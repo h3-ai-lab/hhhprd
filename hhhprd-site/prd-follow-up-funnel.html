@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Follow-up Funnel Metrics · PRD</title>
+  <style>
+    :root{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    main{max-width:1040px;margin:0 auto;padding:42px 24px 80px}article{background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:34px}h2,h3,h4{line-height:1.35}
+    h2{font-size:28px;margin:0 0 20px}h3{font-size:21px;margin:30px 0 10px}h4{font-size:17px;margin:22px 0 8px}
+    p{margin:10px 0}a{color:var(--blue)}table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+    th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f7f9fc}
+    blockquote{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}
+    code{background:#f1f4f8;padding:1px 5px;border-radius:4px}pre{overflow:auto;background:#101828;
+    color:#eef2f7;padding:16px;border-radius:8px}.mermaid{background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:16px;overflow:auto}.top{display:flex;gap:14px;margin-bottom:18px}
+    .top a{text-decoration:none;font-weight:600}
+    @media(max-width:700px){main{padding:16px 10px}article{padding:20px 16px}}
+  </style>
+</head>
+<body><main>
+  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/follow-up-funnel/PRD.md">查看 Markdown 源文件</a></div>
+  <article><h2>销售跟进漏斗指标（Follow-up Funnel Metrics）</h2>
+<blockquote>在管理看板 <code>Sales follow-up</code> 页签增加 5 个漏斗指标，让管理员和销售组长能够看到线索进入销售流程后的接通、预约、体验课完成和付费结果。<br>需求编号：REQ-DASH-007｜状态：待评审｜更新时间：2026-11-10<br>需求类型：看板与指标</blockquote>
+<blockquote>📌<br>- 本期只新增 <code>Lead-Connect%</code>、<code>Lead-Appt%</code>、<code>Lead-Completed%</code>、<code>Connected-Paid%</code>、<code>Appt-Paid%</code>。<br>- 复用管理看板现有的注册批次、用户 ID 去重和筛选规则，不新建第二套漏斗数据。<br>- 不改变线索状态、预约、体验课、订单或 CC 归属逻辑。</blockquote>
+<blockquote>⚠️ 来源：<a href="https://qjphu5vphyf4.jp.larksuite.com/base/VmMrbK4uva0lbOsnnXSjBy9rpLK?table=tbl6ewjzW1j648cj&amp;view=vewEIikg2C" target="_blank" rel="noopener">CRM Request No. 7</a>；需求方于 2026-11-10 确认 5 个指标名称和口径。原消息中 <code>Connected-Paid%</code>、<code>Appt-Paid%</code> 的分子分母方向与指标名称及漏斗语义相反，本文先按建议的漏斗方向编写，并在“待确认”中标出。</blockquote>
+<h3>交互原型</h3>
+<p><a href="../projects/follow-up-funnel/prototype/index.html" target="_blank" rel="noopener">打开完整交互原型</a></p>
+<p>原型可验证国家、CC 和注册日期筛选，5 个指标卡、分子分母说明、Cards/Compare 两种查看方式，以及与 Current lead inventory、Calling 的页面关系。</p>
+<h3>要解决什么</h3>
+<p>当前 <code>Sales follow-up</code> 主要展示当前线索库存、外呼量和接通量，能够看到执行过程，但不能直接回答线索在接通、预约、体验课完成和付费之间损失在哪里。</p>
+<p>本期增加 5 个转化指标，让管理者在不切换页签、不手工计算结果的情况下识别主要流失环节；点击统计口径时仍能看到分子、分母和计算范围。</p>
+<h3>本期目标与成功指标</h3>
+<p>本期目标是让 <code>Sales follow-up</code> 具备与 <code>Conversion overview</code> 一致的转化判断能力，首版重点是统一口径和建立基线。</p>
+<table><thead><tr><th>目标</th><th>成功标志</th></tr></thead><tbody><tr><td>补齐关键转化结果</td><td>5 个指标在页面中可直接查看</td></tr><tr><td>避免误读</td><td>每个百分比同时展示分子和分母</td></tr><tr><td>保持全页一致</td><td>5 个指标使用同一注册批次、筛选范围和用户去重规则</td></tr><tr><td>可核对</td><td>页面展示数据更新时间，并与现有转化总览和底层明细保持一致</td></tr><tr><td>可建立基线</td><td>首版允许不设置目标值，但能持续观察变化</td></tr></tbody></table>
+<h3>已确认、工作假设与待确认</h3>
+<table><thead><tr><th>类型</th><th>内容</th></tr></thead><tbody><tr><td>已确认</td><td>本期只增加 5 个指标；<code>Lead</code>、<code>Connected</code>、<code>Booking</code>、<code>Trial completed</code>、<code>Paid user</code> 是核心统计对象</td></tr><tr><td>已确认</td><td><code>Lead-Completed%</code> 的完成人数来自体验课完成记录，不使用预约或出席状态代替</td></tr><tr><td>工作假设</td><td>目标页面是截图中的 <code>Management dashboard &gt; Sales follow-up</code>，而不是销售中心 <code>My Follow-ups</code> 列表</td></tr><tr><td>工作假设</td><td>5 个指标沿用 <code>Conversion overview</code> 的注册批次口径，按用户 ID 去重，结果统计至当前</td></tr><tr><td>待确认</td><td><code>Connected-Paid%</code>、<code>Appt-Paid%</code> 是“阶段转付费”还是“已付费用户中的阶段覆盖率”</td></tr><tr><td>待确认</td><td>退款、取消预约、测试用户和跨业务线用户是否从分母中排除</td></tr></tbody></table>
+<h3>范围</h3>
+<p><strong>做</strong></p>
+<ul><li>在 <code>Sales follow-up</code> 增加 5 个漏斗指标卡片。</li><li>每个指标展示百分比、分子、分母和统计口径提示。</li><li>复用国家、CC、日期筛选及现有角色数据权限。</li><li>复用现有注册批次、业务时间和数据更新时间规则。</li><li>无数据、零分母、加载失败和数据延迟时提供明确状态。</li></ul>
+<p><strong>不做</strong></p>
+<ul><li>不新增或修改销售阶段、接通判定、预约状态、体验课完成状态和支付状态。</li><li>不改变 CC 分配、首位 CC、当前 CC 或业绩归属规则。</li><li>不新增收入、AOV、退款金额、转化趋势、目标值或预测。</li><li>不改造 <code>Conversion overview</code>、支付结果页签或销售中心列表。</li><li>本需求不包含新的明细下载能力；现有下载能力保持原样。</li></ul>
+<h3>指标关系</h3>
+<div class="mermaid">flowchart LR
+    L[注册批次用户 L] --&gt; C[已接通用户 C]
+    L --&gt; A[已预约用户 A]
+    L --&gt; T[体验课完成用户 T]
+    C --&gt; CP[Connected-Paid%]
+    A --&gt; AP[Appt-Paid%]
+    P[已付费用户 P] --&gt; CP
+    P --&gt; AP
+    L --&gt; M1[Lead-Connect%]
+    C --&gt; M1
+    L --&gt; M2[Lead-Appt%]
+    A --&gt; M2
+    L --&gt; M3[Lead-Completed%]
+    T --&gt; M3</div>
+<p>同一注册批次内的用户可以跳过部分阶段，例如没有接通记录但完成体验课或付款。因此各阶段人数不强制逐级递减，指标不得通过前端强制把下游人数截断为上游人数。</p>
+<h3>指标定义</h3>
+<p>定义以下集合，所有集合均来自同一筛选后的注册批次：</p>
+<ul><li><code>L</code>：注册批次中的唯一用户。</li><li><code>C</code>：至少有一次成功接通的用户。</li><li><code>A</code>：至少有一次有效预约的用户。</li><li><code>T</code>：至少完成一次有效体验课的用户。</li><li><code>P</code>：至少有一笔有效已支付订单的用户。</li></ul>
+<table><thead><tr><th>指标</th><th>建议计算公式</th><th>业务用途</th></tr></thead><tbody><tr><td>Lead-Connect%</td><td><code>C ÷ L</code></td><td>判断线索触达能力</td></tr><tr><td>Lead-Appt%</td><td><code>A ÷ L</code></td><td>判断从线索到预约的转化</td></tr><tr><td>Lead-Completed%</td><td><code>T ÷ L</code></td><td>判断从线索到体验课完成的转化</td></tr><tr><td>Connected-Paid%</td><td><code>(P ∩ C) ÷ C</code></td><td>判断已接通用户的付费转化</td></tr><tr><td>Appt-Paid%</td><td><code>(P ∩ A) ÷ A</code></td><td>判断已预约用户的付费转化</td></tr></tbody></table>
+<p>计算规则：</p>
+<ul><li>同一用户在同一指标中只计一次，不按通话、预约或订单次数重复计数。</li><li><code>Connected-Paid%</code> 的分子只统计既已接通又已付费的用户。</li><li><code>Appt-Paid%</code> 的分子只统计既已预约又已付费的用户。</li><li>百分比按分子除以分母计算，页面展示保留一位小数，具体分子和分母以整数展示。</li><li>分母为零时显示 <code>—</code>，不显示 <code>0%</code>。</li><li>数据允许出现分子大于分母或比率超过 100%；系统不得截断，应原样展示并提示可能存在数据口径异常。</li><li>取消、退款、测试用户和跨业务线记录是否纳入，沿用管理看板现有规则，本期不单独改变。</li></ul>
+<p>如果业务确认原消息中的公式为最终定义，则 <code>Connected-Paid%</code> 与 <code>Appt-Paid%</code> 实际表示“已付费用户中有接通/预约记录的比例”，应同步调整指标名称，避免与常规漏斗方向混淆。</p>
+<h3>页面设计</h3>
+<p>位置：<code>Management dashboard &gt; Sales follow-up</code>，放在 <code>Current lead inventory</code> 与 <code>Calling</code> 之间。</p>
+<pre><code class="text">[国家] [CC] [Activity dates]
+[现有说明：当前库存和当前状态不受日期筛选影响]
+
+Current lead inventory
+
+Follow-up conversion                        数据截至 YYYY-MM-DD HH:mm
+[Lead-Connect%] [Lead-Appt%] [Lead-Completed%]
+[Connected-Paid%] [Appt-Paid%]
+[统计口径 ⓘ]
+
+Calling</code></pre>
+<p>页面规则：</p>
+<ul><li>五个指标使用统一尺寸的卡片，宽度不足时自动换行，不隐藏指标。</li><li>卡片主信息为指标名称和百分比，次信息为 <code>分子 / 分母</code>。</li><li>桌面端默认单行显示前三个指标、单行显示后两个指标；移动端按单列或双列展示。</li><li>页面切换至 <code>Conversion overview</code> 或 <code>Payments</code> 后返回，保留本次筛选条件。</li><li>指标加载中显示加载状态，不先展示 <code>0%</code>。</li><li>指标加载失败时显示失败提示和重试入口，不把失败状态表现为无数据。</li><li>数据延迟时继续展示最近成功更新的数据，并明确标注更新时间。</li></ul>
+<h4>筛选与时间口径</h4>
+<table><thead><tr><th>项目</th><th>规则</th></tr></thead><tbody><tr><td>国家</td><td>沿用页面现有国家筛选</td></tr><tr><td>CC</td><td>沿用页面现有 CC 筛选及权限范围</td></tr><tr><td>日期</td><td>选择同一注册批次；日期范围按用户注册时间界定</td></tr><tr><td>后续结果</td><td>从注册时间起统计至当前，不受日期结束之后发生的接通、预约、体验课或支付限制</td></tr><tr><td>去重</td><td>各指标按用户 ID 去重</td></tr><tr><td>时区</td><td>沿用当前看板业务时区规则；截图中为 <code>Asia/Saigon（UTC+7）</code></td></tr><tr><td>更新时间</td><td>页面展示最近一次完整数据更新时间</td></tr></tbody></table>
+<p><code>Current lead inventory</code> 和 <code>Current status</code> 继续按“截至现在”计算；新增的 5 个指标按注册批次计算。页面说明需要把两类口径分开，避免用户认为切换日期会同时改写当前库存。</p>
+<h3>权限与数据范围</h3>
+<table><thead><tr><th>角色 / 条件</th><th>能看什么</th><th>能做什么</th><th>限制</th></tr></thead><tbody><tr><td>管理员 / 超级管理员</td><td>授权业务线内的 5 个指标</td><td>切换筛选、查看口径和更新时间</td><td>不扩大现有敏感数据权限</td></tr><tr><td>销售组长</td><td>有权限团队范围内的 5 个指标</td><td>按现有 CC 和日期维度查看</td><td>不得看到其他团队汇总或明细</td></tr><tr><td>其他管理看板角色</td><td>沿用现有看板权限</td><td>只读查看</td><td>不因新增指标获得新的用户、订单或通话数据</td></tr></tbody></table>
+<p>新增指标不引入新的权限体系。用户无权限时沿用当前看板的无权限状态，不得通过指标分子/分母暴露无权访问的数据量。</p>
+<h3>数据与依赖</h3>
+<table><thead><tr><th>数据 / 系统</th><th>用途</th><th>关键规则</th><th>失败处理</th></tr></thead><tbody><tr><td>注册批次 / 用户</td><td><code>Lead</code> 分母及国家、CC 范围</td><td>一个注册用户只计一次；沿用现有业务线和归属口径</td><td>批次数据失败时整组指标显示失败状态</td></tr><tr><td>外呼记录</td><td><code>Connected</code></td><td>至少一次成功接通；不把外呼、未接或线路失败算作接通</td><td>外呼数据延迟时保留最近成功快照</td></tr><tr><td>预约记录</td><td><code>Booking</code></td><td>至少一次有效预约；取消预约是否计入沿用现有口径</td><td>预约状态异常时不以通话小结代替</td></tr><tr><td>课程学习记录</td><td><code>Trial completed</code></td><td>至少一次有效体验课完成，不使用预约或出席代替</td><td>课程记录延迟时保留最近成功快照</td></tr><tr><td>订单 / 支付记录</td><td><code>Paid user</code></td><td>至少一笔有效已支付订单；按用户 ID 去重</td><td>支付同步延迟时展示更新时间，不手工补齐</td></tr></tbody></table>
+<p>5 个指标应复用 <code>Conversion overview</code> 已有的批次、用户去重和阶段判定，不单独复制一套计算定义。指标显示的是管理分析结果，不用于直接修改线索、预约、课程或订单。</p>
+<h3>用户怎么走</h3>
+<pre><code class="text">管理员打开 Sales follow-up
+→ 选择国家、CC 和注册日期
+→ 查看 5 个漏斗百分比及分子/分母
+→ 通过统计口径确认计算范围
+→ 结合 Current lead inventory 和 Calling 判断问题环节
+→ 切换筛选进行团队或时间段比较</code></pre>
+<p>主要决策场景：</p>
+<ul><li><code>Lead-Connect%</code> 偏低：优先检查线索质量、外呼覆盖、线路和首次联系时效。</li><li><code>Lead-Appt%</code> 偏低：重点看接通后的预约话术、可用时段和预约阻力。</li><li><code>Lead-Completed%</code> 偏低：检查预约后的提醒、出席和体验课履约。</li><li><code>Connected-Paid%</code> 偏低：检查接通用户的课程匹配、销售跟进和报价。</li><li><code>Appt-Paid%</code> 偏低：检查预约质量、到场后成交和体验课后的购买转化。</li></ul>
+<h3>异常与边界</h3>
+<ul><li><strong>零分母</strong>：显示 <code>—</code> 和 <code>0 / 0</code>，不显示 <code>0%</code>。</li><li><strong>分子大于分母</strong>：保留原始比率并提示异常，不截断为 100%。</li><li><strong>阶段跳跃</strong>：允许未接通但预约、未预约但完成体验课或直接付费，人数不做逐级强制递减。</li><li><strong>重复记录</strong>：同一用户多次接通、预约、完成或支付只计一次。</li><li><strong>历史数据缺失</strong>：沿用当前看板状态；没有可靠事件时不使用当前状态倒推历史阶段。</li><li><strong>数据延迟</strong>：显示最近成功更新时间和数据范围，不把未同步数据解释为零。</li><li><strong>权限变化</strong>：返回页面或重新查询后按最新权限生效；无权数据不计入用户可见的汇总。</li><li><strong>筛选为空</strong>：五个指标统一显示无数据状态，不保留上一次筛选的数值。</li></ul>
+<h3>待确认</h3>
+<table><thead><tr><th>问题</th><th>默认假设</th><th>影响</th><th>Owner</th></tr></thead><tbody><tr><td><code>Connected-Paid%</code> 是已付费用户占已接通用户，还是已接通用户占已付费用户</td><td>按指标名称采用 <code>Paid ∩ Connected ÷ Connected</code></td><td>决定指标是否为漏斗转化率；反向公式可能产生超过 100% 的结果</td><td>需求方</td></tr><tr><td><code>Appt-Paid%</code> 是已付费用户占已预约用户，还是已预约用户占已付费用户</td><td>按指标名称采用 <code>Paid ∩ Appt ÷ Appt</code></td><td>决定预约到付费的判断方向</td><td>需求方</td></tr><tr><td>“有效预约”和“有效体验课完成”的最终状态定义</td><td>预约取至少一次有效预约；完成取课程记录中的真实完成状态</td><td>影响两个分子和两个分母</td><td>需求方、技术</td></tr><tr><td>退款、取消预约、测试用户和跨业务线用户是否计入</td><td>沿用管理看板现有统一口径</td><td>影响所有指标的可比性</td><td>产品、数据、业务</td></tr><tr><td>CC 转派后指标按首次 CC 还是当前 CC 归属</td><td>沿用当前管理看板归属规则</td><td>影响团队和个人比较</td><td>产品、业务</td></tr></tbody></table></article>
+</main>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+</script>
+</body></html>

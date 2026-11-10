@@ -9,6 +9,7 @@ ROOT = Path(__file__).parent
 PROJECTS = {
     "referrals-rewards": "Referrals & Rewards",
     "first-contact": "First Contact",
+    "follow-up-funnel": "Follow-up Funnel Metrics",
 }
 
 

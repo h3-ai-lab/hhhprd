@@ -10,6 +10,7 @@
 | CRM 整体产品体系 | 持续维护 | [整体框架](00-crm-prd-framework.md) | — |
 | Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
 | First Contact | 待评审 | [PRD](projects/first-contact/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
+| Follow-up Funnel Metrics | 待评审 | [PRD](projects/follow-up-funnel/PRD.md) | [本地原型](projects/follow-up-funnel/prototype/index.html) |
 
 ## GitHub Pages
 
@@ -84,8 +85,10 @@ python3 build_prd_pages.py
 4. **查现状**：搜索现有手册、飞书需求、会议纪要，判断已有、部分覆盖或缺失。
 5. **定边界**：明确本期做什么、不做什么、依赖谁、谁会受影响。
 6. **画流程**：从真实触发点画到业务结果，覆盖成功、取消、重复、超时、失败、退款/撤销和恢复。
-7. **写方案**：按主类型组织页面、字段、规则、数据、权限和异常，不机械铺满模板。
-8. **标不确定性**：只保留真正影响方案或排期的待确认项。
+7. **补 RBAC**：新增功能、页面、按钮、字段组或数据列表时，必须读取权限提示词，输出权限矩阵和权限数据变更。
+8. **写方案**：按主类型组织页面、字段、规则、数据、权限和异常，不机械铺满模板。
+9. **标不确定性**：只保留真正影响方案或排期的待确认项。
+10. **本地验证**：先保存并验证 PRD、HTML 和原型，等待用户明确确认后才上传 GitHub。
 
 ### 需求类型路由
 
@@ -105,17 +108,21 @@ python3 build_prd_pages.py
 
 ## 本地维护边界
 
-- 源码保存在本地，并同步发布到 GitHub Pages。
+- 默认先保存在本地；未经用户明确确认，不上传 GitHub、不推送远端、不触发 Pages。
+- 用户确认后再上传 GitHub，并由 `main` 分支工作流发布。
 - 原型仅使用演示数据，不连接生产接口。
 - 原型源码位于 `projects/<project>/prototype/`。
-- 推送 `main` 后由 `.github/workflows/pages.yml` 自动发布。
+- 上传并推送 `main` 后由 `.github/workflows/pages.yml` 发布。
 
 ## 写作样式
 
+- PRD 和原型默认直接使用简体中文，不再询问语言；正式产品名、字段标识和外部系统名称可按官方原文保留。
 - 开头先写一句结论，再放 `📌 本期重点`。
 - 每份功能 PRD 只保留一个完整交互原型地址，不罗列页面直达链接、源码地址或本地地址。
 - 一个一级标题对应一个核心问题或一个需求，不按模板机械铺满。
 - 涉及业务流转的 PRD 必须包含端到端流程图；字段、规则、看板或用户端需求选择最能说明问题的页面路径、决策表、状态机或旅程图。
+- 新增功能或数据列表必须输出 RBAC 功能权限、字段/数据范围和权限数据变更，不能只写“沿用现有权限”。
+- 所有交付默认本地优先，验证后等待用户确认，不得自动上传 GitHub 或发布 Pages。
 - 优先用短句、列表和小表；长段只用于解释因果和冲突。
 - 页面上能直接看到的结果优先于抽象描述。
 - 同一规则只写一次；跨模块引用现有关键结论。
@@ -123,5 +130,6 @@ python3 build_prd_pages.py
 - 不写实现代码、SQL、接口实现、类/函数设计或伪代码，技术实现由开发负责。
 - 不写验收标准、测试用例、测试计划或回归清单，验收由测试负责。
 - 写作检查由 Agent 在交付前内部完成，不写入 PRD。
+- 不在 PRD 中展示生成提示词、补充提示词或内部提示词文件路径。
 - 已确认、工作假设和待确认分开写。
 
