@@ -9,7 +9,7 @@
 |---|---|---|---|
 | CRM 整体产品体系 | 持续维护 | [整体框架](00-crm-prd-framework.md) | — |
 | Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
-| Vietnam First Contact | 待评审 | [PRD](projects/first-contact/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
+| First Contact | 待评审 | [PRD](projects/first-contact/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
 
 ## GitHub Pages
 
@@ -78,16 +78,30 @@ python3 build_prd_pages.py
 
 ## 一句话需求怎么变成 PRD
 
-1. **看原话**：保留原始诉求，说明我对其业务含义的解释。
-2. **查现状**：搜索现有手册、飞书需求、会议纪要，判断已有、部分覆盖或缺失。
-3. **定边界**：明确本期做什么、不做什么、依赖谁、谁会受影响。
-4. **画流程**：从真实触发点画到业务结果，覆盖成功、取消、重复、超时、失败、退款/撤销和恢复。
-5. **写方案**：按“业务问题 → 流程图 → 规则 → 页面 → 数据/权限 → 异常”展开。
-6. **标不确定性**：只保留真正影响方案或排期的待确认项。
+1. **判断类型**：先按主问题归类，不按用户提到的页面或按钮机械归类。
+2. **选主提示词**：从 [`prompts/`](prompts/) 选择一个主类型；跨类型时只增加必要补充。
+3. **看原话**：保留原始诉求，说明我对其业务含义的解释。
+4. **查现状**：搜索现有手册、飞书需求、会议纪要，判断已有、部分覆盖或缺失。
+5. **定边界**：明确本期做什么、不做什么、依赖谁、谁会受影响。
+6. **画流程**：从真实触发点画到业务结果，覆盖成功、取消、重复、超时、失败、退款/撤销和恢复。
+7. **写方案**：按主类型组织页面、字段、规则、数据、权限和异常，不机械铺满模板。
+8. **标不确定性**：只保留真正影响方案或排期的待确认项。
+
+### 需求类型路由
+
+| 类型 | 典型问题 | 提示词 |
+|---|---|---|
+| 业务流程 | 角色、步骤、交接、审批、生命周期 | [01-business-workflow.md](prompts/01-business-workflow.md) |
+| 表单、字段与列表 | 字段、表单、列、筛选、排序、导出 | [02-form-field-list.md](prompts/02-form-field-list.md) |
+| 规则、状态与数据 | 判定、状态机、唯一性、超时、退款 | [03-rule-state-data.md](prompts/03-rule-state-data.md) |
+| 权限与审计 | 角色、数据范围、敏感操作、留痕 | [04-permission-audit.md](prompts/04-permission-audit.md) |
+| 集成与自动化 | 外部事件、回调、同步、重试、补偿 | [05-integration-automation.md](prompts/05-integration-automation.md) |
+| 看板与指标 | 漏斗、KPI、维度、口径、下钻 | [06-dashboard-metrics.md](prompts/06-dashboard-metrics.md) |
+| 用户端体验 | App、C 端页面、邀请、注册、支付 | [07-user-experience-journey.md](prompts/07-user-experience-journey.md) |
 
 默认只产出一份功能 PRD；跨业务域时再补领域稿，形成新版本范围时再补版本 PRD。
 
-PRD 生成提示词见 [`prompts/prd-generation.md`](prompts/prd-generation.md)。
+通用规则见 [`prompts/prd-generation.md`](prompts/prd-generation.md)，类型路由见 [`prompts/README.md`](prompts/README.md)。
 
 ## 本地维护边界
 
