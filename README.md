@@ -8,7 +8,13 @@
 | 项目 | 状态 | PRD | 原型 |
 |---|---|---|---|
 | CRM 整体产品体系 | 持续维护 | [整体框架](00-crm-prd-framework.md) | — |
-| Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/PRD.md) | [本地原型](http://127.0.0.1:4175/projects/referrals-rewards/prototype/) |
+| Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
+
+## GitHub Pages
+
+- 项目入口：<https://h3-ai-lab.github.io/hhhprd/>
+- 需求文档：<https://h3-ai-lab.github.io/hhhprd/prd-referrals-rewards.html>
+- 交互原型：<https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/>
 
 ## 目录结构
 
@@ -80,10 +86,10 @@ python3 build_prd_pages.py
 
 ## 本地维护边界
 
-- 当前版本仅保存在本地，不再关联极狐仓库。
+- 源码保存在本地，并同步发布到 GitHub Pages。
 - 原型仅使用演示数据，不连接生产接口。
 - 原型源码位于 `projects/<project>/prototype/`。
-- 当前不维护 GitHub Pages、GitLab Pages 或其他自动发布流程。
+- 推送 `main` 后由 `.github/workflows/pages.yml` 自动发布。
 
 ## 写作样式
 

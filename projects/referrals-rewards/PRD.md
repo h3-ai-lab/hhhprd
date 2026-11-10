@@ -15,19 +15,21 @@
 
 ## 可交互原型
 
+线上原型：[https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/)
+
 本地原型：[http://127.0.0.1:4175/projects/referrals-rewards/prototype/](http://127.0.0.1:4175/projects/referrals-rewards/prototype/)
 
 原型源码：[http://127.0.0.1:4175/projects/referrals-rewards/prototype/index.html](http://127.0.0.1:4175/projects/referrals-rewards/prototype/index.html)
 
 | 页面 | 直达地址 |
 |---|---|
-| 功能概览与奖励流程 | [打开概览](http://127.0.0.1:4175/projects/referrals-rewards/prototype/#/overview) |
-| CRM 推荐活动 | [打开推荐活动](http://127.0.0.1:4175/projects/referrals-rewards/prototype/#/activity) |
-| CRM 社媒审核 | [打开社媒审核](http://127.0.0.1:4175/projects/referrals-rewards/prototype/#/social) |
-| App 邀请体验 | [打开 App 原型](http://127.0.0.1:4175/projects/referrals-rewards/prototype/#/app) |
-| 奖励发放流水 | [打开奖励流水](http://127.0.0.1:4175/projects/referrals-rewards/prototype/#/ledger) |
-| 规则与异常 | [打开规则](http://127.0.0.1:4175/projects/referrals-rewards/prototype/#/rules) |
-| 验收清单 | [打开验收](http://127.0.0.1:4175/projects/referrals-rewards/prototype/#/acceptance) |
+| 功能概览与奖励流程 | [打开概览](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/#/overview) |
+| CRM 推荐活动 | [打开推荐活动](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/#/activity) |
+| CRM 社媒审核 | [打开社媒审核](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/#/social) |
+| App 邀请体验 | [打开 App 原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/#/app) |
+| 奖励发放流水 | [打开奖励流水](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/#/ledger) |
+| 规则与异常 | [打开规则](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/#/rules) |
+| 验收清单 | [打开验收](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/#/acceptance) |
 
 本地原型服务停止后，在仓库中执行：
 
