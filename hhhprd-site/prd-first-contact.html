@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>First Contact · PRD</title>
+  <style>
+    :root{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    main{max-width:1040px;margin:0 auto;padding:42px 24px 80px}article{background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:34px}h2,h3,h4{line-height:1.35}
+    h2{font-size:28px;margin:0 0 20px}h3{font-size:21px;margin:30px 0 10px}h4{font-size:17px;margin:22px 0 8px}
+    p{margin:10px 0}a{color:var(--blue)}table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+    th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f7f9fc}
+    blockquote{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}
+    code{background:#f1f4f8;padding:1px 5px;border-radius:4px}pre{overflow:auto;background:#101828;
+    color:#eef2f7;padding:16px;border-radius:8px}.mermaid{background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:16px;overflow:auto}.top{display:flex;gap:14px;margin-bottom:18px}
+    .top a{text-decoration:none;font-weight:600}
+    @media(max-width:700px){main{padding:16px 10px}article{padding:20px 16px}}
+  </style>
+</head>
+<body><main>
+  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/first-contact/PRD.md">查看 Markdown 源文件</a></div>
+  <article><h2>越南首位联系人（First Contact）</h2>
+<blockquote>越南线索从首位 CC 交接给第二位 CC / TMK 后，销售中心仍需保留“首位 CC”和“首次联络时间”，支持按首位 CC 筛选、下载并查看完整分配历史，用于规模化监控电话营销的触达量、工作量与生产力。<br>需求编号：REQ-VN-001｜状态：待评审｜更新时间：2026-11-10</blockquote>
+<blockquote>📌<br>- 首位 CC 是线索在销售中心第一次获得归属时记录的负责人，后续转派、掉库、回池和再领取都不能覆盖。<br>- 在销售中心列表增加 <code>首位 CC</code>、<code>首次联络时间</code> 和交接状态，并提供首位 CC 组合筛选与同范围下载。<br>- 本期只覆盖越南业务流程；历史数据只从已有分配历史回填，无法确认的记录标记为“历史未知”。</blockquote>
+<blockquote>⚠️ 来源：2026-11-10 需求方口述；现状依据为 <code>01-current-state-and-boundaries.md</code> 和 <code>crm-manual/docs/sales/S-00.md</code>。需求中的“首次客户关怀”“首次客户联络”是否完全同义，需要在评审时由业务确认。</blockquote>
+<h3>可交互原型</h3>
+<p><a href="https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/" target="_blank" rel="noopener">打开完整交互原型</a></p>
+<p>原型内可验证销售中心列表、首位 CC 筛选、筛选后导出、分配历史、团队监控、异常和历史数据边界。</p>
+<h3>要解决什么</h3>
+<p>越南当前存在两条销售流程：</p>
+<ol><li><strong>CC 流程</strong>：CC 承接线索、完成首次跟进，再根据业务规则继续销售或交接。</li><li><strong>电话营销（TMK）流程</strong>：首位 CC 完成本阶段工作后，将线索分配给第二位 CC / TMK。线索负责人变化后，团队无法在列表和下载数据中快速识别最初由谁承接、何时首次联络。</li></ol>
+<p>当前只能在单条线索的 <code>Lead &gt; Update</code> 中查看分配历史，无法批量筛选或下载。这导致组长只能逐条抽查，不能快速回答“这段时间首位 CC 总共承接了多少线索、实际触达了多少、向 TMK 交接了多少、不同 CC 的产出差异是什么”。</p>
+<h3>本期目标与成功指标</h3>
+<p>本期要建立一条可批量核对的首位 CC 数据链：首次归属写入后保持不变，后续交接只更新当前负责人，列表、筛选、下载、监控和详情使用同一口径。</p>
+<table><thead><tr><th>指标</th><th>口径</th><th>用途</th></tr></thead><tbody><tr><td>首位 CC 覆盖率</td><td><code>first_cc_id</code> 非空线索数 ÷ 进入越南销售中心的线索数</td><td>判断数据是否可用于监控</td></tr><tr><td>首位 CC 承接量</td><td>按 <code>first_cc_id</code> 去重的线索数</td><td>衡量各 CC 的工作量</td></tr><tr><td>首位 CC 触达量</td><td>至少产生一次有效外呼尝试的线索数</td><td>衡量实际触达规模</td></tr><tr><td>首位 CC 触达覆盖率</td><td>首位 CC 触达量 ÷ 首位 CC 承接量</td><td>衡量按线索触达的生产力</td></tr><tr><td>TMK 交接量</td><td>从非 TMK 负责人转给 TMK 的线索数</td><td>衡量电话营销输入规模</td></tr><tr><td>TMK 触达量</td><td>由 TMK 角色在 CRM 产生至少一次有效外呼尝试的线索数</td><td>回答 TMK 过去触达了多少线索</td></tr><tr><td>下载一致率</td><td>下载明细行数 ÷ 同条件列表行数</td><td>验证导出与筛选口径一致</td></tr></tbody></table>
+<p>所有时间按 <code>Asia/Ho_Chi_Minh</code> 展示和筛选。上线首版先建立基线，未确认前不承诺具体提升目标。</p>
+<h3>范围</h3>
+<p><strong>做</strong></p>
+<ul><li>在首次分配、人工领取、直接分配或自动分配成功时写入首位 CC。</li><li>在销售中心列表展示首位 CC、首次联络时间、当前 CC 和 TMK 交接状态。</li><li>支持按首位 CC、首次联络时间、当前 CC、交接状态和历史完整度筛选。</li><li>下载当前筛选范围内的明细，字段与列表口径一致。</li><li>在线索详情中保留与展示完整分配历史。</li><li>为组长 / 管理员提供首位 CC 与 TMK 的汇总监控。</li></ul>
+<p><strong>不做</strong></p>
+<ul><li>本期不改变现有线索领取、自动分配、掉库和转派规则。</li><li>不把首个电话尝试直接当成本期已定义好的“有效接通”；两者使用不同字段。</li><li>不自动判定首位 CC 的工作是否完成，也不自动触发向 TMK 交接。</li><li>不覆盖泰国、马来西亚等其他业务线。</li><li>不猜测或伪造历史首位 CC；无法从历史事件恢复的数据保持“历史未知”。</li><li>不在本需求中新增现金激励或个人绩效结算。</li></ul>
+<h3>核心定义</h3>
+<table><thead><tr><th>字段</th><th>定义</th><th>写入规则</th></tr></thead><tbody><tr><td>首位 CC / First CC</td><td>线索进入销售中心后，第一次取得线索归属的 CC 用户</td><td>首次归属事件成功后写入；仅当字段为空时写入</td></tr><tr><td>首次归属时间</td><td>首位 CC 取得线索归属的时间</td><td>与首次归属事件使用同一事务写入</td></tr><tr><td>首次联络时间</td><td>首位 CC 在线索上产生的第一条有效跟进或外呼记录时间</td><td>首次有效事件写入；后续事件不覆盖</td></tr><tr><td>当前 CC</td><td>线索当前负责人</td><td>领取、转派、掉库、恢复时更新</td></tr><tr><td>TMK 交接时间</td><td>当前负责人第一次从非 TMK 变为 TMK 角色的时间</td><td>由成功转派事件和角色组判断写入</td></tr><tr><td>历史完整度</td><td>是否可以确认首位 CC</td><td>仅根据已有分配历史和通话 / 跟进记录回填；否则为历史未知</td></tr></tbody></table>
+<p>建议的判定顺序：</p>
+<ol><li>自动分配到具体 CC、公海人工领取、组长直接分配，均视为取得归属。</li><li>线索重新回池或再次领取，不重置首位 CC。</li><li>用户后续离职或改名不改变首位 CC ID；列表展示当时名称快照，并提供当前账号状态。</li><li>当前负责人与首位 CC 相同，表示尚未发生负责人交接；不同时不自动证明一定发生 TMK 交接。</li><li>是否属于 TMK 以组织角色 / 岗位组配置为准，不能只凭姓名或当前阶段猜测。</li></ol>
+<h3>业务流程图</h3>
+<div class="mermaid">flowchart TD
+    A[新线索进入越南销售中心] --&gt; B{系统是否直接分配}
+    B --&gt;|是| C[写入自动分配事件]
+    B --&gt;|否| D[进入公海]
+    D --&gt; E{CC 是否领取成功}
+    E --&gt;|并发失败或取消| D1[停留公海 不写首位 CC]
+    E --&gt;|成功| F[写入人工领取事件]
+    C --&gt; G{首位 CC 是否已有值}
+    F --&gt; G
+    G --&gt;|否| H[事务内写入首位 CC 和首次归属时间]
+    G --&gt;|是| I[保留原首位 CC 不变]
+    H --&gt; J[首位 CC 开始跟进]
+    I --&gt; J
+    J --&gt; K{是否产生有效跟进或外呼}
+    K --&gt;|否| K1[触达时间保持为空]
+    K --&gt;|是| L[首次写入首次联络时间]
+    K1 --&gt; M{是否转交给第二位 CC 或 TMK}
+    L --&gt; M
+    M --&gt;|否| N[继续由当前 CC 跟进]
+    M --&gt;|是 成功| O[更新当前 CC 并追加分配历史]
+    M --&gt;|失败 取消 并发冲突| M1[保留原负责人并提示]
+    O --&gt; P{新负责人是否为 TMK}
+    P --&gt;|是| Q[写入 TMK 交接时间]
+    P --&gt;|否| R[只记录普通转派]
+    Q --&gt; S[列表 筛选 下载 监控按首位 CC 聚合]
+    R --&gt; S
+    N --&gt; S
+    M1 --&gt; N
+    K1 --&gt; S
+    S --&gt; T{历史数据是否可恢复首位 CC}
+    T --&gt;|可确认| U[回填首位 CC 和时间]
+    T --&gt;|不可确认| V[历史未知 不参与承接量分母]</div>
+<h4>异常场景</h4>
+<table><thead><tr><th>场景</th><th>系统处理</th><th>用户看到什么</th><th>恢复方式</th></tr></thead><tbody><tr><td>两名 CC 并发领取同一线索</td><td>仅一个领取成功；仅成功事件写首位 CC</td><td>另一人收到“线索已被领取”</td><td>刷新列表，进入其他线索</td></tr><tr><td>写入首位 CC 后转派事务失败</td><td>首位 CC 与分配历史均回滚</td><td>转派失败，原负责人不变</td><td>重新转派</td></tr><tr><td>历史线索缺少分配事件</td><td>首位 CC 显示“历史未知”</td><td>不显示推测姓名</td><td>有原始审计时补数；否则等待人工核对</td></tr><tr><td>TMK 角色配置错误</td><td>保留普通转派记录，不写 TMK 交接时间</td><td>列表显示“待确认角色”</td><td>修正角色后按事件重算</td></tr><tr><td>下载任务超时</td><td>不生成不完整文件</td><td>提示任务失败，不展示成功</td><td>缩小范围或重试</td></tr><tr><td>首位 CC 离职</td><td>展示名称快照和“已停用”</td><td>历史归属仍可筛选</td><td>不做负责人替换</td></tr></tbody></table>
+<h3>需求 1：保留首位 CC</h3>
+<p>线索每次成功获得负责人时执行：</p>
+<pre><code class="text">if lead.first_cc_id is empty:
+    lead.first_cc_id = owner.id
+    lead.first_cc_name_snapshot = owner.name
+    lead.first_assigned_at = event_time
+    lead.first_assignment_source = claim | direct_assign | auto_assign | import
+append_assignment_history(lead, from_owner, to_owner, event_time, reason)</code></pre>
+<p>规则：</p>
+<ul><li>首位 CC 只在第一次成功归属时写入，转派、掉库、回池、再领取、退款或订单状态变化都不覆盖。</li><li>写入首位 CC 和分配历史必须在同一事务中完成；任何一步失败都不能留下半条记录。</li><li>当前 CC 仍使用现有字段和权限规则，不另建第二套负责人体系。</li><li>导入 leads 如果携带历史负责人，应先确认导入语义；默认只记录当前负责人，不据此推断首位 CC。</li></ul>
+<h3>需求 2：列表与筛选</h3>
+<p>在销售中心 <code>公海</code>、<code>我的跟进</code>、<code>已付费</code> 三个线索列表统一增加：</p>
+<table><thead><tr><th>列</th><th>展示规则</th></tr></thead><tbody><tr><td>首位 CC</td><td>姓名 + CC 标识；离职用户标记“已停用”；缺失显示“历史未知”</td></tr><tr><td>首次归属时间</td><td><code>Asia/Ho_Chi_Minh</code>，精确到分钟</td></tr><tr><td>首次联络时间</td><td>无有效跟进时显示 <code>—</code>，不把空值显示成当天</td></tr><tr><td>当前 CC / 阶段</td><td>当前负责人和现有销售阶段</td></tr><tr><td>TMK 交接</td><td><code>已交接</code>、<code>未交接</code>、<code>待确认角色</code>、<code>历史未知</code></td></tr></tbody></table>
+<p>筛选项：</p>
+<ul><li>首位 CC：单选或多选，支持姓名、邮箱、CC ID 搜索。</li><li>首位 CC 团队：按组长权限限定可选范围。</li><li>首次归属时间：开始日期、结束日期，首尾均包含。</li><li>首次联络状态：已触达、未触达、历史未知。</li><li>当前 CC：沿用现有 CC 筛选。</li><li>TMK 交接状态：已交接、未交接、待确认角色。</li><li>历史完整度：完整、缺失。</li></ul>
+<p>列表和筛选需满足：</p>
+<ul><li>用户没有跨组数据权限时，首位 CC 候选项只能展示其有权查看的 CC。</li><li>筛选只影响当前列表和随后下载，不改变线索或分配历史。</li><li>刷新、翻页、排序和切换页签后保留当前筛选条件；离开销售中心后按现有系统行为重置。</li><li><code>下载数据</code> 使用与当前列表相同的筛选、时区、去重键和权限，不允许绕过筛选下载全量。</li></ul>
+<h3>需求 3：筛选后下载</h3>
+<p>下载文件沿用现有导出能力，新增以下列：</p>
+<table><thead><tr><th>字段</th><th>必填</th><th>说明</th></tr></thead><tbody><tr><td><code>lead_id</code></td><td>是</td><td>线索唯一 ID</td></tr><tr><td><code>user_id</code></td><td>是</td><td>用户 ID</td></tr><tr><td><code>first_cc_id</code></td><td>否</td><td>首位 CC ID；历史未知时为空</td></tr><tr><td><code>first_cc_name</code></td><td>否</td><td>首次归属时名称快照</td></tr><tr><td><code>first_assigned_at</code></td><td>否</td><td>首位归属时间，带时区</td></tr><tr><td><code>first_contacted_at</code></td><td>否</td><td>首次有效联络时间，带时区</td></tr><tr><td><code>current_cc_id</code></td><td>是</td><td>当前负责人</td></tr><tr><td><code>tmk_handover_at</code></td><td>否</td><td>TMK 首次交接时间</td></tr><tr><td><code>history_status</code></td><td>是</td><td><code>complete</code> / <code>missing</code></td></tr></tbody></table>
+<p>下载要求：</p>
+<ul><li>先预览行数和时间范围，再生成文件。</li><li>行数和列表当前筛选结果一致；列表分页不影响完整下载。</li><li>任务失败不能生成空白或部分列的文件。</li><li>联系方式、录音等敏感字段继续遵守现有权限和脱敏规则；本需求不扩大导出范围。</li><li>操作日志记录操作人、筛选条件、数据范围、行数和生成时间。</li></ul>
+<h3>需求 4：团队监控</h3>
+<p>为越南销售组长 / 管理员增加首位 CC 与 TMK 的汇总视图：</p>
+<pre><code class="text">越南业务线 + 时间范围
+→ 首位 CC 承接线索
+→ 已触达 / 未触达
+→ 当前仍在 CC / 已交接 TMK / 普通转派
+→ TMK 已触达 / 待触达
+→ 点击数字查看同口径明细</code></pre>
+<p>页面至少展示：</p>
+<ul><li>首位 CC 承接量、触达量和触达覆盖率。</li><li>每位首位 CC 的承接量、触达量、交接量和未触达数。</li><li>TMK 接收量、已触达量和待触达量。</li><li>数据完整度与历史未知数量。</li></ul>
+<p>所有汇总数字均可下钻到明细，并复用需求 2 的筛选口径。</p>
+<h3>权限与数据范围</h3>
+<table><thead><tr><th>角色 / 条件</th><th>能看什么</th><th>能做什么</th><th>限制</th></tr></thead><tbody><tr><td>普通 CC</td><td>本人当前线索及对应首位 CC</td><td>查看、跟进、按现有规则转派</td><td>不能筛选其他 CC 的全量</td></tr><tr><td>销售组长</td><td>有权限的团队和业务线数据</td><td>查看监控、筛选、下载授权范围</td><td>下载需现有导出权限</td></tr><tr><td>TMK / 第二位 CC</td><td>分配给本人或本组的线索</td><td>查看首位 CC 与交接历史、跟进</td><td>不能修改首位 CC</td></tr><tr><td>推荐运营 / 质检</td><td>授权业务线数据</td><td>只读查看、筛选</td><td>不进入销售操作</td></tr><tr><td>管理员 / 超级管理员</td><td>越南业务线全量</td><td>查看、导出、处理历史缺失</td><td>导出和敏感字段继续审计</td></tr></tbody></table>
+<p>首位 CC 是历史事实字段，所有角色均不可在前端直接编辑。管理员修复历史数据必须走可审计的补数流程。</p>
+<h3>数据与依赖</h3>
+<table><thead><tr><th>数据 / 系统</th><th>来源</th><th>唯一标识</th><th>时效 / 失败处理</th></tr></thead><tbody><tr><td>线索与当前负责人</td><td>现有 CRM 线索表</td><td><code>lead_id</code></td><td>实时；事务失败回滚</td></tr><tr><td>分配历史</td><td><code>Lead &gt; Update</code> 现有事件</td><td><code>assignment_event_id</code></td><td>新事件实时写入；旧事件按可用范围回填</td></tr><tr><td>外呼记录</td><td>现有外呼轻集成</td><td><code>call_id</code></td><td>接收事件去重；未同步时首次联络时间保持为空</td></tr><tr><td>跟进记录</td><td>现有 CRM 跟进</td><td><code>followup_id</code></td><td>首次有效记录幂等写入</td></tr><tr><td>用户与团队</td><td>系统配置 / 组织角色</td><td><code>user_id</code>、<code>team_id</code></td><td>TMK 角色变化保留历史交接时点</td></tr><tr><td>导出任务</td><td>现有下载能力</td><td><code>export_task_id</code></td><td>失败重试；不得下发不完整文件</td></tr></tbody></table>
+<h3>用户怎么走</h3>
+<pre><code class="text">首位 CC 承接线索 → 完成首次联络
+→ 组长转派给第二位 CC / TMK
+→ 当前 CC 与阶段更新，首位 CC 保持不变
+→ 组长按首位 CC 和时间筛选
+→ 预览并下载当前范围
+→ 下钻或另开线索查看 Lead &gt; Update 分配历史</code></pre>
+<h3>异常与边界</h3>
+<ul><li><strong>无首位 CC</strong>：老数据没有可确认事件时显示“历史未知”，不能使用当前 CC 或最早可见事件猜测。</li><li><strong>重复触发</strong>：分配事件、外呼事件和跟进事件均使用幂等键；首位字段一经写入不覆盖。</li><li><strong>并发领取</strong>：数据库唯一约束和事务保证只有一个成功领取者。</li><li><strong>重复回池</strong>：回池和二次领取只追加历史，不重置首位 CC。</li><li><strong>普通转派与 TMK 交接</strong>：只有新负责人被确认属于 TMK 角色组时才写 TMK 交接时间；角色无法确认时显示“待确认角色”。</li><li><strong>用户离职或改名</strong>：保留首位 CC ID 和首次名称快照，额外展示当前账号状态。</li><li><strong>导入历史数据</strong>：只接受已经核实并带来源的记录，导入文件需要保存批次号和操作人。</li><li><strong>时区</strong>：页面和下载统一使用 <code>Asia/Ho_Chi_Minh</code>；跨日以本地日期切分。</li><li><strong>大范围下载</strong>：沿用现有导出上限；超限时提示缩小日期范围，不静默截断。</li></ul>
+<h3>验收</h3>
+<h4>首位 CC 写入与保留</h4>
+<ol><li>新线索自动分配给 Linh Pham 后，列表出现 Linh Pham 作为首位 CC，首次归属时间与分配事件一致。</li><li>同一线索从 Linh Pham 转给 TMK Minh 后，当前 CC 变为 TMK Minh，首位 CC 仍为 Linh Pham。</li><li>线索退回公海并被另一名 CC 再次领取后，首位 CC 不重置。</li><li>两名 CC 同时领取同一线索，只有一人成功，分配历史和首位 CC 只出现一次。</li><li>转派事务失败时，负责人、首位 CC 和分配历史均保持原值。</li></ol>
+<h4>列表、筛选与下载</h4>
+<ol><li>普通 CC 只能看到本人范围，组长可以按授权团队内的首位 CC 筛选。</li><li>按“首位 CC = Linh Pham + 首次联络状态 = 未触达”筛选后，列表只显示符合两项条件的线索。</li><li>切到下一页、排序或刷新后，当前筛选仍保留。</li><li>下载行数与同条件列表一致，包含全部指定字段和 <code>Asia/Ho_Chi_Minh</code> 时间。</li><li>下载只包含当前用户有权查看的数据；操作日志出现筛选条件、行数和时间。</li></ol>
+<h4>监控、异常与历史</h4>
+<ol><li>监控页首位 CC 承接量、触达量和交接量可以与明细逐条核对。</li><li>点击任一汇总数字可打开相同筛选条件的明细。</li><li>历史分配记录缺失的线索显示“历史未知”，不参与首位 CC 承接量分母。</li><li>用户离职后仍可按其历史首位 CC 名称筛选，列表标记“已停用”。</li><li>首位 CC 或 TMK 角色配置调整后，历史交接时点不被覆盖。</li></ol>
+<h3>待确认</h3>
+<table><thead><tr><th>问题</th><th>当前工作假设</th><th>影响</th><th>Owner</th></tr></thead><tbody><tr><td>首次联络是否等同第一次外呼尝试</td><td>以 CRM 成功创建的外呼尝试为准；接通和有效沟通另算</td><td>触达量口径</td><td>越南销售负责人</td></tr><tr><td>公海人工领取是否计入首位 CC</td><td>计入；自动分配、领取、直接分配都算取得归属</td><td>工作量分母</td><td>越南销售负责人</td></tr><tr><td>TMK 是否通过角色组识别</td><td>使用系统角色 / 岗位组，不按姓名或阶段猜</td><td>交接量口径</td><td>CRM 产品 / 越南销售</td></tr><tr><td>历史分配事件是否完整</td><td>只回填可验证数据，其余标历史未知</td><td>历史覆盖率</td><td>CRM 技术</td></tr><tr><td>监控入口放在销售中心还是管理看板</td><td>首选销售中心组内视图，保留后续进入看板的可能</td><td>导航与权限</td><td>CRM 产品</td></tr><tr><td>是否需要按团队而不是个人展示首位 CC</td><td>P0 保留个人明细，团队汇总作为筛选维度</td><td>权限和报表</td><td>业务负责人</td></tr></tbody></table>
+<h3>写作检查</h3>
+<ul><li>只出现一个交互原型主地址。</li><li>首位 CC、首次联络时间、当前 CC 和 TMK 交接没有混成一个字段。</li><li>主图覆盖领取、并发、转派、回池、历史缺失和下载。</li><li>列表、筛选、下载和监控使用同一时间变量与去重键。</li><li>权限同时覆盖页面、候选项、数据范围和下载。</li><li>验收可以直接在原型或测试数据上执行。</li></ul></article>
+</main>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+</script>
+</body></html>
