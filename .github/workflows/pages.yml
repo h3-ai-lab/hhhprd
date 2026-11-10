@@ -26,20 +26,29 @@ jobs:
           test -f 00-crm-prd-framework.md
           test -f hhhprd-site/index.html
           test -f hhhprd-site/prd-referrals-rewards.html
+          test -f hhhprd-site/prd-first-contact.html
           test -f projects/referrals-rewards/PRD.md
           test -f projects/referrals-rewards/prototype/index.html
+          test -f projects/first-contact/PRD.md
+          test -f projects/first-contact/prototype/index.html
 
       - name: Assemble Pages site
         run: |
-          mkdir -p public/projects/referrals-rewards/prototype
+          mkdir -p public/projects/referrals-rewards/prototype public/projects/first-contact/prototype
           cp hhhprd-site/index.html public/index.html
           cp hhhprd-site/prd-referrals-rewards.html public/prd-referrals-rewards.html
+          cp hhhprd-site/prd-first-contact.html public/prd-first-contact.html
           cp projects/referrals-rewards/PRD.md public/projects/referrals-rewards/PRD.md
+          cp projects/first-contact/PRD.md public/projects/first-contact/PRD.md
           cp -R projects/referrals-rewards/prototype/. public/projects/referrals-rewards/prototype/
+          cp -R projects/first-contact/prototype/. public/projects/first-contact/prototype/
 
           sed -i 's#href="../projects/referrals-rewards/prototype/index.html"#href="projects/referrals-rewards/prototype/index.html"#' public/index.html
+          sed -i 's#href="../projects/first-contact/prototype/index.html"#href="projects/first-contact/prototype/index.html"#' public/index.html
           sed -i 's#href="../projects/referrals-rewards/PRD.md"#href="projects/referrals-rewards/PRD.md"#' public/prd-referrals-rewards.html
+          sed -i 's#href="../projects/first-contact/PRD.md"#href="projects/first-contact/PRD.md"#' public/prd-first-contact.html
           sed -i 's#http://127.0.0.1:4175/projects/referrals-rewards/prototype/#projects/referrals-rewards/prototype/#g' public/prd-referrals-rewards.html
+          sed -i 's#http://127.0.0.1:4175/projects/first-contact/prototype/#projects/first-contact/prototype/#g' public/prd-first-contact.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

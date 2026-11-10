@@ -6,9 +6,10 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-PROJECT = ROOT / "projects" / "referrals-rewards"
-SOURCE = PROJECT / "PRD.md"
-OUTPUT = ROOT / "hhhprd-site" / "prd-referrals-rewards.html"
+PROJECTS = {
+    "referrals-rewards": "Referrals & Rewards",
+    "first-contact": "First Contact",
+}
 
 
 def inline(text):
@@ -95,8 +96,10 @@ def markdown_to_html(markdown):
     return "\n".join(output)
 
 
-def main():
-    source = SOURCE.read_text(encoding="utf-8")
+def build_project(slug, title):
+    project = ROOT / "projects" / slug
+    source = (project / "PRD.md").read_text(encoding="utf-8")
+    output = ROOT / "hhhprd-site" / f"prd-{slug}.html"
     source = re.sub(r"\A---\s*\n.*?\n---\s*\n?", "", source, count=1, flags=re.S)
     content = markdown_to_html(source)
     page = f"""<!doctype html>
@@ -104,7 +107,7 @@ def main():
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Referrals &amp; Rewards · PRD</title>
+  <title>{html.escape(title)} · PRD</title>
   <style>
     :root{{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}}
     *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);
@@ -123,7 +126,7 @@ def main():
   </style>
 </head>
 <body><main>
-  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/referrals-rewards/PRD.md">查看 Markdown 源文件</a></div>
+  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/{slug}/PRD.md">查看 Markdown 源文件</a></div>
   <article>{content}</article>
 </main>
 <script type="module">
@@ -131,8 +134,13 @@ def main():
   mermaid.initialize({{ startOnLoad: true, theme: "neutral" }});
 </script>
 </body></html>"""
-    OUTPUT.write_text(page, encoding="utf-8")
-    print(f"Generated {OUTPUT}")
+    output.write_text(page, encoding="utf-8")
+    print(f"Generated {output}")
+
+
+def main():
+    for slug, title in PROJECTS.items():
+        build_project(slug, title)
 
 
 if __name__ == "__main__":
