@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dino CRM PRD 可视化工作台">
+  <title>Dino CRM · PRD Workspace</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></symbol>
+    <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 12 2-6h6"/></symbol>
+    <symbol id="i-decision" viewBox="0 0 24 24"><path d="M12 3v5M12 16v5M7 8h10l3 4-3 4H7l-3-4z"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M4 10h16v11H4zM3 6h18v4H3zM12 6v15M12 6c-2.5 0-5-1-5-3 0-1.2 1-2 2.2-2C11 1 12 6 12 6Zm0 0c2.5 0 5-1 5-3 0-1.2-1-2-2.2-2C13 1 12 6 12 6Z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16l-6 7v6l-4 2v-8z"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <div class="brand-copy">
+          <strong>Dino CRM</strong>
+          <span>Referrals &amp; Rewards</span>
+        </div>
+      </div>
+
+      <nav class="side-nav" aria-label="主导航">
+        <div class="nav-group-label">泰国推荐奖励</div>
+        <button class="nav-item is-active" data-route="overview">
+          <svg><use href="#i-grid"></use></svg><span>功能概览</span>
+        </button>
+        <button class="nav-item" data-route="activity">
+          <svg><use href="#i-list"></use></svg><span>推荐活动</span>
+        </button>
+        <button class="nav-item" data-route="social">
+          <svg><use href="#i-check"></use></svg><span>社媒审核</span><em>3</em>
+        </button>
+        <button class="nav-item" data-route="app">
+          <svg><use href="#i-pulse"></use></svg><span>App 邀请体验</span>
+        </button>
+        <button class="nav-item" data-route="ledger">
+          <svg><use href="#i-gift"></use></svg><span>奖励流水</span>
+        </button>
+        <button class="nav-item" data-route="rules">
+          <svg><use href="#i-decision"></use></svg><span>规则与异常</span>
+        </button>
+        <button class="nav-item" data-route="acceptance">
+          <svg><use href="#i-check"></use></svg><span>验收清单</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-status"><i></i>本地工作稿</div>
+        <span>REQ-TH-001 · 泰国业务线</span>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn menu-btn" id="menu-toggle" aria-label="展开或收起导航">
+            <svg><use href="#i-menu"></use></svg>
+          </button>
+          <div>
+            <div class="crumb">Dino CRM <span>/</span> 营销中心 <span>/</span> Referrals &amp; Rewards</div>
+            <h1 id="page-title">推荐奖励概览</h1>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <span class="env-tag"><i></i> 原型演示</span>
+          <button class="btn btn-secondary btn-small" data-route="app">体验 App 邀请流程</button>
+          <div class="account">
+            <div class="avatar">P</div>
+            <div><strong>Product</strong><span>PRD Owner</span></div>
+          </div>
+        </div>
+      </header>
+
+      <main id="content" class="content" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div class="drawer-layer" id="drawer-layer" aria-hidden="true">
+    <button class="drawer-scrim" data-action="close-drawer" aria-label="关闭详情"></button>
+    <aside class="drawer" id="drawer" aria-label="详情面板"></aside>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script defer src="./app.js"></script>
+</body>
+</html>
