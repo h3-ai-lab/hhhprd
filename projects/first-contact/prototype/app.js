@@ -163,7 +163,7 @@ const toast = document.querySelector("#toast");
 
 function routeFromHash() {
   const route = location.hash.replace(/^#\/?/, "");
-  return ["leads", "monitor", "rules"].includes(route) ? route : "leads";
+  return ["leads", "monitor"].includes(route) ? route : "leads";
 }
 
 function icon(name) {
@@ -181,13 +181,6 @@ function esc(value) {
 function initials(name) {
   if (!name) return "?";
   return name.split(/\s+/).slice(-2).map((part) => part[0]).join("").toUpperCase();
-}
-
-function pageHeading(eyebrow, title, copy, actions = "") {
-  return `<div class="page-heading">
-    <div><div class="eyebrow">${esc(eyebrow)}</div><h2>${esc(title)}</h2><p>${esc(copy)}</p></div>
-    ${actions ? `<div class="heading-actions">${actions}</div>` : ""}
-  </div>`;
 }
 
 function tag(text, kind = "neutral") {
@@ -254,29 +247,6 @@ function statCards(rows) {
     <article class="stat-card is-warning"><span class="stat-label">已有首次外呼</span><strong>${stats.outbound}</strong><small>不区分外呼状态</small><span class="stat-icon">${icon("phone")}</span></article>
     <article class="stat-card is-purple"><span class="stat-label">已有首次接通</span><strong>${stats.connected}</strong><small>与首次外呼时间独立记录</small><span class="stat-icon">${icon("arrow")}</span></article>
   </div>`;
-}
-
-function hero(rows) {
-  const stats = statsFor(rows);
-  return `<section class="hero">
-    <div class="hero-main">
-      <div>
-        <div class="eyebrow">GLOBAL SALES · FIRST CONTACT TRACE</div>
-        <h2>首次分配留下归属，外呼与接通分别留痕</h2>
-        <p>线索转入后续 CC 后，列表、下载和监控继续保留首位 CC；业务方通过当前 CC 是否等于首位 CC 直接判断负责人是否发生变化。</p>
-      </div>
-      <div class="hero-note"><span>当前视图可确认</span><strong>${stats.covered} 条</strong><small>${stats.missing} 条历史未知 · 不计入承接量</small></div>
-    </div>
-    <div class="handoff-rail" aria-label="首位联系人业务链路">
-      <div class="rail-node first"><i>01</i><div><strong>首次分配</strong>首位 CC 写入</div></div>
-      <div class="rail-arrow">${icon("arrow")}</div>
-      <div class="rail-node"><i>02</i><div><strong>首次外呼</strong>不区分外呼状态</div></div>
-      <div class="rail-arrow">${icon("arrow")}</div>
-      <div class="rail-node"><i>03</i><div><strong>首次接通</strong>独立记录时间</div></div>
-      <div class="rail-arrow">${icon("arrow")}</div>
-      <div class="rail-node"><i>04</i><div><strong>负责人比较</strong>首位 CC 与当前 CC</div></div>
-    </div>
-  </section>`;
 }
 
 function selectOptions(items, selected, allLabel) {
@@ -372,10 +342,7 @@ function renderLeads() {
   const start = (state.page - 1) * PAGE_SIZE;
   const pageRows = rows.slice(start, start + PAGE_SIZE);
   content.innerHTML = `<section class="page-enter">
-    ${pageHeading("SALES CENTER OVERVIEW", "首位联系人", "跨业务线围绕首位 CC、首次外呼、首次接通和负责人变化建立可筛选、可下载、可追溯的团队视图。", `<button class="btn btn-secondary btn-small" data-route="monitor">${icon("pulse")} 查看团队监控</button>`)}
-    ${hero(rows)}
     ${statCards(rows)}
-    <div class="notice">${icon("info")}<span><strong>当前列表已增加首位 CC。</strong> 首位 CC 是历史事实，不会随当前负责人改变；历史缺失记录不会被猜测回填。</span><button class="btn btn-quiet btn-small" data-route="rules">查看字段定义</button></div>
     <div class="view-tabs" role="tablist" aria-label="销售中心页签">
       <button class="view-tab ${state.tab === "pool" ? "is-active" : ""}" data-tab="pool">公海 <em>${VIEW_COUNTS.pool}</em></button>
       <button class="view-tab ${state.tab === "following" ? "is-active" : ""}" data-tab="following">我的跟进 <em>${VIEW_COUNTS.following}</em></button>
@@ -428,11 +395,10 @@ function renderMonitor() {
   const productivity = productivityRows();
   const connectedRate = stats.total ? Math.round((stats.connected / stats.total) * 100) : 0;
   content.innerHTML = `<section class="page-enter">
-    ${pageHeading("TEAM PRODUCTIVITY", "首位 CC 与负责人变化监控", "数据范围：授权业务线、2026-11-01 至 2026-11-10。所有数字可回到同口径明细。", `<button class="btn btn-secondary btn-small" data-route="leads">${icon("list")} 返回线索列表</button>`)}
     ${statCards(completeRows)}
     <div class="monitor-grid">
       <section class="card">
-        <div class="card-head"><div><h3>首位 CC 生产力</h3><p>首次分配、首次外呼和首次接通按 Lead ID 去重</p></div>${tag("当前演示数据", "info")}</div>
+        <div class="card-head"><div><h3>首位 CC 生产力</h3><p>首次分配、首次外呼和首次接通按 Lead ID 去重</p></div></div>
         <div class="table-wrap"><table class="agent-table">
           <thead><tr><th>首位 CC</th><th>首次分配</th><th>首次外呼</th><th>外呼覆盖率</th><th>首次接通</th><th>负责人变化</th></tr></thead>
           <tbody>${productivity.map((row) => `<tr data-agent="${esc(row.name)}">
@@ -461,56 +427,17 @@ function renderMonitor() {
         </section>
       </div>
     </div>
-    <div class="notice">${icon("info")}<span><strong>口径一致：</strong> 首次外呼按第一条外呼记录计算并保留所有状态；首次接通只在存在接通记录时写入；负责人变化通过当前 CC 与首位 CC 直接比较。</span><button class="btn btn-quiet btn-small" data-route="rules">查看计算规则</button></div>
-  </section>`;
-}
-
-function renderRules() {
-  content.innerHTML = `<section class="page-enter">
-    ${pageHeading("FIELD CONTRACT", "字段与业务规则", "把历史事实、当前状态和外部事件分开，保证列表、筛选、下载与监控不会互相矛盾。")}
-    <div class="definition-grid">
-      <article class="definition-card"><span class="number">FACT 01</span><h3>首位 CC</h3><p>线索进入销售中心后第一次取得归属的 CC。首次分配成功后永久保留，不随转派、掉库、回池或再领取变化。</p></article>
-      <article class="definition-card"><span class="number">FACT 02</span><h3>首次分配时间</h3><p>首位 CC 第一次取得线索归属的时间，与首位 CC 同时写入。</p></article>
-      <article class="definition-card"><span class="number">FACT 03</span><h3>首次外呼时间</h3><p>线索第一条外呼记录的时间。不区分接通、拒接、无人接听或其他外呼状态。</p></article>
-      <article class="definition-card"><span class="number">FACT 04</span><h3>首次接通时间</h3><p>线索第一次产生接通外呼记录的时间，与首次外呼时间独立记录。</p></article>
-      <article class="definition-card"><span class="number">FACT 05</span><h3>当前 CC 与负责人变化</h3><p>当前 CC 由领取、自动分配、转派或管理操作更新。当前 CC 与首位 CC 不同即表示负责人已发生变化，不增加流转校验。</p></article>
-      <article class="definition-card"><span class="number">FACT 06</span><h3>历史完整度</h3><p>只有可验证的分配和外呼历史才标为完整；缺失时显示历史未知，不允许拿当前 CC 倒推首位 CC。</p></article>
-      <article class="definition-card"><span class="number">FACT 07</span><h3>名称快照</h3><p>保留首次分配时的 CC 名称。人员离职或改名后仍可按历史名称筛选，并显示当前账号状态。</p></article>
-    </div>
-    <section class="card" style="margin-top:16px">
-      <div class="card-head"><div><h3>一次成功归属的数据写入</h3><p>首位事实和分配历史必须处于同一事务</p></div>${tag("幂等写入", "info")}</div>
-      <div class="rule-flow">
-        <div class="rule-step"><small>STEP 01</small><strong>首次分配</strong><span>写入首位 CC 和时间</span></div>
-        <div class="rule-step"><small>STEP 02</small><strong>首次外呼</strong><span>任何外呼状态均写入</span></div>
-        <div class="rule-step"><small>STEP 03</small><strong>首次接通</strong><span>存在接通记录时写入</span></div>
-        <div class="rule-step"><small>STEP 04</small><strong>更新当前 CC</strong><span>首位字段保持不变</span></div>
-        <div class="rule-step"><small>STEP 05</small><strong>直接比较</strong><span>当前 CC 是否等于首位 CC</span></div>
-      </div>
-    </section>
-    <section class="card">
-      <div class="card-head"><div><h3>关键边界</h3><p>最容易产生错误统计的场景</p></div></div>
-      <div class="card-body"><div class="rule-list">
-        <div class="rule-row"><strong>并发领取</strong><p>数据库唯一约束保证只有一个领取成功；只有成功事件可以写入首位 CC 和分配历史。</p></div>
-        <div class="rule-row"><strong>回池后再领取</strong><p>首位 CC 仍是第一次归属者；新领取人只成为当前 CC。回池不重置历史。</p></div>
-        <div class="rule-row"><strong>负责人是否变化</strong><p>直接比较当前 CC 与首位 CC：相同表示未变化，不同表示当前 CC 已发生变化。不新增流转字段或校验步骤。</p></div>
-        <div class="rule-row"><strong>历史缺失</strong><p>没有审计事件时不使用“最早可见通话”或“当前 CC”倒推。数据不完整比猜测更可解释。</p></div>
-        <div class="rule-row"><strong>离职与改名</strong><p><code>first_cc_id</code> 不变，展示首次名称快照；账号状态单独展示，不影响历史筛选。</p></div>
-        <div class="rule-row"><strong>筛选后下载</strong><p>下载使用完整筛选结果与当前权限，不受当前分页限制，也不能绕过筛选导出全量。</p></div>
-      </div></div>
-    </section>
   </section>`;
 }
 
 function render() {
   const titles = {
     leads: "我的跟进 · 首位联系人",
-    monitor: "首位 CC 与负责人变化监控",
-    rules: "字段与业务规则"
+    monitor: "首位 CC 与负责人变化监控"
   };
   document.querySelector("#page-title").textContent = titles[state.route];
   document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.route === state.route));
   if (state.route === "monitor") renderMonitor();
-  else if (state.route === "rules") renderRules();
   else renderLeads();
 }
 

@@ -20,3 +20,10 @@
 - Do not include acceptance criteria, test cases, test plans, regression checklists, or Agent self-check sections in PRDs.
 - Do not display prompt names, supplementary prompt names, or prompt file paths inside a PRD.
 - Perform writing and consistency checks internally without adding them to the delivered PRD.
+
+## Prototype rules
+
+- A prototype must show only the product interface and capabilities available after launch.
+- Do not show PRD titles, requirement context, value statements, flow narratives, design notes, field-definition pages, prototype banners, demo-data banners, or other explanatory UI inside the product surface.
+- Open directly on the operational page users will use.
+- Keep explanations in the PRD; use `prompts/prototype-generation.md` for prototypes.

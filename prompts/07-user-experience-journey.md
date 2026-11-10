@@ -2,6 +2,8 @@
 
 先读取 [`prd-generation.md`](prd-generation.md)。
 
+绘制用户端原型时同时读取 [`prototype-generation.md`](prototype-generation.md)，只展示上线后的真实页面和可操作功能。
+
 ## 适用信号
 
 - App、C 端页面、邀请、注册、登录、支付、通知或用户自助操作。
