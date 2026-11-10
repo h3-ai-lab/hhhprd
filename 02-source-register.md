@@ -20,7 +20,7 @@
 | [VN&TH 11 月周会](https://qjphu5vphyf4.jp.larksuite.com/docx/JD4ddkyQRom0t4xEvqXjtL26pcc) | C | 推荐策略近期上线、泰国获客目标 | 未定义产品规则 |
 | [需求拆分与排期规范](https://qjphu5vphyf4.jp.larksuite.com/wiki/AbHPwbqnEi5VJ0kpg4sjrCc9pwb) | A | 功能点、执行任务、Owner 与交付闭环 | 只用于交付层 |
 | [香港支付落地页参照](https://qjphu5vphyf4.jp.larksuite.com/wiki/UGHPwF9XQi0iVTks5kIjNMwZpHc) | A | 当前推荐写法与版式 | 只参考结构，不复制业务内容 |
-| 越南首位联系人需求（2026-11-10 需求方口述） | A | 首位 CC、TMK 交接、列表/筛选/下载诉求 | 首次联络和 TMK 角色口径待评审确认 |
+| 首位联系人需求（2026-11-10 需求方口述及字段确认） | A | 全业务线首位 CC、首次分配/外呼/接通、列表/筛选/下载 | 历史回填和跨业务线汇总时区待确认 |
 | `crm-manual/` | D | 当前页面操作 | 手册不等于产品目标 |
 
 ## 2. 空缺资料

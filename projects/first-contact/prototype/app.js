@@ -1,134 +1,135 @@
 const LEADS = [
   {
-    id: "VN-261109-1048", userId: "2119933744832167937", name: "Nguyễn Minh Anh",
+    id: "LD-261109-1048", userId: "2119933744832167937", name: "Nguyễn Minh Anh", businessLine: "Vietnam",
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
-    assignedText: "2026-11-09 09:12 (+07)", contactText: "2026-11-09 09:18 (+07)",
-    assignedDate: "2026-11-09", handoverText: "2026-11-09 17:42 (+07)",
-    contacted: true, handover: "handed", history: "complete", stage: "TMK 已触达",
+    assignedText: "2026-11-09 09:12 (+07)", outboundText: "2026-11-09 09:18 (+07)", connectedText: "2026-11-09 09:26 (+07)",
+    assignedDate: "2026-11-09", currentAssignedText: "2026-11-09 17:42 (+07)",
+    hasOutbound: true, history: "complete", stage: "电话营销跟进中",
     attempts: 4, connected: 2, outcome: "有意向", view: "following", stopped: false
   },
   {
-    id: "VN-261109-1051", userId: "211993114542575618", name: "Bảo Lê",
+    id: "LD-261109-1051", userId: "211993114542575618", name: "Bảo Lê", businessLine: "Thailand",
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
-    assignedText: "2026-11-09 09:28 (+07)", contactText: "2026-11-09 10:04 (+07)",
-    assignedDate: "2026-11-09", handoverText: "2026-11-09 18:03 (+07)",
-    contacted: true, handover: "handed", history: "complete", stage: "TMK 跟进中",
+    assignedText: "2026-11-09 09:28 (+07)", outboundText: "2026-11-09 10:04 (+07)", connectedText: "2026-11-09 10:10 (+07)",
+    assignedDate: "2026-11-09", currentAssignedText: "2026-11-09 18:03 (+07)",
+    hasOutbound: true, history: "complete", stage: "电话营销跟进中",
     attempts: 3, connected: 1, outcome: "未填写", view: "following", stopped: false
   },
   {
-    id: "VN-261109-1067", userId: "211993582872029762", name: "Chi Phạm",
+    id: "LD-261109-1067", userId: "211993582872029762", name: "Chi Phạm", businessLine: "Malaysia",
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
     currentCc: "Linh Pham", currentCcId: "cc_vn_1024", currentTeam: "CC",
-    assignedText: "2026-11-09 11:05 (+07)", contactText: "—",
-    assignedDate: "2026-11-09", handoverText: "—",
-    contacted: false, handover: "not", history: "complete", stage: "首次跟进",
+    assignedText: "2026-11-09 11:05 (+07)", outboundText: "—", connectedText: "—",
+    assignedDate: "2026-11-09", currentAssignedText: "2026-11-09 11:05 (+07)",
+    hasOutbound: false, history: "complete", stage: "首次跟进",
     attempts: 0, connected: 0, outcome: "未填写", view: "following", stopped: false
   },
   {
-    id: "VN-261108-0934", userId: "211993414302876441", name: "Dung Trần",
+    id: "LD-261108-0934", userId: "211993414302876441", name: "Dung Trần", businessLine: "Vietnam",
     firstCc: "Mai Nguyen", firstCcId: "cc_vn_1031", firstCcEmail: "mai.nguyen@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
-    assignedText: "2026-11-08 14:22 (+07)", contactText: "2026-11-08 14:31 (+07)",
-    assignedDate: "2026-11-08", handoverText: "2026-11-09 09:14 (+07)",
-    contacted: true, handover: "handed", history: "complete", stage: "TMK 已触达",
+    assignedText: "2026-11-08 14:22 (+07)", outboundText: "2026-11-08 14:31 (+07)", connectedText: "2026-11-08 14:40 (+07)",
+    assignedDate: "2026-11-08", currentAssignedText: "2026-11-09 09:14 (+07)",
+    hasOutbound: true, history: "complete", stage: "电话营销已接通",
     attempts: 5, connected: 3, outcome: "已预约", view: "following", stopped: false
   },
   {
-    id: "VN-261108-0948", userId: "211993778120431105", name: "Giang Võ",
+    id: "LD-261108-0948", userId: "211993778120431105", name: "Giang Võ", businessLine: "Thailand",
     firstCc: "Mai Nguyen", firstCcId: "cc_vn_1031", firstCcEmail: "mai.nguyen@dino.ai",
     currentCc: "Hà Nguyễn", currentCcId: "cc_vn_1042", currentTeam: "CC",
-    assignedText: "2026-11-08 16:08 (+07)", contactText: "2026-11-08 16:16 (+07)",
-    assignedDate: "2026-11-08", handoverText: "—",
-    contacted: true, handover: "not", history: "complete", stage: "销售跟进中",
-    attempts: 2, connected: 1, outcome: "有意向", view: "following", stopped: false
+    assignedText: "2026-11-08 16:08 (+07)", outboundText: "2026-11-08 16:16 (+07)", connectedText: "—",
+    assignedDate: "2026-11-08", currentAssignedText: "2026-11-09 10:20 (+07)",
+    hasOutbound: true, history: "complete", stage: "销售跟进中",
+    attempts: 2, connected: 0, outcome: "无人接听", view: "following", stopped: false
   },
   {
-    id: "VN-261110-1122", userId: "211993011548763924", name: "Hạnh Đỗ",
+    id: "LD-261110-1122", userId: "211993011548763924", name: "Hạnh Đỗ", businessLine: "Vietnam",
     firstCc: "Quyen Do", firstCcId: "cc_vn_1039", firstCcEmail: "quyen.do@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
-    assignedText: "2026-11-10 08:11 (+07)", contactText: "2026-11-10 08:19 (+07)",
-    assignedDate: "2026-11-10", handoverText: "2026-11-10 08:25 (+07)",
-    contacted: true, handover: "handed", history: "complete", stage: "TMK 待跟进",
+    assignedText: "2026-11-10 08:11 (+07)", outboundText: "2026-11-10 08:19 (+07)", connectedText: "2026-11-10 08:22 (+07)",
+    assignedDate: "2026-11-10", currentAssignedText: "2026-11-10 08:25 (+07)",
+    hasOutbound: true, history: "complete", stage: "电话营销待跟进",
     attempts: 1, connected: 1, outcome: "未填写", view: "following", stopped: false
   },
   {
-    id: "VN-261110-1140", userId: "211993723590118302", name: "Khanh Lâm",
+    id: "LD-261110-1140", userId: "211993723590118302", name: "Khanh Lâm", businessLine: "Malaysia",
     firstCc: "Quyen Do", firstCcId: "cc_vn_1039", firstCcEmail: "quyen.do@dino.ai",
     currentCc: "Quyen Do", currentCcId: "cc_vn_1039", currentTeam: "CC",
-    assignedText: "2026-11-10 09:47 (+07)", contactText: "—",
-    assignedDate: "2026-11-10", handoverText: "—",
-    contacted: false, handover: "not", history: "complete", stage: "首次跟进",
+    assignedText: "2026-11-10 09:47 (+08)", outboundText: "—", connectedText: "—",
+    assignedDate: "2026-11-10", currentAssignedText: "2026-11-10 09:47 (+08)",
+    hasOutbound: false, history: "complete", stage: "首次跟进",
     attempts: 0, connected: 0, outcome: "未填写", view: "following", stopped: false
   },
   {
-    id: "VN-260918-0502", userId: "211993665881039421", name: "Tú Phan",
+    id: "LD-260918-0502", userId: "211993665881039421", name: "Tú Phan", businessLine: "Thailand",
     firstCc: null, firstCcId: null, firstCcEmail: null,
     currentCc: "Bảo Trân", currentCcId: "cc_vn_1051", currentTeam: "CC",
-    assignedText: "—", contactText: "2026-09-18 10:32 (+07)",
-    assignedDate: "", handoverText: "待确认角色",
-    contacted: true, handover: "unknown", history: "missing", stage: "TMK 已触达",
+    assignedText: "—", outboundText: "2026-09-18 10:32 (+07)", connectedText: "2026-09-18 10:36 (+07)",
+    assignedDate: "", currentAssignedText: "历史未知",
+    hasOutbound: true, history: "missing", stage: "电话营销已接通",
     attempts: 2, connected: 1, outcome: "未填写", view: "following", stopped: false
   },
   {
-    id: "VN-260907-0471", userId: "211993090470273734", name: "Minh Châu",
+    id: "LD-260907-0471", userId: "211993090470273734", name: "Minh Châu", businessLine: "Vietnam",
     firstCc: "An Vo", firstCcId: "cc_vn_1006", firstCcEmail: "an.vo@dino.ai",
     currentCc: "Bảo Trân", currentCcId: "cc_vn_1051", currentTeam: "CC",
-    assignedText: "2026-09-07 10:02 (+07)", contactText: "2026-09-07 10:20 (+07)",
-    assignedDate: "2026-09-07", handoverText: "2026-09-08 08:54 (+07)",
-    contacted: true, handover: "handed", history: "complete", stage: "TMK 已触达",
+    assignedText: "2026-09-07 10:02 (+07)", outboundText: "2026-09-07 10:20 (+07)", connectedText: "2026-09-07 10:25 (+07)",
+    assignedDate: "2026-09-07", currentAssignedText: "2026-09-08 08:54 (+07)",
+    hasOutbound: true, history: "complete", stage: "续费跟进",
     attempts: 6, connected: 4, outcome: "已付费", view: "paid", stopped: true
   },
   {
-    id: "VN-261012-0619", userId: "211993690918140527", name: "Nam Hoàng",
+    id: "LD-261012-0619", userId: "211993690918140527", name: "Nam Hoàng", businessLine: "Thailand",
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
-    assignedText: "2026-10-12 13:26 (+07)", contactText: "2026-10-12 13:40 (+07)",
-    assignedDate: "2026-10-12", handoverText: "2026-10-13 09:03 (+07)",
-    contacted: true, handover: "handed", history: "complete", stage: "续费跟进",
+    assignedText: "2026-10-12 13:26 (+07)", outboundText: "2026-10-12 13:40 (+07)", connectedText: "2026-10-12 13:48 (+07)",
+    assignedDate: "2026-10-12", currentAssignedText: "2026-10-13 09:03 (+07)",
+    hasOutbound: true, history: "complete", stage: "续费跟进",
     attempts: 8, connected: 5, outcome: "已付费", view: "paid", stopped: false
   },
   {
-    id: "VN-261020-0752", userId: "211993207845610980", name: "Oanh Nguyễn",
+    id: "LD-261020-0752", userId: "211993207845610980", name: "Oanh Nguyễn", businessLine: "Malaysia",
     firstCc: "Mai Nguyen", firstCcId: "cc_vn_1031", firstCcEmail: "mai.nguyen@dino.ai",
     currentCc: "Mai Nguyen", currentCcId: "cc_vn_1031", currentTeam: "CC",
-    assignedText: "2026-10-20 15:16 (+07)", contactText: "2026-10-20 15:24 (+07)",
-    assignedDate: "2026-10-20", handoverText: "—",
-    contacted: true, handover: "not", history: "complete", stage: "续费跟进",
+    assignedText: "2026-10-20 15:16 (+08)", outboundText: "2026-10-20 15:24 (+08)", connectedText: "2026-10-20 15:29 (+08)",
+    assignedDate: "2026-10-20", currentAssignedText: "2026-10-20 15:16 (+08)",
+    hasOutbound: true, history: "complete", stage: "续费跟进",
     attempts: 3, connected: 2, outcome: "已付费", view: "paid", stopped: false
   },
   {
-    id: "VN-260903-0428", userId: "211993519107422668", name: "Phú Nguyễn",
+    id: "LD-260903-0428", userId: "211993519107422668", name: "Phú Nguyễn", businessLine: "Thailand",
     firstCc: null, firstCcId: null, firstCcEmail: null,
     currentCc: "Bảo Trân", currentCcId: "cc_vn_1051", currentTeam: "CC",
-    assignedText: "—", contactText: "2026-09-03 11:18 (+07)",
-    assignedDate: "", handoverText: "待确认角色",
-    contacted: true, handover: "unknown", history: "missing", stage: "TMK 已触达",
+    assignedText: "—", outboundText: "2026-09-03 11:18 (+07)", connectedText: "—",
+    assignedDate: "", currentAssignedText: "历史未知",
+    hasOutbound: true, history: "missing", stage: "电话营销跟进中",
     attempts: 2, connected: 1, outcome: "已付费", view: "paid", stopped: false
   },
   {
-    id: "VN-261110-1168", userId: "211993880651174930", name: "Quyên Lý",
+    id: "LD-261110-1168", userId: "211993880651174930", name: "Quyên Lý", businessLine: "Vietnam",
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
-    currentCc: "无人负责", currentCcId: null, currentTeam: "POOL",
-    assignedText: "2026-11-10 10:11 (+07)", contactText: "2026-11-10 10:15 (+07)",
-    assignedDate: "2026-11-10", handoverText: "—",
-    contacted: true, handover: "not", history: "complete", stage: "已退回公海",
+    currentCc: "未分配", currentCcId: null, currentTeam: "POOL",
+    assignedText: "2026-11-10 10:11 (+07)", outboundText: "2026-11-10 10:15 (+07)", connectedText: "—",
+    assignedDate: "2026-11-10", currentAssignedText: "2026-11-10 11:03 (+07)",
+    hasOutbound: true, history: "complete", stage: "已退回公海",
     attempts: 1, connected: 0, outcome: "无人接听", view: "pool", stopped: false
   },
   {
-    id: "VN-260922-0563", userId: "211993440781025116", name: "Sơn Đặng",
+    id: "LD-260922-0563", userId: "211993440781025116", name: "Sơn Đặng", businessLine: "Malaysia",
     firstCc: null, firstCcId: null, firstCcEmail: null,
-    currentCc: "无人负责", currentCcId: null, currentTeam: "POOL",
-    assignedText: "—", contactText: "—",
-    assignedDate: "", handoverText: "待确认角色",
-    contacted: false, handover: "unknown", history: "missing", stage: "待领取",
+    currentCc: "未分配", currentCcId: null, currentTeam: "POOL",
+    assignedText: "—", outboundText: "—", connectedText: "—",
+    assignedDate: "", currentAssignedText: "历史未知",
+    hasOutbound: false, history: "missing", stage: "待领取",
     attempts: 0, connected: 0, outcome: "未填写", view: "pool", stopped: false
   }
 ];
 
 const FIRST_CC = ["Linh Pham", "Mai Nguyen", "Quyen Do", "An Vo"];
-const CURRENT_CC = ["Minh Tran", "Linh Pham", "Hà Nguyễn", "Quyen Do", "Bảo Trân", "Mai Nguyen", "无人负责"];
+const CURRENT_CC = ["Minh Tran", "Linh Pham", "Hà Nguyễn", "Quyen Do", "Bảo Trân", "Mai Nguyen", "未分配"];
+const BUSINESS_LINES = ["Vietnam", "Thailand", "Malaysia"];
 const VIEW_COUNTS = {
   pool: LEADS.filter((lead) => lead.view === "pool").length,
   following: LEADS.filter((lead) => lead.view === "following").length,
@@ -142,10 +143,11 @@ const state = {
   page: 1,
   filters: {
     query: "",
+    businessLine: "all",
     firstCc: "all",
     currentCc: "all",
-    contact: "all",
-    handover: "all",
+    outbound: "all",
+    connected: "all",
     history: "all",
     from: "2026-11-01",
     to: "2026-11-10"
@@ -192,16 +194,12 @@ function tag(text, kind = "neutral") {
   return `<span class="tag tag-${kind}">${esc(text)}</span>`;
 }
 
-function handoverLabel(value) {
-  return value === "handed" ? "已交接" : value === "not" ? "未交接" : "待确认角色";
-}
-
-function handoverTag(value) {
-  return tag(handoverLabel(value), value === "handed" ? "purple" : value === "not" ? "neutral" : "warning");
-}
-
 function historyTag(value) {
   return value === "complete" ? tag("完整", "success") : tag("历史未知", "danger");
+}
+
+function businessLineLabel(value) {
+  return value === "Vietnam" ? "越南" : value === "Thailand" ? "泰国" : value === "Malaysia" ? "马来西亚" : value;
 }
 
 function currentFilters() {
@@ -216,12 +214,15 @@ function filteredRows(includeTab = true) {
       const haystack = `${lead.id} ${lead.userId} ${lead.name}`.toLowerCase();
       if (!haystack.includes(f.query.toLowerCase())) return false;
     }
+    if (f.businessLine !== "all" && lead.businessLine !== f.businessLine) return false;
     if (f.firstCc !== "all" && lead.firstCc !== f.firstCc) return false;
     if (f.currentCc !== "all" && lead.currentCc !== f.currentCc) return false;
-    if (f.contact === "contacted" && !lead.contacted) return false;
-    if (f.contact === "not-contacted" && lead.contacted) return false;
-    if (f.contact === "unknown" && lead.history !== "missing") return false;
-    if (f.handover !== "all" && lead.handover !== f.handover) return false;
+    if (f.outbound === "has" && !lead.hasOutbound) return false;
+    if (f.outbound === "none" && lead.hasOutbound) return false;
+    if (f.outbound === "unknown" && lead.history !== "missing") return false;
+    if (f.connected === "yes" && lead.connectedText === "—") return false;
+    if (f.connected === "no" && lead.connectedText !== "—") return false;
+    if (f.connected === "unknown" && lead.history !== "missing") return false;
     if (f.history !== "all" && lead.history !== f.history) return false;
     if (f.from && lead.assignedDate && lead.assignedDate < f.from) return false;
     if (f.to && lead.assignedDate && lead.assignedDate > f.to) return false;
@@ -231,14 +232,16 @@ function filteredRows(includeTab = true) {
 
 function statsFor(rows) {
   const covered = rows.filter((row) => row.history === "complete").length;
-  const contacted = rows.filter((row) => row.contacted).length;
-  const handed = rows.filter((row) => row.handover === "handed").length;
+  const outbound = rows.filter((row) => row.hasOutbound).length;
+  const connected = rows.filter((row) => row.connectedText !== "—").length;
+  const changed = rows.filter((row) => row.firstCcId && row.currentCcId && row.currentCcId !== row.firstCcId).length;
   return {
     total: rows.length,
     covered,
     coverage: rows.length ? Math.round((covered / rows.length) * 100) : 0,
-    contacted,
-    handed,
+    outbound,
+    connected,
+    changed,
     missing: rows.length - covered
   };
 }
@@ -248,8 +251,8 @@ function statCards(rows) {
   return `<div class="stat-grid">
     <article class="stat-card"><span class="stat-label">当前筛选线索</span><strong>${stats.total}</strong><small>按 Lead ID 去重</small><span class="stat-icon">${icon("list")}</span></article>
     <article class="stat-card is-success"><span class="stat-label">首位 CC 覆盖率</span><strong>${stats.coverage}%</strong><small>${stats.covered} / ${stats.total} 可确认</small><span class="stat-icon">${icon("check")}</span></article>
-    <article class="stat-card is-warning"><span class="stat-label">已触达线索</span><strong>${stats.contacted}</strong><small>至少一次有效外呼尝试</small><span class="stat-icon">${icon("phone")}</span></article>
-    <article class="stat-card is-purple"><span class="stat-label">已交接 TMK</span><strong>${stats.handed}</strong><small>首位 CC 保持不变</small><span class="stat-icon">${icon("arrow")}</span></article>
+    <article class="stat-card is-warning"><span class="stat-label">已有首次外呼</span><strong>${stats.outbound}</strong><small>不区分外呼状态</small><span class="stat-icon">${icon("phone")}</span></article>
+    <article class="stat-card is-purple"><span class="stat-label">已有首次接通</span><strong>${stats.connected}</strong><small>与首次外呼时间独立记录</small><span class="stat-icon">${icon("arrow")}</span></article>
   </div>`;
 }
 
@@ -258,20 +261,20 @@ function hero(rows) {
   return `<section class="hero">
     <div class="hero-main">
       <div>
-        <div class="eyebrow">VIETNAM · FIRST CONTACT TRACE</div>
-        <h2>负责人可以交接，首次归属必须留下</h2>
-        <p>首位 CC 完成本轮工作后把线索交给 TMK，列表、下载和监控继续使用同一位首位 CC，避免负责人变化后丢失工作量。</p>
+        <div class="eyebrow">GLOBAL SALES · FIRST CONTACT TRACE</div>
+        <h2>首次分配留下归属，外呼与接通分别留痕</h2>
+        <p>线索转入后续 CC 后，列表、下载和监控继续保留首位 CC；业务方通过当前 CC 是否等于首位 CC 直接判断负责人是否发生变化。</p>
       </div>
       <div class="hero-note"><span>当前视图可确认</span><strong>${stats.covered} 条</strong><small>${stats.missing} 条历史未知 · 不计入承接量</small></div>
     </div>
-    <div class="handoff-rail" aria-label="首位联系人交接链路">
-      <div class="rail-node first"><i>01</i><div><strong>线索归属</strong>首次 CC 写入</div></div>
+    <div class="handoff-rail" aria-label="首位联系人业务链路">
+      <div class="rail-node first"><i>01</i><div><strong>首次分配</strong>首位 CC 写入</div></div>
       <div class="rail-arrow">${icon("arrow")}</div>
-      <div class="rail-node"><i>02</i><div><strong>完成跟进</strong>首次联络留痕</div></div>
+      <div class="rail-node"><i>02</i><div><strong>首次外呼</strong>不区分外呼状态</div></div>
       <div class="rail-arrow">${icon("arrow")}</div>
-      <div class="rail-node"><i>03</i><div><strong>交接 TMK</strong>只更新当前 CC</div></div>
+      <div class="rail-node"><i>03</i><div><strong>首次接通</strong>独立记录时间</div></div>
       <div class="rail-arrow">${icon("arrow")}</div>
-      <div class="rail-node"><i>04</i><div><strong>批量监控</strong>筛选、下载、核对</div></div>
+      <div class="rail-node"><i>04</i><div><strong>负责人比较</strong>首位 CC 与当前 CC</div></div>
     </div>
   </section>`;
 }
@@ -287,27 +290,27 @@ function filtersPanel(rows) {
   return `<section class="filter-card">
     <div class="filter-grid">
       <label class="field"><span class="field-label">搜索线索</span><span class="search-box">${icon("search")}<input class="input" id="filter-query" value="${esc(f.query)}" placeholder="Lead ID / User ID / 姓名"></span></label>
+      <label class="field"><span class="field-label">业务线</span><select class="select" id="filter-business-line">${selectOptions(BUSINESS_LINES, f.businessLine, "全部业务线")}</select></label>
       <label class="field"><span class="field-label">首位 CC</span><select class="select" id="filter-first-cc">${selectOptions(FIRST_CC, f.firstCc, "全部首位 CC")}</select></label>
       <label class="field"><span class="field-label">当前 CC</span><select class="select" id="filter-current-cc">${selectOptions(CURRENT_CC, f.currentCc, "全部当前 CC")}</select></label>
-      <label class="field"><span class="field-label">首次联络状态</span><select class="select" id="filter-contact">
-        <option value="all">全部状态</option><option value="contacted" ${f.contact === "contacted" ? "selected" : ""}>已触达</option>
-        <option value="not-contacted" ${f.contact === "not-contacted" ? "selected" : ""}>未触达</option>
-        <option value="unknown" ${f.contact === "unknown" ? "selected" : ""}>历史未知</option>
-      </select></label>
-      <label class="field"><span class="field-label">TMK 交接</span><select class="select" id="filter-handover">
-        <option value="all">全部交接状态</option><option value="handed" ${f.handover === "handed" ? "selected" : ""}>已交接</option>
-        <option value="not" ${f.handover === "not" ? "selected" : ""}>未交接</option>
-        <option value="unknown" ${f.handover === "unknown" ? "selected" : ""}>待确认角色</option>
+      <label class="field"><span class="field-label">首次外呼状态</span><select class="select" id="filter-outbound">
+        <option value="all">全部状态</option><option value="has" ${f.outbound === "has" ? "selected" : ""}>有外呼记录</option>
+        <option value="none" ${f.outbound === "none" ? "selected" : ""}>无外呼记录</option>
+        <option value="unknown" ${f.outbound === "unknown" ? "selected" : ""}>历史未知</option>
       </select></label>
     </div>
     <div class="filter-grid second">
+      <label class="field"><span class="field-label">首次接通状态</span><select class="select" id="filter-connected">
+        <option value="all">全部状态</option><option value="yes" ${f.connected === "yes" ? "selected" : ""}>已接通</option>
+        <option value="no" ${f.connected === "no" ? "selected" : ""}>未接通</option>
+        <option value="unknown" ${f.connected === "unknown" ? "selected" : ""}>历史未知</option>
+      </select></label>
       <label class="field"><span class="field-label">历史完整度</span><select class="select" id="filter-history">
         <option value="all">全部记录</option><option value="complete" ${f.history === "complete" ? "selected" : ""}>完整</option>
         <option value="missing" ${f.history === "missing" ? "selected" : ""}>历史缺失</option>
       </select></label>
-      <label class="field"><span class="field-label">首次归属日期（起）</span><input class="input" type="date" id="filter-from" value="${esc(f.from)}"></label>
-      <label class="field"><span class="field-label">首次归属日期（止）</span><input class="input" type="date" id="filter-to" value="${esc(f.to)}"></label>
-      <div class="field"><span class="field-label">时间口径</span><button class="btn" style="width:100%" disabled>Asia/Ho_Chi_Minh</button></div>
+      <label class="field"><span class="field-label">首次分配日期（起）</span><input class="input" type="date" id="filter-from" value="${esc(f.from)}"></label>
+      <label class="field"><span class="field-label">首次分配日期（止）</span><input class="input" type="date" id="filter-to" value="${esc(f.to)}"></label>
       <div class="field"><span class="field-label">当前视图</span><button class="btn" style="width:100%" disabled>${state.tab === "following" ? "我的跟进" : state.tab === "paid" ? "已付费" : "公海"}</button></div>
     </div>
     <div class="filter-actions">
@@ -322,32 +325,34 @@ function activeFilterChips() {
   const f = state.filters;
   const chips = [];
   if (f.query) chips.push(`关键词：${f.query}`);
+  if (f.businessLine !== "all") chips.push(`业务线：${businessLineLabel(f.businessLine)}`);
   if (f.firstCc !== "all") chips.push(`首位 CC：${f.firstCc}`);
   if (f.currentCc !== "all") chips.push(`当前 CC：${f.currentCc}`);
-  if (f.contact !== "all") chips.push(`联络：${f.contact === "contacted" ? "已触达" : f.contact === "not-contacted" ? "未触达" : "历史未知"}`);
-  if (f.handover !== "all") chips.push(`交接：${handoverLabel(f.handover)}`);
+  if (f.outbound !== "all") chips.push(`首次外呼：${f.outbound === "has" ? "有记录" : f.outbound === "none" ? "无记录" : "历史未知"}`);
+  if (f.connected !== "all") chips.push(`首次接通：${f.connected === "yes" ? "已接通" : f.connected === "no" ? "未接通" : "历史未知"}`);
   if (f.history !== "all") chips.push(`历史：${f.history === "complete" ? "完整" : "缺失"}`);
   return chips.map((text) => `<span class="filter-chip">${esc(text)}</span>`).join("");
 }
 
 function leadRows(rows) {
   if (!rows.length) {
-    return `<tr><td colspan="9"><div class="empty-state"><strong>当前筛选下没有线索</strong><p>调整首位 CC、首次联络状态或日期范围后重试。</p></div></td></tr>`;
+    return `<tr><td colspan="8"><div class="empty-state"><strong>当前筛选下没有线索</strong><p>调整业务线、首位 CC、外呼状态或日期范围后重试。</p></div></td></tr>`;
   }
   return rows.map((lead) => {
     const firstUser = lead.firstCc
-      ? `<div class="user-cell"><span class="user-avatar">${initials(lead.firstCc)}</span><span class="user-copy"><strong>${esc(lead.firstCc)}${lead.stopped ? ` ${tag("已停用", "neutral")}` : ""}</strong><span>${esc(lead.firstCcEmail)}</span></span></div><span class="preserved">首次归属后不变</span>`
+      ? `<div class="user-cell"><span class="user-avatar">${initials(lead.firstCc)}</span><span class="user-copy"><strong>${esc(lead.firstCc)}${lead.stopped ? ` ${tag("已停用", "neutral")}` : ""}</strong><span>${esc(lead.firstCcEmail)}</span></span></div><span class="preserved">首次分配后不变</span>`
       : `<div class="user-cell"><span class="user-avatar missing">?</span><span class="user-copy"><strong>历史未知</strong><span>无可确认分配事件</span></span></div>`;
-    const currentUser = `<div class="user-cell"><span class="user-avatar ${lead.currentTeam === "TMK" ? "tmk" : "missing"}">${initials(lead.currentCc)}</span><span class="user-copy"><strong>${esc(lead.currentCc)}</strong><span>${lead.currentTeam === "TMK" ? "TMK 电话营销" : lead.currentTeam === "POOL" ? "待领取" : "CC 客户关怀"}</span></span></div>`;
+    const sameOwner = lead.firstCcId && lead.currentCcId === lead.firstCcId;
+    const ownerState = !lead.currentCcId ? "当前未分配" : sameOwner ? "与首位 CC 相同" : "当前 CC 已发生变化";
+    const currentUser = `<div class="user-cell"><span class="user-avatar ${lead.currentTeam === "TMK" ? "tmk" : "missing"}">${initials(lead.currentCc)}</span><span class="user-copy"><strong>${esc(lead.currentCc)}</strong><span>${ownerState}</span></span></div>`;
     return `<tr data-lead="${lead.id}">
-      <td><span class="cell-title">${esc(lead.name)}</span><span class="cell-sub mono">${esc(lead.id)}</span><span class="cell-sub">${esc(lead.userId)}</span></td>
+      <td><span class="cell-title">${esc(lead.name)}</span><span class="cell-sub">${esc(businessLineLabel(lead.businessLine))} · <span class="mono">${esc(lead.id)}</span></span><span class="cell-sub">${esc(lead.userId)}</span></td>
       <td class="is-first">${firstUser}</td>
       <td>${lead.assignedText === "—" ? '<span class="empty-time">—</span>' : esc(lead.assignedText)}</td>
-      <td>${lead.contactText === "—" ? '<span class="empty-time">—</span>' : esc(lead.contactText)}</td>
+      <td>${lead.outboundText === "—" ? '<span class="empty-time">—</span>' : esc(lead.outboundText)}</td>
+      <td>${lead.connectedText === "—" ? '<span class="empty-time">—</span>' : esc(lead.connectedText)}</td>
       <td>${currentUser}</td>
       <td><span class="cell-title">${esc(lead.stage)}</span><span class="cell-sub">外呼 ${lead.attempts} 次</span></td>
-      <td>${handoverTag(lead.handover)}</td>
-      <td>${lead.attempts > 0 ? tag(`已触达 · ${lead.connected} 次接通`, "success") : tag("未触达", "neutral")}</td>
       <td>${historyTag(lead.history)}</td>
     </tr>`;
   }).join("");
@@ -367,7 +372,7 @@ function renderLeads() {
   const start = (state.page - 1) * PAGE_SIZE;
   const pageRows = rows.slice(start, start + PAGE_SIZE);
   content.innerHTML = `<section class="page-enter">
-    ${pageHeading("SALES CENTER OVERVIEW", "越南首位联系人", "围绕线索首次归属建立可筛选、可下载、可追溯的团队视图。", `<button class="btn btn-secondary btn-small" data-route="monitor">${icon("pulse")} 查看团队监控</button>`)}
+    ${pageHeading("SALES CENTER OVERVIEW", "首位联系人", "跨业务线围绕首位 CC、首次外呼、首次接通和负责人变化建立可筛选、可下载、可追溯的团队视图。", `<button class="btn btn-secondary btn-small" data-route="monitor">${icon("pulse")} 查看团队监控</button>`)}
     ${hero(rows)}
     ${statCards(rows)}
     <div class="notice">${icon("info")}<span><strong>当前列表已增加首位 CC。</strong> 首位 CC 是历史事实，不会随当前负责人改变；历史缺失记录不会被猜测回填。</span><button class="btn btn-quiet btn-small" data-route="rules">查看字段定义</button></div>
@@ -385,7 +390,7 @@ function renderLeads() {
         <button class="btn btn-small" data-action="open-export" ${rows.length ? "" : "disabled"}>${icon("download")} 预览并下载</button>
       </div>
       <div class="table-wrap"><table class="data-table">
-        <thead><tr><th>线索 / 用户</th><th class="is-first">首位 CC</th><th>首次归属时间</th><th>首次联络时间</th><th>当前 CC</th><th>跟进阶段</th><th>TMK 交接</th><th>触达状态</th><th>历史完整度</th></tr></thead>
+        <thead><tr><th>线索 / 用户</th><th class="is-first">首位 CC</th><th>首次分配时间</th><th>首次外呼时间</th><th>首次接通时间</th><th>当前 CC</th><th>跟进阶段</th><th>历史完整度</th></tr></thead>
         <tbody>${leadRows(pageRows)}</tbody>
       </table></div>
       <div class="table-footer"><span>显示 ${rows.length ? start + 1 : 0}–${Math.min(start + PAGE_SIZE, rows.length)} / ${rows.length} 条 · 下载使用完整筛选范围</span>${pageButtons(rows.length)}</div>
@@ -403,9 +408,17 @@ function productivityRows() {
   const source = periodRows().filter((lead) => lead.firstCc);
   return FIRST_CC.map((name) => {
     const rows = source.filter((lead) => lead.firstCc === name);
-    const contacted = rows.filter((lead) => lead.contacted).length;
-    const handed = rows.filter((lead) => lead.handover === "handed").length;
-    return { name, assigned: rows.length, contacted, handed, rate: rows.length ? Math.round((contacted / rows.length) * 100) : 0 };
+    const outbound = rows.filter((lead) => lead.hasOutbound).length;
+    const connected = rows.filter((lead) => lead.connectedText !== "—").length;
+    const changed = rows.filter((lead) => lead.currentCcId && lead.currentCcId !== lead.firstCcId).length;
+    return {
+      name,
+      assigned: rows.length,
+      outbound,
+      connected,
+      changed,
+      outboundRate: rows.length ? Math.round((outbound / rows.length) * 100) : 0
+    };
   });
 }
 
@@ -413,31 +426,34 @@ function renderMonitor() {
   const completeRows = periodRows();
   const stats = statsFor(completeRows);
   const productivity = productivityRows();
-  const tmkReceived = completeRows.filter((lead) => lead.handover === "handed").length;
-  const tmkContacted = completeRows.filter((lead) => lead.handover === "handed" && lead.currentTeam === "TMK" && lead.contacted).length;
+  const connectedRate = stats.total ? Math.round((stats.connected / stats.total) * 100) : 0;
   content.innerHTML = `<section class="page-enter">
-    ${pageHeading("TEAM PRODUCTIVITY", "首位 CC 与 TMK 监控", "数据范围：越南业务线、2026-11-01 至 2026-11-10。所有数字可回到同口径明细。", `<button class="btn btn-secondary btn-small" data-route="leads">${icon("list")} 返回线索列表</button>`)}
+    ${pageHeading("TEAM PRODUCTIVITY", "首位 CC 与负责人变化监控", "数据范围：授权业务线、2026-11-01 至 2026-11-10。所有数字可回到同口径明细。", `<button class="btn btn-secondary btn-small" data-route="leads">${icon("list")} 返回线索列表</button>`)}
     ${statCards(completeRows)}
     <div class="monitor-grid">
       <section class="card">
-        <div class="card-head"><div><h3>首位 CC 生产力</h3><p>承接、触达与 TMK 交接按 Lead ID 去重</p></div>${tag("当前演示数据", "info")}</div>
+        <div class="card-head"><div><h3>首位 CC 生产力</h3><p>首次分配、首次外呼和首次接通按 Lead ID 去重</p></div>${tag("当前演示数据", "info")}</div>
         <div class="table-wrap"><table class="agent-table">
-          <thead><tr><th>首位 CC</th><th>承接</th><th>已触达</th><th>触达覆盖率</th><th>交接 TMK</th><th>未触达</th></tr></thead>
+          <thead><tr><th>首位 CC</th><th>首次分配</th><th>首次外呼</th><th>外呼覆盖率</th><th>首次接通</th><th>负责人变化</th></tr></thead>
           <tbody>${productivity.map((row) => `<tr data-agent="${esc(row.name)}">
             <td><div class="user-cell"><span class="user-avatar">${initials(row.name)}</span><span class="user-copy"><strong>${esc(row.name)}</strong><span>点击查看明细</span></span></div></td>
-            <td><strong>${row.assigned}</strong></td><td>${row.contacted}</td>
-            <td class="progress-cell"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:${row.rate}%"></div></div><b>${row.rate}%</b></div></td>
-            <td>${row.handed}</td><td>${row.assigned - row.contacted}</td>
+            <td><strong>${row.assigned}</strong></td><td>${row.outbound}</td>
+            <td class="progress-cell"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:${row.outboundRate}%"></div></div><b>${row.outboundRate}%</b></div></td>
+            <td>${row.connected}</td><td>${row.changed}</td>
           </tr>`).join("")}</tbody>
         </table></div>
       </section>
       <div>
         <section class="card">
-          <div class="card-head"><div><h3>TMK 输入与触达</h3><p>只看已发生交接的线索</p></div>${tag("交接后", "purple")}</div>
+          <div class="card-head"><div><h3>外呼与接通</h3><p>首次外呼不区分结果，首次接通单独统计</p></div>${tag("外呼链路", "purple")}</div>
           <div class="card-body"><div class="watch-list">
-            <div class="watch-item"><div class="watch-head"><strong>收到线索</strong><span>交接量</span></div><div class="watch-value">${tmkReceived}</div><p>首位 CC 完成交接后进入 TMK</p></div>
-            <div class="watch-item"><div class="watch-head"><strong>已触达</strong><span>${tmkReceived ? Math.round((tmkContacted / tmkReceived) * 100) : 0}% 覆盖</span></div><div class="watch-value">${tmkContacted}</div><p>保留首次 CC 维度，可继续追踪 TMK 产出</p></div>
+            <div class="watch-item"><div class="watch-head"><strong>首次外呼</strong><span>不区分外呼状态</span></div><div class="watch-value">${stats.outbound}</div><p>该数字包含未接通、拒接、无人接听等外呼记录</p></div>
+            <div class="watch-item"><div class="watch-head"><strong>首次接通</strong><span>${connectedRate}% 覆盖率</span></div><div class="watch-value">${stats.connected}</div><p>只统计首次产生接通记录的线索</p></div>
           </div></div>
+        </section>
+        <section class="card">
+          <div class="card-head"><div><h3>负责人变化</h3><p>直接比较两个负责人字段</p></div>${tag("派生判断", "info")}</div>
+          <div class="card-body"><div class="watch-item"><div class="watch-head"><strong>当前 CC 已不同于首位 CC</strong><span>${stats.total ? Math.round((stats.changed / stats.total) * 100) : 0}%</span></div><div class="watch-value">${stats.changed}</div><p>不校验流转类型、目标岗位或销售阶段。</p></div></div>
         </section>
         <section class="card">
           <div class="card-head"><div><h3>数据完整度</h3><p>历史未知不参与承接量分母</p></div>${icon("info")}</div>
@@ -445,7 +461,7 @@ function renderMonitor() {
         </section>
       </div>
     </div>
-    <div class="notice">${icon("info")}<span><strong>口径一致：</strong> 首位 CC 承接量只统计可确认数据；TMK 交接量按成功转派事件去重，不把普通转派算作 TMK。</span><button class="btn btn-quiet btn-small" data-route="rules">查看计算规则</button></div>
+    <div class="notice">${icon("info")}<span><strong>口径一致：</strong> 首次外呼按第一条外呼记录计算并保留所有状态；首次接通只在存在接通记录时写入；负责人变化通过当前 CC 与首位 CC 直接比较。</span><button class="btn btn-quiet btn-small" data-route="rules">查看计算规则</button></div>
   </section>`;
 }
 
@@ -453,21 +469,22 @@ function renderRules() {
   content.innerHTML = `<section class="page-enter">
     ${pageHeading("FIELD CONTRACT", "字段与业务规则", "把历史事实、当前状态和外部事件分开，保证列表、筛选、下载与监控不会互相矛盾。")}
     <div class="definition-grid">
-      <article class="definition-card"><span class="number">FACT 01</span><h3>首位 CC</h3><p>线索进入销售中心后第一次取得归属的 CC。首次归属成功后永久保留，不随转派、掉库、回池或再领取变化。</p></article>
-      <article class="definition-card"><span class="number">FACT 02</span><h3>首次联络时间</h3><p>首位 CC 在线索上产生的第一条有效外呼或跟进记录时间。它和首位 CC 负责人是不同字段。</p></article>
-      <article class="definition-card"><span class="number">FACT 03</span><h3>当前 CC</h3><p>当前正在处理线索的负责人，可由领取、自动分配、转派或管理操作更新。</p></article>
-      <article class="definition-card"><span class="number">FACT 04</span><h3>TMK 交接时间</h3><p>负责人首次从非 TMK 变为 TMK 的时间。必须由成功转派事件和角色组共同确认。</p></article>
-      <article class="definition-card"><span class="number">FACT 05</span><h3>历史完整度</h3><p>只有可验证的分配历史才标为完整；缺失时显示历史未知，不允许拿当前 CC 倒推首位 CC。</p></article>
-      <article class="definition-card"><span class="number">FACT 06</span><h3>名称快照</h3><p>保留首次归属时的 CC 名称。人员离职或改名后仍可按历史名称筛选，并显示当前账号状态。</p></article>
+      <article class="definition-card"><span class="number">FACT 01</span><h3>首位 CC</h3><p>线索进入销售中心后第一次取得归属的 CC。首次分配成功后永久保留，不随转派、掉库、回池或再领取变化。</p></article>
+      <article class="definition-card"><span class="number">FACT 02</span><h3>首次分配时间</h3><p>首位 CC 第一次取得线索归属的时间，与首位 CC 同时写入。</p></article>
+      <article class="definition-card"><span class="number">FACT 03</span><h3>首次外呼时间</h3><p>线索第一条外呼记录的时间。不区分接通、拒接、无人接听或其他外呼状态。</p></article>
+      <article class="definition-card"><span class="number">FACT 04</span><h3>首次接通时间</h3><p>线索第一次产生接通外呼记录的时间，与首次外呼时间独立记录。</p></article>
+      <article class="definition-card"><span class="number">FACT 05</span><h3>当前 CC 与负责人变化</h3><p>当前 CC 由领取、自动分配、转派或管理操作更新。当前 CC 与首位 CC 不同即表示负责人已发生变化，不增加流转校验。</p></article>
+      <article class="definition-card"><span class="number">FACT 06</span><h3>历史完整度</h3><p>只有可验证的分配和外呼历史才标为完整；缺失时显示历史未知，不允许拿当前 CC 倒推首位 CC。</p></article>
+      <article class="definition-card"><span class="number">FACT 07</span><h3>名称快照</h3><p>保留首次分配时的 CC 名称。人员离职或改名后仍可按历史名称筛选，并显示当前账号状态。</p></article>
     </div>
     <section class="card" style="margin-top:16px">
       <div class="card-head"><div><h3>一次成功归属的数据写入</h3><p>首位事实和分配历史必须处于同一事务</p></div>${tag("幂等写入", "info")}</div>
       <div class="rule-flow">
-        <div class="rule-step"><small>STEP 01</small><strong>成功取得归属</strong><span>领取 / 自动分配 / 直接分配</span></div>
-        <div class="rule-step"><small>STEP 02</small><strong>检查首位字段</strong><span>仅当为空时写入</span></div>
-        <div class="rule-step"><small>STEP 03</small><strong>记录事件</strong><span>负责人、时间、来源、原因</span></div>
-        <div class="rule-step"><small>STEP 04</small><strong>转派当前负责人</strong><span>首位字段保持不变</span></div>
-        <div class="rule-step"><small>STEP 05</small><strong>筛选与下载</strong><span>同口径核对</span></div>
+        <div class="rule-step"><small>STEP 01</small><strong>首次分配</strong><span>写入首位 CC 和时间</span></div>
+        <div class="rule-step"><small>STEP 02</small><strong>首次外呼</strong><span>任何外呼状态均写入</span></div>
+        <div class="rule-step"><small>STEP 03</small><strong>首次接通</strong><span>存在接通记录时写入</span></div>
+        <div class="rule-step"><small>STEP 04</small><strong>更新当前 CC</strong><span>首位字段保持不变</span></div>
+        <div class="rule-step"><small>STEP 05</small><strong>直接比较</strong><span>当前 CC 是否等于首位 CC</span></div>
       </div>
     </section>
     <section class="card">
@@ -475,7 +492,7 @@ function renderRules() {
       <div class="card-body"><div class="rule-list">
         <div class="rule-row"><strong>并发领取</strong><p>数据库唯一约束保证只有一个领取成功；只有成功事件可以写入首位 CC 和分配历史。</p></div>
         <div class="rule-row"><strong>回池后再领取</strong><p>首位 CC 仍是第一次归属者；新领取人只成为当前 CC。回池不重置历史。</p></div>
-        <div class="rule-row"><strong>普通转派与 TMK</strong><p>负责人变化并不自动代表 TMK 交接，必须同时确认新负责人属于 TMK 角色组。</p></div>
+        <div class="rule-row"><strong>负责人是否变化</strong><p>直接比较当前 CC 与首位 CC：相同表示未变化，不同表示当前 CC 已发生变化。不新增流转字段或校验步骤。</p></div>
         <div class="rule-row"><strong>历史缺失</strong><p>没有审计事件时不使用“最早可见通话”或“当前 CC”倒推。数据不完整比猜测更可解释。</p></div>
         <div class="rule-row"><strong>离职与改名</strong><p><code>first_cc_id</code> 不变，展示首次名称快照；账号状态单独展示，不影响历史筛选。</p></div>
         <div class="rule-row"><strong>筛选后下载</strong><p>下载使用完整筛选结果与当前权限，不受当前分页限制，也不能绕过筛选导出全量。</p></div>
@@ -487,7 +504,7 @@ function renderRules() {
 function render() {
   const titles = {
     leads: "我的跟进 · 首位联系人",
-    monitor: "首位 CC 与 TMK 监控",
+    monitor: "首位 CC 与负责人变化监控",
     rules: "字段与业务规则"
   };
   document.querySelector("#page-title").textContent = titles[state.route];
@@ -508,10 +525,11 @@ function navigate(route) {
 function readFilters() {
   return {
     query: document.querySelector("#filter-query").value.trim(),
+    businessLine: document.querySelector("#filter-business-line").value,
     firstCc: document.querySelector("#filter-first-cc").value,
     currentCc: document.querySelector("#filter-current-cc").value,
-    contact: document.querySelector("#filter-contact").value,
-    handover: document.querySelector("#filter-handover").value,
+    outbound: document.querySelector("#filter-outbound").value,
+    connected: document.querySelector("#filter-connected").value,
     history: document.querySelector("#filter-history").value,
     from: document.querySelector("#filter-from").value,
     to: document.querySelector("#filter-to").value
@@ -532,7 +550,7 @@ function applyFilters() {
 
 function resetFilters() {
   state.filters = {
-    query: "", firstCc: "all", currentCc: "all", contact: "all", handover: "all", history: "all",
+    query: "", businessLine: "all", firstCc: "all", currentCc: "all", outbound: "all", connected: "all", history: "all",
     from: "2026-11-01", to: "2026-11-10"
   };
   state.page = 1;
@@ -551,24 +569,34 @@ function openDrawer(lead) {
   const firstLine = lead.firstCc
     ? `<li class="timeline-item first"><span class="timeline-dot"></span><strong>首次分配给 ${esc(lead.firstCc)}</strong><span>${esc(lead.assignedText)} · 写入首位 CC 与分配历史</span></li>`
     : `<li class="timeline-item first"><span class="timeline-dot"></span><strong>历史归属无法确认</strong><span>缺少可验证分配事件 · 不使用当前负责人倒推</span></li>`;
-  const contactLine = lead.contacted
-    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>首次有效联络</strong><span>${esc(lead.contactText)} · ${lead.attempts} 次外呼，${lead.connected} 次接通</span></li>`
-    : `<li class="timeline-item"><span class="timeline-dot"></span><strong>尚未产生首次联络</strong><span>触达时间保持为空</span></li>`;
-  const transferLine = lead.currentCc !== lead.firstCc
-    ? `<li class="timeline-item ${lead.currentTeam === "TMK" ? "tmk" : ""}"><span class="timeline-dot"></span><strong>当前负责人变更为 ${esc(lead.currentCc)}</strong><span>${esc(lead.handoverText)} · 首位 CC 保持不变</span></li>`
-    : `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前仍由 ${esc(lead.currentCc)} 负责</strong><span>${esc(lead.stage)}</span></li>`;
+  const outboundLine = lead.hasOutbound
+    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>首次外呼</strong><span>${esc(lead.outboundText)} · 不区分本次外呼结果</span></li>`
+    : `<li class="timeline-item"><span class="timeline-dot"></span><strong>尚未产生首次外呼</strong><span>首次外呼时间保持为空</span></li>`;
+  const connectedLine = lead.connectedText !== "—"
+    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>首次接通</strong><span>${esc(lead.connectedText)} · 首次接通独立记录</span></li>`
+    : `<li class="timeline-item"><span class="timeline-dot"></span><strong>尚未产生首次接通</strong><span>首次接通时间保持为空</span></li>`;
+  const sameOwner = lead.firstCcId && lead.currentCcId === lead.firstCcId;
+  const transferLine = !lead.firstCcId
+    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>负责人变化无法判断</strong><span>首位 CC 历史未知 · 当前 CC 为 ${esc(lead.currentCc)}</span></li>`
+    : !lead.currentCcId
+      ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前未分配</strong><span>${esc(lead.currentAssignedText)} · 不计为负责人变化</span></li>`
+      : sameOwner
+        ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前仍由 ${esc(lead.currentCc)} 负责</strong><span>${esc(lead.stage)} · 当前 CC 与首位 CC 相同</span></li>`
+        : `<li class="timeline-item tmk"><span class="timeline-dot"></span><strong>当前负责人为 ${esc(lead.currentCc)}</strong><span>${esc(lead.currentAssignedText)} · 当前 CC 已不同于首位 CC</span></li>`;
   drawer.innerHTML = `<div class="drawer-head"><div><small>${esc(lead.id)}</small><h3>${esc(lead.name)}</h3></div><button class="icon-btn" data-action="close-drawer" aria-label="关闭">${icon("close")}</button></div>
     <div class="drawer-body">
-      <div class="drawer-block"><h4>首位归属</h4><dl class="facts">
+      <div class="drawer-block"><h4>首位联系人与关键时间</h4><dl class="facts">
+        <dt>业务线</dt><dd>${esc(businessLineLabel(lead.businessLine))}</dd>
         <dt>首位 CC</dt><dd>${lead.firstCc ? esc(lead.firstCc) : "历史未知"}</dd>
-        <dt>首次归属</dt><dd>${esc(lead.assignedText)}</dd>
-        <dt>首次联络</dt><dd>${esc(lead.contactText)}</dd>
+        <dt>首次分配</dt><dd>${esc(lead.assignedText)}</dd>
+        <dt>首次外呼</dt><dd>${esc(lead.outboundText)}</dd>
+        <dt>首次接通</dt><dd>${esc(lead.connectedText)}</dd>
         <dt>当前 CC</dt><dd>${esc(lead.currentCc)}</dd>
-        <dt>交接状态</dt><dd>${handoverTag(lead.handover)}</dd>
+        <dt>负责人变化</dt><dd>${lead.firstCcId ? (sameOwner ? "否，当前 CC 与首位 CC 相同" : "是，当前 CC 已不同于首位 CC") : "历史未知"}</dd>
         <dt>历史完整度</dt><dd>${historyTag(lead.history)}</dd>
       </dl></div>
-      <div class="drawer-block"><h4>Lead &gt; Update 分配历史</h4><ol class="timeline">${firstLine}${contactLine}${transferLine}</ol></div>
-      <div class="drawer-block"><div class="drawer-note"><strong>事实字段不可编辑。</strong> 首位 CC 只在第一次成功归属时写入；这里展示的是历史快照。当前业务状态变化只更新当前 CC 与阶段。</div></div>
+      <div class="drawer-block"><h4>Lead &gt; Update 分配历史</h4><ol class="timeline">${firstLine}${outboundLine}${connectedLine}${transferLine}</ol></div>
+      <div class="drawer-block"><div class="drawer-note"><strong>事实字段不可编辑。</strong> 首位 CC 只在第一次成功分配时写入；负责人是否变化不单独存储，直接比较当前 CC 与首位 CC。</div></div>
       <div class="drawer-block"><h4>当前跟进</h4><dl class="facts">
         <dt>销售阶段</dt><dd>${esc(lead.stage)}</dd>
         <dt>外呼尝试</dt><dd>${lead.attempts} 次</dd>
@@ -595,8 +623,8 @@ function openExport() {
   const lastDate = rows.map((row) => row.assignedDate).filter(Boolean).sort().at(-1) || "—";
   exportModal.innerHTML = `<div class="modal-head"><div><h3 id="export-title">下载当前筛选数据</h3><p>预览确认后生成 CSV，内容与当前列表口径一致。</p></div><button class="icon-btn" data-action="close-export" aria-label="关闭">${icon("close")}</button></div>
     <div class="modal-body">
-      <div class="export-summary"><div class="export-metric"><span>数据行数</span><strong>${rows.length}</strong></div><div class="export-metric"><span>日期范围</span><strong style="font-size:13px">${firstDate} 至 ${lastDate}</strong></div><div class="export-metric"><span>时间口径</span><strong style="font-size:13px">Asia/Ho_Chi_Minh</strong></div></div>
-      <div class="field-list">${["lead_id", "user_id", "first_cc_id", "first_cc_name", "first_assigned_at", "first_contacted_at", "current_cc_id", "tmk_handover_at", "history_status"].map((field) => `<code>${field}</code>`).join("")}</div>
+      <div class="export-summary"><div class="export-metric"><span>数据行数</span><strong>${rows.length}</strong></div><div class="export-metric"><span>日期范围</span><strong style="font-size:13px">${firstDate} 至 ${lastDate}</strong></div><div class="export-metric"><span>时间口径</span><strong style="font-size:13px">按业务线时区</strong></div></div>
+      <div class="field-list">${["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "current_cc_id", "history_status"].map((field) => `<code>${field}</code>`).join("")}</div>
       <div class="drawer-note" style="margin-top:12px">下载会记录操作人、筛选条件、数据范围和行数。联系方式与录音字段继续遵循现有导出权限，不在本需求中扩大。</div>
     </div>
     <div class="modal-foot"><button class="btn" data-action="close-export">取消</button><button class="btn btn-primary" data-action="download-csv">${icon("download")} 生成 CSV</button></div>`;
@@ -615,18 +643,19 @@ function csvCell(value) {
 
 function downloadCSV() {
   const rows = filteredRows();
-  const header = ["lead_id", "user_id", "first_cc_id", "first_cc_name", "first_assigned_at", "first_contacted_at", "current_cc_id", "tmk_handover_at", "history_status"];
+  const header = ["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "current_cc_id", "history_status"];
   const body = rows.map((row) => [
-    row.id, row.userId, row.firstCcId, row.firstCc, row.assignedText,
-    row.contactText === "—" ? "" : row.contactText, row.currentCcId,
-    row.handoverText === "—" || row.handoverText === "待确认角色" ? "" : row.handoverText,
+    row.id, row.userId, row.businessLine, row.firstCcId, row.firstCc, row.assignedText,
+    row.outboundText === "—" ? "" : row.outboundText,
+    row.connectedText === "—" ? "" : row.connectedText,
+    row.currentCcId,
     row.history
   ].map(csvCell).join(","));
   const blob = new Blob(["\ufeff" + [header.map(csvCell).join(","), ...body].join("\n")], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `vn-first-contact-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.download = `first-contact-${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(link);
   link.click();
   link.remove();
