@@ -57,23 +57,6 @@ const EXCEPTIONS = [
   { id: "R-24", scenario: "审核误操作", action: "管理员纠正并留痕", recovery: "记录前后状态和原因" }
 ];
 
-const ACCEPTANCE = [
-  ["REF-A01", "推荐绑定", "好友确认后只生成一条有效推荐关系。", "P0"],
-  ["REF-A02", "推荐绑定", "无效推荐码不阻断普通登录，只提示未绑定。", "P0"],
-  ["REF-A03", "Lead 归属", "好友创建 Lead 后优先分配给邀请人当前 CC owner。", "P0"],
-  ["REF-A04", "首次试听", "首节体验课完成后邀请人准确增加 14 天。", "P0"],
-  ["REF-A05", "首次购买", "3/6/12 个月订单分别奖励 1/2/3 个月并可与试听奖励叠加。", "P0"],
-  ["REF-A06", "幂等", "重复试听或支付回调不会重复延长会员。", "P0"],
-  ["REF-A07", "退款", "购买奖励未发时冻结，已发时按退款规则冲正未来会员。", "P0"],
-  ["REF-A08", "失败恢复", "权益服务超时可重试，超过阈值进入人工处理。", "P1"],
-  ["REF-A09", "社媒审核", "有效投稿发 5 天；选中发 2 个月，未选中发 15 天。", "P1"],
-  ["REF-A10", "社媒权限", "未授权官方的投稿不能被标记为官方选中。", "P1"],
-  ["REF-A11", "CRM 列表", "能查看邀请人、好友、CC、试听、购买和奖励全链路。", "P1"],
-  ["REF-A12", "CRM 权限", "运营仅能访问泰国数据；普通 CC 无法进入奖励后台。", "P1"],
-  ["REF-A13", "审计", "审核、重试、奖励发放和冲正均记录操作人及时间。", "P1"],
-  ["REF-A14", "导出", "导出条件与当前筛选范围一致，敏感字段按权限脱敏。", "P1"]
-];
-
 const state = {
   route: "",
   flow: "bind",
@@ -84,8 +67,7 @@ const state = {
   rewardTrial: true,
   rewardPlan: 6,
   appBound: false,
-  ledgerStatus: "all",
-  acceptance: new Set(loadAcceptance())
+  ledgerStatus: "all"
 };
 
 const pageTitles = {
@@ -94,8 +76,7 @@ const pageTitles = {
   social: "社媒审核",
   app: "App 邀请体验",
   ledger: "奖励流水",
-  rules: "规则与异常",
-  acceptance: "验收清单"
+  rules: "规则与异常"
 };
 
 const content = document.querySelector("#content");
@@ -113,15 +94,6 @@ function parseRoute() {
   return pageTitles[route] ? route : "overview";
 }
 function navigate(route) { location.hash = `#/${route}`; }
-function loadAcceptance() {
-  try {
-    const value = JSON.parse(localStorage.getItem("crm-referral-acceptance") || "[]");
-    return Array.isArray(value) ? value : [];
-  } catch { return []; }
-}
-function saveAcceptance() {
-  try { localStorage.setItem("crm-referral-acceptance", JSON.stringify([...state.acceptance])); } catch { /* noop */ }
-}
 function statusTone(status) {
   if (["已发放", "官方选中", "有效待选择"].includes(status)) return "success";
   if (["待发放", "技术开发中"].includes(status)) return "info";
@@ -151,8 +123,7 @@ function render() {
   else if (state.route === "social") content.innerHTML = renderSocial();
   else if (state.route === "app") content.innerHTML = renderApp();
   else if (state.route === "ledger") content.innerHTML = renderLedger();
-  else if (state.route === "rules") content.innerHTML = renderRules();
-  else content.innerHTML = renderAcceptance();
+  else content.innerHTML = renderRules();
   content.firstElementChild?.classList.add("page-enter");
 }
 
@@ -282,15 +253,6 @@ function renderRules() {
   </section>`;
 }
 
-function renderAcceptance() {
-  const done = ACCEPTANCE.filter(([id]) => state.acceptance.has(id)).length;
-  const percent = Math.round((done / ACCEPTANCE.length) * 100);
-  return `<section>
-    ${pageHeading("Acceptance", "验收清单", "勾选状态保存在当前浏览器，仅用于原型评审。")}
-    <div class="card"><div class="subtoolbar"><div><h3>验收进度</h3><p>${done} / ${ACCEPTANCE.length} 项通过</p></div><div class="progress-wrap"><strong>${percent}%</strong><div class="progress-track"><div class="progress-fill" style="width:${percent}%"></div></div></div></div><div class="card-body acceptance-list">${ACCEPTANCE.map(([id, group, text, priority]) => `<label class="acceptance-item ${state.acceptance.has(id) ? "is-checked" : ""}"><input type="checkbox" data-acceptance="${id}" ${state.acceptance.has(id) ? "checked" : ""}><span><strong>${esc(text)}</strong><p>${esc(group)} · ${id}</p></span>${priorityTag(priority)}</label>`).join("")}</div></div>
-  </section>`;
-}
-
 function openDrawer(header, body) {
   drawer.innerHTML = `<div class="drawer-head"><div>${header}</div><button class="icon-btn" data-action="close-drawer" aria-label="关闭">${icon("close")}</button></div><div class="drawer-body">${body}</div>`;
   drawerLayer.classList.add("is-open");
@@ -378,20 +340,6 @@ document.addEventListener("change", (event) => {
   if (event.target.id === "activity-status") { state.activityStatus = event.target.value; updateActivity(); }
   if (event.target.id === "ledger-status") { state.ledgerStatus = event.target.value; updateLedger(); }
   if (event.target.id === "trial-complete") { state.rewardTrial = event.target.checked; render(); }
-  if (event.target.matches("[data-acceptance]")) {
-    const id = event.target.dataset.acceptance;
-    if (event.target.checked) state.acceptance.add(id); else state.acceptance.delete(id);
-    saveAcceptance();
-    event.target.closest(".acceptance-item")?.classList.toggle("is-checked", event.target.checked);
-    const done = ACCEPTANCE.filter(([itemId]) => state.acceptance.has(itemId)).length;
-    const percent = Math.round((done / ACCEPTANCE.length) * 100);
-    const progress = document.querySelector(".progress-fill");
-    const label = document.querySelector(".progress-wrap strong");
-    const summary = document.querySelector(".subtoolbar p");
-    if (progress) progress.style.width = `${percent}%`;
-    if (label) label.textContent = `${percent}%`;
-    if (summary) summary.textContent = `${done} / ${ACCEPTANCE.length} 项通过`;
-  }
 });
 
 document.querySelector("#menu-toggle").addEventListener("click", () => document.querySelector("#sidebar").classList.toggle("is-open"));

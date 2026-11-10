@@ -703,30 +703,6 @@ main:focus { outline: none; }
 .rule-row strong { font-size: 11px; }
 .rule-row p { margin: 0; color: var(--text-2); font-size: 11px; }
 
-.acceptance-summary { margin-bottom: 16px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-.acceptance-summary strong { display: block; font-size: 15px; }
-.acceptance-summary p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
-.big-progress { width: min(300px, 45vw); }
-.big-progress-head { margin-bottom: 6px; display: flex; justify-content: space-between; color: #536274; font-size: 10px; }
-.big-progress-head b { color: var(--blue); font-size: 13px; }
-.big-progress .progress-track { height: 8px; }
-.acceptance-list { display: grid; gap: 9px; }
-.acceptance-item {
-  padding: 13px 14px;
-  display: flex;
-  align-items: flex-start;
-  gap: 11px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
-  cursor: pointer;
-}
-.acceptance-item.is-checked { border-color: #cfe0f8; background: #f8fbff; }
-.acceptance-item input { width: 15px; height: 15px; margin: 2px 0 0; accent-color: var(--blue); }
-.acceptance-item span { flex: 1; }
-.acceptance-item strong { display: block; font-size: 11px; }
-.acceptance-item p { margin: 2px 0 0; color: var(--muted); font-size: 9px; }
-
 .toast {
   position: fixed;
   right: 26px;
@@ -790,8 +766,6 @@ main:focus { outline: none; }
   .table-toolbar .spacer { display: none; }
   .export-summary { grid-template-columns: 1fr; }
   .rule-row { grid-template-columns: 1fr; gap: 4px; }
-  .acceptance-summary { align-items: flex-start; flex-direction: column; }
-  .big-progress { width: 100%; }
   .toast { right: 14px; bottom: 14px; left: 14px; max-width: none; }
 }
 

@@ -135,20 +135,6 @@ const VIEW_COUNTS = {
   paid: LEADS.filter((lead) => lead.view === "paid").length
 };
 const PAGE_SIZE = 8;
-const ACCEPTANCE = [
-  ["AC-01", "写入与保留", "新线索自动分配后写入首位 CC 和首次归属时间"],
-  ["AC-02", "写入与保留", "转给 TMK 后首位 CC 不变，当前 CC 更新"],
-  ["AC-03", "写入与保留", "回池、再领取和重新分配均不重置首位 CC"],
-  ["AC-04", "写入与保留", "并发领取只有一个成功，首位 CC 不重复"],
-  ["AC-05", "列表与筛选", "首位 CC 和首次联络时间在三类线索列表展示"],
-  ["AC-06", "列表与筛选", "按首位 CC、触达状态和交接状态组合筛选"],
-  ["AC-07", "列表与筛选", "翻页、排序和刷新后保留当前筛选"],
-  ["AC-08", "下载", "下载行数和字段与当前筛选结果一致"],
-  ["AC-09", "下载", "无导出权限时不能绕过列表下载"],
-  ["AC-10", "监控", "承接量、触达量和交接量可下钻核对"],
-  ["AC-11", "历史", "缺失分配事件的记录显示历史未知且不猜测"],
-  ["AC-12", "历史", "离职用户的名称快照仍可筛选并标记已停用"]
-];
 
 const state = {
   route: routeFromHash(),
@@ -163,8 +149,7 @@ const state = {
     history: "all",
     from: "2026-11-01",
     to: "2026-11-10"
-  },
-  acceptance: new Set(JSON.parse(localStorage.getItem("first-contact-acceptance") || "[]"))
+  }
 };
 
 const content = document.querySelector("#content");
@@ -176,7 +161,7 @@ const toast = document.querySelector("#toast");
 
 function routeFromHash() {
   const route = location.hash.replace(/^#\/?/, "");
-  return ["leads", "monitor", "rules", "acceptance"].includes(route) ? route : "leads";
+  return ["leads", "monitor", "rules"].includes(route) ? route : "leads";
 }
 
 function icon(name) {
@@ -499,37 +484,16 @@ function renderRules() {
   </section>`;
 }
 
-function renderAcceptance() {
-  const done = ACCEPTANCE.filter(([id]) => state.acceptance.has(id)).length;
-  const percent = Math.round((done / ACCEPTANCE.length) * 100);
-  content.innerHTML = `<section class="page-enter">
-    ${pageHeading("ACCEPTANCE", "验收清单", "勾选状态保存在当前浏览器，仅用于原型评审。")}
-    <section class="acceptance-summary card">
-      <div><strong>首位联系人验收</strong><p>${done} / ${ACCEPTANCE.length} 项通过 · REQ-VN-001</p></div>
-      <div class="big-progress"><div class="big-progress-head"><span>整体完成度</span><b>${percent}%</b></div><div class="progress-track"><div class="progress-fill" style="width:${percent}%"></div></div></div>
-    </section>
-    <div class="card"><div class="card-body"><div class="acceptance-list">
-      ${ACCEPTANCE.map(([id, group, text]) => `<label class="acceptance-item ${state.acceptance.has(id) ? "is-checked" : ""}">
-        <input type="checkbox" data-acceptance="${id}" ${state.acceptance.has(id) ? "checked" : ""}>
-        <span><strong>${esc(text)}</strong><p>${esc(group)} · ${id}</p></span>
-        ${tag(group, group === "历史" ? "warning" : group === "下载" ? "purple" : "info")}
-      </label>`).join("")}
-    </div></div></div>
-  </section>`;
-}
-
 function render() {
   const titles = {
     leads: "我的跟进 · 首位联系人",
     monitor: "首位 CC 与 TMK 监控",
-    rules: "字段与业务规则",
-    acceptance: "验收清单"
+    rules: "字段与业务规则"
   };
   document.querySelector("#page-title").textContent = titles[state.route];
   document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.route === state.route));
   if (state.route === "monitor") renderMonitor();
   else if (state.route === "rules") renderRules();
-  else if (state.route === "acceptance") renderAcceptance();
   else renderLeads();
 }
 
@@ -726,15 +690,6 @@ document.addEventListener("keydown", (event) => {
     closeExport();
     document.querySelector("#sidebar").classList.remove("is-open");
   }
-});
-
-document.addEventListener("change", (event) => {
-  if (!event.target.matches("[data-acceptance]")) return;
-  const id = event.target.dataset.acceptance;
-  if (event.target.checked) state.acceptance.add(id);
-  else state.acceptance.delete(id);
-  localStorage.setItem("first-contact-acceptance", JSON.stringify([...state.acceptance]));
-  renderAcceptance();
 });
 
 document.querySelector("#menu-toggle").addEventListener("click", () => {

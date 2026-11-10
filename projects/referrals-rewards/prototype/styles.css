@@ -576,25 +576,6 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 }
 .decision-strip strong { color: #8d5e13; font-size: 12px; }
 
-.acceptance-list { display: grid; gap: 10px; }
-.acceptance-item {
-  display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: start;
-  padding: 14px 16px; border: 1px solid var(--line); border-radius: 9px; background: #fff;
-}
-.acceptance-item input {
-  appearance: none; width: 20px; height: 20px; margin: 0; border: 1px solid #cbd4df; border-radius: 6px; background: #fff;
-  display: grid; place-items: center;
-}
-.acceptance-item input::after { content: "✓"; color: #fff; font-size: 12px; transform: scale(0); transition: 0.12s; }
-.acceptance-item input:checked { border-color: #1677ff; background: #1677ff; }
-.acceptance-item input:checked::after { transform: scale(1); }
-.acceptance-item.is-checked { background: #f7fbff; }
-.acceptance-item strong { display: block; font-size: 13px; }
-.acceptance-item p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
-.progress-wrap { display: flex; align-items: center; gap: 12px; }
-.progress-track { width: 160px; height: 7px; border-radius: 99px; overflow: hidden; background: #e8edf4; }
-.progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #1677ff, #57a4ff); }
-
 .drawer-layer { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
 .drawer-layer.is-open { pointer-events: auto; }
 .drawer-scrim {
