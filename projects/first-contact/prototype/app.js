@@ -130,6 +130,22 @@ const LEADS = [
 const FIRST_CC = ["Linh Pham", "Mai Nguyen", "Quyen Do", "An Vo"];
 const CURRENT_CC = ["Minh Tran", "Linh Pham", "Hà Nguyễn", "Quyen Do", "Bảo Trân", "Mai Nguyen", "未分配"];
 const BUSINESS_LINES = ["Vietnam", "Thailand", "Malaysia"];
+const LEAD_PROFILE = {
+  "LD-261109-1048": { intent: "有意向", userStatus: "未付费已体验", userType: "正式用户", age: "6–8", course: "L1", login: "minh.anh@student.vn", source: "Facebook_LF (VN)" },
+  "LD-261109-1051": { intent: "未填写", userStatus: "未付费未体验", userType: "正式用户", age: "9–12", course: "L2", login: "bao.le@student.th", source: "TikTok Thailand" },
+  "LD-261109-1067": { intent: "有意向", userStatus: "未付费已体验", userType: "正式用户", age: "3–5", course: "L1", login: "chi.pham@student.my", source: "Facebook_LF (MY)" },
+  "LD-261108-0934": { intent: "有意向", userStatus: "未付费已体验", userType: "正式用户", age: "6–8", course: "L2", login: "dung.tran@student.vn", source: "Google Search" },
+  "LD-261108-0948": { intent: "无意向", userStatus: "未付费未体验", userType: "正式用户", age: "9–12", course: "L1", login: "giang.vo@student.th", source: "App Organic" },
+  "LD-261110-1122": { intent: "有意向", userStatus: "未付费已体验", userType: "正式用户", age: "3–5", course: "L1", login: "hanh.do@student.vn", source: "TikTok Vietnam" },
+  "LD-261110-1140": { intent: "未填写", userStatus: "未付费未体验", userType: "测试用户", age: "—", course: "—", login: "khanh.lam@student.my", source: "Facebook_LF (MY)" },
+  "LD-260918-0502": { intent: "无意向", userStatus: "未付费已体验", userType: "正式用户", age: "9–12", course: "L2", login: "tu.phan@student.th", source: "Facebook_LF (TH)" },
+  "LD-260907-0471": { intent: "有意向", userStatus: "付费", userType: "正式用户", age: "6–8", course: "L3", login: "minh.chau@student.vn", source: "TikTok Vietnam" },
+  "LD-261012-0619": { intent: "有意向", userStatus: "付费", userType: "正式用户", age: "9–12", course: "L4", login: "nam.hoang@student.th", source: "Facebook_LF (TH)" },
+  "LD-261020-0752": { intent: "未填写", userStatus: "付费", userType: "正式用户", age: "6–8", course: "L2", login: "oanh.nguyen@student.my", source: "App Organic" },
+  "LD-260903-0428": { intent: "有意向", userStatus: "付费", userType: "正式用户", age: "3–5", course: "L1", login: "phu.nguyen@student.th", source: "Facebook_LF (TH)" },
+  "LD-261110-1168": { intent: "无意向", userStatus: "未付费已体验", userType: "正式用户", age: "6–8", course: "L1", login: "quyen.ly@student.vn", source: "Google Search" },
+  "LD-260922-0563": { intent: "未填写", userStatus: "未付费未体验", userType: "正式用户", age: "—", course: "—", login: "son.dang@student.my", source: "Facebook_LF (MY)" }
+};
 const VIEW_COUNTS = {
   pool: LEADS.filter((lead) => lead.view === "pool").length,
   following: LEADS.filter((lead) => lead.view === "following").length,
@@ -148,6 +164,10 @@ const state = {
     currentCc: "all",
     outbound: "all",
     connected: "all",
+    outboundMin: "",
+    outboundMax: "",
+    connectedMin: "",
+    connectedMax: "",
     history: "all",
     from: "2026-11-01",
     to: "2026-11-10"
@@ -195,6 +215,12 @@ function businessLineLabel(value) {
   return value === "Vietnam" ? "越南" : value === "Thailand" ? "泰国" : value === "Malaysia" ? "马来西亚" : value;
 }
 
+function withinRange(value, minimum, maximum) {
+  if (minimum !== "" && value < Number(minimum)) return false;
+  if (maximum !== "" && value > Number(maximum)) return false;
+  return true;
+}
+
 function currentFilters() {
   return { ...state.filters };
 }
@@ -216,6 +242,8 @@ function filteredRows(includeTab = true) {
     if (f.connected === "yes" && lead.connectedText === "—") return false;
     if (f.connected === "no" && lead.connectedText !== "—") return false;
     if (f.connected === "unknown" && lead.history !== "missing") return false;
+    if (!withinRange(lead.attempts, f.outboundMin, f.outboundMax)) return false;
+    if (!withinRange(lead.connected, f.connectedMin, f.connectedMax)) return false;
     if (f.history !== "all" && lead.history !== f.history) return false;
     if (f.from && lead.assignedDate && lead.assignedDate < f.from) return false;
     if (f.to && lead.assignedDate && lead.assignedDate > f.to) return false;
@@ -227,6 +255,8 @@ function statsFor(rows) {
   const covered = rows.filter((row) => row.history === "complete").length;
   const outbound = rows.filter((row) => row.hasOutbound).length;
   const connected = rows.filter((row) => row.connectedText !== "—").length;
+  const outboundCalls = rows.reduce((sum, row) => sum + row.attempts, 0);
+  const connectedCalls = rows.reduce((sum, row) => sum + row.connected, 0);
   const changed = rows.filter((row) => row.firstCcId && row.currentCcId && row.currentCcId !== row.firstCcId).length;
   return {
     total: rows.length,
@@ -234,6 +264,8 @@ function statsFor(rows) {
     coverage: rows.length ? Math.round((covered / rows.length) * 100) : 0,
     outbound,
     connected,
+    outboundCalls,
+    connectedCalls,
     changed,
     missing: rows.length - covered
   };
@@ -244,8 +276,8 @@ function statCards(rows) {
   return `<div class="stat-grid">
     <article class="stat-card"><span class="stat-label">当前筛选线索</span><strong>${stats.total}</strong><small>按 Lead ID 去重</small><span class="stat-icon">${icon("list")}</span></article>
     <article class="stat-card is-success"><span class="stat-label">首位 CC 覆盖率</span><strong>${stats.coverage}%</strong><small>${stats.covered} / ${stats.total} 可确认</small><span class="stat-icon">${icon("check")}</span></article>
-    <article class="stat-card is-warning"><span class="stat-label">已有首次外呼</span><strong>${stats.outbound}</strong><small>不区分外呼状态</small><span class="stat-icon">${icon("phone")}</span></article>
-    <article class="stat-card is-purple"><span class="stat-label">已有首次接通</span><strong>${stats.connected}</strong><small>与首次外呼时间独立记录</small><span class="stat-icon">${icon("arrow")}</span></article>
+    <article class="stat-card is-warning"><span class="stat-label">外呼总量</span><strong>${stats.outboundCalls}</strong><small>不区分外呼状态</small><span class="stat-icon">${icon("phone")}</span></article>
+    <article class="stat-card is-purple"><span class="stat-label">接通总量</span><strong>${stats.connectedCalls}</strong><small>${stats.outboundCalls ? Math.round((stats.connectedCalls / stats.outboundCalls) * 100) : 0}% 接通率</small><span class="stat-icon">${icon("arrow")}</span></article>
   </div>`;
 }
 
@@ -259,7 +291,7 @@ function filtersPanel(rows) {
   const f = state.filters;
   return `<section class="filter-card">
     <div class="filter-grid">
-      <label class="field"><span class="field-label">搜索线索</span><span class="search-box">${icon("search")}<input class="input" id="filter-query" value="${esc(f.query)}" placeholder="Lead ID / User ID / 姓名"></span></label>
+      <label class="field search-field"><span class="field-label">搜索线索</span><span class="search-box">${icon("search")}<input class="input" id="filter-query" value="${esc(f.query)}" placeholder="Lead ID / User ID / 姓名"></span></label>
       <label class="field"><span class="field-label">业务线</span><select class="select" id="filter-business-line">${selectOptions(BUSINESS_LINES, f.businessLine, "全部业务线")}</select></label>
       <label class="field"><span class="field-label">首位 CC</span><select class="select" id="filter-first-cc">${selectOptions(FIRST_CC, f.firstCc, "全部首位 CC")}</select></label>
       <label class="field"><span class="field-label">当前 CC</span><select class="select" id="filter-current-cc">${selectOptions(CURRENT_CC, f.currentCc, "全部当前 CC")}</select></label>
@@ -283,6 +315,13 @@ function filtersPanel(rows) {
       <label class="field"><span class="field-label">首次分配日期（止）</span><input class="input" type="date" id="filter-to" value="${esc(f.to)}"></label>
       <div class="field"><span class="field-label">当前视图</span><button class="btn" style="width:100%" disabled>${state.tab === "following" ? "我的跟进" : state.tab === "paid" ? "已付费" : "公海"}</button></div>
     </div>
+    <div class="filter-grid third">
+      <label class="field"><span class="field-label">外呼次数下限</span><input class="input" type="number" min="0" step="1" id="filter-outbound-min" value="${esc(f.outboundMin)}" placeholder="不限"></label>
+      <label class="field"><span class="field-label">外呼次数上限</span><input class="input" type="number" min="0" step="1" id="filter-outbound-max" value="${esc(f.outboundMax)}" placeholder="不限"></label>
+      <label class="field"><span class="field-label">外呼接通次数下限</span><input class="input" type="number" min="0" step="1" id="filter-connected-min" value="${esc(f.connectedMin)}" placeholder="不限"></label>
+      <label class="field"><span class="field-label">外呼接通次数上限</span><input class="input" type="number" min="0" step="1" id="filter-connected-max" value="${esc(f.connectedMax)}" placeholder="不限"></label>
+      <div class="field"><span class="field-label">组合规则</span><div class="range-hint">两组次数区间同时满足；边界包含</div></div>
+    </div>
     <div class="filter-actions">
       <button class="btn btn-primary" data-action="apply-filters">${icon("filter")} 应用筛选</button>
       <button class="btn" data-action="reset-filters">重置筛选</button>
@@ -300,15 +339,18 @@ function activeFilterChips() {
   if (f.currentCc !== "all") chips.push(`当前 CC：${f.currentCc}`);
   if (f.outbound !== "all") chips.push(`首次外呼：${f.outbound === "has" ? "有记录" : f.outbound === "none" ? "无记录" : "历史未知"}`);
   if (f.connected !== "all") chips.push(`首次接通：${f.connected === "yes" ? "已接通" : f.connected === "no" ? "未接通" : "历史未知"}`);
+  if (f.outboundMin !== "" || f.outboundMax !== "") chips.push(`外呼次数：${f.outboundMin || "0"}–${f.outboundMax || "不限"}`);
+  if (f.connectedMin !== "" || f.connectedMax !== "") chips.push(`接通次数：${f.connectedMin || "0"}–${f.connectedMax || "不限"}`);
   if (f.history !== "all") chips.push(`历史：${f.history === "complete" ? "完整" : "缺失"}`);
   return chips.map((text) => `<span class="filter-chip">${esc(text)}</span>`).join("");
 }
 
 function leadRows(rows) {
   if (!rows.length) {
-    return `<tr><td colspan="8"><div class="empty-state"><strong>当前筛选下没有线索</strong><p>调整业务线、首位 CC、外呼状态或日期范围后重试。</p></div></td></tr>`;
+    return `<tr><td colspan="19"><div class="empty-state"><strong>当前筛选下没有线索</strong><p>调整业务线、首位 CC、外呼状态、次数区间或日期范围后重试。</p></div></td></tr>`;
   }
   return rows.map((lead) => {
+    const profile = LEAD_PROFILE[lead.id];
     const firstUser = lead.firstCc
       ? `<div class="user-cell"><span class="user-avatar">${initials(lead.firstCc)}</span><span class="user-copy"><strong>${esc(lead.firstCc)}${lead.stopped ? ` ${tag("已停用", "neutral")}` : ""}</strong><span>${esc(lead.firstCcEmail)}</span></span></div><span class="preserved">首次分配后不变</span>`
       : `<div class="user-cell"><span class="user-avatar missing">?</span><span class="user-copy"><strong>历史未知</strong><span>无可确认分配事件</span></span></div>`;
@@ -316,14 +358,25 @@ function leadRows(rows) {
     const ownerState = !lead.currentCcId ? "当前未分配" : sameOwner ? "与首位 CC 相同" : "当前 CC 已发生变化";
     const currentUser = `<div class="user-cell"><span class="user-avatar ${lead.currentTeam === "TMK" ? "tmk" : "missing"}">${initials(lead.currentCc)}</span><span class="user-copy"><strong>${esc(lead.currentCc)}</strong><span>${ownerState}</span></span></div>`;
     return `<tr data-lead="${lead.id}">
-      <td><span class="cell-title">${esc(lead.name)}</span><span class="cell-sub">${esc(businessLineLabel(lead.businessLine))} · <span class="mono">${esc(lead.id)}</span></span><span class="cell-sub">${esc(lead.userId)}</span></td>
+      <td><span class="mono">${esc(lead.userId)}</span><span class="cell-sub">${esc(businessLineLabel(lead.businessLine))}</span></td>
+      <td><span class="cell-title">${esc(lead.name)}</span><span class="cell-sub mono">${esc(lead.id)}</span></td>
+      <td>${esc(profile.intent)}</td>
+      <td>${esc(profile.userStatus)}</td>
+      <td>${esc(profile.userType)}</td>
+      <td>${esc(profile.age)}</td>
+      <td>${esc(profile.course)}</td>
+      <td>${esc(profile.login)}</td>
+      <td>${esc(profile.source)}</td>
       <td class="is-first">${firstUser}</td>
+      <td>${currentUser}</td>
+      <td><span class="cell-title">${esc(lead.stage)}</span></td>
       <td>${lead.assignedText === "—" ? '<span class="empty-time">—</span>' : esc(lead.assignedText)}</td>
       <td>${lead.outboundText === "—" ? '<span class="empty-time">—</span>' : esc(lead.outboundText)}</td>
       <td>${lead.connectedText === "—" ? '<span class="empty-time">—</span>' : esc(lead.connectedText)}</td>
-      <td>${currentUser}</td>
-      <td><span class="cell-title">${esc(lead.stage)}</span><span class="cell-sub">外呼 ${lead.attempts} 次</span></td>
+      <td><strong>${lead.attempts}</strong></td>
+      <td><strong>${lead.connected}</strong></td>
       <td>${historyTag(lead.history)}</td>
+      <td><button class="btn btn-small btn-secondary" data-lead="${lead.id}">查看</button></td>
     </tr>`;
   }).join("");
 }
@@ -351,13 +404,17 @@ function renderLeads() {
     ${filtersPanel(rows)}
     <section class="table-card">
       <div class="table-toolbar">
-        <div><strong>线索明细</strong><p>点击任一行查看完整分配历史</p></div>
+        <div><strong>线索明细</strong><p>保留现有 CRM 字段顺序；新增字段统一放在操作列之前</p></div>
         <div class="spacer"></div>
         <div class="active-filters">${activeFilterChips()}</div>
+        <button class="btn btn-small" data-action="show-new-columns">${icon("arrow")} 定位新增字段</button>
         <button class="btn btn-small" data-action="open-export" ${rows.length ? "" : "disabled"}>${icon("download")} 预览并下载</button>
       </div>
       <div class="table-wrap"><table class="data-table">
-        <thead><tr><th>线索 / 用户</th><th class="is-first">首位 CC</th><th>首次分配时间</th><th>首次外呼时间</th><th>首次接通时间</th><th>当前 CC</th><th>跟进阶段</th><th>历史完整度</th></tr></thead>
+        <thead><tr>
+          <th>用户 ID</th><th>学生姓名</th><th>购买意向</th><th>用户状态</th><th>用户类型</th><th>年龄段</th><th>课程等级</th><th>登录账号</th><th>渠道来源-落地页</th>
+          <th class="is-first is-new">首位 CC</th><th class="is-new">当前 CC</th><th class="is-new">跟进阶段</th><th class="is-new">首次分配时间</th><th class="is-new">首次外呼时间</th><th class="is-new">首次接通时间</th><th class="is-new">外呼次数</th><th class="is-new">外呼接通次数</th><th class="is-new">历史完整度</th><th>操作</th>
+        </tr></thead>
         <tbody>${leadRows(pageRows)}</tbody>
       </table></div>
       <div class="table-footer"><span>显示 ${rows.length ? start + 1 : 0}–${Math.min(start + PAGE_SIZE, rows.length)} / ${rows.length} 条 · 下载使用完整筛选范围</span>${pageButtons(rows.length)}</div>
@@ -457,6 +514,10 @@ function readFilters() {
     currentCc: document.querySelector("#filter-current-cc").value,
     outbound: document.querySelector("#filter-outbound").value,
     connected: document.querySelector("#filter-connected").value,
+    outboundMin: document.querySelector("#filter-outbound-min").value,
+    outboundMax: document.querySelector("#filter-outbound-max").value,
+    connectedMin: document.querySelector("#filter-connected-min").value,
+    connectedMax: document.querySelector("#filter-connected-max").value,
     history: document.querySelector("#filter-history").value,
     from: document.querySelector("#filter-from").value,
     to: document.querySelector("#filter-to").value
@@ -469,6 +530,21 @@ function applyFilters() {
     notify("开始日期不能晚于结束日期");
     return;
   }
+  const ranges = [
+    ["外呼次数", next.outboundMin, next.outboundMax],
+    ["外呼接通次数", next.connectedMin, next.connectedMax]
+  ];
+  for (const [label, minimum, maximum] of ranges) {
+    if ((minimum !== "" && (!Number.isInteger(Number(minimum)) || Number(minimum) < 0))
+      || (maximum !== "" && (!Number.isInteger(Number(maximum)) || Number(maximum) < 0))) {
+      notify(`${label}必须填写大于等于 0 的整数`);
+      return;
+    }
+    if (minimum !== "" && maximum !== "" && Number(minimum) > Number(maximum)) {
+      notify(`${label}下限不能高于上限`);
+      return;
+    }
+  }
   state.filters = next;
   state.page = 1;
   render();
@@ -477,7 +553,8 @@ function applyFilters() {
 
 function resetFilters() {
   state.filters = {
-    query: "", businessLine: "all", firstCc: "all", currentCc: "all", outbound: "all", connected: "all", history: "all",
+    query: "", businessLine: "all", firstCc: "all", currentCc: "all",
+    outbound: "all", connected: "all", outboundMin: "", outboundMax: "", connectedMin: "", connectedMax: "", history: "all",
     from: "2026-11-01", to: "2026-11-10"
   };
   state.page = 1;
@@ -526,8 +603,8 @@ function openDrawer(lead) {
       <div class="drawer-block"><div class="drawer-note"><strong>事实字段不可编辑。</strong> 首位 CC 只在第一次成功分配时写入；负责人是否变化不单独存储，直接比较当前 CC 与首位 CC。</div></div>
       <div class="drawer-block"><h4>当前跟进</h4><dl class="facts">
         <dt>销售阶段</dt><dd>${esc(lead.stage)}</dd>
-        <dt>外呼尝试</dt><dd>${lead.attempts} 次</dd>
-        <dt>接通次数</dt><dd>${lead.connected} 次</dd>
+        <dt>外呼次数</dt><dd>${lead.attempts} 次</dd>
+        <dt>外呼接通次数</dt><dd>${lead.connected} 次</dd>
         <dt>最近结果</dt><dd>${esc(lead.outcome)}</dd>
       </dl></div>
     </div>`;
@@ -551,7 +628,7 @@ function openExport() {
   exportModal.innerHTML = `<div class="modal-head"><div><h3 id="export-title">下载当前筛选数据</h3><p>预览确认后生成 CSV，内容与当前列表口径一致。</p></div><button class="icon-btn" data-action="close-export" aria-label="关闭">${icon("close")}</button></div>
     <div class="modal-body">
       <div class="export-summary"><div class="export-metric"><span>数据行数</span><strong>${rows.length}</strong></div><div class="export-metric"><span>日期范围</span><strong style="font-size:13px">${firstDate} 至 ${lastDate}</strong></div><div class="export-metric"><span>时间口径</span><strong style="font-size:13px">按业务线时区</strong></div></div>
-      <div class="field-list">${["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "current_cc_id", "history_status"].map((field) => `<code>${field}</code>`).join("")}</div>
+      <div class="field-list">${["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "outbound_count", "outbound_connected_count", "current_cc_id", "history_status"].map((field) => `<code>${field}</code>`).join("")}</div>
       <div class="drawer-note" style="margin-top:12px">下载会记录操作人、筛选条件、数据范围和行数。联系方式与录音字段继续遵循现有导出权限，不在本需求中扩大。</div>
     </div>
     <div class="modal-foot"><button class="btn" data-action="close-export">取消</button><button class="btn btn-primary" data-action="download-csv">${icon("download")} 生成 CSV</button></div>`;
@@ -570,11 +647,13 @@ function csvCell(value) {
 
 function downloadCSV() {
   const rows = filteredRows();
-  const header = ["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "current_cc_id", "history_status"];
+  const header = ["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "outbound_count", "outbound_connected_count", "current_cc_id", "history_status"];
   const body = rows.map((row) => [
     row.id, row.userId, row.businessLine, row.firstCcId, row.firstCc, row.assignedText,
     row.outboundText === "—" ? "" : row.outboundText,
     row.connectedText === "—" ? "" : row.connectedText,
+    row.attempts,
+    row.connected,
     row.currentCcId,
     row.history
   ].map(csvCell).join(","));
@@ -633,6 +712,11 @@ document.addEventListener("click", (event) => {
   if (!action) return;
   if (action === "apply-filters") applyFilters();
   if (action === "reset-filters") resetFilters();
+  if (action === "show-new-columns") {
+    const tableWrap = document.querySelector(".table-wrap");
+    const firstNew = document.querySelector(".data-table th.is-new");
+    if (tableWrap && firstNew) tableWrap.scrollTo({ left: Math.max(0, firstNew.offsetLeft - 48), behavior: "smooth" });
+  }
   if (action === "close-drawer") closeDrawer();
   if (action === "open-export") openExport();
   if (action === "close-export") closeExport();
