@@ -20,7 +20,7 @@
 | [VN&TH 11 月周会](https://qjphu5vphyf4.jp.larksuite.com/docx/JD4ddkyQRom0t4xEvqXjtL26pcc) | C | 推荐策略近期上线、泰国获客目标 | 未定义产品规则 |
 | [需求拆分与排期规范](https://qjphu5vphyf4.jp.larksuite.com/wiki/AbHPwbqnEi5VJ0kpg4sjrCc9pwb) | A | 功能点、执行任务、Owner 与交付闭环 | 只用于交付层 |
 | [香港支付落地页参照](https://qjphu5vphyf4.jp.larksuite.com/wiki/UGHPwF9XQi0iVTks5kIjNMwZpHc) | A | 当前推荐写法与版式 | 只参考结构，不复制业务内容 |
-| 首位联系人需求（2026-11-10 需求方口述及字段确认） | A | 全业务线首位 CC、首次分配/外呼/接通、列表/筛选/下载 | 历史回填和跨业务线汇总时区待确认 |
+| 首位联系人需求（2026-11-10 需求方口述及字段确认） | A | 全业务线首位 CC、首次分配/外呼/接通、外呼/接通次数筛选、列表与下载 | 历史回填和跨业务线汇总时区待确认 |
 | [CRM Request No. 7](https://qjphu5vphyf4.jp.larksuite.com/base/VmMrbK4uva0lbOsnnXSjBy9rpLK?table=tbl6ewjzW1j648cj&view=vewEIikg2C) | A | 销售跟进 5 个漏斗指标、附件页面和需求方口径确认 | `Connected-Paid%`、`Appt-Paid%` 分子分母方向待确认 |
 | `crm-manual/` | D | 当前页面操作 | 手册不等于产品目标 |
 

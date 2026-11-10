@@ -119,7 +119,7 @@ def build_project(slug, title):
     p{{margin:10px 0}}a{{color:var(--blue)}}table{{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}}
     th,td{{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}}th{{background:#f7f9fc}}
     blockquote{{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}}
-    code{{background:#f1f4f8;padding:1px 5px;border-radius:4px}}pre{{overflow:auto;background:#101828;
+    code{{background:#f1f4f8;padding:1px 5px;border-radius:4px}}pre code{{background:transparent;padding:0;border-radius:0;color:inherit}}pre{{overflow:auto;background:#101828;
     color:#eef2f7;padding:16px;border-radius:8px}}.mermaid{{background:#fff;border:1px solid var(--line);
     border-radius:8px;padding:16px;overflow:auto}}.top{{display:flex;gap:14px;margin-bottom:18px}}
     .top a{{text-decoration:none;font-weight:600}}
