@@ -12,6 +12,8 @@
 | 引入首跟节点&首跟看板 | 待评审 | [PRD](projects/first-contact/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
 | 引入首跟节点&首跟看板-2 | 待评审 | [PRD](projects/first-contact-concise/PRD.md) | [现有原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
 | 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
+| CRM账号&权限体系优化 | PRD 待评审 | [PRD](projects/crm-account-permissions/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-account-permissions/prototype/) |
+| 多级业务线 | 前置分析，已并入 | [项目入口](projects/multi-level-business-lines/README.md) | — |
 
 ## GitHub Pages
 
