@@ -8,16 +8,43 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 PROJECTS = {
     "referrals-rewards": "Referrals & Rewards",
-    "first-contact": "First Contact",
-    "follow-up-funnel": "Follow-up Funnel Metrics",
+    "first-contact": "首位联系人",
+    "follow-up-funnel": "销售跟进漏斗指标",
 }
+
+BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
+CODE_RE = re.compile(r"`([^`]+)`")
+
+
+def linkify(text):
+    """Replace Markdown links without a backtracking-prone regular expression."""
+    output = []
+    cursor = 0
+    while True:
+        start = text.find("[", cursor)
+        if start == -1:
+            output.append(html.escape(text[cursor:], quote=False))
+            break
+        label_end = text.find("](", start + 1)
+        url_end = text.find(")", label_end + 2) if label_end != -1 else -1
+        if label_end == -1 or url_end == -1:
+            output.append(html.escape(text[cursor:], quote=False))
+            break
+        output.append(html.escape(text[cursor:start], quote=False))
+        label = text[start + 1:label_end]
+        url = text[label_end + 2:url_end]
+        output.append(
+            f'<a href="{html.escape(url, quote=True)}" target="_blank" rel="noopener">'
+            f"{html.escape(label, quote=False)}</a>"
+        )
+        cursor = url_end + 1
+    return "".join(output)
 
 
 def inline(text):
-    text = html.escape(text, quote=False)
-    text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2" target="_blank" rel="noopener">\1</a>', text)
-    text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
-    text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+    text = linkify(text)
+    text = BOLD_RE.sub(r"<strong>\1</strong>", text)
+    text = CODE_RE.sub(r"<code>\1</code>", text)
     return text
 
 
@@ -43,6 +70,9 @@ def markdown_to_html(markdown):
                 output.append(f'<div class="mermaid">{body}</div>')
             else:
                 output.append(f'<pre><code class="{html.escape(language)}">{body}</code></pre>')
+        elif stripped.startswith("#### "):
+            output.append(f"<h5>{inline(stripped[5:])}</h5>")
+            index += 1
         elif stripped.startswith("### "):
             output.append(f"<h4>{inline(stripped[4:])}</h4>")
             index += 1
@@ -93,6 +123,9 @@ def markdown_to_html(markdown):
                     break
                 paragraph.append(current)
                 index += 1
+            if not paragraph:
+                index += 1
+                continue
             output.append("<p>" + inline(" ".join(paragraph)) + "</p>")
     return "\n".join(output)
 

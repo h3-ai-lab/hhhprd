@@ -1,14 +1,14 @@
-# Follow-up Funnel Metrics
+# 销售跟进漏斗指标
 
-> 在管理看板 `Sales follow-up` 增加 5 个销售跟进漏斗指标。
+> 在管理看板的“销售跟进”页签增加 5 个跟进转化指标。
 
 | 项 | 内容 |
 |---|---|
 | 状态 | PRD 待评审 |
 | 需求编号 | REQ-DASH-007 |
 | 正式 PRD | [PRD.md](PRD.md) |
-| 交互原型 | [prototype/index.html](prototype/index.html) |
-| 主要范围 | Lead-Connect%、Lead-Appt%、Lead-Completed%、Connected-Paid%、Appt-Paid% |
+| 交互原型 | [打开完整交互原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
+| 主要范围 | 线索接通率、线索预约率、线索体验课完成率、接通付费转化率、预约付费转化率 |
 
 ## 数据口径
 
