@@ -543,9 +543,6 @@ function render() {
     monitor: "首位 CC 与外呼产出监控"
   };
   document.querySelector("#page-title").textContent = titles[state.route];
-  document.querySelector("#breadcrumb").innerHTML = state.route === "monitor"
-    ? "Dino CRM <span>/</span> 销售管理 <span>/</span> 团队监控"
-    : "Dino CRM <span>/</span> 销售管理 <span>/</span> 销售中心";
   document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.route === state.route));
   if (state.route === "monitor") renderMonitor();
   else renderLeads();
