@@ -12,6 +12,7 @@
 ## PRD rules
 
 - Follow `prompts/prd-generation.md` and select one primary requirement-type prompt from `prompts/README.md`.
+- For any field, form, list, filter, sorting, or export requirement, first access the corresponding page in the existing CRM and read the actual field order in its form, detail page, default list columns, filter-area position, filter groups, and filters. Compare the current state item by item before designing the target state. Add a new filter to the same filter area, group, and relative position as comparable existing filters; never default it to the end. Never substitute an assumed order or position when the live CRM cannot be accessed.
 - Write PRDs, prototype navigation, page copy, state labels, and explanatory text in Simplified Chinese by default.
 - Do not ask the user to choose a language. Preserve official product names, field identifiers, codes, and external system names when translation would make them inaccurate.
 - Any new feature, page, action, field group, or data list must use `prompts/04-permission-audit.md` and output complete RBAC permission data.
