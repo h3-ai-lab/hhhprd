@@ -2,6 +2,8 @@
 
 先读取 [`prd-generation.md`](prd-generation.md)，再选择一个主类型提示词。所有类型共享“不写代码、不写验收、不输出写作检查、只保留一个原型地址”的规则。
 
+单文件 PRD 的正式参考样例为 [`REQ-CC-002`](../projects/first-contact-concise/PRD.md)；新需求参考其结构密度和信息组织方式，不再拆分研发详表。
+
 正式 PRD 不设“待确认”或开放问题章节；尚未明确的事项应在生成 PRD 前完成决策。
 
 任何新增功能、页面、按钮、字段组或数据列表，还必须读取 [`04-permission-audit.md`](04-permission-audit.md)，输出 RBAC 权限矩阵和权限数据变更清单。
