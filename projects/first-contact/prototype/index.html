@@ -47,25 +47,10 @@
     </aside>
 
     <div class="workspace">
-      <header class="topbar">
-        <div class="topbar-left">
-          <button class="icon-btn menu-btn" id="menu-toggle" aria-label="展开导航">
-            <svg><use href="#i-menu"></use></svg>
-          </button>
-          <div>
-            <div class="crumb" id="breadcrumb">Dino CRM <span>/</span> 销售管理 <span>/</span> 销售中心</div>
-            <h1 id="page-title">我的跟进 · 首位联系人</h1>
-          </div>
-        </div>
-        <div class="topbar-right">
-          <span class="env-tag"><i></i> 全业务线</span>
-          <button class="btn btn-secondary btn-small" data-route="monitor">团队监控</button>
-          <div class="account">
-            <div class="avatar">S</div>
-            <div><strong>销售运营组长</strong><span>销售中心</span></div>
-          </div>
-        </div>
-      </header>
+      <button class="icon-btn menu-btn floating-menu-btn" id="menu-toggle" aria-label="展开导航">
+        <svg><use href="#i-menu"></use></svg>
+      </button>
+      <h1 class="sr-only" id="page-title">我的跟进 · 首位联系人</h1>
       <main class="content" id="content" tabindex="-1"></main>
     </div>
   </div>
