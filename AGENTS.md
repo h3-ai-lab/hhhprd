@@ -16,6 +16,7 @@
 - For every field, form, and list requirement, assess sorting necessity field by field and state whether sorting is supported, unsupported, or conditional, with a business reason. Identifiers, phone numbers, email addresses, and free text normally do not need sorting; times, counts, amounts, and business-priority values require scenario-based evaluation. For sortable fields, define direction, blank-value order, and multi-field priority.
 - For requirements involving reports, lead assignment or recycling, ownership transfer, follow-up tasks, or staff lifecycle changes, assess the impact of departed, disabled, or reassigned employees. Define what active data is handed over or reclaimed, how historical ownership is retained, how pending work and downstream tasks change, and when access is revoked.
 - Write PRDs, prototype navigation, page copy, state labels, and explanatory text in Simplified Chinese by default.
+- Use "业务线" consistently for market and data dimensions in PRDs and prototypes. Do not describe those dimensions as "国家", even when source documents or stored values use a country-based label.
 - Do not ask the user to choose a language. Preserve official product names, field identifiers, codes, and external system names when translation would make them inaccurate.
 - Any new feature, page, action, field group, or data list must use `prompts/04-permission-audit.md` and output complete RBAC permission data.
 - Keep exactly one complete interactive prototype URL per PRD.
