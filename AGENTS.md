@@ -3,8 +3,9 @@
 ## Delivery
 
 - Create and update all PRDs, generated HTML, and prototypes in the repository workspace.
-- A user request to "发布" or "上传 GitHub" authorizes the agent to commit, push, and trigger the normal publication workflow directly.
-- Do not require a separate local verification gate or a second confirmation before publication.
+- After completing requested changes to PRDs, generated pages, prototypes, or design rules, automatically commit, push, and trigger the normal publication workflow.
+- Do not wait for a separate "发布" or "上传 GitHub" confirmation after the requested work is complete.
+- Keep changes local only when the user explicitly asks to stay local or not upload.
 - Publish only the scope requested by the user. Do not include unrelated working-tree changes.
 - After publication, report the resulting commit and deployment status when available.
 
@@ -12,6 +13,7 @@
 
 - Follow `prompts/prd-generation.md` and select one primary requirement-type prompt from `prompts/README.md`.
 - For any field, form, list, filter, sorting, or export requirement, first access the corresponding page in the existing CRM and read the actual field order in its form, detail page, default list columns, filter-area position, filter groups, and filters. Compare the current state item by item before designing the target state. Add a new filter to the same filter area, group, and relative position as comparable existing filters; never default it to the end. Never substitute an assumed order or position when the live CRM cannot be accessed.
+- For every field, form, and list requirement, assess sorting necessity field by field and state whether sorting is supported, unsupported, or conditional, with a business reason. Identifiers, phone numbers, email addresses, and free text normally do not need sorting; times, counts, amounts, and business-priority values require scenario-based evaluation. For sortable fields, define direction, blank-value order, and multi-field priority.
 - Write PRDs, prototype navigation, page copy, state labels, and explanatory text in Simplified Chinese by default.
 - Do not ask the user to choose a language. Preserve official product names, field identifiers, codes, and external system names when translation would make them inaccurate.
 - Any new feature, page, action, field group, or data list must use `prompts/04-permission-audit.md` and output complete RBAC permission data.
