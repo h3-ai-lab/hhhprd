@@ -13,6 +13,7 @@
 | 引入首跟节点&首跟看板-2 | 单文件参考样例｜待评审 | [PRD](projects/first-contact-concise/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
 | 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 | CRM账号&权限体系优化 | PRD 待评审 | [PRD](projects/crm-account-permissions/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-account-permissions/prototype/) |
+| CRM组织架构&数据权限 | PRD 待评审 | [PRD](projects/crm-org-data-permissions/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
 | 多级业务线 | 前置分析，已并入 | [项目入口](projects/multi-level-business-lines/README.md) | — |
 
 ## GitHub Pages
@@ -23,6 +24,7 @@
 - 引入首跟节点&首跟看板 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact.html>
 - 引入首跟节点&首跟看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/>
 - 引入首跟节点&首跟看板-2 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html>
+- CRM组织架构&数据权限 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-org-data-permissions.html>
 
 ## 目录结构
 
