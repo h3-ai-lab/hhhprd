@@ -157,6 +157,7 @@ const state = {
   route: routeFromHash(),
   tab: "following",
   page: 1,
+  exportRows: [],
   filters: {
     query: "",
     businessLine: "all",
@@ -279,10 +280,10 @@ function statsFor(rows) {
 function statCards(rows) {
   const stats = statsFor(rows);
   return `<div class="stat-grid">
-    <article class="stat-card"><span class="stat-label">当前筛选线索</span><strong>${stats.total}</strong><small>按 Lead ID 去重</small><span class="stat-icon">${icon("list")}</span></article>
-    <article class="stat-card is-success"><span class="stat-label">首位 CC 覆盖率</span><strong>${stats.coverage}%</strong><small>${stats.covered} / ${stats.total} 可确认</small><span class="stat-icon">${icon("check")}</span></article>
-    <article class="stat-card is-warning"><span class="stat-label">外呼总量</span><strong>${stats.outboundCalls}</strong><small>不区分外呼状态</small><span class="stat-icon">${icon("phone")}</span></article>
-    <article class="stat-card is-purple"><span class="stat-label">接通总量</span><strong>${stats.connectedCalls}</strong><small>${stats.outboundCalls ? Math.round((stats.connectedCalls / stats.outboundCalls) * 100) : 0}% 接通率</small><span class="stat-icon">${icon("arrow")}</span></article>
+    <button class="stat-card" data-monitor-stat="all"><span class="stat-label">当前筛选线索</span><strong>${stats.total}</strong><small>按 Lead ID 去重</small><span class="stat-icon">${icon("list")}</span></button>
+    <button class="stat-card is-success" data-monitor-stat="all"><span class="stat-label">首位 CC 覆盖率</span><strong>${stats.coverage}%</strong><small>${stats.covered} / ${stats.total} 可确认</small><span class="stat-icon">${icon("check")}</span></button>
+    <button class="stat-card is-warning" data-monitor-stat="outbound"><span class="stat-label">外呼总量</span><strong>${stats.outboundCalls}</strong><small>不区分外呼状态</small><span class="stat-icon">${icon("phone")}</span></button>
+    <button class="stat-card is-purple" data-monitor-stat="connected"><span class="stat-label">接通总量</span><strong>${stats.connectedCalls}</strong><small>${stats.outboundCalls ? Math.round((stats.connectedCalls / stats.outboundCalls) * 100) : 0}% 接通率</small><span class="stat-icon">${icon("arrow")}</span></button>
   </div>`;
 }
 
@@ -426,8 +427,32 @@ function renderLeads() {
 
 function periodRows() {
   return LEADS.filter((lead) => (
-    lead.firstCcId && matchesDateFilter(lead)
+    lead.firstCcId
+    && (state.filters.businessLine === "all" || lead.businessLine === state.filters.businessLine)
+    && (state.filters.firstCc === "all" || lead.firstCc === state.filters.firstCc)
+    && matchesDateFilter(lead)
   ));
+}
+
+function monitorFiltersPanel(rows) {
+  const f = state.filters;
+  return `<section class="filter-card monitor-filter-card">
+    <div class="filter-grid second">
+      <label class="field"><span class="field-label">业务线</span><select class="select" id="monitor-business-line">${selectOptions(BUSINESS_LINES, f.businessLine, "全部业务线")}</select></label>
+      <label class="field"><span class="field-label">首位 CC</span><select class="select" id="monitor-first-cc">${selectOptions(FIRST_CC, f.firstCc, "全部首位 CC")}</select></label>
+      <label class="field"><span class="field-label">日期类型</span><select class="select" id="monitor-date-field">
+        <option value="registration" ${f.dateField === "registration" ? "selected" : ""}>注册时间</option>
+        <option value="assigned" ${f.dateField === "assigned" ? "selected" : ""}>首次分配时间</option>
+      </select></label>
+      <label class="field"><span class="field-label">开始日期</span><input class="input" type="date" id="monitor-from" value="${esc(f.from)}"></label>
+      <label class="field"><span class="field-label">结束日期</span><input class="input" type="date" id="monitor-to" value="${esc(f.to)}"></label>
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-primary" data-action="apply-monitor-filters">${icon("filter")} 应用筛选</button>
+      <button class="btn" data-action="reset-monitor-filters">重置筛选</button>
+      <span class="filter-count">当前汇总 ${rows.length} 条</span>
+    </div>
+  </section>`;
 }
 
 function productivityRows() {
@@ -462,6 +487,7 @@ function renderMonitor() {
         <div class="access-actions">
           <span class="access-status">${icon("check")} 当前已授权</span>
           <button class="btn btn-small btn-secondary" data-action="open-rbac">查看 RBAC 配置</button>
+          <button class="btn btn-small" data-action="monitor-export">${icon("download")} 导出当前视图</button>
         </div>
       </div>
       <div class="access-grid">
@@ -476,6 +502,7 @@ function renderMonitor() {
         <small>其他角色需管理员显式配置</small>
       </div>
     </section>
+    ${monitorFiltersPanel(completeRows)}
     ${statCards(completeRows)}
     <div class="monitor-grid">
       <section class="card">
@@ -548,6 +575,40 @@ function readFilters() {
     from: document.querySelector("#filter-from").value,
     to: document.querySelector("#filter-to").value
   };
+}
+
+function readMonitorFilters() {
+  return {
+    businessLine: document.querySelector("#monitor-business-line").value,
+    firstCc: document.querySelector("#monitor-first-cc").value,
+    dateField: document.querySelector("#monitor-date-field").value,
+    from: document.querySelector("#monitor-from").value,
+    to: document.querySelector("#monitor-to").value
+  };
+}
+
+function applyMonitorFilters() {
+  const next = readMonitorFilters();
+  if (next.from && next.to && next.from > next.to) {
+    notify("开始日期不能晚于结束日期");
+    return;
+  }
+  state.filters = { ...state.filters, ...next };
+  render();
+  notify(`团队监控已更新，共 ${periodRows().length} 条汇总数据`);
+}
+
+function resetMonitorFilters() {
+  state.filters = {
+    ...state.filters,
+    businessLine: "all",
+    firstCc: "all",
+    dateField: "registration",
+    from: "",
+    to: ""
+  };
+  render();
+  notify("团队监控筛选已重置");
 }
 
 function applyFilters() {
@@ -662,8 +723,9 @@ function openRbacDrawer() {
   drawerLayer.setAttribute("aria-hidden", "false");
 }
 
-function openExport() {
-  const rows = filteredRows();
+function openExport(sourceRows = filteredRows(), scope = "线索筛选") {
+  const rows = sourceRows;
+  state.exportRows = rows;
   if (!rows.length) {
     notify("当前筛选没有可导出的数据");
     return;
@@ -671,7 +733,7 @@ function openExport() {
   const dateValues = rows.map((row) => state.filters.dateField === "assigned" ? row.assignedDate : row.registrationDate).filter(Boolean).sort();
   const firstDate = dateValues[0] || "不限";
   const lastDate = dateValues.at(-1) || "不限";
-  exportModal.innerHTML = `<div class="modal-head"><div><h3 id="export-title">下载当前筛选数据</h3><p>预览确认后生成 CSV，内容与当前列表口径一致。</p></div><button class="icon-btn" data-action="close-export" aria-label="关闭">${icon("close")}</button></div>
+  exportModal.innerHTML = `<div class="modal-head"><div><h3 id="export-title">下载当前筛选数据</h3><p>来源：${esc(scope)}。预览确认后生成 CSV，内容与当前筛选口径一致。</p></div><button class="icon-btn" data-action="close-export" aria-label="关闭">${icon("close")}</button></div>
     <div class="modal-body">
       <div class="export-summary"><div class="export-metric"><span>数据行数</span><strong>${rows.length}</strong></div><div class="export-metric"><span>${dateFieldLabel(state.filters.dateField)}范围</span><strong style="font-size:13px">${firstDate} 至 ${lastDate}</strong></div><div class="export-metric"><span>时间口径</span><strong style="font-size:13px">按业务线时区</strong></div></div>
       <div class="field-list">${["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "outbound_count", "outbound_connected_count", "current_cc_id"].map((field) => `<code>${field}</code>`).join("")}</div>
@@ -692,7 +754,7 @@ function csvCell(value) {
 }
 
 function downloadCSV() {
-  const rows = filteredRows();
+  const rows = state.exportRows?.length ? state.exportRows : filteredRows();
   const header = ["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "outbound_count", "outbound_connected_count", "current_cc_id"];
   const body = rows.map((row) => [
     row.id, row.userId, row.businessLine, row.firstCcId, row.firstCc, row.assignedText,
@@ -729,6 +791,20 @@ document.addEventListener("click", (event) => {
     render();
     return;
   }
+  const monitorStat = event.target.closest("[data-monitor-stat]");
+  if (monitorStat) {
+    state.tab = "following";
+    state.page = 1;
+    if (monitorStat.dataset.monitorStat === "outbound") state.filters.outbound = "has";
+    else if (monitorStat.dataset.monitorStat === "connected") state.filters.connected = "yes";
+    else {
+      state.filters.outbound = "all";
+      state.filters.connected = "all";
+    }
+    navigate("leads");
+    notify("已下钻到同口径线索明细");
+    return;
+  }
   const leadRow = event.target.closest("[data-lead]");
   if (leadRow) {
     const lead = LEADS.find((item) => item.id === leadRow.dataset.lead);
@@ -757,6 +833,8 @@ document.addEventListener("click", (event) => {
   if (!action) return;
   if (action === "apply-filters") applyFilters();
   if (action === "reset-filters") resetFilters();
+  if (action === "apply-monitor-filters") applyMonitorFilters();
+  if (action === "reset-monitor-filters") resetMonitorFilters();
   if (action === "show-new-columns") {
     const tableWrap = document.querySelector(".table-wrap");
     const firstNew = document.querySelector(".data-table th.is-new");
@@ -765,6 +843,7 @@ document.addEventListener("click", (event) => {
   if (action === "close-drawer") closeDrawer();
   if (action === "open-rbac") openRbacDrawer();
   if (action === "open-export") openExport();
+  if (action === "monitor-export") openExport(periodRows(), "团队监控");
   if (action === "close-export") closeExport();
   if (action === "download-csv") downloadCSV();
 });

@@ -339,7 +339,9 @@ main:focus { outline: none; }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #fff;
+  color: inherit;
   box-shadow: var(--shadow);
+  text-align: left;
 }
 .stat-label { color: var(--text-2); font-size: 11px; }
 .stat-card strong { display: block; margin: 5px 0 2px; color: #1c2835; font-size: 27px; line-height: 1.1; letter-spacing: -0.6px; }
