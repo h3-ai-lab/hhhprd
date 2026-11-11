@@ -27,23 +27,30 @@ jobs:
           test -f hhhprd-site/index.html
           test -f hhhprd-site/prd-referrals-rewards.html
           test -f hhhprd-site/prd-first-contact.html
+          test -f hhhprd-site/prd-first-contact-concise.html
           test -f hhhprd-site/prd-follow-up-funnel.html
           test -f projects/referrals-rewards/PRD.md
           test -f projects/referrals-rewards/prototype/index.html
           test -f projects/first-contact/PRD.md
           test -f projects/first-contact/prototype/index.html
+          test -f projects/first-contact-concise/PRD.md
+          test -f projects/first-contact-concise/DETAILS.md
           test -f projects/follow-up-funnel/PRD.md
           test -f projects/follow-up-funnel/prototype/index.html
 
       - name: Assemble Pages site
         run: |
-          mkdir -p public/projects/referrals-rewards/prototype public/projects/first-contact/prototype public/projects/follow-up-funnel/prototype
+          mkdir -p public/projects/referrals-rewards/prototype public/projects/first-contact/prototype public/projects/first-contact-concise public/projects/follow-up-funnel/prototype
           cp hhhprd-site/index.html public/index.html
           cp hhhprd-site/prd-referrals-rewards.html public/prd-referrals-rewards.html
           cp hhhprd-site/prd-first-contact.html public/prd-first-contact.html
+          cp hhhprd-site/prd-first-contact-concise.html public/prd-first-contact-concise.html
           cp hhhprd-site/prd-follow-up-funnel.html public/prd-follow-up-funnel.html
           cp projects/referrals-rewards/PRD.md public/projects/referrals-rewards/PRD.md
           cp projects/first-contact/PRD.md public/projects/first-contact/PRD.md
+          cp projects/first-contact-concise/PRD.md public/projects/first-contact-concise/PRD.md
+          cp projects/first-contact-concise/DETAILS.md public/projects/first-contact-concise/DETAILS.md
+          cp projects/first-contact-concise/README.md public/projects/first-contact-concise/README.md
           cp projects/follow-up-funnel/PRD.md public/projects/follow-up-funnel/PRD.md
           cp -R projects/referrals-rewards/prototype/. public/projects/referrals-rewards/prototype/
           cp -R projects/first-contact/prototype/. public/projects/first-contact/prototype/
@@ -51,9 +58,12 @@ jobs:
 
           sed -i 's#href="../projects/referrals-rewards/prototype/index.html"#href="projects/referrals-rewards/prototype/index.html"#' public/index.html
           sed -i 's#href="../projects/first-contact/prototype/index.html"#href="projects/first-contact/prototype/index.html"#' public/index.html
+          sed -i 's#href="../projects/first-contact-concise/DETAILS.md"#href="projects/first-contact-concise/DETAILS.md"#' public/index.html
           sed -i 's#href="../projects/follow-up-funnel/prototype/index.html"#href="projects/follow-up-funnel/prototype/index.html"#' public/index.html
           sed -i 's#href="../projects/referrals-rewards/PRD.md"#href="projects/referrals-rewards/PRD.md"#' public/prd-referrals-rewards.html
           sed -i 's#href="../projects/first-contact/PRD.md"#href="projects/first-contact/PRD.md"#' public/prd-first-contact.html
+          sed -i 's#href="../projects/first-contact-concise/PRD.md"#href="projects/first-contact-concise/PRD.md"#' public/prd-first-contact-concise.html
+          sed -i 's#href="DETAILS.md"#href="projects/first-contact-concise/DETAILS.md"#g' public/prd-first-contact-concise.html
           sed -i 's#href="../projects/follow-up-funnel/prototype/index.html"#href="projects/follow-up-funnel/prototype/index.html"#' public/prd-follow-up-funnel.html
           sed -i 's#http://127.0.0.1:4175/projects/referrals-rewards/prototype/#projects/referrals-rewards/prototype/#g' public/prd-referrals-rewards.html
           sed -i 's#http://127.0.0.1:4175/projects/first-contact/prototype/#projects/first-contact/prototype/#g' public/prd-first-contact.html
