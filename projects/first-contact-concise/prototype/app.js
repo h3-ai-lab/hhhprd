@@ -298,6 +298,22 @@ function filteredRows(includeTab = true) {
   });
 }
 
+const METRIC_HELP = {
+  assigned: "首跟承接量：筛选范围内首跟 CC 非空的去重 Lead 数。",
+  coverage: "首跟覆盖率：首跟 CC 非空的去重 Lead 数 ÷ 筛选范围内全部去重 Lead 数。",
+  outboundLeads: "首次外呼线索数：首跟集合中首次外呼时间非空的去重 Lead 数。",
+  outboundCoverage: "首次外呼覆盖率：首次外呼时间非空的去重 Lead 数 ÷ 首跟集合去重 Lead 数。",
+  connectedLeads: "首次接通线索数：首跟集合中首次接通时间非空的去重 Lead 数。",
+  connectedCoverage: "首次接通覆盖率：首次接通时间非空的去重 Lead 数 ÷ 首跟集合去重 Lead 数。",
+  outboundTotal: "外呼次数：首跟集合内全部外呼记录之和，按 Call ID 去重，单位是“通”。",
+  connectedTotal: "接通次数：首跟集合内状态为接通的 Call ID 去重数，单位是“通”；卡片下方外呼接通率 = 接通次数 ÷ 外呼次数，外呼次数为 0 时显示“—”。"
+};
+
+function metricHelp(key) {
+  const text = `${METRIC_HELP[key] || ""} 统计范围：当前业务线、首跟 CC、日期类型和日期范围筛选后的线索；时间按所选日期字段和业务线时区统计；人数类按 Lead ID 去重，次数类按 Call ID 去重；分母为 0 时显示“—”。`;
+  return `<button type="button" class="metric-help" data-metric-help="${esc(text)}" title="${esc(text)}" aria-label="${esc(text)}">口径</button>`;
+}
+
 function statsFor(rows, cohortRows = rows) {
   const covered = rows.filter((row) => row.firstCcId).length;
   const outbound = rows.filter((row) => row.hasOutbound).length;
@@ -323,10 +339,10 @@ function statsFor(rows, cohortRows = rows) {
 function statCards(rows, cohortRows) {
   const stats = statsFor(rows, cohortRows);
   return `<div class="stat-grid">
-    <button class="stat-card" data-monitor-stat="all"><span class="stat-label">首跟承接量</span><strong>${stats.covered}</strong><small>筛选线索 ${stats.total}</small><span class="stat-icon">${icon("list")}</span></button>
-    <button class="stat-card is-success" data-monitor-stat="all"><span class="stat-label">首跟覆盖率</span><strong>${formatPercent(stats.covered, stats.total)}</strong><small>${stats.covered} / ${stats.total}</small><span class="stat-icon">${icon("check")}</span></button>
-    <button class="stat-card is-warning" data-monitor-stat="outbound"><span class="stat-label">外呼总量</span><strong>${stats.outboundCalls}</strong><small>首次外呼线索 ${stats.outbound}</small><span class="stat-icon">${icon("phone")}</span></button>
-    <button class="stat-card is-purple" data-monitor-stat="connected"><span class="stat-label">接通总量</span><strong>${stats.connectedCalls}</strong><small>${formatPercent(stats.connectedCalls, stats.outboundCalls)} 外呼接通率</small><span class="stat-icon">${icon("arrow")}</span></button>
+    <div class="stat-card" role="button" tabindex="0" data-monitor-stat="all"><span class="stat-label">首跟承接量</span><strong>${stats.covered}</strong><small>筛选线索 ${stats.total}</small>${metricHelp("assigned")}</div>
+    <div class="stat-card is-success" role="button" tabindex="0" data-monitor-stat="all"><span class="stat-label">首跟覆盖率</span><strong>${formatPercent(stats.covered, stats.total)}</strong><small>${stats.covered} / ${stats.total}</small>${metricHelp("coverage")}</div>
+    <div class="stat-card is-warning" role="button" tabindex="0" data-monitor-stat="outbound"><span class="stat-label">外呼次数</span><strong>${stats.outboundCalls}</strong><small>首次外呼线索 ${stats.outbound}</small>${metricHelp("outboundTotal")}</div>
+    <div class="stat-card is-purple" role="button" tabindex="0" data-monitor-stat="connected"><span class="stat-label">接通次数</span><strong>${stats.connectedCalls}</strong><small>${formatPercent(stats.connectedCalls, stats.outboundCalls)} 外呼接通率</small>${metricHelp("connectedTotal")}</div>
   </div>`;
 }
 
@@ -541,6 +557,8 @@ function productivityRows() {
       assigned: rows.length,
       outbound,
       connected,
+      outboundCalls: rows.reduce((sum, lead) => sum + lead.attempts, 0),
+      connectedCalls: rows.reduce((sum, lead) => sum + lead.connected, 0),
       outboundRate: rows.length ? outbound / rows.length * 100 : 0,
       connectedRate: rows.length ? connected / rows.length * 100 : 0
     };
@@ -559,13 +577,15 @@ function renderMonitor() {
       <section class="card">
         <div class="card-head"><div><h3>首跟 CC 生产力</h3><p>承接、首次外呼和首次接通按 Lead ID 去重</p></div></div>
         <div class="table-wrap"><table class="agent-table">
-          <thead><tr><th>首跟 CC</th><th>首跟承接量</th><th>首次外呼线索</th><th>首次外呼覆盖率</th><th>首次接通线索</th><th>首次接通覆盖率</th></tr></thead>
+          <thead><tr><th>首跟 CC</th><th>首跟承接量 ${metricHelp("assigned")}</th><th>首次外呼线索 ${metricHelp("outboundLeads")}</th><th>首次外呼覆盖率 ${metricHelp("outboundCoverage")}</th><th>首次接通线索 ${metricHelp("connectedLeads")}</th><th>首次接通覆盖率 ${metricHelp("connectedCoverage")}</th><th>外呼次数 ${metricHelp("outboundTotal")}</th><th>接通次数 ${metricHelp("connectedTotal")}</th></tr></thead>
           <tbody>${productivity.map((row) => `<tr data-agent="${esc(row.name)}">
             <td><div class="user-cell"><span class="user-avatar">${initials(row.name)}</span><span class="user-copy"><strong>${esc(row.name)}</strong><span>点击查看明细</span></span></div></td>
             <td><strong>${row.assigned}</strong></td><td>${row.outbound}</td>
             <td class="progress-cell"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:${row.outboundRate}%"></div></div><b>${formatPercent(row.outbound, row.assigned)}</b></div></td>
             <td>${row.connected}</td>
             <td class="progress-cell"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:${row.connectedRate}%"></div></div><b>${formatPercent(row.connected, row.assigned)}</b></div></td>
+            <td><strong>${row.outboundCalls}</strong></td>
+            <td><strong>${row.connectedCalls}</strong></td>
           </tr>`).join("")}</tbody>
         </table></div>
       </section>
@@ -573,15 +593,8 @@ function renderMonitor() {
         <section class="card">
           <div class="card-head"><div><h3>外呼与接通</h3><p>首次外呼不区分结果，首次接通单独统计</p></div>${tag("外呼链路", "purple")}</div>
           <div class="card-body"><div class="watch-list">
-            <div class="watch-item"><div class="watch-head"><strong>首次外呼线索数</strong><span>${formatPercent(stats.outbound, stats.covered)} 覆盖率</span></div><div class="watch-value">${stats.outbound}</div><p>${stats.outbound} / ${stats.covered} 条首跟线索完成首次外呼</p></div>
-            <div class="watch-item"><div class="watch-head"><strong>首次接通</strong><span>${formatPercent(stats.connected, stats.covered)} 覆盖率</span></div><div class="watch-value">${stats.connected}</div><p>${stats.connected} / ${stats.covered} 条首跟线索产生首次接通</p></div>
-          </div></div>
-        </section>
-        <section class="card">
-          <div class="card-head"><div><h3>个人外呼产出</h3><p>当前业务线范围累计结果</p></div></div>
-          <div class="card-body"><div class="watch-list">
-            <div class="watch-item"><div class="watch-head"><strong>外呼总量</strong><span>不区分状态</span></div><div class="watch-value">${stats.outboundCalls}</div><p>对应筛选范围内的累计外呼次数</p></div>
-            <div class="watch-item"><div class="watch-head"><strong>接通总量</strong><span>${formatPercent(stats.connectedCalls, stats.outboundCalls)} 外呼接通率</span></div><div class="watch-value">${stats.connectedCalls}</div><p>外呼接通次数是外呼次数的子集</p></div>
+            <div class="watch-item">${metricHelp("outboundCoverage")}<div class="watch-head"><strong>首次外呼线索数</strong><span>${formatPercent(stats.outbound, stats.covered)} 覆盖率</span></div><div class="watch-value">${stats.outbound}</div><p>${stats.outbound} / ${stats.covered}</p></div>
+            <div class="watch-item">${metricHelp("connectedCoverage")}<div class="watch-head"><strong>首次接通线索数</strong><span>${formatPercent(stats.connected, stats.covered)} 覆盖率</span></div><div class="watch-value">${stats.connected}</div><p>${stats.connected} / ${stats.covered}</p></div>
           </div></div>
         </section>
       </div>
@@ -817,6 +830,12 @@ function downloadCSV() {
 }
 
 document.addEventListener("click", (event) => {
+  const metric = event.target.closest("[data-metric-help]");
+  if (metric) {
+    event.stopPropagation();
+    notify(metric.dataset.metricHelp);
+    return;
+  }
   const route = event.target.closest("[data-route]");
   if (route) {
     if (route.tagName === "BUTTON") event.preventDefault();
