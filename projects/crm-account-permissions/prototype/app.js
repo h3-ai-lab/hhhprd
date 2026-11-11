@@ -14,6 +14,7 @@ const state = {
   dashboardOrg: "r1",
   dashboardCC: "",
   dashboardDate: "",
+  logModule: "",
   logs: [
     { time: "2026-11-11 16:24:08", module: "组织架构", action: "新增", target: "越南业务线 / 1区 / A部 / A1组", actor: "lin.yue@dinoai.ai" },
     { time: "2026-11-11 16:20:31", module: "成员账号", action: "编辑", target: "林悦 · 数据授权", actor: "chen.ming@dinoai.ai" },
@@ -94,6 +95,8 @@ const descendantsOf = (id) => {
   return output;
 };
 const subtreeIds = (id) => id ? [id, ...descendantsOf(id).map((org) => org.id)] : [];
+const OPERATOR_SCOPE_ROOTS = ["r1"];
+const operatorAllowedIds = () => new Set(OPERATOR_SCOPE_ROOTS.flatMap((id) => subtreeIds(id)));
 const orgPath = (id) => {
   const parts = [];
   let current = orgById(id);
@@ -106,16 +109,29 @@ const orgPath = (id) => {
 const levelName = (level) => ({ 1: "国家", 2: "区", 3: "部", 4: "组" })[level] || "—";
 const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
 const memberOptions = (selectedId = "", onlyWithin = "") => {
-  const allowed = onlyWithin ? new Set(subtreeIds(onlyWithin)) : null;
+  const allowed = new Set(subtreeIds(onlyWithin));
   return members
-    .filter((member) => member.status === "启用" && (!allowed || allowed.has(member.primaryOrgId)))
+    .filter((member) => member.status === "启用" && allowed.has(member.primaryOrgId))
     .map((member) => `<option value="${member.id}" ${member.id === selectedId ? "selected" : ""}>${escapeHtml(member.name)} · ${escapeHtml(orgPath(member.primaryOrgId))}</option>`)
     .join("");
 };
-const orgOptions = (line = "", selected = "", allowRoot = true) => orgs
-  .filter((org) => (!line || org.line === line) && (allowRoot || org.level > 1))
+const orgOptions = (line = "", selected = "", allowRoot = true) => {
+  const allowed = operatorAllowedIds();
+  return orgs
+  .filter((org) => allowed.has(org.id) && (!line || org.line === line) && (allowRoot || org.level > 1))
   .map((org) => `<option value="${org.id}" ${org.id === selected ? "selected" : ""}>${"　".repeat(org.level - 1)}${escapeHtml(org.name)} · ${levelName(org.level)}</option>`)
   .join("");
+};
+
+function orgParentOptions(editing) {
+  const allowed = operatorAllowedIds();
+  const descendantIds = new Set(editing ? descendantsOf(editing.id).map((org) => org.id) : []);
+  return orgs
+    .filter((org) => org.level < 4 && org.id !== editing?.id && !descendantIds.has(org.id)
+      && (allowed.has(org.id) || org.id === editing?.parentId))
+    .map((org) => `<option value="${org.id}" ${org.id === editing?.parentId ? "selected" : ""}>${"　".repeat(org.level - 1)}${escapeHtml(org.name)} · ${levelName(org.level)}</option>`)
+    .join("");
+}
 
 function countMembers(orgId) {
   return members.filter((member) => member.primaryOrgId === orgId && member.status === "启用").length;
@@ -161,7 +177,8 @@ function closeModal() {
 }
 
 function treeHtml(parentId = null, depth = 0) {
-  return childrenOf(parentId).map((org) => {
+  const allowed = operatorAllowedIds();
+  return childrenOf(parentId).filter((org) => org.id === "vn" || allowed.has(org.id)).map((org) => {
     const keyword = state.selectedOrgSearch.trim().toLowerCase();
     const matches = !keyword || orgPath(org.id).toLowerCase().includes(keyword);
     const childHtml = treeHtml(org.id, depth + 1);
@@ -218,10 +235,12 @@ function renderOrganizationTab() {
 
 function renderMembersTab() {
   const f = state.memberFilters;
-  const candidates = orgs.filter((org) => !f.line || org.line === f.line);
+  const allowed = operatorAllowedIds();
+  const candidates = orgs.filter((org) => allowed.has(org.id) && (!f.line || org.line === f.line));
   const filtered = members.filter((member) => {
     const keyword = f.search.trim().toLowerCase();
-    return (!keyword || member.name.toLowerCase().includes(keyword) || member.email.toLowerCase().includes(keyword))
+    return allowed.has(member.primaryOrgId)
+      && (!keyword || member.name.toLowerCase().includes(keyword) || member.email.toLowerCase().includes(keyword))
       && (!f.line || member.line === f.line)
       && (!f.orgId || subtreeIds(f.orgId).includes(member.primaryOrgId))
       && (!f.roleId || member.roleId === f.roleId)
@@ -274,8 +293,9 @@ function renderRolesTab() {
 }
 
 function renderLogsTab() {
+  const logs = state.logs.filter((log) => !state.logModule || log.module === state.logModule);
   return `<div class="filters">
-    <select class="select"><option>全部模块</option><option>组织架构</option><option>成员账号</option><option>角色权限</option></select>
+    <select class="select" id="log-module-filter"><option value="">全部模块</option>${["组织架构","成员账号","角色权限"].map((module) => `<option ${state.logModule === module ? "selected" : ""}>${module}</option>`).join("")}</select>
     <input class="field search-field" placeholder="按操作人邮箱搜索">
     <input class="field" type="date" value="2026-11-01">
     <span class="secondary-text">至</span>
@@ -283,7 +303,7 @@ function renderLogsTab() {
     <div class="actions"><button class="btn">重置</button><button class="btn primary">${icon("search")}搜索</button></div>
   </div>
   <div class="table-wrap"><table><thead><tr><th>模块</th><th>操作行为</th><th>操作对象</th><th>操作人</th><th>操作时间</th></tr></thead>
-    <tbody>${state.logs.map((log) => `<tr><td>${log.module}</td><td><span class="tag ${log.action === "新增" ? "green" : "blue"}">${log.action}</span></td><td>${escapeHtml(log.target)}</td><td>${escapeHtml(log.actor)}</td><td>${log.time}</td></tr>`).join("")}</tbody>
+    <tbody>${logs.map((log) => `<tr><td>${log.module}</td><td><span class="tag ${log.action === "新增" ? "green" : "blue"}">${log.action}</span></td><td>${escapeHtml(log.target)}</td><td>${escapeHtml(log.actor)}</td><td>${log.time}</td></tr>`).join("")}</tbody>
   </table></div>`;
 }
 
@@ -326,7 +346,7 @@ function renderSales() {
       <input class="field search-field" id="sales-search" placeholder="搜索用户 ID / 姓名 / 登录账号" value="${escapeHtml(state.salesSearch)}">
       <select class="select"><option>越南</option></select>
       <select class="select" id="sales-org-filter"><option value="r1" ${state.salesOrg === "r1" ? "selected" : ""}>全部授权组织</option>${allowed.map((org) => `<option value="${org.id}" ${state.salesOrg === org.id ? "selected" : ""}>${"　".repeat(org.level - 2)}${escapeHtml(org.name)}</option>`).join("")}</select>
-      <select class="select"><option>全部 CC</option>${members.filter((m) => m.userType === "CC").map((m) => `<option>${m.name}</option>`).join("")}</select>
+      <select class="select"><option>全部 CC</option>${members.filter((m) => m.userType === "CC" && allowed.some((org) => org.id === m.primaryOrgId)).map((m) => `<option>${m.name}</option>`).join("")}</select>
       <select class="select" id="sales-stage-filter"><option value="">全部跟进阶段</option>${["跟进中","已预约","已付费","暂不跟进","待领取"].map((stage) => `<option ${state.salesStage === stage ? "selected" : ""}>${stage}</option>`).join("")}</select>
       <select class="select" id="sales-status-filter"><option value="">全部用户状态</option>${["已注册","已付费"].map((status) => `<option ${state.salesStatus === status ? "selected" : ""}>${status}</option>`).join("")}</select>
       <div class="actions"><button class="btn" data-action="reset-sales">重置筛选</button><button class="btn">${icon("download")}下载数据</button></div>
@@ -395,7 +415,7 @@ function renderDashboard() {
     <div class="filters">
       <select class="select"><option>越南</option></select>
       <select class="select" id="dashboard-org-filter"><option value="r1" ${state.dashboardOrg === "r1" ? "selected" : ""}>1区及全部下级</option>${allowed.slice(1).map((item) => `<option value="${item.id}" ${state.dashboardOrg === item.id ? "selected" : ""}>${"　".repeat(item.level - 2)}${escapeHtml(item.name)}</option>`).join("")}</select>
-      <select class="select"><option>全部 CC</option>${members.filter((m) => m.userType === "CC").map((m) => `<option>${m.name}</option>`).join("")}</select>
+      <select class="select"><option>全部 CC</option>${members.filter((m) => m.userType === "CC" && allowed.some((org) => org.id === m.primaryOrgId)).map((m) => `<option>${m.name}</option>`).join("")}</select>
       <input class="field" type="date" value="2026-11-01">
       <span class="secondary-text">至</span>
       <input class="field" type="date" value="2026-11-11">
@@ -460,8 +480,8 @@ function openOrgModal(mode, orgId = state.selectedOrg) {
     <div class="modal-head"><h2 id="modal-title">${editing ? "编辑组织" : "新增下级组织"}</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
     <div class="form-section">组织信息</div>
     <div class="form-grid">
-      <div class="form-item"><label>业务线 <em>*</em></label><select class="select" name="line"><option>越南</option><option>泰国</option></select></div>
-      <div class="form-item"><label>上级组织 <em>*</em></label><select class="select" name="parentId">${orgOptions("越南", parent || "")}</select></div>
+      <div class="form-item"><label>业务线 <em>*</em></label><select class="select" name="line"><option>越南</option></select></div>
+      <div class="form-item"><label>上级组织 <em>*</em></label><select class="select" name="parentId">${editing ? orgParentOptions(editing) : orgOptions("越南", parent || "")}</select></div>
       <div class="form-item full"><label>组织名称 <em>*</em></label><input class="field" name="name" value="${escapeHtml(editing?.name || "")}" placeholder="请输入组织名称"></div>
       <div class="form-item"><label>组织层级</label><input class="field" value="${levelName(editing?.level || nextLevel)}" disabled></div>
       <div class="form-item"><label>负责人</label><select class="select" name="leaderId"><option value="">暂不设置</option>${memberOptions(editing?.leaderId || "")}</select></div>
@@ -501,9 +521,51 @@ function setError(id, text) {
   if (target) target.textContent = text;
 }
 
+function memberGrantOrgs(line) {
+  const allowed = operatorAllowedIds();
+  return orgs.filter((org) => org.line === line && allowed.has(org.id));
+}
+
+function hasSelectedAncestor(org, selectedIds) {
+  let parent = org.parentId ? orgById(org.parentId) : null;
+  while (parent) {
+    if (selectedIds.has(parent.id)) return true;
+    parent = parent.parentId ? orgById(parent.parentId) : null;
+  }
+  return false;
+}
+
+function memberOrgSelectorHtml(line) {
+  const selectedIds = window.__memberGrantIds || new Set();
+  const nodes = memberGrantOrgs(line);
+  const chips = [...selectedIds].map((id) => ({ id, org: orgById(id) })).filter((item) => item.org && item.org.line === line)
+    .map(({ id, org }) => `<span class="org-chip" data-chip="${id}">${escapeHtml(org.name)}及下级<button type="button" data-remove-grant="${id}" aria-label="移除${escapeHtml(org.name)}">×</button></span>`).join("");
+  const rows = nodes.map((org) => {
+    const covered = hasSelectedAncestor(org, selectedIds);
+    const checked = selectedIds.has(org.id) || covered;
+    return `<label class="org-check-row ${covered ? "is-covered" : ""}" style="--tree-indent:${(org.level - 2) * 16}px">
+      <input type="checkbox" data-grant-org="${org.id}" ${checked ? "checked" : ""} ${covered ? "disabled" : ""}>
+      <span>${escapeHtml(org.name)}</span><span class="level-badge">L${org.level} · ${levelName(org.level)}${selectedIds.has(org.id) ? " · 含下级" : ""}</span>
+    </label>`;
+  }).join("");
+  return `<div class="org-multiselect">
+    <div class="org-select-trigger ${window.__memberSelectorOpen ? "is-open" : ""}" role="button" tabindex="0" data-action="toggle-member-org-panel">
+      <span class="org-chip-list">${chips || '<span class="secondary-text">请选择组织，可多选</span>'}</span><span class="select-caret">⌄</span>
+    </div>
+    ${window.__memberSelectorOpen ? `<div class="org-select-panel" id="member-org-panel">
+      <div class="org-select-panel-head"><span>可选择父节点或任意下级</span><span>父节点自动包含全部下级</span></div>
+      ${rows || '<div class="org-select-empty">当前操作人没有可选组织</div>'}
+    </div>` : ""}
+  </div>`;
+}
+
 function openMemberModal(memberId = "") {
   const member = members.find((item) => item.id === memberId);
   const scope = member?.scope || "self";
+  const line = member?.line === "全部业务线" ? "越南" : member?.line || "越南";
+  window.__memberGrantIds = new Set(member?.orgIds || []);
+  window.__memberSelectorOpen = false;
+  const assignableRoles = roles.filter((role) => ["role_region", "role_sales"].includes(role.id));
   openModal(`<form id="member-form">
     <div class="modal-head"><h2 id="modal-title">${member ? "编辑成员" : "新增成员"}</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
     <div class="form-section">基本信息</div>
@@ -514,25 +576,61 @@ function openMemberModal(memberId = "") {
     </div>
     <div class="form-section" style="margin-top:18px">权限配置</div>
     <div class="form-grid">
-      <div class="form-item full"><label>功能角色 <em>*</em></label><select class="select" name="roleId"><option value="">请选择功能角色</option>${roles.map((role) => `<option value="${role.id}" ${member?.roleId === role.id ? "selected" : ""}>${role.name}</option>`).join("")}</select></div>
-      <div class="form-item"><label>业务线 <em>*</em></label><select class="select" name="line"><option>越南</option><option ${member?.line === "泰国" ? "selected" : ""}>泰国</option></select></div>
+      <div class="form-item full"><label>功能角色 <em>*</em></label><select class="select" name="roleId"><option value="">请选择功能角色</option>${assignableRoles.map((role) => `<option value="${role.id}" ${member?.roleId === role.id ? "selected" : ""}>${role.name}</option>`).join("")}</select></div>
+      <div class="form-item"><label>业务线 <em>*</em></label><select class="select" name="line"><option>越南</option></select></div>
       <div class="form-item"><label>数据范围 <em>*</em></label><select class="select" name="scope" id="member-scope">
         <option value="self" ${scope === "self" ? "selected" : ""}>本人</option>
         <option value="nodes" ${scope === "nodes" ? "selected" : ""}>指定组织及下级</option>
         <option value="line" ${scope === "line" ? "selected" : ""}>业务线全部</option>
       </select></div>
       <div class="form-item full" id="member-org-grant" style="${scope === "nodes" ? "" : "display:none"}">
-        <label>指定组织 <em>*</em></label>
-        <select class="select" name="orgIds" multiple size="5">${orgs.filter((org) => org.line === (member?.line || "越南")).map((org) => `<option value="${org.id}" ${member?.orgIds?.includes(org.id) ? "selected" : ""}>${"　".repeat(org.level - 1)}${escapeHtml(org.name)}</option>`).join("")}</select>
+        <label>授权组织 <em>*</em></label>
+        <div id="member-org-selector">${memberOrgSelectorHtml(line)}</div>
       </div>
-      <div class="form-item full"><label>主组织 <em>*</em></label><select class="select" name="primaryOrgId">${orgOptions(member?.line || "越南", member?.primaryOrgId || "")}</select></div>
+      <div class="form-item full"><label>主组织 <em>*</em></label><select class="select" name="primaryOrgId" id="member-primary-org">${orgOptions(line, member?.primaryOrgId || "")}</select></div>
     </div>
     <div class="form-error" id="member-error"></div>
     <div class="modal-actions"><button class="btn" type="button" data-action="close-modal">取消</button><button class="btn primary" type="submit">保存</button></div>
   </form>`);
+
+  const refreshGrantSelector = () => {
+    document.getElementById("member-org-selector").innerHTML = memberOrgSelectorHtml(document.querySelector('#member-form [name="line"]').value);
+  };
   const scopeSelect = document.getElementById("member-scope");
   scopeSelect.addEventListener("change", () => {
     document.getElementById("member-org-grant").style.display = scopeSelect.value === "nodes" ? "" : "none";
+  });
+  document.getElementById("member-form").addEventListener("change", (event) => {
+    if (event.target.id === "member-scope") return;
+    if (event.target.name === "line") {
+      window.__memberGrantIds.clear();
+      window.__memberSelectorOpen = false;
+      document.getElementById("member-primary-org").innerHTML = orgOptions(event.target.value, "");
+      refreshGrantSelector();
+      return;
+    }
+    if (event.target.matches("[data-grant-org]")) {
+      const id = event.target.dataset.grantOrg;
+      const org = orgById(id);
+      if (event.target.checked) {
+        window.__memberGrantIds.add(id);
+        descendantsOf(id).forEach((node) => window.__memberGrantIds.delete(node.id));
+      } else {
+        window.__memberGrantIds.delete(id);
+      }
+      refreshGrantSelector();
+    }
+  });
+  document.getElementById("member-form").addEventListener("click", (event) => {
+    if (event.target.closest('[data-action="toggle-member-org-panel"]')) {
+      window.__memberSelectorOpen = !window.__memberSelectorOpen;
+      refreshGrantSelector();
+    }
+    const remove = event.target.closest("[data-remove-grant]");
+    if (remove) {
+      window.__memberGrantIds.delete(remove.dataset.removeGrant);
+      refreshGrantSelector();
+    }
   });
   document.getElementById("member-form").addEventListener("submit", (event) => {
     event.preventDefault();
@@ -540,22 +638,25 @@ function openMemberModal(memberId = "") {
     const name = String(form.get("name") || "").trim();
     const email = String(form.get("email") || "").trim().toLowerCase();
     const roleId = String(form.get("roleId") || "");
-    const line = String(form.get("line") || "");
+    const selectedLine = String(form.get("line") || "");
     const selectedScope = String(form.get("scope") || "self");
     const primaryOrgId = String(form.get("primaryOrgId") || "");
-    const selectedOrgIds = Array.from(event.currentTarget.querySelector('[name="orgIds"]').selectedOptions).map((option) => option.value);
+    const selectedOrgIds = [...window.__memberGrantIds];
+    const allowed = operatorAllowedIds();
     if (!name || !email || !roleId || !primaryOrgId) return setError("member-error", "请完整填写姓名、邮箱、角色和主组织");
     if (!email.includes("@")) return setError("member-error", "请输入有效邮箱");
     if (members.some((item) => item.id !== member?.id && item.email === email)) return setError("member-error", "登录邮箱已存在");
-    if (orgById(primaryOrgId)?.line !== line) return setError("member-error", "主组织必须属于所选业务线");
+    if (!allowed.has(primaryOrgId)) return setError("member-error", "主组织超出当前操作人的数据权限");
+    if (orgById(primaryOrgId)?.line !== selectedLine) return setError("member-error", "主组织必须属于所选业务线");
     if (selectedScope === "nodes" && !selectedOrgIds.length) return setError("member-error", "请至少选择一个授权组织");
+    if (selectedScope === "nodes" && selectedOrgIds.some((id) => !allowed.has(id))) return setError("member-error", "授权组织超出当前操作人的数据权限");
     const next = {
       id: member?.id || `m_${Date.now()}`,
       name,
       email,
       userType: String(form.get("userType") || "其他"),
       roleId,
-      line,
+      line: selectedLine,
       scope: selectedScope,
       orgIds: selectedScope === "nodes" ? selectedOrgIds : [],
       primaryOrgId,
@@ -698,6 +799,10 @@ el.content.addEventListener("change", (event) => {
   }
   if (event.target.id === "dashboard-org-filter") {
     state.dashboardOrg = event.target.value;
+    render();
+  }
+  if (event.target.id === "log-module-filter") {
+    state.logModule = event.target.value;
     render();
   }
 });
