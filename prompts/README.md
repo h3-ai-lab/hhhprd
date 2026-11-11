@@ -4,7 +4,7 @@
 
 任何新增功能、页面、按钮、字段组或数据列表，还必须读取 [`04-permission-audit.md`](04-permission-audit.md)，输出 RBAC 权限矩阵和权限数据变更清单。
 
-所有 PRD 和原型默认执行本地优先：生成、构建、验证后在本地等待确认，未经用户明确同意不得上传 GitHub 或触发 Pages。
+用户要求“发布”或“上传 GitHub”时，完成后直接提交并发布，不再要求本地验证或二次确认；发布范围只包含当前任务相关改动。
 
 生成原型时还必须读取 [`prototype-generation.md`](prototype-generation.md)，只展示上线后真实产品界面，不把 PRD 说明、流程叙事或原型提示画进产品页面。
 

@@ -1,13 +1,12 @@
 # Dino PRD Repository Rules
 
-## Local-first delivery
+## Delivery
 
-- Create and update all PRDs, generated HTML, and prototypes in the local workspace first.
-- Run local validation for required files, generated pages, and key interactions.
-- Report local file paths, validation results, and any unresolved questions.
-- Stop after local verification and wait for explicit user confirmation.
-- Do not create a remote commit, push to GitHub, use the GitHub API to update remote files, or trigger GitHub Pages until the user explicitly says "确认", "发布", or "上传 GitHub".
-- When confirmation is given, upload only the reviewed scope and verify the resulting GitHub Pages URLs.
+- Create and update all PRDs, generated HTML, and prototypes in the repository workspace.
+- A user request to "发布" or "上传 GitHub" authorizes the agent to commit, push, and trigger the normal publication workflow directly.
+- Do not require a separate local verification gate or a second confirmation before publication.
+- Publish only the scope requested by the user. Do not include unrelated working-tree changes.
+- After publication, report the resulting commit and deployment status when available.
 
 ## PRD rules
 
