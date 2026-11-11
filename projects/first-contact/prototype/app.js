@@ -4,8 +4,8 @@ const LEADS = [
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
     assignedText: "2026-11-09 09:12 (+07)", outboundText: "2026-11-09 09:18 (+07)", connectedText: "2026-11-09 09:26 (+07)",
-    assignedDate: "2026-11-09", currentAssignedText: "2026-11-09 17:42 (+07)",
-    hasOutbound: true, history: "complete", stage: "电话营销跟进中",
+    registrationDate: "2026-10-24", assignedDate: "2026-11-09", currentAssignedText: "2026-11-09 17:42 (+07)",
+    hasOutbound: true, stage: "电话营销跟进中",
     attempts: 4, connected: 2, outcome: "有意向", view: "following", stopped: false
   },
   {
@@ -13,8 +13,8 @@ const LEADS = [
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
     assignedText: "2026-11-09 09:28 (+07)", outboundText: "2026-11-09 10:04 (+07)", connectedText: "2026-11-09 10:10 (+07)",
-    assignedDate: "2026-11-09", currentAssignedText: "2026-11-09 18:03 (+07)",
-    hasOutbound: true, history: "complete", stage: "电话营销跟进中",
+    registrationDate: "2026-10-30", assignedDate: "2026-11-09", currentAssignedText: "2026-11-09 18:03 (+07)",
+    hasOutbound: true, stage: "电话营销跟进中",
     attempts: 3, connected: 1, outcome: "未填写", view: "following", stopped: false
   },
   {
@@ -22,8 +22,8 @@ const LEADS = [
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
     currentCc: "Linh Pham", currentCcId: "cc_vn_1024", currentTeam: "CC",
     assignedText: "2026-11-09 11:05 (+07)", outboundText: "—", connectedText: "—",
-    assignedDate: "2026-11-09", currentAssignedText: "2026-11-09 11:05 (+07)",
-    hasOutbound: false, history: "complete", stage: "首次跟进",
+    registrationDate: "2026-11-02", assignedDate: "2026-11-09", currentAssignedText: "2026-11-09 11:05 (+07)",
+    hasOutbound: false, stage: "首次跟进",
     attempts: 0, connected: 0, outcome: "未填写", view: "following", stopped: false
   },
   {
@@ -31,8 +31,8 @@ const LEADS = [
     firstCc: "Mai Nguyen", firstCcId: "cc_vn_1031", firstCcEmail: "mai.nguyen@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
     assignedText: "2026-11-08 14:22 (+07)", outboundText: "2026-11-08 14:31 (+07)", connectedText: "2026-11-08 14:40 (+07)",
-    assignedDate: "2026-11-08", currentAssignedText: "2026-11-09 09:14 (+07)",
-    hasOutbound: true, history: "complete", stage: "电话营销已接通",
+    registrationDate: "2026-11-01", assignedDate: "2026-11-08", currentAssignedText: "2026-11-09 09:14 (+07)",
+    hasOutbound: true, stage: "电话营销已接通",
     attempts: 5, connected: 3, outcome: "已预约", view: "following", stopped: false
   },
   {
@@ -40,8 +40,8 @@ const LEADS = [
     firstCc: "Mai Nguyen", firstCcId: "cc_vn_1031", firstCcEmail: "mai.nguyen@dino.ai",
     currentCc: "Hà Nguyễn", currentCcId: "cc_vn_1042", currentTeam: "CC",
     assignedText: "2026-11-08 16:08 (+07)", outboundText: "2026-11-08 16:16 (+07)", connectedText: "—",
-    assignedDate: "2026-11-08", currentAssignedText: "2026-11-09 10:20 (+07)",
-    hasOutbound: true, history: "complete", stage: "销售跟进中",
+    registrationDate: "2026-10-29", assignedDate: "2026-11-08", currentAssignedText: "2026-11-09 10:20 (+07)",
+    hasOutbound: true, stage: "销售跟进中",
     attempts: 2, connected: 0, outcome: "无人接听", view: "following", stopped: false
   },
   {
@@ -49,8 +49,8 @@ const LEADS = [
     firstCc: "Quyen Do", firstCcId: "cc_vn_1039", firstCcEmail: "quyen.do@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
     assignedText: "2026-11-10 08:11 (+07)", outboundText: "2026-11-10 08:19 (+07)", connectedText: "2026-11-10 08:22 (+07)",
-    assignedDate: "2026-11-10", currentAssignedText: "2026-11-10 08:25 (+07)",
-    hasOutbound: true, history: "complete", stage: "电话营销待跟进",
+    registrationDate: "2026-11-09", assignedDate: "2026-11-10", currentAssignedText: "2026-11-10 08:25 (+07)",
+    hasOutbound: true, stage: "电话营销待跟进",
     attempts: 1, connected: 1, outcome: "未填写", view: "following", stopped: false
   },
   {
@@ -58,8 +58,8 @@ const LEADS = [
     firstCc: "Quyen Do", firstCcId: "cc_vn_1039", firstCcEmail: "quyen.do@dino.ai",
     currentCc: "Quyen Do", currentCcId: "cc_vn_1039", currentTeam: "CC",
     assignedText: "2026-11-10 09:47 (+08)", outboundText: "—", connectedText: "—",
-    assignedDate: "2026-11-10", currentAssignedText: "2026-11-10 09:47 (+08)",
-    hasOutbound: false, history: "complete", stage: "首次跟进",
+    registrationDate: "2026-11-10", assignedDate: "2026-11-10", currentAssignedText: "2026-11-10 09:47 (+08)",
+    hasOutbound: false, stage: "首次跟进",
     attempts: 0, connected: 0, outcome: "未填写", view: "following", stopped: false
   },
   {
@@ -67,8 +67,8 @@ const LEADS = [
     firstCc: null, firstCcId: null, firstCcEmail: null,
     currentCc: "Bảo Trân", currentCcId: "cc_vn_1051", currentTeam: "CC",
     assignedText: "—", outboundText: "2026-09-18 10:32 (+07)", connectedText: "2026-09-18 10:36 (+07)",
-    assignedDate: "", currentAssignedText: "历史未知",
-    hasOutbound: true, history: "missing", stage: "电话营销已接通",
+    registrationDate: "2026-09-02", assignedDate: "", currentAssignedText: "历史未知",
+    hasOutbound: true, stage: "电话营销已接通",
     attempts: 2, connected: 1, outcome: "未填写", view: "following", stopped: false
   },
   {
@@ -76,8 +76,8 @@ const LEADS = [
     firstCc: "An Vo", firstCcId: "cc_vn_1006", firstCcEmail: "an.vo@dino.ai",
     currentCc: "Bảo Trân", currentCcId: "cc_vn_1051", currentTeam: "CC",
     assignedText: "2026-09-07 10:02 (+07)", outboundText: "2026-09-07 10:20 (+07)", connectedText: "2026-09-07 10:25 (+07)",
-    assignedDate: "2026-09-07", currentAssignedText: "2026-09-08 08:54 (+07)",
-    hasOutbound: true, history: "complete", stage: "续费跟进",
+    registrationDate: "2026-08-28", assignedDate: "2026-09-07", currentAssignedText: "2026-09-08 08:54 (+07)",
+    hasOutbound: true, stage: "续费跟进",
     attempts: 6, connected: 4, outcome: "已付费", view: "paid", stopped: true
   },
   {
@@ -85,8 +85,8 @@ const LEADS = [
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
     currentCc: "Minh Tran", currentCcId: "tmk_vn_021", currentTeam: "TMK",
     assignedText: "2026-10-12 13:26 (+07)", outboundText: "2026-10-12 13:40 (+07)", connectedText: "2026-10-12 13:48 (+07)",
-    assignedDate: "2026-10-12", currentAssignedText: "2026-10-13 09:03 (+07)",
-    hasOutbound: true, history: "complete", stage: "续费跟进",
+    registrationDate: "2026-10-03", assignedDate: "2026-10-12", currentAssignedText: "2026-10-13 09:03 (+07)",
+    hasOutbound: true, stage: "续费跟进",
     attempts: 8, connected: 5, outcome: "已付费", view: "paid", stopped: false
   },
   {
@@ -94,8 +94,8 @@ const LEADS = [
     firstCc: "Mai Nguyen", firstCcId: "cc_vn_1031", firstCcEmail: "mai.nguyen@dino.ai",
     currentCc: "Mai Nguyen", currentCcId: "cc_vn_1031", currentTeam: "CC",
     assignedText: "2026-10-20 15:16 (+08)", outboundText: "2026-10-20 15:24 (+08)", connectedText: "2026-10-20 15:29 (+08)",
-    assignedDate: "2026-10-20", currentAssignedText: "2026-10-20 15:16 (+08)",
-    hasOutbound: true, history: "complete", stage: "续费跟进",
+    registrationDate: "2026-10-12", assignedDate: "2026-10-20", currentAssignedText: "2026-10-20 15:16 (+08)",
+    hasOutbound: true, stage: "续费跟进",
     attempts: 3, connected: 2, outcome: "已付费", view: "paid", stopped: false
   },
   {
@@ -103,8 +103,8 @@ const LEADS = [
     firstCc: null, firstCcId: null, firstCcEmail: null,
     currentCc: "Bảo Trân", currentCcId: "cc_vn_1051", currentTeam: "CC",
     assignedText: "—", outboundText: "2026-09-03 11:18 (+07)", connectedText: "—",
-    assignedDate: "", currentAssignedText: "历史未知",
-    hasOutbound: true, history: "missing", stage: "电话营销跟进中",
+    registrationDate: "2026-08-25", assignedDate: "", currentAssignedText: "历史未知",
+    hasOutbound: true, stage: "电话营销跟进中",
     attempts: 2, connected: 1, outcome: "已付费", view: "paid", stopped: false
   },
   {
@@ -112,8 +112,8 @@ const LEADS = [
     firstCc: "Linh Pham", firstCcId: "cc_vn_1024", firstCcEmail: "linh.pham@dino.ai",
     currentCc: "未分配", currentCcId: null, currentTeam: "POOL",
     assignedText: "2026-11-10 10:11 (+07)", outboundText: "2026-11-10 10:15 (+07)", connectedText: "—",
-    assignedDate: "2026-11-10", currentAssignedText: "2026-11-10 11:03 (+07)",
-    hasOutbound: true, history: "complete", stage: "已退回公海",
+    registrationDate: "2026-11-08", assignedDate: "2026-11-10", currentAssignedText: "2026-11-10 11:03 (+07)",
+    hasOutbound: true, stage: "已退回公海",
     attempts: 1, connected: 0, outcome: "无人接听", view: "pool", stopped: false
   },
   {
@@ -121,8 +121,8 @@ const LEADS = [
     firstCc: null, firstCcId: null, firstCcEmail: null,
     currentCc: "未分配", currentCcId: null, currentTeam: "POOL",
     assignedText: "—", outboundText: "—", connectedText: "—",
-    assignedDate: "", currentAssignedText: "历史未知",
-    hasOutbound: false, history: "missing", stage: "待领取",
+    registrationDate: "2026-09-15", assignedDate: "", currentAssignedText: "历史未知",
+    hasOutbound: false, stage: "待领取",
     attempts: 0, connected: 0, outcome: "未填写", view: "pool", stopped: false
   }
 ];
@@ -168,9 +168,9 @@ const state = {
     outboundMax: "",
     connectedMin: "",
     connectedMax: "",
-    history: "all",
-    from: "2026-11-01",
-    to: "2026-11-10"
+    dateField: "registration",
+    from: "",
+    to: ""
   }
 };
 
@@ -207,10 +207,6 @@ function tag(text, kind = "neutral") {
   return `<span class="tag tag-${kind}">${esc(text)}</span>`;
 }
 
-function historyTag(value) {
-  return value === "complete" ? tag("完整", "success") : tag("历史未知", "danger");
-}
-
 function businessLineLabel(value) {
   return value === "Vietnam" ? "越南" : value === "Thailand" ? "泰国" : value === "Malaysia" ? "马来西亚" : value;
 }
@@ -218,6 +214,19 @@ function businessLineLabel(value) {
 function withinRange(value, minimum, maximum) {
   if (minimum !== "" && value < Number(minimum)) return false;
   if (maximum !== "" && value > Number(maximum)) return false;
+  return true;
+}
+
+function dateFieldLabel(value) {
+  return value === "assigned" ? "首次分配时间" : "注册时间";
+}
+
+function matchesDateFilter(lead, filters = state.filters) {
+  const value = filters.dateField === "assigned" ? lead.assignedDate : lead.registrationDate;
+  if (!filters.from && !filters.to) return true;
+  if (!value) return false;
+  if (filters.from && value < filters.from) return false;
+  if (filters.to && value > filters.to) return false;
   return true;
 }
 
@@ -238,26 +247,23 @@ function filteredRows(includeTab = true) {
     if (f.currentCc !== "all" && lead.currentCc !== f.currentCc) return false;
     if (f.outbound === "has" && !lead.hasOutbound) return false;
     if (f.outbound === "none" && lead.hasOutbound) return false;
-    if (f.outbound === "unknown" && lead.history !== "missing") return false;
+    if (f.outbound === "unknown" && lead.firstCcId) return false;
     if (f.connected === "yes" && lead.connectedText === "—") return false;
     if (f.connected === "no" && lead.connectedText !== "—") return false;
-    if (f.connected === "unknown" && lead.history !== "missing") return false;
+    if (f.connected === "unknown" && lead.firstCcId) return false;
     if (!withinRange(lead.attempts, f.outboundMin, f.outboundMax)) return false;
     if (!withinRange(lead.connected, f.connectedMin, f.connectedMax)) return false;
-    if (f.history !== "all" && lead.history !== f.history) return false;
-    if (f.from && lead.assignedDate && lead.assignedDate < f.from) return false;
-    if (f.to && lead.assignedDate && lead.assignedDate > f.to) return false;
+    if (!matchesDateFilter(lead, f)) return false;
     return true;
   });
 }
 
 function statsFor(rows) {
-  const covered = rows.filter((row) => row.history === "complete").length;
+  const covered = rows.filter((row) => row.firstCcId).length;
   const outbound = rows.filter((row) => row.hasOutbound).length;
   const connected = rows.filter((row) => row.connectedText !== "—").length;
   const outboundCalls = rows.reduce((sum, row) => sum + row.attempts, 0);
   const connectedCalls = rows.reduce((sum, row) => sum + row.connected, 0);
-  const changed = rows.filter((row) => row.firstCcId && row.currentCcId && row.currentCcId !== row.firstCcId).length;
   return {
     total: rows.length,
     covered,
@@ -266,7 +272,6 @@ function statsFor(rows) {
     connected,
     outboundCalls,
     connectedCalls,
-    changed,
     missing: rows.length - covered
   };
 }
@@ -307,12 +312,12 @@ function filtersPanel(rows) {
         <option value="no" ${f.connected === "no" ? "selected" : ""}>未接通</option>
         <option value="unknown" ${f.connected === "unknown" ? "selected" : ""}>历史未知</option>
       </select></label>
-      <label class="field"><span class="field-label">历史完整度</span><select class="select" id="filter-history">
-        <option value="all">全部记录</option><option value="complete" ${f.history === "complete" ? "selected" : ""}>完整</option>
-        <option value="missing" ${f.history === "missing" ? "selected" : ""}>历史缺失</option>
+      <label class="field"><span class="field-label">日期类型</span><select class="select" id="filter-date-field">
+        <option value="registration" ${f.dateField === "registration" ? "selected" : ""}>注册时间</option>
+        <option value="assigned" ${f.dateField === "assigned" ? "selected" : ""}>首次分配时间</option>
       </select></label>
-      <label class="field"><span class="field-label">首次分配日期（起）</span><input class="input" type="date" id="filter-from" value="${esc(f.from)}"></label>
-      <label class="field"><span class="field-label">首次分配日期（止）</span><input class="input" type="date" id="filter-to" value="${esc(f.to)}"></label>
+      <label class="field"><span class="field-label">开始日期</span><input class="input" type="date" id="filter-from" value="${esc(f.from)}"></label>
+      <label class="field"><span class="field-label">结束日期</span><input class="input" type="date" id="filter-to" value="${esc(f.to)}"></label>
       <div class="field"><span class="field-label">当前视图</span><button class="btn" style="width:100%" disabled>${state.tab === "following" ? "我的跟进" : state.tab === "paid" ? "已付费" : "公海"}</button></div>
     </div>
     <div class="filter-grid third">
@@ -341,22 +346,21 @@ function activeFilterChips() {
   if (f.connected !== "all") chips.push(`首次接通：${f.connected === "yes" ? "已接通" : f.connected === "no" ? "未接通" : "历史未知"}`);
   if (f.outboundMin !== "" || f.outboundMax !== "") chips.push(`外呼次数：${f.outboundMin || "0"}–${f.outboundMax || "不限"}`);
   if (f.connectedMin !== "" || f.connectedMax !== "") chips.push(`接通次数：${f.connectedMin || "0"}–${f.connectedMax || "不限"}`);
-  if (f.history !== "all") chips.push(`历史：${f.history === "complete" ? "完整" : "缺失"}`);
+  if (f.from || f.to) chips.push(`${dateFieldLabel(f.dateField)}：${f.from || "不限"}–${f.to || "不限"}`);
   return chips.map((text) => `<span class="filter-chip">${esc(text)}</span>`).join("");
 }
 
 function leadRows(rows) {
   if (!rows.length) {
-    return `<tr><td colspan="19"><div class="empty-state"><strong>当前筛选下没有线索</strong><p>调整业务线、首位 CC、外呼状态、次数区间或日期范围后重试。</p></div></td></tr>`;
+    return `<tr><td colspan="18"><div class="empty-state"><strong>当前筛选下没有线索</strong><p>调整业务线、首位 CC、外呼状态、次数区间或日期范围后重试。</p></div></td></tr>`;
   }
   return rows.map((lead) => {
     const profile = LEAD_PROFILE[lead.id];
     const firstUser = lead.firstCc
       ? `<div class="user-cell"><span class="user-avatar">${initials(lead.firstCc)}</span><span class="user-copy"><strong>${esc(lead.firstCc)}${lead.stopped ? ` ${tag("已停用", "neutral")}` : ""}</strong><span>${esc(lead.firstCcEmail)}</span></span></div><span class="preserved">首次分配后不变</span>`
       : `<div class="user-cell"><span class="user-avatar missing">?</span><span class="user-copy"><strong>历史未知</strong><span>无可确认分配事件</span></span></div>`;
-    const sameOwner = lead.firstCcId && lead.currentCcId === lead.firstCcId;
-    const ownerState = !lead.currentCcId ? "当前未分配" : sameOwner ? "与首位 CC 相同" : "当前 CC 已发生变化";
-    const currentUser = `<div class="user-cell"><span class="user-avatar ${lead.currentTeam === "TMK" ? "tmk" : "missing"}">${initials(lead.currentCc)}</span><span class="user-copy"><strong>${esc(lead.currentCc)}</strong><span>${ownerState}</span></span></div>`;
+    const teamLabel = lead.currentTeam === "TMK" ? "电话营销" : lead.currentTeam === "POOL" ? "待分配" : "客户关怀";
+    const currentUser = `<div class="user-cell"><span class="user-avatar ${lead.currentTeam === "TMK" ? "tmk" : "missing"}">${initials(lead.currentCc)}</span><span class="user-copy"><strong>${esc(lead.currentCc)}</strong><span>${teamLabel}</span></span></div>`;
     return `<tr data-lead="${lead.id}">
       <td><span class="mono">${esc(lead.userId)}</span><span class="cell-sub">${esc(businessLineLabel(lead.businessLine))}</span></td>
       <td><span class="cell-title">${esc(lead.name)}</span><span class="cell-sub mono">${esc(lead.id)}</span></td>
@@ -375,7 +379,6 @@ function leadRows(rows) {
       <td>${lead.connectedText === "—" ? '<span class="empty-time">—</span>' : esc(lead.connectedText)}</td>
       <td><strong>${lead.attempts}</strong></td>
       <td><strong>${lead.connected}</strong></td>
-      <td>${historyTag(lead.history)}</td>
       <td><button class="btn btn-small btn-secondary" data-lead="${lead.id}">查看</button></td>
     </tr>`;
   }).join("");
@@ -395,7 +398,6 @@ function renderLeads() {
   const start = (state.page - 1) * PAGE_SIZE;
   const pageRows = rows.slice(start, start + PAGE_SIZE);
   content.innerHTML = `<section class="page-enter">
-    ${statCards(rows)}
     <div class="view-tabs" role="tablist" aria-label="销售中心页签">
       <button class="view-tab ${state.tab === "pool" ? "is-active" : ""}" data-tab="pool">公海 <em>${VIEW_COUNTS.pool}</em></button>
       <button class="view-tab ${state.tab === "following" ? "is-active" : ""}" data-tab="following">我的跟进 <em>${VIEW_COUNTS.following}</em></button>
@@ -413,7 +415,7 @@ function renderLeads() {
       <div class="table-wrap"><table class="data-table">
         <thead><tr>
           <th>用户 ID</th><th>学生姓名</th><th>购买意向</th><th>用户状态</th><th>用户类型</th><th>年龄段</th><th>课程等级</th><th>登录账号</th><th>渠道来源-落地页</th>
-          <th class="is-first is-new">首位 CC</th><th class="is-new">当前 CC</th><th class="is-new">跟进阶段</th><th class="is-new">首次分配时间</th><th class="is-new">首次外呼时间</th><th class="is-new">首次接通时间</th><th class="is-new">外呼次数</th><th class="is-new">外呼接通次数</th><th class="is-new">历史完整度</th><th>操作</th>
+          <th class="is-first is-new">首位 CC</th><th class="is-new">当前 CC</th><th class="is-new">跟进阶段</th><th class="is-new">首次分配时间</th><th class="is-new">首次外呼时间</th><th class="is-new">首次接通时间</th><th class="is-new">外呼次数</th><th class="is-new">外呼接通次数</th><th>操作</th>
         </tr></thead>
         <tbody>${leadRows(pageRows)}</tbody>
       </table></div>
@@ -424,7 +426,7 @@ function renderLeads() {
 
 function periodRows() {
   return LEADS.filter((lead) => (
-    lead.history === "complete" && lead.assignedDate >= "2026-11-01" && lead.assignedDate <= "2026-11-10"
+    lead.firstCcId && matchesDateFilter(lead)
   ));
 }
 
@@ -434,13 +436,11 @@ function productivityRows() {
     const rows = source.filter((lead) => lead.firstCc === name);
     const outbound = rows.filter((lead) => lead.hasOutbound).length;
     const connected = rows.filter((lead) => lead.connectedText !== "—").length;
-    const changed = rows.filter((lead) => lead.currentCcId && lead.currentCcId !== lead.firstCcId).length;
     return {
       name,
       assigned: rows.length,
       outbound,
       connected,
-      changed,
       outboundRate: rows.length ? Math.round((outbound / rows.length) * 100) : 0
     };
   });
@@ -452,17 +452,41 @@ function renderMonitor() {
   const productivity = productivityRows();
   const connectedRate = stats.total ? Math.round((stats.connected / stats.total) * 100) : 0;
   content.innerHTML = `<section class="page-enter">
+    <section class="card access-card">
+      <div class="access-heading">
+        <div>
+          <div class="eyebrow">RBAC · MENU PERMISSION</div>
+          <h2>团队监控已纳入角色权限树</h2>
+          <p>菜单位于“销售管理 → 团队监控”。菜单显示、汇总查看、下钻和导出分别校验权限。</p>
+        </div>
+        <div class="access-actions">
+          <span class="access-status">${icon("check")} 当前已授权</span>
+          <button class="btn btn-small btn-secondary" data-action="open-rbac">查看 RBAC 配置</button>
+        </div>
+      </div>
+      <div class="access-grid">
+        <div><span>当前身份</span><strong>销售运营组长</strong><small>继承销售组长默认授权</small></div>
+        <div><span>数据范围</span><strong>所辖团队 · 全业务线</strong><small>由成员账号数据权限决定</small></div>
+        <div><span>页面能力</span><strong>查看 · 筛选 · 下钻</strong><small>汇总和明细同时校验权限</small></div>
+        <div><span>导出能力</span><strong>独立校验</strong><small>页面可见不等于可批量导出</small></div>
+      </div>
+      <div class="access-defaults">
+        <span>上线自动授权</span>
+        <b>超级管理员</b><b>系统管理员</b><b>销售组长</b><b>业务负责人</b>
+        <small>其他角色需管理员显式配置</small>
+      </div>
+    </section>
     ${statCards(completeRows)}
     <div class="monitor-grid">
       <section class="card">
         <div class="card-head"><div><h3>首位 CC 生产力</h3><p>首次分配、首次外呼和首次接通按 Lead ID 去重</p></div></div>
         <div class="table-wrap"><table class="agent-table">
-          <thead><tr><th>首位 CC</th><th>首次分配</th><th>首次外呼</th><th>外呼覆盖率</th><th>首次接通</th><th>负责人变化</th></tr></thead>
+          <thead><tr><th>首位 CC</th><th>首次分配</th><th>首次外呼</th><th>外呼覆盖率</th><th>首次接通</th></tr></thead>
           <tbody>${productivity.map((row) => `<tr data-agent="${esc(row.name)}">
             <td><div class="user-cell"><span class="user-avatar">${initials(row.name)}</span><span class="user-copy"><strong>${esc(row.name)}</strong><span>点击查看明细</span></span></div></td>
             <td><strong>${row.assigned}</strong></td><td>${row.outbound}</td>
             <td class="progress-cell"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:${row.outboundRate}%"></div></div><b>${row.outboundRate}%</b></div></td>
-            <td>${row.connected}</td><td>${row.changed}</td>
+            <td>${row.connected}</td>
           </tr>`).join("")}</tbody>
         </table></div>
       </section>
@@ -475,12 +499,11 @@ function renderMonitor() {
           </div></div>
         </section>
         <section class="card">
-          <div class="card-head"><div><h3>负责人变化</h3><p>直接比较两个负责人字段</p></div>${tag("派生判断", "info")}</div>
-          <div class="card-body"><div class="watch-item"><div class="watch-head"><strong>当前 CC 已不同于首位 CC</strong><span>${stats.total ? Math.round((stats.changed / stats.total) * 100) : 0}%</span></div><div class="watch-value">${stats.changed}</div><p>不校验流转类型、目标岗位或销售阶段。</p></div></div>
-        </section>
-        <section class="card">
-          <div class="card-head"><div><h3>数据完整度</h3><p>历史未知不参与承接量分母</p></div>${icon("info")}</div>
-          <div class="card-body"><div class="watch-item"><div class="watch-head"><strong>可确认首位 CC</strong><span>${stats.coverage}% 覆盖</span></div><div class="watch-value">${stats.covered}</div><p>${stats.missing} 条历史记录缺少可验证分配事件，需人工核对。</p></div></div>
+          <div class="card-head"><div><h3>个人外呼产出</h3><p>当前业务线范围累计结果</p></div>${tag("次数筛选", "info")}</div>
+          <div class="card-body"><div class="watch-list">
+            <div class="watch-item"><div class="watch-head"><strong>外呼总量</strong><span>不区分状态</span></div><div class="watch-value">${stats.outboundCalls}</div><p>对应筛选范围内的累计外呼次数</p></div>
+            <div class="watch-item"><div class="watch-head"><strong>接通总量</strong><span>${stats.outboundCalls ? Math.round((stats.connectedCalls / stats.outboundCalls) * 100) : 0}% 接通率</span></div><div class="watch-value">${stats.connectedCalls}</div><p>外呼接通次数是外呼次数的子集</p></div>
+          </div></div>
         </section>
       </div>
     </div>
@@ -490,9 +513,12 @@ function renderMonitor() {
 function render() {
   const titles = {
     leads: "我的跟进 · 首位联系人",
-    monitor: "首位 CC 与负责人变化监控"
+    monitor: "首位 CC 与外呼产出监控"
   };
   document.querySelector("#page-title").textContent = titles[state.route];
+  document.querySelector("#breadcrumb").innerHTML = state.route === "monitor"
+    ? "Dino CRM <span>/</span> 销售管理 <span>/</span> 团队监控"
+    : "Dino CRM <span>/</span> 销售管理 <span>/</span> 销售中心";
   document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.route === state.route));
   if (state.route === "monitor") renderMonitor();
   else renderLeads();
@@ -518,7 +544,7 @@ function readFilters() {
     outboundMax: document.querySelector("#filter-outbound-max").value,
     connectedMin: document.querySelector("#filter-connected-min").value,
     connectedMax: document.querySelector("#filter-connected-max").value,
-    history: document.querySelector("#filter-history").value,
+    dateField: document.querySelector("#filter-date-field").value,
     from: document.querySelector("#filter-from").value,
     to: document.querySelector("#filter-to").value
   };
@@ -554,8 +580,8 @@ function applyFilters() {
 function resetFilters() {
   state.filters = {
     query: "", businessLine: "all", firstCc: "all", currentCc: "all",
-    outbound: "all", connected: "all", outboundMin: "", outboundMax: "", connectedMin: "", connectedMax: "", history: "all",
-    from: "2026-11-01", to: "2026-11-10"
+    outbound: "all", connected: "all", outboundMin: "", outboundMax: "", connectedMin: "", connectedMax: "",
+    dateField: "registration", from: "", to: ""
   };
   state.page = 1;
   render();
@@ -579,14 +605,11 @@ function openDrawer(lead) {
   const connectedLine = lead.connectedText !== "—"
     ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>首次接通</strong><span>${esc(lead.connectedText)} · 首次接通独立记录</span></li>`
     : `<li class="timeline-item"><span class="timeline-dot"></span><strong>尚未产生首次接通</strong><span>首次接通时间保持为空</span></li>`;
-  const sameOwner = lead.firstCcId && lead.currentCcId === lead.firstCcId;
   const transferLine = !lead.firstCcId
-    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>负责人变化无法判断</strong><span>首位 CC 历史未知 · 当前 CC 为 ${esc(lead.currentCc)}</span></li>`
+    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前负责人为 ${esc(lead.currentCc)}</strong><span>首位 CC 历史未知</span></li>`
     : !lead.currentCcId
-      ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前未分配</strong><span>${esc(lead.currentAssignedText)} · 不计为负责人变化</span></li>`
-      : sameOwner
-        ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前仍由 ${esc(lead.currentCc)} 负责</strong><span>${esc(lead.stage)} · 当前 CC 与首位 CC 相同</span></li>`
-        : `<li class="timeline-item tmk"><span class="timeline-dot"></span><strong>当前负责人为 ${esc(lead.currentCc)}</strong><span>${esc(lead.currentAssignedText)} · 当前 CC 已不同于首位 CC</span></li>`;
+      ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前未分配</strong><span>${esc(lead.currentAssignedText)}</span></li>`
+      : `<li class="timeline-item ${lead.currentTeam === "TMK" ? "tmk" : ""}"><span class="timeline-dot"></span><strong>当前负责人为 ${esc(lead.currentCc)}</strong><span>${esc(lead.currentAssignedText)}</span></li>`;
   drawer.innerHTML = `<div class="drawer-head"><div><small>${esc(lead.id)}</small><h3>${esc(lead.name)}</h3></div><button class="icon-btn" data-action="close-drawer" aria-label="关闭">${icon("close")}</button></div>
     <div class="drawer-body">
       <div class="drawer-block"><h4>首位联系人与关键时间</h4><dl class="facts">
@@ -596,11 +619,9 @@ function openDrawer(lead) {
         <dt>首次外呼</dt><dd>${esc(lead.outboundText)}</dd>
         <dt>首次接通</dt><dd>${esc(lead.connectedText)}</dd>
         <dt>当前 CC</dt><dd>${esc(lead.currentCc)}</dd>
-        <dt>负责人变化</dt><dd>${lead.firstCcId ? (sameOwner ? "否，当前 CC 与首位 CC 相同" : "是，当前 CC 已不同于首位 CC") : "历史未知"}</dd>
-        <dt>历史完整度</dt><dd>${historyTag(lead.history)}</dd>
       </dl></div>
       <div class="drawer-block"><h4>Lead &gt; Update 分配历史</h4><ol class="timeline">${firstLine}${outboundLine}${connectedLine}${transferLine}</ol></div>
-      <div class="drawer-block"><div class="drawer-note"><strong>事实字段不可编辑。</strong> 首位 CC 只在第一次成功分配时写入；负责人是否变化不单独存储，直接比较当前 CC 与首位 CC。</div></div>
+      <div class="drawer-block"><div class="drawer-note"><strong>事实字段不可编辑。</strong> 首位 CC 只在第一次成功分配时写入；可直接比较当前 CC 与首位 CC。</div></div>
       <div class="drawer-block"><h4>当前跟进</h4><dl class="facts">
         <dt>销售阶段</dt><dd>${esc(lead.stage)}</dd>
         <dt>外呼次数</dt><dd>${lead.attempts} 次</dd>
@@ -617,18 +638,43 @@ function closeDrawer() {
   drawerLayer.setAttribute("aria-hidden", "true");
 }
 
+function openRbacDrawer() {
+  drawer.innerHTML = `<div class="drawer-head"><div><small>SYSTEM CONFIG · RBAC</small><h3>团队监控权限配置</h3></div><button class="icon-btn" data-action="close-drawer" aria-label="关闭">${icon("close")}</button></div>
+    <div class="drawer-body">
+      <div class="drawer-block"><h4>角色权限树</h4><div class="permission-tree">
+        <div class="permission-branch"><strong>销售管理</strong></div>
+        <div class="permission-node"><span>销售中心</span>${tag("已有", "neutral")}</div>
+        <div class="permission-node is-new"><span>团队监控</span>${tag("本次新增", "info")}</div>
+        <div class="permission-child"><span>查看汇总</span><b>已授权</b></div>
+        <div class="permission-child"><span>筛选</span><b>已授权</b></div>
+        <div class="permission-child"><span>下钻明细</span><b>已授权</b></div>
+        <div class="permission-child"><span>导出</span><b>单独校验</b></div>
+      </div></div>
+      <div class="drawer-block"><h4>上线自动授权</h4><div class="role-grant-list">
+        <div><strong>超级管理员</strong><span>全部业务线 · 查看 / 筛选 / 下钻 / 导出</span></div>
+        <div><strong>系统管理员</strong><span>所属业务线 · 查看 / 筛选 / 下钻</span></div>
+        <div><strong>销售组长</strong><span>所属团队与业务线 · 查看 / 筛选 / 下钻</span></div>
+        <div><strong>业务负责人</strong><span>已授权业务线 · 查看 / 筛选 / 下钻</span></div>
+      </div></div>
+      <div class="drawer-block"><div class="drawer-note">其他角色、自定义角色和后续新建角色不会自动获得该菜单，需要管理员在 RBAC 中显式授权。权限变更完成后即时生效。</div></div>
+    </div>`;
+  drawerLayer.classList.add("is-open");
+  drawerLayer.setAttribute("aria-hidden", "false");
+}
+
 function openExport() {
   const rows = filteredRows();
   if (!rows.length) {
     notify("当前筛选没有可导出的数据");
     return;
   }
-  const firstDate = rows.map((row) => row.assignedDate).filter(Boolean).sort()[0] || "—";
-  const lastDate = rows.map((row) => row.assignedDate).filter(Boolean).sort().at(-1) || "—";
+  const dateValues = rows.map((row) => state.filters.dateField === "assigned" ? row.assignedDate : row.registrationDate).filter(Boolean).sort();
+  const firstDate = dateValues[0] || "不限";
+  const lastDate = dateValues.at(-1) || "不限";
   exportModal.innerHTML = `<div class="modal-head"><div><h3 id="export-title">下载当前筛选数据</h3><p>预览确认后生成 CSV，内容与当前列表口径一致。</p></div><button class="icon-btn" data-action="close-export" aria-label="关闭">${icon("close")}</button></div>
     <div class="modal-body">
-      <div class="export-summary"><div class="export-metric"><span>数据行数</span><strong>${rows.length}</strong></div><div class="export-metric"><span>日期范围</span><strong style="font-size:13px">${firstDate} 至 ${lastDate}</strong></div><div class="export-metric"><span>时间口径</span><strong style="font-size:13px">按业务线时区</strong></div></div>
-      <div class="field-list">${["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "outbound_count", "outbound_connected_count", "current_cc_id", "history_status"].map((field) => `<code>${field}</code>`).join("")}</div>
+      <div class="export-summary"><div class="export-metric"><span>数据行数</span><strong>${rows.length}</strong></div><div class="export-metric"><span>${dateFieldLabel(state.filters.dateField)}范围</span><strong style="font-size:13px">${firstDate} 至 ${lastDate}</strong></div><div class="export-metric"><span>时间口径</span><strong style="font-size:13px">按业务线时区</strong></div></div>
+      <div class="field-list">${["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "outbound_count", "outbound_connected_count", "current_cc_id"].map((field) => `<code>${field}</code>`).join("")}</div>
       <div class="drawer-note" style="margin-top:12px">下载会记录操作人、筛选条件、数据范围和行数。联系方式与录音字段继续遵循现有导出权限，不在本需求中扩大。</div>
     </div>
     <div class="modal-foot"><button class="btn" data-action="close-export">取消</button><button class="btn btn-primary" data-action="download-csv">${icon("download")} 生成 CSV</button></div>`;
@@ -647,15 +693,14 @@ function csvCell(value) {
 
 function downloadCSV() {
   const rows = filteredRows();
-  const header = ["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "outbound_count", "outbound_connected_count", "current_cc_id", "history_status"];
+  const header = ["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "outbound_count", "outbound_connected_count", "current_cc_id"];
   const body = rows.map((row) => [
     row.id, row.userId, row.businessLine, row.firstCcId, row.firstCc, row.assignedText,
     row.outboundText === "—" ? "" : row.outboundText,
     row.connectedText === "—" ? "" : row.connectedText,
     row.attempts,
     row.connected,
-    row.currentCcId,
-    row.history
+    row.currentCcId
   ].map(csvCell).join(","));
   const blob = new Blob(["\ufeff" + [header.map(csvCell).join(","), ...body].join("\n")], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -718,6 +763,7 @@ document.addEventListener("click", (event) => {
     if (tableWrap && firstNew) tableWrap.scrollTo({ left: Math.max(0, firstNew.offsetLeft - 48), behavior: "smooth" });
   }
   if (action === "close-drawer") closeDrawer();
+  if (action === "open-rbac") openRbacDrawer();
   if (action === "open-export") openExport();
   if (action === "close-export") closeExport();
   if (action === "download-csv") downloadCSV();

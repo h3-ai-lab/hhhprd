@@ -8,7 +8,7 @@
 | 需求编号 | REQ-CC-001 |
 | 正式 PRD | [PRD.md](PRD.md) |
 | 线上原型 | [打开线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
-| 主要范围 | 首位 CC、首次分配、首次外呼、首次接通、外呼次数/接通次数筛选、筛选后下载、团队监控 |
+| 主要范围 | 首位 CC、首次分配、首次外呼、首次接通、外呼次数/接通次数筛选、筛选后下载、团队监控及 RBAC 授权 |
 
 ## 本地预览
 
