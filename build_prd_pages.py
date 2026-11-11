@@ -9,6 +9,7 @@ ROOT = Path(__file__).parent
 PROJECTS = {
     "referrals-rewards": "Referrals & Rewards",
     "first-contact": "引入首跟节点&首跟看板",
+    "first-contact-concise": "引入首跟节点&首跟看板-2",
     "follow-up-funnel": "管理看板新增跟进漏斗",
 }
 

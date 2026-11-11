@@ -10,6 +10,7 @@
 | CRM 整体产品体系 | 持续维护 | [整体框架](00-crm-prd-framework.md) | — |
 | Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
 | 引入首跟节点&首跟看板 | 待评审 | [PRD](projects/first-contact/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
+| 引入首跟节点&首跟看板-2 | 待评审 | [PRD](projects/first-contact-concise/PRD.md) | [现有原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
 | 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 
 ## GitHub Pages
@@ -19,6 +20,7 @@
 - 交互原型：<https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/>
 - 引入首跟节点&首跟看板 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact.html>
 - 引入首跟节点&首跟看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/>
+- 引入首跟节点&首跟看板-2 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html>
 
 ## 目录结构
 
