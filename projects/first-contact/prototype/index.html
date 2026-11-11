@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dino CRM 首位联系人工作台">
-  <title>Dino CRM · 首位联系人</title>
+  <meta name="description" content="Dino CRM 销售中心">
+  <title>Dino CRM · 销售中心</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css">
 </head>
@@ -38,19 +38,33 @@
       <nav class="side-nav" aria-label="主导航">
         <div class="nav-group-label">销售中心</div>
         <button class="nav-item is-active" data-route="leads">
-          <svg><use href="#i-list"></use></svg><span>线索与筛选</span>
+          <svg><use href="#i-list"></use></svg><span>销售中心</span>
         </button>
         <button class="nav-item" data-route="monitor">
-          <svg><use href="#i-pulse"></use></svg><span>团队监控</span><em>RBAC</em>
+          <svg><use href="#i-pulse"></use></svg><span>团队监控</span>
         </button>
       </nav>
     </aside>
 
     <div class="workspace">
-      <button class="icon-btn menu-btn floating-menu-btn" id="menu-toggle" aria-label="展开导航">
-        <svg><use href="#i-menu"></use></svg>
-      </button>
-      <h1 class="sr-only" id="page-title">我的跟进 · 首位联系人</h1>
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn menu-btn" id="menu-toggle" aria-label="展开导航">
+            <svg><use href="#i-menu"></use></svg>
+          </button>
+          <div>
+            <div class="crumb" id="breadcrumb">Dino CRM <span>/</span> 销售管理 <span>/</span> 销售中心</div>
+            <h1 id="page-title">销售中心</h1>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <span class="env-tag"><i></i> 全业务线</span>
+          <div class="account">
+            <div class="avatar">S</div>
+            <div><strong>销售运营组长</strong><span>销售中心</span></div>
+          </div>
+        </div>
+      </header>
       <main class="content" id="content" tabindex="-1"></main>
     </div>
   </div>

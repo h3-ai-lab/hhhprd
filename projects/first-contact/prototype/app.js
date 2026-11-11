@@ -161,8 +161,17 @@ const state = {
   filters: {
     query: "",
     businessLine: "all",
+    intent: "all",
     firstCc: "all",
     currentCc: "all",
+    stage: "all",
+    age: "all",
+    course: "all",
+    sourceLanding: "all",
+    sourceApp: "all",
+    userStatus: "all",
+    consultAppointment: "all",
+    appointmentOutbound: "all",
     outbound: "all",
     connected: "all",
     outboundMin: "",
@@ -212,6 +221,29 @@ function businessLineLabel(value) {
   return value === "Vietnam" ? "越南" : value === "Thailand" ? "泰国" : value === "Malaysia" ? "马来西亚" : value;
 }
 
+function sourceApp(source) {
+  if (source.startsWith("Facebook")) return "Facebook";
+  if (source.startsWith("TikTok")) return "TikTok";
+  if (source.startsWith("Google")) return "Google";
+  if (source.startsWith("App")) return "App";
+  return "其他";
+}
+
+function leadMatchesOption(lead, key, value) {
+  if (value === "all") return true;
+  const profile = LEAD_PROFILE[lead.id];
+  if (key === "intent") return profile.intent === value;
+  if (key === "stage") return lead.stage === value;
+  if (key === "age") return profile.age === value;
+  if (key === "course") return profile.course === value;
+  if (key === "sourceLanding") return profile.source === value;
+  if (key === "sourceApp") return sourceApp(profile.source) === value;
+  if (key === "userStatus") return profile.userStatus === value;
+  if (key === "consultAppointment") return (lead.outcome === "已预约" ? "已预约" : "未预约") === value;
+  if (key === "appointmentOutbound") return (lead.hasOutbound ? "已外呼" : "未外呼") === value;
+  return true;
+}
+
 function withinRange(value, minimum, maximum) {
   if (minimum !== "" && value < Number(minimum)) return false;
   if (maximum !== "" && value > Number(maximum)) return false;
@@ -244,6 +276,9 @@ function filteredRows(includeTab = true) {
       if (!haystack.includes(f.query.toLowerCase())) return false;
     }
     if (f.businessLine !== "all" && lead.businessLine !== f.businessLine) return false;
+    for (const key of ["intent", "stage", "age", "course", "sourceLanding", "sourceApp", "userStatus", "consultAppointment", "appointmentOutbound"]) {
+      if (!leadMatchesOption(lead, key, f[key])) return false;
+    }
     if (f.firstCc !== "all" && lead.firstCc !== f.firstCc) return false;
     if (f.currentCc !== "all" && lead.currentCc !== f.currentCc) return false;
     if (f.outbound === "has" && !lead.hasOutbound) return false;
@@ -295,43 +330,63 @@ function selectOptions(items, selected, allLabel) {
 
 function filtersPanel(rows) {
   const f = state.filters;
+  const profiles = LEADS.map((lead) => LEAD_PROFILE[lead.id]);
+  const stages = [...new Set(LEADS.map((lead) => lead.stage))];
+  const ages = [...new Set(profiles.map((profile) => profile.age))];
+  const courses = [...new Set(profiles.map((profile) => profile.course))];
+  const sources = [...new Set(profiles.map((profile) => profile.source))];
+  const apps = [...new Set(profiles.map((profile) => sourceApp(profile.source)))];
+  const statuses = [...new Set(profiles.map((profile) => profile.userStatus))];
   return `<section class="filter-card">
     <div class="filter-grid">
-      <label class="field search-field"><span class="field-label">搜索线索</span><span class="search-box">${icon("search")}<input class="input" id="filter-query" value="${esc(f.query)}" placeholder="Lead ID / User ID / 姓名"></span></label>
-      <label class="field"><span class="field-label">业务线</span><select class="select" id="filter-business-line">${selectOptions(BUSINESS_LINES, f.businessLine, "全部业务线")}</select></label>
+      <label class="field search-field"><span class="field-label">搜索</span><span class="search-box">${icon("search")}<input class="input" id="filter-query" value="${esc(f.query)}" placeholder="手机号 / 用户ID / 姓名"></span></label>
+      <label class="field"><span class="field-label">国家</span><select class="select" id="filter-business-line">${selectOptions(BUSINESS_LINES, f.businessLine, "全部国家")}</select></label>
+      <label class="field"><span class="field-label">购买意向</span><select class="select" id="filter-intent">${selectOptions(["有意向", "无意向", "未填写"], f.intent, "全部意向")}</select></label>
       <label class="field"><span class="field-label">首位 CC</span><select class="select" id="filter-first-cc">${selectOptions(FIRST_CC, f.firstCc, "全部首位 CC")}</select></label>
-      <label class="field"><span class="field-label">当前 CC</span><select class="select" id="filter-current-cc">${selectOptions(CURRENT_CC, f.currentCc, "全部当前 CC")}</select></label>
+      <label class="field"><span class="field-label">CC</span><select class="select" id="filter-current-cc">${selectOptions(CURRENT_CC, f.currentCc, "全部 CC")}</select></label>
+    </div>
+    <div class="filter-grid second">
+      <label class="field"><span class="field-label">当前跟进阶段</span><select class="select" id="filter-stage">${selectOptions(stages, f.stage, "全部阶段")}</select></label>
+      <label class="field"><span class="field-label">年龄段</span><select class="select" id="filter-age">${selectOptions(ages, f.age, "全部年龄")}</select></label>
+      <label class="field"><span class="field-label">课程等级</span><select class="select" id="filter-course">${selectOptions(courses, f.course, "全部等级")}</select></label>
+      <label class="field"><span class="field-label">渠道来源-落地页</span><select class="select" id="filter-source-landing">${selectOptions(sources, f.sourceLanding, "全部落地页")}</select></label>
+      <label class="field"><span class="field-label">渠道来源-App</span><select class="select" id="filter-source-app">${selectOptions(apps, f.sourceApp, "全部 App")}</select></label>
+    </div>
+    <div class="filter-grid third">
+      <label class="field"><span class="field-label">用户状态</span><select class="select" id="filter-user-status">${selectOptions(statuses, f.userStatus, "全部状态")}</select></label>
+      <label class="field"><span class="field-label">销售咨询预约</span><select class="select" id="filter-consult-appointment">${selectOptions(["已预约", "未预约"], f.consultAppointment, "全部")}</select></label>
+      <label class="field"><span class="field-label">预约外呼</span><select class="select" id="filter-appointment-outbound">${selectOptions(["已外呼", "未外呼"], f.appointmentOutbound, "全部")}</select></label>
+      <div class="field date-range-field">
+        <span class="field-label">日期</span>
+        <div class="date-range-row">
+          <select class="select" id="filter-date-field">
+            <option value="registration" ${f.dateField === "registration" ? "selected" : ""}>注册日期</option>
+            <option value="assigned" ${f.dateField === "assigned" ? "selected" : ""}>首次分配时间</option>
+          </select>
+          <input class="input" type="date" id="filter-from" value="${esc(f.from)}" aria-label="开始日期">
+          <span>至</span>
+          <input class="input" type="date" id="filter-to" value="${esc(f.to)}" aria-label="结束日期">
+        </div>
+      </div>
+    </div>
+    <div class="filter-grid fourth">
       <label class="field"><span class="field-label">首次外呼状态</span><select class="select" id="filter-outbound">
         <option value="all">全部状态</option><option value="has" ${f.outbound === "has" ? "selected" : ""}>有外呼记录</option>
         <option value="none" ${f.outbound === "none" ? "selected" : ""}>无外呼记录</option>
         <option value="unknown" ${f.outbound === "unknown" ? "selected" : ""}>历史未知</option>
       </select></label>
-    </div>
-    <div class="filter-grid second">
       <label class="field"><span class="field-label">首次接通状态</span><select class="select" id="filter-connected">
         <option value="all">全部状态</option><option value="yes" ${f.connected === "yes" ? "selected" : ""}>已接通</option>
         <option value="no" ${f.connected === "no" ? "selected" : ""}>未接通</option>
         <option value="unknown" ${f.connected === "unknown" ? "selected" : ""}>历史未知</option>
       </select></label>
-      <label class="field"><span class="field-label">日期类型</span><select class="select" id="filter-date-field">
-        <option value="registration" ${f.dateField === "registration" ? "selected" : ""}>注册时间</option>
-        <option value="assigned" ${f.dateField === "assigned" ? "selected" : ""}>首次分配时间</option>
-      </select></label>
-      <label class="field"><span class="field-label">开始日期</span><input class="input" type="date" id="filter-from" value="${esc(f.from)}"></label>
-      <label class="field"><span class="field-label">结束日期</span><input class="input" type="date" id="filter-to" value="${esc(f.to)}"></label>
-      <div class="field"><span class="field-label">当前视图</span><button class="btn" style="width:100%" disabled>${state.tab === "following" ? "我的跟进" : state.tab === "paid" ? "已付费" : "公海"}</button></div>
-    </div>
-    <div class="filter-grid third">
-      <label class="field"><span class="field-label">外呼次数下限</span><input class="input" type="number" min="0" step="1" id="filter-outbound-min" value="${esc(f.outboundMin)}" placeholder="不限"></label>
-      <label class="field"><span class="field-label">外呼次数上限</span><input class="input" type="number" min="0" step="1" id="filter-outbound-max" value="${esc(f.outboundMax)}" placeholder="不限"></label>
-      <label class="field"><span class="field-label">外呼接通次数下限</span><input class="input" type="number" min="0" step="1" id="filter-connected-min" value="${esc(f.connectedMin)}" placeholder="不限"></label>
-      <label class="field"><span class="field-label">外呼接通次数上限</span><input class="input" type="number" min="0" step="1" id="filter-connected-max" value="${esc(f.connectedMax)}" placeholder="不限"></label>
-      <div class="field"><span class="field-label">组合规则</span><div class="range-hint">两组次数区间同时满足；边界包含</div></div>
+      <div class="field range-field"><span class="field-label">外呼次数</span><div class="range-inputs"><input class="input" type="number" min="0" step="1" id="filter-outbound-min" value="${esc(f.outboundMin)}" placeholder="最小值"><span>至</span><input class="input" type="number" min="0" step="1" id="filter-outbound-max" value="${esc(f.outboundMax)}" placeholder="最大值"></div></div>
+      <div class="field range-field"><span class="field-label">外呼接通次数</span><div class="range-inputs"><input class="input" type="number" min="0" step="1" id="filter-connected-min" value="${esc(f.connectedMin)}" placeholder="最小值"><span>至</span><input class="input" type="number" min="0" step="1" id="filter-connected-max" value="${esc(f.connectedMax)}" placeholder="最大值"></div></div>
     </div>
     <div class="filter-actions">
       <button class="btn btn-primary" data-action="apply-filters">${icon("filter")} 应用筛选</button>
       <button class="btn" data-action="reset-filters">重置筛选</button>
-      <span class="filter-count">当前视图 ${rows.length} 条结果</span>
+      <span class="filter-count">${rows.length} 条结果</span>
     </div>
   </section>`;
 }
@@ -340,9 +395,18 @@ function activeFilterChips() {
   const f = state.filters;
   const chips = [];
   if (f.query) chips.push(`关键词：${f.query}`);
-  if (f.businessLine !== "all") chips.push(`业务线：${businessLineLabel(f.businessLine)}`);
+  if (f.businessLine !== "all") chips.push(`国家：${businessLineLabel(f.businessLine)}`);
+  if (f.intent !== "all") chips.push(`购买意向：${f.intent}`);
   if (f.firstCc !== "all") chips.push(`首位 CC：${f.firstCc}`);
-  if (f.currentCc !== "all") chips.push(`当前 CC：${f.currentCc}`);
+  if (f.currentCc !== "all") chips.push(`CC：${f.currentCc}`);
+  if (f.stage !== "all") chips.push(`跟进阶段：${f.stage}`);
+  if (f.age !== "all") chips.push(`年龄段：${f.age}`);
+  if (f.course !== "all") chips.push(`课程等级：${f.course}`);
+  if (f.sourceLanding !== "all") chips.push(`落地页：${f.sourceLanding}`);
+  if (f.sourceApp !== "all") chips.push(`App：${f.sourceApp}`);
+  if (f.userStatus !== "all") chips.push(`用户状态：${f.userStatus}`);
+  if (f.consultAppointment !== "all") chips.push(`销售咨询预约：${f.consultAppointment}`);
+  if (f.appointmentOutbound !== "all") chips.push(`预约外呼：${f.appointmentOutbound}`);
   if (f.outbound !== "all") chips.push(`首次外呼：${f.outbound === "has" ? "有记录" : f.outbound === "none" ? "无记录" : "历史未知"}`);
   if (f.connected !== "all") chips.push(`首次接通：${f.connected === "yes" ? "已接通" : f.connected === "no" ? "未接通" : "历史未知"}`);
   if (f.outboundMin !== "" || f.outboundMax !== "") chips.push(`外呼次数：${f.outboundMin || "0"}–${f.outboundMax || "不限"}`);
@@ -353,12 +417,12 @@ function activeFilterChips() {
 
 function leadRows(rows) {
   if (!rows.length) {
-    return `<tr><td colspan="18"><div class="empty-state"><strong>当前筛选下没有线索</strong><p>调整业务线、首位 CC、外呼状态、次数区间或日期范围后重试。</p></div></td></tr>`;
+    return `<tr><td colspan="18"><div class="empty-state"><strong>当前筛选下没有线索</strong><p>调整国家、首位 CC、外呼状态、次数区间或日期范围后重试。</p></div></td></tr>`;
   }
   return rows.map((lead) => {
     const profile = LEAD_PROFILE[lead.id];
     const firstUser = lead.firstCc
-      ? `<div class="user-cell"><span class="user-avatar">${initials(lead.firstCc)}</span><span class="user-copy"><strong>${esc(lead.firstCc)}${lead.stopped ? ` ${tag("已停用", "neutral")}` : ""}</strong><span>${esc(lead.firstCcEmail)}</span></span></div><span class="preserved">首次分配后不变</span>`
+      ? `<div class="user-cell"><span class="user-avatar">${initials(lead.firstCc)}</span><span class="user-copy"><strong>${esc(lead.firstCc)}${lead.stopped ? ` ${tag("已停用", "neutral")}` : ""}</strong><span>${esc(lead.firstCcEmail)}</span></span></div>`
       : `<div class="user-cell"><span class="user-avatar missing">?</span><span class="user-copy"><strong>历史未知</strong><span>无可确认分配事件</span></span></div>`;
     const teamLabel = lead.currentTeam === "TMK" ? "电话营销" : lead.currentTeam === "POOL" ? "待分配" : "客户关怀";
     const currentUser = `<div class="user-cell"><span class="user-avatar ${lead.currentTeam === "TMK" ? "tmk" : "missing"}">${initials(lead.currentCc)}</span><span class="user-copy"><strong>${esc(lead.currentCc)}</strong><span>${teamLabel}</span></span></div>`;
@@ -372,7 +436,7 @@ function leadRows(rows) {
       <td>${esc(profile.course)}</td>
       <td>${esc(profile.login)}</td>
       <td>${esc(profile.source)}</td>
-      <td class="is-first">${firstUser}</td>
+      <td>${firstUser}</td>
       <td>${currentUser}</td>
       <td><span class="cell-title">${esc(lead.stage)}</span></td>
       <td>${lead.assignedText === "—" ? '<span class="empty-time">—</span>' : esc(lead.assignedText)}</td>
@@ -407,16 +471,15 @@ function renderLeads() {
     ${filtersPanel(rows)}
     <section class="table-card">
       <div class="table-toolbar">
-        <div><strong>线索明细</strong><p>保留现有 CRM 字段顺序；新增字段统一放在操作列之前</p></div>
+        <div><strong>线索明细</strong></div>
         <div class="spacer"></div>
         <div class="active-filters">${activeFilterChips()}</div>
-        <button class="btn btn-small" data-action="show-new-columns">${icon("arrow")} 定位新增字段</button>
         <button class="btn btn-small" data-action="open-export" ${rows.length ? "" : "disabled"}>${icon("download")} 预览并下载</button>
       </div>
       <div class="table-wrap"><table class="data-table">
         <thead><tr>
           <th>用户 ID</th><th>学生姓名</th><th>购买意向</th><th>用户状态</th><th>用户类型</th><th>年龄段</th><th>课程等级</th><th>登录账号</th><th>渠道来源-落地页</th>
-          <th class="is-first is-new">首位 CC</th><th class="is-new">当前 CC</th><th class="is-new">跟进阶段</th><th class="is-new">首次分配时间</th><th class="is-new">首次外呼时间</th><th class="is-new">首次接通时间</th><th class="is-new">外呼次数</th><th class="is-new">外呼接通次数</th><th>操作</th>
+          <th>首位 CC</th><th>当前 CC</th><th>跟进阶段</th><th>首次分配时间</th><th>首次外呼时间</th><th>首次接通时间</th><th>外呼次数</th><th>外呼接通次数</th><th>操作</th>
         </tr></thead>
         <tbody>${leadRows(pageRows)}</tbody>
       </table></div>
@@ -438,7 +501,7 @@ function monitorFiltersPanel(rows) {
   const f = state.filters;
   return `<section class="filter-card monitor-filter-card">
     <div class="filter-grid second">
-      <label class="field"><span class="field-label">业务线</span><select class="select" id="monitor-business-line">${selectOptions(BUSINESS_LINES, f.businessLine, "全部业务线")}</select></label>
+      <label class="field"><span class="field-label">国家</span><select class="select" id="monitor-business-line">${selectOptions(BUSINESS_LINES, f.businessLine, "全部国家")}</select></label>
       <label class="field"><span class="field-label">首位 CC</span><select class="select" id="monitor-first-cc">${selectOptions(FIRST_CC, f.firstCc, "全部首位 CC")}</select></label>
       <label class="field"><span class="field-label">日期类型</span><select class="select" id="monitor-date-field">
         <option value="registration" ${f.dateField === "registration" ? "selected" : ""}>注册时间</option>
@@ -450,6 +513,7 @@ function monitorFiltersPanel(rows) {
     <div class="filter-actions">
       <button class="btn btn-primary" data-action="apply-monitor-filters">${icon("filter")} 应用筛选</button>
       <button class="btn" data-action="reset-monitor-filters">重置筛选</button>
+      <button class="btn" data-action="monitor-export">${icon("download")} 导出当前视图</button>
       <span class="filter-count">当前汇总 ${rows.length} 条</span>
     </div>
   </section>`;
@@ -477,31 +541,6 @@ function renderMonitor() {
   const productivity = productivityRows();
   const connectedRate = stats.total ? Math.round((stats.connected / stats.total) * 100) : 0;
   content.innerHTML = `<section class="page-enter">
-    <section class="card access-card">
-      <div class="access-heading">
-        <div>
-          <div class="eyebrow">RBAC · MENU PERMISSION</div>
-          <h2>团队监控已纳入角色权限树</h2>
-          <p>菜单位于“销售管理 → 团队监控”。菜单显示、汇总查看、下钻和导出分别校验权限。</p>
-        </div>
-        <div class="access-actions">
-          <span class="access-status">${icon("check")} 当前已授权</span>
-          <button class="btn btn-small btn-secondary" data-action="open-rbac">查看 RBAC 配置</button>
-          <button class="btn btn-small" data-action="monitor-export">${icon("download")} 导出当前视图</button>
-        </div>
-      </div>
-      <div class="access-grid">
-        <div><span>当前身份</span><strong>销售运营组长</strong><small>继承销售组长默认授权</small></div>
-        <div><span>数据范围</span><strong>所辖团队 · 全业务线</strong><small>由成员账号数据权限决定</small></div>
-        <div><span>页面能力</span><strong>查看 · 筛选 · 下钻</strong><small>汇总和明细同时校验权限</small></div>
-        <div><span>导出能力</span><strong>独立校验</strong><small>页面可见不等于可批量导出</small></div>
-      </div>
-      <div class="access-defaults">
-        <span>上线自动授权</span>
-        <b>超级管理员</b><b>系统管理员</b><b>销售组长</b><b>业务负责人</b>
-        <small>其他角色需管理员显式配置</small>
-      </div>
-    </section>
     ${monitorFiltersPanel(completeRows)}
     ${statCards(completeRows)}
     <div class="monitor-grid">
@@ -526,7 +565,7 @@ function renderMonitor() {
           </div></div>
         </section>
         <section class="card">
-          <div class="card-head"><div><h3>个人外呼产出</h3><p>当前业务线范围累计结果</p></div>${tag("次数筛选", "info")}</div>
+          <div class="card-head"><div><h3>个人外呼产出</h3><p>当前国家范围累计结果</p></div></div>
           <div class="card-body"><div class="watch-list">
             <div class="watch-item"><div class="watch-head"><strong>外呼总量</strong><span>不区分状态</span></div><div class="watch-value">${stats.outboundCalls}</div><p>对应筛选范围内的累计外呼次数</p></div>
             <div class="watch-item"><div class="watch-head"><strong>接通总量</strong><span>${stats.outboundCalls ? Math.round((stats.connectedCalls / stats.outboundCalls) * 100) : 0}% 接通率</span></div><div class="watch-value">${stats.connectedCalls}</div><p>外呼接通次数是外呼次数的子集</p></div>
@@ -539,10 +578,13 @@ function renderMonitor() {
 
 function render() {
   const titles = {
-    leads: "我的跟进 · 首位联系人",
-    monitor: "首位 CC 与外呼产出监控"
+    leads: "销售中心",
+    monitor: "团队监控"
   };
   document.querySelector("#page-title").textContent = titles[state.route];
+  document.querySelector("#breadcrumb").innerHTML = state.route === "monitor"
+    ? "Dino CRM <span>/</span> 销售管理 <span>/</span> 团队监控"
+    : "Dino CRM <span>/</span> 销售管理 <span>/</span> 销售中心";
   document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.route === state.route));
   if (state.route === "monitor") renderMonitor();
   else renderLeads();
@@ -560,8 +602,17 @@ function readFilters() {
   return {
     query: document.querySelector("#filter-query").value.trim(),
     businessLine: document.querySelector("#filter-business-line").value,
+    intent: document.querySelector("#filter-intent").value,
     firstCc: document.querySelector("#filter-first-cc").value,
     currentCc: document.querySelector("#filter-current-cc").value,
+    stage: document.querySelector("#filter-stage").value,
+    age: document.querySelector("#filter-age").value,
+    course: document.querySelector("#filter-course").value,
+    sourceLanding: document.querySelector("#filter-source-landing").value,
+    sourceApp: document.querySelector("#filter-source-app").value,
+    userStatus: document.querySelector("#filter-user-status").value,
+    consultAppointment: document.querySelector("#filter-consult-appointment").value,
+    appointmentOutbound: document.querySelector("#filter-appointment-outbound").value,
     outbound: document.querySelector("#filter-outbound").value,
     connected: document.querySelector("#filter-connected").value,
     outboundMin: document.querySelector("#filter-outbound-min").value,
@@ -637,7 +688,9 @@ function applyFilters() {
 
 function resetFilters() {
   state.filters = {
-    query: "", businessLine: "all", firstCc: "all", currentCc: "all",
+    query: "", businessLine: "all", intent: "all", firstCc: "all", currentCc: "all",
+    stage: "all", age: "all", course: "all", sourceLanding: "all", sourceApp: "all",
+    userStatus: "all", consultAppointment: "all", appointmentOutbound: "all",
     outbound: "all", connected: "all", outboundMin: "", outboundMax: "", connectedMin: "", connectedMax: "",
     dateField: "registration", from: "", to: ""
   };
@@ -694,30 +747,6 @@ function openDrawer(lead) {
 function closeDrawer() {
   drawerLayer.classList.remove("is-open");
   drawerLayer.setAttribute("aria-hidden", "true");
-}
-
-function openRbacDrawer() {
-  drawer.innerHTML = `<div class="drawer-head"><div><small>SYSTEM CONFIG · RBAC</small><h3>团队监控权限配置</h3></div><button class="icon-btn" data-action="close-drawer" aria-label="关闭">${icon("close")}</button></div>
-    <div class="drawer-body">
-      <div class="drawer-block"><h4>角色权限树</h4><div class="permission-tree">
-        <div class="permission-branch"><strong>销售管理</strong></div>
-        <div class="permission-node"><span>销售中心</span>${tag("已有", "neutral")}</div>
-        <div class="permission-node is-new"><span>团队监控</span>${tag("本次新增", "info")}</div>
-        <div class="permission-child"><span>查看汇总</span><b>已授权</b></div>
-        <div class="permission-child"><span>筛选</span><b>已授权</b></div>
-        <div class="permission-child"><span>下钻明细</span><b>已授权</b></div>
-        <div class="permission-child"><span>导出</span><b>单独校验</b></div>
-      </div></div>
-      <div class="drawer-block"><h4>上线自动授权</h4><div class="role-grant-list">
-        <div><strong>超级管理员</strong><span>全部业务线 · 查看 / 筛选 / 下钻 / 导出</span></div>
-        <div><strong>系统管理员</strong><span>所属业务线 · 查看 / 筛选 / 下钻</span></div>
-        <div><strong>销售组长</strong><span>所属团队与业务线 · 查看 / 筛选 / 下钻</span></div>
-        <div><strong>业务负责人</strong><span>已授权业务线 · 查看 / 筛选 / 下钻</span></div>
-      </div></div>
-      <div class="drawer-block"><div class="drawer-note">其他角色、自定义角色和后续新建角色不会自动获得该菜单，需要管理员在 RBAC 中显式授权。权限变更完成后即时生效。</div></div>
-    </div>`;
-  drawerLayer.classList.add("is-open");
-  drawerLayer.setAttribute("aria-hidden", "false");
 }
 
 function openExport(sourceRows = filteredRows(), scope = "线索筛选") {
@@ -832,13 +861,7 @@ document.addEventListener("click", (event) => {
   if (action === "reset-filters") resetFilters();
   if (action === "apply-monitor-filters") applyMonitorFilters();
   if (action === "reset-monitor-filters") resetMonitorFilters();
-  if (action === "show-new-columns") {
-    const tableWrap = document.querySelector(".table-wrap");
-    const firstNew = document.querySelector(".data-table th.is-new");
-    if (tableWrap && firstNew) tableWrap.scrollTo({ left: Math.max(0, firstNew.offsetLeft - 48), behavior: "smooth" });
-  }
   if (action === "close-drawer") closeDrawer();
-  if (action === "open-rbac") openRbacDrawer();
   if (action === "open-export") openExport();
   if (action === "monitor-export") openExport(periodRows(), "团队监控");
   if (action === "close-export") closeExport();

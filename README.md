@@ -1,7 +1,7 @@
 # Dino 产品需求与原型库
 
 > 本地主稿、飞书归档。按项目组织 PRD、原型和验收资料。
-> 更新时间：2026-11-10
+> 更新时间：2026-11-11
 
 ## 项目列表
 
@@ -10,7 +10,7 @@
 | CRM 整体产品体系 | 持续维护 | [整体框架](00-crm-prd-framework.md) | — |
 | Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
 | First Contact | 待评审 | [PRD](projects/first-contact/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
-| Follow-up Funnel Metrics | 待评审 | [PRD](projects/follow-up-funnel/PRD.md) | [本地原型](projects/follow-up-funnel/prototype/index.html) |
+| 销售跟进漏斗指标 | 待评审 | [PRD](projects/follow-up-funnel/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 
 ## GitHub Pages
 
