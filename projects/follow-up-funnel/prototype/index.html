@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dino CRM · 销售跟进</title>
+  <title>Dino CRM · 管理看板</title>
   <style>
     html, body { margin: 0; min-height: 100%; background: #f0f2f5; }
     body { min-width: 320px; }
@@ -807,10 +807,10 @@
       </div>
       <nav class="ff-side-nav" aria-label="管理看板导航">
         <div class="ff-nav-group">管理看板</div>
-        <button class="ff-nav-item" type="button" data-dashboard-tab="overview">
+        <button class="ff-nav-item is-active" type="button" data-dashboard-tab="overview" aria-current="page">
           <span class="ff-nav-glyph" aria-hidden="true">转</span><span>转化总览</span>
         </button>
-        <button class="ff-nav-item is-active" type="button" data-dashboard-tab="sales" aria-current="page">
+        <button class="ff-nav-item" type="button" data-dashboard-tab="sales">
           <span class="ff-nav-glyph" aria-hidden="true">跟</span><span>销售跟进</span>
         </button>
         <button class="ff-nav-item" type="button" data-dashboard-tab="payments">
@@ -827,7 +827,7 @@
           </button>
           <div>
             <div class="ff-crumb">Dino CRM <span>/</span> 管理看板</div>
-            <h2 class="ff-topbar-title" id="ff-topbar-title">销售跟进</h2>
+            <h2 class="ff-topbar-title" id="ff-topbar-title">转化总览</h2>
           </div>
         </div>
         <div class="ff-appbar-meta">
@@ -851,13 +851,13 @@
     </header>
 
     <div class="ff-tabs" role="tablist" aria-label="看板视图">
-      <button class="ff-tab" id="ff-tab-overview" role="tab" type="button" aria-selected="false" aria-controls="ff-panel-overview">
+      <button class="ff-tab" id="ff-tab-overview" role="tab" type="button" aria-selected="true" aria-controls="ff-panel-overview">
         <strong>转化总览</strong>
-        <span>同一注册批次的六环转化</span>
+        <span>六环转化与跟进转化</span>
       </button>
-      <button class="ff-tab" id="ff-tab-sales" role="tab" type="button" aria-selected="true" aria-controls="ff-panel-sales">
+      <button class="ff-tab" id="ff-tab-sales" role="tab" type="button" aria-selected="false" aria-controls="ff-panel-sales">
         <strong>销售跟进</strong>
-        <span>外呼、预约与付费转化</span>
+        <span>线索库存与外呼现状</span>
       </button>
       <button class="ff-tab" id="ff-tab-payments" role="tab" type="button" aria-selected="false" aria-controls="ff-panel-payments">
         <strong>支付结果</strong>
@@ -900,20 +900,6 @@
         <div class="ff-inventory-stats" id="ff-inventory-stats"></div>
       </section>
 
-      <section class="ff-panel" aria-labelledby="ff-funnel-title">
-        <header class="ff-panel-head">
-          <div>
-            <h2 class="ff-panel-title" id="ff-funnel-title">
-              跟进转化
-              <span class="ff-badge">注册批次</span>
-            </h2>
-            <div class="ff-panel-meta" id="ff-cohort-meta"></div>
-          </div>
-          <span class="ff-updated">更新于 2026-11-11 09:45</span>
-        </header>
-        <div class="ff-metrics" id="ff-metrics"></div>
-              </section>
-
       <section class="ff-panel" aria-labelledby="ff-calling-title">
         <header class="ff-calling-head">
           <h2 class="ff-calling-title" id="ff-calling-title">外呼</h2>
@@ -937,7 +923,7 @@
       </section>
     </section>
 
-    <section id="ff-panel-overview" role="tabpanel" aria-labelledby="ff-tab-overview" hidden>
+    <section id="ff-panel-overview" role="tabpanel" aria-labelledby="ff-tab-overview">
       <section class="ff-panel" aria-labelledby="ff-overview-title">
         <header class="ff-panel-head">
           <div>
@@ -953,6 +939,19 @@
             <strong id="ff-l2s"></strong>
           </div>
         </div>
+      </section>
+      <section class="ff-panel" aria-labelledby="ff-funnel-title">
+        <header class="ff-panel-head">
+          <div>
+            <h2 class="ff-panel-title" id="ff-funnel-title">
+              跟进转化
+              <span class="ff-badge">注册批次</span>
+            </h2>
+            <div class="ff-panel-meta" id="ff-cohort-meta"></div>
+          </div>
+          <span class="ff-updated">更新于 2026-11-11 09:45</span>
+        </header>
+        <div class="ff-metrics" id="ff-metrics"></div>
       </section>
     </section>
 
@@ -1079,7 +1078,7 @@
         country: countries[saved.country] ? saved.country : "vietnam",
         cc: ccShares[saved.cc] ? saved.cc : "all",
         range: rangeShares[saved.range] ? saved.range : "all",
-        tab: ["overview", "sales", "payments"].includes(saved.tab) ? saved.tab : "sales"
+        tab: ["overview", "sales", "payments"].includes(saved.tab) ? saved.tab : "overview"
       };
 
       const el = {
@@ -1152,20 +1151,6 @@
       }
 
       function renderSales(data) {
-        el.cohortMeta.textContent = `${rangeNames[state.range]}注册批次 · 结果统计至 2026-11-11`;
-        el.metrics.innerHTML = metrics.map(metric => {
-          const numerator = data[metric.numerator];
-          const denominator = data[metric.denominator];
-          return `
-            <article class="ff-metric ${metric.paid ? "is-paid" : ""}">
-              <div class="ff-metric-label">${metric.label}</div>
-              <div class="ff-metric-code">${metric.code}</div>
-              <div class="ff-metric-value">${percent(numerator, denominator)}</div>
-              <div class="ff-metric-fraction">${number.format(numerator)} / ${number.format(denominator)}</div>
-            </article>
-          `;
-        }).join("");
-
         const base = countries[state.country];
         el.calling.innerHTML = `
           <tr>
@@ -1189,6 +1174,19 @@
           ["已支付人数", data.paid]
         ];
         el.overviewMeta.textContent = `${rangeNames[state.range]}注册批次 · 后续结果统计至当前`;
+        el.cohortMeta.textContent = `${rangeNames[state.range]}注册批次 · 跟进转化结果统计至当前`;
+        el.metrics.innerHTML = metrics.map(metric => {
+          const numerator = data[metric.numerator];
+          const denominator = data[metric.denominator];
+          return `
+            <article class="ff-metric ${metric.paid ? "is-paid" : ""}">
+              <div class="ff-metric-label">${metric.label}</div>
+              <div class="ff-metric-code">${metric.code}</div>
+              <div class="ff-metric-value">${percent(numerator, denominator)}</div>
+              <div class="ff-metric-fraction">${number.format(numerator)} / ${number.format(denominator)}</div>
+            </article>
+          `;
+        }).join("");
         el.stages.innerHTML = stages.map(([label, value], index) =>
           `<div class="ff-stage"><span>${String(index + 1).padStart(2, "0")} · ${label}</span><strong>${number.format(value)}</strong></div>`
         ).join("");
