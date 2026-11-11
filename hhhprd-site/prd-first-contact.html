@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>首位联系人 · PRD</title>
+  <title>引入首跟节点&amp;首跟看板 · PRD</title>
   <style>
     :root{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}
     *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
@@ -23,7 +23,7 @@
 </head>
 <body><main>
   <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/first-contact/PRD.md">查看 Markdown 源文件</a></div>
-  <article><h2>首位联系人（First Contact）</h2>
+  <article><h2>引入首跟节点&amp;首跟看板</h2>
 <blockquote>线索从首位 CC 交接给后续 CC 后，销售中心仍需保留“首位 CC”“首次分配时间”“首次外呼时间”“首次接通时间”和累计外呼次数，支持按联系人字段与次数区间筛选、下载并查看完整分配历史，用于规模化监控各业务线电话营销的触达量、工作量与生产力。<br>需求编号：REQ-CC-001｜状态：待评审｜更新时间：2026-11-11<br>需求类型：表单、字段与列表｜补充类型：权限与审计、看板与指标</blockquote>
 <blockquote>📌<br><br>- 首位 CC 是线索在销售中心第一次获得归属时记录的负责人，后续转派、掉库、回池和再领取都不能覆盖。<br>- 在销售中心列表增加 <code>首位 CC</code>、<code>首次分配时间</code>、<code>首次外呼时间</code> 和 <code>首次接通时间</code>，并提供首位 CC 组合筛选与同范围下载。<br>- 将 <code>外呼次数</code>、<code>外呼接通次数</code> 作为独立产出需求，支持次数区间筛选并纳入下载。<br>- 需求覆盖各业务线；不设置单独的“是否流转”校验字段，业务方通过当前 CC 是否等于首位 CC 直接判断负责人是否发生变化。<br>- 历史数据只从已有事件回填，无法确认的记录标记为“历史未知”。</blockquote>
 <blockquote>⚠️ 来源：2026-11-10 需求方口述及同日字段确认；现状依据为 <code>01-current-state-and-boundaries.md</code>、<code>crm-manual/docs/sales/S-00.md</code> 和 <code>crm-manual/docs/system/A-01.md</code>。</blockquote>

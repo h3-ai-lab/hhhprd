@@ -8,8 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 PROJECTS = {
     "referrals-rewards": "Referrals & Rewards",
-    "first-contact": "首位联系人",
-    "follow-up-funnel": "销售跟进漏斗指标",
+    "first-contact": "引入首跟节点&首跟看板",
+    "follow-up-funnel": "管理看板新增跟进漏斗",
 }
 
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
