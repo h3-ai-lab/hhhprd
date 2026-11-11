@@ -22,6 +22,7 @@
 | [香港支付落地页参照](https://qjphu5vphyf4.jp.larksuite.com/wiki/UGHPwF9XQi0iVTks5kIjNMwZpHc) | A | 当前推荐写法与版式 | 只参考结构，不复制业务内容 |
 | 首位联系人需求（2026-11-10 需求方口述及字段确认） | A | 全业务线首位 CC、首次分配/外呼/接通、外呼/接通次数筛选、列表与下载 | 历史回填和跨业务线汇总时区待确认 |
 | [CRM Request No. 7](https://qjphu5vphyf4.jp.larksuite.com/base/VmMrbK4uva0lbOsnnXSjBy9rpLK?table=tbl6ewjzW1j648cj&view=vewEIikg2C) | A | 销售跟进 5 个漏斗指标、附件页面和需求方口径确认 | `Connected-Paid%`、`Appt-Paid%` 分子分母方向待确认 |
+| [系统权限与线索分配需求](https://qjphu5vphyf4.jp.larksuite.com/wiki/BRUcwo6ZniAiBBkwH9xjEehVpHg) | A | 业务线、数据范围、成员账号、数据分组、TMK 分配与转交 | 为前置方案；正式项目升级为四级组织树与账号权限体系 |
 | `crm-manual/` | D | 当前页面操作 | 手册不等于产品目标 |
 
 ## 2. 空缺资料
