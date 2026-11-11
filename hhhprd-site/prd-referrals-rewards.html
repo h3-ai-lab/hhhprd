@@ -26,7 +26,7 @@
   <article><h2>泰国推荐奖励（Referrals &amp; Rewards）</h2>
 <blockquote>泰国老用户邀请好友、分享课堂内容，符合条件后由系统自动延长会员，并在 CRM 可追踪、审核和追溯。<br>需求编号：REQ-TH-001｜状态：待评审｜更新时间：2026-11-10</blockquote>
 <blockquote>📌<br><br>- 好友完成首次试听，邀请人 +14 天；好友购买 3/6/12 个月，邀请人再加 1/2/3 个月。<br>- 有效社媒投稿先 +5 天；被官方 Facebook 选中再加 2 个月，未被选中再加 15 天。<br>- 本期仅泰国；奖励按自然日/自然月延长会员，不发现金、优惠券或积分。</blockquote>
-<blockquote>⚠️ 来源：<a href="https://qjphu5vphyf4.jp.larksuite.com/wiki/OewiwN0BCiDituksN8dj7HDupNd" target="_blank" rel="noopener">主需求</a>；<a href="https://qjphu5vphyf4.jp.larksuite.com/wiki/XB2PwcT9lie4WMkSmAUjGIvopxh" target="_blank" rel="noopener">较新同名文档</a> 补充了“未被官方选中再加 15 天”。本文按较新版本编写并列入待确认。</blockquote>
+<blockquote>⚠️ 来源：<a href="https://qjphu5vphyf4.jp.larksuite.com/wiki/OewiwN0BCiDituksN8dj7HDupNd" target="_blank" rel="noopener">主需求</a>；<a href="https://qjphu5vphyf4.jp.larksuite.com/wiki/XB2PwcT9lie4WMkSmAUjGIvopxh" target="_blank" rel="noopener">较新同名文档</a> 补充了“未被官方选中再加 15 天”。本文采用较新版本规则。</blockquote>
 <h3>可交互原型</h3>
 <p><a href="https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/" target="_blank" rel="noopener">打开完整交互原型</a></p>
 <p>原型内可查看推荐活动、社媒审核、奖励流水、规则异常，以及 App 邀请和奖励到账流程；页面切换以原型内部导航为准。</p>
@@ -37,9 +37,8 @@
 <p>本期要建立一条可追踪的泰国裂变链路：邀请关系能够唯一绑定，好友行为能够触发正确奖励，会员权益最终发放成功，异常和退款能够核对及补偿。</p>
 <table><thead><tr><th>指标</th><th>口径</th><th>用途</th></tr></thead><tbody><tr><td>邀请绑定率</td><td>完成推荐关系确认的好友数 ÷ 打开有效邀请链接的好友数</td><td>判断分享和落地页是否顺畅</td></tr><tr><td>好友试听完成率</td><td>完成首节体验课的好友数 ÷ 已绑定好友数</td><td>判断销售预约和到课质量</td></tr><tr><td>好友付费转化率</td><td>首笔有效会员订单数 ÷ 已绑定好友数</td><td>判断裂变带来的付费结果</td></tr><tr><td>奖励发放成功率</td><td>发放成功的奖励事件数 ÷ 进入发放的奖励事件数</td><td>判断权益服务稳定性</td></tr><tr><td>奖励冲正率</td><td>最终冲正的购买奖励数 ÷ 已发放购买奖励数</td><td>判断退款和风控成本</td></tr><tr><td>重复事件拦截率</td><td>被幂等拦截的重复事件数 ÷ 全部业务事件数</td><td>发现重复回调或数据源异常</td></tr></tbody></table>
 <p>上线首版先建立基线，不在未确认前承诺具体转化目标。所有指标按 <code>Asia/Bangkok</code> 自然日统计，并与 CRM 明细使用同一筛选范围。</p>
-<h3>发布优先级与决策状态</h3>
+<h3>发布优先级</h3>
 <table><thead><tr><th>优先级</th><th>范围</th><th>产品评审重点</th></tr></thead><tbody><tr><td>P0</td><td>邀请链接/推荐码、关系绑定、Lead/CC 归属、首次试听和首次购买奖励、权益发放、退款冲正、CRM 奖励详情</td><td>明确唯一关系、幂等、权限、退款和审计边界</td></tr><tr><td>P1</td><td>社媒投稿审核、奖励重试、运营导出、完整指标和异常告警</td><td>P0 稳定后灰度，不阻塞推荐主链路</td></tr></tbody></table>
-<table><thead><tr><th>状态</th><th>内容</th></tr></thead><tbody><tr><td>已明确</td><td>+14 天试听奖励；3/6/12 个月购买分别奖励 1/2/3 个月；社媒有效 +5 天；官方选中 +2 个月；有效未选中 +15 天；本期仅泰国</td></tr><tr><td>工作假设</td><td>邀请人需为泰国有效会员；会员过期时奖励保留待发放；邀请人无 CC owner 时回退泰国自动分配</td></tr><tr><td>待确认</td><td>1 个月和周包是否奖励；奖励是否全部叠加；邀请码有效期与单人上限；审核 SLA；内容删除后的扣回规则</td></tr></tbody></table>
 <h3>业务流程总图</h3>
 <p>覆盖从邀请人发起分享，到好友试听/购买，再到奖励入账、失败重试和退款冲正的完整链路。</p>
 <div class="mermaid">flowchart TD
@@ -79,7 +78,7 @@
     U --&gt;|3 个月| V1[生成 +1 个月奖励事件]
     U --&gt;|6 个月| V2[生成 +2 个月奖励事件]
     U --&gt;|12 个月| V3[生成 +3 个月奖励事件]
-    U --&gt;|1 个月 周包 其他| V4[本期不自动奖励 待确认]
+    U --&gt;|1 个月 周包 其他| V4[本期不自动奖励]
     V1 --&gt; W[进入权益发放子流程]
     V2 --&gt; W
     V3 --&gt; W
@@ -160,17 +159,17 @@
 <pre><code class="text">好友打开链接 → 手机号登录 → 确认推荐关系
 → CRM 创建/关联 Lead → 首次试听完成 → 邀请人 +14 天
 → 好友购买会员 → 邀请人再得 1/2/3 个月</code></pre>
-<table><thead><tr><th>场景</th><th>规则</th></tr></thead><tbody><tr><td>邀请人资格</td><td>工作假设：泰国业务线有效会员；待确认</td></tr><tr><td>好友资格</td><td>未开始首次试听、未绑定其他邀请人的用户</td></tr><tr><td>关系绑定</td><td>必须在好友首次试听开始前完成；确认后不能自行更换邀请人</td></tr><tr><td>自荐/重复</td><td>同一用户 ID、验证手机号自荐，或好友已有邀请人时拦截</td></tr><tr><td>无效推荐码</td><td>不阻断登录，只提示关系未绑定</td></tr><tr><td>Lead 归属</td><td>好友登录且 CRM 记录 Lead 后，自动分配给邀请人当前 CC owner</td></tr><tr><td>CC owner 缺失</td><td>回退泰国现有自动分配规则；待确认</td></tr></tbody></table>
+<table><thead><tr><th>场景</th><th>规则</th></tr></thead><tbody><tr><td>邀请人资格</td><td>泰国业务线有效会员</td></tr><tr><td>好友资格</td><td>未开始首次试听、未绑定其他邀请人的用户</td></tr><tr><td>关系绑定</td><td>必须在好友首次试听开始前完成；确认后不能自行更换邀请人</td></tr><tr><td>自荐/重复</td><td>同一用户 ID、验证手机号自荐，或好友已有邀请人时拦截</td></tr><tr><td>无效推荐码</td><td>不阻断登录，只提示关系未绑定</td></tr><tr><td>Lead 归属</td><td>好友登录且 CRM 记录 Lead 后，自动分配给邀请人当前 CC owner</td></tr><tr><td>CC owner 缺失</td><td>回退泰国现有自动分配规则</td></tr></tbody></table>
 <p>新推荐只新增来源和推荐关系，不覆盖邀请人原有注册渠道和销售归属。</p>
 <h3>需求 2：好友奖励</h3>
 <h4>首次试听</h4>
 <p>好友完成首节体验课后，邀请人 <strong>+14 天</strong>。</p>
 <p>有效条件：体验课、该好友第一节、状态已完成、完成时间晚于绑定时间、属于泰国业务线。仅预约、未到课、取消、改期、进行中不触发。</p>
 <h4>首次购买</h4>
-<table><thead><tr><th>好友购买</th><th>邀请人奖励</th></tr></thead><tbody><tr><td>3 个月</td><td>+1 个月</td></tr><tr><td>6 个月</td><td>+2 个月</td></tr><tr><td>12 个月</td><td>+3 个月</td></tr><tr><td>1 个月、周包及其他</td><td>本期暂不自动发放；待确认</td></tr></tbody></table>
+<table><thead><tr><th>好友购买</th><th>邀请人奖励</th></tr></thead><tbody><tr><td>3 个月</td><td>+1 个月</td></tr><tr><td>6 个月</td><td>+2 个月</td></tr><tr><td>12 个月</td><td>+3 个月</td></tr><tr><td>1 个月、周包及其他</td><td>本期暂不自动发放</td></tr></tbody></table>
 <p>有效订单必须支付成功、属于泰国业务线和适用会员商品，且未取消、退款或拒付。好友先试听再购买时，试听 +14 天和购买奖励叠加；每个好友的各奖励最多一次，续费再奖励不在本期。</p>
 <h4>会员发放</h4>
-<ul><li>已有会员：从当前到期时间顺延。</li><li>+14 天按自然日，+1/+2/+3 个月按自然月。</li><li>会员已过期：工作假设为保留待发放，重新成为有效会员后发放；待确认。</li><li>必须由权益服务确认会员实际延长，接口成功不等于发放成功。</li><li>同一业务事件只能生成一条奖励，重复回调不得重复加时长。</li><li>退款最终成立时，按“权益发放与退款流程图”冲正对应购买奖励；冲正过程同样需要幂等和审计。</li></ul>
+<ul><li>已有会员：从当前到期时间顺延。</li><li>+14 天按自然日，+1/+2/+3 个月按自然月。</li><li>会员已过期：保留待发放，重新成为有效会员后发放。</li><li>必须由权益服务确认会员实际延长，接口成功不等于发放成功。</li><li>同一业务事件只能生成一条奖励，重复回调不得重复加时长。</li><li>退款最终成立时，按“权益发放与退款流程图”冲正对应购买奖励；冲正过程同样需要幂等和审计。</li></ul>
 <h3>需求 3：社媒分享奖励</h3>
 <p>用户在社交平台发布孩子在 Dino AI 课堂中的照片或视频后，由运营在 CRM 录入内容链接/凭证、用户、课堂信息、授权状态和备注。</p>
 <div class="mermaid">flowchart TD
@@ -199,9 +198,9 @@
     D1 --&gt; O
     N --&gt; P[通知用户 结束]</div>
 <p>规则：</p>
-<ul><li>未授权官方使用时，不能标记为“已选中”。</li><li>同一链接或媒体内容只奖励一次。</li><li>被删除、无法访问或不属于该用户的内容可标记无效。</li><li>社媒奖励和好友推荐奖励可以叠加。</li><li>已发奖励是否因内容删除或审核纠错而扣回，待确认。</li></ul>
+<ul><li>未授权官方使用时，不能标记为“已选中”。</li><li>同一链接或媒体内容只奖励一次。</li><li>被删除、无法访问或不属于该用户的内容可标记无效。</li><li>社媒奖励和好友推荐奖励可以叠加。</li></ul>
 <h3>需求 4：CRM 页面</h3>
-<p>建议入口：<code>营销中心 → Referrals &amp; Rewards</code>，最终归属待确认。</p>
+<p>入口：<code>营销中心 → Referrals &amp; Rewards</code>。</p>
 <p>顶部指标：<code>Referred Friends</code>、<code>First Trial Completed</code>、<code>Paid Conversions</code>、<code>Pending Rewards</code>。</p>
 <p>页面结构：</p>
 <ol><li><code>Referral Activity</code>：推荐关系与奖励进度。</li><li><code>Social Post Review</code>：社媒投稿审核队列。</li><li>选中推荐后在右侧展示 <code>Reward Details</code> 和会员当前到期时间。</li></ol>
@@ -210,7 +209,7 @@
 <p>社媒审核可执行：查看内容、标记有效/无效、选中/未选中、重试失败奖励。操作需二次确认并记录备注，不允许直接填写奖励天数。</p>
 <p>奖励详情展示：奖励类型、触发事件和时间、奖励时长、发放前后到期时间、状态、失败原因、重试记录和操作人。</p>
 <h4>指标口径</h4>
-<table><thead><tr><th>指标</th><th>分子</th><th>分母 / 去重</th></tr></thead><tbody><tr><td>Referred Friends</td><td>已绑定推荐关系数</td><td>按 Referral ID 去重</td></tr><tr><td>First Trial Completed</td><td>至少完成一节有效首节体验课的好友数</td><td>按好友用户 ID 去重</td></tr><tr><td>Paid Conversions</td><td>产生首笔有效会员订单的好友数</td><td>按好友用户 ID 去重，退款后是否回退待确认</td></tr><tr><td>Pending Rewards</td><td>待发放、发放失败和人工处理中的奖励事件数</td><td>按 Reward Event ID 去重</td></tr></tbody></table>
+<table><thead><tr><th>指标</th><th>分子</th><th>分母 / 去重</th></tr></thead><tbody><tr><td>Referred Friends</td><td>已绑定推荐关系数</td><td>按 Referral ID 去重</td></tr><tr><td>First Trial Completed</td><td>至少完成一节有效首节体验课的好友数</td><td>按好友用户 ID 去重</td></tr><tr><td>Paid Conversions</td><td>产生首笔有效会员订单的好友数</td><td>按好友用户 ID 去重</td></tr><tr><td>Pending Rewards</td><td>待发放、发放失败和人工处理中的奖励事件数</td><td>按 Reward Event ID 去重</td></tr></tbody></table>
 <p>顶部指标、明细和导出必须使用相同的业务线、时间范围和统计截止时点。</p>
 <h4>页面状态</h4>
 <table><thead><tr><th>状态</th><th>页面表现</th><th>可用操作</th></tr></thead><tbody><tr><td>加载中</td><td>展示骨架或加载状态，保留当前筛选条件</td><td>无</td></tr><tr><td>无数据</td><td>明确区分“没有推荐记录”和“筛选无结果”</td><td>清空筛选</td></tr><tr><td>权限不足</td><td>隐藏无权限数据，不返回可通过接口绕过的详情</td><td>返回上一页</td></tr><tr><td>奖励待发放</td><td>显示等待原因和预计下一次重试时间</td><td>有权限的运营可重试</td></tr><tr><td>奖励失败</td><td>展示失败原因、错误码、重试次数和关联业务事件</td><td>重试、转人工</td></tr><tr><td>退款冻结</td><td>展示原订单、退款进度和冻结奖励</td><td>查看退款详情；最终结果前不允许手工解冻</td></tr><tr><td>内容审核</td><td>展示内容、授权状态和审核历史</td><td>标记有效/无效、选中/未选中，二次确认并填写备注</td></tr></tbody></table>
@@ -227,8 +226,6 @@
 <p>需要记录的产品事件：</p>
 <ul><li><code>referral_code_created</code></li><li><code>referral_link_opened</code></li><li><code>referral_bind_confirmed</code> / <code>referral_bind_rejected</code></li><li><code>reward_triggered</code></li><li><code>reward_issue_requested</code> / <code>reward_issued</code> / <code>reward_issue_failed</code></li><li><code>reward_retry_triggered</code></li><li><code>refund_freeze_created</code> / <code>reward_reversed</code></li><li><code>social_submission_reviewed</code></li></ul>
 <p>告警至少覆盖：绑定接口连续失败、权益发放失败率异常、重复事件异常升高、退款冻结未在 SLA 内完成。</p>
-<h3>待确认</h3>
-<table><thead><tr><th>问题</th><th>当前假设</th><th>影响</th></tr></thead><tbody><tr><td>邀请人是否必须为有效会员</td><td>是</td><td>绑定资格与防刷</td></tr><tr><td>未选中 +15 天是否最终生效</td><td>按较新文档执行</td><td>奖励成本</td></tr><tr><td>+5 天、+15 天、+2 个月是否叠加</td><td>是</td><td>总奖励额</td></tr><tr><td>社媒审核 SLA、审核人和申诉</td><td>工作日内，细则待定</td><td>运营流程</td></tr><tr><td>1 个月/周包是否有购买奖励</td><td>本期不发</td><td>奖励覆盖</td></tr><tr><td>退款/拒付如何冲正购买奖励</td><td>已发奖励冻结；最终确认后冲正未来会员</td><td>财务与风控</td></tr><tr><td>好友续费是否再奖励</td><td>不再奖励</td><td>长期成本</td></tr><tr><td>邀请人无 CC owner 如何分配</td><td>回退自动分配</td><td>销售归属</td></tr><tr><td>会员过期后奖励何时生效</td><td>重新成为有效会员后</td><td>权益结算</td></tr><tr><td>邀请码有效期、单人邀请上限</td><td>未限制</td><td>防刷</td></tr><tr><td>页面归属和独立权限</td><td>营销中心</td><td>信息架构</td></tr><tr><td>历史推荐/投稿是否补发</td><td>不补发</td><td>数据迁移</td></tr></tbody></table>
 <h3>发布建议</h3>
 <ol><li><strong>P0 推荐闭环</strong>：App 分享、关系绑定、Lead 归属、试听和购买奖励。</li><li><strong>P1 社媒奖励</strong>：CRM 投稿录入、审核及对应奖励。</li><li><strong>P1 运营增强</strong>：导出、批量重试、异常对账和完整看板。</li></ol>
 <p>上线前必须完成推荐关系唯一约束、奖励幂等、权益发放契约、退款策略、监控告警和泰国灰名单测试。</p></article>

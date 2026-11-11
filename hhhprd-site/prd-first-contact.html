@@ -146,9 +146,7 @@
 → 预览并下载当前范围
 → 下钻或另开线索查看 Lead &gt; Update 分配历史</code></pre>
 <h3>异常与边界</h3>
-<ul><li><strong>无首位 CC</strong>：老数据没有可确认事件时显示“历史未知”，不能使用当前 CC 或最早可见事件猜测。</li><li><strong>重复触发</strong>：分配事件、外呼事件和跟进事件均使用幂等键；首位字段一经写入不覆盖。</li><li><strong>并发领取</strong>：系统保证同一线索只有一个成功领取者。</li><li><strong>重复回池</strong>：回池和二次领取只追加历史，不重置首位 CC。</li><li><strong>负责人变化判断</strong>：不设置额外的流转状态或时间；直接比较当前 CC ID 与首位 CC ID，相同表示负责人未变化，不同表示当前 CC 已不同于首位 CC。</li><li><strong>用户离职或改名</strong>：保留首位 CC ID 和首次名称快照，额外展示当前账号状态。</li><li><strong>导入历史数据</strong>：只接受已经核实并带来源的记录，导入文件需要保存批次号和操作人。</li><li><strong>时区</strong>：页面按各业务线现有展示时区设置，下载保留时间时区偏移；跨业务线汇总按系统统计边界处理。</li><li><strong>大范围下载</strong>：沿用现有导出上限；超限时提示缩小日期范围，不静默截断。</li></ul>
-<h3>待确认</h3>
-<table><thead><tr><th>问题</th><th>当前工作假设</th><th>影响</th><th>Owner</th></tr></thead><tbody><tr><td>公海人工领取是否计入首位 CC</td><td>计入；自动分配、领取、直接分配都算取得归属</td><td>工作量分母</td><td>各业务线销售负责人</td></tr><tr><td>历史分配事件是否完整</td><td>只回填可验证数据，其余标历史未知</td><td>历史覆盖率</td><td>CRM 技术</td></tr><tr><td>监控入口放在销售中心还是管理看板</td><td>首选销售中心组内视图，保留后续进入看板的可能</td><td>导航与权限</td><td>CRM 产品</td></tr><tr><td>是否需要按团队而不是个人展示首位 CC</td><td>P0 保留个人明细，团队汇总作为筛选维度</td><td>权限和报表</td><td>业务负责人</td></tr><tr><td>跨业务线汇总使用哪个统一统计时区</td><td>明细保留原业务线时区，汇总按系统统一口径</td><td>日分组与导出</td><td>CRM 产品 / 数据</td></tr></tbody></table></article>
+<ul><li><strong>无首位 CC</strong>：老数据没有可确认事件时显示“历史未知”，不能使用当前 CC 或最早可见事件猜测。</li><li><strong>重复触发</strong>：分配事件、外呼事件和跟进事件均使用幂等键；首位字段一经写入不覆盖。</li><li><strong>并发领取</strong>：系统保证同一线索只有一个成功领取者。</li><li><strong>重复回池</strong>：回池和二次领取只追加历史，不重置首位 CC。</li><li><strong>负责人变化判断</strong>：不设置额外的流转状态或时间；直接比较当前 CC ID 与首位 CC ID，相同表示负责人未变化，不同表示当前 CC 已不同于首位 CC。</li><li><strong>用户离职或改名</strong>：保留首位 CC ID 和首次名称快照，额外展示当前账号状态。</li><li><strong>导入历史数据</strong>：只接受已经核实并带来源的记录，导入文件需要保存批次号和操作人。</li><li><strong>时区</strong>：页面按各业务线现有展示时区设置，下载保留时间时区偏移；跨业务线汇总按系统统计边界处理。</li><li><strong>大范围下载</strong>：沿用现有导出上限；超限时提示缩小日期范围，不静默截断。</li></ul></article>
 </main>
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";

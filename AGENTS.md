@@ -18,6 +18,7 @@
 - Keep exactly one complete interactive prototype URL per PRD.
 - Do not write implementation code, SQL, API implementation, class/function design, or pseudocode.
 - Do not include acceptance criteria, test cases, test plans, regression checklists, or Agent self-check sections in PRDs.
+- Do not include pending-confirmation or open-question sections in PRDs. Resolve required decisions before writing the final PRD.
 - Do not display prompt names, supplementary prompt names, or prompt file paths inside a PRD.
 - Perform writing and consistency checks internally without adding them to the delivered PRD.
 
