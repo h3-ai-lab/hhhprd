@@ -15,6 +15,7 @@
 - [多级业务线需求分析](research/REQUIREMENT-ANALYSIS.md)
 - [归属模型](research/ATTRIBUTION-MODEL.md)
 - [配置与数据口径模拟](research/CONFIGURATION-SIMULATION.md)
+- [页面与功能影响评估](research/IMPACT-ASSESSMENT.md)
 - [历史迁移方案](research/HISTORICAL-MIGRATION.md)
 
 ## 项目结构
