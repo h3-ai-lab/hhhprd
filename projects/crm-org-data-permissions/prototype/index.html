@@ -51,11 +51,15 @@
           </div>
         </div>
         <div class="topbar-right">
-          <span class="scope-tag"><i></i>1区及下级</span>
-          <div class="account">
-            <div class="avatar">L</div>
-            <div><strong>林悦</strong><span>1区管理员兼销售</span></div>
-          </div>
+          <span class="scope-tag" id="scope-label"><i></i>1区及下级</span>
+          <label class="account identity-account">
+            <span class="avatar" id="current-avatar">L</span>
+            <select class="identity-select" id="identity-switch" aria-label="当前身份">
+              <option value="m_region">林悦 · 区域管理员兼销售</option>
+              <option value="m_line">陈鸣 · 业务线管理员</option>
+              <option value="m_super">系统管理员 · 超级管理员</option>
+            </select>
+          </label>
         </div>
       </header>
       <main class="content" id="content" tabindex="-1"></main>
