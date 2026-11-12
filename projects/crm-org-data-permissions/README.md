@@ -12,10 +12,10 @@
 
 ## 来源
 
-- [多级业务线需求分析](../multi-level-business-lines/REQUIREMENT-ANALYSIS.md)
-- [归属模型](../multi-level-business-lines/ATTRIBUTION-MODEL.md)
-- [配置与数据口径模拟](../multi-level-business-lines/CONFIGURATION-SIMULATION.md)
-- [历史迁移方案](../multi-level-business-lines/HISTORICAL-MIGRATION.md)
+- [多级业务线需求分析](research/REQUIREMENT-ANALYSIS.md)
+- [归属模型](research/ATTRIBUTION-MODEL.md)
+- [配置与数据口径模拟](research/CONFIGURATION-SIMULATION.md)
+- [历史迁移方案](research/HISTORICAL-MIGRATION.md)
 
 ## 本地预览
 

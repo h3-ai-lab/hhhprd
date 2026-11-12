@@ -11,7 +11,6 @@ PROJECTS = {
     "first-contact": "引入首跟节点&首跟看板",
     "first-contact-concise": "引入首跟节点&首跟看板-2",
     "follow-up-funnel": "管理看板新增跟进漏斗",
-    "crm-account-permissions": "CRM账号&权限体系优化",
     "crm-org-data-permissions": "CRM组织架构&数据权限",
 }
 
