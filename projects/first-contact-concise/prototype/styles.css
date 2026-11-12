@@ -354,8 +354,6 @@ main:focus { outline: none; }
   color: inherit;
   box-shadow: var(--shadow);
   text-align: left;
-  cursor: pointer;
-  user-select: none;
 }
 .stat-label { color: var(--text-2); font-size: 11px; }
 .stat-card strong { display: block; margin: 5px 0 2px; color: #1c2835; font-size: 27px; line-height: 1.1; letter-spacing: -0.6px; }
@@ -846,8 +844,6 @@ main:focus { outline: none; }
 .agent-table th { padding: 9px 12px; border-bottom: 1px solid var(--line); color: #657181; background: #f8fafc; font-size: 9px; font-weight: 650; text-align: left; }
 .agent-table th .metric-help { position: static; margin-left: 4px; padding: 0 5px; line-height: 17px; vertical-align: middle; }
 .agent-table td { padding: 12px; border-bottom: 1px solid #edf1f5; font-size: 11px; }
-.agent-table tbody tr { cursor: pointer; }
-.agent-table tbody tr:hover { background: #f8fbff; }
 .agent-table tbody tr:last-child td { border-bottom: 0; }
 .progress-cell { min-width: 106px; }
 .progress-row { display: flex; align-items: center; gap: 8px; }
