@@ -1,11 +1,11 @@
 # Dino 产品需求与原型库
 
 > 本地主稿、飞书归档。按“公共能力 + 项目空间”组织需求、原型与知识资料。
-> 更新时间：2026-11-11
+> 更新时间：2026-11-12
 
 ## 先看这里
 
-- 找执行流程：`shared/workflows/`
+- 找执行流程：`shared/workflows/`；修订已有 PRD 先读 `shared/workflows/document-change.md`
 - 找专业能力：`shared/skills/`
 - 找原始资料来源：`shared/rag/` 或项目 `rag/`
 - 找已确认事实和决策：`shared/memory/` 或项目 `memory/`
@@ -90,12 +90,12 @@ python3 build_prd_pages.py
 
 | 层级 | 文档 | 用途 |
 |---|---|---|
-| 公共流程 | `shared/workflows/` | PRD 2.0 与发布流程 |
+| 公共流程 | `shared/workflows/` | PRD 2.0、文档变更与发布流程 |
 | 公共能力 | `shared/skills/` | PRD、原型、校验、发布能力 |
 | 公共知识 | `shared/rag/` | 原始来源清单与检索规则 |
 | 公共记忆 | `shared/memory/` | 术语、现状与全局决策 |
 | 项目 | `projects/<project>/` | 项目上下文、PRD、原型与调研 |
-| 功能 PRD | `projects/<project>/prd/PRD.md` | 单个完整需求 |
+| 功能 PRD | `projects/<project>/prd/PRD.md` | 单个完整需求；修订使用正文变更标记 |
 
 ## 一句话需求怎么变成 PRD
 
@@ -139,6 +139,7 @@ python3 build_prd_pages.py
 ## 写作样式
 
 - PRD 和原型默认直接使用简体中文，不再询问语言；正式产品名、字段标识和外部系统名称可按官方原文保留。
+- 修订已有 PRD 时，在原文档保留 `<del>[原/删除]` 删除线和 `<ins>[新增/现行]` 红色内容，并在文末更新修订记录；原型只同步最新产品状态，不显示变更标记。
 - 开头先写一句结论，再放 `📌 本期重点`。
 - 每份功能 PRD 只保留一个完整交互原型地址，不罗列页面直达链接、源码地址或本地地址。
 - 一个一级标题对应一个核心问题或一个需求，不按模板机械铺满。

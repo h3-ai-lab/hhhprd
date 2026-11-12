@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 SHARED_REQUIRED = [
     "shared/workflows/prd-2.0.md",
+    "shared/workflows/document-change.md",
     "shared/skills/crm-prd-authoring/SKILL.md",
     "shared/skills/crm-prototype-authoring/SKILL.md",
     "shared/skills/crm-artifact-validation/SKILL.md",

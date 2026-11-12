@@ -14,7 +14,7 @@
 6. **生成交付物**：PRD 默认单文件，放在项目 `prd/PRD.md`；原型放在 `prototype/`。
 7. **自动校验**：执行结构、链接、禁用内容和指标一致性检查。
 8. **按需发布**：用户要求发布或适用自动发布规则时，由发布 Skill 上传并验证公开 URL。
-9. **差异修订**：评审反馈只修改受影响章节或原型模块，不重写全部产物。
+9. **差异修订**：已有 PRD 的评审反馈按 [`document-change.md`](document-change.md) 在原文档中标记新增、修改和删除，维护修订记录；原型同步到最新状态，不展示变更标记。
 
 ## 决策卡
 
@@ -32,10 +32,11 @@
 
 1. 根目录 `AGENTS.md`
 2. 本工作流
-3. 项目 `README.md` 和 `project.yaml`
-4. 项目 `memory/`
-5. 项目 `rag/sources.yaml` 指向的资料
-6. 当前 PRD 和原型
+3. 已有 PRD 修订时读取 `document-change.md`
+4. 项目 `README.md` 和 `project.yaml`
+5. 项目 `memory/`
+6. 项目 `rag/sources.yaml` 指向的资料
+7. 当前 PRD 和原型
 
 ## 停止条件
 
