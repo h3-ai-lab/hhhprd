@@ -1,0 +1,18 @@
+id: REQ-CC-002
+name: 引入首跟节点&首跟看板-2
+status: 参考样例
+workflow:
+  base: ../../shared/workflows/prd-2.0.md
+  overrides: workflow/overrides.md
+skills:
+  prd: ../../shared/skills/crm-prd-authoring/SKILL.md
+  prototype: ../../shared/skills/crm-prototype-authoring/SKILL.md
+  validation: ../../shared/skills/crm-artifact-validation/SKILL.md
+rag: rag/sources.yaml
+memory: memory/project-memory.md
+artifacts:
+  prd: prd/PRD.md
+  prototype: prototype/index.html
+public:
+  prd: https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html
+  prototype: https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/

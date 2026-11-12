@@ -1,0 +1,16 @@
+version: 1
+sources:
+  - id: crm-manual
+    path: ../../crm-manual
+    purpose: 现有 CRM 页面、字段、筛选和操作规则
+    priority: authoritative
+  - id: source-register
+    path: source-register.md
+    purpose: 全局结论来源索引
+    priority: high
+  - id: project-memory
+    path: ../memory
+    purpose: 已确认的业务事实、术语和跨项目决策
+    priority: high
+retrieval:
+  rules: retrieval-rules.md

@@ -8,7 +8,7 @@
 | 需求编号 | REQ-RBAC-001 |
 | 主需求类型 | 权限与审计 |
 | 来源方案 | [系统权限与线索分配需求](https://qjphu5vphyf4.jp.larksuite.com/wiki/BRUcwo6ZniAiBBkwH9xjEehVpHg) |
-| 正式 PRD | [CRM组织架构&数据权限](../PRD.md) |
+| 正式 PRD | [CRM组织架构&数据权限](../prd/PRD.md) |
 | 交互原型 | [打开完整交互原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
 | 主要范围 | 组织树、成员归属、数据授权、线索组织归属、销售中心与关联数据隔离、迁移和审计 |
 
@@ -38,7 +38,7 @@
 
 ## 当前边界
 
-本文档保留需求推导、市场研究、配置模拟和迁移依据。正式产品定义与交互原型见 [CRM组织架构&数据权限](../PRD.md)。
+本文档保留需求推导、市场研究、配置模拟和迁移依据。正式产品定义见 [CRM组织架构&数据权限](../prd/PRD.md)，交互原型位于 `../prototype/`。
 
 ## 推荐的最小闭环
 

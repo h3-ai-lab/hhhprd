@@ -1,0 +1,18 @@
+version: 1
+sources:
+  - id: requirement-analysis
+    path: ../research/REQUIREMENT-ANALYSIS.md
+    purpose: 组织树与数据权限现状分析
+    priority: high
+  - id: configuration-simulation
+    path: ../research/CONFIGURATION-SIMULATION.md
+    purpose: 角色、组织和数据范围模拟
+    priority: high
+  - id: historical-migration
+    path: ../research/HISTORICAL-MIGRATION.md
+    purpose: 存量账号和业务数据迁移
+    priority: high
+  - id: system-account-manual
+    path: ../../../../crm-manual/docs/system/A-01.md
+    purpose: 现有成员、角色和权限页面
+    priority: authoritative

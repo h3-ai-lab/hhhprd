@@ -1,0 +1,14 @@
+version: 1
+sources:
+  - id: dashboard-manual
+    path: ../../../../crm-manual/docs/dashboard/D-01.md
+    purpose: 管理看板现有页面结构和筛选
+    priority: authoritative
+  - id: dashboard-snapshot
+    path: ../../../../crm-manual/docs/images/D-01-dashboard.png
+    purpose: 管理看板页面现状
+    priority: high
+  - id: requirements
+    uri: https://qjphu5vphyf4.jp.larksuite.com/base/VmMrbK4uva0lbOsnnXSjBy9rpLK?table=tbl6ewjzW1j648cj&view=vewEIikg2C
+    purpose: 原始需求与指标口径
+    priority: high
