@@ -24,6 +24,7 @@
 - Keep exactly one complete interactive prototype URL per PRD.
 - For post-review edits, mark PRD revisions in place with `<del>[原/删除] …</del>` and `<ins>[新增/现行] …</ins>` and maintain a versioned revision record.
 - Apply the revision markers only when the user explicitly describes the change as post-review. For pre-review changes, update the current PRD content directly without revision colors, strikethrough, change labels, or a revision record; always synchronize the prototype without markers.
+- After a post-review revision has been written and verified, report exactly one completion line per updated document in the form: `文档修订 vX.X｜文档地址：<URL>｜修订内容：<one-sentence summary>`.
 - Do not write implementation code, SQL, API implementation, class/function design, or pseudocode.
 - Do not include acceptance criteria, test cases, test plans, regression checklists, or Agent self-check sections in PRDs.
 - Do not include pending-confirmation or open-question sections in PRDs. Resolve required decisions before writing the final PRD.
