@@ -1,0 +1,27 @@
+version: 1
+sources:
+  - id: original-referrals
+    uri: https://qjphu5vphyf4.jp.larksuite.com/wiki/OewiwN0BCiDituksN8dj7HDupNd
+    purpose: 原始泰国转介绍和社媒分享活动规则
+    priority: high
+  - id: updated-referrals
+    uri: https://qjphu5vphyf4.jp.larksuite.com/wiki/XB2PwcT9lie4WMkSmAUjGIvopxh
+    purpose: 较新活动规则
+    priority: high
+  - id: existing-project
+    path: ../referrals-rewards
+    purpose: 上一版完整 Referrals & Rewards 方案
+    priority: high
+  - id: lark-private-chat
+    purpose: 2026-11-10 至 2026-11-11 与 Trang Milan 的 MVP 链路、当前手工动作和首版归因诉求
+    priority: authoritative
+  - id: add-membership-screenshot
+    purpose: 现有“添加会员”弹窗的开通类型、有效期天数和开通原因字段
+    priority: authoritative
+  - id: crm-manual
+    path: ../../../crm-manual
+    purpose: 用户中心、销售中心、订单中心与添加会员的现有操作说明
+    priority: supporting
+
+retrieval:
+  rules: ../../../shared/rag/retrieval-rules.md

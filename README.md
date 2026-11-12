@@ -17,6 +17,7 @@
 |---|---|---|---|
 | CRM 整体产品体系 | 持续维护 | [整体框架](shared/memory/product-framework.md) | — |
 | Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
+| 拉新裂变mvp | 待评审 | [PRD](projects/referral-growth-mvp/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/) |
 | 引入首跟节点&首跟看板 | 待评审 | [PRD](projects/first-contact/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
 | 引入首跟节点&首跟看板-2 | 单文件参考样例｜待评审 | [PRD](projects/first-contact-concise/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
 | 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
@@ -28,6 +29,8 @@
 - 项目入口：<https://h3-ai-lab.github.io/hhhprd/>
 - 需求文档：<https://h3-ai-lab.github.io/hhhprd/prd-referrals-rewards.html>
 - 交互原型：<https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/>
+- 拉新裂变mvp PRD：<https://h3-ai-lab.github.io/hhhprd/prd-referral-growth-mvp.html>
+- 拉新裂变mvp原型：<https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/>
 - 引入首跟节点&首跟看板 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact.html>
 - 引入首跟节点&首跟看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/>
 - 引入首跟节点&首跟看板-2 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html>
