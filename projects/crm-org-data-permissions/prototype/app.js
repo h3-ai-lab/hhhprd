@@ -26,7 +26,7 @@ const roles = [
   { id: "role_super", name: "超级管理员", desc: "全部功能与全局组织数据", builtin: true, users: 1 },
   { id: "role_line", name: "业务线管理员", desc: "业务线组织、成员、销售和看板管理", builtin: false, users: 2 },
   { id: "role_region", name: "区域管理员兼销售", desc: "区域管理、线索跟进与转派", builtin: false, users: 3 },
-  { id: "role_sales", name: "销售", desc: "本人线索外呼与跟进", builtin: false, users: 28 }
+  { id: "role_sales", name: "销售", desc: "本人线索外呼、跟进及按角色配置转派", builtin: false, users: 28 }
 ];
 
 let orgs = [
@@ -355,12 +355,12 @@ function renderMembersTab() {
 function renderRolesTab() {
   const modules = [
     ["管理看板", "查看", "查看", "查看", "无"],
-    ["销售中心", "操作", "操作", "操作", "本人操作"],
+    ["销售中心", "操作", "操作", "操作", "按角色权限"],
     ["系统配置", "操作", "按范围操作", "按范围操作", "无"],
     ["成员账号", "操作", "按范围操作", "按范围操作", "无"],
     ["组织架构", "操作", "按范围操作", "按范围操作", "无"]
   ];
-  return `<div class="toolbar"><div class="muted-note">成员只能绑定一个功能角色</div><button class="btn primary" data-action="add-role">${icon("plus")}新增角色</button></div>
+  return `<div class="toolbar"><div class="muted-note">成员只能绑定一个功能角色；动作是否开放由角色权限配置，示例中的 CC 转派可开启</div><button class="btn primary" data-action="add-role">${icon("plus")}新增角色</button></div>
   <div class="table-wrap"><table>
     <thead><tr><th>角色</th><th>职责说明</th><th>成员数</th><th>操作</th></tr></thead>
     <tbody>${roles.map((role) => `<tr><td><span class="primary-text">${role.name}</span> ${role.builtin ? '<span class="tag blue">内置</span>' : ""}</td><td>${role.desc}</td><td>${role.users}</td><td><button class="btn ghost" data-action="edit-role">编辑权限</button></td></tr>`).join("")}</tbody>
@@ -933,7 +933,7 @@ function memberGrantCardsHtml() {
           <select class="select" data-grant-primary="${escapeHtml(line)}"><option value="">请选择主组织</option>${orgOptions(line, draft.primaryOrgId || "")}</select>
         </div>
         ${draft.scope === "nodes" ? `<div class="form-item full"><label>授权组织 <em>*</em></label><div>${memberOrgSelectorHtml(line)}</div></div>` : ""}
-        ${draft.scope === "self" ? '<div class="form-item full"><div class="scope-note">本人仅包含当前负责人为本人账号的线索及直接关联数据；不含公共池和其他成员线索。公共池领取由功能角色和主组织另行控制。</div></div>' : ""}
+        ${draft.scope === "self" ? '<div class="form-item full"><div class="scope-note">本人仅包含当前线索归属人为本人账号的线索及直接关联数据；不含公共池和其他成员线索。公共池领取由功能角色和主组织另行控制。</div></div>' : ""}
       </div>
     </section>`;
   }).join("");
