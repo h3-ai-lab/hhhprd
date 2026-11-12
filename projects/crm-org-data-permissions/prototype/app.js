@@ -366,13 +366,13 @@ function renderSystem() {
   </section>`;
 }
 
-function allowedU2Orgs() {
+function allowedOperatorOrgs() {
   const allowed = operatorAllowedIds();
   return orgs.filter((org) => allowed.has(org.id));
 }
 
 function renderSales() {
-  const allowed = allowedU2Orgs();
+  const allowed = allowedOperatorOrgs();
   const allowedIds = new Set(allowed.map((org) => org.id));
   if (!allowedIds.has(state.salesOrg)) state.salesOrg = currentUser().primaryOrgId;
   const selectedIds = new Set(subtreeIds(state.salesOrg));
@@ -436,7 +436,7 @@ function metricHelp(key) {
 }
 
 function renderDashboard() {
-  const allowed = allowedU2Orgs();
+  const allowed = allowedOperatorOrgs();
   if (!operatorAllowedIds().has(state.dashboardOrg)) state.dashboardOrg = currentUser().primaryOrgId;
   const data = aggregateFor(state.dashboardOrg);
   const org = orgById(state.dashboardOrg) || orgById("r1");
