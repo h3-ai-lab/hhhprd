@@ -16,7 +16,7 @@ const state = {
   logs: [
     { time: "2026-11-11 16:24:08", module: "组织架构", action: "新增", target: "越南业务线 / 1区 / A部 / A1组", actor: "lin.yue@dinoai.ai" },
     { time: "2026-11-11 16:20:31", module: "成员账号", action: "编辑", target: "林悦 · 数据授权", actor: "chen.ming@dinoai.ai" },
-    { time: "2026-11-11 15:48:12", module: "组织架构", action: "编辑", target: "越南业务线 / 1区 / B部 · 负责人", actor: "lin.yue@dinoai.ai" },
+    { time: "2026-11-11 15:48:12", module: "组织架构", action: "编辑", target: "越南业务线 / 1区 / B部", actor: "lin.yue@dinoai.ai" },
     { time: "2026-11-11 14:36:09", module: "角色权限", action: "编辑", target: "区域管理员 · 管理看板查看", actor: "admin@dinoai.ai" },
     { time: "2026-11-11 11:17:43", module: "成员账号", action: "新增", target: "周宁 · A2组", actor: "lin.yue@dinoai.ai" }
   ]
@@ -30,21 +30,21 @@ const roles = [
 ];
 
 let orgs = [
-  { id: "vn", name: "越南业务线", line: "越南", level: 1, parentId: null, leaderId: "m_line", status: "启用" },
-  { id: "r1", name: "1区", line: "越南", level: 2, parentId: "vn", leaderId: "m_region", status: "启用" },
-  { id: "a", name: "A部", line: "越南", level: 3, parentId: "r1", leaderId: "m_region", status: "启用" },
-  { id: "a1", name: "A1组", line: "越南", level: 4, parentId: "a", leaderId: "m_s1", status: "启用" },
-  { id: "a2", name: "A2组", line: "越南", level: 4, parentId: "a", leaderId: "m_s2", status: "启用" },
-  { id: "b", name: "B部", line: "越南", level: 3, parentId: "r1", leaderId: "m_region", status: "启用" },
-  { id: "b1", name: "B1组", line: "越南", level: 4, parentId: "b", leaderId: "m_s3", status: "启用" },
-  { id: "b2", name: "B2组", line: "越南", level: 4, parentId: "b", leaderId: "m_s4", status: "启用" },
-  { id: "r2", name: "2区", line: "越南", level: 2, parentId: "vn", leaderId: "m_u3", status: "启用" },
-  { id: "c", name: "C部", line: "越南", level: 3, parentId: "r2", leaderId: "m_u3", status: "启用" },
-  { id: "c1", name: "C1组", line: "越南", level: 4, parentId: "c", leaderId: "m_s5", status: "启用" },
-  { id: "th", name: "泰国业务线", line: "泰国", level: 1, parentId: null, leaderId: "m_th_line", status: "启用" },
-  { id: "th1", name: "曼谷一区", line: "泰国", level: 2, parentId: "th", leaderId: "m_th_line", status: "启用" },
-  { id: "th2", name: "曼谷二区", line: "泰国", level: 2, parentId: "th", leaderId: "m_th_line", status: "启用" },
-  { id: "thd", name: "曼谷销售部", line: "泰国", level: 3, parentId: "th1", leaderId: "m_th_line", status: "启用" }
+  { id: "vn", name: "越南业务线", line: "越南", level: 1, parentId: null, status: "启用" },
+  { id: "r1", name: "1区", line: "越南", level: 2, parentId: "vn", status: "启用" },
+  { id: "a", name: "A部", line: "越南", level: 3, parentId: "r1", status: "启用" },
+  { id: "a1", name: "A1组", line: "越南", level: 4, parentId: "a", status: "启用" },
+  { id: "a2", name: "A2组", line: "越南", level: 4, parentId: "a", status: "启用" },
+  { id: "b", name: "B部", line: "越南", level: 3, parentId: "r1", status: "启用" },
+  { id: "b1", name: "B1组", line: "越南", level: 4, parentId: "b", status: "启用" },
+  { id: "b2", name: "B2组", line: "越南", level: 4, parentId: "b", status: "启用" },
+  { id: "r2", name: "2区", line: "越南", level: 2, parentId: "vn", status: "启用" },
+  { id: "c", name: "C部", line: "越南", level: 3, parentId: "r2", status: "启用" },
+  { id: "c1", name: "C1组", line: "越南", level: 4, parentId: "c", status: "启用" },
+  { id: "th", name: "泰国业务线", line: "泰国", level: 1, parentId: null, status: "启用" },
+  { id: "th1", name: "曼谷一区", line: "泰国", level: 2, parentId: "th", status: "启用" },
+  { id: "th2", name: "曼谷二区", line: "泰国", level: 2, parentId: "th", status: "启用" },
+  { id: "thd", name: "曼谷销售部", line: "泰国", level: 3, parentId: "th1", status: "启用" }
 ];
 
 let members = [
@@ -160,17 +160,6 @@ const orgPath = (id) => {
 };
 const levelName = (level) => ({ 1: "业务线", 2: "区", 3: "部", 4: "组" })[level] || "—";
 const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
-const memberOptions = (selectedId = "", onlyWithin = "") => {
-  const allowed = new Set(subtreeIds(onlyWithin));
-  const line = orgById(onlyWithin)?.line;
-  return members
-    .filter((member) => member.status === "启用" && memberGrants(member).some((grant) => (!line || grant.line === line) && allowed.has(grant.primaryOrgId)))
-    .map((member) => {
-      const grant = memberGrants(member).find((item) => (!line || item.line === line) && allowed.has(item.primaryOrgId));
-      return `<option value="${member.id}" ${member.id === selectedId ? "selected" : ""}>${escapeHtml(member.name)} · ${escapeHtml(orgPath(grant?.primaryOrgId))}</option>`;
-    })
-    .join("");
-};
 const orgOptions = (line = "", selected = "", allowRoot = true) => {
   const allowed = operatorAllowedIds();
   return orgs
@@ -284,12 +273,11 @@ function renderOrganizationTab() {
         </div>
       </div>
       <div class="table-wrap"><table>
-        <thead><tr><th>组织名称</th><th>所属业务线</th><th>上级组织</th><th>负责人</th><th>成员数</th><th>状态</th><th>操作</th></tr></thead>
+        <thead><tr><th>组织名称</th><th>所属业务线</th><th>上级组织</th><th>成员数</th><th>状态</th><th>操作</th></tr></thead>
         <tbody>${rows.map((org) => `<tr>
           <td><span class="primary-text">${escapeHtml(org.name)}</span><div class="secondary-text">${escapeHtml(orgPath(org.id))}</div></td>
           <td><span class="tag">${escapeHtml(org.line)}</span></td>
           <td>${org.parentId ? escapeHtml(orgById(org.parentId)?.name) : "—"}</td>
-          <td>${escapeHtml(memberName(org.leaderId))}</td>
           <td>${countMembers(org.id)}</td>
           <td><span class="tag ${org.status === "启用" ? "green" : ""}">${org.status}</span></td>
           <td><button class="btn ghost" data-org-edit="${org.id}" ${editable.has(org.id) ? "" : "disabled"}>${editable.has(org.id) ? "编辑" : "只读"}</button></td>
@@ -535,7 +523,6 @@ function openOrgModal(mode, orgId = state.selectedOrg) {
         ? '<div class="form-item"><label>上级组织</label><input class="field" value="—" disabled></div>'
         : `<div class="form-item"><label>上级组织 <em>*</em></label><select class="select" name="parentId">${editing ? orgParentOptions(editing) : orgOptions(line, parent || "")}</select></div>`}
       <div class="form-item full"><label>组织名称 <em>*</em></label><input class="field" name="name" value="${escapeHtml(editing?.name || "")}" placeholder="请输入组织名称"></div>
-      <div class="form-item"><label>负责人</label><select class="select" name="leaderId"><option value="">暂不设置</option>${memberOptions(editing?.leaderId || "")}</select></div>
       <div class="form-item"><label>状态</label><select class="select" name="status"><option ${editing?.status !== "停用" ? "selected" : ""}>启用</option><option ${editing?.status === "停用" ? "selected" : ""}>停用</option></select></div>
     </div>
     <div class="form-error" id="org-error"></div>
@@ -559,13 +546,12 @@ function openOrgModal(mode, orgId = state.selectedOrg) {
       Object.assign(editing, {
         name,
         parentId: editing.level === 1 ? null : parentId,
-        leaderId: String(form.get("leaderId") || ""),
         status: String(form.get("status") || "启用"),
         level: editing.level === 1 ? 1 : parentOrg.level + 1
       });
       state.logs.unshift({ time: "2026-11-11 16:36:20", module: "组织架构", action: "编辑", target: orgPath(editing.id), actor: "lin.yue@dinoai.ai" });
     } else {
-      const org = { id: `org_${Date.now()}`, name, line: parentOrg.line, parentId, leaderId: String(form.get("leaderId") || ""), status: String(form.get("status") || "启用"), level: parentOrg.level + 1 };
+      const org = { id: `org_${Date.now()}`, name, line: parentOrg.line, parentId, status: String(form.get("status") || "启用"), level: parentOrg.level + 1 };
       orgs.push(org);
       state.selectedOrg = org.id;
       state.logs.unshift({ time: "2026-11-11 16:36:20", module: "组织架构", action: "新增", target: orgPath(org.id), actor: "lin.yue@dinoai.ai" });
@@ -582,7 +568,6 @@ function openBusinessLineModal() {
     <div class="form-section">业务线信息</div>
     <div class="form-grid">
       <div class="form-item full"><label>业务线名称 <em>*</em></label><input class="field" name="name" placeholder="请输入业务线名称"></div>
-      <div class="form-item"><label>负责人</label><select class="select" name="leaderId"><option value="">暂不设置</option>${members.filter((member) => member.status === "启用").map((member) => `<option value="${member.id}">${escapeHtml(member.name)} · ${escapeHtml(member.email)}</option>`).join("")}</select></div>
       <div class="form-item"><label>状态</label><select class="select" name="status"><option>启用</option><option>停用</option></select></div>
     </div>
     <div class="form-error" id="line-error"></div>
@@ -594,7 +579,7 @@ function openBusinessLineModal() {
     const name = String(form.get("name") || "").trim();
     if (!name) return setError("line-error", "请输入业务线名称");
     if (orgs.some((org) => org.level === 1 && org.name === name)) return setError("line-error", "业务线名称不能重复");
-    const org = { id: `line_${Date.now()}`, name, line: name, level: 1, parentId: null, leaderId: String(form.get("leaderId") || ""), status: String(form.get("status") || "启用") };
+    const org = { id: `line_${Date.now()}`, name, line: name, level: 1, parentId: null, status: String(form.get("status") || "启用") };
     orgs.push(org);
     state.selectedOrg = org.id;
     state.logs.unshift({ time: "2026-11-11 18:42:10", module: "组织架构", action: "新增业务线", target: name, actor: currentUser().email });
@@ -607,6 +592,74 @@ function openBusinessLineModal() {
 function setError(id, text) {
   const target = document.getElementById(id);
   if (target) target.textContent = text;
+}
+
+function finishMemberSave({ member, next, name, grants, changedLines, affectedLeads, leadChoice }) {
+  if (member) Object.assign(member, next);
+  else members.unshift(next);
+
+  if (affectedLeads.length) {
+    for (const lead of affectedLeads) {
+      if (leadChoice === "carry") {
+        const line = orgById(lead.orgId)?.line;
+        const targetGrant = grants.find((grant) => grant.line === line);
+        if (targetGrant) lead.orgId = targetGrant.primaryOrgId;
+      } else {
+        lead.ownerId = "";
+        lead.stage = "待领取";
+        const fallbackOwner = members.find((candidate) => candidate.id !== member?.id
+          && candidate.status === "启用"
+          && candidate.userType === "CC"
+          && memberGrants(candidate).some((grant) => grant.primaryOrgId === lead.orgId));
+        if (fallbackOwner) {
+          lead.ownerId = fallbackOwner.id;
+          lead.stage = "跟进中";
+        }
+      }
+    }
+  }
+
+  state.logs.unshift({
+    time: "2026-11-11 18:58:24",
+    module: "成员账号",
+    action: member ? "编辑" : "新增",
+    target: `${name} · ${grants.map((grant) => `${grant.line}/${orgPath(grant.primaryOrgId)}`).join("；")}`,
+    actor: currentUser().email
+  });
+  if (affectedLeads.length) {
+    state.logs.unshift({
+      time: "2026-11-11 18:58:24",
+      module: "成员账号",
+      action: leadChoice === "carry" ? "调岗带走线索" : "调岗留存线索",
+      target: `${name} · ${affectedLeads.length} 条 · ${[...changedLines].join("、")}`,
+      actor: currentUser().email
+    });
+  }
+  closeModal();
+  render();
+  showToast("成员配置已保存");
+}
+
+function openPrimaryOrgChangePrompt(saveContext) {
+  const { name, affectedLeads, changedLines } = saveContext;
+  openModal(`<div class="modal-head"><h2 id="modal-title">调整线索归属</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
+    <div class="permission-hint">${escapeHtml(name)}的${escapeHtml([...changedLines].join("、"))}业务线主组织已变更，名下 ${affectedLeads.length} 条线索需要处理。</div>
+    <div class="table-wrap"><table><thead><tr><th>线索</th><th>当前归属组织</th></tr></thead><tbody>
+      ${affectedLeads.slice(0, 6).map((lead) => `<tr><td>${escapeHtml(lead.id)} · ${escapeHtml(lead.name)}</td><td>${escapeHtml(orgPath(lead.orgId))}</td></tr>`).join("")}
+    </tbody></table></div>
+    ${affectedLeads.length > 6 ? `<div class="secondary-text" style="margin-top:8px">另有 ${affectedLeads.length - 6} 条线索</div>` : ""}
+    <div class="form-error" id="org-change-error"></div>
+    <div class="modal-actions">
+      <button class="btn" type="button" data-org-change-cancel>取消</button>
+      <button class="btn" type="button" data-org-change-choice="leave">留在原组织自动分配</button>
+      <button class="btn primary" type="button" data-org-change-choice="carry">直接带走</button>
+    </div>`);
+  el.modal.querySelector("[data-org-change-cancel]").addEventListener("click", closeModal);
+  el.modal.querySelectorAll("[data-org-change-choice]").forEach((button) => {
+    button.addEventListener("click", () => {
+      finishMemberSave({ ...saveContext, leadChoice: button.dataset.orgChangeChoice });
+    });
+  });
 }
 
 function memberGrantOrgs(line) {
@@ -819,12 +872,20 @@ function openMemberModal(memberId = "") {
       status: member?.status || "启用",
       lastLogin: member?.lastLogin || "—"
     };
-    if (member) Object.assign(member, next);
-    else members.unshift(next);
-    state.logs.unshift({ time: "2026-11-11 16:38:47", module: "成员账号", action: member ? "编辑" : "新增", target: `${name} · ${grants.map((grant) => `${grant.line}/${orgPath(grant.primaryOrgId)}`).join("；")}`, actor: currentUser().email });
-    closeModal();
-    render();
-    showToast("成员配置已保存");
+    const previousGrants = member ? memberGrants(member) : [];
+    const changedLines = new Set(grants.filter((grant) => {
+      const previous = previousGrants.find((item) => item.line === grant.line);
+      return previous && previous.primaryOrgId !== grant.primaryOrgId;
+    }).map((grant) => grant.line));
+    const affectedLeads = member
+      ? leads.filter((lead) => lead.ownerId === member.id && changedLines.has(orgById(lead.orgId)?.line))
+      : [];
+    const saveContext = { member, next, name, grants, changedLines, affectedLeads };
+    if (affectedLeads.length) {
+      openPrimaryOrgChangePrompt(saveContext);
+    } else {
+      finishMemberSave(saveContext);
+    }
   });
 }
 
