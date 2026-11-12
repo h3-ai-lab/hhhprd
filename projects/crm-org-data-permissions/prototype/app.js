@@ -9,6 +9,8 @@ const state = {
   salesTab: "pool",
   salesOrg: "r1",
   salesSearch: "",
+  salesFirstCc: "",
+  salesCurrentCc: "",
   salesStage: "",
   salesStatus: "",
   dashboardOrg: "r1",
@@ -26,7 +28,7 @@ const roles = [
   { id: "role_super", name: "超级管理员", desc: "全部功能与全局组织数据", builtin: true, users: 1 },
   { id: "role_line", name: "业务线管理员", desc: "业务线组织、成员、销售和看板管理", builtin: false, users: 2 },
   { id: "role_region", name: "区域管理员兼销售", desc: "区域管理、线索跟进与转派", builtin: false, users: 3 },
-  { id: "role_sales", name: "销售", desc: "本人线索外呼、跟进及按角色配置转派", builtin: false, users: 28 }
+  { id: "role_sales", name: "销售", desc: "本人线索外呼、跟进及已配置的动作权限", builtin: false, users: 28 }
 ];
 
 let orgs = [
@@ -70,16 +72,16 @@ members.find((member) => member.id === "m_region").grants.push({
 });
 
 const leads = [
-  { id: "LD-20261111-0181", name: "Nguyen Minh Anh", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L3", account: "anh.nguyen@mail.vn", source: "TikTok · 越南英语提升", orgId: "a1", ownerId: "m_s1", stage: "跟进中", calls: 3, connected: 2, paid: false, phone: "**** 0186", register: "2026-11-11 09:32" },
-  { id: "LD-20261111-0179", name: "Tran Bao Chau", intent: "有意向", status: "已注册", type: "正式用户", age: "青少年", course: "L2", account: "chau.tran@mail.vn", source: "Meta · 体验课", orgId: "a1", ownerId: "", stage: "待领取", calls: 0, connected: 0, paid: false, phone: "**** 0281", register: "2026-11-11 09:18" },
-  { id: "LD-20261111-0173", name: "Le Thu Ha", intent: "未填写", status: "已注册", type: "正式用户", age: "成人", course: "L1", account: "ha.le@mail.vn", source: "Messenger · 在线咨询", orgId: "a2", ownerId: "m_s2", stage: "已预约", calls: 4, connected: 3, paid: true, phone: "**** 0366", register: "2026-11-11 08:56" },
-  { id: "LD-20261111-0168", name: "Pham Gia Linh", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L4", account: "linh.pham@mail.vn", source: "离屏 · A部活动", orgId: "a1", ownerId: "", stage: "待领取", calls: 0, connected: 0, paid: false, phone: "**** 0412", register: "2026-11-11 08:21" },
-  { id: "LD-20261111-0154", name: "Vo Minh Khang", intent: "有意向", status: "已付费", type: "正式用户", age: "成人", course: "L3", account: "khang.vo@mail.vn", source: "Google · Search", orgId: "b1", ownerId: "m_s3", stage: "已付费", calls: 2, connected: 2, paid: true, phone: "**** 0573", register: "2026-11-10 21:08" },
-  { id: "LD-20261111-0148", name: "Do Ngoc Mai", intent: "无意向", status: "已注册", type: "正式用户", age: "青少年", course: "L2", account: "mai.do@mail.vn", source: "TikTok · B1组", orgId: "b1", ownerId: "m_s3", stage: "暂不跟进", calls: 2, connected: 1, paid: false, phone: "**** 0649", register: "2026-11-10 20:46" },
-  { id: "LD-20261111-0141", name: "Bui Anh Tuan", intent: "未填写", status: "已注册", type: "正式用户", age: "成人", course: "L1", account: "tuan.bui@mail.vn", source: "B2组 · WhatsApp", orgId: "b2", ownerId: "m_s4", stage: "跟进中", calls: 1, connected: 1, paid: false, phone: "**** 0731", register: "2026-11-10 19:23" },
-  { id: "LD-20261111-0138", name: "Hoang Kim Ngan", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L3", account: "ngan.hoang@mail.vn", source: "1区活动页", orgId: "r1", ownerId: "m_region", stage: "已预约", calls: 3, connected: 2, paid: true, phone: "**** 0854", register: "2026-11-10 18:59" },
-  { id: "LD-20261111-0127", name: "Dang Quoc Huy", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L4", account: "huy.dang@mail.vn", source: "B部转派", orgId: "b", ownerId: "m_region", stage: "跟进中", calls: 2, connected: 1, paid: false, phone: "**** 0962", register: "2026-11-10 17:41" },
-  { id: "LD-20261111-0119", name: "Truong My Linh", intent: "有意向", status: "已注册", type: "正式用户", age: "青少年", course: "L2", account: "linh.truong@mail.vn", source: "C1组 · 体验课", orgId: "c1", ownerId: "m_s5", stage: "跟进中", calls: 2, connected: 1, paid: false, phone: "**** 1048", register: "2026-11-10 16:18" }
+  { id: "LD-20261111-0181", name: "Nguyen Minh Anh", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L3", account: "anh.nguyen@mail.vn", source: "TikTok · 越南英语提升", orgId: "a1", ownerId: "m_s1", firstOwnerId: "m_s1", stage: "跟进中", calls: 3, connected: 2, paid: false, phone: "**** 0186", register: "2026-11-11 09:32" },
+  { id: "LD-20261111-0179", name: "Tran Bao Chau", intent: "有意向", status: "已注册", type: "正式用户", age: "青少年", course: "L2", account: "chau.tran@mail.vn", source: "Meta · 体验课", orgId: "a1", ownerId: "", firstOwnerId: "m_s1", stage: "待领取", calls: 0, connected: 0, paid: false, phone: "**** 0281", register: "2026-11-11 09:18" },
+  { id: "LD-20261111-0173", name: "Le Thu Ha", intent: "未填写", status: "已注册", type: "正式用户", age: "成人", course: "L1", account: "ha.le@mail.vn", source: "Messenger · 在线咨询", orgId: "a2", ownerId: "m_s2", firstOwnerId: "m_s1", stage: "已预约", calls: 4, connected: 3, paid: true, phone: "**** 0366", register: "2026-11-11 08:56" },
+  { id: "LD-20261111-0168", name: "Pham Gia Linh", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L4", account: "linh.pham@mail.vn", source: "离屏 · A部活动", orgId: "a1", ownerId: "", firstOwnerId: "m_s2", stage: "待领取", calls: 0, connected: 0, paid: false, phone: "**** 0412", register: "2026-11-11 08:21" },
+  { id: "LD-20261111-0154", name: "Vo Minh Khang", intent: "有意向", status: "已付费", type: "正式用户", age: "成人", course: "L3", account: "khang.vo@mail.vn", source: "Google · Search", orgId: "b1", ownerId: "m_s3", firstOwnerId: "m_s3", stage: "已付费", calls: 2, connected: 2, paid: true, phone: "**** 0573", register: "2026-11-10 21:08" },
+  { id: "LD-20261111-0148", name: "Do Ngoc Mai", intent: "无意向", status: "已注册", type: "正式用户", age: "青少年", course: "L2", account: "mai.do@mail.vn", source: "TikTok · B1组", orgId: "b1", ownerId: "m_s3", firstOwnerId: "m_s2", stage: "暂不跟进", calls: 2, connected: 1, paid: false, phone: "**** 0649", register: "2026-11-10 20:46" },
+  { id: "LD-20261111-0141", name: "Bui Anh Tuan", intent: "未填写", status: "已注册", type: "正式用户", age: "成人", course: "L1", account: "tuan.bui@mail.vn", source: "B2组 · WhatsApp", orgId: "b2", ownerId: "m_s4", firstOwnerId: "m_s3", stage: "跟进中", calls: 1, connected: 1, paid: false, phone: "**** 0731", register: "2026-11-10 19:23" },
+  { id: "LD-20261111-0138", name: "Hoang Kim Ngan", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L3", account: "ngan.hoang@mail.vn", source: "1区活动页", orgId: "r1", ownerId: "m_region", firstOwnerId: "m_s5", stage: "已预约", calls: 3, connected: 2, paid: true, phone: "**** 0854", register: "2026-11-10 18:59" },
+  { id: "LD-20261111-0127", name: "Dang Quoc Huy", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L4", account: "huy.dang@mail.vn", source: "B部转派", orgId: "b", ownerId: "m_region", firstOwnerId: "m_s4", stage: "跟进中", calls: 2, connected: 1, paid: false, phone: "**** 0962", register: "2026-11-10 17:41" },
+  { id: "LD-20261111-0119", name: "Truong My Linh", intent: "有意向", status: "已注册", type: "正式用户", age: "青少年", course: "L2", account: "linh.truong@mail.vn", source: "C1组 · 体验课", orgId: "c1", ownerId: "m_s5", firstOwnerId: "m_s3", stage: "跟进中", calls: 2, connected: 1, paid: false, phone: "**** 1048", register: "2026-11-10 16:18" }
 ];
 
 const assignmentRules = [
@@ -360,7 +362,7 @@ function renderRolesTab() {
     ["成员账号", "操作", "按范围操作", "按范围操作", "无"],
     ["组织架构", "操作", "按范围操作", "按范围操作", "无"]
   ];
-  return `<div class="toolbar"><div class="muted-note">成员只能绑定一个功能角色；动作是否开放由角色权限配置，示例中的 CC 转派可开启</div><button class="btn primary" data-action="add-role">${icon("plus")}新增角色</button></div>
+  return `<div class="toolbar"><div class="muted-note">成员只能绑定一个功能角色</div><button class="btn primary" data-action="add-role">${icon("plus")}新增角色</button></div>
   <div class="table-wrap"><table>
     <thead><tr><th>角色</th><th>职责说明</th><th>成员数</th><th>操作</th></tr></thead>
     <tbody>${roles.map((role) => `<tr><td><span class="primary-text">${role.name}</span> ${role.builtin ? '<span class="tag blue">内置</span>' : ""}</td><td>${role.desc}</td><td>${role.users}</td><td><button class="btn ghost" data-action="edit-role">编辑权限</button></td></tr>`).join("")}</tbody>
@@ -412,8 +414,13 @@ function renderSales() {
   const allowedIds = new Set(allowed.map((org) => org.id));
   if (!allowedIds.has(state.salesOrg)) state.salesOrg = currentUser().primaryOrgId;
   const selectedIds = new Set(subtreeIds(state.salesOrg));
-  const rows = leads.filter((lead) => selectedIds.has(lead.orgId)
-    && (!state.salesSearch || `${lead.name}${lead.account}${lead.id}`.toLowerCase().includes(state.salesSearch.toLowerCase()))
+  const scopedLeads = leads.filter((lead) => selectedIds.has(lead.orgId));
+  const firstCcIds = [...new Set(scopedLeads.map((lead) => lead.firstOwnerId).filter(Boolean))];
+  const currentCcIds = [...new Set(scopedLeads.map((lead) => lead.ownerId).filter(Boolean))];
+  const rows = scopedLeads.filter((lead) =>
+    (!state.salesSearch || `${lead.name}${lead.account}${lead.id}`.toLowerCase().includes(state.salesSearch.toLowerCase()))
+    && (!state.salesFirstCc || lead.firstOwnerId === state.salesFirstCc)
+    && (!state.salesCurrentCc || lead.ownerId === state.salesCurrentCc)
     && (!state.salesStage || lead.stage === state.salesStage)
     && (!state.salesStatus || lead.status === state.salesStatus)
     && (state.salesTab !== "pool" || !lead.ownerId)
@@ -430,19 +437,20 @@ function renderSales() {
       <input class="field search-field" id="sales-search" placeholder="搜索用户 ID / 姓名 / 登录账号" value="${escapeHtml(state.salesSearch)}">
       <select class="select"><option>越南</option></select>
       <select class="select" id="sales-org-filter">${allowed.map((org) => `<option value="${org.id}" ${state.salesOrg === org.id ? "selected" : ""}>${"　".repeat(Math.max(0, org.level - 2))}${escapeHtml(org.name)}</option>`).join("")}</select>
-      <select class="select"><option>全部 CC</option>${members.filter((m) => m.userType === "CC" && memberGrants(m).some((grant) => allowed.some((org) => org.id === grant.primaryOrgId))).map((m) => `<option>${m.name}</option>`).join("")}</select>
+      <select class="select" id="sales-first-cc-filter"><option value="">全部首位 CC</option>${firstCcIds.map((id) => `<option value="${id}" ${state.salesFirstCc === id ? "selected" : ""}>${escapeHtml(memberName(id))}</option>`).join("")}</select>
+      <select class="select" id="sales-current-cc-filter"><option value="">全部当前 CC</option>${currentCcIds.map((id) => `<option value="${id}" ${state.salesCurrentCc === id ? "selected" : ""}>${escapeHtml(memberName(id))}</option>`).join("")}</select>
       <select class="select" id="sales-stage-filter"><option value="">全部跟进阶段</option>${["跟进中","已预约","已付费","暂不跟进","待领取"].map((stage) => `<option ${state.salesStage === stage ? "selected" : ""}>${stage}</option>`).join("")}</select>
       <select class="select" id="sales-status-filter"><option value="">全部用户状态</option>${["已注册","已付费"].map((status) => `<option ${state.salesStatus === status ? "selected" : ""}>${status}</option>`).join("")}</select>
       <div class="actions"><button class="btn" data-action="reset-sales">重置筛选</button><button class="btn">${icon("download")}下载数据</button></div>
     </div>
     <div class="table-wrap"><table>
-      <thead><tr><th>用户 ID</th><th>学生姓名</th><th>购买意向</th><th>用户状态</th><th>用户类型</th><th>年龄段</th><th>课程等级</th><th>登录账号</th><th>渠道来源-落地页</th><th>业务线</th><th>归属组织</th><th>预约外呼</th><th>注册时间</th><th>CC</th><th>跟进阶段</th><th>操作</th></tr></thead>
+      <thead><tr><th>用户 ID</th><th>学生姓名</th><th>购买意向</th><th>用户状态</th><th>用户类型</th><th>年龄段</th><th>课程等级</th><th>登录账号</th><th>渠道来源-落地页</th><th>业务线</th><th>归属组织</th><th>预约外呼</th><th>注册时间</th><th>首位 CC</th><th>CC</th><th>跟进阶段</th><th>操作</th></tr></thead>
       <tbody>${rows.map((lead) => `<tr>
         <td><span class="primary-text">${lead.id}</span></td><td>${escapeHtml(lead.name)}</td><td><span class="tag ${lead.intent === "有意向" ? "green" : lead.intent === "无意向" ? "red" : ""}">${lead.intent}</span></td>
         <td><span class="tag ${lead.status === "已付费" ? "green" : "blue"}">${lead.status}</span></td><td>${lead.type}</td><td>${lead.age}</td><td>${lead.course}</td><td>${lead.account}</td><td>${lead.source}</td><td>越南</td>
-        <td><span class="path">${escapeHtml(orgPath(lead.orgId))}</span></td><td><span class="tag">${lead.phone}</span></td><td>${lead.register}</td><td>${lead.ownerId ? escapeHtml(memberName(lead.ownerId)) : "—"}</td><td>${lead.stage}</td>
+        <td><span class="path">${escapeHtml(orgPath(lead.orgId))}</span></td><td><span class="tag">${lead.phone}</span></td><td>${lead.register}</td><td>${lead.firstOwnerId ? escapeHtml(memberName(lead.firstOwnerId)) : "—"}</td><td>${lead.ownerId ? escapeHtml(memberName(lead.ownerId)) : "—"}</td><td>${lead.stage}</td>
         <td>${!lead.ownerId ? `<button class="btn ghost" data-lead-assign="${lead.id}">分配</button>` : `<button class="btn ghost" data-action="view-lead">${icon("phone")}外呼</button>`}</td>
-      </tr>`).join("") || `<tr><td colspan="16" class="secondary-text">当前筛选范围暂无线索</td></tr>`}</tbody>
+      </tr>`).join("") || `<tr><td colspan="17" class="secondary-text">当前筛选范围暂无线索</td></tr>`}</tbody>
     </table></div>
     <div class="muted-note" style="margin-top:10px">数据范围：${escapeHtml(operatorScopeLabel())}</div>
   </section>`;
@@ -1184,6 +1192,8 @@ el.content.addEventListener("click", (event) => {
   }
   if (action === "reset-sales") {
     state.salesSearch = "";
+    state.salesFirstCc = "";
+    state.salesCurrentCc = "";
     state.salesStage = "";
     state.salesStatus = "";
     state.salesOrg = "r1";
@@ -1219,6 +1229,14 @@ el.content.addEventListener("change", (event) => {
   if (event.target.id === "member-status-filter") state.memberFilters.status = event.target.value;
   if (event.target.id === "sales-org-filter") {
     state.salesOrg = event.target.value;
+    render();
+  }
+  if (event.target.id === "sales-first-cc-filter") {
+    state.salesFirstCc = event.target.value;
+    render();
+  }
+  if (event.target.id === "sales-current-cc-filter") {
+    state.salesCurrentCc = event.target.value;
     render();
   }
   if (event.target.id === "sales-stage-filter") {
