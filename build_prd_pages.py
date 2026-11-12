@@ -134,7 +134,7 @@ def markdown_to_html(markdown):
 
 def build_project(slug, title):
     project = ROOT / "projects" / slug
-    source = (project / "PRD.md").read_text(encoding="utf-8")
+    source = (project / "prd" / "PRD.md").read_text(encoding="utf-8")
     output = ROOT / "hhhprd-site" / f"prd-{slug}.html"
     source = re.sub(r"\A---\s*\n.*?\n---\s*\n?", "", source, count=1, flags=re.S)
     content = markdown_to_html(source)
@@ -162,7 +162,7 @@ def build_project(slug, title):
   </style>
 </head>
 <body><main>
-  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/{slug}/PRD.md">查看 Markdown 源文件</a></div>
+  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/{slug}/prd/PRD.md">查看 Markdown 源文件</a></div>
   <article>{content}</article>
 </main>
 <script type="module">

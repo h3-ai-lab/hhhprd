@@ -1,0 +1,14 @@
+version: 1
+sources:
+  - id: crm-sales-manual
+    path: ../../../../crm-manual/docs/sales/S-00.md
+    purpose: 销售中心现有字段、筛选和操作
+    priority: authoritative
+  - id: crm-lead-lifecycle
+    path: ../../../../crm-manual/docs/sales/S-04.md
+    purpose: 转派与退回公海规则
+    priority: authoritative
+  - id: crm-member-config
+    path: ../../../../crm-manual/docs/system/A-01.md
+    purpose: 角色、成员和数据权限
+    priority: high

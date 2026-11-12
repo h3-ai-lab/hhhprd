@@ -1,0 +1,14 @@
+version: 1
+sources:
+  - id: first-contact-prd
+    path: ../../first-contact/prd/PRD.md
+    purpose: 首跟节点业务规则和现有设计
+    priority: high
+  - id: crm-sales-manual
+    path: ../../../../crm-manual/docs/sales/S-00.md
+    purpose: 销售中心字段、筛选和操作
+    priority: authoritative
+  - id: crm-lead-lifecycle
+    path: ../../../../crm-manual/docs/sales/S-04.md
+    purpose: 转派与退回公海规则
+    priority: authoritative

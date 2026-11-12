@@ -1,0 +1,10 @@
+version: 1
+sources:
+  - id: primary-requirement
+    uri: https://qjphu5vphyf4.jp.larksuite.com/wiki/OewiwN0BCiDituksN8dj7HDupNd
+    purpose: 推荐奖励主需求
+    priority: high
+  - id: updated-requirement
+    uri: https://qjphu5vphyf4.jp.larksuite.com/wiki/XB2PwcT9lie4WMkSmAUjGIvopxh
+    purpose: 未被官方选中奖励补充规则
+    priority: high

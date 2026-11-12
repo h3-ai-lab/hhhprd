@@ -6,11 +6,22 @@
 |---|---|
 | 状态 | PRD 待评审 |
 | 需求编号 | REQ-TH-001 |
-| 正式 PRD | [PRD.md](PRD.md) |
+| 正式 PRD | [PRD](prd/PRD.md) |
 | 线上原型 | [打开线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
 | 本地原型 | [打开本地原型](http://127.0.0.1:4175/projects/referrals-rewards/prototype/) |
 | 原型源码 | [prototype/index.html](prototype/index.html) |
 | 主要范围 | 推荐绑定、试听/购买奖励、社媒审核、会员权益发放 |
+
+## 项目结构
+
+| 目录 | 内容 |
+|---|---|
+| `workflow/` | 推荐奖励流程扩展 |
+| `skills/` | 公共 Skill 使用说明 |
+| `rag/` | 需求文档与来源清单 |
+| `memory/` | 已确认奖励规则和术语 |
+| `prd/` | 产品需求文档 |
+| `prototype/` | 可交互原型 |
 
 ## 本地预览
 

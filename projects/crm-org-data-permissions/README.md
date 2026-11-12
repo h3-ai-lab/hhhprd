@@ -6,7 +6,7 @@
 |---|---|
 | 状态 | PRD 待评审 |
 | 需求编号 | REQ-ORG-001 |
-| 正式 PRD | [PRD.md](PRD.md) |
+| 正式 PRD | [PRD](prd/PRD.md) |
 | 交互原型 | [打开交互原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
 | 主要范围 | 四级组织树、成员授权、线索归属、跨模块数据范围、历史迁移与审计 |
 
@@ -16,6 +16,18 @@
 - [归属模型](research/ATTRIBUTION-MODEL.md)
 - [配置与数据口径模拟](research/CONFIGURATION-SIMULATION.md)
 - [历史迁移方案](research/HISTORICAL-MIGRATION.md)
+
+## 项目结构
+
+| 目录 | 内容 |
+|---|---|
+| `workflow/` | 组织权限流程扩展 |
+| `skills/` | 公共 Skill 使用说明 |
+| `rag/` | 调研资料和来源清单 |
+| `memory/` | 已确认组织与权限决策 |
+| `prd/` | 单文件 PRD |
+| `prototype/` | 专属交互原型 |
+| `research/` | 原始调研与分析资料 |
 
 ## 本地预览
 

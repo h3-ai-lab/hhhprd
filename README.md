@@ -1,18 +1,26 @@
 # Dino 产品需求与原型库
 
-> 本地主稿、飞书归档。按项目组织 PRD、原型和验收资料。
+> 本地主稿、飞书归档。按“公共能力 + 项目空间”组织需求、原型与知识资料。
 > 更新时间：2026-11-11
+
+## 先看这里
+
+- 找执行流程：`shared/workflows/`
+- 找专业能力：`shared/skills/`
+- 找原始资料来源：`shared/rag/` 或项目 `rag/`
+- 找已确认事实和决策：`shared/memory/` 或项目 `memory/`
+- 找项目交付物：`projects/<project>/prd/` 和 `projects/<project>/prototype/`
 
 ## 项目列表
 
 | 项目 | 状态 | PRD | 原型 |
 |---|---|---|---|
-| CRM 整体产品体系 | 持续维护 | [整体框架](00-crm-prd-framework.md) | — |
-| Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
-| 引入首跟节点&首跟看板 | 待评审 | [PRD](projects/first-contact/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
-| 引入首跟节点&首跟看板-2 | 单文件参考样例｜待评审 | [PRD](projects/first-contact-concise/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
-| 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
-| CRM组织架构&数据权限 | PRD 待评审 | [PRD](projects/crm-org-data-permissions/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
+| CRM 整体产品体系 | 持续维护 | [整体框架](shared/memory/product-framework.md) | — |
+| Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
+| 引入首跟节点&首跟看板 | 待评审 | [PRD](projects/first-contact/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
+| 引入首跟节点&首跟看板-2 | 单文件参考样例｜待评审 | [PRD](projects/first-contact-concise/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
+| 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
+| CRM组织架构&数据权限 | PRD 待评审 | [PRD](projects/crm-org-data-permissions/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
 | 多级业务线调研 | 归档于 REQ-ORG-001 | [调研资料](projects/crm-org-data-permissions/research/README.md) | — |
 
 ## GitHub Pages
@@ -29,16 +37,23 @@
 
 ```text
 crm-prd/
-├── 00-crm-prd-framework.md      CRM 全局框架
-├── 01-current-state-and-boundaries.md
-├── 02-source-register.md
-├── 03-open-decisions.md
-├── templates/                   通用 PRD 模板
+├── AGENTS.md
+├── shared/
+│   ├── workflows/              公共执行流程
+│   ├── skills/                 公共专业能力
+│   ├── rag/                    公共知识来源与检索规则
+│   └── memory/                 公共术语、现状和决策
 └── projects/
-    └── referrals-rewards/
-        ├── README.md            项目入口
-        ├── PRD.md               完整产品需求
-        └── prototype/           可交互原型
+    └── <project>/
+        ├── README.md           项目入口
+        ├── project.yaml        项目能力与公开地址映射
+        ├── workflow/           项目流程扩展
+        ├── skills/             项目级 Skill 扩展说明
+        ├── rag/                项目资料清单
+        ├── memory/             项目已确认事实与决策
+        ├── prd/                PRD
+        ├── prototype/          可交互原型
+        └── research/           调研归档
 ```
 
 ## 本地入口
@@ -65,27 +80,27 @@ python3 build_prd_pages.py
 ```
 
 > 📌
-> - 整体看框架：`00-crm-prd-framework.md`
-> - 查现状与边界：`01-current-state-and-boundaries.md`
-> - 查资料出处：`02-source-register.md`
-> - 看未决问题：`03-open-decisions.md`
-> - 写新需求：复制 `templates/feature-prd.md`
+> - 整体看框架：`shared/memory/product-framework.md`
+> - 查现状与边界：`shared/memory/current-state.md`
+> - 查资料出处：`shared/rag/source-register.md`
+> - 看全局决策：`shared/memory/decisions.md`
+> - 写新需求：读取 `shared/workflows/prd-2.0.md`
 
 ## 文档入口
 
 | 层级 | 文档 | 用途 |
 |---|---|---|
-| 整体 | `00-crm-prd-framework.md` | CRM 定位、边界、主链路、模块地图 |
-| 现状 | `01-current-state-and-boundaries.md` | 当前能力、在建能力、已知问题 |
-| 依据 | `02-source-register.md` | 每项结论来自哪里 |
-| 决策 | `03-open-decisions.md` | 会影响多个需求的决策记录 |
-| 项目 | `projects/<project>/` | 项目入口、PRD、原型与资料 |
-| 功能 | `projects/<project>/PRD.md` | 单个完整需求 |
+| 公共流程 | `shared/workflows/` | PRD 2.0 与发布流程 |
+| 公共能力 | `shared/skills/` | PRD、原型、校验、发布能力 |
+| 公共知识 | `shared/rag/` | 原始来源清单与检索规则 |
+| 公共记忆 | `shared/memory/` | 术语、现状与全局决策 |
+| 项目 | `projects/<project>/` | 项目上下文、PRD、原型与调研 |
+| 功能 PRD | `projects/<project>/prd/PRD.md` | 单个完整需求 |
 
 ## 一句话需求怎么变成 PRD
 
 1. **判断类型**：先按主问题归类，不按用户提到的页面或按钮机械归类。
-2. **选主提示词**：从 [`prompts/`](prompts/) 选择一个主类型；跨类型时只增加必要补充。
+2. **选主 Skill**：从 [`shared/skills/`](shared/skills/) 选择能力，再在 `crm-prd-authoring` 中选择一个主类型；跨类型时只增加必要补充。
 3. **看原话**：保留原始诉求，说明我对其业务含义的解释。
 4. **查现状**：搜索现有手册、飞书需求、会议纪要，判断已有、部分覆盖或缺失；字段、表单和列表类需求必须进入现有 CRM 对应页面，读取实际字段、筛选区位置和顺序并逐项比对。
 5. **定边界**：明确本期做什么、不做什么、依赖谁、谁会受影响。
@@ -96,21 +111,21 @@ python3 build_prd_pages.py
 10. **收敛决策**：进入正式 PRD 前完成必要决策，正文只写已明确规则。
 11. **自动发布**：完成任务后直接提交并发布，不再等待用户逐次确认；只有用户明确要求仅保留本地时才停止。
 
-### 需求类型路由
+### 需求类型参考
 
 | 类型 | 典型问题 | 提示词 |
 |---|---|---|
-| 业务流程 | 角色、步骤、交接、审批、生命周期 | [01-business-workflow.md](prompts/01-business-workflow.md) |
-| 表单、字段与列表 | 字段、表单、列、筛选、排序、导出 | [02-form-field-list.md](prompts/02-form-field-list.md) |
-| 规则、状态与数据 | 判定、状态机、唯一性、超时、退款 | [03-rule-state-data.md](prompts/03-rule-state-data.md) |
-| 权限与审计 | 角色、数据范围、敏感操作、留痕 | [04-permission-audit.md](prompts/04-permission-audit.md) |
-| 集成与自动化 | 外部事件、回调、同步、重试、补偿 | [05-integration-automation.md](prompts/05-integration-automation.md) |
-| 看板与指标 | 漏斗、KPI、维度、口径、下钻 | [06-dashboard-metrics.md](prompts/06-dashboard-metrics.md) |
-| 用户端体验 | App、C 端页面、邀请、注册、支付 | [07-user-experience-journey.md](prompts/07-user-experience-journey.md) |
+| 业务流程 | 角色、步骤、交接、审批、生命周期 | [01-business-workflow.md](shared/skills/crm-prd-authoring/references/01-business-workflow.md) |
+| 表单、字段与列表 | 字段、表单、列、筛选、排序、导出 | [02-form-field-list.md](shared/skills/crm-prd-authoring/references/02-form-field-list.md) |
+| 规则、状态与数据 | 判定、状态机、唯一性、超时、退款 | [03-rule-state-data.md](shared/skills/crm-prd-authoring/references/03-rule-state-data.md) |
+| 权限与审计 | 角色、数据范围、敏感操作、留痕 | [04-permission-audit.md](shared/skills/crm-prd-authoring/references/04-permission-audit.md) |
+| 集成与自动化 | 外部事件、回调、同步、重试、补偿 | [05-integration-automation.md](shared/skills/crm-prd-authoring/references/05-integration-automation.md) |
+| 看板与指标 | 漏斗、KPI、维度、口径、下钻 | [06-dashboard-metrics.md](shared/skills/crm-prd-authoring/references/06-dashboard-metrics.md) |
+| 用户端体验 | App、C 端页面、邀请、注册、支付 | [07-user-experience-journey.md](shared/skills/crm-prd-authoring/references/07-user-experience-journey.md) |
 
 默认只产出一份功能 PRD；跨业务域时再补领域稿，形成新版本范围时再补版本 PRD。
 
-通用规则见 [`prompts/prd-generation.md`](prompts/prd-generation.md)，类型路由见 [`prompts/README.md`](prompts/README.md)。
+通用规则见 [`shared/skills/crm-prd-authoring/SKILL.md`](shared/skills/crm-prd-authoring/SKILL.md)，类型路由见 [`shared/skills/crm-prd-authoring/references/README.md`](shared/skills/crm-prd-authoring/references/README.md)。
 
 ## 发布边界
 
