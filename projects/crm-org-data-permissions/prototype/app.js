@@ -611,7 +611,7 @@ function setError(id, text) {
 
 function memberGrantOrgs(line) {
   const allowed = operatorAllowedIds();
-  return orgs.filter((org) => org.line === line && allowed.has(org.id));
+  return orgs.filter((org) => org.line === line && org.level > 1 && allowed.has(org.id));
 }
 
 function hasSelectedAncestor(org, selectedIds) {
@@ -663,6 +663,8 @@ function memberGrantCardsHtml() {
   return lines.map((line) => {
     const draft = window.__memberGrantDraft.get(line);
     const displayName = orgs.find((org) => org.level === 1 && org.line === line)?.name || line;
+    const rootOrg = orgs.find((org) => org.level === 1 && org.line === line);
+    const canGrantLine = !!rootOrg && operatorAllowedIds().has(rootOrg.id);
     return `<section class="grant-card" data-grant-card="${escapeHtml(line)}">
       <div class="grant-card-head"><strong>${escapeHtml(displayName)}</strong><button class="btn ghost" type="button" data-remove-member-line="${escapeHtml(line)}">移除</button></div>
       <div class="form-grid">
@@ -670,7 +672,7 @@ function memberGrantCardsHtml() {
           <select class="select" data-grant-scope="${escapeHtml(line)}">
             <option value="self" ${draft.scope === "self" ? "selected" : ""}>本人</option>
             <option value="nodes" ${draft.scope === "nodes" ? "selected" : ""}>指定组织及下级</option>
-            <option value="line" ${draft.scope === "line" ? "selected" : ""}>业务线全部</option>
+            ${canGrantLine ? `<option value="line" ${draft.scope === "line" ? "selected" : ""}>业务线全部</option>` : ""}
           </select>
         </div>
         <div class="form-item"><label>主组织 <em>*</em></label>
@@ -734,6 +736,10 @@ function openMemberModal(memberId = "") {
       const draft = window.__memberGrantDraft.get(grantLine);
       draft.scope = event.target.value;
       if (draft.scope !== "nodes") draft.orgIds.clear();
+      if (draft.scope === "line") {
+        const rootOrg = orgs.find((org) => org.level === 1 && org.line === grantLine);
+        if (rootOrg) draft.primaryOrgId = rootOrg.id;
+      }
       refreshGrantEditor();
       return;
     }
@@ -793,8 +799,10 @@ function openMemberModal(memberId = "") {
       if (!grant.primaryOrgId) return setError("member-error", `${grant.line}业务线请选择主组织`);
       if (!allowed.has(grant.primaryOrgId)) return setError("member-error", "主组织超出当前操作人的数据权限");
       if (orgById(grant.primaryOrgId)?.line !== grant.line) return setError("member-error", "主组织必须属于对应业务线");
+      const rootOrg = orgs.find((org) => org.level === 1 && org.line === grant.line);
+      if (grant.scope === "line" && (!rootOrg || !allowed.has(rootOrg.id))) return setError("member-error", "当前操作人无权授予该业务线全部数据");
       if (grant.scope === "nodes" && !grant.orgIds.length) return setError("member-error", `${grant.line}业务线请至少选择一个授权组织`);
-      if (grant.scope === "nodes" && grant.orgIds.some((id) => !allowed.has(id))) return setError("member-error", "授权组织超出当前操作人的数据权限");
+      if (grant.scope === "nodes" && grant.orgIds.some((id) => orgById(id)?.level === 1 || !allowed.has(id))) return setError("member-error", "授权组织超出当前操作人的数据权限");
     }
     const primary = grants[0];
     const next = {
