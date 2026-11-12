@@ -1,8 +1,8 @@
 const state = {
-  currentUserId: "m_region",
+  currentUserId: "m_super",
   route: "system",
   systemTab: "organization",
-  selectedOrg: "r1",
+  selectedOrg: "vn",
   selectedOrgSearch: "",
   memberFilters: { search: "", line: "", orgId: "", roleId: "", status: "" },
   memberSearchDraft: "",
@@ -40,7 +40,11 @@ let orgs = [
   { id: "b2", name: "B2组", line: "越南", level: 4, parentId: "b", leaderId: "m_s4", status: "启用" },
   { id: "r2", name: "2区", line: "越南", level: 2, parentId: "vn", leaderId: "m_u3", status: "启用" },
   { id: "c", name: "C部", line: "越南", level: 3, parentId: "r2", leaderId: "m_u3", status: "启用" },
-  { id: "c1", name: "C1组", line: "越南", level: 4, parentId: "c", leaderId: "m_s5", status: "启用" }
+  { id: "c1", name: "C1组", line: "越南", level: 4, parentId: "c", leaderId: "m_s5", status: "启用" },
+  { id: "th", name: "泰国业务线", line: "泰国", level: 1, parentId: null, leaderId: "m_th_line", status: "启用" },
+  { id: "th1", name: "曼谷一区", line: "泰国", level: 2, parentId: "th", leaderId: "m_th_line", status: "启用" },
+  { id: "th2", name: "曼谷二区", line: "泰国", level: 2, parentId: "th", leaderId: "m_th_line", status: "启用" },
+  { id: "thd", name: "曼谷销售部", line: "泰国", level: 3, parentId: "th1", leaderId: "m_th_line", status: "启用" }
 ];
 
 let members = [
@@ -52,10 +56,17 @@ let members = [
   { id: "m_s2", name: "周宁", email: "zhou.ning@dinoai.ai", userType: "CC", roleId: "role_sales", line: "越南", scope: "self", orgIds: [], primaryOrgId: "a2", status: "启用", lastLogin: "2026-11-11 16:02:18" },
   { id: "m_s3", name: "何安", email: "he.an@dinoai.ai", userType: "CC", roleId: "role_sales", line: "越南", scope: "self", orgIds: [], primaryOrgId: "b1", status: "启用", lastLogin: "2026-11-11 15:59:06" },
   { id: "m_s4", name: "陆晨", email: "lu.chen@dinoai.ai", userType: "CC", roleId: "role_sales", line: "越南", scope: "self", orgIds: [], primaryOrgId: "b2", status: "启用", lastLogin: "2026-11-11 15:50:33" },
-  { id: "m_s5", name: "沈青", email: "shen.qing@dinoai.ai", userType: "CC", roleId: "role_sales", line: "越南", scope: "self", orgIds: [], primaryOrgId: "c1", status: "启用", lastLogin: "2026-11-11 15:38:44" }
+  { id: "m_s5", name: "沈青", email: "shen.qing@dinoai.ai", userType: "CC", roleId: "role_sales", line: "越南", scope: "self", orgIds: [], primaryOrgId: "c1", status: "启用", lastLogin: "2026-11-11 15:38:44" },
+  { id: "m_th_line", name: "Narin", email: "narin@dinoai.ai", userType: "其他", roleId: "role_line", line: "泰国", scope: "line", orgIds: [], primaryOrgId: "th", status: "启用", lastLogin: "2026-11-11 15:22:08" }
 ];
 members.forEach((member) => {
   member.grants = [{ line: member.line, scope: member.scope, orgIds: [...member.orgIds], primaryOrgId: member.primaryOrgId }];
+});
+members.find((member) => member.id === "m_region").grants.push({
+  line: "泰国",
+  scope: "nodes",
+  orgIds: ["th1"],
+  primaryOrgId: "th1"
 });
 
 const leads = [
@@ -269,7 +280,7 @@ function renderOrganizationTab() {
         <div class="toolbar-group">
           <button class="btn" data-action="add-business-line" ${canAddLine ? "" : "disabled"} title="${canAddLine ? "" : "仅超级管理员可新增业务线"}">${icon("plus")}新增业务线</button>
           <button class="btn" data-action="edit-org" ${selectedEditable ? "" : "disabled"}>${icon("edit")}编辑</button>
-          <button class="btn primary" data-action="add-org" ${selectedEditable && selected?.level < 4 ? "" : "disabled"}>${icon("plus")}新增下级</button>
+          <button class="btn primary" data-action="add-org" ${selectedEditable && selected?.level < 4 ? "" : "disabled"}>${icon("plus")}新增组织</button>
         </div>
       </div>
       <div class="table-wrap"><table>
