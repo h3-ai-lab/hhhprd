@@ -22,7 +22,8 @@
 - Do not ask the user to choose a language. Preserve official product names, field identifiers, codes, and external system names when translation would make them inaccurate.
 - Any new feature, page, action, field group, or data list must use `shared/skills/crm-prd-authoring/references/04-permission-audit.md` and output complete RBAC permission data.
 - Keep exactly one complete interactive prototype URL per PRD.
-- Mark PRD revisions in place with `<del>[原/删除] …</del>` and `<ins>[新增/现行] …</ins>`, maintain a versioned revision record, and synchronize the prototype without displaying revision markers.
+- For post-review edits, mark PRD revisions in place with `<del>[原/删除] …</del>` and `<ins>[新增/现行] …</ins>` and maintain a versioned revision record.
+- Apply the revision markers only when the user explicitly describes the change as post-review. For pre-review changes, update the current PRD content directly without revision colors, strikethrough, change labels, or a revision record; always synchronize the prototype without markers.
 - Do not write implementation code, SQL, API implementation, class/function design, or pseudocode.
 - Do not include acceptance criteria, test cases, test plans, regression checklists, or Agent self-check sections in PRDs.
 - Do not include pending-confirmation or open-question sections in PRDs. Resolve required decisions before writing the final PRD.
