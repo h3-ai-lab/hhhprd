@@ -28,6 +28,13 @@ description: Build production-looking CRM HTML prototypes that show only post-la
 
 说明性内容留在 PRD。原型打开后应直接进入用户实际工作的默认页面。
 
+## PRD 修订同步
+
+- 已有 PRD 发生新增、修改或删除后，同步检查并修订对应原型。
+- 原型只展示最新产品状态，不显示红色、删除线、`[新增]`、`[删除]`、修订编号或变更说明。
+- PRD 删除功能时，同步删除原型中的入口、控件、事件处理和权限呈现，不能只修改 PRD。
+- 原型变更不增加额外标注；变更差异由 PRD 正文和修订记录承担。
+
 ## 页面与交互
 
 - 首屏优先展示实际列表、表单或工作台，不先展示介绍页面。
@@ -61,4 +68,5 @@ description: Build production-looking CRM HTML prototypes that show only post-la
 - 页面是否可以从标题直接看出是上线后的真实功能。
 - 首屏是否直接进入实际工作，而不是先看介绍。
 - 原型指标是否与 PRD 逐项同名、同公式、同范围和同去重口径。
+- 原型是否已同步最新 PRD，且没有显示任何文档修订标记。
 - 不在原型中输出本检查清单。

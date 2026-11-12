@@ -24,6 +24,7 @@ jobs:
       - name: Validate project
         run: |
           test -f shared/workflows/prd-2.0.md
+          test -f shared/workflows/document-change.md
           test -f shared/skills/crm-prd-authoring/SKILL.md
           test -f shared/skills/crm-prototype-authoring/SKILL.md
           test -f shared/skills/crm-artifact-validation/scripts/validate.py
