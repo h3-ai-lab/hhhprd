@@ -16,6 +16,12 @@ PROJECTS = {
 
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
 CODE_RE = re.compile(r"`([^`]+)`")
+CHANGE_TAGS = {
+    "<ins>": "\ue000",
+    "</ins>": "\ue001",
+    "<del>": "\ue002",
+    "</del>": "\ue003",
+}
 
 
 def linkify(text):
@@ -44,9 +50,14 @@ def linkify(text):
 
 
 def inline(text):
+    for source, placeholder in CHANGE_TAGS.items():
+        text = text.replace(source, placeholder)
     text = linkify(text)
     text = BOLD_RE.sub(r"<strong>\1</strong>", text)
     text = CODE_RE.sub(r"<code>\1</code>", text)
+    replacements = {"\ue000": "<ins>", "\ue001": "</ins>", "\ue002": "<del>", "\ue003": "</del>"}
+    for placeholder, rendered in replacements.items():
+        text = text.replace(placeholder, rendered)
     return text
 
 
@@ -136,6 +147,12 @@ def build_project(slug, title):
     project = ROOT / "projects" / slug
     source = (project / "prd" / "PRD.md").read_text(encoding="utf-8")
     output = ROOT / "hhhprd-site" / f"prd-{slug}.html"
+    change_css = (
+        "\n    ins{color:#d93025;text-decoration:none;font-weight:600}"
+        "\n    del{color:#6b7280;text-decoration-thickness:1.5px}"
+        if "<ins>" in source or "<del>" in source
+        else ""
+    )
     source = re.sub(r"\A---\s*\n.*?\n---\s*\n?", "", source, count=1, flags=re.S)
     content = markdown_to_html(source)
     page = f"""<!doctype html>
@@ -153,7 +170,7 @@ def build_project(slug, title):
     h2{{font-size:28px;margin:0 0 20px}}h3{{font-size:21px;margin:30px 0 10px}}h4{{font-size:17px;margin:22px 0 8px}}
     p{{margin:10px 0}}a{{color:var(--blue)}}table{{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}}
     th,td{{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}}th{{background:#f7f9fc}}
-    blockquote{{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}}
+    blockquote{{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}}{change_css}
     code{{background:#f1f4f8;padding:1px 5px;border-radius:4px}}pre code{{background:transparent;padding:0;border-radius:0;color:inherit}}pre{{overflow:auto;background:#101828;
     color:#eef2f7;padding:16px;border-radius:8px}}.mermaid{{background:#fff;border:1px solid var(--line);
     border-radius:8px;padding:16px;overflow:auto}}.top{{display:flex;gap:14px;margin-bottom:18px}}
