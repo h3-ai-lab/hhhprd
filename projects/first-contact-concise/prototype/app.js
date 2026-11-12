@@ -339,10 +339,10 @@ function statsFor(rows, cohortRows = rows) {
 function statCards(rows, cohortRows) {
   const stats = statsFor(rows, cohortRows);
   return `<div class="stat-grid">
-    <div class="stat-card" role="button" tabindex="0" data-monitor-stat="all"><span class="stat-label">首跟承接量</span><strong>${stats.covered}</strong><small>筛选线索 ${stats.total}</small>${metricHelp("assigned")}</div>
-    <div class="stat-card is-success" role="button" tabindex="0" data-monitor-stat="all"><span class="stat-label">首跟覆盖率</span><strong>${formatPercent(stats.covered, stats.total)}</strong><small>${stats.covered} / ${stats.total}</small>${metricHelp("coverage")}</div>
-    <div class="stat-card is-warning" role="button" tabindex="0" data-monitor-stat="outbound"><span class="stat-label">外呼次数</span><strong>${stats.outboundCalls}</strong><small>首次外呼线索 ${stats.outbound}</small>${metricHelp("outboundTotal")}</div>
-    <div class="stat-card is-purple" role="button" tabindex="0" data-monitor-stat="connected"><span class="stat-label">接通次数</span><strong>${stats.connectedCalls}</strong><small>${formatPercent(stats.connectedCalls, stats.outboundCalls)} 外呼接通率</small>${metricHelp("connectedTotal")}</div>
+    <div class="stat-card"><span class="stat-label">首跟承接量</span><strong>${stats.covered}</strong><small>筛选线索 ${stats.total}</small>${metricHelp("assigned")}</div>
+    <div class="stat-card is-success"><span class="stat-label">首跟覆盖率</span><strong>${formatPercent(stats.covered, stats.total)}</strong><small>${stats.covered} / ${stats.total}</small>${metricHelp("coverage")}</div>
+    <div class="stat-card is-warning"><span class="stat-label">外呼次数</span><strong>${stats.outboundCalls}</strong><small>首次外呼线索 ${stats.outbound}</small>${metricHelp("outboundTotal")}</div>
+    <div class="stat-card is-purple"><span class="stat-label">接通次数</span><strong>${stats.connectedCalls}</strong><small>${formatPercent(stats.connectedCalls, stats.outboundCalls)} 外呼接通率</small>${metricHelp("connectedTotal")}</div>
   </div>`;
 }
 
@@ -578,8 +578,8 @@ function renderMonitor() {
         <div class="card-head"><div><h3>首跟 CC 生产力</h3><p>承接、首次外呼和首次接通按 Lead ID 去重</p></div></div>
         <div class="table-wrap"><table class="agent-table">
           <thead><tr><th>首跟 CC</th><th>首跟承接量 ${metricHelp("assigned")}</th><th>首次外呼线索 ${metricHelp("outboundLeads")}</th><th>首次外呼覆盖率 ${metricHelp("outboundCoverage")}</th><th>首次接通线索 ${metricHelp("connectedLeads")}</th><th>首次接通覆盖率 ${metricHelp("connectedCoverage")}</th><th>外呼次数 ${metricHelp("outboundTotal")}</th><th>接通次数 ${metricHelp("connectedTotal")}</th></tr></thead>
-          <tbody>${productivity.map((row) => `<tr data-agent="${esc(row.name)}">
-            <td><div class="user-cell"><span class="user-avatar">${initials(row.name)}</span><span class="user-copy"><strong>${esc(row.name)}</strong><span>点击查看明细</span></span></div></td>
+          <tbody>${productivity.map((row) => `<tr>
+            <td><div class="user-cell"><span class="user-avatar">${initials(row.name)}</span><span class="user-copy"><strong>${esc(row.name)}</strong></span></div></td>
             <td><strong>${row.assigned}</strong></td><td>${row.outbound}</td>
             <td class="progress-cell"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:${row.outboundRate}%"></div></div><b>${formatPercent(row.outbound, row.assigned)}</b></div></td>
             <td>${row.connected}</td>
@@ -849,33 +849,10 @@ document.addEventListener("click", (event) => {
     render();
     return;
   }
-  const monitorStat = event.target.closest("[data-monitor-stat]");
-  if (monitorStat) {
-    state.tab = "following";
-    state.page = 1;
-    if (monitorStat.dataset.monitorStat === "outbound") state.filters.outbound = "has";
-    else if (monitorStat.dataset.monitorStat === "connected") state.filters.connected = "yes";
-    else {
-      state.filters.outbound = "all";
-      state.filters.connected = "all";
-    }
-    navigate("leads");
-    notify("已下钻到同口径线索明细");
-    return;
-  }
   const leadRow = event.target.closest("[data-lead]");
   if (leadRow) {
     const lead = LEADS.find((item) => item.id === leadRow.dataset.lead);
     if (lead) openDrawer(lead);
-    return;
-  }
-  const agent = event.target.closest("[data-agent]");
-  if (agent) {
-    state.filters = { ...state.filters, firstCc: agent.dataset.agent, query: "" };
-    state.tab = "following";
-    state.page = 1;
-    navigate("leads");
-    notify(`已下钻到首跟 CC：${agent.dataset.agent}`);
     return;
   }
   const page = event.target.closest("[data-page]");
