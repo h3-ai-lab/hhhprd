@@ -124,6 +124,7 @@ th { background: #f7f9fc; color: #606b7a; font-size: 12px; font-weight: 600; tex
 td { padding: 12px; border-bottom: 1px solid #eef1f5; vertical-align: middle; }
 tbody tr:hover { background: #fafcff; }
 tbody tr:last-child td { border-bottom: 0; }
+.row-actions { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; min-width: 230px; }
 .primary-text { font-weight: 600; color: #273142; }
 .secondary-text { color: var(--muted); font-size: 12px; }
 .path { color: #5d6878; font-size: 12px; max-width: 320px; }
@@ -183,6 +184,16 @@ tbody tr:last-child td { border-bottom: 0; }
   margin: -3px 0 14px; padding: 8px 10px; border-radius: 6px; background: #f5f8fc;
   color: #667085; font-size: 12px; line-height: 1.55;
 }
+.impact-summary {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px;
+  padding: 12px; margin-bottom: 16px; border: 1px solid #f0dba7; border-radius: 8px; background: #fffaf0;
+}
+.impact-card { min-width: 0; padding: 2px 8px; border-right: 1px solid #f1e3c3; }
+.impact-card:last-child { border-right: 0; }
+.impact-card span, .impact-card small { display: block; color: #8b6b2e; font-size: 11px; }
+.impact-card strong { display: block; margin: 3px 0 1px; color: #5f430a; font-size: 22px; line-height: 1.2; }
+.impact-reason { min-height: 88px; width: 100%; padding: 9px 11px; resize: vertical; }
+.scope-note { padding: 8px 10px; border-radius: 6px; background: #f5f8fc; color: #667085; font-size: 12px; line-height: 1.55; }
 .business-line-checks { display: flex; gap: 8px; flex-wrap: wrap; }
 .business-line-check {
   min-height: 34px; display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px;

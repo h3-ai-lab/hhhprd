@@ -82,6 +82,16 @@ const leads = [
   { id: "LD-20261111-0119", name: "Truong My Linh", intent: "有意向", status: "已注册", type: "正式用户", age: "青少年", course: "L2", account: "linh.truong@mail.vn", source: "C1组 · 体验课", orgId: "c1", ownerId: "m_s5", stage: "跟进中", calls: 2, connected: 1, paid: false, phone: "**** 1048", register: "2026-11-10 16:18" }
 ];
 
+const assignmentRules = [
+  { id: "rule_a1_weekday", name: "A1组工作日常规分配", line: "越南", orgId: "a1", status: "启用" },
+  { id: "rule_a2_weekday", name: "A2组工作日常规分配", line: "越南", orgId: "a2", status: "启用" },
+  { id: "rule_a_weekend", name: "A部周末值班分配", line: "越南", orgId: "a", status: "启用" },
+  { id: "rule_b1_weekday", name: "B1组工作日常规分配", line: "越南", orgId: "b1", status: "启用" },
+  { id: "rule_b2_weekday", name: "B2组工作日常规分配", line: "越南", orgId: "b2", status: "启用" },
+  { id: "rule_c1_weekday", name: "C1组工作日常规分配", line: "越南", orgId: "c1", status: "启用" },
+  { id: "rule_thd_weekday", name: "曼谷销售部常规分配", line: "泰国", orgId: "thd", status: "启用" }
+];
+
 const el = {
   content: document.getElementById("content"),
   sidebar: document.getElementById("sidebar"),
@@ -107,6 +117,25 @@ const descendantsOf = (id) => {
   return output;
 };
 const subtreeIds = (id) => id ? [id, ...descendantsOf(id).map((org) => org.id)] : [];
+const orgImpact = (id) => {
+  const affectedIds = new Set(subtreeIds(id));
+  return {
+    members: members.filter((member) => memberGrants(member).some((grant) =>
+      affectedIds.has(grant.primaryOrgId) || (grant.orgIds || []).some((orgId) => affectedIds.has(orgId))
+    )).length,
+    leads: leads.filter((lead) => affectedIds.has(lead.orgId)).length,
+    rules: assignmentRules.filter((rule) => rule.status === "启用" && affectedIds.has(rule.orgId)).length,
+    organizations: affectedIds.size
+  };
+};
+const updateOrgLevels = (rootId) => {
+  const root = orgById(rootId);
+  if (!root) return;
+  root.level = root.parentId ? (orgById(root.parentId)?.level || 0) + 1 : 1;
+  descendantsOf(rootId).forEach((org) => {
+    org.level = (orgById(org.parentId)?.level || 0) + 1;
+  });
+};
 const currentUser = () => members.find((member) => member.id === state.currentUserId) || members[0];
 const memberGrants = (member) => member?.grants || [{ line: member?.line, scope: member?.scope, orgIds: [...(member?.orgIds || [])], primaryOrgId: member?.primaryOrgId }];
 const operatorAllowedIds = () => {
@@ -167,16 +196,6 @@ const orgOptions = (line = "", selected = "", allowRoot = true) => {
   .map((org) => `<option value="${org.id}" ${org.id === selected ? "selected" : ""}>${"　".repeat(org.level - 1)}${escapeHtml(org.name)} · ${levelName(org.level)}</option>`)
   .join("");
 };
-
-function orgParentOptions(editing) {
-  const allowed = operatorAllowedIds();
-  const descendantIds = new Set(editing ? descendantsOf(editing.id).map((org) => org.id) : []);
-  return orgs
-    .filter((org) => org.line === editing?.line && org.level < 4 && org.id !== editing?.id && !descendantIds.has(org.id)
-      && (allowed.has(org.id) || org.id === editing?.parentId))
-    .map((org) => `<option value="${org.id}" ${org.id === editing?.parentId ? "selected" : ""}>${"　".repeat(org.level - 1)}${escapeHtml(org.name)} · ${levelName(org.level)}</option>`)
-    .join("");
-}
 
 function countMembers(orgId) {
   return members.filter((member) => member.status === "启用" && memberGrants(member).some((grant) => grant.primaryOrgId === orgId)).length;
@@ -280,7 +299,13 @@ function renderOrganizationTab() {
           <td>${org.parentId ? escapeHtml(orgById(org.parentId)?.name) : "—"}</td>
           <td>${countMembers(org.id)}</td>
           <td><span class="tag ${org.status === "启用" ? "green" : ""}">${org.status}</span></td>
-          <td><button class="btn ghost" data-org-edit="${org.id}" ${editable.has(org.id) ? "" : "disabled"}>${editable.has(org.id) ? "编辑" : "只读"}</button></td>
+          <td><div class="row-actions">
+            ${editable.has(org.id) ? `<button class="btn ghost" data-org-edit="${org.id}">编辑</button>` : '<span class="secondary-text">只读</span>'}
+            ${editable.has(org.id) && org.level > 1 ? `<button class="btn ghost" data-org-move="${org.id}">更换上级</button><button class="btn ghost" data-org-merge="${org.id}">合并</button>` : ""}
+            ${editable.has(org.id) ? (org.status === "启用"
+              ? `<button class="btn ghost danger" data-org-disable="${org.id}">停用</button>`
+              : `<button class="btn ghost" data-org-enable="${org.id}">启用</button>`) : ""}
+          </div></td>
         </tr>`).join("")}</tbody>
       </table></div>
     </section>
@@ -358,8 +383,8 @@ function renderLogsTab() {
     <input class="field" type="date" value="2026-11-11">
     <div class="actions"><button class="btn">重置</button><button class="btn primary">${icon("search")}搜索</button></div>
   </div>
-  <div class="table-wrap"><table><thead><tr><th>模块</th><th>操作行为</th><th>操作对象</th><th>操作人</th><th>操作时间</th></tr></thead>
-    <tbody>${logs.map((log) => `<tr><td>${log.module}</td><td><span class="tag ${log.action === "新增" ? "green" : "blue"}">${log.action}</span></td><td>${escapeHtml(log.target)}</td><td>${escapeHtml(log.actor)}</td><td>${log.time}</td></tr>`).join("")}</tbody>
+  <div class="table-wrap"><table><thead><tr><th>模块</th><th>操作行为</th><th>操作对象</th><th>变更摘要</th><th>操作人</th><th>操作时间</th></tr></thead>
+    <tbody>${logs.map((log) => `<tr><td>${log.module}</td><td><span class="tag ${log.action === "新增" ? "green" : "blue"}">${log.action}</span></td><td>${escapeHtml(log.target)}</td><td>${escapeHtml(log.detail || "—")}</td><td>${escapeHtml(log.actor)}</td><td>${log.time}</td></tr>`).join("")}</tbody>
   </table></div>`;
 }
 
@@ -516,14 +541,19 @@ function openOrgModal(mode, orgId = state.selectedOrg) {
   const title = editing ? "编辑组织" : nextLevel === 2 ? "新增区" : nextLevel === 3 ? "新增部" : "新增组";
   openModal(`<form id="org-form">
     <div class="modal-head"><h2 id="modal-title">${title}</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
+    ${editing ? '<div class="permission-hint">更换上级、合并和停用请使用组织列表中的独立操作入口，系统会在保存前展示影响并要求填写原因。</div>' : ""}
     <div class="form-section">组织信息</div>
     <div class="form-grid">
       <div class="form-item"><label>业务线</label><input class="field" value="${escapeHtml(line || "—")}" disabled></div>
       ${editing?.level === 1
         ? '<div class="form-item"><label>上级组织</label><input class="field" value="—" disabled></div>'
-        : `<div class="form-item"><label>上级组织 <em>*</em></label><select class="select" name="parentId">${editing ? orgParentOptions(editing) : orgOptions(line, parent || "")}</select></div>`}
+        : editing
+          ? `<div class="form-item"><label>上级组织</label><input class="field" value="${escapeHtml(orgById(editing.parentId)?.name || "—")}" disabled></div>`
+          : `<div class="form-item"><label>上级组织 <em>*</em></label><select class="select" name="parentId">${orgOptions(line, parent || "")}</select></div>`}
       <div class="form-item full"><label>组织名称 <em>*</em></label><input class="field" name="name" value="${escapeHtml(editing?.name || "")}" placeholder="请输入组织名称"></div>
-      <div class="form-item"><label>状态</label><select class="select" name="status"><option ${editing?.status !== "停用" ? "selected" : ""}>启用</option><option ${editing?.status === "停用" ? "selected" : ""}>停用</option></select></div>
+      <div class="form-item"><label>状态</label>${editing
+        ? `<input class="field" value="${editing.status}" disabled>`
+        : '<select class="select" name="status"><option>启用</option><option>停用</option></select>'}</div>
     </div>
     <div class="form-error" id="org-error"></div>
     <div class="modal-actions"><button class="btn" type="button" data-action="close-modal">取消</button><button class="btn primary" type="submit">保存</button></div>
@@ -532,7 +562,7 @@ function openOrgModal(mode, orgId = state.selectedOrg) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const name = String(form.get("name") || "").trim();
-    const parentId = String(form.get("parentId") || "");
+    const parentId = editing ? editing.parentId : String(form.get("parentId") || "");
     const parentOrg = orgById(parentId);
     if (!name) return setError("org-error", "请输入组织名称");
     if (editing?.level !== 1) {
@@ -546,7 +576,7 @@ function openOrgModal(mode, orgId = state.selectedOrg) {
       Object.assign(editing, {
         name,
         parentId: editing.level === 1 ? null : parentId,
-        status: String(form.get("status") || "启用"),
+        status: editing.status,
         level: editing.level === 1 ? 1 : parentOrg.level + 1
       });
       state.logs.unshift({ time: "2026-11-11 16:36:20", module: "组织架构", action: "编辑", target: orgPath(editing.id), actor: "lin.yue@dinoai.ai" });
@@ -592,6 +622,177 @@ function openBusinessLineModal() {
 function setError(id, text) {
   const target = document.getElementById(id);
   if (target) target.textContent = text;
+}
+
+function organizationChangeTargetOptions(org, mode) {
+  const allowed = operatorAllowedIds();
+  const affectedIds = new Set(subtreeIds(org.id));
+  const descendantDepth = Math.max(0, ...descendantsOf(org.id).map((node) => node.level - org.level));
+  return orgs
+    .filter((candidate) => candidate.id !== org.id
+      && candidate.line === org.line
+      && candidate.status === "启用"
+      && !affectedIds.has(candidate.id)
+      && allowed.has(candidate.id)
+      && (mode !== "move" || candidate.id !== org.parentId)
+      && (mode !== "move" || candidate.level + descendantDepth + 1 <= 4))
+    .map((candidate) => `<option value="${candidate.id}">${"　".repeat(candidate.level - 1)}${escapeHtml(candidate.name)} · ${levelName(candidate.level)}</option>`)
+    .join("");
+}
+
+function impactSummaryHtml(impact) {
+  return `<div class="impact-summary">
+    <div class="impact-card"><span>受影响成员</span><strong>${impact.members}</strong><small>按成员去重</small></div>
+    <div class="impact-card"><span>受影响线索</span><strong>${impact.leads}</strong><small>当前归属在节点子树内</small></div>
+    <div class="impact-card"><span>受影响分配规则</span><strong>${impact.rules}</strong><small>状态为启用</small></div>
+    <div class="impact-card"><span>涉及组织节点</span><strong>${impact.organizations}</strong><small>含当前节点及下级</small></div>
+  </div>`;
+}
+
+function openOrganizationImpactModal(mode, orgId) {
+  const org = orgById(orgId);
+  if (!org || !operatorAllowedIds().has(org.id)) return;
+  const impact = orgImpact(org.id);
+  const configs = {
+    move: {
+      title: "更换上级",
+      hint: "保存后，该节点及全部下级会进入新的组织路径，相关成员的数据范围和看板范围随之调整。",
+      confirm: "确认更换",
+      action: "更换上级"
+    },
+    merge: {
+      title: "合并组织",
+      hint: "合并后，当前成员、线索和分配规则按目标组织处理；已发生业务的组织快照不回写。",
+      confirm: "确认合并",
+      action: "合并"
+    },
+    disable: {
+      title: "停用组织",
+      hint: "停用后停止新增成员、授权和线索分配，历史数据仍可查看。",
+      confirm: "确认停用",
+      action: "停用"
+    }
+  };
+  const config = configs[mode];
+  const options = mode === "disable" ? "" : organizationChangeTargetOptions(org, mode);
+  openModal(`<form id="org-impact-form">
+    <div class="modal-head"><h2 id="modal-title">${config.title}</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
+    <div class="permission-hint">操作对象：${escapeHtml(orgPath(org.id))}。${config.hint}</div>
+    ${impactSummaryHtml(impact)}
+    ${mode === "move" ? `<div class="form-section">调整后归属</div><div class="form-item full">
+      <label>新的上级组织 <em>*</em></label>
+      <select class="select" name="targetOrgId"><option value="">请选择新的上级组织</option>${options}</select>
+    </div>` : ""}
+    ${mode === "merge" ? `<div class="form-section">合并目标</div><div class="form-item full">
+      <label>合并到 <em>*</em></label>
+      <select class="select" name="targetOrgId"><option value="">请选择目标组织</option>${options}</select>
+    </div>` : ""}
+    <div class="form-item full" style="margin-top:14px">
+      <label>操作原因 <em>*</em></label>
+      <textarea class="field impact-reason" name="reason" placeholder="请填写本次组织调整的原因"></textarea>
+    </div>
+    <div class="form-error" id="org-impact-error"></div>
+    <div class="modal-actions"><button class="btn" type="button" data-action="close-modal">取消</button><button class="btn primary" type="submit">${config.confirm}</button></div>
+  </form>`);
+
+  document.getElementById("org-impact-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const reason = String(form.get("reason") || "").trim();
+    const targetId = String(form.get("targetOrgId") || "");
+    if (!reason) return setError("org-impact-error", "请填写操作原因");
+    if (mode !== "disable" && !targetId) return setError("org-impact-error", mode === "move" ? "请选择新的上级组织" : "请选择合并目标");
+
+    const timestamp = "2026-11-11 19:12:36";
+    if (mode === "move") {
+      const oldParent = orgById(org.parentId)?.name || "—";
+      const newParent = orgById(targetId);
+      org.parentId = targetId;
+      updateOrgLevels(org.id);
+      state.logs.unshift({
+        time: timestamp,
+        module: "组织架构",
+        action: "更换上级",
+        target: orgPath(org.id),
+        detail: `${oldParent} → ${newParent?.name || "—"}；原因：${reason}`,
+        actor: currentUser().email
+      });
+      closeModal();
+      render();
+      return showToast("组织上级已更换");
+    }
+
+    if (mode === "merge") {
+      const target = orgById(targetId);
+      if (!target) return setError("org-impact-error", "目标组织已发生变化，请刷新后重试");
+      const affectedIds = new Set(subtreeIds(org.id));
+      childrenOf(org.id).forEach((child) => {
+        child.parentId = target.id;
+        updateOrgLevels(child.id);
+      });
+      members.forEach((member) => {
+        memberGrants(member).forEach((grant) => {
+          if (affectedIds.has(grant.primaryOrgId)) grant.primaryOrgId = target.id;
+          grant.orgIds = [...new Set((grant.orgIds || []).map((nodeId) => affectedIds.has(nodeId) ? target.id : nodeId))];
+        });
+        const primary = memberGrants(member)[0];
+        if (primary) {
+          member.line = primary.line;
+          member.scope = primary.scope;
+          member.orgIds = [...(primary.orgIds || [])];
+          member.primaryOrgId = primary.primaryOrgId;
+        }
+      });
+      leads.forEach((lead) => {
+        if (affectedIds.has(lead.orgId)) lead.orgId = target.id;
+      });
+      assignmentRules.forEach((rule) => {
+        if (affectedIds.has(rule.orgId)) rule.orgId = target.id;
+      });
+      org.status = "停用";
+      state.selectedOrg = target.id;
+      state.logs.unshift({
+        time: timestamp,
+        module: "组织架构",
+        action: "合并",
+        target: `${orgPath(org.id)} → ${orgPath(target.id)}`,
+        detail: `成员 ${impact.members}、线索 ${impact.leads}、规则 ${impact.rules}；原因：${reason}`,
+        actor: currentUser().email
+      });
+      closeModal();
+      render();
+      return showToast("组织已合并");
+    }
+
+    org.status = "停用";
+    state.logs.unshift({
+      time: timestamp,
+      module: "组织架构",
+      action: "停用",
+      target: orgPath(org.id),
+      detail: `成员 ${impact.members}、线索 ${impact.leads}、规则 ${impact.rules}；原因：${reason}`,
+      actor: currentUser().email
+    });
+    closeModal();
+    render();
+    showToast("组织已停用");
+  });
+}
+
+function enableOrganization(orgId) {
+  const org = orgById(orgId);
+  if (!org || !operatorAllowedIds().has(org.id)) return;
+  org.status = "启用";
+  state.logs.unshift({
+    time: "2026-11-11 19:15:08",
+    module: "组织架构",
+    action: "启用",
+    target: orgPath(org.id),
+    detail: "恢复新增成员、授权和线索分配",
+    actor: currentUser().email
+  });
+  render();
+  showToast("组织已启用");
 }
 
 function finishMemberSave({ member, next, name, grants, changedLines, affectedLeads, leadChoice }) {
@@ -732,6 +933,7 @@ function memberGrantCardsHtml() {
           <select class="select" data-grant-primary="${escapeHtml(line)}"><option value="">请选择主组织</option>${orgOptions(line, draft.primaryOrgId || "")}</select>
         </div>
         ${draft.scope === "nodes" ? `<div class="form-item full"><label>授权组织 <em>*</em></label><div>${memberOrgSelectorHtml(line)}</div></div>` : ""}
+        ${draft.scope === "self" ? '<div class="form-item full"><div class="scope-note">本人仅包含当前负责人为本人账号的线索及直接关联数据；不含公共池和其他成员线索。公共池领取由功能角色和主组织另行控制。</div></div>' : ""}
       </div>
     </section>`;
   }).join("");
@@ -939,6 +1141,14 @@ el.content.addEventListener("click", (event) => {
   }
   const orgEdit = event.target.closest("[data-org-edit]");
   if (orgEdit) return openOrgModal("edit", orgEdit.dataset.orgEdit);
+  const orgMove = event.target.closest("[data-org-move]");
+  if (orgMove) return openOrganizationImpactModal("move", orgMove.dataset.orgMove);
+  const orgMerge = event.target.closest("[data-org-merge]");
+  if (orgMerge) return openOrganizationImpactModal("merge", orgMerge.dataset.orgMerge);
+  const orgDisable = event.target.closest("[data-org-disable]");
+  if (orgDisable) return openOrganizationImpactModal("disable", orgDisable.dataset.orgDisable);
+  const orgEnable = event.target.closest("[data-org-enable]");
+  if (orgEnable) return enableOrganization(orgEnable.dataset.orgEnable);
   const memberEdit = event.target.closest("[data-member-edit]");
   if (memberEdit) return openMemberModal(memberEdit.dataset.memberEdit);
   const salesTab = event.target.closest("[data-sales-tab]");
