@@ -120,6 +120,19 @@
 .event-value.benefit { color: var(--green); }
 .event-value.month { color: var(--blue); }
 .modal .form-row { grid-template-columns: 136px minmax(0, 1fr); }
+.field[hidden],
+.form-row[hidden] { display: none !important; }
+.community-table th,
+.community-table td { padding-right: 9px; padding-left: 9px; }
+.community-table td { font-size: 11px; }
+.community-table th:last-child,
+.community-table td:last-child {
+  position: sticky;
+  right: 0;
+  background: #fff;
+  box-shadow: -8px 0 12px -12px rgba(27, 39, 56, .45);
+}
+.community-table th:last-child { background: #f8fafc; }
 .toast-note {
   color: var(--muted);
   font-size: 10px;

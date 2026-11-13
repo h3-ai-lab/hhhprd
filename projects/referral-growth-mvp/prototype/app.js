@@ -9,8 +9,10 @@ const I18N = {
     "nav.orders": "订单中心",
     "nav.marketing": "营销与增长",
     "nav.growth": "拉新关系",
+    "nav.community": "社群上传",
     "nav.bindings": "拉新关系维护",
     "bindings.title": "拉新关系维护",
+    "community.title": "社群上传",
     "nav.system": "系统管理",
     "nav.settings": "系统配置",
     "footer.status": "服务运行正常",
@@ -58,7 +60,7 @@ const I18N = {
     "option.allCc": "全部 CC",
     "option.allStatuses": "全部状态",
     "source.referral": "拉新推荐",
-    "source.social": "社媒推荐",
+    "source.social": "社群上传",
     "source.regular": "常规赠送",
     "status.success": "已发放",
     "status.processing": "待发放",
@@ -100,7 +102,7 @@ const I18N = {
     "unified.noteText": "绑定、奖励事件、赠送订单和权益状态在同一列表追踪",
     "unified.empty": "当前筛选下没有拉新记录",
     "unified.keywordPlaceholder": "用户 ID / 事件 ID / 订单 ID",
-    "bindings.newSocial": "登记社媒推荐",
+    "bindings.newSocial": "登记社群上传",
     "bindings.newReferral": "新建好友推荐",
     "sales.title": "销售中心",
     "sales.subtitle": "我的跟进与已付费客户",
@@ -167,7 +169,7 @@ const I18N = {
     "grant.verify": "核验",
     "grant.verify.note": "按推荐人所属业务线匹配手机号，并核验注册状态、推荐唯一性和有效付费会员订单",
     "grant.contentLink": "内容链接",
-    "grant.contentLink.note": "社媒推荐由独立拉新关系页面维护",
+    "grant.contentLink.note": "社群上传由营销中心独立审核列表维护",
     "grant.validityDays": "有效期天数",
     "grant.systemReward": "系统核验奖励",
     "grant.reason": "开通原因",
@@ -175,10 +177,10 @@ const I18N = {
     "grant.confirm": "确认发放",
     "grant.issuing": "发放中…",
     "grant.helper.regular": "新用户从当前时间起算；未付费体验中的用户在现体验到期时间上累加。",
-    "grant.helper.social": "社媒推荐由独立拉新关系页面维护并按内容状态自动发奖。",
+    "grant.helper.social": "社群上传由独立审核列表维护，并按审核和选中结果自动发奖。",
     "grant.helper.referral": "拉新推荐奖励由订单套餐自动确定，有效期单位不可修改。",
     "grant.reason.friend": "好友推荐活动权益",
-    "grant.reason.social": "社媒推荐活动权益 · 有效发布",
+    "grant.reason.social": "社群上传活动权益 · 审核有效",
     "grant.reason.generated": "拉新推荐 · {referrer}推荐{referred} · {plan}套餐 · 对应订单 {order}",
     "grant.error.empty": "请输入被推荐人手机号",
     "grant.error.format": "手机号格式无效，请输入带国际区号的完整手机号",
@@ -187,7 +189,7 @@ const I18N = {
     "grant.error.businessLine": "手机号用户属于{userLine}业务线，与推荐人所属{referrerLine}业务线不一致",
     "grant.error.multiple": "该手机号在同一业务线下匹配多个账号，请联系管理员核实",
     "grant.error.unverified": "请先完成被推荐人与订单核验",
-    "grant.error.social": "请输入社媒内容链接",
+    "grant.error.social": "请输入社群上传内容链接",
     "grant.verify.passed": "核验通过",
     "grant.verifiedUser": "{name} · 正式用户",
     "grant.userId": "用户 ID",
@@ -208,7 +210,7 @@ const I18N = {
     "grant.rewardMonths": "+{count} 个月",
     "toast.refreshed": "数据已刷新",
     "toast.referralSuccess": "推荐关系已绑定，权益已发放",
-    "toast.socialSuccess": "社媒推荐记录已保存",
+    "toast.socialSuccess": "社群上传记录已保存",
     "drawer.title": "推荐关系详情",
     "drawer.relationInfo": "关系信息",
     "drawer.referrer": "推荐人",
@@ -255,8 +257,10 @@ const I18N = {
     "nav.orders": "Order Center",
     "nav.marketing": "Marketing & Growth",
     "nav.growth": "Growth Relationships",
+    "nav.community": "Community Uploads",
     "nav.bindings": "Growth Relationships",
     "bindings.title": "Growth Relationships",
+    "community.title": "Community Uploads",
     "nav.system": "System",
     "nav.settings": "System Settings",
     "footer.status": "All services operational",
@@ -304,7 +308,7 @@ const I18N = {
     "option.allCc": "All CCs",
     "option.allStatuses": "All statuses",
     "source.referral": "Referral",
-    "source.social": "Social recommendation",
+    "source.social": "Community upload",
     "source.regular": "Standard grant",
     "status.success": "Issued",
     "status.processing": "Pending",
@@ -346,7 +350,7 @@ const I18N = {
     "unified.noteText": "Binding, reward events, gift orders, and benefit status are tracked in one list",
     "unified.empty": "No growth records match the current filters",
     "unified.keywordPlaceholder": "User ID / event ID / order ID",
-    "bindings.newSocial": "Add social recommendation",
+    "bindings.newSocial": "Record community upload",
     "bindings.newReferral": "New friend referral",
     "sales.title": "Sales Center",
     "sales.subtitle": "My follow-ups and paid customers",
@@ -413,7 +417,7 @@ const I18N = {
     "grant.verify": "Verify",
     "grant.verify.note": "Match the phone within the referrer's business line, then verify registration, referral uniqueness, and a valid paid membership order",
     "grant.contentLink": "Content link",
-    "grant.contentLink.note": "Social recommendations are managed in the dedicated Growth Relationships page",
+    "grant.contentLink.note": "Community uploads are managed in the dedicated review list",
     "grant.validityDays": "Validity",
     "grant.systemReward": "Verified reward",
     "grant.reason": "Grant reason",
@@ -421,10 +425,10 @@ const I18N = {
     "grant.confirm": "Confirm and issue",
     "grant.issuing": "Issuing…",
     "grant.helper.regular": "New users start from the current time. Unpaid users on trial receive the benefit after their current trial end date.",
-    "grant.helper.social": "Social recommendations are managed separately and rewarded automatically from content status.",
+    "grant.helper.social": "Community uploads are managed in a dedicated review list and rewarded automatically from review and selection outcomes.",
     "grant.helper.referral": "The referral reward is determined by the order plan. The validity unit cannot be edited.",
     "grant.reason.friend": "Friend referral benefit",
-    "grant.reason.social": "Social recommendation benefit · Valid post",
+    "grant.reason.social": "Community upload benefit · Approved content",
     "grant.reason.generated": "Referral · {referrer} referred {referred} · {plan} plan · Order {order}",
     "grant.error.empty": "Enter the referred user's phone number",
     "grant.error.format": "Invalid phone number. Enter the full number with its country code.",
@@ -433,7 +437,7 @@ const I18N = {
     "grant.error.businessLine": "The phone account belongs to the {userLine} business line, which does not match the referrer's {referrerLine} business line",
     "grant.error.multiple": "This phone number matches multiple accounts in the same business line. Contact an administrator.",
     "grant.error.unverified": "Verify the referred user and order first",
-    "grant.error.social": "Enter the social content link",
+    "grant.error.social": "Enter the community upload content link",
     "grant.verify.passed": "Verified",
     "grant.verifiedUser": "{name} · Registered",
     "grant.userId": "User ID",
@@ -454,7 +458,7 @@ const I18N = {
     "grant.rewardMonths": "+{count} months",
     "toast.refreshed": "Data refreshed",
     "toast.referralSuccess": "Referral linked and benefit issued",
-    "toast.socialSuccess": "Social recommendation saved",
+    "toast.socialSuccess": "Community upload saved",
     "drawer.title": "Referral Relationship",
     "drawer.relationInfo": "Relationship",
     "drawer.referrer": "Referrer",
@@ -703,15 +707,15 @@ function applyStaticTranslations() {
   document.documentElement.lang = state.lang === "en" ? "en" : "zh-CN";
   document.title = t("document.title");
   document.querySelectorAll("[data-i18n]").forEach((element) => {
-    if (element.closest("#bindingsView, #referralModal, #socialModal")) return;
+    if (element.closest("#bindingsView, #communityView, #communityReviewModal, #referralModal, #socialModal")) return;
     element.textContent = t(element.dataset.i18n);
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
-    if (element.closest("#bindingsView, #referralModal, #socialModal")) return;
+    if (element.closest("#bindingsView, #communityView, #communityReviewModal, #referralModal, #socialModal")) return;
     element.placeholder = t(element.dataset.i18nPlaceholder);
   });
   document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
-    if (element.closest("#bindingsView, #referralModal, #socialModal")) return;
+    if (element.closest("#bindingsView, #communityView, #communityReviewModal, #referralModal, #socialModal")) return;
     element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
   });
   document.querySelectorAll("[data-lang]").forEach((button) => {
@@ -720,8 +724,8 @@ function applyStaticTranslations() {
   document.getElementById("usersRowSummary").textContent = countLabel("users.count", 3);
   document.getElementById("grantTitle").textContent = t("grant.title", { id: "2120302255148482561" });
   document.getElementById("rewardSummaryValue").textContent = ruleLabel(1);
-  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "sales" ? "sales.title" : state.view === "orders" ? "orders.title" : "users.title";
-  const viewCrumb = state.view === "dashboard" ? "crumb.growth" : state.view === "sales" ? "nav.sales" : state.view === "orders" ? "nav.orders" : "crumb.users";
+  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "community" ? "community.title" : state.view === "sales" ? "sales.title" : state.view === "orders" ? "orders.title" : "users.title";
+  const viewCrumb = state.view === "dashboard" || state.view === "community" ? "crumb.growth" : state.view === "sales" ? "nav.sales" : state.view === "orders" ? "nav.orders" : "crumb.users";
   document.getElementById("pageTitle").textContent = t(viewTitle);
   document.getElementById("crumb").textContent = t(viewCrumb);
 }
@@ -825,18 +829,21 @@ function openDrawer(id) {
 function setView(view) {
   state.view = view;
   const dashboard = view === "dashboard";
+  const community = view === "community";
   const sales = view === "sales";
   const orders = view === "orders";
   document.getElementById("dashboardView").hidden = !dashboard;
   document.getElementById("bindingsView").hidden = true;
+  document.getElementById("communityView").hidden = !community;
   document.getElementById("salesView").hidden = !sales;
   document.getElementById("ordersView").hidden = !orders;
-  document.getElementById("usersView").hidden = dashboard || sales || orders;
-  document.getElementById("pageTitle").textContent = t(dashboard ? "nav.growth" : sales ? "sales.title" : orders ? "orders.title" : "users.title");
-  document.getElementById("crumb").textContent = t(dashboard ? "crumb.growth" : sales ? "nav.sales" : orders ? "nav.orders" : "crumb.users");
+  document.getElementById("usersView").hidden = dashboard || community || sales || orders;
+  document.getElementById("pageTitle").textContent = t(dashboard ? "nav.growth" : community ? "community.title" : sales ? "sales.title" : orders ? "orders.title" : "users.title");
+  document.getElementById("crumb").textContent = t(dashboard || community ? "crumb.growth" : sales ? "nav.sales" : orders ? "nav.orders" : "crumb.users");
   document.querySelectorAll(".nav-item[data-view]").forEach((item) => item.classList.toggle("active", item.dataset.view === view));
   document.getElementById("sidebar").classList.remove("open");
   if (dashboard) window.GrowthBindingView?.activate();
+  if (community) window.CommunityUploadView?.activate();
 }
 
 function resetGrantForm() {
@@ -1033,9 +1040,9 @@ function setLanguage(language) {
     // Local file previews may block history updates.
   }
   applyStaticTranslations();
-  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "sales" ? "sales.title" : state.view === "orders" ? "orders.title" : "users.title";
+  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "community" ? "community.title" : state.view === "sales" ? "sales.title" : state.view === "orders" ? "orders.title" : "users.title";
   document.getElementById("pageTitle").textContent = t(viewTitle);
-  document.getElementById("crumb").textContent = t(state.view === "dashboard" ? "crumb.growth" : state.view === "sales" ? "nav.sales" : state.view === "orders" ? "nav.orders" : "crumb.users");
+  document.getElementById("crumb").textContent = t(state.view === "dashboard" || state.view === "community" ? "crumb.growth" : state.view === "sales" ? "nav.sales" : state.view === "orders" ? "nav.orders" : "crumb.users");
   renderRows();
   if (!document.getElementById("grantModal").hidden) {
     if (state.verified) renderVerifiedReferral();
@@ -1051,7 +1058,7 @@ function setLanguage(language) {
 document.querySelectorAll("[data-lang]").forEach((button) => {
   button.addEventListener("click", () => setLanguage(button.dataset.lang));
 });
-document.querySelectorAll(".nav-item[data-view]").forEach((item) => {
+document.querySelectorAll("button[data-view]").forEach((item) => {
   item.addEventListener("click", () => setView(item.dataset.view));
 });
 
