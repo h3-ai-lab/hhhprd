@@ -36,5 +36,6 @@
 - A prototype must show only the product interface and capabilities available after launch.
 - Do not show PRD titles, requirement context, value statements, flow narratives, design notes, field-definition pages, prototype banners, demo-data banners, or other explanatory UI inside the product surface.
 - Keep the prototype synchronized with the current PRD but never display revision colors, strikethrough text, change labels, revision IDs, or change notes in the product interface.
+- Every new or materially updated prototype must support complete Simplified Chinese and English switching within one prototype and one public URL. Default to Chinese; persist the user's language choice; translate all navigation, labels, filters, table headers, metrics, actions, placeholders, validation, empty/loading/error/permission states, modals, toasts, help text, and accessibility labels. Language switching must not reset page state, filters, forms, or business data.
 - Open directly on the operational page users will use.
 - Keep explanations in the PRD; use `shared/skills/crm-prototype-authoring/SKILL.md` for prototypes.

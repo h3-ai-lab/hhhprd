@@ -1,6 +1,6 @@
 ---
 name: crm-prototype-authoring
-description: Build production-looking CRM HTML prototypes that show only post-launch functionality, use exact PRD metric definitions, and keep all displayed filters, actions, and published links consistent.
+description: Build production-looking bilingual CRM HTML prototypes that show only post-launch functionality, support complete Chinese/English switching in one URL, use exact PRD metric definitions, and keep all displayed filters, actions, and published links consistent.
 ---
 
 # CRM 原型设计
@@ -28,6 +28,29 @@ description: Build production-looking CRM HTML prototypes that show only post-la
 
 说明性内容留在 PRD。原型打开后应直接进入用户实际工作的默认页面。
 
+## 中英文双语（强制）
+
+后续所有 CRM 原型必须支持简体中文与英文切换，并在同一个原型、同一个公开地址内完成。
+
+- 默认显示简体中文，不根据浏览器语言自动改变默认版本。
+- 在产品正式位置提供清晰的 `中 / EN` 语言切换入口，不添加“原型说明”或演示提示。
+- 语言选择在当前原型内跨页面、弹窗、刷新和返回列表时保持；用户再次进入时优先恢复上次选择。
+- 中文和英文必须表达同一业务规则、字段含义、指标口径、状态和异常，不得形成两个需求版本。
+- 中文“业务线”在英文界面统一使用 `Business Line`，不译为 `Country`。
+- 语言切换只改变界面文案，不重置筛选、分页、表单输入、弹窗状态和业务数据。
+- 同一原型只保留一个完整访问地址，不为中英文分别生成两套链接或两份独立原型。
+
+以下产品界面文案必须全部提供中英文：
+
+- 导航、面包屑、页面标题、页签和菜单。
+- 搜索、筛选、字段名称、表格列、按钮、操作菜单和分页。
+- 指标名称、状态、枚举显示值、单位、口径说明和帮助文案。
+- 表单标签、占位提示、必填提示、校验错误和二次确认。
+- 空态、加载态、失败态、权限不足、无结果和数据同步状态。
+- 弹窗、抽屉、提示消息、导出说明和可访问性标签。
+
+客户姓名、用户 ID、邮箱、渠道原始值、产品正式名称、接口字段和系统枚举码可不翻译；其对应的人工可读标签必须翻译。两种语言下都必须检查截断、换行、布局溢出和操作位置变化。
+
 ## PRD 修订同步
 
 - 已有 PRD 发生新增、修改或删除后，同步检查并修订对应原型。
@@ -39,6 +62,7 @@ description: Build production-looking CRM HTML prototypes that show only post-la
 
 - 首屏优先展示实际列表、表单或工作台，不先展示介绍页面。
 - 使用真实业务布局、数据密度、字段顺序和操作位置。
+- 原型默认进入中文界面，并可通过同一原型内语言开关切换为完整英文界面。
 - 面向用户的市场和数据范围统一使用“业务线”，不展示“国家”标签。
 - 筛选、排序、分页、导出、详情和异常反馈必须可操作。
 - 使用演示数据时，不在产品界面额外显示“演示数据”横幅。
@@ -67,6 +91,8 @@ description: Build production-looking CRM HTML prototypes that show only post-la
 - 删除所有业务背景、价值说明、流程叙事和设计提示。
 - 页面是否可以从标题直接看出是上线后的真实功能。
 - 首屏是否直接进入实际工作，而不是先看介绍。
+- 是否支持同一原型内的完整中英文切换，默认中文且语言选择可保持。
+- 英文界面是否存在未翻译文案、截断、溢出或与中文规则不一致。
 - 原型指标是否与 PRD 逐项同名、同公式、同范围和同去重口径。
 - 原型是否已同步最新 PRD，且没有显示任何文档修订标记。
 - 不在原型中输出本检查清单。
