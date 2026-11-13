@@ -1,14 +1,14 @@
 (() => {
 const TEXT = {
   zh: {
-    "document.title": "拉新关系维护 · Dino CRM",
+    "document.title": "拉新关系 · Dino CRM",
     "nav.business": "业务管理",
     "nav.dashboard": "管理看板",
     "nav.userList": "用户列表",
     "nav.sales": "销售中心",
     "nav.orders": "订单中心",
     "nav.marketing": "营销与增长",
-    "nav.growth": "拉新归因",
+    "nav.growth": "拉新关系",
     "nav.bindings": "拉新关系维护",
     "nav.users": "用户管理",
     "nav.system": "系统管理",
@@ -42,6 +42,12 @@ const TEXT = {
     "bindings.eventNoteText": "绑定状态和奖励状态分开维护",
     "bindings.page": "第 1 页",
     "bindings.count": "共 {count} 条记录",
+    "unified.title": "统一拉新记录",
+    "unified.note": "口径：",
+    "unified.noteText": "绑定、奖励事件、赠送订单和权益状态在同一列表追踪",
+    "unified.empty": "当前筛选下没有拉新记录",
+    "unified.keywordPlaceholder": "用户 ID / 手机号 / 事件 ID / 订单 ID",
+    "unified.count": "共 {count} 条记录",
     "business.thailand": "泰国",
     "table.referrer": "推荐人",
     "table.referred": "被推荐人",
@@ -66,6 +72,12 @@ const TEXT = {
     "table.triggeredAt": "触发时间",
     "table.benefit": "奖励值",
     "table.failureReason": "失败原因",
+    "table.record": "业务记录",
+    "table.related": "关联对象",
+    "table.triggerEvent": "触发事件",
+    "table.giftOrder": "赠送订单",
+    "source.referral": "拉新推荐",
+    "source.social": "社媒推荐",
     "bindStatus.bound": "已绑定",
     "bindStatus.pending": "待注册",
     "bindStatus.invalid": "已失效",
@@ -73,6 +85,9 @@ const TEXT = {
     "eventStatus.processing": "待发放",
     "eventStatus.issued": "已发放",
     "eventStatus.failed": "发放失败",
+    "giftStatus.CREATED": "已生成，待发放",
+    "giftStatus.FULFILLED": "已完成",
+    "giftStatus.NOT_CREATED": "未生成",
     "trigger.firstTrial": "等待首课完课",
     "trigger.purchase": "等待首次购买",
     "trigger.socialReview": "等待社媒状态",
@@ -139,7 +154,7 @@ const TEXT = {
     "nav.sales": "Sales Center",
     "nav.orders": "Order Center",
     "nav.marketing": "Marketing & Growth",
-    "nav.growth": "Referral Attribution",
+    "nav.growth": "Growth Relationships",
     "nav.bindings": "Growth Relationships",
     "nav.users": "User Management",
     "nav.system": "System",
@@ -173,6 +188,12 @@ const TEXT = {
     "bindings.eventNoteText": "Binding status and reward status are independent",
     "bindings.page": "Page 1",
     "bindings.count": "{count} records",
+    "unified.title": "Unified Growth Records",
+    "unified.note": "Scope: ",
+    "unified.noteText": "Binding, reward events, gift orders, and benefit status are tracked in one list",
+    "unified.empty": "No growth records match the current filters",
+    "unified.keywordPlaceholder": "User ID / phone / event ID / order ID",
+    "unified.count": "{count} records",
     "business.thailand": "Thailand",
     "table.referrer": "Referrer",
     "table.referred": "Referred user",
@@ -197,6 +218,12 @@ const TEXT = {
     "table.triggeredAt": "Triggered at",
     "table.benefit": "Benefit",
     "table.failureReason": "Failure reason",
+    "table.record": "Business record",
+    "table.related": "Related object",
+    "table.triggerEvent": "Trigger event",
+    "table.giftOrder": "Gift order",
+    "source.referral": "Referral",
+    "source.social": "Social recommendation",
     "bindStatus.bound": "Linked",
     "bindStatus.pending": "Pending registration",
     "bindStatus.invalid": "Invalid",
@@ -204,6 +231,9 @@ const TEXT = {
     "eventStatus.processing": "Pending issuance",
     "eventStatus.issued": "Issued",
     "eventStatus.failed": "System failure",
+    "giftStatus.CREATED": "Created, pending fulfillment",
+    "giftStatus.FULFILLED": "Fulfilled",
+    "giftStatus.NOT_CREATED": "Not created",
     "trigger.firstTrial": "Awaiting first lesson completion",
     "trigger.purchase": "Awaiting first purchase",
     "trigger.socialReview": "Awaiting social status",
@@ -273,6 +303,11 @@ const state = {
   bindingResult: null,
   socialNoticeKey: "",
   toastKey: "",
+  referrer: {
+    id: "2120302255148482561",
+    name: "Pimchanok S.",
+    owner: "Thanya C.",
+  },
 };
 
 const referrals = [
@@ -290,6 +325,9 @@ const referrals = [
     nextTrigger: "trigger.purchase",
     latestReward: "reward.firstTrial",
     rewardStatus: "issued",
+    planMonths: 3,
+    giftOrderId: "GRT202611080041",
+    giftOrderStatus: "FULFILLED",
   },
   {
     id: "BIND-202611-0204",
@@ -305,6 +343,8 @@ const referrals = [
     nextTrigger: "trigger.firstTrial",
     latestReward: "reward.none",
     rewardStatus: "waiting",
+    giftOrderId: "—",
+    giftOrderStatus: "NOT_CREATED",
   },
   {
     id: "BIND-202611-0186",
@@ -319,8 +359,11 @@ const referrals = [
     boundAt: "2026-11-06",
     nextTrigger: "trigger.assignment",
     latestReward: "reward.purchase",
+    planMonths: 12,
     rewardMonths: 3,
     rewardStatus: "processing",
+    giftOrderId: "GRT202611090018",
+    giftOrderStatus: "CREATED",
   },
   {
     id: "BIND-202611-0172",
@@ -336,6 +379,8 @@ const referrals = [
     nextTrigger: "trigger.firstTrial",
     latestReward: "reward.none",
     rewardStatus: "waiting",
+    giftOrderId: "—",
+    giftOrderStatus: "NOT_CREATED",
   },
 ];
 
@@ -352,6 +397,8 @@ const socialRecords = [
     reward: "reward.published",
     rewardDetail: "reward.selected",
     status: "issued",
+    giftOrderId: "GRT202611080056",
+    giftOrderStatus: "FULFILLED",
   },
   {
     id: "SOC-202611-0034",
@@ -365,6 +412,8 @@ const socialRecords = [
     reward: "reward.published",
     rewardDetail: "reward.notSelected",
     status: "issued",
+    giftOrderId: "GRT202611090072",
+    giftOrderStatus: "FULFILLED",
   },
   {
     id: "SOC-202611-0038",
@@ -378,6 +427,8 @@ const socialRecords = [
     reward: "reward.published",
     rewardDetail: "",
     status: "processing",
+    giftOrderId: "GRT202611090069",
+    giftOrderStatus: "CREATED",
   },
 ];
 
@@ -388,6 +439,7 @@ const rewardEvents = [
     triggeredAt: "2026-11-08 16:42",
     benefit: "reward.firstTrial",
     status: "issued",
+    giftOrderId: "GRT202611080041",
   },
   {
     type: "REFERRAL_FIRST_PURCHASE_3M",
@@ -396,6 +448,7 @@ const rewardEvents = [
     benefit: "reward.purchase",
     months: 1,
     status: "processing",
+    giftOrderId: "GRT202611090018",
   },
   {
     type: "SOCIAL_POST_PUBLISHED",
@@ -403,6 +456,7 @@ const rewardEvents = [
     triggeredAt: "2026-11-06 19:18",
     benefit: "reward.published",
     status: "issued",
+    giftOrderId: "GRT202611060033",
   },
   {
     type: "SOCIAL_POST_OFFICIALLY_SELECTED",
@@ -410,6 +464,7 @@ const rewardEvents = [
     triggeredAt: "2026-11-08 11:20",
     benefit: "reward.selected",
     status: "issued",
+    giftOrderId: "GRT202611080056",
   },
   {
     type: "SOCIAL_POST_NOT_SELECTED",
@@ -417,6 +472,7 @@ const rewardEvents = [
     triggeredAt: "2026-11-09 15:05",
     benefit: "reward.notSelected",
     status: "issued",
+    giftOrderId: "GRT202611090072",
   },
 ];
 
@@ -473,6 +529,15 @@ function platformLabel(value) {
   return value.charAt(0) + value.slice(1).toLowerCase();
 }
 
+function bindingSourceLabel(value) {
+  return t(value === "social" ? "source.social" : "source.referral");
+}
+
+function renderReferrerSummary() {
+  document.getElementById("referrerSummary").textContent =
+    `${state.referrer.name} · ${state.referrer.id} · ${t("business.thailand")} · CC: ${state.referrer.owner}`;
+}
+
 function renderReferrals() {
   document.getElementById("referralRows").innerHTML = referrals.map((row) => `
     <tr>
@@ -522,6 +587,82 @@ function renderEvents() {
   document.getElementById("eventCount").textContent = t("bindings.count", { count: rewardEvents.length });
 }
 
+function unifiedRows() {
+  const referralRows = referrals.map((row) => ({
+    id: row.id,
+    source: "referral",
+    user: row.referrer,
+    userId: row.referrerId,
+    related: row.referredId ? `${row.referred} · ${row.phone}` : `${row.referred} · ${row.phone}`,
+    owner: row.owner,
+    bindingStatus: row.bindingStatus,
+    eventType: row.latestReward === "reward.firstTrial"
+      ? "REFERRAL_FIRST_TRIAL_COMPLETED"
+      : row.latestReward === "reward.purchase"
+        ? `REFERRAL_FIRST_PURCHASE_${row.planMonths}M`
+        : "—",
+    reward: t(row.latestReward, { count: row.rewardMonths }),
+    rewardStatus: row.rewardStatus,
+    giftOrderId: row.giftOrderId,
+    giftOrderStatus: row.giftOrderStatus,
+    date: row.boundAt,
+    keywords: [row.id, row.referrerId, row.referredId, row.phone, row.giftOrderId, row.referrer, row.referred],
+  }));
+  const socialRows = socialRecords.map((row) => ({
+    id: row.id,
+    source: "social",
+    user: row.user,
+    userId: "",
+    related: `${platformLabel(row.platform)} · ${t(row.contentType)}`,
+    owner: "Thanya C.",
+    bindingStatus: "bound",
+    bindingText: row.contentStatus,
+    eventType: row.rewardDetail ? `SOCIAL_POST_${row.rewardDetail === "reward.selected" ? "OFFICIALLY_SELECTED" : "NOT_SELECTED"}` : "SOCIAL_POST_PUBLISHED",
+    reward: row.rewardDetail ? `${t(row.reward)} + ${t(row.rewardDetail)}` : t(row.reward),
+    rewardStatus: row.status,
+    giftOrderId: row.giftOrderId,
+    giftOrderStatus: row.giftOrderStatus,
+    date: row.publishedAt,
+    keywords: [row.id, row.user, row.giftOrderId, row.platform, t(row.contentStatus)],
+  }));
+  return [...referralRows, ...socialRows];
+}
+
+function renderUnified() {
+  const source = document.getElementById("unifiedSourceFilter").value;
+  const owner = document.getElementById("unifiedCcFilter").value;
+  const bindingStatus = document.getElementById("unifiedBindingFilter").value;
+  const rewardStatus = document.getElementById("unifiedRewardFilter").value;
+  const keyword = document.getElementById("unifiedKeywordFilter").value.trim().toLowerCase();
+  const start = document.getElementById("unifiedStartDate").value;
+  const end = document.getElementById("unifiedEndDate").value;
+  const rows = unifiedRows().filter((row) => {
+    const sourceMatch = !source || row.source === source;
+    const ownerMatch = !owner || row.owner === owner;
+    const bindingMatch = !bindingStatus || row.bindingStatus === bindingStatus;
+    const rewardMatch = !rewardStatus || row.rewardStatus === rewardStatus;
+    const keywordMatch = !keyword || row.keywords.some((value) => String(value || "").toLowerCase().includes(keyword));
+    const dateMatch = (!start || row.date >= start) && (!end || row.date <= end);
+    return sourceMatch && ownerMatch && bindingMatch && rewardMatch && keywordMatch && dateMatch;
+  });
+  const body = document.getElementById("unifiedRows");
+  body.innerHTML = rows.map((row) => `
+    <tr>
+      <td><span class="mono">${row.id}</span><span class="secondary">${row.date}</span></td>
+      <td><span class="source ${row.source === "social" ? "social" : ""}">${bindingSourceLabel(row.source)}</span></td>
+      <td><span>${row.user}</span>${row.userId ? `<span class="secondary mono">${row.userId}</span>` : ""}</td>
+      <td>${row.related}</td>
+      <td>${row.owner}</td>
+      <td>${row.bindingStatus === "pending" ? `<span class="status pending">${t("bindStatus.pending")}</span>` : `<span class="status bound">${row.bindingText ? t(row.bindingText) : t("bindStatus.bound")}</span>`}</td>
+      <td><span class="event-type">${row.eventType}</span></td>
+      <td>${row.reward}</td>
+      <td><span class="mono">${row.giftOrderId}</span><span class="secondary">${t(`giftStatus.${row.giftOrderStatus}`)} · ฿0</span></td>
+      <td>${rewardStatusLabel(row.rewardStatus)}</td>
+    </tr>`).join("");
+  document.getElementById("unifiedEmpty").hidden = rows.length > 0;
+  document.getElementById("unifiedCount").textContent = t("unified.count", { count: rows.length });
+}
+
 function applyTranslations() {
   const roots = ["bindingsView", "referralModal", "socialModal"].map((id) => document.getElementById(id));
   roots.forEach((root) => {
@@ -538,7 +679,9 @@ function applyTranslations() {
   renderReferrals();
   renderSocial();
   renderEvents();
+  renderUnified();
   renderBindingResult();
+  renderReferrerSummary();
   if (state.toastKey) document.getElementById("toast").textContent = t(state.toastKey);
 }
 
@@ -555,7 +698,8 @@ function setTab(tab) {
   document.querySelectorAll(".section-tab").forEach((button) => button.classList.toggle("active", button.dataset.tab === tab));
 }
 
-function openReferralModal() {
+function openReferralModal(referrer = null) {
+  if (referrer) state.referrer = referrer;
   state.verified = false;
   state.phoneUser = null;
   state.bindingResult = null;
@@ -564,6 +708,7 @@ function openReferralModal() {
   document.getElementById("referralNotice").classList.remove("show");
   document.getElementById("confirmBinding").disabled = true;
   document.getElementById("referralModal").hidden = false;
+  renderReferrerSummary();
   renderBindingResult();
 }
 
@@ -628,24 +773,33 @@ function verifyPhone() {
 function confirmBinding() {
   if (!state.verified) return;
   const bound = state.phoneUser.status === "bound";
+  const activeReferrer = { ...state.referrer };
   referrals.unshift({
     id: `BIND-202611-${String(210 + referrals.length).padStart(4, "0")}`,
-    referrerId: "2120302255148482561",
-    referrer: "Pimchanok S.",
+    referrerId: activeReferrer.id,
+    referrer: activeReferrer.name,
     referredId: state.phoneUser.userId,
     referred: state.phoneUser.name,
     phone: state.phoneUser.phone,
     line: "thailand",
-    owner: "Thanya C.",
+    owner: activeReferrer.owner,
     bindingStatus: bound ? "bound" : "pending",
     boundAt: "2026-11-13",
     nextTrigger: "trigger.firstTrial",
     latestReward: "reward.none",
     rewardStatus: "waiting",
+    giftOrderId: "—",
+    giftOrderStatus: "NOT_CREATED",
   });
+  state.referrer = {
+    id: "2120302255148482561",
+    name: "Pimchanok S.",
+    owner: "Thanya C.",
+  };
   closeReferralModal();
   setTab("referral");
   renderReferrals();
+  renderUnified();
   showToast("referralModal.success");
 }
 
@@ -693,6 +847,7 @@ function confirmSocial() {
     OFFICIALLY_SELECTED: "social.selected",
     INVALID: "social.invalid",
   }[status];
+  const giftOrderId = status === "INVALID" ? "—" : `GRT202611${String(130 + socialRecords.length).padStart(4, "0")}`;
   socialRecords.unshift({
     id: `SOC-202611-${String(40 + socialRecords.length).padStart(4, "0")}`,
     user: "Pimchanok S.",
@@ -705,6 +860,8 @@ function confirmSocial() {
     reward,
     rewardDetail,
     status: status === "INVALID" ? "failed" : "processing",
+    giftOrderId,
+    giftOrderStatus: status === "INVALID" ? "NOT_CREATED" : "CREATED",
   });
   if (status !== "INVALID") {
     rewardEvents.unshift({
@@ -719,6 +876,7 @@ function confirmSocial() {
   setTab("social");
   renderSocial();
   renderEvents();
+  renderUnified();
   showToast("socialModal.success");
 }
 
@@ -736,8 +894,36 @@ function showToast(key) {
 }
 
 document.querySelectorAll(".section-tab").forEach((button) => button.addEventListener("click", () => setTab(button.dataset.tab)));
+document.querySelectorAll("[data-unified-date]").forEach((button) => {
+  button.addEventListener("click", () => {
+    button.parentElement.querySelectorAll("[data-unified-date]").forEach((item) => item.classList.toggle("active", item === button));
+  });
+});
 document.getElementById("newReferralBtn").addEventListener("click", openReferralModal);
 document.getElementById("newSocialBtn").addEventListener("click", openSocialModal);
+["unifiedBusinessFilter", "unifiedSourceFilter", "unifiedCcFilter", "unifiedBindingFilter", "unifiedRewardFilter", "unifiedStartDate", "unifiedEndDate"].forEach((id) => {
+  document.getElementById(id).addEventListener("change", renderUnified);
+});
+document.getElementById("unifiedKeywordFilter").addEventListener("input", renderUnified);
+document.getElementById("unifiedReset").addEventListener("click", () => {
+  document.getElementById("unifiedSourceFilter").value = "";
+  document.getElementById("unifiedCcFilter").value = "";
+  document.getElementById("unifiedBindingFilter").value = "";
+  document.getElementById("unifiedRewardFilter").value = "";
+  document.getElementById("unifiedKeywordFilter").value = "";
+  document.getElementById("unifiedStartDate").value = "2026-11-01";
+  document.getElementById("unifiedEndDate").value = "2026-11-30";
+  renderUnified();
+});
+document.querySelectorAll(".open-binding-sales").forEach((button) => {
+  button.addEventListener("click", () => {
+    openReferralModal({
+      id: button.dataset.referrerId,
+      name: button.dataset.referrerName,
+      owner: button.dataset.owner,
+    });
+  });
+});
 document.getElementById("verifyBindingPhone").addEventListener("click", verifyPhone);
 document.getElementById("bindingPhone").addEventListener("input", () => {
   state.verified = false;
@@ -767,7 +953,10 @@ window.GrowthBindingView = {
     renderReferrals();
     renderSocial();
     renderEvents();
+    renderUnified();
   },
-  openReferral: openReferralModal,
+  openReferral(referrer = null) {
+    openReferralModal(referrer);
+  },
 };
 })();

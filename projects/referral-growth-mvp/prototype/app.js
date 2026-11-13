@@ -1,6 +1,6 @@
 const I18N = {
   zh: {
-    "document.title": "拉新归因 · Dino CRM",
+    "document.title": "拉新关系 · Dino CRM",
     "nav.business": "业务管理",
     "nav.dashboard": "管理看板",
     "nav.users": "用户管理",
@@ -8,7 +8,7 @@ const I18N = {
     "nav.sales": "销售中心",
     "nav.orders": "订单中心",
     "nav.marketing": "营销与增长",
-    "nav.growth": "拉新归因",
+    "nav.growth": "拉新关系",
     "nav.bindings": "拉新关系维护",
     "bindings.title": "拉新关系维护",
     "nav.system": "系统管理",
@@ -19,7 +19,7 @@ const I18N = {
     "aria.openMenu": "展开菜单",
     "crumb.growth": "营销中心",
     "crumb.users": "用户管理",
-    "dashboard.subtitle": "泰国业务线 · 推荐关系与权益结果",
+    "dashboard.subtitle": "泰国业务线 · 关系、业务事件、赠送订单与权益结果",
     "common.refresh": "刷新数据",
     "metric.referrers": "推荐人数",
     "metric.referrers.note": "按推荐人用户 ID 去重",
@@ -44,6 +44,7 @@ const I18N = {
     "filter.source": "来源",
     "filter.ownerCc": "归属 CC",
     "filter.status": "权益状态",
+    "filter.bindingStatus": "绑定状态",
     "filter.keyword": "关键词",
     "filter.keyword.placeholder": "用户 ID / 手机号 / 订单 ID",
     "common.reset": "重置筛选",
@@ -63,10 +64,18 @@ const I18N = {
     "status.processing": "待发放",
     "status.failed": "发放失败",
     "status.invalid": "归因失效",
+    "bindStatus.bound": "已绑定",
+    "bindStatus.pending": "待注册",
+    "bindStatus.invalid": "已失效",
+    "eventStatus.issued": "已发放",
+    "eventStatus.processing": "待发放",
+    "eventStatus.failed": "发放失败",
+    "eventStatus.waiting": "待触发",
     "status.paid": "已付费",
     "status.trial": "体验中",
     "table.referrer": "推荐人",
     "table.referred": "被推荐人",
+    "table.user": "用户",
     "table.referredPhone": "被推荐人手机号",
     "table.source": "来源",
     "table.order": "归因订单",
@@ -78,6 +87,48 @@ const I18N = {
     "table.owner": "归属 CC",
     "table.rule": "奖励规则",
     "table.status": "权益状态",
+    "table.bindStatus": "绑定/内容状态",
+    "table.record": "业务记录",
+    "table.related": "关联对象",
+    "table.triggerEvent": "触发事件",
+    "table.giftOrder": "赠送订单",
+    "unified.title": "统一拉新记录",
+    "unified.note": "口径：",
+    "unified.noteText": "绑定、奖励事件、赠送订单和权益状态在同一列表追踪",
+    "unified.empty": "当前筛选下没有拉新记录",
+    "unified.keywordPlaceholder": "用户 ID / 手机号 / 事件 ID / 订单 ID",
+    "bindings.newSocial": "登记社媒推荐",
+    "bindings.newReferral": "新建好友推荐",
+    "sales.title": "销售中心",
+    "sales.subtitle": "我的跟进与已付费客户",
+    "sales.followUps": "我的跟进",
+    "sales.paid": "已付费",
+    "sales.allStage": "全部跟进阶段",
+    "sales.pendingCall": "待外呼",
+    "sales.connected": "已接通",
+    "sales.stage": "跟进阶段",
+    "sales.call": "拨号",
+    "sales.followUp": "更新跟进",
+    "orders.title": "订单中心",
+    "orders.subtitle": "查询付款订单与系统赠送订单",
+    "orders.allOrders": "全部订单",
+    "orders.giftOrders": "赠送订单",
+    "orders.searchPlaceholder": "订单 ID / 用户 ID / 手机号",
+    "orders.orderTypeAll": "订单类型：全部",
+    "orders.membershipGrant": "会员赠送",
+    "orders.paid": "付费订单",
+    "orders.orderId": "订单 ID",
+    "orders.orderType": "订单类型",
+    "orders.businessSource": "业务来源",
+    "orders.phone": "手机号",
+    "orders.followingCc": "创建时跟进 CC",
+    "orders.orderStatus": "订单状态",
+    "orders.benefitChange": "权益变化",
+    "orders.fulfilled": "已完成",
+    "orders.created": "已生成待发放",
+    "orders.benefit14d": "+14 天",
+    "orders.benefit2m": "+2 个月",
+    "orders.benefit3m": "+3 个月",
     "users.title": "用户中心",
     "users.subtitle": "查找用户并处理账号或会员操作",
     "users.searchPlaceholder": "用户 ID / 姓名 / 登录账号",
@@ -200,7 +251,7 @@ const I18N = {
     "nav.sales": "Sales Center",
     "nav.orders": "Order Center",
     "nav.marketing": "Marketing & Growth",
-    "nav.growth": "Referral Attribution",
+    "nav.growth": "Growth Relationships",
     "nav.bindings": "Growth Relationships",
     "bindings.title": "Growth Relationships",
     "nav.system": "System",
@@ -211,7 +262,7 @@ const I18N = {
     "aria.openMenu": "Open navigation",
     "crumb.growth": "Marketing",
     "crumb.users": "User Management",
-    "dashboard.subtitle": "Thailand business line · Referral relationships and benefit outcomes",
+    "dashboard.subtitle": "Thailand business line · Relationships, business events, gift orders, and benefits",
     "common.refresh": "Refresh",
     "metric.referrers": "Referrers",
     "metric.referrers.note": "Unique by referrer user ID",
@@ -236,6 +287,7 @@ const I18N = {
     "filter.source": "Source",
     "filter.ownerCc": "Owner CC",
     "filter.status": "Benefit status",
+    "filter.bindingStatus": "Binding status",
     "filter.keyword": "Keyword",
     "filter.keyword.placeholder": "User ID / phone / order ID",
     "common.reset": "Reset filters",
@@ -255,10 +307,18 @@ const I18N = {
     "status.processing": "Pending",
     "status.failed": "Failed",
     "status.invalid": "Attribution invalid",
+    "bindStatus.bound": "Linked",
+    "bindStatus.pending": "Pending registration",
+    "bindStatus.invalid": "Invalid",
+    "eventStatus.issued": "Issued",
+    "eventStatus.processing": "Pending issuance",
+    "eventStatus.failed": "System failure",
+    "eventStatus.waiting": "Waiting",
     "status.paid": "Paid",
     "status.trial": "On trial",
     "table.referrer": "Referrer",
     "table.referred": "Referred user",
+    "table.user": "User",
     "table.referredPhone": "Referred phone",
     "table.source": "Source",
     "table.order": "Attributed order",
@@ -270,6 +330,48 @@ const I18N = {
     "table.owner": "Owner CC",
     "table.rule": "Reward rule",
     "table.status": "Benefit status",
+    "table.bindStatus": "Binding/content status",
+    "table.record": "Business record",
+    "table.related": "Related object",
+    "table.triggerEvent": "Trigger event",
+    "table.giftOrder": "Gift order",
+    "unified.title": "Unified Growth Records",
+    "unified.note": "Scope: ",
+    "unified.noteText": "Binding, reward events, gift orders, and benefit status are tracked in one list",
+    "unified.empty": "No growth records match the current filters",
+    "unified.keywordPlaceholder": "User ID / phone / event ID / order ID",
+    "bindings.newSocial": "Add social recommendation",
+    "bindings.newReferral": "New friend referral",
+    "sales.title": "Sales Center",
+    "sales.subtitle": "My follow-ups and paid customers",
+    "sales.followUps": "My follow-ups",
+    "sales.paid": "Paid",
+    "sales.allStage": "All follow-up stages",
+    "sales.pendingCall": "Pending call",
+    "sales.connected": "Connected",
+    "sales.stage": "Follow-up stage",
+    "sales.call": "Call",
+    "sales.followUp": "Log follow-up",
+    "orders.title": "Order Center",
+    "orders.subtitle": "Paid orders and system gift orders",
+    "orders.allOrders": "All orders",
+    "orders.giftOrders": "Gift orders",
+    "orders.searchPlaceholder": "Order ID / user ID / phone",
+    "orders.orderTypeAll": "Order type: All",
+    "orders.membershipGrant": "Membership grant",
+    "orders.paid": "Paid order",
+    "orders.orderId": "Order ID",
+    "orders.orderType": "Order type",
+    "orders.businessSource": "Business source",
+    "orders.phone": "Phone",
+    "orders.followingCc": "Following CC at creation",
+    "orders.orderStatus": "Order status",
+    "orders.benefitChange": "Benefit change",
+    "orders.fulfilled": "Fulfilled",
+    "orders.created": "Created, pending fulfillment",
+    "orders.benefit14d": "+14 days",
+    "orders.benefit2m": "+2 months",
+    "orders.benefit3m": "+3 months",
     "users.title": "User Center",
     "users.subtitle": "Find users and manage account or membership actions",
     "users.searchPlaceholder": "User ID / name / login account",
@@ -612,8 +714,8 @@ function applyStaticTranslations() {
   document.getElementById("usersRowSummary").textContent = countLabel("users.count", 3);
   document.getElementById("grantTitle").textContent = t("grant.title", { id: "2120302255148482561" });
   document.getElementById("rewardSummaryValue").textContent = ruleLabel(1);
-  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "bindings" ? "bindings.title" : "users.title";
-  const viewCrumb = state.view === "dashboard" ? "crumb.growth" : "crumb.users";
+  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "sales" ? "sales.title" : state.view === "orders" ? "orders.title" : "users.title";
+  const viewCrumb = state.view === "dashboard" ? "crumb.growth" : state.view === "sales" ? "nav.sales" : state.view === "orders" ? "nav.orders" : "crumb.users";
   document.getElementById("pageTitle").textContent = t(viewTitle);
   document.getElementById("crumb").textContent = t(viewCrumb);
 }
@@ -717,15 +819,18 @@ function openDrawer(id) {
 function setView(view) {
   state.view = view;
   const dashboard = view === "dashboard";
-  const bindings = view === "bindings";
+  const sales = view === "sales";
+  const orders = view === "orders";
   document.getElementById("dashboardView").hidden = !dashboard;
-  document.getElementById("bindingsView").hidden = !bindings;
-  document.getElementById("usersView").hidden = dashboard || bindings;
-  document.getElementById("pageTitle").textContent = t(dashboard ? "nav.growth" : bindings ? "bindings.title" : "users.title");
-  document.getElementById("crumb").textContent = t(dashboard || bindings ? "crumb.growth" : "crumb.users");
+  document.getElementById("bindingsView").hidden = true;
+  document.getElementById("salesView").hidden = !sales;
+  document.getElementById("ordersView").hidden = !orders;
+  document.getElementById("usersView").hidden = dashboard || sales || orders;
+  document.getElementById("pageTitle").textContent = t(dashboard ? "nav.growth" : sales ? "sales.title" : orders ? "orders.title" : "users.title");
+  document.getElementById("crumb").textContent = t(dashboard ? "crumb.growth" : sales ? "nav.sales" : orders ? "nav.orders" : "crumb.users");
   document.querySelectorAll(".nav-item[data-view]").forEach((item) => item.classList.toggle("active", item.dataset.view === view));
   document.getElementById("sidebar").classList.remove("open");
-  if (bindings) window.GrowthBindingView?.activate();
+  if (dashboard) window.GrowthBindingView?.activate();
 }
 
 function resetGrantForm() {
@@ -840,7 +945,7 @@ function verifyReferredUser() {
 }
 
 function openGrant() {
-  setView("bindings");
+  setView("dashboard");
   window.GrowthBindingView?.openReferral();
 }
 
@@ -922,9 +1027,9 @@ function setLanguage(language) {
     // Local file previews may block history updates.
   }
   applyStaticTranslations();
-  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "bindings" ? "bindings.title" : "users.title";
+  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "sales" ? "sales.title" : state.view === "orders" ? "orders.title" : "users.title";
   document.getElementById("pageTitle").textContent = t(viewTitle);
-  document.getElementById("crumb").textContent = t(state.view === "dashboard" ? "crumb.growth" : "crumb.users");
+  document.getElementById("crumb").textContent = t(state.view === "dashboard" ? "crumb.growth" : state.view === "sales" ? "nav.sales" : state.view === "orders" ? "nav.orders" : "crumb.users");
   renderRows();
   if (!document.getElementById("grantModal").hidden) {
     if (state.verified) renderVerifiedReferral();

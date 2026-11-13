@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>拉新归因 · Dino CRM</title>
+  <title>拉新关系 · Dino CRM</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="binding.css">
 </head>
@@ -29,11 +29,10 @@
       <button class="nav-item"><svg><use href="#i-grid"></use></svg><span data-i18n="nav.dashboard">管理看板</span></button>
       <button class="nav-item"><svg><use href="#i-users"></use></svg><span data-i18n="nav.users">用户管理</span></button>
       <button class="nav-item" data-view="users"><svg><use href="#i-users"></use></svg><span data-i18n="nav.userList">用户列表</span></button>
-      <button class="nav-item"><svg><use href="#i-phone"></use></svg><span data-i18n="nav.sales">销售中心</span></button>
-      <button class="nav-item"><svg><use href="#i-box"></use></svg><span data-i18n="nav.orders">订单中心</span></button>
+      <button class="nav-item" data-view="sales"><svg><use href="#i-phone"></use></svg><span data-i18n="nav.sales">销售中心</span></button>
+      <button class="nav-item" data-view="orders"><svg><use href="#i-box"></use></svg><span data-i18n="nav.orders">订单中心</span></button>
       <div class="nav-label" data-i18n="nav.marketing">营销与增长</div>
-      <button class="nav-item active" data-view="dashboard"><svg><use href="#i-chart"></use></svg><span data-i18n="nav.growth">拉新归因</span></button>
-      <button class="nav-item" data-view="bindings"><svg><use href="#i-users"></use></svg><span data-i18n="nav.bindings">拉新关系维护</span></button>
+      <button class="nav-item active" data-view="dashboard"><svg><use href="#i-chart"></use></svg><span data-i18n="nav.growth">拉新关系</span></button>
       <div class="nav-label" data-i18n="nav.system">系统管理</div>
       <button class="nav-item"><svg><use href="#i-settings"></use></svg><span data-i18n="nav.settings">系统配置</span></button>
     </nav>
@@ -49,7 +48,7 @@
         <button class="btn small mobile-menu" id="menuBtn" aria-label="展开菜单" data-i18n-aria-label="aria.openMenu"><svg><use href="#i-menu"></use></svg></button>
         <div>
           <div class="crumb">Dino CRM <span>/</span> <b id="crumb" data-i18n="crumb.growth">营销中心</b></div>
-          <h1 id="pageTitle" data-i18n="nav.growth">拉新归因</h1>
+          <h1 id="pageTitle" data-i18n="nav.growth">拉新关系</h1>
         </div>
       </div>
       <div class="top-right">
@@ -69,10 +68,12 @@
       <section class="view" id="dashboardView">
         <div class="view-head">
           <div>
-            <h2 data-i18n="nav.growth">拉新归因</h2>
-            <p data-i18n="dashboard.subtitle">泰国业务线 · 推荐关系与权益结果</p>
+            <h2 data-i18n="nav.growth">拉新关系</h2>
+            <p data-i18n="dashboard.subtitle">泰国业务线 · 关系、业务事件、赠送订单与权益结果</p>
           </div>
           <div class="head-actions">
+            <button class="btn" id="newSocialBtn" data-i18n="bindings.newSocial">登记社媒推荐</button>
+            <button class="btn primary" id="newReferralBtn" data-i18n="bindings.newReferral">新建好友推荐</button>
             <button class="btn" id="refreshBtn" data-i18n="common.refresh">刷新数据</button>
           </div>
         </div>
@@ -100,7 +101,7 @@
           </article>
         </div>
 
-        <section class="panel">
+        <section class="panel" id="legacyAttributionPanel" hidden>
           <div class="panel-head">
             <h3 data-i18n="records.title">归因记录</h3>
             <div class="date-tabs" aria-label="业务日期">
@@ -169,6 +170,78 @@
             <div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div>
           </div>
         </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h3 data-i18n="unified.title">统一拉新记录</h3>
+              <div class="inline-meta"><span><b data-i18n="unified.note">口径：</b><span data-i18n="unified.noteText">绑定、奖励事件、赠送订单和权益状态在同一列表追踪</span></span></div>
+            </div>
+            <div class="date-tabs" aria-label="业务日期">
+              <button class="date-tab active" data-unified-date="bind" data-i18n="records.bindDate">关系绑定时间</button>
+              <button class="date-tab" data-unified-date="order" data-i18n="records.orderDate">订单支付时间</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="filters">
+              <div class="field">
+                <label data-i18n="filter.dateRange">日期范围</label>
+                <div class="date-range">
+                  <input class="control" id="unifiedStartDate" type="date" value="2026-11-01">
+                  <span data-i18n="filter.to">至</span>
+                  <input class="control" id="unifiedEndDate" type="date" value="2026-11-30">
+                </div>
+              </div>
+              <div class="field">
+                <label data-i18n="filter.businessLine">业务线</label>
+                <select class="control" id="unifiedBusinessFilter"><option value="thailand" data-i18n="option.thailand">泰国</option><option value="vietnam" data-i18n="option.vietnam">越南</option></select>
+              </div>
+              <div class="field">
+                <label data-i18n="filter.source">来源</label>
+                <select class="control" id="unifiedSourceFilter"><option value="" data-i18n="option.allSources">全部来源</option><option value="referral" data-i18n="source.referral">拉新推荐</option><option value="social" data-i18n="source.social">社媒推荐</option></select>
+              </div>
+              <div class="field">
+                <label data-i18n="filter.ownerCc">归属 CC</label>
+                <select class="control" id="unifiedCcFilter"><option value="" data-i18n="option.allCc">全部 CC</option><option>Thanya C.</option><option>Mina P.</option><option>Nok S.</option></select>
+              </div>
+              <div class="field">
+                <label data-i18n="filter.bindingStatus">绑定状态</label>
+                <select class="control" id="unifiedBindingFilter"><option value="" data-i18n="option.allStatuses">全部状态</option><option value="bound" data-i18n="bindStatus.bound">已绑定</option><option value="pending" data-i18n="bindStatus.pending">待注册</option><option value="invalid" data-i18n="bindStatus.invalid">已失效</option></select>
+              </div>
+              <div class="field">
+                <label data-i18n="filter.status">奖励状态</label>
+                <select class="control" id="unifiedRewardFilter"><option value="" data-i18n="option.allStatuses">全部状态</option><option value="issued" data-i18n="eventStatus.issued">已发放</option><option value="processing" data-i18n="eventStatus.processing">待发放</option><option value="failed" data-i18n="eventStatus.failed">发放失败</option><option value="waiting" data-i18n="eventStatus.waiting">待触发</option></select>
+              </div>
+              <div class="field">
+                <label data-i18n="filter.keyword">关键词</label>
+                <input class="control search" id="unifiedKeywordFilter" placeholder="用户 ID / 手机号 / 订单 ID" data-i18n-placeholder="unified.keywordPlaceholder">
+              </div>
+              <button class="btn small" id="unifiedReset" style="align-self:flex-end" data-i18n="common.reset">重置筛选</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="table.record">业务记录</th>
+                <th data-i18n="table.source">来源</th>
+                <th data-i18n="table.user">用户</th>
+                <th data-i18n="table.related">关联对象</th>
+                <th data-i18n="table.owner">归属 CC</th>
+                <th data-i18n="table.bindStatus">绑定/内容状态</th>
+                <th data-i18n="table.triggerEvent">触发事件</th>
+                <th data-i18n="table.reward">奖励</th>
+                <th data-i18n="table.giftOrder">赠送订单</th>
+                <th data-i18n="table.status">奖励状态</th>
+              </tr></thead>
+              <tbody id="unifiedRows"></tbody>
+            </table>
+            <div class="empty" id="unifiedEmpty" hidden data-i18n="unified.empty">当前筛选下没有拉新记录</div>
+          </div>
+          <div class="table-foot">
+            <span id="unifiedCount"></span>
+            <span data-i18n="bindings.page">第 1 页</span>
+          </div>
+        </section>
       </section>
 
       <section class="view" id="bindingsView" hidden>
@@ -178,8 +251,8 @@
             <p data-i18n="bindings.subtitle">先绑定关系，后由业务事件自动发放权益</p>
           </div>
           <div class="head-actions">
-            <button class="btn" id="newSocialBtn" data-i18n="bindings.newSocial">登记社媒推荐</button>
-            <button class="btn primary" id="newReferralBtn" data-i18n="bindings.newReferral">新建好友推荐</button>
+            <button class="btn" id="legacyNewSocialBtn" data-i18n="bindings.newSocial">登记社媒推荐</button>
+            <button class="btn primary" id="legacyNewReferralBtn" data-i18n="bindings.newReferral">新建好友推荐</button>
           </div>
         </div>
 
@@ -283,6 +356,109 @@
         </section>
       </section>
 
+      <section class="view" id="salesView" hidden>
+        <div class="view-head">
+          <div>
+            <h2 data-i18n="sales.title">销售中心</h2>
+            <p data-i18n="sales.subtitle">我的跟进与已付费客户</p>
+          </div>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div class="date-tabs">
+              <button class="date-tab active" data-i18n="sales.followUps">我的跟进</button>
+              <button class="date-tab" data-i18n="sales.paid">已付费</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="user-toolbar">
+              <input class="control search" placeholder="手机号 / 用户 ID / 姓名" data-i18n-placeholder="users.searchPlaceholder">
+              <select class="control"><option data-i18n="sales.allStage">全部跟进阶段</option><option data-i18n="sales.pendingCall">待外呼</option><option data-i18n="sales.connected">已接通</option></select>
+              <select class="control"><option data-i18n="users.businessTh">业务线：泰国</option><option data-i18n="users.businessVn">业务线：越南</option></select>
+              <button class="btn small" data-i18n="common.search">搜索</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="users.userId">用户 ID</th>
+                <th data-i18n="users.name">姓名</th>
+                <th data-i18n="users.userStatus">用户状态</th>
+                <th data-i18n="sales.stage">跟进阶段</th>
+                <th data-i18n="table.owner">归属 CC</th>
+                <th data-i18n="users.actions">操作</th>
+              </tr></thead>
+              <tbody>
+                <tr class="btn-row">
+                  <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="sales.connected">已接通</td><td>Thanya C.</td>
+                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                </tr>
+                <tr class="btn-row">
+                  <td class="mono">2120302281472036721</td><td>Kanya R.</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="sales.pendingCall">待外呼</td><td>Mina P.</td>
+                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                </tr>
+                <tr class="btn-row">
+                  <td class="mono">2120302210461928824</td><td>Arunee T.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="sales.connected">已接通</td><td>Nok S.</td>
+                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-foot"><span>3</span><span data-i18n="bindings.page">第 1 页</span></div>
+        </section>
+      </section>
+
+      <section class="view" id="ordersView" hidden>
+        <div class="view-head">
+          <div>
+            <h2 data-i18n="orders.title">订单中心</h2>
+            <p data-i18n="orders.subtitle">查询付款订单与系统赠送订单</p>
+          </div>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div class="date-tabs">
+              <button class="date-tab active" data-i18n="orders.allOrders">全部订单</button>
+              <button class="date-tab" data-i18n="orders.giftOrders">赠送订单</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="user-toolbar">
+              <input class="control search" placeholder="订单 ID / 用户 ID / 手机号" data-i18n-placeholder="orders.searchPlaceholder">
+              <select class="control"><option data-i18n="orders.orderTypeAll">订单类型：全部</option><option data-i18n="orders.membershipGrant">会员赠送</option><option data-i18n="orders.paid">付费订单</option></select>
+              <button class="btn small" data-i18n="common.search">搜索</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="orders.orderId">订单 ID</th>
+                <th data-i18n="orders.orderType">订单类型</th>
+                <th data-i18n="orders.businessSource">业务来源</th>
+                <th data-i18n="table.user">用户</th>
+                <th data-i18n="orders.phone">手机号</th>
+                <th data-i18n="orders.followingCc">创建时跟进 CC</th>
+                <th data-i18n="table.amount">金额</th>
+                <th data-i18n="orders.orderStatus">订单状态</th>
+                <th data-i18n="orders.benefitChange">权益变化</th>
+              </tr></thead>
+              <tbody>
+                <tr class="btn-row">
+                  <td class="mono">GRT202611080041</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.referral">拉新推荐</td><td>Pimchanok S.</td><td class="mono">+66 82 **** 2233</td><td>Thanya C.</td><td>฿0</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit14d">+14 天</td>
+                </tr>
+                <tr class="btn-row">
+                  <td class="mono">GRT202611080056</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.social">社媒推荐</td><td>Pimchanok S.</td><td class="mono">+66 82 **** 2233</td><td>Thanya C.</td><td>฿0</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit2m">+2 个月</td>
+                </tr>
+                <tr class="btn-row">
+                  <td class="mono">GRT202611090018</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.referral">拉新推荐</td><td>Arunee T.</td><td class="mono">+66 88 **** 7712</td><td>Nok S.</td><td>฿0</td><td><span class="status processing" data-i18n="orders.created">已生成待发放</span></td><td data-i18n="orders.benefit3m">+3 个月</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-foot"><span>3</span><span data-i18n="bindings.page">第 1 页</span></div>
+        </section>
+      </section>
+
       <section class="view" id="usersView" hidden>
         <div class="view-head">
           <div>
@@ -335,7 +511,7 @@
       <div class="modal-body">
         <div class="binding-context">
           <strong data-i18n="referralModal.referrer">推荐人</strong>
-          <span>Pimchanok S. · 2120302255148482561 · Thailand · CC: Thanya C.</span>
+          <span id="referrerSummary">Pimchanok S. · 2120302255148482561 · Thailand · CC: Thanya C.</span>
         </div>
         <div class="form-row">
           <div class="form-label"><span class="req">*</span><span data-i18n="referralModal.phone">被推荐人手机号</span></div>
