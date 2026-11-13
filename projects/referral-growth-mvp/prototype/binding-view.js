@@ -22,10 +22,10 @@ const TEXT = {
     "bindings.subtitle": "先绑定关系，后由业务事件自动发放权益",
     "bindings.newSocial": "登记社媒推荐",
     "bindings.newReferral": "新建好友推荐",
-    "bindings.bound": "已绑定关系",
+    "bindings.bound": "已生效关系",
     "bindings.boundNote": "等待首课、购买或归属异常处理",
-    "bindings.pending": "待注册绑定",
-    "bindings.pendingNote": "注册后按手机号自动关联用户",
+    "bindings.pending": "待转移关系",
+    "bindings.pendingNote": "等待原归属 CC 重新分配线索",
     "bindings.automatic": "自动发放",
     "bindings.automaticNote": "首课、购买与社媒事件",
     "bindings.tabReferral": "好友推荐",
@@ -46,7 +46,7 @@ const TEXT = {
     "unified.note": "口径：",
     "unified.noteText": "绑定、奖励事件、赠送订单和权益状态在同一列表追踪",
     "unified.empty": "当前筛选下没有拉新记录",
-    "unified.keywordPlaceholder": "用户 ID / 手机号 / 事件 ID / 订单 ID",
+    "unified.keywordPlaceholder": "用户 ID / 事件 ID / 订单 ID",
     "unified.count": "共 {count} 条记录",
     "business.thailand": "泰国",
     "table.referrer": "推荐人",
@@ -76,10 +76,13 @@ const TEXT = {
     "table.related": "关联对象",
     "table.triggerEvent": "触发事件",
     "table.giftOrder": "赠送订单",
+    "table.action": "操作",
+    "table.targetOwner": "目标归属 CC",
+    "table.currentOwner": "当前归属 CC",
     "source.referral": "拉新推荐",
     "source.social": "社媒推荐",
-    "bindStatus.bound": "已绑定",
-    "bindStatus.pending": "待注册",
+    "bindStatus.active": "已生效",
+    "bindStatus.pendingTransfer": "待原 CC 转移",
     "bindStatus.invalid": "已失效",
     "eventStatus.waiting": "待触发",
     "eventStatus.processing": "待发放",
@@ -88,6 +91,7 @@ const TEXT = {
     "giftStatus.CREATED": "已生成，待发放",
     "giftStatus.FULFILLED": "已完成",
     "giftStatus.NOT_CREATED": "未生成",
+    "trigger.transfer": "等待重新分配线索",
     "trigger.firstTrial": "等待首课完课",
     "trigger.purchase": "等待首次购买",
     "trigger.socialReview": "等待社媒状态",
@@ -114,21 +118,31 @@ const TEXT = {
     "referralModal.title": "新建好友推荐",
     "referralModal.subtitle": "仅绑定关系，不发放会员权益",
     "referralModal.referrer": "推荐人",
-    "referralModal.phone": "被推荐人手机号",
+    "referralModal.referredUserId": "被推荐人用户 ID",
+    "referralModal.userIdPlaceholder": "输入 C 的完整用户 ID",
     "referralModal.verify": "核验",
-    "referralModal.verifyNote": "按推荐人业务线匹配；未注册手机号可创建待注册预绑定",
+    "referralModal.verifyNote": "精确核验用户、业务线、活动新注册状态、已有推荐关系和当前归属 CC",
     "referralModal.note": "绑定备注",
     "referralModal.notePlaceholder": "例如父母与孩子的对应关系",
     "referralModal.enumLabel": "绑定状态枚举：",
     "referralModal.confirm": "确认绑定",
-    "referralModal.empty": "请输入被推荐人手机号",
-    "referralModal.invalidPhone": "手机号格式无效",
-    "referralModal.self": "该手机号属于推荐人本人，不能绑定自荐关系",
-    "referralModal.otherLine": "手机号用户属于越南业务线，与推荐人泰国业务线不一致",
-    "referralModal.existing": "Narin K. · 同业务线已注册用户",
-    "referralModal.eligible": "可绑定：用户与推荐人同属泰国业务线",
-    "referralModal.pending": "该手机号尚未注册，将创建待注册预绑定",
-    "referralModal.success": "关系已绑定，奖励将在业务事件到达后自动发放",
+    "referralModal.empty": "请输入被推荐人用户 ID",
+    "referralModal.invalidUserId": "用户 ID 格式无效，请输入完整数字 ID",
+    "referralModal.self": "不能使用推荐人自己的用户 ID 绑定自荐关系",
+    "referralModal.notFound": "未找到该正式注册用户，不能绑定",
+    "referralModal.otherLine": "该用户属于越南业务线，与推荐人泰国业务线不一致",
+    "referralModal.notNew": "该用户注册时间早于活动开始时间，不属于活动新用户",
+    "referralModal.alreadyBound": "该用户已绑定其他推荐人，不能重复绑定",
+    "referralModal.existing": "Narin K. · 活动新注册用户",
+    "referralModal.eligible": "可绑定：正式注册、同业务线且无其他推荐关系",
+    "referralModal.registeredAt": "注册时间",
+    "referralModal.campaignStart": "活动开始",
+    "referralModal.newRegistration": "新注册判定",
+    "referralModal.currentOwner": "当前归属 CC",
+    "referralModal.successPending": "绑定成功，C 当前归属 {owner}，请联系其重新分配线索",
+    "referralModal.successActive": "绑定成功，C 已归属 CC A，后续业务事件将自动触发奖励",
+    "transfer.action": "重新分配线索",
+    "transfer.success": "C 已转给 {owner}，绑定关系生效",
     "socialModal.title": "登记社媒推荐",
     "socialModal.subtitle": "先保存内容记录，状态变化后自动发奖",
     "socialModal.user": "发布用户",
@@ -168,10 +182,10 @@ const TEXT = {
     "bindings.subtitle": "Link the relationship first; issue benefits later from business events",
     "bindings.newSocial": "Add social recommendation",
     "bindings.newReferral": "New friend referral",
-    "bindings.bound": "Linked relationships",
+    "bindings.bound": "Active relationships",
     "bindings.boundNote": "Awaiting first lesson, purchase, or assignment review",
-    "bindings.pending": "Pending registration",
-    "bindings.pendingNote": "Phone is linked to a user after registration",
+    "bindings.pending": "Pending ownership transfer",
+    "bindings.pendingNote": "Waiting for the current CC to reassign the lead",
     "bindings.automatic": "Automatic issuance",
     "bindings.automaticNote": "First lesson, purchase, and social events",
     "bindings.tabReferral": "Friend referrals",
@@ -192,7 +206,7 @@ const TEXT = {
     "unified.note": "Scope: ",
     "unified.noteText": "Binding, reward events, gift orders, and benefit status are tracked in one list",
     "unified.empty": "No growth records match the current filters",
-    "unified.keywordPlaceholder": "User ID / phone / event ID / order ID",
+    "unified.keywordPlaceholder": "User ID / event ID / order ID",
     "unified.count": "{count} records",
     "business.thailand": "Thailand",
     "table.referrer": "Referrer",
@@ -222,10 +236,13 @@ const TEXT = {
     "table.related": "Related object",
     "table.triggerEvent": "Trigger event",
     "table.giftOrder": "Gift order",
+    "table.action": "Action",
+    "table.targetOwner": "Target owner CC",
+    "table.currentOwner": "Current owner CC",
     "source.referral": "Referral",
     "source.social": "Social recommendation",
-    "bindStatus.bound": "Linked",
-    "bindStatus.pending": "Pending registration",
+    "bindStatus.active": "Active",
+    "bindStatus.pendingTransfer": "Pending original-CC transfer",
     "bindStatus.invalid": "Invalid",
     "eventStatus.waiting": "Waiting",
     "eventStatus.processing": "Pending issuance",
@@ -234,6 +251,7 @@ const TEXT = {
     "giftStatus.CREATED": "Created, pending fulfillment",
     "giftStatus.FULFILLED": "Fulfilled",
     "giftStatus.NOT_CREATED": "Not created",
+    "trigger.transfer": "Awaiting lead reassignment",
     "trigger.firstTrial": "Awaiting first lesson completion",
     "trigger.purchase": "Awaiting first purchase",
     "trigger.socialReview": "Awaiting social status",
@@ -260,21 +278,31 @@ const TEXT = {
     "referralModal.title": "New Friend Referral",
     "referralModal.subtitle": "Link the relationship only; no membership benefit is issued",
     "referralModal.referrer": "Referrer",
-    "referralModal.phone": "Referred user phone",
+    "referralModal.referredUserId": "Referred user ID",
+    "referralModal.userIdPlaceholder": "Enter C's complete user ID",
     "referralModal.verify": "Verify",
-    "referralModal.verifyNote": "Match within the referrer's business line; an unregistered phone can be reserved",
+    "referralModal.verifyNote": "Verify the user, business line, campaign registration, existing referral, and current owner CC",
     "referralModal.note": "Binding note",
     "referralModal.notePlaceholder": "For example, the parent-child relationship",
     "referralModal.enumLabel": "Binding status enums: ",
     "referralModal.confirm": "Confirm link",
-    "referralModal.empty": "Enter the referred user's phone number",
-    "referralModal.invalidPhone": "Invalid phone number",
-    "referralModal.self": "This phone belongs to the referrer and cannot be used for self-referral",
-    "referralModal.otherLine": "This phone belongs to the Vietnam business line, which does not match the referrer's Thailand business line",
-    "referralModal.existing": "Narin K. · Registered in the same business line",
-    "referralModal.eligible": "Eligible: the user and referrer are both in the Thailand business line",
-    "referralModal.pending": "This phone is not registered yet. A pending-registration link will be created.",
-    "referralModal.success": "Relationship linked. Rewards will be issued automatically when business events arrive.",
+    "referralModal.empty": "Enter the referred user ID",
+    "referralModal.invalidUserId": "Invalid user ID. Enter the complete numeric ID.",
+    "referralModal.self": "The referrer's own user ID cannot be used for self-referral",
+    "referralModal.notFound": "No eligible registered user was found for this user ID",
+    "referralModal.otherLine": "The user belongs to the Vietnam business line, which does not match the referrer's Thailand business line",
+    "referralModal.notNew": "The user registered before the campaign start and is not a new campaign user",
+    "referralModal.alreadyBound": "This user is already linked to another referrer",
+    "referralModal.existing": "Narin K. · New campaign registration",
+    "referralModal.eligible": "Eligible: registered, same business line, and no existing referral",
+    "referralModal.registeredAt": "Registered at",
+    "referralModal.campaignStart": "Campaign start",
+    "referralModal.newRegistration": "New registration",
+    "referralModal.currentOwner": "Current owner CC",
+    "referralModal.successPending": "Relationship linked. C currently belongs to {owner}; contact them to reassign the lead.",
+    "referralModal.successActive": "Relationship linked. C already belongs to CC A; business events will now trigger rewards.",
+    "transfer.action": "Reassign lead",
+    "transfer.success": "C reassigned to {owner}; the referral relationship is now active.",
     "socialModal.title": "Add Social Recommendation",
     "socialModal.subtitle": "Save the content first; status changes trigger rewards automatically",
     "socialModal.user": "Publishing user",
@@ -299,14 +327,55 @@ const state = {
   tab: "referral",
   bindingType: "",
   verified: false,
-  phoneUser: null,
+  verifiedUser: null,
   bindingResult: null,
   socialNoticeKey: "",
   toastKey: "",
+  toastValues: {},
   referrer: {
     id: "2120302255148482561",
     name: "Pimchanok S.",
     owner: "Thanya C.",
+  },
+};
+
+const CAMPAIGN_START = "2026-11-01";
+const USER_DIRECTORY = {
+  "2120302295478341": {
+    userId: "2120302295478341",
+    name: "Narin K.",
+    businessLine: "thailand",
+    userType: "FORMAL",
+    registeredAt: "2026-11-08",
+    currentOwner: "Nok S.",
+    existingBinding: false,
+  },
+  "2120302247228042882": {
+    userId: "2120302247228042882",
+    name: "Waraporn L.",
+    businessLine: "thailand",
+    userType: "FORMAL",
+    registeredAt: "2026-10-20",
+    currentOwner: "Nok S.",
+    existingBinding: false,
+  },
+  "2120302273820914407": {
+    userId: "2120302273820914407",
+    name: "Siriporn W.",
+    businessLine: "thailand",
+    userType: "FORMAL",
+    registeredAt: "2026-11-03",
+    currentOwner: "Nok S.",
+    existingBinding: true,
+  },
+  "2120302295479900": {
+    userId: "2120302295479900",
+    name: "Linh N.",
+    businessLine: "vietnam",
+    userType: "FORMAL",
+    registeredAt: "2026-11-05",
+    currentOwner: "Mina P.",
+    existingBinding: false,
   },
 };
 
@@ -320,9 +389,10 @@ const referrals = [
     phone: "+66 81 **** 5678",
     line: "thailand",
     owner: "Thanya C.",
-    bindingStatus: "bound",
+    currentOwner: "Nok S.",
+    bindingStatus: "pendingTransfer",
     boundAt: "2026-11-08",
-    nextTrigger: "trigger.purchase",
+    nextTrigger: "trigger.transfer",
     latestReward: "reward.firstTrial",
     rewardStatus: "issued",
     planMonths: 3,
@@ -333,12 +403,13 @@ const referrals = [
     id: "BIND-202611-0204",
     referrerId: "2120302281472036721",
     referrer: "Kanya R.",
-    referredId: "",
-    referred: "—",
+    referredId: "2120302246091874272",
+    referred: "Mali P.",
     phone: "+66 90 **** 2018",
     line: "thailand",
     owner: "Mina P.",
-    bindingStatus: "pending",
+    currentOwner: "Mina P.",
+    bindingStatus: "active",
     boundAt: "2026-11-09",
     nextTrigger: "trigger.firstTrial",
     latestReward: "reward.none",
@@ -355,7 +426,8 @@ const referrals = [
     phone: "+66 88 **** 1234",
     line: "thailand",
     owner: "Nok S.",
-    bindingStatus: "bound",
+    currentOwner: "Nok S.",
+    bindingStatus: "active",
     boundAt: "2026-11-06",
     nextTrigger: "trigger.assignment",
     latestReward: "reward.purchase",
@@ -374,7 +446,8 @@ const referrals = [
     phone: "+66 95 **** 7777",
     line: "thailand",
     owner: "Mina P.",
-    bindingStatus: "bound",
+    currentOwner: "Mina P.",
+    bindingStatus: "active",
     boundAt: "2026-11-04",
     nextTrigger: "trigger.firstTrial",
     latestReward: "reward.none",
@@ -481,20 +554,9 @@ function t(key, values = {}) {
   return template.replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? `{${name}}`));
 }
 
-function normalizePhone(value) {
-  return value.replace(/[^\d+]/g, "").replace(/(?!^)\+/g, "");
-}
-
-function maskPhone(value) {
-  const normalized = normalizePhone(value);
-  if (normalized.length < 8) return normalized;
-  const prefix = normalized.slice(0, 4);
-  const suffix = normalized.slice(-4);
-  return `${prefix} **** ${suffix}`;
-}
-
 function statusLabel(key) {
-  return `<span class="status ${key === "bound" ? "bound" : key}">${t(`bindStatus.${key}`)}</span>`;
+  const cls = key === "active" ? "bound" : key === "pendingTransfer" ? "pending" : key;
+  return `<span class="status ${cls}">${t(`bindStatus.${key}`)}</span>`;
 }
 
 function rewardStatusLabel(key) {
@@ -511,13 +573,16 @@ function renderBindingResult() {
   }
   result.hidden = false;
   result.className = "relation-hint";
-  if (state.bindingResult.kind === "existing") {
-    result.innerHTML = `<strong>${t("referralModal.existing")}</strong><span>${t("referralModal.eligible")}</span><span class="mono">2120302295478341</span>`;
-    return;
-  }
-  if (state.bindingResult.kind === "pending") {
-    result.textContent = t("referralModal.pending");
-    result.classList.add("is-pending");
+  if (state.bindingResult.kind === "eligible") {
+    const user = state.bindingResult.user;
+    result.innerHTML = `
+      <strong>${t("referralModal.existing")}</strong>
+      <span>${t("referralModal.eligible")}</span>
+      <span class="mono">${user.userId}</span>
+      <span>${t("referralModal.registeredAt")}: ${user.registeredAt}</span>
+      <span>${t("referralModal.campaignStart")}: ${CAMPAIGN_START}</span>
+      <span>${t("referralModal.newRegistration")}: NEW_REGISTRATION</span>
+      <span>${t("referralModal.currentOwner")}: ${user.currentOwner || "—"}</span>`;
     return;
   }
   result.textContent = t(state.bindingResult.key);
@@ -593,8 +658,9 @@ function unifiedRows() {
     source: "referral",
     user: row.referrer,
     userId: row.referrerId,
-    related: row.referredId ? `${row.referred} · ${row.phone}` : `${row.referred} · ${row.phone}`,
+    related: `${row.referred} · ${row.referredId || "—"}`,
     owner: row.owner,
+    currentOwner: row.currentOwner,
     bindingStatus: row.bindingStatus,
     eventType: row.latestReward === "reward.firstTrial"
       ? "REFERRAL_FIRST_TRIAL_COMPLETED"
@@ -606,7 +672,7 @@ function unifiedRows() {
     giftOrderId: row.giftOrderId,
     giftOrderStatus: row.giftOrderStatus,
     date: row.boundAt,
-    keywords: [row.id, row.referrerId, row.referredId, row.phone, row.giftOrderId, row.referrer, row.referred],
+    keywords: [row.id, row.referrerId, row.referredId, row.giftOrderId, row.referrer, row.referred],
   }));
   const socialRows = socialRecords.map((row) => ({
     id: row.id,
@@ -615,7 +681,8 @@ function unifiedRows() {
     userId: "",
     related: `${platformLabel(row.platform)} · ${t(row.contentType)}`,
     owner: "Thanya C.",
-    bindingStatus: "bound",
+    currentOwner: "—",
+    bindingStatus: "active",
     bindingText: row.contentStatus,
     eventType: row.rewardDetail ? `SOCIAL_POST_${row.rewardDetail === "reward.selected" ? "OFFICIALLY_SELECTED" : "NOT_SELECTED"}` : "SOCIAL_POST_PUBLISHED",
     reward: row.rewardDetail ? `${t(row.reward)} + ${t(row.rewardDetail)}` : t(row.reward),
@@ -638,7 +705,7 @@ function renderUnified() {
   const end = document.getElementById("unifiedEndDate").value;
   const rows = unifiedRows().filter((row) => {
     const sourceMatch = !source || row.source === source;
-    const ownerMatch = !owner || row.owner === owner;
+    const ownerMatch = !owner || row.owner === owner || row.currentOwner === owner;
     const bindingMatch = !bindingStatus || row.bindingStatus === bindingStatus;
     const rewardMatch = !rewardStatus || row.rewardStatus === rewardStatus;
     const keywordMatch = !keyword || row.keywords.some((value) => String(value || "").toLowerCase().includes(keyword));
@@ -653,14 +720,28 @@ function renderUnified() {
       <td><span>${row.user}</span>${row.userId ? `<span class="secondary mono">${row.userId}</span>` : ""}</td>
       <td>${row.related}</td>
       <td>${row.owner}</td>
-      <td>${row.bindingStatus === "pending" ? `<span class="status pending">${t("bindStatus.pending")}</span>` : `<span class="status bound">${row.bindingText ? t(row.bindingText) : t("bindStatus.bound")}</span>`}</td>
+      <td>${row.currentOwner || "—"}</td>
+      <td>${row.bindingStatus === "pendingTransfer" ? `<span class="status pending">${t("bindStatus.pendingTransfer")}</span>` : `<span class="status bound">${row.bindingText ? t(row.bindingText) : t("bindStatus.active")}</span>`}</td>
       <td><span class="event-type">${row.eventType}</span></td>
       <td>${row.reward}</td>
       <td><span class="mono">${row.giftOrderId}</span><span class="secondary">${t(`giftStatus.${row.giftOrderStatus}`)} · ฿0</span></td>
       <td>${rewardStatusLabel(row.rewardStatus)}</td>
+      <td>${row.source === "referral" && row.bindingStatus === "pendingTransfer" ? `<button class="btn small transfer-lead" data-binding-id="${row.id}">${t("transfer.action")}</button>` : "—"}</td>
     </tr>`).join("");
   document.getElementById("unifiedEmpty").hidden = rows.length > 0;
   document.getElementById("unifiedCount").textContent = t("unified.count", { count: rows.length });
+  body.querySelectorAll(".transfer-lead").forEach((button) => {
+    button.addEventListener("click", () => {
+      const relation = referrals.find((item) => item.id === button.dataset.bindingId);
+      if (!relation) return;
+      relation.bindingStatus = "active";
+      relation.currentOwner = relation.owner;
+      relation.nextTrigger = "trigger.firstTrial";
+      renderUnified();
+      renderReferrals();
+      showToast("transfer.success", { owner: relation.owner });
+    });
+  });
 }
 
 function applyTranslations() {
@@ -682,7 +763,7 @@ function applyTranslations() {
   renderUnified();
   renderBindingResult();
   renderReferrerSummary();
-  if (state.toastKey) document.getElementById("toast").textContent = t(state.toastKey);
+  if (state.toastKey) document.getElementById("toast").textContent = t(state.toastKey, state.toastValues);
 }
 
 function setBindingLanguage(lang) {
@@ -701,9 +782,9 @@ function setTab(tab) {
 function openReferralModal(referrer = null) {
   if (referrer) state.referrer = referrer;
   state.verified = false;
-  state.phoneUser = null;
+  state.verifiedUser = null;
   state.bindingResult = null;
-  document.getElementById("bindingPhone").value = "";
+  document.getElementById("bindingUserId").value = "";
   document.getElementById("bindingNote").value = "";
   document.getElementById("referralNotice").classList.remove("show");
   document.getElementById("confirmBinding").disabled = true;
@@ -716,76 +797,82 @@ function closeReferralModal() {
   document.getElementById("referralModal").hidden = true;
 }
 
-function verifyPhone() {
-  const value = document.getElementById("bindingPhone").value.trim();
-  const result = document.getElementById("bindingResult");
+function verifyReferredUser() {
+  const value = document.getElementById("bindingUserId").value.trim();
   const confirm = document.getElementById("confirmBinding");
   state.verified = false;
-  state.phoneUser = null;
+  state.verifiedUser = null;
   state.bindingResult = null;
   confirm.disabled = true;
 
-  const phone = normalizePhone(value);
-  if (!/^\+?[1-9]\d{7,14}$/.test(phone)) {
-    state.bindingResult = { kind: "error", key: value ? "referralModal.invalidPhone" : "referralModal.empty" };
+  if (!value) {
+    state.bindingResult = { kind: "error", key: "referralModal.empty" };
     renderBindingResult();
     return;
   }
 
-  if (phone === "+66821112233") {
+  if (!/^\d{10,24}$/.test(value)) {
+    state.bindingResult = { kind: "error", key: "referralModal.invalidUserId" };
+    renderBindingResult();
+    return;
+  }
+
+  if (value === state.referrer.id) {
     state.bindingResult = { kind: "error", key: "referralModal.self" };
     renderBindingResult();
     return;
   }
 
-  if (phone === "+84912345678") {
+  const user = USER_DIRECTORY[value];
+  if (!user || user.userType !== "FORMAL") {
+    state.bindingResult = { kind: "error", key: "referralModal.notFound" };
+    renderBindingResult();
+    return;
+  }
+
+  if (user.businessLine !== "thailand") {
     state.bindingResult = { kind: "error", key: "referralModal.otherLine" };
     renderBindingResult();
     return;
   }
 
-  if (phone === "+66812345678") {
-    state.phoneUser = {
-      status: "bound",
-      userId: "2120302295478341",
-      name: "Narin K.",
-      phone: "+66 81 **** 5678",
-    };
-    state.bindingResult = { kind: "existing" };
-    state.verified = true;
-    confirm.disabled = false;
+  if (user.registeredAt < CAMPAIGN_START) {
+    state.bindingResult = { kind: "error", key: "referralModal.notNew" };
     renderBindingResult();
     return;
   }
 
-  state.phoneUser = {
-    status: "pending",
-    userId: "",
-    name: "—",
-    phone: maskPhone(value),
-  };
+  if (user.existingBinding) {
+    state.bindingResult = { kind: "error", key: "referralModal.alreadyBound" };
+    renderBindingResult();
+    return;
+  }
+
+  state.verifiedUser = { ...user };
+  state.bindingResult = { kind: "eligible", user };
   state.verified = true;
   confirm.disabled = false;
-  state.bindingResult = { kind: "pending" };
   renderBindingResult();
 }
 
 function confirmBinding() {
   if (!state.verified) return;
-  const bound = state.phoneUser.status === "bound";
   const activeReferrer = { ...state.referrer };
+  const pendingTransfer = state.verifiedUser.currentOwner !== activeReferrer.owner;
   referrals.unshift({
     id: `BIND-202611-${String(210 + referrals.length).padStart(4, "0")}`,
     referrerId: activeReferrer.id,
     referrer: activeReferrer.name,
-    referredId: state.phoneUser.userId,
-    referred: state.phoneUser.name,
-    phone: state.phoneUser.phone,
+    referredId: state.verifiedUser.userId,
+    referred: state.verifiedUser.name,
+    registeredAt: state.verifiedUser.registeredAt,
+    newRegistration: "NEW_REGISTRATION",
     line: "thailand",
     owner: activeReferrer.owner,
-    bindingStatus: bound ? "bound" : "pending",
+    currentOwner: state.verifiedUser.currentOwner,
+    bindingStatus: pendingTransfer ? "pendingTransfer" : "active",
     boundAt: "2026-11-13",
-    nextTrigger: "trigger.firstTrial",
+    nextTrigger: pendingTransfer ? "trigger.transfer" : "trigger.firstTrial",
     latestReward: "reward.none",
     rewardStatus: "waiting",
     giftOrderId: "—",
@@ -800,7 +887,9 @@ function confirmBinding() {
   setTab("referral");
   renderReferrals();
   renderUnified();
-  showToast("referralModal.success");
+  showToast(pendingTransfer ? "referralModal.successPending" : "referralModal.successActive", {
+    owner: state.verifiedUser.currentOwner || "—",
+  });
 }
 
 function openSocialModal() {
@@ -880,16 +969,18 @@ function confirmSocial() {
   showToast("socialModal.success");
 }
 
-function showToast(key) {
+function showToast(key, values = {}) {
   const toast = document.getElementById("toast");
   state.toastKey = key;
-  toast.textContent = t(key);
+  state.toastValues = values;
+  toast.textContent = t(key, values);
   toast.classList.remove("show");
   void toast.offsetWidth;
   toast.classList.add("show");
   setTimeout(() => {
     toast.classList.remove("show");
     state.toastKey = "";
+    state.toastValues = {};
   }, 2400);
 }
 
@@ -899,7 +990,7 @@ document.querySelectorAll("[data-unified-date]").forEach((button) => {
     button.parentElement.querySelectorAll("[data-unified-date]").forEach((item) => item.classList.toggle("active", item === button));
   });
 });
-document.getElementById("newReferralBtn").addEventListener("click", openReferralModal);
+document.getElementById("newReferralBtn").addEventListener("click", () => openReferralModal());
 document.getElementById("newSocialBtn").addEventListener("click", openSocialModal);
 ["unifiedBusinessFilter", "unifiedSourceFilter", "unifiedCcFilter", "unifiedBindingFilter", "unifiedRewardFilter", "unifiedStartDate", "unifiedEndDate"].forEach((id) => {
   document.getElementById(id).addEventListener("change", renderUnified);
@@ -924,16 +1015,16 @@ document.querySelectorAll(".open-binding-sales").forEach((button) => {
     });
   });
 });
-document.getElementById("verifyBindingPhone").addEventListener("click", verifyPhone);
-document.getElementById("bindingPhone").addEventListener("input", () => {
+document.getElementById("verifyBindingPhone").addEventListener("click", verifyReferredUser);
+document.getElementById("bindingUserId").addEventListener("input", () => {
   state.verified = false;
-  state.phoneUser = null;
+  state.verifiedUser = null;
   state.bindingResult = null;
   document.getElementById("confirmBinding").disabled = true;
   renderBindingResult();
 });
-document.getElementById("bindingPhone").addEventListener("keydown", (event) => {
-  if (event.key === "Enter") verifyPhone();
+document.getElementById("bindingUserId").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") verifyReferredUser();
 });
 document.getElementById("confirmBinding").addEventListener("click", confirmBinding);
 document.getElementById("confirmSocial").addEventListener("click", confirmSocial);

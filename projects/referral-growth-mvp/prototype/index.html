@@ -206,7 +206,7 @@
               </div>
               <div class="field">
                 <label data-i18n="filter.bindingStatus">绑定状态</label>
-                <select class="control" id="unifiedBindingFilter"><option value="" data-i18n="option.allStatuses">全部状态</option><option value="bound" data-i18n="bindStatus.bound">已绑定</option><option value="pending" data-i18n="bindStatus.pending">待注册</option><option value="invalid" data-i18n="bindStatus.invalid">已失效</option></select>
+                <select class="control" id="unifiedBindingFilter"><option value="" data-i18n="option.allStatuses">全部状态</option><option value="active" data-i18n="bindStatus.active">已生效</option><option value="pendingTransfer" data-i18n="bindStatus.pendingTransfer">待原 CC 转移</option><option value="invalid" data-i18n="bindStatus.invalid">已失效</option></select>
               </div>
               <div class="field">
                 <label data-i18n="filter.status">奖励状态</label>
@@ -214,7 +214,7 @@
               </div>
               <div class="field">
                 <label data-i18n="filter.keyword">关键词</label>
-                <input class="control search" id="unifiedKeywordFilter" placeholder="用户 ID / 手机号 / 订单 ID" data-i18n-placeholder="unified.keywordPlaceholder">
+                <input class="control search" id="unifiedKeywordFilter" placeholder="用户 ID / 事件 ID / 订单 ID" data-i18n-placeholder="unified.keywordPlaceholder">
               </div>
               <button class="btn small" id="unifiedReset" style="align-self:flex-end" data-i18n="common.reset">重置筛选</button>
             </div>
@@ -226,12 +226,14 @@
                 <th data-i18n="table.source">来源</th>
                 <th data-i18n="table.user">用户</th>
                 <th data-i18n="table.related">关联对象</th>
-                <th data-i18n="table.owner">归属 CC</th>
-                <th data-i18n="table.bindStatus">绑定/内容状态</th>
+                <th data-i18n="table.targetOwner">目标归属 CC</th>
+                <th data-i18n="table.currentOwner">当前归属 CC</th>
+                <th data-i18n="table.bindStatus">关系状态</th>
                 <th data-i18n="table.triggerEvent">触发事件</th>
                 <th data-i18n="table.reward">奖励</th>
                 <th data-i18n="table.giftOrder">赠送订单</th>
                 <th data-i18n="table.status">奖励状态</th>
+                <th data-i18n="table.action">操作</th>
               </tr></thead>
               <tbody id="unifiedRows"></tbody>
             </table>
@@ -258,12 +260,12 @@
 
         <div class="binding-summary">
           <article class="stat">
-            <div class="stat-top"><span class="stat-label" data-i18n="bindings.bound">已绑定关系</span><span class="status bound" data-i18n="bindStatus.bound">已绑定</span></div>
+            <div class="stat-top"><span class="stat-label" data-i18n="bindings.bound">已生效关系</span><span class="status bound" data-i18n="bindStatus.active">已生效</span></div>
             <strong>126</strong><small data-i18n="bindings.boundNote">等待首课、购买或归属异常处理</small>
           </article>
           <article class="stat">
-            <div class="stat-top"><span class="stat-label" data-i18n="bindings.pending">待注册绑定</span><span class="status pending-registration" data-i18n="bindStatus.pending">待注册</span></div>
-            <strong>8</strong><small data-i18n="bindings.pendingNote">注册后按手机号自动关联用户</small>
+            <div class="stat-top"><span class="stat-label" data-i18n="bindings.pending">待转移关系</span><span class="status pending-registration" data-i18n="bindStatus.pendingTransfer">待原 CC 转移</span></div>
+            <strong>8</strong><small data-i18n="bindings.pendingNote">等待原归属 CC 重新分配线索</small>
           </article>
           <article class="stat">
             <div class="stat-top"><span class="stat-label" data-i18n="bindings.automatic">自动发放</span><span class="event-type">EVENT</span></div>
@@ -514,13 +516,13 @@
           <span id="referrerSummary">Pimchanok S. · 2120302255148482561 · Thailand · CC: Thanya C.</span>
         </div>
         <div class="form-row">
-          <div class="form-label"><span class="req">*</span><span data-i18n="referralModal.phone">被推荐人手机号</span></div>
+          <div class="form-label"><span class="req">*</span><span data-i18n="referralModal.referredUserId">被推荐人用户 ID</span></div>
           <div class="form-main">
             <div class="inline-input">
-              <input class="control" id="bindingPhone" type="tel" inputmode="tel" placeholder="+66 81 234 5678">
+              <input class="control" id="bindingUserId" placeholder="输入 C 的完整用户 ID" data-i18n-placeholder="referralModal.userIdPlaceholder">
               <button class="btn" id="verifyBindingPhone" data-i18n="referralModal.verify">核验</button>
             </div>
-            <div class="helper" data-i18n="referralModal.verifyNote">按推荐人业务线匹配；未注册手机号可创建待注册预绑定</div>
+            <div class="helper" data-i18n="referralModal.verifyNote">精确核验用户、业务线、活动新注册状态、已有推荐关系和当前归属 CC</div>
             <div class="relation-hint" id="bindingResult" hidden></div>
           </div>
         </div>
@@ -530,7 +532,7 @@
         </div>
         <div class="enum-note">
           <span data-i18n="referralModal.enumLabel">绑定状态枚举：</span>
-          <code>PENDING_REGISTRATION</code> · <code>BOUND</code> · <code>INVALID</code>
+          <code>BOUND_PENDING_TRANSFER</code> · <code>BOUND_ACTIVE</code> · <code>INVALID</code>
         </div>
       </div>
       <div class="modal-foot">
