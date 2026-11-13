@@ -11,14 +11,14 @@ const STR = {
     roleName: "运营管理员",
     roleSub: "消息发送",
     introTitle: "客户消息",
-    introText: "查看客户与 dinoAI 官方账号的绑定状态，仅向已关注且已授权营销消息的客户发送文本消息。",
+    introText: "查看客户与 dinoAI 官方账号的绑定状态，多选 1–100 位已关注且已授权的客户，通过 Multicast 批量发送同一文本消息。",
     lastSync: "LINE 状态已同步",
     metricBound: "已绑定客户数",
     metricSendable: "可发送客户数",
-    metricAccepted: "近30天消息受理率",
+    metricAccepted: "近30天批次受理率",
     metricBoundFoot: "当前筛选范围内，关系有效的客户",
     metricSendableFoot: "已关注、已授权，且状态已确认",
-    metricAcceptedFoot: "LINE 已受理消息数 ÷ 已进入消息服务的消息数",
+    metricAcceptedFoot: "LINE 已受理批次 ÷ 进入消息服务的批次",
     customerList: "客户列表",
     customerCount: "共 {count} 位",
     searchPlaceholder: "搜索用户 ID、姓名或手机号",
@@ -29,6 +29,7 @@ const STR = {
     filterFriendShort: "关注",
     filterConsentShort: "授权",
     filterAll: "全部状态",
+    colSelect: "选择",
     colUser: "客户",
     colBusiness: "业务线",
     colBinding: "LINE 绑定",
@@ -39,6 +40,13 @@ const STR = {
     previous: "上一页",
     next: "下一页",
     page: "第 1 页",
+    selectedCount: "已选 {count} / 100",
+    selectPage: "选择当前页",
+    clearSelection: "清空选择",
+    batchSend: "批量发送",
+    batchLimit: "单次最多 100 位",
+    maxSelected: "单次最多选择 100 位客户",
+    selectedNone: "请先选择可发送客户",
     noCustomers: "当前条件下没有客户",
     noCustomersSub: "调整搜索或筛选条件后重试",
     detailTitle: "客户详情",
@@ -59,9 +67,9 @@ const STR = {
     messagePlaceholder: "输入要发送给客户的文本消息",
     sendNote: "发送后仅表示 LINE 已受理，不代表已读",
     send: "发送消息",
-    historyTitle: "消息记录",
-    historyCount: "最近 {count} 条",
-    historyEmpty: "暂无消息记录",
+    historyTitle: "发送批次",
+    historyCount: "最近 {count} 个",
+    historyEmpty: "暂无发送批次",
     retry: "重试",
     accepted: "LINE 已受理",
     failed: "发送失败",
@@ -84,15 +92,22 @@ const STR = {
     reasonUnknown: "LINE 状态暂时无法确认，请刷新后重试。",
     reasonConflict: "当前绑定存在冲突，请联系管理员处理后重试。",
     modalTitle: "确认发送消息",
+    batchModalTitle: "批量发送消息",
     modalCustomer: "接收客户",
     modalBusiness: "业务线",
     modalLineId: "LINE 用户 ID",
     modalPreview: "消息内容",
+    modalRecipients: "接收客户",
+    modalRecipientCount: "共 {count} 位客户",
+    modalEligible: "可发送 {count} 位",
+    modalExcluded: "已排除 {count} 位",
+    batchAccepted: "批次已受理",
+    recipientCount: "{count} 位客户",
     cancel: "取消",
     confirmSend: "确认发送",
     toastRefreshed: "LINE 状态已刷新",
     toastSent: "消息已提交，等待 LINE 受理",
-    toastAccepted: "LINE 已受理该消息",
+    toastAccepted: "LINE 已受理该批次",
     toastRetried: "已使用原消息 ID 重新提交",
     close: "关闭",
     greetingTemplate: "您好 {name}，您的下一节课程即将开始，请提前进入课堂。",
@@ -117,14 +132,14 @@ const STR = {
     roleName: "Operations Admin",
     roleSub: "Messaging",
     introTitle: "Customer messages",
-    introText: "Review each customer's link to the dinoAI Official Account and send text messages only to customers who follow the account and have opted in.",
+    introText: "Review each customer's link to the dinoAI Official Account and send one text message to 1–100 opted-in followers through Multicast.",
     lastSync: "LINE status synced",
     metricBound: "Linked Customers",
     metricSendable: "Message-ready Customers",
-    metricAccepted: "30-day Acceptance Rate",
+    metricAccepted: "30-day Batch Acceptance Rate",
     metricBoundFoot: "Customers with an active link in the current filters",
     metricSendableFoot: "Following, opted in, and recently verified",
-    metricAcceptedFoot: "Messages accepted by LINE ÷ messages sent to the service",
+    metricAcceptedFoot: "Accepted batches ÷ batches sent to the service",
     customerList: "Customers",
     customerCount: "{count} customers",
     searchPlaceholder: "Search user ID, name, or phone",
@@ -135,6 +150,7 @@ const STR = {
     filterFriendShort: "Following",
     filterConsentShort: "Opt-in",
     filterAll: "All statuses",
+    colSelect: "Select",
     colUser: "Customer",
     colBusiness: "Business Line",
     colBinding: "LINE Link",
@@ -145,6 +161,13 @@ const STR = {
     previous: "Previous",
     next: "Next",
     page: "Page 1",
+    selectedCount: "Selected {count} / 100",
+    selectPage: "Select Current Page",
+    clearSelection: "Clear",
+    batchSend: "Send in Batch",
+    batchLimit: "Maximum 100 recipients",
+    maxSelected: "You can select up to 100 customers",
+    selectedNone: "Select at least one message-ready customer",
     noCustomers: "No customers match these filters",
     noCustomersSub: "Adjust the search or filters and try again",
     detailTitle: "Customer Details",
@@ -165,9 +188,9 @@ const STR = {
     messagePlaceholder: "Enter the message to send",
     sendNote: "Accepted by LINE does not mean the message was read",
     send: "Send Message",
-    historyTitle: "Message History",
+    historyTitle: "Send Batches",
     historyCount: "Latest {count}",
-    historyEmpty: "No messages yet",
+    historyEmpty: "No send batches yet",
     retry: "Retry",
     accepted: "Accepted by LINE",
     failed: "Send failed",
@@ -190,15 +213,22 @@ const STR = {
     reasonUnknown: "LINE status cannot be confirmed. Refresh and try again.",
     reasonConflict: "The line link has a conflict. Ask an administrator to resolve it.",
     modalTitle: "Confirm Message",
+    batchModalTitle: "Send in Batch",
     modalCustomer: "Recipient",
     modalBusiness: "Business Line",
     modalLineId: "LINE User ID",
     modalPreview: "Message",
+    modalRecipients: "Recipients",
+    modalRecipientCount: "{count} customers",
+    modalEligible: "{count} ready to message",
+    modalExcluded: "{count} excluded",
+    batchAccepted: "Batch accepted by LINE",
+    recipientCount: "{count} customers",
     cancel: "Cancel",
     confirmSend: "Confirm & Send",
     toastRefreshed: "LINE status refreshed",
     toastSent: "Message submitted for LINE acceptance",
-    toastAccepted: "LINE accepted the message",
+    toastAccepted: "LINE accepted the batch",
     toastRetried: "Resubmitted with the same message ID",
     close: "Close",
     greetingTemplate: "Hi {name}, your next class is about to begin. Please join the classroom a few minutes early.",
@@ -270,7 +300,8 @@ const state = {
   query: "",
   binding: "all",
   friend: "all",
-  consent: "all"
+  consent: "all",
+  selectedUsers: new Set()
 };
 
 const content = document.querySelector("#content");
@@ -397,8 +428,11 @@ function selectedCustomer() {
 function metricStats(customers) {
   const bound = customers.filter((customer) => customer.binding === "ACTIVE").length;
   const sendable = customers.filter(isSendable).length;
-  const messages = customers.flatMap((customer) => customer.messages);
-  const attempted = messages.filter((message) => ["ACCEPTED", "FAILED"].includes(message.status));
+  const batches = new Map();
+  customers.flatMap((customer) => customer.messages).forEach((message) => {
+    if (!batches.has(message.id)) batches.set(message.id, message);
+  });
+  const attempted = [...batches.values()].filter((batch) => ["ACCEPTED", "FAILED"].includes(batch.status));
   const accepted = attempted.filter((message) => message.status === "ACCEPTED");
   return {
     bound,
@@ -447,6 +481,16 @@ function renderAll() {
           <div><h3>${esc(t("customerList"))}</h3><p>${esc(t("customerCount", { count: customers.length }))}</p></div>
           <span class="count-pill" id="visible-count">${customers.length}</span>
         </div>
+        <div class="bulk-bar" id="bulk-bar">
+          <div class="bulk-selection">
+            <strong id="selected-count">${esc(t("selectedCount", { count: 0 }))}</strong>
+            <span>${esc(t("batchLimit"))}</span>
+          </div>
+          <div class="bulk-actions">
+            <button class="btn btn-small" id="clear-selection" disabled>${esc(t("clearSelection"))}</button>
+            <button class="btn btn-primary btn-small" id="batch-send" disabled>${icon("send")}<span>${esc(t("batchSend"))}</span></button>
+          </div>
+        </div>
         <div class="filter-bar">
           <div class="search-box">${icon("search")}<input id="search" class="control" value="${esc(state.query)}" placeholder="${esc(t("searchPlaceholder"))}" aria-label="${esc(t("searchPlaceholder"))}"></div>
           <select id="filter-binding" class="control" aria-label="${esc(t("filterBinding"))}">
@@ -471,6 +515,7 @@ function renderAll() {
         <div class="table-wrap">
           <table>
             <thead><tr>
+              <th class="select-column"><input type="checkbox" id="select-page" aria-label="${esc(t("selectPage"))}"></th>
               <th>${esc(t("colUser"))}</th><th>${esc(t("colBusiness"))}</th><th>${esc(t("colBinding"))}</th>
               <th>${esc(t("colFriend"))}</th><th>${esc(t("colConsent"))}</th><th>${esc(t("colSendable"))}</th><th>${esc(t("colUpdated"))}</th>
             </tr></thead>
@@ -489,6 +534,7 @@ function renderAll() {
   renderCustomerTable();
   renderDetail();
   bindPageEvents();
+  updateBulkControls();
   updateChrome();
 }
 
@@ -503,11 +549,12 @@ function renderCustomerTable() {
   const body = document.querySelector("#customer-body");
   if (!body) return;
   if (!customers.length) {
-    body.innerHTML = `<tr><td colspan="7"><div class="empty"><strong>${esc(t("noCustomers"))}</strong><span>${esc(t("noCustomersSub"))}</span></div></td></tr>`;
+    body.innerHTML = `<tr><td colspan="8"><div class="empty"><strong>${esc(t("noCustomers"))}</strong><span>${esc(t("noCustomersSub"))}</span></div></td></tr>`;
     return;
   }
   body.innerHTML = customers.map((customer) => `
     <tr data-user="${esc(customer.userId)}" class="${customer.userId === state.selectedId ? "is-selected" : ""}" tabindex="0">
+      <td class="select-column"><input type="checkbox" data-select-user="${esc(customer.userId)}" aria-label="${esc(customer.name)}" ${state.selectedUsers.has(customer.userId) ? "checked" : ""} ${isSendable(customer) ? "" : "disabled"}></td>
       <td><div class="customer-cell"><strong>${esc(customer.name)}</strong><span class="user-id">${esc(customer.userId)}</span></div></td>
       <td>${esc(businessLineLabel(customer.businessLine))}</td>
       <td>${statusTag(bindingLabel(customer.binding), bindingKind(customer.binding))}</td>
@@ -531,6 +578,74 @@ function renderCustomerTable() {
       }
     });
   });
+  body.querySelectorAll("[data-select-user]").forEach((checkbox) => {
+    checkbox.addEventListener("click", (event) => event.stopPropagation());
+    checkbox.addEventListener("change", () => toggleCustomerSelection(checkbox.dataset.selectUser, checkbox.checked));
+  });
+  updateSelectPageControl(customers);
+}
+
+function toggleCustomerSelection(userId, checked) {
+  const customer = CUSTOMERS.find((item) => item.userId === userId);
+  if (!customer || !isSendable(customer)) return;
+  if (checked && state.selectedUsers.size >= 100) {
+    showToast(t("maxSelected"));
+    renderCustomerTable();
+    updateBulkControls();
+    return;
+  }
+  if (checked) state.selectedUsers.add(userId);
+  else state.selectedUsers.delete(userId);
+  renderCustomerTable();
+  updateBulkControls();
+}
+
+function clearSelection() {
+  state.selectedUsers.clear();
+  renderCustomerTable();
+  updateBulkControls();
+}
+
+function updateBulkControls() {
+  [...state.selectedUsers].forEach((userId) => {
+    const customer = CUSTOMERS.find((item) => item.userId === userId);
+    if (!customer || !isSendable(customer)) state.selectedUsers.delete(userId);
+  });
+  const count = state.selectedUsers.size;
+  const countNode = document.querySelector("#selected-count");
+  if (countNode) countNode.textContent = t("selectedCount", { count });
+  const clearButton = document.querySelector("#clear-selection");
+  const sendButton = document.querySelector("#batch-send");
+  if (clearButton) clearButton.disabled = count === 0;
+  if (sendButton) sendButton.disabled = count === 0;
+}
+
+function updateSelectPageControl(customers) {
+  const checkbox = document.querySelector("#select-page");
+  if (!checkbox) return;
+  const selectable = customers.filter(isSendable);
+  const selectedVisible = selectable.filter((customer) => state.selectedUsers.has(customer.userId));
+  checkbox.disabled = selectable.length === 0;
+  checkbox.checked = selectable.length > 0 && selectedVisible.length === selectable.length;
+  checkbox.indeterminate = selectedVisible.length > 0 && selectedVisible.length < selectable.length;
+}
+
+function selectCurrentPage() {
+  const selectable = filteredCustomers().filter(isSendable);
+  const allSelected = selectable.length > 0 && selectable.every((customer) => state.selectedUsers.has(customer.userId));
+  if (allSelected) {
+    selectable.forEach((customer) => state.selectedUsers.delete(customer.userId));
+  } else {
+    for (const customer of selectable) {
+      if (state.selectedUsers.size >= 100) {
+        showToast(t("maxSelected"));
+        break;
+      }
+      state.selectedUsers.add(customer.userId);
+    }
+  }
+  renderCustomerTable();
+  updateBulkControls();
 }
 
 function renderDetail() {
@@ -591,13 +706,16 @@ function renderDetail() {
 }
 
 function renderMessage(message) {
-  const statusKey = { ACCEPTED: "accepted", FAILED: "failed", PENDING: "pending" }[message.status];
+  const statusKey = message.status === "ACCEPTED" && message.batchId
+    ? "batchAccepted"
+    : { ACCEPTED: "accepted", FAILED: "failed", PENDING: "pending" }[message.status];
   const statusClass = { ACCEPTED: "ok", FAILED: "fail", PENDING: "wait" }[message.status];
+  const recipientMeta = message.recipientCount > 1 ? ` · ${t("recipientCount", { count: message.recipientCount })}` : "";
   return `
     <div class="history-item">
       <div class="history-top">
         <span class="history-status ${statusClass}">${statusClass === "ok" ? icon("check") : icon("alert")}${esc(t(statusKey))}</span>
-        <span class="history-meta">${formatTime(message.at)} · ${esc(message.id)}</span>
+        <span class="history-meta">${formatTime(message.at)} · ${esc(message.id)}${esc(recipientMeta)}</span>
       </div>
       <div class="history-text">${esc(messageText(message))}</div>
       ${message.status === "FAILED" ? `<div class="history-error">${esc(t(message.errorKey))}</div><button class="retry-btn" data-retry="${esc(message.id)}">${esc(t("retry"))}</button>` : ""}
@@ -609,13 +727,25 @@ function bindPageEvents() {
   const search = document.querySelector("#search");
   search.addEventListener("input", (event) => {
     state.query = event.target.value;
+    state.selectedUsers.clear();
     updateFilteredView();
   });
   ["binding", "friend", "consent"].forEach((key) => {
     document.querySelector(`#filter-${key}`).addEventListener("change", (event) => {
       state[key] = event.target.value;
+      state.selectedUsers.clear();
       updateFilteredView();
     });
+  });
+  document.querySelector("#select-page").addEventListener("change", selectCurrentPage);
+  document.querySelector("#clear-selection").addEventListener("click", clearSelection);
+  document.querySelector("#batch-send").addEventListener("click", () => {
+    const recipients = CUSTOMERS.filter((customer) => state.selectedUsers.has(customer.userId) && isSendable(customer));
+    if (!recipients.length) {
+      showToast(t("selectedNone"));
+      return;
+    }
+    openBatchModal(recipients);
   });
 }
 
@@ -638,6 +768,7 @@ function updateFilteredView() {
   if (count) count.textContent = customers.length;
   const pager = document.querySelector("#pager-label");
   if (pager) pager.textContent = t("customerCount", { count: customers.length });
+  updateBulkControls();
 }
 
 function bindDetailEvents(customer, sendable) {
@@ -704,6 +835,58 @@ function openSendModal(customer, text) {
   });
 }
 
+function openBatchModal(recipients) {
+  modal.innerHTML = `
+    <div class="modal-head">
+      <h3 id="modal-title">${esc(t("batchModalTitle"))}</h3>
+      <button class="icon-btn" data-action="close-modal" aria-label="${esc(t("close"))}">${icon("close")}</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-review">
+        <div><span>${esc(t("modalRecipients"))}</span><strong>${esc(t("modalRecipientCount", { count: recipients.length }))}</strong></div>
+        <div><span>${esc(t("modalEligible", { count: recipients.length }))}</span><strong>${esc(t("modalExcluded", { count: 0 }))}</strong></div>
+      </div>
+      <div class="batch-recipient-names">${esc(recipients.map((customer) => customer.name).join(" · "))}</div>
+      <div class="batch-compose">
+        <div class="composer-label"><label for="batch-message-text">${esc(t("messageTitle"))}</label><span class="char-count" id="batch-char-count">${esc(t("charCount", { count: 0 }))}</span></div>
+        <div class="templates">
+          <button class="template-btn" data-batch-template="greetingTemplate">${esc(t("templateGreeting"))}</button>
+          <button class="template-btn" data-batch-template="followupTemplate">${esc(t("templateFollowup"))}</button>
+          <button class="template-btn" data-batch-template="promotionTemplate">${esc(t("templatePromotion"))}</button>
+        </div>
+        <textarea id="batch-message-text" class="message-input" maxlength="5000" placeholder="${esc(t("messagePlaceholder"))}"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" data-action="close-modal">${esc(t("cancel"))}</button>
+      <button class="btn btn-primary" id="confirm-batch-send">${icon("send")}<span>${esc(t("confirmSend"))}</span></button>
+    </div>
+  `;
+  modalLayer.classList.add("is-open");
+  modalLayer.setAttribute("aria-hidden", "false");
+  const textarea = document.querySelector("#batch-message-text");
+  textarea.addEventListener("input", () => {
+    document.querySelector("#batch-char-count").textContent = t("charCount", { count: textarea.value.length });
+  });
+  modal.querySelectorAll("[data-batch-template]").forEach((button) => {
+    button.addEventListener("click", () => {
+      textarea.value = t(button.dataset.batchTemplate, { name: recipients[0].name.split(" ")[0] });
+      textarea.dispatchEvent(new Event("input"));
+      textarea.focus();
+    });
+  });
+  modalLayer.querySelectorAll("[data-action='close-modal']").forEach((button) => button.addEventListener("click", closeModal));
+  document.querySelector("#confirm-batch-send").addEventListener("click", () => {
+    const text = textarea.value.trim();
+    if (!text) {
+      textarea.focus();
+      return;
+    }
+    closeModal();
+    submitBatch(recipients, text);
+  });
+}
+
 function closeModal() {
   modalLayer.classList.remove("is-open");
   modalLayer.setAttribute("aria-hidden", "true");
@@ -711,17 +894,38 @@ function closeModal() {
 }
 
 function submitMessage(customer, text) {
+  submitBatch([customer], text);
+}
+
+function submitBatch(recipients, text) {
+  if (!recipients.length || recipients.length > 100) return;
   const id = `MSG-${new Date().toISOString().slice(2, 10).replaceAll("-", "")}-${Math.floor(1000 + Math.random() * 9000)}`;
-  const message = { id, textKey: text, at: new Date().toISOString(), status: "PENDING" };
-  customer.messages.push(message);
-  customer.updatedAt = message.at;
+  const at = new Date().toISOString();
+  const recipientIds = recipients.map((customer) => customer.userId);
+  recipients.forEach((customer) => {
+    customer.messages.push({
+      id,
+      textKey: text,
+      at,
+      status: "PENDING",
+      batchId: id,
+      recipientIds,
+      recipientCount: recipients.length
+    });
+    customer.updatedAt = at;
+  });
+  state.selectedUsers.clear();
   renderCustomerTable();
   renderDetail();
   updateFilteredView();
   showToast(t("toastSent"));
   window.setTimeout(() => {
-    message.status = "ACCEPTED";
-    message.at = new Date().toISOString();
+    CUSTOMERS.forEach((item) => {
+      item.messages.filter((message) => message.id === id).forEach((message) => {
+        message.status = "ACCEPTED";
+        message.at = new Date().toISOString();
+      });
+    });
     renderDetail();
     updateFilteredView();
     showToast(t("toastAccepted"));
@@ -731,14 +935,18 @@ function submitMessage(customer, text) {
 function retryMessage(customer, messageId) {
   const message = customer.messages.find((item) => item.id === messageId);
   if (!message || !isSendable(customer)) return;
-  message.status = "PENDING";
+  CUSTOMERS.flatMap((item) => item.messages).filter((item) => item.id === messageId).forEach((item) => {
+    item.status = "PENDING";
+  });
   renderDetail();
   showToast(t("toastRetried"));
   window.setTimeout(() => {
-    message.status = "ACCEPTED";
-    message.at = new Date().toISOString();
-    delete message.errorKey;
-    customer.updatedAt = message.at;
+    CUSTOMERS.flatMap((item) => item.messages).filter((item) => item.id === messageId).forEach((item) => {
+      item.status = "ACCEPTED";
+      item.at = new Date().toISOString();
+      delete item.errorKey;
+    });
+    customer.updatedAt = new Date().toISOString();
     renderCustomerTable();
     renderDetail();
     updateFilteredView();
