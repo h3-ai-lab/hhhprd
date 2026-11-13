@@ -26,8 +26,6 @@
     </div>
     <nav class="nav">
       <div class="nav-label" data-i18n="nav.business">业务管理</div>
-      <button class="nav-item"><svg><use href="#i-grid"></use></svg><span data-i18n="nav.dashboard">管理看板</span></button>
-      <button class="nav-item"><svg><use href="#i-users"></use></svg><span data-i18n="nav.users">用户管理</span></button>
       <button class="nav-item" data-view="users"><svg><use href="#i-users"></use></svg><span data-i18n="nav.userList">用户列表</span></button>
       <button class="nav-item" data-view="sales"><svg><use href="#i-phone"></use></svg><span data-i18n="nav.sales">销售中心</span></button>
       <button class="nav-item" data-view="orders"><svg><use href="#i-box"></use></svg><span data-i18n="nav.orders">订单中心</span></button>
@@ -35,7 +33,7 @@
       <button class="nav-item active" data-view="dashboard"><svg><use href="#i-chart"></use></svg><span data-i18n="nav.growth">拉新关系</span></button>
       <button class="nav-item" data-view="community"><svg><use href="#i-users"></use></svg><span data-i18n="nav.community">社媒推荐</span></button>
       <div class="nav-label" data-i18n="nav.system">系统管理</div>
-      <button class="nav-item"><svg><use href="#i-settings"></use></svg><span data-i18n="nav.settings">系统配置</span></button>
+      <button class="nav-item" data-view="settings"><svg><use href="#i-settings"></use></svg><span data-i18n="nav.settings">系统配置</span></button>
     </nav>
     <div class="sidebar-foot">
       <span><i></i> <b data-i18n="footer.status">服务运行正常</b></span>
@@ -435,16 +433,8 @@
         <section class="panel">
           <div class="panel-head">
             <div class="date-tabs">
-              <button class="date-tab active" data-i18n="sales.followUps">我的跟进</button>
-              <button class="date-tab" data-i18n="sales.paid">已付费</button>
-            </div>
-          </div>
-          <div class="panel-body">
-            <div class="user-toolbar">
-              <input class="control search" placeholder="手机号 / 用户 ID / 姓名" data-i18n-placeholder="users.searchPlaceholder">
-              <select class="control"><option data-i18n="sales.allStage">全部跟进阶段</option><option data-i18n="sales.pendingCall">待外呼</option><option data-i18n="sales.connected">已接通</option></select>
-              <select class="control"><option data-i18n="users.businessTh">业务线：泰国</option><option data-i18n="users.businessVn">业务线：越南</option></select>
-              <button class="btn small" data-i18n="common.search">搜索</button>
+              <button class="date-tab active" data-sales-tab="following" data-i18n="sales.followUps">我的跟进</button>
+              <button class="date-tab" data-sales-tab="paid" data-i18n="sales.paid">已付费</button>
             </div>
           </div>
           <div class="table-wrap">
@@ -458,22 +448,22 @@
                 <th data-i18n="users.actions">操作</th>
               </tr></thead>
               <tbody>
-                <tr class="btn-row">
+                <tr class="btn-row sales-row" data-sales-view="following">
                   <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="sales.connected">已接通</td><td>Thanya C.</td>
-                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-i18n="community.create">登记社媒推荐</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-business-line="thailand" data-role-id="CC_TH" data-i18n="sales.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-i18n="community.create">登记社媒推荐</button></div></td>
                 </tr>
-                <tr class="btn-row">
+                <tr class="btn-row sales-row" data-sales-view="following">
                   <td class="mono">2120302281472036721</td><td>Kanya R.</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="sales.pendingCall">待外呼</td><td>Mina P.</td>
-                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302281472036721" data-user-name="Kanya R." data-i18n="community.create">登记社媒推荐</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302281472036721" data-user-name="Kanya R." data-business-line="thailand" data-role-id="CC_TH" data-i18n="sales.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302281472036721" data-user-name="Kanya R." data-i18n="community.create">登记社媒推荐</button></div></td>
                 </tr>
-                <tr class="btn-row">
+                <tr class="btn-row sales-row" data-sales-view="paid">
                   <td class="mono">2120302210461928824</td><td>Arunee T.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="sales.connected">已接通</td><td>Nok S.</td>
-                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302210461928824" data-user-name="Arunee T." data-i18n="community.create">登记社媒推荐</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302210461928824" data-user-name="Arunee T." data-business-line="thailand" data-role-id="CC_TH" data-i18n="sales.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302210461928824" data-user-name="Arunee T." data-i18n="community.create">登记社媒推荐</button></div></td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="table-foot"><span>3</span><span data-i18n="bindings.page">第 1 页</span></div>
+          <div class="table-foot"><span id="salesCount">2</span><span data-i18n="bindings.page">第 1 页</span></div>
         </section>
       </section>
 
@@ -487,15 +477,8 @@
         <section class="panel">
           <div class="panel-head">
             <div class="date-tabs">
-              <button class="date-tab active" data-i18n="orders.allOrders">全部订单</button>
-              <button class="date-tab" data-i18n="orders.giftOrders">赠送订单</button>
-            </div>
-          </div>
-          <div class="panel-body">
-            <div class="user-toolbar">
-              <input class="control search" placeholder="订单 ID / 用户 ID / 手机号" data-i18n-placeholder="orders.searchPlaceholder">
-              <select class="control"><option data-i18n="orders.orderTypeAll">订单类型：全部</option><option data-i18n="orders.membershipGrant">会员赠送</option><option data-i18n="orders.paid">付费订单</option></select>
-              <button class="btn small" data-i18n="common.search">搜索</button>
+              <button class="date-tab active" data-order-tab="all" data-i18n="orders.allOrders">全部订单</button>
+              <button class="date-tab" data-order-tab="gift" data-i18n="orders.giftOrders">赠送订单</button>
             </div>
           </div>
           <div class="table-wrap">
@@ -512,19 +495,52 @@
                 <th data-i18n="orders.benefitChange">权益变化</th>
               </tr></thead>
               <tbody>
-                <tr class="btn-row">
+                <tr class="btn-row order-row" data-order-type="gift">
                   <td class="mono">GRT202611080041</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.referral">拉新推荐</td><td>Pimchanok S.</td><td class="mono">+66 82 **** 2233</td><td>Thanya C.</td><td>฿0</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit14d">+14 天</td>
                 </tr>
-                <tr class="btn-row">
+                <tr class="btn-row order-row" data-order-type="gift">
                   <td class="mono">GRT202611080056</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.social">社媒推荐</td><td>Pimchanok S.</td><td class="mono">+66 82 **** 2233</td><td>Thanya C.</td><td>฿0</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit2m">+2 个月</td>
                 </tr>
-                <tr class="btn-row">
+                <tr class="btn-row order-row" data-order-type="gift">
                   <td class="mono">GRT202611090018</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.referral">拉新推荐</td><td>Arunee T.</td><td class="mono">+66 88 **** 7712</td><td>Nok S.</td><td>฿0</td><td><span class="status processing" data-i18n="orders.created">已生成待发放</span></td><td data-i18n="orders.benefit3m">+3 个月</td>
+                </tr>
+                <tr class="btn-row order-row" data-order-type="paid">
+                  <td class="mono">PO202611020018</td><td><span class="status success" data-i18n="orders.paid">付费订单</span></td><td data-i18n="orders.directPurchase">直接购买</td><td>Narin K.</td><td class="mono">+66 81 **** 5678</td><td>Thanya C.</td><td>฿3,490</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit3m">+3 个月</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="table-foot"><span>3</span><span data-i18n="bindings.page">第 1 页</span></div>
+          <div class="table-foot"><span id="ordersCount">4</span><span data-i18n="bindings.page">第 1 页</span></div>
+        </section>
+      </section>
+
+      <section class="view" id="settingsView" hidden>
+        <div class="view-head">
+          <div>
+            <h2 data-i18n="settings.title">系统配置</h2>
+            <p data-i18n="settings.subtitle">按业务线和角色配置权益来源在添加时长入口中的可见性</p>
+          </div>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h3 data-i18n="settings.sourceTitle">角色权益来源</h3>
+              <div class="inline-meta"><span data-i18n="settings.sourceNote">关闭“权益来源可见”时，系统自动使用常规赠送，必填校验仍可通过。</span></div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="settings.businessLine">业务线</th>
+                <th data-i18n="settings.role">角色</th>
+                <th data-i18n="settings.sourceVisible">权益来源可见</th>
+                <th data-i18n="settings.visibleSources">可见来源</th>
+                <th data-i18n="settings.defaultSource">默认来源</th>
+                <th data-i18n="settings.actions">操作</th>
+              </tr></thead>
+              <tbody id="roleSourceRows"></tbody>
+            </table>
+          </div>
         </section>
       </section>
 
@@ -536,35 +552,26 @@
           </div>
         </div>
         <section class="panel">
-          <div class="panel-body">
-            <div class="user-toolbar">
-              <input class="control search" value="" placeholder="用户 ID / 姓名 / 登录账号" data-i18n-placeholder="users.searchPlaceholder">
-              <select class="control"><option data-i18n="users.userTypeAll">用户类型：全部</option><option data-i18n="users.formal">正式用户</option><option data-i18n="users.guest">游客用户</option></select>
-              <select class="control"><option data-i18n="users.userStatusAll">用户状态：全部</option><option data-i18n="status.paid">已付费</option><option data-i18n="status.trial">体验中</option></select>
-              <select class="control"><option data-i18n="users.businessTh">业务线：泰国</option><option data-i18n="users.businessVn">业务线：越南</option></select>
-              <button class="btn small" data-i18n="common.search">搜索</button>
-            </div>
-          </div>
           <div class="table-wrap">
             <table class="user-table">
               <thead><tr><th data-i18n="users.userId">用户 ID</th><th data-i18n="users.name">姓名</th><th data-i18n="users.userStatus">用户状态</th><th data-i18n="users.userType">用户类型</th><th data-i18n="users.signup">注册方式</th><th data-i18n="users.loginAccount">登录账号</th><th data-i18n="users.channel">渠道来源</th><th data-i18n="users.actions">操作</th></tr></thead>
               <tbody>
                 <tr class="btn-row">
                   <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pim****@dino.ai</td><td>App</td>
-                  <td><div class="row-actions"><button id="openGrantBtn" data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">2120302281472036721</td><td>Kanya R.</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kan****@dino.ai</td><td>App</td>
-                  <td><div class="row-actions"><button class="open-grant-secondary" data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302281472036721" data-user-name="Kanya R." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">2120302210461928824</td><td>Arunee T.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td data-i18n="users.web">网页</td><td>aru****@dino.ai</td><td>Landing Page</td>
-                  <td><div class="row-actions"><button class="open-grant-secondary" data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302210461928824" data-user-name="Arunee T." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="table-foot"><span id="usersRowSummary">共 3 条记录</span><div class="pager"><button>‹</button><button class="active">1</button><button>›</button></div></div>
+          <div class="table-foot"><span id="usersRowSummary">共 3 条记录</span><span data-i18n="bindings.page">第 1 页</span></div>
         </section>
       </section>
     </div>
@@ -807,14 +814,12 @@
             </div>
           </div>
         </div>
-        <div class="form-row">
+        <div class="form-row" id="grantSourceRow">
           <div class="form-label"><span class="req">*</span><span data-i18n="grant.source">权益来源</span></div>
           <div class="form-main">
             <select class="control" id="sourceSelect">
-              <option value="regular" data-i18n="source.regular">常规赠送</option>
-              <option value="referral" data-i18n="source.referral">拉新推荐</option>
-              <option value="social" data-i18n="source.social">社媒推荐</option>
             </select>
+            <div class="helper" id="sourceRoleHint"></div>
           </div>
         </div>
         <div id="referralFields" hidden>
@@ -861,6 +866,32 @@
       <div class="modal-foot">
         <button class="btn" id="cancelGrant" data-i18n="common.cancel">取消</button>
         <button class="btn primary" id="confirmGrant" disabled data-i18n="grant.confirm">确认发放</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-mask" id="roleSourceModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="roleSourceTitle">
+      <div class="modal-head">
+        <div><h3 id="roleSourceTitle">配置权益来源</h3><p id="roleSourceSubtitle">—</p></div>
+        <button class="icon-close" id="closeRoleSource" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-toggle-row">
+          <div><strong data-i18n="settings.sourceVisible">权益来源可见</strong><div class="helper" data-i18n="settings.sourceVisibleNote">开启后，该角色在添加时长入口中显示权益来源。</div></div>
+          <label class="switch"><input type="checkbox" id="roleSourceVisible"><span></span></label>
+        </div>
+        <div class="source-config-grid" id="sourceConfigGrid">
+          <label class="source-option"><input type="checkbox" value="regular" checked disabled><span><strong data-i18n="source.regular">常规赠送</strong><small data-i18n="settings.regularRequired">默认来源，始终启用</small></span></label>
+          <label class="source-option"><input type="checkbox" value="referral" data-source-option><span><strong data-i18n="source.referral">拉新推荐</strong><small data-i18n="settings.referralOption">允许录入被推荐人与订单</small></span></label>
+          <label class="source-option"><input type="checkbox" value="social" data-source-option><span><strong data-i18n="source.social">社媒推荐</strong><small data-i18n="settings.socialOption">允许登记社媒内容来源</small></span></label>
+        </div>
+        <div class="settings-default-note"><b data-i18n="settings.defaultSource">默认来源</b><span data-i18n="source.regular">常规赠送</span></div>
+        <div class="notice" id="roleSourceNotice"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" id="cancelRoleSource" data-i18n="common.cancel">取消</button>
+        <button class="btn primary" id="saveRoleSource" data-i18n="common.save">保存</button>
       </div>
     </section>
   </div>

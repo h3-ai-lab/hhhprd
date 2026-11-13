@@ -53,6 +53,7 @@ const I18N = {
     "common.search": "搜索",
     "common.cancel": "取消",
     "common.close": "关闭",
+    "common.save": "保存",
     "common.days": "天",
     "option.thailand": "泰国",
     "option.vietnam": "越南",
@@ -88,6 +89,7 @@ const I18N = {
     "table.operator": "操作 CC",
     "table.owner": "归属 CC",
     "table.rule": "奖励规则",
+    "table.reward": "奖励",
     "table.status": "权益状态",
     "table.bindStatus": "绑定/内容状态",
     "table.record": "业务记录",
@@ -102,6 +104,8 @@ const I18N = {
     "unified.noteText": "绑定、奖励事件、赠送订单和权益状态在同一列表追踪",
     "unified.empty": "当前筛选下没有拉新记录",
     "unified.keywordPlaceholder": "用户 ID / 事件 ID / 订单 ID",
+    "bindings.page": "第 1 页",
+    "community.create": "登记社媒推荐",
     "bindings.newSocial": "登记社媒推荐",
     "bindings.newReferral": "新建好友推荐",
     "sales.title": "销售中心",
@@ -114,6 +118,7 @@ const I18N = {
     "sales.stage": "跟进阶段",
     "sales.call": "拨号",
     "sales.followUp": "更新跟进",
+    "sales.addDuration": "增加用户时长",
     "orders.title": "订单中心",
     "orders.subtitle": "查询付款订单与系统赠送订单",
     "orders.allOrders": "全部订单",
@@ -122,6 +127,7 @@ const I18N = {
     "orders.orderTypeAll": "订单类型：全部",
     "orders.membershipGrant": "会员赠送",
     "orders.paid": "付费订单",
+    "orders.directPurchase": "直接购买",
     "orders.orderId": "订单 ID",
     "orders.orderType": "订单类型",
     "orders.businessSource": "业务来源",
@@ -152,18 +158,39 @@ const I18N = {
     "users.channel": "渠道来源",
     "users.actions": "操作",
     "users.addMember": "添加会员",
+    "users.addDuration": "增加用户时长",
     "users.maintainBinding": "维护拉新关系",
     "users.editInfo": "修改信息",
     "users.web": "网页",
     "users.count": "共 {count} 条记录",
-    "grant.title": "添加会员 · {id}",
-    "grant.subtitle": "为当前用户添加会员权益",
+    "settings.title": "系统配置",
+    "settings.subtitle": "按业务线和角色配置权益来源在添加时长入口中的可见性",
+    "settings.sourceTitle": "角色权益来源",
+    "settings.sourceNote": "关闭“权益来源可见”时，系统自动使用常规赠送，必填校验仍可通过。",
+    "settings.businessLine": "业务线",
+    "settings.role": "角色",
+    "settings.sourceVisible": "权益来源可见",
+    "settings.visibleSources": "可见来源",
+    "settings.defaultSource": "默认来源",
+    "settings.actions": "操作",
+    "settings.configure": "配置",
+    "settings.enabled": "已开启",
+    "settings.disabled": "已关闭",
+    "settings.sourceVisibleNote": "开启后，该角色在添加时长入口中显示权益来源。",
+    "settings.regularRequired": "默认来源，始终启用",
+    "settings.referralOption": "允许录入被推荐人与订单",
+    "settings.socialOption": "允许登记社媒内容来源",
+    "settings.saved": "角色权益来源配置已保存",
+    "grant.title": "增加用户时长 · {id}",
+    "grant.subtitle": "为当前用户增加会员时长",
     "grant.openType": "开通类型",
     "grant.trialDays": "添加体验天数",
     "grant.trialDays.note": "用户可继续通过付费墙购买",
     "grant.manualTransfer": "手动银行转账",
     "grant.manualTransfer.note": "按普通会员开通",
     "grant.source": "权益来源",
+    "grant.source.roleHint": "当前角色可见来源：{sources}",
+    "grant.source.defaultHint": "当前角色未开放权益来源，系统使用默认“常规赠送”。",
     "grant.referredPhone": "被推荐人手机号",
     "grant.referredPhone.placeholder": "输入带国际区号的完整手机号",
     "grant.verify": "核验",
@@ -174,8 +201,8 @@ const I18N = {
     "grant.systemReward": "系统核验奖励",
     "grant.reason": "开通原因",
     "grant.reason.note": "拉新推荐会写入推荐人、被推荐人和订单，无需再手工备注 referral",
-    "grant.confirm": "确认发放",
-    "grant.issuing": "发放中…",
+    "grant.confirm": "确认增加",
+    "grant.issuing": "处理中…",
     "grant.helper.regular": "新用户从当前时间起算；未付费体验中的用户在现体验到期时间上累加。",
     "grant.helper.social": "社媒推荐由独立审核列表维护，并按审核和选中结果自动发奖。",
     "grant.helper.referral": "拉新推荐奖励由订单套餐自动确定，有效期单位不可修改。",
@@ -190,6 +217,8 @@ const I18N = {
     "grant.error.multiple": "该手机号在同一业务线下匹配多个账号，请联系管理员核实",
     "grant.error.unverified": "请先完成被推荐人与订单核验",
     "grant.error.social": "请输入社媒推荐内容链接",
+    "grant.error.days": "请输入有效的有效期天数",
+    "grant.error.reason": "请输入开通原因",
     "grant.verify.passed": "核验通过",
     "grant.verifiedUser": "{name} · 正式用户",
     "grant.userId": "用户 ID",
@@ -205,12 +234,14 @@ const I18N = {
     "grant.paidAt": "支付时间",
     "grant.thailand": "泰国",
     "grant.vietnam": "越南",
+    "grant.saudi": "沙特阿拉伯",
     "grant.maskedPhone": "+66 81 **** 5678",
     "grant.months": "{count} 个月",
     "grant.rewardMonths": "+{count} 个月",
     "toast.refreshed": "数据已刷新",
     "toast.referralSuccess": "推荐关系已绑定，权益已发放",
     "toast.socialSuccess": "社媒推荐记录已保存",
+    "toast.grantSuccess": "已按{source}增加用户时长",
     "drawer.title": "推荐关系详情",
     "drawer.relationInfo": "关系信息",
     "drawer.referrer": "推荐人",
@@ -301,6 +332,7 @@ const I18N = {
     "common.search": "Search",
     "common.cancel": "Cancel",
     "common.close": "Close",
+    "common.save": "Save",
     "common.days": "days",
     "option.thailand": "Thailand",
     "option.vietnam": "Vietnam",
@@ -336,6 +368,7 @@ const I18N = {
     "table.operator": "Operator CC",
     "table.owner": "Owner CC",
     "table.rule": "Reward rule",
+    "table.reward": "Reward",
     "table.status": "Benefit status",
     "table.bindStatus": "Binding/content status",
     "table.record": "Business record",
@@ -350,6 +383,8 @@ const I18N = {
     "unified.noteText": "Binding, reward events, gift orders, and benefit status are tracked in one list",
     "unified.empty": "No growth records match the current filters",
     "unified.keywordPlaceholder": "User ID / event ID / order ID",
+    "bindings.page": "Page 1",
+    "community.create": "Register social media recommendation",
     "bindings.newSocial": "Record social media recommendation",
     "bindings.newReferral": "New friend referral",
     "sales.title": "Sales Center",
@@ -362,6 +397,7 @@ const I18N = {
     "sales.stage": "Follow-up stage",
     "sales.call": "Call",
     "sales.followUp": "Log follow-up",
+    "sales.addDuration": "Add user duration",
     "orders.title": "Order Center",
     "orders.subtitle": "Paid orders and system gift orders",
     "orders.allOrders": "All orders",
@@ -370,6 +406,7 @@ const I18N = {
     "orders.orderTypeAll": "Order type: All",
     "orders.membershipGrant": "Membership grant",
     "orders.paid": "Paid order",
+    "orders.directPurchase": "Direct purchase",
     "orders.orderId": "Order ID",
     "orders.orderType": "Order type",
     "orders.businessSource": "Business source",
@@ -400,18 +437,39 @@ const I18N = {
     "users.channel": "Channel",
     "users.actions": "Actions",
     "users.addMember": "Add membership",
+    "users.addDuration": "Add user duration",
     "users.maintainBinding": "Manage referral relationship",
     "users.editInfo": "Edit info",
     "users.web": "Web",
     "users.count": "{count} records",
-    "grant.title": "Add membership · {id}",
-    "grant.subtitle": "Add a membership benefit for this user",
+    "settings.title": "System Settings",
+    "settings.subtitle": "Configure benefit-source visibility by business line and role for add-duration entry points",
+    "settings.sourceTitle": "Role benefit sources",
+    "settings.sourceNote": "When Benefit source visibility is off, the system uses Standard grant automatically and required validation still passes.",
+    "settings.businessLine": "Business line",
+    "settings.role": "Role",
+    "settings.sourceVisible": "Benefit source visible",
+    "settings.visibleSources": "Visible sources",
+    "settings.defaultSource": "Default source",
+    "settings.actions": "Actions",
+    "settings.configure": "Configure",
+    "settings.enabled": "Enabled",
+    "settings.disabled": "Disabled",
+    "settings.sourceVisibleNote": "When enabled, this role sees Benefit source in the add-duration entry.",
+    "settings.regularRequired": "Default source, always enabled",
+    "settings.referralOption": "Allow referred user and order entry",
+    "settings.socialOption": "Allow social content source entry",
+    "settings.saved": "Role benefit-source configuration saved",
+    "grant.title": "Add user duration · {id}",
+    "grant.subtitle": "Increase membership duration for this user",
     "grant.openType": "Activation type",
     "grant.trialDays": "Add trial days",
     "grant.trialDays.note": "The user can still purchase through the paywall",
     "grant.manualTransfer": "Manual bank transfer",
     "grant.manualTransfer.note": "Activate as a standard membership",
     "grant.source": "Benefit source",
+    "grant.source.roleHint": "Sources visible to the current role: {sources}",
+    "grant.source.defaultHint": "Benefit source is not enabled for this role. The system uses Standard grant by default.",
     "grant.referredPhone": "Referred user phone",
     "grant.referredPhone.placeholder": "Enter the full phone number with country code",
     "grant.verify": "Verify",
@@ -422,8 +480,8 @@ const I18N = {
     "grant.systemReward": "Verified reward",
     "grant.reason": "Grant reason",
     "grant.reason.note": "A referral saves the referrer, referred user, and order automatically; a manual referral note is not required",
-    "grant.confirm": "Confirm and issue",
-    "grant.issuing": "Issuing…",
+    "grant.confirm": "Confirm increase",
+    "grant.issuing": "Processing…",
     "grant.helper.regular": "New users start from the current time. Unpaid users on trial receive the benefit after their current trial end date.",
     "grant.helper.social": "Social media recommendations are managed in a dedicated review list and rewarded automatically from review and selection outcomes.",
     "grant.helper.referral": "The referral reward is determined by the order plan. The validity unit cannot be edited.",
@@ -438,6 +496,8 @@ const I18N = {
     "grant.error.multiple": "This phone number matches multiple accounts in the same business line. Contact an administrator.",
     "grant.error.unverified": "Verify the referred user and order first",
     "grant.error.social": "Enter the social media recommendation content link",
+    "grant.error.days": "Enter a valid validity period",
+    "grant.error.reason": "Enter a grant reason",
     "grant.verify.passed": "Verified",
     "grant.verifiedUser": "{name} · Registered",
     "grant.userId": "User ID",
@@ -453,12 +513,14 @@ const I18N = {
     "grant.paidAt": "Paid at",
     "grant.thailand": "Thailand",
     "grant.vietnam": "Vietnam",
+    "grant.saudi": "Saudi Arabia",
     "grant.maskedPhone": "+66 81 **** 5678",
     "grant.months": "{count} months",
     "grant.rewardMonths": "+{count} months",
     "toast.refreshed": "Data refreshed",
     "toast.referralSuccess": "Referral linked and benefit issued",
     "toast.socialSuccess": "Social media recommendation saved",
+    "toast.grantSuccess": "User duration added via {source}",
     "drawer.title": "Referral Relationship",
     "drawer.relationInfo": "Relationship",
     "drawer.referrer": "Referrer",
@@ -509,10 +571,22 @@ function detectLanguage() {
   return "zh";
 }
 
+function detectInitialView() {
+  try {
+    const requested = new URLSearchParams(window.location.search).get("view");
+    if (["dashboard", "users", "sales", "orders", "community", "settings"].includes(requested)) return requested;
+  } catch {
+    // Local file previews may block URL parsing.
+  }
+  return "dashboard";
+}
+
 const state = {
   lang: detectLanguage(),
-  view: "dashboard",
+  view: detectInitialView(),
   dateField: "bind",
+  salesTab: "following",
+  orderTab: "all",
   source: "",
   cc: "",
   status: "",
@@ -521,7 +595,22 @@ const state = {
   verifiedUser: null,
   submitted: false,
   selectedId: "",
+  grantContext: null,
+  editingRoleId: null,
 };
+
+const CURRENT_USER = {
+  name: "Thanya C.",
+  roleId: "CC_TH",
+  businessLine: "thailand",
+};
+
+const ROLE_SOURCE_CONFIG = [
+  { roleId: "CC_TH", roleName: "CC_TH", businessLine: "thailand", visible: true, sources: ["regular", "referral", "social"] },
+  { roleId: "CC_VN", roleName: "CC_VN", businessLine: "vietnam", visible: true, sources: ["regular", "referral"] },
+  { roleId: "CC_SA", roleName: "CC_SA", businessLine: "saudi", visible: true, sources: ["regular", "referral", "social"] },
+  { roleId: "CC_TH_SENIOR", roleName: "CC_TH_SENIOR", businessLine: "thailand", visible: false, sources: ["regular"] },
+];
 
 const relationships = [
   {
@@ -672,7 +761,7 @@ function t(key, values = {}) {
 }
 
 function sourceLabel(source) {
-  return t(source === "social" ? "source.social" : "source.referral");
+  return t(`source.${source || "regular"}`);
 }
 
 function statusEntry(status) {
@@ -696,11 +785,20 @@ function normalizePhone(value) {
 }
 
 function businessLineLabel(line) {
-  return t(line === "vietnam" ? "grant.vietnam" : "grant.thailand");
+  return t(`grant.${line || "thailand"}`);
 }
 
 function money(value) {
   return `฿${Number(value).toLocaleString("en-US")}`;
+}
+
+function viewMeta(view) {
+  if (view === "dashboard") return { title: "nav.growth", crumb: "crumb.growth" };
+  if (view === "community") return { title: "community.title", crumb: "crumb.growth" };
+  if (view === "sales") return { title: "sales.title", crumb: "nav.sales" };
+  if (view === "orders") return { title: "orders.title", crumb: "nav.orders" };
+  if (view === "settings") return { title: "settings.title", crumb: "nav.settings" };
+  return { title: "users.title", crumb: "crumb.users" };
 }
 
 function applyStaticTranslations() {
@@ -724,10 +822,9 @@ function applyStaticTranslations() {
   document.getElementById("usersRowSummary").textContent = countLabel("users.count", 3);
   document.getElementById("grantTitle").textContent = t("grant.title", { id: "2120302255148482561" });
   document.getElementById("rewardSummaryValue").textContent = ruleLabel(1);
-  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "community" ? "community.title" : state.view === "sales" ? "sales.title" : state.view === "orders" ? "orders.title" : "users.title";
-  const viewCrumb = state.view === "dashboard" || state.view === "community" ? "crumb.growth" : state.view === "sales" ? "nav.sales" : state.view === "orders" ? "nav.orders" : "crumb.users";
-  document.getElementById("pageTitle").textContent = t(viewTitle);
-  document.getElementById("crumb").textContent = t(viewCrumb);
+  const meta = viewMeta(state.view);
+  document.getElementById("pageTitle").textContent = t(meta.title);
+  document.getElementById("crumb").textContent = t(meta.crumb);
 }
 
 function renderRows() {
@@ -826,31 +923,141 @@ function openDrawer(id) {
   document.getElementById("detailDrawer").hidden = false;
 }
 
+function applySalesTab(tab) {
+  state.salesTab = tab;
+  const rows = [...document.querySelectorAll(".sales-row")];
+  rows.forEach((row) => {
+    row.hidden = row.dataset.salesView !== tab;
+  });
+  document.querySelectorAll("[data-sales-tab]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.salesTab === tab);
+  });
+  document.getElementById("salesCount").textContent = String(rows.filter((row) => !row.hidden).length);
+}
+
+function applyOrderTab(tab) {
+  state.orderTab = tab;
+  const rows = [...document.querySelectorAll(".order-row")];
+  rows.forEach((row) => {
+    row.hidden = tab !== "all" && row.dataset.orderType !== tab;
+  });
+  document.querySelectorAll("[data-order-tab]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.orderTab === tab);
+  });
+  document.getElementById("ordersCount").textContent = String(rows.filter((row) => !row.hidden).length);
+}
+
 function setView(view) {
   state.view = view;
   const dashboard = view === "dashboard";
   const community = view === "community";
   const sales = view === "sales";
   const orders = view === "orders";
+  const settings = view === "settings";
+  const users = view === "users";
   document.getElementById("dashboardView").hidden = !dashboard;
   document.getElementById("bindingsView").hidden = true;
   document.getElementById("communityView").hidden = !community;
   document.getElementById("salesView").hidden = !sales;
   document.getElementById("ordersView").hidden = !orders;
-  document.getElementById("usersView").hidden = dashboard || community || sales || orders;
-  document.getElementById("pageTitle").textContent = t(dashboard ? "nav.growth" : community ? "community.title" : sales ? "sales.title" : orders ? "orders.title" : "users.title");
-  document.getElementById("crumb").textContent = t(dashboard || community ? "crumb.growth" : sales ? "nav.sales" : orders ? "nav.orders" : "crumb.users");
+  document.getElementById("settingsView").hidden = !settings;
+  document.getElementById("usersView").hidden = !users;
+  const meta = viewMeta(view);
+  document.getElementById("pageTitle").textContent = t(meta.title);
+  document.getElementById("crumb").textContent = t(meta.crumb);
   document.querySelectorAll(".nav-item[data-view]").forEach((item) => item.classList.toggle("active", item.dataset.view === view));
   document.getElementById("sidebar").classList.remove("open");
   if (dashboard) window.GrowthBindingView?.activate();
   if (community) window.CommunityUploadView?.activate();
+  if (settings) renderRoleSourceRows();
+  if (sales) applySalesTab(state.salesTab);
+  if (orders) applyOrderTab(state.orderTab);
+}
+
+function roleSourceConfig(roleId) {
+  return ROLE_SOURCE_CONFIG.find((item) => item.roleId === roleId) ?? ROLE_SOURCE_CONFIG[0];
+}
+
+function roleVisibleSources(config) {
+  return config.visible ? config.sources : ["regular"];
+}
+
+function sourceNames(sources) {
+  return sources.map((source) => t(`source.${source}`)).join(state.lang === "en" ? ", " : "、");
+}
+
+function renderRoleSourceRows() {
+  const body = document.getElementById("roleSourceRows");
+  body.innerHTML = ROLE_SOURCE_CONFIG.map((config) => {
+    const sources = roleVisibleSources(config);
+    return `<tr>
+      <td>${businessLineLabel(config.businessLine)}</td>
+      <td><span class="mono">${config.roleName}</span></td>
+      <td><span class="status ${config.visible ? "success" : "invalid"}">${t(config.visible ? "settings.enabled" : "settings.disabled")}</span></td>
+      <td>${sourceNames(sources)}</td>
+      <td>${t("source.regular")}</td>
+      <td><div class="row-actions"><button class="role-source-edit" data-role-config="${config.roleId}">${t("settings.configure")}</button></div></td>
+    </tr>`;
+  }).join("");
+}
+
+function syncRoleSourceControls() {
+  const visible = document.getElementById("roleSourceVisible").checked;
+  document.querySelectorAll("[data-source-option]").forEach((input) => {
+    input.disabled = !visible;
+  });
+}
+
+function openRoleSourceModal(roleId) {
+  const config = roleSourceConfig(roleId);
+  state.editingRoleId = roleId;
+  document.getElementById("roleSourceTitle").textContent = t("settings.sourceTitle");
+  document.getElementById("roleSourceSubtitle").textContent = `${businessLineLabel(config.businessLine)} · ${config.roleName}`;
+  document.getElementById("roleSourceVisible").checked = config.visible;
+  document.querySelectorAll("[data-source-option]").forEach((input) => {
+    input.checked = config.sources.includes(input.value);
+  });
+  document.getElementById("roleSourceNotice").textContent = "";
+  document.getElementById("roleSourceNotice").classList.remove("show");
+  syncRoleSourceControls();
+  document.getElementById("roleSourceModal").hidden = false;
+}
+
+function closeRoleSourceModal() {
+  document.getElementById("roleSourceModal").hidden = true;
+  state.editingRoleId = null;
+}
+
+function saveRoleSource() {
+  const config = roleSourceConfig(state.editingRoleId);
+  config.visible = document.getElementById("roleSourceVisible").checked;
+  config.sources = config.visible
+    ? ["regular", ...[...document.querySelectorAll("[data-source-option]:checked")].map((input) => input.value)]
+    : ["regular"];
+  renderRoleSourceRows();
+  closeRoleSourceModal();
+  if (state.grantContext?.roleId === config.roleId) configureGrantSources();
+  showToast(t("settings.saved"));
+}
+
+function configureGrantSources() {
+  const config = roleSourceConfig(state.grantContext?.roleId ?? CURRENT_USER.roleId);
+  const sources = roleVisibleSources(config);
+  const row = document.getElementById("grantSourceRow");
+  const select = document.getElementById("sourceSelect");
+  row.hidden = !config.visible;
+  select.innerHTML = sources.map((source) => `<option value="${source}">${t(`source.${source}`)}</option>`).join("");
+  select.value = sources.includes("regular") ? "regular" : sources[0];
+  document.getElementById("sourceRoleHint").textContent = config.visible
+    ? t("grant.source.roleHint", { sources: sourceNames(sources) })
+    : t("grant.source.defaultHint");
 }
 
 function resetGrantForm() {
   state.verified = false;
   state.verifiedUser = null;
   state.submitted = false;
-  document.getElementById("sourceSelect").value = "regular";
+  configureGrantSources();
   document.getElementById("referredPhone").value = "";
   document.getElementById("socialLink").value = "";
   document.getElementById("verifyResult").hidden = true;
@@ -866,6 +1073,7 @@ function resetGrantForm() {
 
 function handleSourceChange() {
   const source = document.getElementById("sourceSelect").value;
+  document.getElementById("grantNotice").classList.remove("show");
   document.getElementById("referralFields").hidden = source !== "referral";
   document.getElementById("socialFields").hidden = source !== "social";
   document.getElementById("rewardSummary").hidden = true;
@@ -887,12 +1095,13 @@ function handleSourceChange() {
 function renderVerifiedReferral() {
   const user = state.verifiedUser;
   if (!user) return;
+  const referrer = state.grantContext ?? CURRENT_USER;
   document.getElementById("verifyResult").innerHTML = `
     <div class="verify-title"><strong>${t("grant.verifiedUser", { name: user.name })}</strong><span>${t("grant.verify.passed")}</span></div>
     <div class="verify-grid">
       <div><b>${t("grant.phone")}</b><span class="mono">${user.maskedPhone}</span></div>
       <div><b>${t("grant.userId")}</b><span class="mono">${user.userId}</span></div>
-      <div><b>${t("grant.referrerBusinessLine")}</b><span>${businessLineLabel(REFERRER_CONTEXT.businessLine)}</span></div>
+      <div><b>${t("grant.referrerBusinessLine")}</b><span>${businessLineLabel(referrer.businessLine)}</span></div>
       <div><b>${t("grant.referredBusinessLine")}</b><span>${businessLineLabel(user.businessLine)} · ${t("grant.businessLineMatched")}</span></div>
       <div><b>${t("grant.attributedOrder")}</b><span class="mono">PO202611020018</span></div>
       <div><b>${t("grant.plan")}</b><span>${planLabel(3)}</span></div>
@@ -904,7 +1113,7 @@ function renderVerifiedReferral() {
   document.getElementById("daysInput").readOnly = true;
   document.getElementById("daysInput").value = "";
   document.getElementById("reasonInput").value = t("grant.reason.generated", {
-    referrer: "Pimchanok S.",
+    referrer: referrer.userName,
     referred: user.name,
     plan: planLabel(3),
     order: "PO202611020018",
@@ -938,15 +1147,15 @@ function verifyReferredUser() {
     return;
   }
 
-  if (user.userId === "2120302255148482561") {
+  if (user.userId === state.grantContext?.userId) {
     box.innerHTML = `<div class="verify-error">${t("grant.error.self")}</div>`;
     return;
   }
 
-  if (user.businessLine !== REFERRER_CONTEXT.businessLine) {
+  if (user.businessLine !== (state.grantContext?.businessLine ?? REFERRER_CONTEXT.businessLine)) {
     box.innerHTML = `<div class="verify-error">${t("grant.error.businessLine", {
       userLine: businessLineLabel(user.businessLine),
-      referrerLine: businessLineLabel(REFERRER_CONTEXT.businessLine),
+      referrerLine: businessLineLabel(state.grantContext?.businessLine ?? REFERRER_CONTEXT.businessLine),
     })}</div>`;
     return;
   }
@@ -957,9 +1166,17 @@ function verifyReferredUser() {
   renderVerifiedReferral();
 }
 
-function openGrant() {
-  setView("dashboard");
-  window.GrowthBindingView?.openReferral();
+function openGrant(button) {
+  state.grantContext = {
+    userId: button.dataset.userId,
+    userName: button.dataset.userName,
+    businessLine: button.dataset.businessLine || CURRENT_USER.businessLine,
+    roleId: button.dataset.roleId || CURRENT_USER.roleId,
+  };
+  REFERRER_CONTEXT.businessLine = state.grantContext.businessLine;
+  document.getElementById("grantTitle").textContent = t("grant.title", { id: state.grantContext.userId });
+  resetGrantForm();
+  document.getElementById("grantModal").hidden = false;
 }
 
 function closeGrant() {
@@ -968,7 +1185,10 @@ function closeGrant() {
 
 function confirmGrant() {
   const source = document.getElementById("sourceSelect").value;
+  const grantContext = state.grantContext ?? CURRENT_USER;
   const notice = document.getElementById("grantNotice");
+  const days = Number(document.getElementById("daysInput").value);
+  const reason = document.getElementById("reasonInput").value.trim();
   if (source === "referral" && !state.verified) {
     notice.textContent = t("grant.error.unverified");
     notice.classList.add("show");
@@ -979,6 +1199,17 @@ function confirmGrant() {
     notice.classList.add("show");
     return;
   }
+  if (source !== "referral" && (!Number.isInteger(days) || days < 1 || days > 365)) {
+    notice.textContent = t("grant.error.days");
+    notice.classList.add("show");
+    return;
+  }
+  if (!reason) {
+    notice.textContent = t("grant.error.reason");
+    notice.classList.add("show");
+    return;
+  }
+  notice.classList.remove("show");
 
   state.submitted = true;
   document.getElementById("confirmGrant").disabled = true;
@@ -987,8 +1218,8 @@ function confirmGrant() {
   if (source === "referral" && !relationships.some((row) => row.referredId === state.verifiedUser.userId)) {
     relationships.unshift({
       id: "RR-202611-0128",
-      referrerId: "2120302255148482561",
-      referrer: "Pimchanok S.",
+      referrerId: grantContext.userId,
+      referrer: grantContext.userName,
       referredId: state.verifiedUser.userId,
       referred: state.verifiedUser.name,
       referredPhone: "66812345678",
@@ -1010,7 +1241,7 @@ function confirmGrant() {
     document.getElementById("confirmGrant").textContent = t("grant.confirm");
     closeGrant();
     renderRows();
-    showToast(t(source === "referral" ? "toast.referralSuccess" : "toast.socialSuccess"));
+    showToast(t("toast.grantSuccess", { source: sourceLabel(source) }));
   }, 450);
 }
 
@@ -1040,16 +1271,27 @@ function setLanguage(language) {
     // Local file previews may block history updates.
   }
   applyStaticTranslations();
-  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "community" ? "community.title" : state.view === "sales" ? "sales.title" : state.view === "orders" ? "orders.title" : "users.title";
-  document.getElementById("pageTitle").textContent = t(viewTitle);
-  document.getElementById("crumb").textContent = t(state.view === "dashboard" || state.view === "community" ? "crumb.growth" : state.view === "sales" ? "nav.sales" : state.view === "orders" ? "nav.orders" : "crumb.users");
+  const meta = viewMeta(state.view);
+  document.getElementById("pageTitle").textContent = t(meta.title);
+  document.getElementById("crumb").textContent = t(meta.crumb);
   renderRows();
+  if (state.view === "settings") renderRoleSourceRows();
   if (!document.getElementById("grantModal").hidden) {
+    document.getElementById("grantTitle").textContent = t("grant.title", { id: state.grantContext?.userId ?? "" });
+    const selectedSource = document.getElementById("sourceSelect").value;
+    configureGrantSources();
+    const options = [...document.getElementById("sourceSelect").options].map((option) => option.value);
+    document.getElementById("sourceSelect").value = options.includes(selectedSource) ? selectedSource : options[0];
     if (state.verified) renderVerifiedReferral();
     else {
       document.getElementById("verifyResult").hidden = true;
       handleSourceChange();
     }
+  }
+  if (!document.getElementById("roleSourceModal").hidden && state.editingRoleId) {
+    const role = roleSourceConfig(state.editingRoleId);
+    document.getElementById("roleSourceTitle").textContent = t("settings.sourceTitle");
+    document.getElementById("roleSourceSubtitle").textContent = `${businessLineLabel(role.businessLine)} · ${role.roleName}`;
   }
   if (state.selectedId && !document.getElementById("detailDrawer").hidden) openDrawer(state.selectedId);
   window.dispatchEvent(new CustomEvent("growth-language-change", { detail: { lang: state.lang } }));
@@ -1073,7 +1315,7 @@ document.querySelectorAll(".metric-info").forEach((button) => {
   });
 });
 
-document.querySelectorAll(".date-tab").forEach((button) => {
+document.querySelectorAll("[data-date-field]").forEach((button) => {
   button.addEventListener("click", () => {
     state.dateField = button.dataset.dateField;
     document.querySelectorAll(".date-tab").forEach((tab) => tab.classList.toggle("active", tab === button));
@@ -1109,8 +1351,24 @@ document.getElementById("resetFilters").addEventListener("click", () => {
   renderRows();
 });
 document.getElementById("refreshBtn").addEventListener("click", () => showToast(t("toast.refreshed")));
-document.getElementById("openGrantBtn").addEventListener("click", openGrant);
-document.querySelectorAll(".open-grant-secondary").forEach((button) => button.addEventListener("click", openGrant));
+document.querySelectorAll(".open-grant-user").forEach((button) => button.addEventListener("click", () => openGrant(button)));
+document.querySelectorAll("[data-sales-tab]").forEach((button) => {
+  button.addEventListener("click", () => applySalesTab(button.dataset.salesTab));
+});
+document.querySelectorAll("[data-order-tab]").forEach((button) => {
+  button.addEventListener("click", () => applyOrderTab(button.dataset.orderTab));
+});
+document.getElementById("roleSourceRows").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-role-config]");
+  if (button) openRoleSourceModal(button.dataset.roleConfig);
+});
+document.getElementById("roleSourceVisible").addEventListener("change", syncRoleSourceControls);
+document.getElementById("saveRoleSource").addEventListener("click", saveRoleSource);
+document.getElementById("closeRoleSource").addEventListener("click", closeRoleSourceModal);
+document.getElementById("cancelRoleSource").addEventListener("click", closeRoleSourceModal);
+document.getElementById("roleSourceModal").addEventListener("click", (event) => {
+  if (event.target.id === "roleSourceModal") closeRoleSourceModal();
+});
 document.getElementById("sourceSelect").addEventListener("change", handleSourceChange);
 document.getElementById("verifyBtn").addEventListener("click", verifyReferredUser);
 document.getElementById("referredPhone").addEventListener("keydown", (event) => {
@@ -1131,10 +1389,20 @@ document.getElementById("detailDrawer").addEventListener("click", (event) => {
 document.getElementById("menuBtn").addEventListener("click", () => {
   document.getElementById("sidebar").classList.toggle("open");
 });
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  if (!document.getElementById("roleSourceModal").hidden) closeRoleSourceModal();
+  if (!document.getElementById("grantModal").hidden) closeGrant();
+  if (!document.getElementById("detailDrawer").hidden) document.getElementById("detailDrawer").hidden = true;
+});
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".stat")) document.querySelectorAll(".metric-pop").forEach((pop) => { pop.hidden = true; });
 });
 
+setView(state.view);
 applyStaticTranslations();
 renderRows();
+renderRoleSourceRows();
+applySalesTab(state.salesTab);
+applyOrderTab(state.orderTab);
 window.dispatchEvent(new CustomEvent("growth-language-change", { detail: { lang: state.lang } }));
