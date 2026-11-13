@@ -1,0 +1,34 @@
+version: 1
+sources:
+  - id: crm-current-state
+    path: ../../../shared/memory/current-state.md
+    purpose: CRM 模块边界、用户身份和现有能力
+    priority: high
+  - id: crm-product-framework
+    path: ../../../shared/memory/product-framework.md
+    purpose: CRM 与外部系统的职责边界
+    priority: high
+  - id: crm-user-manual
+    path: ../../../../crm-manual/docs/user/U-01.md
+    purpose: 用户中心现有用户 ID、用户状态和敏感字段权限
+    priority: authoritative
+  - id: line-user-ids
+    url: https://developers.line.biz/en/docs/messaging-api/getting-user-ids/
+    purpose: 同一 Provider 下 LINE Login 与 Messaging API 用户 ID 关系
+    priority: authoritative
+  - id: line-friendship
+    url: https://developers.line.biz/en/docs/line-login/link-a-bot/
+    purpose: 官方账号关注状态、好友状态和用户授权
+    priority: authoritative
+  - id: line-channel-token
+    url: https://developers.line.biz/en/docs/basics/channel-access-token/
+    purpose: 消息发送凭证类型、有效期和撤销规则
+    priority: authoritative
+  - id: line-messaging
+    url: https://developers.line.biz/en/docs/messaging-api/sending-messages/
+    purpose: 单人 Push Message 能力和结果语义
+    priority: authoritative
+  - id: line-development-guidelines
+    url: https://developers.line.biz/en/docs/messaging-api/development-guidelines/
+    purpose: 请求频率、无效用户和账号风控边界
+    priority: authoritative

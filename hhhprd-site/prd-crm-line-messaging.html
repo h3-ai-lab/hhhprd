@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>crm-LINE 消息发送 · PRD</title>
+  <style>
+    :root{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    main{max-width:1040px;margin:0 auto;padding:42px 24px 80px}article{background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:34px}h2,h3,h4{line-height:1.35}
+    h2{font-size:28px;margin:0 0 20px}h3{font-size:21px;margin:30px 0 10px}h4{font-size:17px;margin:22px 0 8px}
+    p{margin:10px 0}a{color:var(--blue)}table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+    th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f7f9fc}
+    blockquote{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}
+    code{background:#f1f4f8;padding:1px 5px;border-radius:4px}pre code{background:transparent;padding:0;border-radius:0;color:inherit}pre{overflow:auto;background:#101828;
+    color:#eef2f7;padding:16px;border-radius:8px}.mermaid{background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:16px;overflow:auto}.top{display:flex;gap:14px;margin-bottom:18px}
+    .top a{text-decoration:none;font-weight:600}
+    @media(max-width:700px){main{padding:16px 10px}article{padding:20px 16px}}
+  </style>
+</head>
+<body><main>
+  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/crm-line-messaging/prd/PRD.md">查看 Markdown 源文件</a></div>
+  <article><h2>crm-LINE 消息发送</h2>
+<blockquote>从客户端接收经 LINE 校验的客户绑定与授权事件，在 CRM 形成“可发送客户”状态，并由有权限的角色发送单人文本消息。<br>需求编号：REQ-LINE-001｜状态：待评审｜更新时间：2026-11-13<br>需求类型：集成与自动化｜补充类型：规则、状态与数据；权限与审计</blockquote>
+<h3>交互原型</h3>
+<p><a href="https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/" target="_blank" rel="noopener">打开完整交互原型</a></p>
+<h3>目标与范围</h3>
+<p><strong>目标</strong></p>
+<ul><li>用稳定用户标识把 dinoAI 客户与其 LINE 官方账号身份唯一绑定，不以姓名、头像或手机号猜测关注人。</li><li>在 CRM 内明确区分“已绑定、已关注、已授权、可发送”，避免向无法接收或未授权的客户发送消息。</li><li>支持有权限的 CRM 角色向单个客户发送文本消息，并追踪消息是否已被 LINE 受理、失败原因及重试结果。</li></ul>
+<p><strong>做</strong></p>
+<ul><li>接收客户端或客户端服务端产生的客户绑定事件，保存 dinoAI 用户 ID、LINE Provider、LINE 用户 ID、关注状态和营销授权。</li><li>接收关注、取关和授权变化事件，按时间与幂等键维护最新状态。</li><li>新增 <code>用户管理 → LINE消息</code> 工作台，支持查找客户、查看 LINE 绑定状态、编辑并发送单人文本消息、查看消息记录和人工重试。</li><li>向无绑定、未关注、未授权或账号异常的客户禁用发送，并明确展示阻塞原因。</li><li>为绑定变更、发送、重试、解绑和越权尝试提供 RBAC 与审计。</li></ul>
+<p><strong>不做</strong></p>
+<ul><li>不设计或实现客户端 LINE 登录、关注引导、授权弹窗和客户端交互。</li><li>不向客户端下发或从客户端接收 LINE Login Access Token、Refresh Token、Messaging API Channel Access Token。</li><li>不通过姓名、头像、LINE ID、手机号或关注时间反查关注人。</li><li>不支持批量群发、定时发送、自动化营销、模板审批、富文本、图片、视频或 Flex Message。</li><li>不提供消息送达、已读、点击或回复状态；LINE 接口受理不等于用户已阅读。</li><li>不支持 CRM 手工创建 LINE 绑定，只允许管理员解除错误绑定后由客户端重新绑定。</li><li>不处理消息中的业务审批，发送人须对自己提交的内容负责。</li></ul>
+<h3>角色与系统边界</h3>
+<table><thead><tr><th>角色或系统</th><th>责任</th></tr></thead><tbody><tr><td>dinoAI 客户端或客户端服务端</td><td>完成 LINE 登录与用户授权；取得并提交可用于绑定的用户标识、LINE 用户标识、关注状态和营销授权</td></tr><tr><td>dinoAI LINE 消息服务</td><td>持有官方账号 Channel Access Token；接收 CRM 消息任务并调用 LINE；向 CRM 回传关注、取关和受理结果</td></tr><tr><td>CRM</td><td>维护绑定关系、可发送状态、消息内容与历史；执行数据权限、发送校验、失败处理和审计</td></tr><tr><td>LINE Platform</td><td>返回关注关系与接口受理结果；实际投递和终端展示不由 CRM 控制</td></tr><tr><td>CC</td><td>查找本人负责的客户，查看 LINE 状态并发送消息</td></tr><tr><td>销售组长、运营/商业化、管理员、超级管理员</td><td>在授权团队或业务线范围内查看、发送、重试或解除绑定</td></tr></tbody></table>
+<h3>业务流程</h3>
+<div class="mermaid">flowchart LR
+    A[客户端完成 LINE 登录与用户授权] --&gt; B[客户端服务端生成绑定事件]
+    B --&gt; C[CRM 校验用户、Provider 与 LINE 用户标识]
+    C --&gt;|通过| D[保存有效绑定]
+    C --&gt;|用户不存在或字段不合法| C1[拒绝绑定并返回原因]
+    C --&gt;|同一 LINE 用户已绑定其他客户| C2[标记绑定冲突并转管理员处理]
+    D --&gt; E{LINE 已关注且已授权营销?}
+    E --&gt;|是| F[状态为可发送]
+    E --&gt;|否| G[状态为不可发送并展示原因]
+    H[LINE 关注/取关/授权事件] --&gt; I[更新最新状态]
+    I --&gt; E
+    F --&gt; J[CRM 操作人选择客户并编辑文本]
+    J --&gt; K{发送前重新校验状态与权限}
+    K --&gt;|通过| L[创建消息任务]
+    K --&gt;|不通过| K1[禁用发送并提示原因]
+    L --&gt; M[LINE 消息服务调用官方账号]
+    M --&gt;|已受理| N[记录已受理]
+    M --&gt;|临时失败| O[自动重试]
+    O --&gt;|成功| N
+    O --&gt;|超过次数| P[记录失败并允许人工重试]
+    M --&gt;|不可重试| P</div>
+<h3>客户端必须提供的信息</h3>
+<p>CRM 不需要客户端提供的 LINE 登录实现，但绑定和发送必须取得以下业务信息。客户端前端不得直接携带服务密钥调用 CRM；这些信息应由客户端或其受信任服务端提交。</p>
+<table><thead><tr><th>信息</th><th>必填</th><th>业务含义</th><th>取值与来源</th></tr></thead><tbody><tr><td><code>event_id</code></td><td>是</td><td>绑定或状态变化事件的幂等标识</td><td>客户端服务端每次事件唯一生成；重复提交返回原结果</td></tr><tr><td><code>event_type</code></td><td>是</td><td>事件类型</td><td><code>BINDING_UPSERT</code>、<code>FRIEND_STATUS_CHANGED</code>、<code>MARKETING_CONSENT_CHANGED</code>、<code>UNBINDING_CHANGED</code></td></tr><tr><td><code>user_id</code></td><td>是</td><td>dinoAI 用户稳定 ID，与 CRM 用户中心一致</td><td>客户端登录用户对应账号；不得使用手机号代替</td></tr><tr><td><code>provider_id</code></td><td>是</td><td>LINE 用户 ID 的命名空间</td><td>由 LINE Messaging API 与 LINE Login Channel 所属 Provider 确定</td></tr><tr><td><code>line_user_id</code></td><td>是</td><td>用于绑定关注人和发送消息的 LINE 用户 ID</td><td>必须由 LINE 登录身份信息获得，格式为 <code>U</code> 加 32 位十六进制字符；不得人工填写</td></tr><tr><td><code>friend_status</code></td><td>是</td><td>事件发生时客户与 dinoAI 官方账号的关系</td><td><code>FOLLOWING</code>、<code>NOT_FOLLOWING</code>、<code>UNKNOWN</code>；由 LINE 状态查询或关注回调得出</td></tr><tr><td><code>marketing_consent</code></td><td>是</td><td>客户是否同意接收 CRM 发起的营销或服务消息</td><td><code>CONSENTED</code>、<code>WITHDRAWN</code>、<code>UNKNOWN</code>；来自独立、可撤回的用户授权</td></tr><tr><td><code>consent_version</code></td><td>是</td><td>客户同意的文本版本</td><td>客户端当前展示的授权条款版本</td></tr><tr><td><code>consent_at</code></td><td>是</td><td>最近一次同意或撤回发生时间</td><td>ISO 8601 时间，包含时区</td></tr><tr><td><code>event_at</code></td><td>是</td><td>本次状态事件的业务发生时间</td><td>服务端时间；用于拒绝乱序旧事件</td></tr><tr><td><code>line_display_name</code></td><td>否</td><td>LINE 展示名，仅用于辅助识别</td><td>可变字段，不参与客户身份判断</td></tr><tr><td><code>client_version</code></td><td>否</td><td>客户端版本</td><td>用于定位接入问题</td></tr></tbody></table>
+<p>客户端不需要向 CRM 提供：</p>
+<ul><li>Messaging API Channel Access Token、Channel Secret 或 LINE Login Channel Secret。</li><li>用户 LINE Login Access Token、Refresh Token 或 LIFF Access Token。</li><li>手机号、姓名或关注时间供 CRM 反查关注人。</li><li>完整的官方账号关注人列表。</li></ul>
+<p>推荐的最小绑定信息是：</p>
+<pre><code class="text">user_id + provider_id + line_user_id + friend_status + marketing_consent</code></pre>
+<p>CRM 接收后必须再次校验用户存在、字段格式、Provider 与当前 dinoAI 官方账号一致；客户端提交的关注和授权仅是业务事件，不能代替 CRM 的发送前状态检查。</p>
+<h3>业务规则</h3>
+<h4>绑定</h4>
+<ul><li>一个 CRM 用户在同一 Provider 下最多存在一条有效绑定。</li><li>同一个 <code>provider_id + line_user_id</code> 在有效状态下只能绑定一个 CRM 用户。</li><li>相同 <code>event_id</code> 重复提交不得创建第二条绑定或重复修改状态。</li><li>同一有效绑定下，晚到的旧 <code>event_at</code> 不覆盖较新的关注或授权状态；相同时间按事件类型固定顺序处理。</li><li>CRM 用户不存在、Provider 不匹配或 <code>line_user_id</code> 格式非法时拒绝绑定，保留失败原因供排查。</li><li>客户更换 LINE 账号或同一 LINE 账号转给另一客户时，先由管理员解除旧绑定，再由客户端产生新绑定。</li><li>解绑不删除历史绑定、消息和审计；旧绑定显示“已解除”，不可继续发送。</li><li>绑定存在但未关注、未授权或状态未知时允许保留，不允许发送。</li></ul>
+<h4>发送资格</h4>
+<p>同时满足以下条件才显示为“可发送”：</p>
+<ol><li>绑定状态为“有效”。</li><li>当前关注状态为“已关注”。</li><li>营销授权为“已同意”。</li><li>CRM 用户存在、账号正常且属于操作人的数据范围。</li><li>发送前状态刷新成功，未被 LINE 或关注事件更新为取关、拉黑或不可访问。</li></ol>
+<p>任一条件不满足时禁用发送：</p>
+<ul><li>未绑定 LINE：<code>未绑定 LINE</code></li><li>已绑定未关注：<code>客户尚未关注官方账号</code></li><li>已关注但未授权：<code>客户未授权接收消息</code></li><li>状态无法确认：<code>LINE 状态暂时无法确认</code></li><li>绑定冲突：<code>绑定存在异常，请联系管理员</code></li><li>无数据权限：<code>无权向该客户发送消息</code></li></ul>
+<h4>消息发送</h4>
+<ul><li>本期只支持向单个客户发送一段文本，正文必填，支持 1–5,000 个字符，首尾空白不自动删除。</li><li>发送前展示客户姓名、用户 ID、业务线、脱敏 LINE 用户 ID、当前关注与授权状态及正文摘要。</li><li>每个发送请求生成唯一消息 ID；重复点击或网络重试不得生成两条消息。</li><li>LINE 返回接口成功后，状态记为“LINE 已受理”，不得展示为“已送达”或“已读”。</li><li>临时网络错误、LINE 服务异常或请求限流可自动重试，最多 3 次，整个过程不超过 10 分钟。</li><li>未绑定、未关注、未授权、绑定冲突、权限不足和内容参数错误不自动重试。</li><li>自动重试仍失败后可人工重试；人工重试沿用原消息 ID，不得创建重复消息。</li><li>客户在消息创建后失去发送资格时，未发出的任务终止并记录原因；已经提交给 LINE 的消息不承诺撤回。</li></ul>
+<h4>状态模型</h4>
+<table><thead><tr><th>对象</th><th>状态</th><th>含义</th></tr></thead><tbody><tr><td>绑定</td><td><code>ACTIVE</code></td><td>有效绑定，可继续校验关注与授权</td></tr><tr><td>绑定</td><td><code>CONFLICT</code></td><td>同一客户或 LINE 用户存在冲突，不可发送</td></tr><tr><td>绑定</td><td><code>RELEASED</code></td><td>已由管理员解除，历史保留</td></tr><tr><td>关注</td><td><code>FOLLOWING</code></td><td>当前为官方账号好友</td></tr><tr><td>关注</td><td><code>NOT_FOLLOWING</code></td><td>未关注、已取关或已拉黑</td></tr><tr><td>关注</td><td><code>UNKNOWN</code></td><td>最近查询失败，不能确认</td></tr><tr><td>授权</td><td><code>CONSENTED</code></td><td>当前同意接收消息</td></tr><tr><td>授权</td><td><code>WITHDRAWN</code></td><td>已撤回或拒绝授权</td></tr><tr><td>授权</td><td><code>UNKNOWN</code></td><td>未取得明确授权，不可发送</td></tr><tr><td>消息</td><td><code>PENDING</code></td><td>已创建，尚未提交 LINE</td></tr><tr><td>消息</td><td><code>RETRYING</code></td><td>临时失败，等待或正在重试</td></tr><tr><td>消息</td><td><code>ACCEPTED</code></td><td>LINE 已受理，不代表已送达</td></tr><tr><td>消息</td><td><code>FAILED</code></td><td>最终失败，可查看原因并人工重试</td></tr></tbody></table>
+<h3>对象、字段与排序</h3>
+<h4>客户绑定</h4>
+<table><thead><tr><th>字段</th><th>业务规则</th></tr></thead><tbody><tr><td>CRM 用户</td><td>展示用户 ID 和姓名，来自现有用户中心</td></tr><tr><td>业务线</td><td>继承 CRM 用户业务线，不由客户端覆盖</td></tr><tr><td>LINE 绑定状态</td><td>有效、绑定冲突、已解除、未绑定</td></tr><tr><td>关注状态</td><td>已关注、未关注、未知；展示最近确认时间</td></tr><tr><td>营销授权</td><td>已同意、已撤回、未知；展示条款版本和授权时间</td></tr><tr><td>可发送状态</td><td>由绑定、关注、授权、账号和数据权限共同计算，不可手工编辑</td></tr><tr><td>LINE 用户 ID</td><td>服务端保存完整值；列表仅展示脱敏值</td></tr><tr><td>最近状态来源</td><td>客户端绑定、LINE 关注事件、LINE 取关事件、发送前查询或管理员解绑</td></tr><tr><td>绑定时间</td><td>首次有效绑定时间；重新绑定生成新绑定周期</td></tr><tr><td>更新时间</td><td>最近一次有效状态变化时间</td></tr></tbody></table>
+<h4>消息记录</h4>
+<table><thead><tr><th>字段</th><th>业务规则</th></tr></thead><tbody><tr><td>消息 ID</td><td>系统唯一生成，重试不变</td></tr><tr><td>客户</td><td>用户 ID、姓名、业务线快照</td></tr><tr><td>操作人</td><td>发起发送的 CRM 账号和姓名快照</td></tr><tr><td>消息正文</td><td>保存原文、字符数和内容摘要</td></tr><tr><td>创建时间</td><td>首次创建消息任务的时间</td></tr><tr><td>最近尝试时间</td><td>最近一次向 LINE 提交的时间</td></tr><tr><td>状态</td><td>待发送、重试中、LINE 已受理、发送失败</td></tr><tr><td>失败原因</td><td>使用可理解的标准原因，保留接口请求标识</td></tr><tr><td>重试次数</td><td>同一条消息累计自动与人工重试次数</td></tr></tbody></table>
+<p>客户列表固定按最近绑定或状态更新时间倒序展示，不支持手工排序。消息记录固定按创建时间倒序展示，不支持手工排序。关注时间、授权时间、LINE 用户 ID、姓名、业务线和状态均不提供排序交互。</p>
+<h3>页面、列表与筛选</h3>
+<p>入口：<code>用户管理 → LINE消息</code>。</p>
+<p>页面分为顶部状态概览、客户筛选与列表、客户详情与发送区。</p>
+<h4>客户列表</h4>
+<p>默认列顺序：</p>
+<p><code>用户 ID → 客户姓名 → 业务线 → LINE 绑定状态 → 关注状态 → 营销授权 → 可发送状态 → 最近更新时间</code></p>
+<p>筛选区顺序：</p>
+<p><code>用户 ID/姓名/手机号搜索 → 业务线 → LINE 绑定状态 → 关注状态 → 营销授权 → 可发送状态</code></p>
+<p>筛选规则：</p>
+<ul><li>搜索支持用户 ID、姓名和手机号；手机号仅在操作人拥有现有用户敏感字段查看权限时可搜索。</li><li>所有筛选使用操作人现有数据范围，不能通过搜索看到无权的客户。</li><li>客户列表分页，切换分页保留已应用筛选。</li><li>无结果、加载失败、LINE 状态查询失败和权限不足分别展示不同状态，不能都显示为空数据。</li></ul>
+<h4>客户详情与发送</h4>
+<p>选择客户后展示：</p>
+<ul><li>客户姓名、用户 ID、业务线、账号状态。</li><li>LINE 绑定状态、关注状态、营销授权、最近确认时间和脱敏 LINE 用户 ID。</li><li>“可发送”或具体阻塞原因。</li><li>文本输入框、字数统计、当前发送内容摘要和发送按钮。</li><li>最近 20 条消息记录；支持展开查看完整正文和失败原因。</li></ul>
+<p>发送交互：</p>
+<ul><li>可发送客户展示“发送消息”；不可发送客户按钮置灰并展示原因。</li><li>点击发送前进行二次确认，确认后按钮进入处理中状态，禁止重复提交。</li><li>消息正在发送时关闭详情，重新打开仍展示该客户的进行中消息。</li><li>失败记录展示“重试”；不满足发送资格时重试入口改为“查看原因”。</li><li>管理员可见“解除绑定”，必须填写原因并二次确认。</li></ul>
+<h3>指标具体口径</h3>
+<p>公共范围：当前操作人数据权限内、应用业务线与状态筛选后的客户；消息指标使用同一客户范围。时间均按操作人所在业务线时区展示。</p>
+<table><thead><tr><th>指标</th><th>分子</th><th>分母</th><th>单位</th><th>统计范围</th><th>时间字段</th><th>去重键</th><th>零值</th></tr></thead><tbody><tr><td>已绑定客户数</td><td>绑定状态为有效的客户数</td><td>—</td><td>位</td><td>当前筛选范围</td><td>最近更新时间</td><td><code>user_id</code></td><td>显示 0</td></tr><tr><td>可发送客户数</td><td>同时满足有效绑定、当前已关注、营销已同意且状态在 24 小时内确认的客户数</td><td>—</td><td>位</td><td>当前筛选范围</td><td>最近关注状态确认时间</td><td><code>user_id</code></td><td>显示 0</td></tr><tr><td>近 30 天消息受理率</td><td>状态为“LINE 已受理”的消息数</td><td>已进入 LINE 消息服务的消息数</td><td>%</td><td>当前客户范围，最近 30 个自然日</td><td>消息最近尝试时间</td><td><code>message_id</code></td><td>分母为 0 时显示“—”</td></tr></tbody></table>
+<p>受理率保留一位小数。重试不增加分母，同一条消息只统计一次；业务校验未通过、从未进入消息服务的发送尝试不进入分母。</p>
+<h3>RBAC 权限数据</h3>
+<h4>功能权限</h4>
+<table><thead><tr><th>页面 / 动作</th><th>默认角色</th><th>数据范围</th><th>审计</th></tr></thead><tbody><tr><td>LINE 消息工作台查看</td><td>CC、销售组长、运营/商业化、管理员、超级管理员</td><td>CC 本人；组长团队；运营授权业务线；管理员授权业务线或全量</td><td>权限变更记录审计</td></tr><tr><td>发送消息</td><td>CC、销售组长、运营/商业化、管理员、超级管理员</td><td>与查看范围一致，发送前再次校验客户归属</td><td>记录操作人、客户、正文摘要和结果</td></tr><tr><td>人工重试</td><td>销售组长、运营/商业化、管理员、超级管理员</td><td>与查看范围一致</td><td>记录原因、原状态、重试次数和结果</td></tr><tr><td>刷新 LINE 状态</td><td>CC、销售组长、运营/商业化、管理员、超级管理员</td><td>与查看范围一致</td><td>记录来源、前后状态和结果</td></tr><tr><td>解除绑定</td><td>管理员、超级管理员</td><td>当前授权业务线</td><td>记录原因、原 LINE 用户 ID 和前后状态</td></tr></tbody></table>
+<h4>字段与数据权限</h4>
+<table><thead><tr><th>字段组 / 列表</th><th>可见角色</th><th>编辑角色</th><th>脱敏 / 隐藏</th><th>可导出</th><th>候选范围限制</th></tr></thead><tbody><tr><td>客户基础信息、业务线、绑定与授权状态</td><td>拥有 LINE 消息查看权限的角色</td><td>系统写入；管理员仅可解绑</td><td>无权客户不显示</td><td>否</td><td>现有用户数据范围</td></tr><tr><td>LINE 用户 ID</td><td>同工作台查看权限</td><td>不可编辑</td><td>列表脱敏；详情显示前后各 4 位</td><td>否</td><td>不提供反向搜索</td></tr><tr><td>手机号</td><td>现有用户手机号权限</td><td>不可编辑</td><td>无权限时完全隐藏；可搜索时仍脱敏展示</td><td>否</td><td>精确搜索且受数据范围限制</td></tr><tr><td>消息正文、失败原因和请求标识</td><td>同工作台查看权限</td><td>发送时由操作人编辑</td><td>不可见的客户不显示历史</td><td>否</td><td>与客户范围一致</td></tr><tr><td>Channel Access Token、Channel Secret、用户 Access Token</td><td>无 CRM 前台角色</td><td>不可编辑</td><td>不进入 CRM 用户可见数据</td><td>否</td><td>由消息服务密钥系统管理</td></tr></tbody></table>
+<h4>权限数据变更</h4>
+<table><thead><tr><th>变更类型</th><th>权限层级</th><th>权限项</th><th>业务说明</th><th>默认角色 / 数据范围</th><th>新增审计</th></tr></thead><tbody><tr><td>新增</td><td>菜单 / 页面</td><td><code>line_message.view</code></td><td>进入 LINE 消息工作台并查看客户与消息</td><td>CC、销售组长、运营/商业化、管理员、超级管理员</td><td>权限变更</td></tr><tr><td>新增</td><td>动作</td><td><code>line_message.send</code></td><td>向可发送客户提交单人文本消息</td><td>CC 本人、组长团队、运营授权业务线、管理员</td><td>是</td></tr><tr><td>新增</td><td>动作</td><td><code>line_message.retry</code></td><td>人工重试最终失败消息</td><td>销售组长、运营/商业化、管理员、超级管理员</td><td>是</td></tr><tr><td>新增</td><td>动作</td><td><code>line_binding.refresh</code></td><td>重新确认关注和授权状态</td><td>同工作台查看角色</td><td>是</td></tr><tr><td>新增</td><td>动作</td><td><code>line_binding.release</code></td><td>解除错误或过期绑定</td><td>管理员、超级管理员；授权业务线</td><td>是</td></tr><tr><td>复用</td><td>数据</td><td>用户数据范围与组织范围</td><td>工作台只返回操作人可见客户</td><td>沿用现有 RBAC</td><td>否</td></tr><tr><td>复用</td><td>字段</td><td>手机号与用户敏感字段权限</td><td>控制手机号搜索与展示</td><td>沿用现有字段权限</td><td>否</td></tr></tbody></table>
+<p>账号停用后立即失去工作台、发送、重试和状态刷新权限。历史消息保留原操作人姓名和 ID 快照；待处理失败的发送任务转为“系统失败”状态，由团队负责人或管理员处理，不自动转给其他员工继续发送。</p>
+<h3>数据依赖、异常与补偿</h3>
+<table><thead><tr><th>场景</th><th>处理</th></tr></thead><tbody><tr><td>客户端重复提交绑定事件</td><td>按 <code>event_id</code> 幂等，返回现有绑定及最新状态</td></tr><tr><td>绑定事件乱序到达</td><td>比较 <code>event_at</code>；旧事件不覆盖新状态，保留事件日志</td></tr><tr><td>CRM 用户不存在</td><td>拒绝绑定并返回“用户不存在或尚未进入 CRM”；不创建占位用户</td></tr><tr><td>Provider 与 dinoAI 官方账号不一致</td><td>拒绝绑定，不写入 LINE 用户 ID</td></tr><tr><td>同一 LINE 用户已绑定其他客户</td><td>标记绑定冲突，禁止发送，管理员核对后解除错误绑定</td></tr><tr><td>客户取关、拉黑或取消授权</td><td>CRM 停止新发送；失败任务不再自动重试</td></tr><tr><td>关注状态超过 24 小时未确认</td><td>客户显示“待确认”，可查看但不可发送；点击发送时实时刷新</td></tr><tr><td>LINE 状态查询超时</td><td>保留最近成功状态并标注“暂时无法确认”；阻断发送</td></tr><tr><td>消息接口限流或临时异常</td><td>自动重试，使用同一消息 ID；超过 3 次或超过 10 分钟转失败</td></tr><tr><td>LINE 接口已受理但 CRM 未收到结果</td><td>先查询原消息结果再重试，避免重复发送</td></tr><tr><td>客户在发送前失权或归属变化</td><td>发送校验失败，任务不进入 LINE，保留失败原因</td></tr><tr><td>消息内容超限或为空</td><td>前端阻止提交；后端校验失败时不创建正式消息记录</td></tr><tr><td>消息服务不可用</td><td>客户和绑定仍可查看；发送、重试显示对应错误，不伪装成成功</td></tr><tr><td>管理员解除绑定</td><td>指定绑定转为已解除；未发送任务终止，历史消息保留</td></tr><tr><td>历史绑定信息缺失</td><td>显示“历史未知”或“未绑定”，不通过关注时间和姓名猜测</td></tr></tbody></table>
+<h3>审计与数据保留</h3>
+<p>以下操作必须记录且不可由普通用户修改：</p>
+<ul><li>绑定创建、绑定冲突、绑定解除和状态来源变化。</li><li>营销同意、授权撤回及条款版本变化。</li><li>消息创建、发送、自动重试、人工重试、成功受理和最终失败。</li><li>关注状态刷新及前后值。</li><li>无权限查看、发送、重试或解绑尝试。</li></ul>
+<p>审计至少包含操作人或系统来源、时间、客户用户 ID、绑定 ID、消息 ID、操作类型、变更前状态、变更后状态、失败原因、请求标识和操作人数据范围。绑定、消息和审计记录至少保留 2 年；解除绑定和客户离线不删除历史发送记录。</p>
+<h3>依赖与上线边界</h3>
+<ul><li>客户端必须已能产出本 PRD 定义的绑定事件；本项目不补齐客户端登录与授权实现。</li><li>dinoAI LINE 消息服务必须已配置同一 Provider 下的 LINE Login 与 Messaging API Channel，并能保持关注状态和渠道凭证有效。</li><li>官方账号必须满足 LINE 当前接口、配额和内容政策；CRM 不保证消息已送达、已读或不会因用户拉黑而失败。</li><li>消息发送前必须以最新关注和授权状态为准；任何客户端缓存状态都不能单独作为最终发送依据。</li><li>一期以单人文本消息闭环为目标，批量、自动化和富消息必须另行评审。</li></ul></article>
+</main>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+</script>
+</body></html>

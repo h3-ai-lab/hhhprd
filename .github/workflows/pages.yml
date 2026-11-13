@@ -37,6 +37,7 @@ jobs:
           test -f hhhprd-site/prd-follow-up-funnel.html
           test -f hhhprd-site/prd-crm-org-data-permissions.html
           test -f hhhprd-site/prd-referral-growth-mvp.html
+          test -f hhhprd-site/prd-crm-line-messaging.html
           for project in projects/*/; do
             test -f "$project/project.yaml"
             test -f "$project/workflow/overrides.md"
@@ -58,6 +59,7 @@ jobs:
           cp hhhprd-site/prd-follow-up-funnel.html public/prd-follow-up-funnel.html
           cp hhhprd-site/prd-crm-org-data-permissions.html public/prd-crm-org-data-permissions.html
           cp hhhprd-site/prd-referral-growth-mvp.html public/prd-referral-growth-mvp.html
+          cp hhhprd-site/prd-crm-line-messaging.html public/prd-crm-line-messaging.html
           cp -R projects/. public/projects/
           for project in projects/*/; do
             slug="$(basename "$project")"
