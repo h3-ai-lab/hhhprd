@@ -363,7 +363,10 @@
         <div class="view-head">
           <div>
             <h2 data-i18n="community.title">社群上传</h2>
-            <p data-i18n="community.subtitle">审核用户上传内容，按审核和官方选中结果自动发奖</p>
+            <p data-i18n="community.subtitle">CC 代用户登记内容，社群运营审核，按审核和官方选中结果自动发奖</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn primary" id="openCommunityCreate" data-i18n="community.create">登记社群上传</button>
           </div>
         </div>
         <div class="stat-grid">
@@ -404,6 +407,7 @@
                 <th data-i18n="community.submissionId">投稿 ID</th>
                 <th data-i18n="table.user">用户</th>
                 <th data-i18n="community.channel">提交渠道</th>
+                <th data-i18n="community.platform">平台</th>
                 <th data-i18n="table.contentType">内容类型</th>
                 <th data-i18n="community.lesson">课堂信息</th>
                 <th data-i18n="community.submittedAt">提交时间</th>
@@ -456,15 +460,15 @@
               <tbody>
                 <tr class="btn-row">
                   <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="sales.connected">已接通</td><td>Thanya C.</td>
-                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-i18n="community.create">登记社群上传</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">2120302281472036721</td><td>Kanya R.</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="sales.pendingCall">待外呼</td><td>Mina P.</td>
-                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302281472036721" data-user-name="Kanya R." data-i18n="community.create">登记社群上传</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">2120302210461928824</td><td>Arunee T.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="sales.connected">已接通</td><td>Nok S.</td>
-                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302210461928824" data-user-name="Arunee T." data-i18n="community.create">登记社群上传</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
                 </tr>
               </tbody>
             </table>
@@ -565,6 +569,98 @@
       </section>
     </div>
   </main>
+
+  <div class="modal-mask" id="communityCreateModal" hidden>
+    <section class="modal binding-modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <div><h3 data-i18n="communityCreate.title">登记社群上传</h3><p data-i18n="communityCreate.subtitle">代用户登记内容，提交后进入社群运营审核</p></div>
+        <button class="icon-close" id="closeCommunityCreate" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
+      </div>
+      <div class="notice" id="communityCreateNotice"></div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span><span data-i18n="communityCreate.userId">用户 ID</span></div>
+          <div class="form-main">
+            <div class="inline-input">
+              <input class="control" id="communityCreateUserId" placeholder="输入完整用户 ID" data-i18n-placeholder="communityCreate.userIdPlaceholder">
+              <button class="btn" id="verifyCommunityUser" data-i18n="communityCreate.verify">核验</button>
+            </div>
+            <div class="helper" data-i18n="communityCreate.verifyNote">精确核验用户、正式注册状态、业务线和可关联的课堂记录</div>
+            <div class="relation-hint" id="communityCreateUserResult" hidden></div>
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label data-i18n="community.platform">平台</label>
+            <select class="control" id="communityCreatePlatform">
+              <option value="community.platformDino" data-i18n="community.platformDino">App 社群</option>
+              <option value="community.platformFacebook" data-i18n="community.platformFacebook">Facebook</option>
+              <option value="community.platformInstagram" data-i18n="community.platformInstagram">Instagram</option>
+              <option value="community.platformTiktok" data-i18n="community.platformTiktok">TikTok</option>
+              <option value="community.platformYoutube" data-i18n="community.platformYoutube">YouTube</option>
+              <option value="community.platformOther" data-i18n="community.platformOther">其他</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="table.contentType">内容类型</label>
+            <select class="control" id="communityCreateType">
+              <option value="community.photo" data-i18n="community.photo">图片</option>
+              <option value="community.video" data-i18n="community.video">视频</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="communityCreate.lesson">课堂证据</label>
+            <select class="control" id="communityCreateLesson">
+              <option value="" data-i18n="communityCreate.lessonPlaceholder">请选择用户课堂</option>
+              <option value="Dino Starter · Nov 08">Dino Starter · Nov 08</option>
+              <option value="Dino Explorer · Nov 07">Dino Explorer · Nov 07</option>
+              <option value="Dino Creator · Nov 06">Dino Creator · Nov 06</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="communityCreate.authorization">官方使用授权</label>
+            <select class="control" id="communityCreateAuthorization">
+              <option value="AUTHORIZED" data-i18n="communityAuth.authorized">已授权官方使用</option>
+              <option value="NOT_AUTHORIZED" data-i18n="communityAuth.notAuthorized">未授权官方使用</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-grid" style="margin-top:12px">
+          <div class="field">
+            <label data-i18n="communityCreate.contentRefType">内容凭证类型</label>
+            <select class="control" id="communityCreateRefType">
+              <option value="EXTERNAL_LINK" data-i18n="communityCreate.externalLink">外部内容链接</option>
+              <option value="UPLOADED_FILE" data-i18n="communityCreate.uploadedFile">上传文件凭证</option>
+            </select>
+          </div>
+          <div class="field" id="communityContentLinkField">
+            <label><span class="req">*</span><span data-i18n="communityCreate.contentLink">内容链接</span></label>
+            <input class="control" id="communityCreateContentLink" placeholder="输入可访问的内容链接" data-i18n-placeholder="communityCreate.contentLinkPlaceholder">
+          </div>
+          <div class="field" id="communityContentFileField" hidden>
+            <label><span class="req">*</span><span data-i18n="communityCreate.contentFile">内容文件</span></label>
+            <input class="control" id="communityCreateContentFile" type="file" accept="image/*,video/*">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-label" data-i18n="communityCreate.note">登记备注</div>
+          <div class="form-main">
+            <textarea class="reason-box" id="communityCreateNote" placeholder="补充线下核验信息" data-i18n-placeholder="communityCreate.notePlaceholder"></textarea>
+          </div>
+        </div>
+        <div class="enum-note">
+          <span data-i18n="communityCreate.enumLabel">提交渠道：</span>
+          <code>CC_MANUAL_ENTRY</code>
+          <span> · </span>
+          <span data-i18n="communityCreate.registrationHint">登记成功后进入 PENDING_REVIEW，不立即发放权益。</span>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" id="cancelCommunityCreate" data-i18n="common.cancel">取消</button>
+        <button class="btn primary" id="saveCommunityCreate" disabled data-i18n="communityCreate.save">提交登记</button>
+      </div>
+    </section>
+  </div>
 
   <div class="modal-mask" id="communityReviewModal" hidden>
     <section class="modal binding-modal" role="dialog" aria-modal="true">

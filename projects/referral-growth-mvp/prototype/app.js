@@ -707,15 +707,15 @@ function applyStaticTranslations() {
   document.documentElement.lang = state.lang === "en" ? "en" : "zh-CN";
   document.title = t("document.title");
   document.querySelectorAll("[data-i18n]").forEach((element) => {
-    if (element.closest("#bindingsView, #communityView, #communityReviewModal, #referralModal, #socialModal")) return;
+    if (element.closest("#bindingsView, #communityView, #communityCreateModal, #communityReviewModal, #referralModal, #socialModal")) return;
     element.textContent = t(element.dataset.i18n);
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
-    if (element.closest("#bindingsView, #communityView, #communityReviewModal, #referralModal, #socialModal")) return;
+    if (element.closest("#bindingsView, #communityView, #communityCreateModal, #communityReviewModal, #referralModal, #socialModal")) return;
     element.placeholder = t(element.dataset.i18nPlaceholder);
   });
   document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
-    if (element.closest("#bindingsView, #communityView, #communityReviewModal, #referralModal, #socialModal")) return;
+    if (element.closest("#bindingsView, #communityView, #communityCreateModal, #communityReviewModal, #referralModal, #socialModal")) return;
     element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
   });
   document.querySelectorAll("[data-lang]").forEach((button) => {
