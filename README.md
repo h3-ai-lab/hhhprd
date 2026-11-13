@@ -22,6 +22,7 @@
 | 引入首跟节点&首跟看板-2 | 单文件参考样例｜待评审 | [PRD](projects/first-contact-concise/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
 | 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 | CRM组织架构&数据权限 | PRD 待评审 | [PRD](projects/crm-org-data-permissions/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
+| crm-LINE 消息发送 | 待评审 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
 | 多级业务线调研 | 归档于 REQ-ORG-001 | [调研资料](projects/crm-org-data-permissions/research/README.md) | — |
 
 ## GitHub Pages
@@ -31,6 +32,8 @@
 - 交互原型：<https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/>
 - 拉新裂变mvp PRD：<https://h3-ai-lab.github.io/hhhprd/prd-referral-growth-mvp.html>
 - 拉新裂变mvp原型：<https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/>
+- crm-LINE 消息发送 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-line-messaging.html>
+- crm-LINE 消息发送原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/>
 - 引入首跟节点&首跟看板 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact.html>
 - 引入首跟节点&首跟看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/>
 - 引入首跟节点&首跟看板-2 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html>
@@ -161,5 +164,6 @@ python3 build_prd_pages.py
 - 不在 PRD 中展示生成提示词、补充提示词或内部提示词文件路径。
 - 原型只展示上线后实际功能和操作界面；PRD 标题、背景说明、流程叙事、字段定义和原型提示不进入产品页面。
 - 原型提供产品化的 `中 / EN` 切换，完整翻译导航、字段、筛选、表格、指标、按钮、弹窗、提示和异常状态；切换语言不重置筛选、分页、表单或业务数据。
+- 原型交付前必须检查功能闭环：所有可见控件可操作，所有入口可进入并返回，核心流程可完整走通，失败与异常分支可体验，业务枚举使用全量数据；没有闭环的功能不能留在界面中。
 - 正式 PRD 不保留待决策章节，开放问题在生成前完成收敛。
 
