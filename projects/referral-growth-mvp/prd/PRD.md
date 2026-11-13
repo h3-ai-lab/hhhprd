@@ -30,6 +30,7 @@
 - 不自动抓取第三方社媒平台结果。
 - 不根据历史备注猜测或补造推荐关系。
 - 不将赠送订单计入 GMV、实付收入或付费用户。
+- 不将 CC 手工增加用户时长作为拉新或社媒推荐发奖入口；该操作与奖励归因完全分离。
 
 ## 角色与业务对象
 
@@ -100,6 +101,7 @@ flowchart TD
 - 推荐人和被推荐人均须为有效正式注册用户，账号状态正常。
 - 被推荐人使用完整用户 ID 精确匹配，不接受手机号、姓名或模糊搜索。
 - 被推荐人必须与推荐人属于同一业务线。
+- 业务线枚举为 `THAILAND / VIETNAM / SAUDI_ARABIA`；本期拉新活动只在泰国业务线执行，其他业务线仅用于现有账号识别和跨业务线拦截。
 - 被推荐人不得是推荐人本人；用户 ID 或已验证手机号相同均视为自荐。
 - 被推荐人的正式账号注册时间必须满足：`campaign_start_at ≤ registered_at ≤ binding_time`，起止边界均包含。
 - 活动开始前已有正式账号的用户即使重新登录或补充资料，仍判定为非新注册。
@@ -137,6 +139,8 @@ flowchart TD
 | `SOCIAL_MEDIA_OFFICIALLY_SELECTED` | 已审核有效且授权官方使用，最终被官方选中 | 发布用户 +2 个月 |
 | `SOCIAL_MEDIA_NOT_SELECTED` | 已审核有效且最终未选中 | 发布用户 +15 天 |
 
+奖励状态枚举：`WAITING / PROCESSING / ISSUED / FAILED`。社媒推荐记录在审核前使用 `PENDING_REVIEW`，审核无效使用 `NOT_APPLICABLE`。
+
 首课：
 
 - 只接受 `FIRST_TRIAL` 且 `lesson_sequence=1`；预约、进行中、取消、未到课、改期和技术失败不触发。
@@ -154,6 +158,7 @@ flowchart TD
 
 - 用户 ID、课堂归属、内容链接或文件、授权和重复内容必须在提交登记前校验。
 - 内容审核前不产生奖励；基础生效后才可进入“官方选中”或“未选中”。
+- 审核状态为 `PENDING_REVIEW / APPROVED / REJECTED`，选中状态为 `PENDING_SELECTION / OFFICIALLY_SELECTED / NOT_SELECTED`。
 - 未授权官方使用时不能标记为官方选中。
 - 审核无效时不生成奖励事件，记录无效原因和备注。
 - 同一记录最终只能进入“官方选中”或“未选中”之一，状态变化全程留痕。

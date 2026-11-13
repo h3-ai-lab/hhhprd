@@ -13,8 +13,6 @@ const I18N = {
     "nav.bindings": "拉新关系维护",
     "bindings.title": "拉新关系维护",
     "community.title": "社媒推荐",
-    "nav.system": "系统管理",
-    "nav.settings": "系统配置",
     "footer.status": "服务运行正常",
     "footer.updated": "数据更新于刚刚",
     "env.production": "生产环境",
@@ -57,12 +55,14 @@ const I18N = {
     "common.days": "天",
     "option.thailand": "泰国",
     "option.vietnam": "越南",
+    "option.saudi": "沙特阿拉伯",
+    "option.allBusinessLines": "全部业务线",
+    "option.allPlatforms": "全部平台",
     "option.allSources": "全部来源",
     "option.allCc": "全部 CC",
     "option.allStatuses": "全部状态",
     "source.referral": "拉新推荐",
     "source.social": "社媒推荐",
-    "source.regular": "常规赠送",
     "status.success": "已发放",
     "status.processing": "待发放",
     "status.failed": "发放失败",
@@ -74,8 +74,10 @@ const I18N = {
     "eventStatus.processing": "待发放",
     "eventStatus.failed": "发放失败",
     "eventStatus.waiting": "待触发",
+    "eventStatus.invalid": "归因失效",
     "status.paid": "已付费",
     "status.trial": "体验中",
+    "status.disabled": "已停用",
     "table.referrer": "推荐人",
     "table.referred": "被推荐人",
     "table.user": "用户",
@@ -163,24 +165,6 @@ const I18N = {
     "users.editInfo": "修改信息",
     "users.web": "网页",
     "users.count": "共 {count} 条记录",
-    "settings.title": "系统配置",
-    "settings.subtitle": "按业务线和角色配置权益来源在添加时长入口中的可见性",
-    "settings.sourceTitle": "角色权益来源",
-    "settings.sourceNote": "关闭“权益来源可见”时，系统自动使用常规赠送，必填校验仍可通过。",
-    "settings.businessLine": "业务线",
-    "settings.role": "角色",
-    "settings.sourceVisible": "权益来源可见",
-    "settings.visibleSources": "可见来源",
-    "settings.defaultSource": "默认来源",
-    "settings.actions": "操作",
-    "settings.configure": "配置",
-    "settings.enabled": "已开启",
-    "settings.disabled": "已关闭",
-    "settings.sourceVisibleNote": "开启后，该角色在添加时长入口中显示权益来源。",
-    "settings.regularRequired": "默认来源，始终启用",
-    "settings.referralOption": "允许录入被推荐人与订单",
-    "settings.socialOption": "允许登记社媒内容来源",
-    "settings.saved": "角色权益来源配置已保存",
     "grant.title": "增加用户时长 · {id}",
     "grant.subtitle": "为当前用户增加会员时长",
     "grant.openType": "开通类型",
@@ -188,60 +172,19 @@ const I18N = {
     "grant.trialDays.note": "用户可继续通过付费墙购买",
     "grant.manualTransfer": "手动银行转账",
     "grant.manualTransfer.note": "按普通会员开通",
-    "grant.source": "权益来源",
-    "grant.source.roleHint": "当前角色可见来源：{sources}",
-    "grant.source.defaultHint": "当前角色未开放权益来源，系统使用默认“常规赠送”。",
-    "grant.referredPhone": "被推荐人手机号",
-    "grant.referredPhone.placeholder": "输入带国际区号的完整手机号",
-    "grant.verify": "核验",
-    "grant.verify.note": "按推荐人所属业务线匹配手机号，并核验注册状态、推荐唯一性和有效付费会员订单",
-    "grant.contentLink": "内容链接",
-    "grant.contentLink.note": "社媒推荐由营销中心独立审核列表维护",
     "grant.validityDays": "有效期天数",
-    "grant.systemReward": "系统核验奖励",
     "grant.reason": "开通原因",
-    "grant.reason.note": "拉新推荐会写入推荐人、被推荐人和订单，无需再手工备注 referral",
+    "grant.reason.note": "记录本次手工增加用户时长的业务原因",
     "grant.confirm": "确认增加",
     "grant.issuing": "处理中…",
     "grant.helper.regular": "新用户从当前时间起算；未付费体验中的用户在现体验到期时间上累加。",
-    "grant.helper.social": "社媒推荐由独立审核列表维护，并按审核和选中结果自动发奖。",
-    "grant.helper.referral": "拉新推荐奖励由订单套餐自动确定，有效期单位不可修改。",
-    "grant.reason.friend": "好友推荐活动权益",
-    "grant.reason.social": "社媒推荐活动权益 · 审核有效",
-    "grant.reason.generated": "拉新推荐 · {referrer}推荐{referred} · {plan}套餐 · 对应订单 {order}",
-    "grant.error.empty": "请输入被推荐人手机号",
-    "grant.error.format": "手机号格式无效，请输入带国际区号的完整手机号",
-    "grant.error.self": "该手机号属于推荐人本人，不能绑定自荐关系",
-    "grant.error.notFound": "该手机号在推荐人所属业务线下没有匹配账号",
-    "grant.error.businessLine": "手机号用户属于{userLine}业务线，与推荐人所属{referrerLine}业务线不一致",
-    "grant.error.multiple": "该手机号在同一业务线下匹配多个账号，请联系管理员核实",
-    "grant.error.unverified": "请先完成被推荐人与订单核验",
-    "grant.error.social": "请输入社媒推荐内容链接",
+    "grant.reason.friend": "运营补充用户时长",
     "grant.error.days": "请输入有效的有效期天数",
     "grant.error.reason": "请输入开通原因",
-    "grant.verify.passed": "核验通过",
-    "grant.verifiedUser": "{name} · 正式用户",
-    "grant.userId": "用户 ID",
-    "grant.phone": "手机号",
-    "grant.businessLine": "业务线",
-    "grant.businessLineMatch": "业务线匹配",
-    "grant.businessLineMatched": "与推荐人一致",
-    "grant.referrerBusinessLine": "推荐人业务线",
-    "grant.referredBusinessLine": "被推荐人业务线",
-    "grant.attributedOrder": "归因订单",
-    "grant.plan": "套餐",
-    "grant.amount": "实付金额",
-    "grant.paidAt": "支付时间",
-    "grant.thailand": "泰国",
-    "grant.vietnam": "越南",
-    "grant.saudi": "沙特阿拉伯",
-    "grant.maskedPhone": "+66 81 **** 5678",
-    "grant.months": "{count} 个月",
-    "grant.rewardMonths": "+{count} 个月",
     "toast.refreshed": "数据已刷新",
     "toast.referralSuccess": "推荐关系已绑定，权益已发放",
     "toast.socialSuccess": "社媒推荐记录已保存",
-    "toast.grantSuccess": "已按{source}增加用户时长",
+    "toast.grantSuccess": "用户时长已增加",
     "drawer.title": "推荐关系详情",
     "drawer.relationInfo": "关系信息",
     "drawer.referrer": "推荐人",
@@ -292,8 +235,6 @@ const I18N = {
     "nav.bindings": "Growth Relationships",
     "bindings.title": "Growth Relationships",
     "community.title": "Social Media Recommendations",
-    "nav.system": "System",
-    "nav.settings": "System Settings",
     "footer.status": "All services operational",
     "footer.updated": "Data updated just now",
     "env.production": "Production",
@@ -336,12 +277,14 @@ const I18N = {
     "common.days": "days",
     "option.thailand": "Thailand",
     "option.vietnam": "Vietnam",
+    "option.saudi": "Saudi Arabia",
+    "option.allBusinessLines": "All business lines",
+    "option.allPlatforms": "All platforms",
     "option.allSources": "All sources",
     "option.allCc": "All CCs",
     "option.allStatuses": "All statuses",
     "source.referral": "Referral",
     "source.social": "Social media recommendation",
-    "source.regular": "Standard grant",
     "status.success": "Issued",
     "status.processing": "Pending",
     "status.failed": "Failed",
@@ -353,8 +296,10 @@ const I18N = {
     "eventStatus.processing": "Pending issuance",
     "eventStatus.failed": "System failure",
     "eventStatus.waiting": "Waiting",
+    "eventStatus.invalid": "Attribution invalid",
     "status.paid": "Paid",
     "status.trial": "On trial",
+    "status.disabled": "Disabled",
     "table.referrer": "Referrer",
     "table.referred": "Referred user",
     "table.user": "User",
@@ -442,24 +387,6 @@ const I18N = {
     "users.editInfo": "Edit info",
     "users.web": "Web",
     "users.count": "{count} records",
-    "settings.title": "System Settings",
-    "settings.subtitle": "Configure benefit-source visibility by business line and role for add-duration entry points",
-    "settings.sourceTitle": "Role benefit sources",
-    "settings.sourceNote": "When Benefit source visibility is off, the system uses Standard grant automatically and required validation still passes.",
-    "settings.businessLine": "Business line",
-    "settings.role": "Role",
-    "settings.sourceVisible": "Benefit source visible",
-    "settings.visibleSources": "Visible sources",
-    "settings.defaultSource": "Default source",
-    "settings.actions": "Actions",
-    "settings.configure": "Configure",
-    "settings.enabled": "Enabled",
-    "settings.disabled": "Disabled",
-    "settings.sourceVisibleNote": "When enabled, this role sees Benefit source in the add-duration entry.",
-    "settings.regularRequired": "Default source, always enabled",
-    "settings.referralOption": "Allow referred user and order entry",
-    "settings.socialOption": "Allow social content source entry",
-    "settings.saved": "Role benefit-source configuration saved",
     "grant.title": "Add user duration · {id}",
     "grant.subtitle": "Increase membership duration for this user",
     "grant.openType": "Activation type",
@@ -467,60 +394,19 @@ const I18N = {
     "grant.trialDays.note": "The user can still purchase through the paywall",
     "grant.manualTransfer": "Manual bank transfer",
     "grant.manualTransfer.note": "Activate as a standard membership",
-    "grant.source": "Benefit source",
-    "grant.source.roleHint": "Sources visible to the current role: {sources}",
-    "grant.source.defaultHint": "Benefit source is not enabled for this role. The system uses Standard grant by default.",
-    "grant.referredPhone": "Referred user phone",
-    "grant.referredPhone.placeholder": "Enter the full phone number with country code",
-    "grant.verify": "Verify",
-    "grant.verify.note": "Match the phone within the referrer's business line, then verify registration, referral uniqueness, and a valid paid membership order",
-    "grant.contentLink": "Content link",
-    "grant.contentLink.note": "Social media recommendations are managed in the dedicated review list",
     "grant.validityDays": "Validity",
-    "grant.systemReward": "Verified reward",
     "grant.reason": "Grant reason",
-    "grant.reason.note": "A referral saves the referrer, referred user, and order automatically; a manual referral note is not required",
+    "grant.reason.note": "Record the business reason for this manual duration increase",
     "grant.confirm": "Confirm increase",
     "grant.issuing": "Processing…",
     "grant.helper.regular": "New users start from the current time. Unpaid users on trial receive the benefit after their current trial end date.",
-    "grant.helper.social": "Social media recommendations are managed in a dedicated review list and rewarded automatically from review and selection outcomes.",
-    "grant.helper.referral": "The referral reward is determined by the order plan. The validity unit cannot be edited.",
-    "grant.reason.friend": "Friend referral benefit",
-    "grant.reason.social": "Social media recommendation benefit · Approved content",
-    "grant.reason.generated": "Referral · {referrer} referred {referred} · {plan} plan · Order {order}",
-    "grant.error.empty": "Enter the referred user's phone number",
-    "grant.error.format": "Invalid phone number. Enter the full number with its country code.",
-    "grant.error.self": "This phone number belongs to the referrer and cannot be used for self-referral",
-    "grant.error.notFound": "No account with this phone number was found in the referrer's business line",
-    "grant.error.businessLine": "The phone account belongs to the {userLine} business line, which does not match the referrer's {referrerLine} business line",
-    "grant.error.multiple": "This phone number matches multiple accounts in the same business line. Contact an administrator.",
-    "grant.error.unverified": "Verify the referred user and order first",
-    "grant.error.social": "Enter the social media recommendation content link",
+    "grant.reason.friend": "Manual duration increase",
     "grant.error.days": "Enter a valid validity period",
     "grant.error.reason": "Enter a grant reason",
-    "grant.verify.passed": "Verified",
-    "grant.verifiedUser": "{name} · Registered",
-    "grant.userId": "User ID",
-    "grant.phone": "Phone",
-    "grant.businessLine": "Business line",
-    "grant.businessLineMatch": "Business-line match",
-    "grant.businessLineMatched": "Matches referrer",
-    "grant.referrerBusinessLine": "Referrer business line",
-    "grant.referredBusinessLine": "Referred business line",
-    "grant.attributedOrder": "Attributed order",
-    "grant.plan": "Plan",
-    "grant.amount": "Paid amount",
-    "grant.paidAt": "Paid at",
-    "grant.thailand": "Thailand",
-    "grant.vietnam": "Vietnam",
-    "grant.saudi": "Saudi Arabia",
-    "grant.maskedPhone": "+66 81 **** 5678",
-    "grant.months": "{count} months",
-    "grant.rewardMonths": "+{count} months",
     "toast.refreshed": "Data refreshed",
     "toast.referralSuccess": "Referral linked and benefit issued",
     "toast.socialSuccess": "Social media recommendation saved",
-    "toast.grantSuccess": "User duration added via {source}",
+    "toast.grantSuccess": "User duration increased",
     "drawer.title": "Referral Relationship",
     "drawer.relationInfo": "Relationship",
     "drawer.referrer": "Referrer",
@@ -574,7 +460,7 @@ function detectLanguage() {
 function detectInitialView() {
   try {
     const requested = new URLSearchParams(window.location.search).get("view");
-    if (["dashboard", "users", "sales", "orders", "community", "settings"].includes(requested)) return requested;
+    if (["dashboard", "users", "sales", "orders", "community"].includes(requested)) return requested;
   } catch {
     // Local file previews may block URL parsing.
   }
@@ -596,21 +482,11 @@ const state = {
   submitted: false,
   selectedId: "",
   grantContext: null,
-  editingRoleId: null,
 };
 
 const CURRENT_USER = {
   name: "Thanya C.",
-  roleId: "CC_TH",
-  businessLine: "thailand",
 };
-
-const ROLE_SOURCE_CONFIG = [
-  { roleId: "CC_TH", roleName: "CC_TH", businessLine: "thailand", visible: true, sources: ["regular", "referral", "social"] },
-  { roleId: "CC_VN", roleName: "CC_VN", businessLine: "vietnam", visible: true, sources: ["regular", "referral"] },
-  { roleId: "CC_SA", roleName: "CC_SA", businessLine: "saudi", visible: true, sources: ["regular", "referral", "social"] },
-  { roleId: "CC_TH_SENIOR", roleName: "CC_TH_SENIOR", businessLine: "thailand", visible: false, sources: ["regular"] },
-];
 
 const relationships = [
   {
@@ -729,31 +605,6 @@ const relationships = [
   },
 ];
 
-const REFERRER_CONTEXT = {
-  phone: "+66 82 111 2233",
-  businessLine: "thailand",
-};
-
-const PHONE_DIRECTORY = {
-  "66812345678": {
-    userId: "2120302295478341",
-    name: "Narin K.",
-    businessLine: "thailand",
-    maskedPhone: "+66 81 **** 5678",
-  },
-  "84912345678": {
-    userId: "2120302295479900",
-    name: "Linh N.",
-    businessLine: "vietnam",
-    maskedPhone: "+84 91 **** 5678",
-  },
-  "66821112233": {
-    userId: "2120302255148482561",
-    name: "Pimchanok S.",
-    businessLine: "thailand",
-    maskedPhone: "+66 82 **** 2233",
-  },
-};
 
 function t(key, values = {}) {
   const template = I18N[state.lang]?.[key] ?? I18N.zh[key] ?? key;
@@ -761,7 +612,7 @@ function t(key, values = {}) {
 }
 
 function sourceLabel(source) {
-  return t(`source.${source || "regular"}`);
+  return t(`source.${source}`);
 }
 
 function statusEntry(status) {
@@ -780,14 +631,6 @@ function countLabel(key, count) {
   return t(key, { count });
 }
 
-function normalizePhone(value) {
-  return value.replace(/[^\d+]/g, "").replace(/(?!^)\+/g, "");
-}
-
-function businessLineLabel(line) {
-  return t(`grant.${line || "thailand"}`);
-}
-
 function money(value) {
   return `฿${Number(value).toLocaleString("en-US")}`;
 }
@@ -797,7 +640,6 @@ function viewMeta(view) {
   if (view === "community") return { title: "community.title", crumb: "crumb.growth" };
   if (view === "sales") return { title: "sales.title", crumb: "nav.sales" };
   if (view === "orders") return { title: "orders.title", crumb: "nav.orders" };
-  if (view === "settings") return { title: "settings.title", crumb: "nav.settings" };
   return { title: "users.title", crumb: "crumb.users" };
 }
 
@@ -819,9 +661,7 @@ function applyStaticTranslations() {
   document.querySelectorAll("[data-lang]").forEach((button) => {
     button.classList.toggle("active", button.dataset.lang === state.lang);
   });
-  document.getElementById("usersRowSummary").textContent = countLabel("users.count", 3);
-  document.getElementById("grantTitle").textContent = t("grant.title", { id: "2120302255148482561" });
-  document.getElementById("rewardSummaryValue").textContent = ruleLabel(1);
+  document.getElementById("usersRowSummary").textContent = countLabel("users.count", document.querySelectorAll("#usersView tbody tr").length);
   const meta = viewMeta(state.view);
   document.getElementById("pageTitle").textContent = t(meta.title);
   document.getElementById("crumb").textContent = t(meta.crumb);
@@ -953,14 +793,12 @@ function setView(view) {
   const community = view === "community";
   const sales = view === "sales";
   const orders = view === "orders";
-  const settings = view === "settings";
   const users = view === "users";
   document.getElementById("dashboardView").hidden = !dashboard;
   document.getElementById("bindingsView").hidden = true;
   document.getElementById("communityView").hidden = !community;
   document.getElementById("salesView").hidden = !sales;
   document.getElementById("ordersView").hidden = !orders;
-  document.getElementById("settingsView").hidden = !settings;
   document.getElementById("usersView").hidden = !users;
   const meta = viewMeta(view);
   document.getElementById("pageTitle").textContent = t(meta.title);
@@ -969,211 +807,27 @@ function setView(view) {
   document.getElementById("sidebar").classList.remove("open");
   if (dashboard) window.GrowthBindingView?.activate();
   if (community) window.CommunityUploadView?.activate();
-  if (settings) renderRoleSourceRows();
   if (sales) applySalesTab(state.salesTab);
   if (orders) applyOrderTab(state.orderTab);
-}
-
-function roleSourceConfig(roleId) {
-  return ROLE_SOURCE_CONFIG.find((item) => item.roleId === roleId) ?? ROLE_SOURCE_CONFIG[0];
-}
-
-function roleVisibleSources(config) {
-  return config.visible ? config.sources : ["regular"];
-}
-
-function sourceNames(sources) {
-  return sources.map((source) => t(`source.${source}`)).join(state.lang === "en" ? ", " : "、");
-}
-
-function renderRoleSourceRows() {
-  const body = document.getElementById("roleSourceRows");
-  body.innerHTML = ROLE_SOURCE_CONFIG.map((config) => {
-    const sources = roleVisibleSources(config);
-    return `<tr>
-      <td>${businessLineLabel(config.businessLine)}</td>
-      <td><span class="mono">${config.roleName}</span></td>
-      <td><span class="status ${config.visible ? "success" : "invalid"}">${t(config.visible ? "settings.enabled" : "settings.disabled")}</span></td>
-      <td>${sourceNames(sources)}</td>
-      <td>${t("source.regular")}</td>
-      <td><div class="row-actions"><button class="role-source-edit" data-role-config="${config.roleId}">${t("settings.configure")}</button></div></td>
-    </tr>`;
-  }).join("");
-}
-
-function syncRoleSourceControls() {
-  const visible = document.getElementById("roleSourceVisible").checked;
-  document.querySelectorAll("[data-source-option]").forEach((input) => {
-    input.disabled = !visible;
-  });
-}
-
-function openRoleSourceModal(roleId) {
-  const config = roleSourceConfig(roleId);
-  state.editingRoleId = roleId;
-  document.getElementById("roleSourceTitle").textContent = t("settings.sourceTitle");
-  document.getElementById("roleSourceSubtitle").textContent = `${businessLineLabel(config.businessLine)} · ${config.roleName}`;
-  document.getElementById("roleSourceVisible").checked = config.visible;
-  document.querySelectorAll("[data-source-option]").forEach((input) => {
-    input.checked = config.sources.includes(input.value);
-  });
-  document.getElementById("roleSourceNotice").textContent = "";
-  document.getElementById("roleSourceNotice").classList.remove("show");
-  syncRoleSourceControls();
-  document.getElementById("roleSourceModal").hidden = false;
-}
-
-function closeRoleSourceModal() {
-  document.getElementById("roleSourceModal").hidden = true;
-  state.editingRoleId = null;
-}
-
-function saveRoleSource() {
-  const config = roleSourceConfig(state.editingRoleId);
-  config.visible = document.getElementById("roleSourceVisible").checked;
-  config.sources = config.visible
-    ? ["regular", ...[...document.querySelectorAll("[data-source-option]:checked")].map((input) => input.value)]
-    : ["regular"];
-  renderRoleSourceRows();
-  closeRoleSourceModal();
-  if (state.grantContext?.roleId === config.roleId) configureGrantSources();
-  showToast(t("settings.saved"));
-}
-
-function configureGrantSources() {
-  const config = roleSourceConfig(state.grantContext?.roleId ?? CURRENT_USER.roleId);
-  const sources = roleVisibleSources(config);
-  const row = document.getElementById("grantSourceRow");
-  const select = document.getElementById("sourceSelect");
-  row.hidden = !config.visible;
-  select.innerHTML = sources.map((source) => `<option value="${source}">${t(`source.${source}`)}</option>`).join("");
-  select.value = sources.includes("regular") ? "regular" : sources[0];
-  document.getElementById("sourceRoleHint").textContent = config.visible
-    ? t("grant.source.roleHint", { sources: sourceNames(sources) })
-    : t("grant.source.defaultHint");
 }
 
 function resetGrantForm() {
   state.verified = false;
   state.verifiedUser = null;
   state.submitted = false;
-  configureGrantSources();
-  document.getElementById("referredPhone").value = "";
-  document.getElementById("socialLink").value = "";
-  document.getElementById("verifyResult").hidden = true;
-  document.getElementById("rewardSummary").hidden = true;
   document.getElementById("daysInput").readOnly = false;
   document.getElementById("daysInput").value = "30";
   document.getElementById("reasonInput").value = t("grant.reason.friend");
   document.getElementById("grantNotice").classList.remove("show");
   document.getElementById("confirmGrant").disabled = false;
   document.getElementById("confirmGrant").textContent = t("grant.confirm");
-  handleSourceChange();
-}
-
-function handleSourceChange() {
-  const source = document.getElementById("sourceSelect").value;
-  document.getElementById("grantNotice").classList.remove("show");
-  document.getElementById("referralFields").hidden = source !== "referral";
-  document.getElementById("socialFields").hidden = source !== "social";
-  document.getElementById("rewardSummary").hidden = true;
-  document.getElementById("daysInput").readOnly = false;
-  document.getElementById("confirmGrant").disabled = source === "referral" && !state.verified;
-  if (source === "social") {
-    document.getElementById("daysInput").value = "5";
-    document.getElementById("reasonInput").value = t("grant.reason.social");
-    document.getElementById("daysHelper").textContent = t("grant.helper.social");
-  } else if (source === "referral") {
-    document.getElementById("daysHelper").textContent = t("grant.helper.referral");
-    document.getElementById("reasonInput").value = t("grant.reason.friend");
-  } else {
-    document.getElementById("daysHelper").textContent = t("grant.helper.regular");
-    document.getElementById("reasonInput").value = t("grant.reason.friend");
-  }
-}
-
-function renderVerifiedReferral() {
-  const user = state.verifiedUser;
-  if (!user) return;
-  const referrer = state.grantContext ?? CURRENT_USER;
-  document.getElementById("verifyResult").innerHTML = `
-    <div class="verify-title"><strong>${t("grant.verifiedUser", { name: user.name })}</strong><span>${t("grant.verify.passed")}</span></div>
-    <div class="verify-grid">
-      <div><b>${t("grant.phone")}</b><span class="mono">${user.maskedPhone}</span></div>
-      <div><b>${t("grant.userId")}</b><span class="mono">${user.userId}</span></div>
-      <div><b>${t("grant.referrerBusinessLine")}</b><span>${businessLineLabel(referrer.businessLine)}</span></div>
-      <div><b>${t("grant.referredBusinessLine")}</b><span>${businessLineLabel(user.businessLine)} · ${t("grant.businessLineMatched")}</span></div>
-      <div><b>${t("grant.attributedOrder")}</b><span class="mono">PO202611020018</span></div>
-      <div><b>${t("grant.plan")}</b><span>${planLabel(3)}</span></div>
-      <div><b>${t("grant.amount")}</b><span>฿3,490</span></div>
-      <div><b>${t("grant.paidAt")}</b><span>2026-11-02</span></div>
-    </div>`;
-  document.getElementById("rewardSummary").hidden = false;
-  document.getElementById("rewardSummaryValue").textContent = ruleLabel(1);
-  document.getElementById("daysInput").readOnly = true;
-  document.getElementById("daysInput").value = "";
-  document.getElementById("reasonInput").value = t("grant.reason.generated", {
-    referrer: referrer.userName,
-    referred: user.name,
-    plan: planLabel(3),
-    order: "PO202611020018",
-  });
-}
-
-function verifyReferredUser() {
-  const input = document.getElementById("referredPhone").value.trim();
-  const box = document.getElementById("verifyResult");
-  const confirm = document.getElementById("confirmGrant");
-  state.verified = false;
-  state.verifiedUser = null;
-  confirm.disabled = true;
-  document.getElementById("rewardSummary").hidden = true;
-  box.hidden = false;
-
-  if (!input) {
-    box.innerHTML = `<div class="verify-error">${t("grant.error.empty")}</div>`;
-    return;
-  }
-
-  const normalizedPhone = normalizePhone(input);
-  if (!/^\+?[1-9]\d{7,14}$/.test(normalizedPhone)) {
-    box.innerHTML = `<div class="verify-error">${t("grant.error.format")}</div>`;
-    return;
-  }
-
-  const user = PHONE_DIRECTORY[normalizedPhone.replace(/^\+/, "")];
-  if (!user) {
-    box.innerHTML = `<div class="verify-error">${t("grant.error.notFound")}</div>`;
-    return;
-  }
-
-  if (user.userId === state.grantContext?.userId) {
-    box.innerHTML = `<div class="verify-error">${t("grant.error.self")}</div>`;
-    return;
-  }
-
-  if (user.businessLine !== (state.grantContext?.businessLine ?? REFERRER_CONTEXT.businessLine)) {
-    box.innerHTML = `<div class="verify-error">${t("grant.error.businessLine", {
-      userLine: businessLineLabel(user.businessLine),
-      referrerLine: businessLineLabel(state.grantContext?.businessLine ?? REFERRER_CONTEXT.businessLine),
-    })}</div>`;
-    return;
-  }
-
-  state.verifiedUser = user;
-  state.verified = true;
-  confirm.disabled = false;
-  renderVerifiedReferral();
 }
 
 function openGrant(button) {
   state.grantContext = {
     userId: button.dataset.userId,
     userName: button.dataset.userName,
-    businessLine: button.dataset.businessLine || CURRENT_USER.businessLine,
-    roleId: button.dataset.roleId || CURRENT_USER.roleId,
   };
-  REFERRER_CONTEXT.businessLine = state.grantContext.businessLine;
   document.getElementById("grantTitle").textContent = t("grant.title", { id: state.grantContext.userId });
   resetGrantForm();
   document.getElementById("grantModal").hidden = false;
@@ -1184,22 +838,10 @@ function closeGrant() {
 }
 
 function confirmGrant() {
-  const source = document.getElementById("sourceSelect").value;
-  const grantContext = state.grantContext ?? CURRENT_USER;
   const notice = document.getElementById("grantNotice");
   const days = Number(document.getElementById("daysInput").value);
   const reason = document.getElementById("reasonInput").value.trim();
-  if (source === "referral" && !state.verified) {
-    notice.textContent = t("grant.error.unverified");
-    notice.classList.add("show");
-    return;
-  }
-  if (source === "social" && !document.getElementById("socialLink").value.trim()) {
-    notice.textContent = t("grant.error.social");
-    notice.classList.add("show");
-    return;
-  }
-  if (source !== "referral" && (!Number.isInteger(days) || days < 1 || days > 365)) {
+  if (!Number.isInteger(days) || days < 1 || days > 365) {
     notice.textContent = t("grant.error.days");
     notice.classList.add("show");
     return;
@@ -1215,33 +857,10 @@ function confirmGrant() {
   document.getElementById("confirmGrant").disabled = true;
   document.getElementById("confirmGrant").textContent = t("grant.issuing");
 
-  if (source === "referral" && !relationships.some((row) => row.referredId === state.verifiedUser.userId)) {
-    relationships.unshift({
-      id: "RR-202611-0128",
-      referrerId: grantContext.userId,
-      referrer: grantContext.userName,
-      referredId: state.verifiedUser.userId,
-      referred: state.verifiedUser.name,
-      referredPhone: "66812345678",
-      referredPhoneMasked: state.verifiedUser.maskedPhone,
-      source: "referral",
-      orderId: "PO202611020018",
-      planMonths: 3,
-      amount: 3490,
-      orderAt: "2026-11-02",
-      bindAt: "2026-11-09",
-      operator: "Thanya C.",
-      owner: "Thanya C.",
-      ruleMonths: 1,
-      status: "success",
-    });
-  }
-
   window.setTimeout(() => {
     document.getElementById("confirmGrant").textContent = t("grant.confirm");
     closeGrant();
-    renderRows();
-    showToast(t("toast.grantSuccess", { source: sourceLabel(source) }));
+    showToast(t("toast.grantSuccess"));
   }, 450);
 }
 
@@ -1275,23 +894,8 @@ function setLanguage(language) {
   document.getElementById("pageTitle").textContent = t(meta.title);
   document.getElementById("crumb").textContent = t(meta.crumb);
   renderRows();
-  if (state.view === "settings") renderRoleSourceRows();
   if (!document.getElementById("grantModal").hidden) {
     document.getElementById("grantTitle").textContent = t("grant.title", { id: state.grantContext?.userId ?? "" });
-    const selectedSource = document.getElementById("sourceSelect").value;
-    configureGrantSources();
-    const options = [...document.getElementById("sourceSelect").options].map((option) => option.value);
-    document.getElementById("sourceSelect").value = options.includes(selectedSource) ? selectedSource : options[0];
-    if (state.verified) renderVerifiedReferral();
-    else {
-      document.getElementById("verifyResult").hidden = true;
-      handleSourceChange();
-    }
-  }
-  if (!document.getElementById("roleSourceModal").hidden && state.editingRoleId) {
-    const role = roleSourceConfig(state.editingRoleId);
-    document.getElementById("roleSourceTitle").textContent = t("settings.sourceTitle");
-    document.getElementById("roleSourceSubtitle").textContent = `${businessLineLabel(role.businessLine)} · ${role.roleName}`;
   }
   if (state.selectedId && !document.getElementById("detailDrawer").hidden) openDrawer(state.selectedId);
   window.dispatchEvent(new CustomEvent("growth-language-change", { detail: { lang: state.lang } }));
@@ -1358,22 +962,6 @@ document.querySelectorAll("[data-sales-tab]").forEach((button) => {
 document.querySelectorAll("[data-order-tab]").forEach((button) => {
   button.addEventListener("click", () => applyOrderTab(button.dataset.orderTab));
 });
-document.getElementById("roleSourceRows").addEventListener("click", (event) => {
-  const button = event.target.closest("[data-role-config]");
-  if (button) openRoleSourceModal(button.dataset.roleConfig);
-});
-document.getElementById("roleSourceVisible").addEventListener("change", syncRoleSourceControls);
-document.getElementById("saveRoleSource").addEventListener("click", saveRoleSource);
-document.getElementById("closeRoleSource").addEventListener("click", closeRoleSourceModal);
-document.getElementById("cancelRoleSource").addEventListener("click", closeRoleSourceModal);
-document.getElementById("roleSourceModal").addEventListener("click", (event) => {
-  if (event.target.id === "roleSourceModal") closeRoleSourceModal();
-});
-document.getElementById("sourceSelect").addEventListener("change", handleSourceChange);
-document.getElementById("verifyBtn").addEventListener("click", verifyReferredUser);
-document.getElementById("referredPhone").addEventListener("keydown", (event) => {
-  if (event.key === "Enter") verifyReferredUser();
-});
 document.getElementById("closeGrant").addEventListener("click", closeGrant);
 document.getElementById("cancelGrant").addEventListener("click", closeGrant);
 document.getElementById("confirmGrant").addEventListener("click", confirmGrant);
@@ -1391,7 +979,6 @@ document.getElementById("menuBtn").addEventListener("click", () => {
 });
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
-  if (!document.getElementById("roleSourceModal").hidden) closeRoleSourceModal();
   if (!document.getElementById("grantModal").hidden) closeGrant();
   if (!document.getElementById("detailDrawer").hidden) document.getElementById("detailDrawer").hidden = true;
 });
@@ -1402,7 +989,6 @@ document.addEventListener("click", (event) => {
 setView(state.view);
 applyStaticTranslations();
 renderRows();
-renderRoleSourceRows();
 applySalesTab(state.salesTab);
 applyOrderTab(state.orderTab);
 window.dispatchEvent(new CustomEvent("growth-language-change", { detail: { lang: state.lang } }));

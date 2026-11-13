@@ -15,6 +15,8 @@ const TEXT = {
     "community.listTitle": "投稿审核",
     "community.reviewStatus": "审核状态",
     "community.selectionStatus": "选中状态",
+    "community.registeredCc": "登记 CC",
+    "community.rewardStatus": "奖励状态",
     "community.pending": "待审核",
     "community.approved": "审核通过",
     "community.invalid": "审核无效",
@@ -36,6 +38,8 @@ const TEXT = {
     "community.platformYoutube": "YouTube",
     "community.platformOther": "其他",
     "community.businessThailand": "泰国业务线",
+    "community.businessVietnam": "越南业务线",
+    "community.businessSaudi": "沙特阿拉伯业务线",
     "community.photo": "图片",
     "community.video": "视频",
     "community.baseReward": "+5 天",
@@ -43,9 +47,11 @@ const TEXT = {
     "community.notSelectedReward": "+15 天",
     "community.action": "审核",
     "community.status.pendingReview": "待审核",
+    "community.status.waiting": "待触发",
     "community.status.processing": "待发放",
     "community.status.issued": "已发放",
     "community.status.failed": "发放失败",
+    "community.status.notApplicable": "不发放",
     "giftStatus.CREATED": "已生成，待发放",
     "giftStatus.FULFILLED": "已完成",
     "giftStatus.NOT_CREATED": "未生成",
@@ -95,6 +101,7 @@ const TEXT = {
     "communityCreate.emptyUser": "请输入用户 ID",
     "communityCreate.invalidUser": "用户 ID 格式无效，请输入完整数字 ID",
     "communityCreate.notFound": "未找到可登记的正式注册用户",
+    "communityCreate.businessLineMismatch": "该用户与当前 CC 不属于同一业务线，不能登记",
     "communityCreate.verified": "已核验正式用户",
     "communityCreate.lessonRequired": "请选择该用户的课堂记录",
     "communityCreate.linkRequired": "请输入可访问的内容链接",
@@ -109,8 +116,15 @@ const TEXT = {
     "table.action": "操作",
     "filter.keyword": "关键词",
     "filter.dateRange": "日期范围",
+    "filter.businessLine": "业务线",
     "filter.to": "至",
+    "option.thailand": "泰国",
+    "option.vietnam": "越南",
+    "option.saudi": "沙特阿拉伯",
+    "option.allCc": "全部 CC",
     "option.allStatuses": "全部状态",
+    "option.allBusinessLines": "全部业务线",
+    "option.allPlatforms": "全部平台",
     "common.reset": "重置筛选",
     "common.cancel": "取消",
     "common.close": "关闭",
@@ -131,6 +145,8 @@ const TEXT = {
     "community.listTitle": "Submission Review",
     "community.reviewStatus": "Review status",
     "community.selectionStatus": "Selection status",
+    "community.registeredCc": "Registration CC",
+    "community.rewardStatus": "Reward status",
     "community.pending": "Pending review",
     "community.approved": "Approved",
     "community.invalid": "Rejected",
@@ -152,6 +168,8 @@ const TEXT = {
     "community.platformYoutube": "YouTube",
     "community.platformOther": "Other",
     "community.businessThailand": "Thailand business line",
+    "community.businessVietnam": "Vietnam business line",
+    "community.businessSaudi": "Saudi Arabia business line",
     "community.photo": "Photo",
     "community.video": "Video",
     "community.baseReward": "+5 days",
@@ -159,9 +177,11 @@ const TEXT = {
     "community.notSelectedReward": "+15 days",
     "community.action": "Review",
     "community.status.pendingReview": "Pending review",
+    "community.status.waiting": "Waiting",
     "community.status.processing": "Pending issuance",
     "community.status.issued": "Issued",
     "community.status.failed": "System failure",
+    "community.status.notApplicable": "Not issued",
     "giftStatus.CREATED": "Created, pending fulfillment",
     "giftStatus.FULFILLED": "Fulfilled",
     "giftStatus.NOT_CREATED": "Not created",
@@ -211,6 +231,7 @@ const TEXT = {
     "communityCreate.emptyUser": "Enter the user ID",
     "communityCreate.invalidUser": "Invalid user ID. Enter the complete numeric ID.",
     "communityCreate.notFound": "No eligible registered user was found",
+    "communityCreate.businessLineMismatch": "The user and current CC are not in the same business line",
     "communityCreate.verified": "Verified registered user",
     "communityCreate.lessonRequired": "Select a lesson record for this user",
     "communityCreate.linkRequired": "Enter an accessible content link",
@@ -225,8 +246,15 @@ const TEXT = {
     "table.action": "Action",
     "filter.keyword": "Keyword",
     "filter.dateRange": "Date range",
+    "filter.businessLine": "Business line",
     "filter.to": "to",
+    "option.thailand": "Thailand",
+    "option.vietnam": "Vietnam",
+    "option.saudi": "Saudi Arabia",
+    "option.allCc": "All CCs",
     "option.allStatuses": "All statuses",
+    "option.allBusinessLines": "All business lines",
+    "option.allPlatforms": "All platforms",
     "common.reset": "Reset filters",
     "common.cancel": "Cancel",
     "common.close": "Close",
@@ -247,6 +275,7 @@ const COMMUNITY_USERS = {
   "2120302255148482561": {
     id: "2120302255148482561",
     name: "Pimchanok S.",
+    businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Thanya C.",
     lessons: ["Dino Starter · Nov 08", "Dino Explorer · Nov 07"],
@@ -254,6 +283,7 @@ const COMMUNITY_USERS = {
   "2120302281472036721": {
     id: "2120302281472036721",
     name: "Kanya R.",
+    businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Mina P.",
     lessons: ["Dino Explorer · Nov 07", "Dino Creator · Nov 06"],
@@ -261,9 +291,42 @@ const COMMUNITY_USERS = {
   "2120302210461928824": {
     id: "2120302210461928824",
     name: "Arunee T.",
+    businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Nok S.",
     lessons: ["Dino Creator · Nov 06", "Dino Starter · Nov 05"],
+  },
+  "2120302261184209917": {
+    id: "2120302261184209917",
+    name: "Nicha T.",
+    businessLineCode: "thailand",
+    businessLine: "community.businessThailand",
+    currentOwner: "Nok S.",
+    lessons: ["Dino Explorer · Nov 10", "Dino Starter · Nov 09"],
+  },
+  "2120302247228042882": {
+    id: "2120302247228042882",
+    name: "Waraporn L.",
+    businessLineCode: "thailand",
+    businessLine: "community.businessThailand",
+    currentOwner: "Nok S.",
+    lessons: ["Dino Creator · Nov 05"],
+  },
+  "2120302273820914407": {
+    id: "2120302273820914407",
+    name: "Siriporn W.",
+    businessLineCode: "thailand",
+    businessLine: "community.businessThailand",
+    currentOwner: "Nok S.",
+    lessons: ["Dino Starter · Nov 04"],
+  },
+  "2120302295479900": {
+    id: "2120302295479900",
+    name: "Linh N.",
+    businessLineCode: "vietnam",
+    businessLine: "community.businessVietnam",
+    currentOwner: "Mina P.",
+    lessons: ["Dino Starter · Nov 05"],
   },
 };
 
@@ -272,6 +335,7 @@ const submissions = [
     id: "CMT-202611-0038",
     userId: "2120302255148482561",
     user: "Pimchanok S.",
+    businessLine: "thailand",
     channel: "community.ccEntry",
     platform: "community.platformFacebook",
     registeredBy: "Thanya C.",
@@ -286,13 +350,14 @@ const submissions = [
     reward: "—",
     giftOrderId: "—",
     giftOrderStatus: "NOT_CREATED",
-    rewardStatus: "pendingReview",
+    rewardStatus: "PENDING_REVIEW",
     reviewNote: "",
   },
   {
     id: "CMT-202611-0034",
     userId: "2120302281472036721",
     user: "Kanya R.",
+    businessLine: "thailand",
     channel: "community.ccEntry",
     platform: "community.platformFacebook",
     registeredBy: "Mina P.",
@@ -307,13 +372,14 @@ const submissions = [
     reward: "community.baseReward|community.notSelectedReward",
     giftOrderId: "GRT202611080072",
     giftOrderStatus: "FULFILLED",
-    rewardStatus: "issued",
+    rewardStatus: "ISSUED",
     reviewNote: "",
   },
   {
     id: "CMT-202611-0029",
     userId: "2120302210461928824",
     user: "Arunee T.",
+    businessLine: "thailand",
     channel: "community.ccEntry",
     platform: "community.platformInstagram",
     registeredBy: "Nok S.",
@@ -328,13 +394,14 @@ const submissions = [
     reward: "community.baseReward|community.selectedReward",
     giftOrderId: "GRT202611070081",
     giftOrderStatus: "FULFILLED",
-    rewardStatus: "issued",
+    rewardStatus: "ISSUED",
     reviewNote: "",
   },
   {
     id: "CMT-202611-0022",
     userId: "2120302295478341",
     user: "Narin K.",
+    businessLine: "thailand",
     channel: "community.ccEntry",
     platform: "community.platformTiktok",
     registeredBy: "Thanya C.",
@@ -349,7 +416,74 @@ const submissions = [
     reward: "community.baseReward",
     giftOrderId: "GRT202611060066",
     giftOrderStatus: "CREATED",
-    rewardStatus: "processing",
+    rewardStatus: "PROCESSING",
+    reviewNote: "",
+  },
+  {
+    id: "CMT-202611-0019",
+    userId: "2120302247228042882",
+    user: "Waraporn L.",
+    businessLine: "thailand",
+    channel: "community.ccEntry",
+    platform: "community.platformYoutube",
+    registeredBy: "Mina P.",
+    contentRefType: "UPLOADED_FILE",
+    contentLink: "https://youtube.com/shorts/20261105019",
+    contentType: "community.video",
+    lesson: "Dino Creator · Nov 05",
+    submittedAt: "2026-11-05 16:10",
+    authorized: true,
+    reviewStatus: "REJECTED",
+    selectionStatus: null,
+    reward: "—",
+    giftOrderId: "—",
+    giftOrderStatus: "NOT_CREATED",
+    rewardStatus: "NOT_APPLICABLE",
+    reviewNote: "课堂视频重复",
+    reviewReason: "DUPLICATE_CONTENT",
+  },
+  {
+    id: "CMT-202611-0014",
+    userId: "2120302273820914407",
+    user: "Siriporn W.",
+    businessLine: "thailand",
+    channel: "community.ccEntry",
+    platform: "community.platformOther",
+    registeredBy: "Nok S.",
+    contentRefType: "EXTERNAL_LINK",
+    contentLink: "https://example.com/dino-class-post",
+    contentType: "community.photo",
+    lesson: "Dino Starter · Nov 04",
+    submittedAt: "2026-11-04 11:25",
+    authorized: true,
+    reviewStatus: "APPROVED",
+    selectionStatus: "PENDING_SELECTION",
+    reward: "community.baseReward",
+    giftOrderId: "GRT202611040051",
+    giftOrderStatus: "CREATED",
+    rewardStatus: "FAILED",
+    reviewNote: "",
+  },
+  {
+    id: "CMT-202611-0012",
+    userId: "2120302261184209917",
+    user: "Nicha T.",
+    businessLine: "thailand",
+    channel: "community.ccEntry",
+    platform: "community.platformFacebook",
+    registeredBy: "Nok S.",
+    contentRefType: "EXTERNAL_LINK",
+    contentLink: "https://facebook.com/share/p/20261103012",
+    contentType: "community.photo",
+    lesson: "Dino Starter · Nov 03",
+    submittedAt: "2026-11-03 10:40",
+    authorized: true,
+    reviewStatus: "APPROVED",
+    selectionStatus: "PENDING_SELECTION",
+    reward: "—",
+    giftOrderId: "—",
+    giftOrderStatus: "NOT_CREATED",
+    rewardStatus: "WAITING",
     reviewNote: "",
   },
 ];
@@ -383,23 +517,42 @@ function rewardText(row) {
   return row.reward.split("|").map((key) => t(key)).join(" + ");
 }
 
+function businessLineLabel(value) {
+  if (value === "vietnam") return t("community.businessVietnam");
+  if (value === "saudi") return t("community.businessSaudi");
+  return t("community.businessThailand");
+}
+
+function rewardStatusLabel(status) {
+  return t(`community.status.${{ PENDING_REVIEW: "pendingReview", WAITING: "waiting", PROCESSING: "processing", ISSUED: "issued", FAILED: "failed", NOT_APPLICABLE: "notApplicable" }[status] || "waiting"}`);
+}
+
 function renderRows() {
+  const businessLine = document.getElementById("communityBusinessFilter").value;
+  const registeredCc = document.getElementById("communityRegisteredCcFilter").value;
+  const platform = document.getElementById("communityPlatformFilter").value;
   const review = document.getElementById("communityReviewFilter").value;
   const selection = document.getElementById("communitySelectionFilter").value;
+  const rewardStatus = document.getElementById("communityRewardFilter").value;
   const keyword = document.getElementById("communityKeyword").value.trim().toLowerCase();
   const start = document.getElementById("communityStartDate").value;
   const end = document.getElementById("communityEndDate").value;
   const rows = submissions.filter((row) => {
+    const businessMatch = !businessLine || row.businessLine === businessLine;
+    const registeredMatch = !registeredCc || row.registeredBy === registeredCc;
+    const platformMatch = !platform || row.platform === platform;
     const reviewMatch = !review || row.reviewStatus === review;
     const selectionMatch = !selection || row.selectionStatus === selection;
+    const rewardMatch = !rewardStatus || row.rewardStatus === rewardStatus;
     const keywordMatch = !keyword || [row.id, row.userId, row.user, row.giftOrderId, row.contentLink, row.registeredBy, t(row.platform)].some((value) => String(value || "").toLowerCase().includes(keyword));
     const date = row.submittedAt.slice(0, 10);
-    return reviewMatch && selectionMatch && keywordMatch && (!start || date >= start) && (!end || date <= end);
+    return businessMatch && registeredMatch && platformMatch && reviewMatch && selectionMatch && rewardMatch && keywordMatch && (!start || date >= start) && (!end || date <= end);
   });
   document.getElementById("communityRows").innerHTML = rows.map((row) => `
     <tr>
       <td class="mono">${row.id}</td>
       <td>${row.user}<span class="secondary mono">${row.userId}</span></td>
+      <td>${businessLineLabel(row.businessLine)}</td>
       <td>${t(row.channel)}<span class="secondary">${row.registeredBy}</span></td>
       <td>${t(row.platform)}</td>
       <td>${t(row.contentType)}</td>
@@ -409,6 +562,7 @@ function renderRows() {
       <td>${selectionLabel(row.selectionStatus)}</td>
       <td>${rewardText(row)}</td>
       <td><span class="mono">${row.giftOrderId}</span><span class="secondary">${t(`giftStatus.${row.giftOrderStatus}`)} · ฿0</span></td>
+      <td><span class="status ${row.rewardStatus === "ISSUED" ? "success" : row.rewardStatus === "FAILED" ? "failed" : "processing"}">${rewardStatusLabel(row.rewardStatus)}</span></td>
       <td><button class="btn small review-submission" data-id="${row.id}">${t("community.action")}</button></td>
     </tr>`).join("");
   document.getElementById("communityEmpty").hidden = rows.length > 0;
@@ -502,6 +656,11 @@ function verifyCommunityUser() {
     renderCreateUserResult();
     return;
   }
+  if (user.businessLineCode !== "thailand") {
+    showCreateNotice("communityCreate.businessLineMismatch");
+    renderCreateUserResult();
+    return;
+  }
 
   state.createUser = user;
   state.createNoticeKey = "";
@@ -553,6 +712,7 @@ function saveCommunityCreate() {
     id: `CMT-202611-${String(100 + submissions.length).padStart(4, "0")}`,
     userId: state.createUser.id,
     user: state.createUser.name,
+    businessLine: state.createUser.businessLineCode,
     channel: "community.ccEntry",
     platform: document.getElementById("communityCreatePlatform").value,
     registeredBy: "Thanya C.",
@@ -567,7 +727,7 @@ function saveCommunityCreate() {
     reward: "—",
     giftOrderId: "—",
     giftOrderStatus: "NOT_CREATED",
-    rewardStatus: "pendingReview",
+    rewardStatus: "PENDING_REVIEW",
     reviewNote: document.getElementById("communityCreateNote").value.trim(),
   });
   closeCommunityCreate();
@@ -644,7 +804,7 @@ function saveReview() {
     row.reward = "—";
     row.giftOrderId = "—";
     row.giftOrderStatus = "NOT_CREATED";
-    row.rewardStatus = "pendingReview";
+    row.rewardStatus = "NOT_APPLICABLE";
     state.noticeKey = "communityReview.rejectedHint";
   } else {
     if (selectionStatus === "OFFICIALLY_SELECTED" && !row.authorized) {
@@ -664,7 +824,7 @@ function saveReview() {
         : "community.baseReward";
     row.giftOrderId = row.giftOrderId === "—" ? `GRT202611${String(160 + submissions.indexOf(row)).padStart(4, "0")}` : row.giftOrderId;
     row.giftOrderStatus = "CREATED";
-    row.rewardStatus = "processing";
+    row.rewardStatus = "PROCESSING";
     state.noticeKey = selectionStatus === "PENDING_SELECTION"
       ? "communityReview.approvedBase"
       : selectionStatus === "OFFICIALLY_SELECTED"
@@ -709,13 +869,17 @@ document.getElementById("cancelCommunityReview").addEventListener("click", () =>
 document.getElementById("communityReviewModal").addEventListener("click", (event) => {
   if (event.target.id === "communityReviewModal") event.currentTarget.hidden = true;
 });
-["communityReviewFilter", "communitySelectionFilter", "communityStartDate", "communityEndDate"].forEach((id) => {
+["communityBusinessFilter", "communityRegisteredCcFilter", "communityPlatformFilter", "communityReviewFilter", "communitySelectionFilter", "communityRewardFilter", "communityStartDate", "communityEndDate"].forEach((id) => {
   document.getElementById(id).addEventListener("change", renderRows);
 });
 document.getElementById("communityKeyword").addEventListener("input", renderRows);
 document.getElementById("communityReset").addEventListener("click", () => {
+  document.getElementById("communityBusinessFilter").value = "";
+  document.getElementById("communityRegisteredCcFilter").value = "";
+  document.getElementById("communityPlatformFilter").value = "";
   document.getElementById("communityReviewFilter").value = "";
   document.getElementById("communitySelectionFilter").value = "";
+  document.getElementById("communityRewardFilter").value = "";
   document.getElementById("communityKeyword").value = "";
   document.getElementById("communityStartDate").value = "2026-11-01";
   document.getElementById("communityEndDate").value = "2026-11-30";

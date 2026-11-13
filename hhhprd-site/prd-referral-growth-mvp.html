@@ -32,7 +32,7 @@
 <p><strong>做</strong></p>
 <ul><li>通过被推荐人用户 ID 建立唯一推荐关系。</li><li>校验正式注册、活动新注册、业务线一致、自荐和重复推荐。</li><li>展示被推荐人的当前归属 CC；关系在完成“重新分配线索”后生效。</li><li>按首课完课、首次购买和社媒推荐审核结果自动发奖。</li><li>由 CC 在 CRM 代用户登记社媒推荐，由运营审核。</li><li>生成零金额赠送订单，并复用现有会员权益开通能力。</li><li>在统一拉新列表中查看关系、奖励事件、赠送订单和权益结果。</li></ul>
 <p><strong>不做</strong></p>
-<ul><li>不建设用户端邀请链接、推荐码或 App 自助投稿。</li><li>不自动抢占或改写其他 CC 的线索归属。</li><li>不发放好友续费奖励，不做退款自动追扣。</li><li>不自动抓取第三方社媒平台结果。</li><li>不根据历史备注猜测或补造推荐关系。</li><li>不将赠送订单计入 GMV、实付收入或付费用户。</li></ul>
+<ul><li>不建设用户端邀请链接、推荐码或 App 自助投稿。</li><li>不自动抢占或改写其他 CC 的线索归属。</li><li>不发放好友续费奖励，不做退款自动追扣。</li><li>不自动抓取第三方社媒平台结果。</li><li>不根据历史备注猜测或补造推荐关系。</li><li>不将赠送订单计入 GMV、实付收入或付费用户。</li><li>不将 CC 手工增加用户时长作为拉新或社媒推荐发奖入口；该操作与奖励归因完全分离。</li></ul>
 <h3>角色与业务对象</h3>
 <table><thead><tr><th>角色</th><th>职责</th></tr></thead><tbody><tr><td>推荐人</td><td>接受 CC 活动说明，邀请好友注册，并向 CC 提供被推荐人用户 ID</td></tr><tr><td>被推荐人</td><td>经推荐人邀请并完成正式注册的新用户</td></tr><tr><td>销售 CC</td><td>绑定推荐关系、登记社媒推荐、查看当前归属并处理异常；不手工发奖</td></tr><tr><td>目标归属 CC</td><td>推荐关系所归属的 CC，默认取推荐人当前 CC</td></tr><tr><td>当前归属 CC</td><td>被推荐人当前线索的真实负责人，负责将其重新分配给目标归属 CC</td></tr><tr><td>销售组长 / 管理员</td><td>调整目标归属、处理无归属线索和发放异常</td></tr><tr><td>社媒运营</td><td>审核 CC 登记的社媒内容及官方选中结果</td></tr></tbody></table>
 <table><thead><tr><th>业务对象</th><th>唯一性</th></tr></thead><tbody><tr><td>拉新关系</td><td>一个被推荐人只能绑定一个推荐人</td></tr><tr><td>归属转移记录</td><td>同一关系最多完成一次有效转移</td></tr><tr><td>社媒推荐记录</td><td>同一用户、同一内容文件或链接只生成一条有效记录</td></tr><tr><td>奖励事件</td><td>同一业务事件最多生成一条</td></tr><tr><td>赠送订单</td><td>同一奖励事件最多生成一笔</td></tr><tr><td>权益发放记录</td><td>同一关系、同一奖励规则最多成功发放一次</td></tr></tbody></table>
@@ -70,7 +70,7 @@
     S9 --&gt;|待选择| S12[保持待选择]</div>
 <h3>业务规则</h3>
 <h4>用户与关系</h4>
-<ul><li>推荐人和被推荐人均须为有效正式注册用户，账号状态正常。</li><li>被推荐人使用完整用户 ID 精确匹配，不接受手机号、姓名或模糊搜索。</li><li>被推荐人必须与推荐人属于同一业务线。</li><li>被推荐人不得是推荐人本人；用户 ID 或已验证手机号相同均视为自荐。</li><li>被推荐人的正式账号注册时间必须满足：<code>campaign_start_at ≤ registered_at ≤ binding_time</code>，起止边界均包含。</li><li>活动开始前已有正式账号的用户即使重新登录或补充资料，仍判定为非新注册。</li><li>新注册判定结果在绑定时保存快照，不因后续活动配置变化重算。</li><li>推荐人可以绑定多个不同被推荐人；每个被推荐人独立形成一条关系和奖励记录。</li></ul>
+<ul><li>推荐人和被推荐人均须为有效正式注册用户，账号状态正常。</li><li>被推荐人使用完整用户 ID 精确匹配，不接受手机号、姓名或模糊搜索。</li><li>被推荐人必须与推荐人属于同一业务线。</li><li>业务线枚举为 <code>THAILAND / VIETNAM / SAUDI_ARABIA</code>；本期拉新活动只在泰国业务线执行，其他业务线仅用于现有账号识别和跨业务线拦截。</li><li>被推荐人不得是推荐人本人；用户 ID 或已验证手机号相同均视为自荐。</li><li>被推荐人的正式账号注册时间必须满足：<code>campaign_start_at ≤ registered_at ≤ binding_time</code>，起止边界均包含。</li><li>活动开始前已有正式账号的用户即使重新登录或补充资料，仍判定为非新注册。</li><li>新注册判定结果在绑定时保存快照，不因后续活动配置变化重算。</li><li>推荐人可以绑定多个不同被推荐人；每个被推荐人独立形成一条关系和奖励记录。</li></ul>
 <h4>绑定、转移与状态</h4>
 <p>绑定只建立关系，不发放权益。目标归属 CC 默认取推荐人当前 CC；推荐人无有效 CC 时取操作 CC，有权限的组长或管理员可在提交前调整。</p>
 <table><thead><tr><th>状态</th><th>进入条件</th><th>是否发奖</th><th>退出条件</th></tr></thead><tbody><tr><td><code>BOUND_PENDING_TRANSFER</code></td><td>被推荐人当前归属其他 CC 或无归属</td><td>否，事件先缓存</td><td>完成线索重新分配</td></tr><tr><td><code>BOUND_ACTIVE</code></td><td>被推荐人已归属目标 CC</td><td>是</td><td>退款或人工确认无效时进入失效</td></tr><tr><td><code>INVALID</code></td><td>重复、自荐、跨业务线或人工确认无效</td><td>否</td><td>不可恢复，保留审计</td></tr></tbody></table>
@@ -78,13 +78,14 @@
 <h4>奖励事件</h4>
 <p>奖励事件仅在关系已生效且对应业务事件通过校验后生成。</p>
 <table><thead><tr><th>事件</th><th>触发条件</th><th>权益</th></tr></thead><tbody><tr><td><code>REFERRAL_FIRST_TRIAL_COMPLETED</code></td><td>被推荐人第一节体验课状态为 <code>COMPLETED</code>，且完课时间晚于绑定时间</td><td>推荐人 +14 天</td></tr><tr><td><code>REFERRAL_FIRST_PURCHASE_3M</code></td><td>被推荐人首次有效购买 3 个月会员</td><td>推荐人 +1 个月</td></tr><tr><td><code>REFERRAL_FIRST_PURCHASE_6M</code></td><td>被推荐人首次有效购买 6 个月会员</td><td>推荐人 +2 个月</td></tr><tr><td><code>REFERRAL_FIRST_PURCHASE_12M</code></td><td>被推荐人首次有效购买 12 个月会员</td><td>推荐人 +3 个月</td></tr><tr><td><code>SOCIAL_MEDIA_APPROVED</code></td><td>CC 登记内容审核有效</td><td>发布用户 +5 天</td></tr><tr><td><code>SOCIAL_MEDIA_OFFICIALLY_SELECTED</code></td><td>已审核有效且授权官方使用，最终被官方选中</td><td>发布用户 +2 个月</td></tr><tr><td><code>SOCIAL_MEDIA_NOT_SELECTED</code></td><td>已审核有效且最终未选中</td><td>发布用户 +15 天</td></tr></tbody></table>
+<p>奖励状态枚举：<code>WAITING / PROCESSING / ISSUED / FAILED</code>。社媒推荐记录在审核前使用 <code>PENDING_REVIEW</code>，审核无效使用 <code>NOT_APPLICABLE</code>。</p>
 <p>首课：</p>
 <ul><li>只接受 <code>FIRST_TRIAL</code> 且 <code>lesson_sequence=1</code>；预约、进行中、取消、未到课、改期和技术失败不触发。</li><li>同一推荐关系最多成功发放一次首课奖励；首课和购买奖励可叠加。</li></ul>
 <p>购买：</p>
 <ul><li>只接受被推荐人的首次有效会员订单；套餐仅限 3、6、12 个月。</li><li>待支付、取消、失败或测试订单不触发；最终退款、撤单或拒付后归因失效，不追扣已发权益。</li><li>首课和购买按各自业务事件去重，不互相替代。</li></ul>
 <h4>社媒推荐</h4>
 <p>社媒推荐由 CC 与用户确认内容后，在 CRM 代用户登记；本期不建设 App 用户自助投稿。</p>
-<ul><li>用户 ID、课堂归属、内容链接或文件、授权和重复内容必须在提交登记前校验。</li><li>内容审核前不产生奖励；基础生效后才可进入“官方选中”或“未选中”。</li><li>未授权官方使用时不能标记为官方选中。</li><li>审核无效时不生成奖励事件，记录无效原因和备注。</li><li>同一记录最终只能进入“官方选中”或“未选中”之一，状态变化全程留痕。</li><li>两种结果奖励互斥；重复回调使用 <code>social_recommendation_id + reward_event_type</code> 幂等。</li></ul>
+<ul><li>用户 ID、课堂归属、内容链接或文件、授权和重复内容必须在提交登记前校验。</li><li>内容审核前不产生奖励；基础生效后才可进入“官方选中”或“未选中”。</li><li>审核状态为 <code>PENDING_REVIEW / APPROVED / REJECTED</code>，选中状态为 <code>PENDING_SELECTION / OFFICIALLY_SELECTED / NOT_SELECTED</code>。</li><li>未授权官方使用时不能标记为官方选中。</li><li>审核无效时不生成奖励事件，记录无效原因和备注。</li><li>同一记录最终只能进入“官方选中”或“未选中”之一，状态变化全程留痕。</li><li>两种结果奖励互斥；重复回调使用 <code>social_recommendation_id + reward_event_type</code> 幂等。</li></ul>
 <h4>赠送订单与权益</h4>
 <p>奖励事件通过校验后必须先生成赠送订单，再由订单驱动权益开通，不能直接修改会员到期时间。</p>
 <table><thead><tr><th>订单规则</th><th>说明</th></tr></thead><tbody><tr><td>订单类型</td><td><code>MEMBERSHIP_GRANT</code></td></tr><tr><td>金额与支付</td><td>金额为 0，支付状态为 <code>NOT_REQUIRED</code>，不计入 GMV 和付费用户</td></tr><tr><td>业务来源</td><td><code>FRIEND_REFERRAL</code> 或 <code>SOCIAL_MEDIA_RECOMMENDATION</code></td></tr><tr><td>来源类型</td><td><code>REFERRAL_REWARD</code> 或 <code>SOCIAL_MEDIA_REWARD</code></td></tr><tr><td>权益接收人</td><td>好友推荐为推荐人；社媒推荐为发布用户</td></tr><tr><td>幂等键</td><td><code>REFERRAL_REWARD:{reward_event_id}</code> 或 <code>SOCIAL_MEDIA_REWARD:{reward_event_id}</code></td></tr><tr><td>天数型奖励</td><td>按自然日顺延</td></tr><tr><td>月数型奖励</td><td>按自然月顺延，同时保存原始单位和值</td></tr><tr><td>订单状态</td><td><code>CREATING → CREATED → FULFILLED</code>；系统异常进入 <code>FAILED</code></td></tr></tbody></table>
