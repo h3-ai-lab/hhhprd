@@ -174,12 +174,14 @@ const I18N = {
     "drawer.rule": "奖励规则",
     "drawer.entitlement": "权益流水",
     "drawer.pendingEntitlement": "等待权益服务确认",
+    "drawer.failureReason": "失败原因",
+    "drawer.systemFailure": "系统异常：权益服务请求超时",
     "drawer.reason": "开通原因",
     "drawer.timeline": "处理轨迹",
     "drawer.paymentDone": "被推荐人完成支付",
     "drawer.boundDone": "推荐关系已绑定",
     "drawer.operatorLine": "操作人 {name}",
-    "drawer.failedDetail": "权益服务返回超时，可发起幂等重试",
+    "drawer.failedDetail": "系统异常导致权益服务请求超时，可使用同一幂等键重试",
     "drawer.invalidDetail": "归因订单退款，历史记录保留",
     "drawer.auditDetail": "权益服务与审计",
     "drawer.generatedReason": "拉新推荐 · {referrer}推荐{referred} · {plan}套餐",
@@ -361,12 +363,14 @@ const I18N = {
     "drawer.rule": "Reward rule",
     "drawer.entitlement": "Entitlement transaction",
     "drawer.pendingEntitlement": "Awaiting entitlement service confirmation",
+    "drawer.failureReason": "Failure reason",
+    "drawer.systemFailure": "System error: entitlement service request timed out",
     "drawer.reason": "Grant reason",
     "drawer.timeline": "Activity Timeline",
     "drawer.paymentDone": "Referred user completed payment",
     "drawer.boundDone": "Referral relationship linked",
     "drawer.operatorLine": "Operator: {name}",
-    "drawer.failedDetail": "The entitlement service timed out. An idempotent retry can be started.",
+    "drawer.failedDetail": "A system error caused the entitlement request to time out. Retry with the same idempotency key.",
     "drawer.invalidDetail": "The attributed order was refunded. The historical record is retained.",
     "drawer.auditDetail": "Entitlement service and audit",
     "drawer.generatedReason": "Referral · {referrer} referred {referred} · {plan} plan",
@@ -684,6 +688,7 @@ function openDrawer(id) {
         <dt>${t("drawer.owner")}</dt><dd>${row.owner}</dd>
         <dt>${t("drawer.rule")}</dt><dd>${ruleLabel(row.ruleMonths)}</dd>
         <dt>${t("drawer.entitlement")}</dt><dd class="mono">${row.status === "processing" ? t("drawer.pendingEntitlement") : `ENT-${row.id.slice(-4)}-TH`}</dd>
+        ${row.status === "failed" ? `<dt>${t("drawer.failureReason")}</dt><dd>${t("drawer.systemFailure")}</dd>` : ""}
         <dt>${t("drawer.reason")}</dt><dd>${t("drawer.generatedReason", { referrer: row.referrer, referred: row.referred, plan: planLabel(row.planMonths) })}</dd>
       </dl>
     </div>
