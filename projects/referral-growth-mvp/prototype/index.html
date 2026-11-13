@@ -24,34 +24,38 @@
       <div><strong>Dino CRM</strong><small>Sales Operations</small></div>
     </div>
     <nav class="nav">
-      <div class="nav-label">业务管理</div>
-      <button class="nav-item"><svg><use href="#i-grid"></use></svg><span>管理看板</span></button>
-      <button class="nav-item"><svg><use href="#i-users"></use></svg><span>用户管理</span></button>
-      <button class="nav-item" data-view="users"><svg><use href="#i-users"></use></svg><span>用户列表</span></button>
-      <button class="nav-item"><svg><use href="#i-phone"></use></svg><span>销售中心</span></button>
-      <button class="nav-item"><svg><use href="#i-box"></use></svg><span>订单中心</span></button>
-      <div class="nav-label">营销与增长</div>
-      <button class="nav-item active" data-view="dashboard"><svg><use href="#i-chart"></use></svg><span>拉新归因</span></button>
-      <div class="nav-label">系统管理</div>
-      <button class="nav-item"><svg><use href="#i-settings"></use></svg><span>系统配置</span></button>
+      <div class="nav-label" data-i18n="nav.business">业务管理</div>
+      <button class="nav-item"><svg><use href="#i-grid"></use></svg><span data-i18n="nav.dashboard">管理看板</span></button>
+      <button class="nav-item"><svg><use href="#i-users"></use></svg><span data-i18n="nav.users">用户管理</span></button>
+      <button class="nav-item" data-view="users"><svg><use href="#i-users"></use></svg><span data-i18n="nav.userList">用户列表</span></button>
+      <button class="nav-item"><svg><use href="#i-phone"></use></svg><span data-i18n="nav.sales">销售中心</span></button>
+      <button class="nav-item"><svg><use href="#i-box"></use></svg><span data-i18n="nav.orders">订单中心</span></button>
+      <div class="nav-label" data-i18n="nav.marketing">营销与增长</div>
+      <button class="nav-item active" data-view="dashboard"><svg><use href="#i-chart"></use></svg><span data-i18n="nav.growth">拉新归因</span></button>
+      <div class="nav-label" data-i18n="nav.system">系统管理</div>
+      <button class="nav-item"><svg><use href="#i-settings"></use></svg><span data-i18n="nav.settings">系统配置</span></button>
     </nav>
     <div class="sidebar-foot">
-      <span><i></i> 服务运行正常</span>
-      数据更新于刚刚
+      <span><i></i> <b data-i18n="footer.status">服务运行正常</b></span>
+      <b data-i18n="footer.updated">数据更新于刚刚</b>
     </div>
   </aside>
 
   <main class="workspace">
     <header class="topbar">
       <div style="display:flex;align-items:center;gap:11px">
-        <button class="btn small mobile-menu" id="menuBtn" aria-label="展开菜单"><svg><use href="#i-menu"></use></svg></button>
+        <button class="btn small mobile-menu" id="menuBtn" aria-label="展开菜单" data-i18n-aria-label="aria.openMenu"><svg><use href="#i-menu"></use></svg></button>
         <div>
-          <div class="crumb">Dino CRM <span>/</span> <b id="crumb">营销中心</b></div>
-          <h1 id="pageTitle">拉新归因</h1>
+          <div class="crumb">Dino CRM <span>/</span> <b id="crumb" data-i18n="crumb.growth">营销中心</b></div>
+          <h1 id="pageTitle" data-i18n="nav.growth">拉新归因</h1>
         </div>
       </div>
       <div class="top-right">
-        <span class="env"><i></i> 生产环境</span>
+        <span class="env"><i></i> <b data-i18n="env.production">生产环境</b></span>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="zh">ZH</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
         <div class="user">
           <div class="avatar">TH</div>
           <div class="user-copy"><strong>Thanya C.</strong><small>CC_TH</small></div>
@@ -63,99 +67,100 @@
       <section class="view" id="dashboardView">
         <div class="view-head">
           <div>
-            <h2>拉新归因</h2>
-            <p>泰国业务线 · 推荐关系与权益结果</p>
+            <h2 data-i18n="nav.growth">拉新归因</h2>
+            <p data-i18n="dashboard.subtitle">泰国业务线 · 推荐关系与权益结果</p>
           </div>
           <div class="head-actions">
-            <button class="btn" id="refreshBtn">刷新数据</button>
+            <button class="btn" id="refreshBtn" data-i18n="common.refresh">刷新数据</button>
           </div>
         </div>
 
         <div class="stat-grid">
           <article class="stat">
-            <div class="stat-top"><span class="stat-label">推荐人数</span><button class="metric-info" data-pop="pop1">?</button></div>
-            <strong id="referrerCount">12</strong><small>按推荐人用户 ID 去重</small>
-            <div class="metric-pop" id="pop1" hidden><b>口径：</b>关系集合中至少有一条记录的推荐人用户数。单位：人；去重键：推荐人用户 ID。</div>
+            <div class="stat-top"><span class="stat-label" data-i18n="metric.referrers">推荐人数</span><button class="metric-info" data-pop="pop1">?</button></div>
+            <strong id="referrerCount">12</strong><small data-i18n="metric.referrers.note">按推荐人用户 ID 去重</small>
+            <div class="metric-pop" id="pop1" hidden><b data-i18n="metric.formula">口径：</b><span data-i18n="metric.referrers.formula">关系集合中至少有一条记录的推荐人用户数。单位：人；去重键：推荐人用户 ID。</span></div>
           </article>
           <article class="stat">
-            <div class="stat-top"><span class="stat-label">被推荐人数</span><button class="metric-info" data-pop="pop2">?</button></div>
-            <strong id="referredCount">19</strong><small>按被推荐人用户 ID 去重</small>
-            <div class="metric-pop" id="pop2" hidden><b>口径：</b>关系集合中至少有一条记录的被推荐人用户数。单位：人；去重键：被推荐人用户 ID。</div>
+            <div class="stat-top"><span class="stat-label" data-i18n="metric.referred">被推荐人数</span><button class="metric-info" data-pop="pop2">?</button></div>
+            <strong id="referredCount">19</strong><small data-i18n="metric.referred.note">按被推荐人用户 ID 去重</small>
+            <div class="metric-pop" id="pop2" hidden><b data-i18n="metric.formula">口径：</b><span data-i18n="metric.referred.formula">关系集合中至少有一条记录的被推荐人用户数。单位：人；去重键：被推荐人用户 ID。</span></div>
           </article>
           <article class="stat">
-            <div class="stat-top"><span class="stat-label">裂变 GMV</span><button class="metric-info" data-pop="pop3">?</button></div>
-            <strong id="gmvCount">฿62,810</strong><small>每条关系唯一归因订单</small>
-            <div class="metric-pop" id="pop3" hidden><b>口径：</b>关系集合内各条有效关系唯一归因订单的实付金额之和。单位：THB；去重键：订单 ID；排除取消、退款和测试订单。</div>
+            <div class="stat-top"><span class="stat-label" data-i18n="metric.gmv">裂变 GMV</span><button class="metric-info" data-pop="pop3">?</button></div>
+            <strong id="gmvCount">฿62,810</strong><small data-i18n="metric.gmv.note">每条关系唯一归因订单</small>
+            <div class="metric-pop" id="pop3" hidden><b data-i18n="metric.formula">口径：</b><span data-i18n="metric.gmv.formula">关系集合内各条有效关系唯一归因订单的实付金额之和。单位：THB；去重键：订单 ID；排除取消、退款和测试订单。</span></div>
           </article>
           <article class="stat">
-            <div class="stat-top"><span class="stat-label">权益发放成功率</span><button class="metric-info" data-pop="pop4">?</button></div>
+            <div class="stat-top"><span class="stat-label" data-i18n="metric.success">权益发放成功率</span><button class="metric-info" data-pop="pop4">?</button></div>
             <strong id="successRate">94.7%</strong><small>18 / 19</small>
-            <div class="metric-pop" id="pop4" hidden><b>口径：</b>已发放关系数 ÷ 已发起权益发放关系数。重试不重复计入分母；分母为 0 时显示“—”。</div>
+            <div class="metric-pop" id="pop4" hidden><b data-i18n="metric.formula">口径：</b><span data-i18n="metric.success.formula">已发放关系数 ÷ 已发起权益发放关系数。重试不重复计入分母；分母为 0 时显示“—”。</span></div>
           </article>
         </div>
 
         <section class="panel">
           <div class="panel-head">
-            <h3>归因记录</h3>
+            <h3 data-i18n="records.title">归因记录</h3>
             <div class="date-tabs" aria-label="业务日期">
-              <button class="date-tab active" data-date-field="bind">关系绑定时间</button>
-              <button class="date-tab" data-date-field="order">订单支付时间</button>
+              <button class="date-tab active" data-date-field="bind" data-i18n="records.bindDate">关系绑定时间</button>
+              <button class="date-tab" data-date-field="order" data-i18n="records.orderDate">订单支付时间</button>
             </div>
           </div>
           <div class="panel-body">
             <div class="filters">
               <div class="field">
-                <label>日期范围</label>
+                <label data-i18n="filter.dateRange">日期范围</label>
                 <div class="date-range">
                   <input class="control" id="startDate" type="date" value="2026-11-01">
-                  <span>至</span>
+                  <span data-i18n="filter.to">至</span>
                   <input class="control" id="endDate" type="date" value="2026-11-09">
                 </div>
               </div>
               <div class="field">
-                <label>业务线</label>
-                <select class="control" id="businessFilter"><option>泰国</option><option>越南</option></select>
+                <label data-i18n="filter.businessLine">业务线</label>
+                <select class="control" id="businessFilter"><option value="thailand" data-i18n="option.thailand">泰国</option><option value="vietnam" data-i18n="option.vietnam">越南</option></select>
               </div>
               <div class="field">
-                <label>来源</label>
-                <select class="control" id="sourceFilter"><option value="">全部来源</option><option value="referral">拉新推荐</option><option value="social">社媒分享</option></select>
+                <label data-i18n="filter.source">来源</label>
+                <select class="control" id="sourceFilter"><option value="" data-i18n="option.allSources">全部来源</option><option value="referral" data-i18n="source.referral">拉新推荐</option><option value="social" data-i18n="source.social">社媒分享</option></select>
               </div>
               <div class="field">
-                <label>归属 CC</label>
-                <select class="control" id="ccFilter"><option value="">全部 CC</option><option>Thanya C.</option><option>Mina P.</option><option>Nok S.</option></select>
+                <label data-i18n="filter.ownerCc">归属 CC</label>
+                <select class="control" id="ccFilter"><option value="" data-i18n="option.allCc">全部 CC</option><option>Thanya C.</option><option>Mina P.</option><option>Nok S.</option></select>
               </div>
               <div class="field">
-                <label>权益状态</label>
-                <select class="control" id="statusFilter"><option value="">全部状态</option><option value="success">已发放</option><option value="processing">待发放</option><option value="failed">发放失败</option><option value="invalid">归因失效</option></select>
+                <label data-i18n="filter.status">权益状态</label>
+                <select class="control" id="statusFilter"><option value="" data-i18n="option.allStatuses">全部状态</option><option value="success" data-i18n="status.success">已发放</option><option value="processing" data-i18n="status.processing">待发放</option><option value="failed" data-i18n="status.failed">发放失败</option><option value="invalid" data-i18n="status.invalid">归因失效</option></select>
               </div>
               <div class="field">
-                <label>关键词</label>
-                <input class="control search" id="keywordFilter" placeholder="用户 ID / 订单 ID">
+                <label data-i18n="filter.keyword">关键词</label>
+                <input class="control search" id="keywordFilter" placeholder="用户 ID / 订单 ID" data-i18n-placeholder="filter.keyword.placeholder">
               </div>
-              <button class="btn small" id="resetFilters" style="align-self:flex-end">重置筛选</button>
+              <button class="btn small" id="resetFilters" style="align-self:flex-end" data-i18n="common.reset">重置筛选</button>
             </div>
           </div>
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>推荐人</th>
-                  <th>被推荐人</th>
-                  <th>来源</th>
-                  <th>归因订单</th>
-                  <th>套餐</th>
-                  <th>实付金额</th>
-                  <th>订单支付时间</th>
-                  <th>绑定时间</th>
-                  <th>操作 CC</th>
-                  <th>归属 CC</th>
-                  <th>奖励规则</th>
-                  <th>权益状态</th>
+                  <th data-i18n="table.referrer">推荐人</th>
+                  <th data-i18n="table.referred">被推荐人</th>
+                  <th data-i18n="table.referredPhone">被推荐人手机号</th>
+                  <th data-i18n="table.source">来源</th>
+                  <th data-i18n="table.order">归因订单</th>
+                  <th data-i18n="table.plan">套餐</th>
+                  <th data-i18n="table.amount">实付金额</th>
+                  <th data-i18n="table.paidAt">订单支付时间</th>
+                  <th data-i18n="table.boundAt">绑定时间</th>
+                  <th data-i18n="table.operator">操作 CC</th>
+                  <th data-i18n="table.owner">归属 CC</th>
+                  <th data-i18n="table.rule">奖励规则</th>
+                  <th data-i18n="table.status">权益状态</th>
                 </tr>
               </thead>
               <tbody id="growthRows"></tbody>
             </table>
-            <div class="empty" id="emptyState" hidden>当前筛选下没有归因记录</div>
+            <div class="empty" id="emptyState" hidden data-i18n="records.empty">当前筛选下没有归因记录</div>
           </div>
           <div class="table-foot">
             <span id="rowSummary">共 19 条记录</span>
@@ -167,40 +172,40 @@
       <section class="view" id="usersView" hidden>
         <div class="view-head">
           <div>
-            <h2>用户中心</h2>
-            <p>查找用户并处理账号或会员操作</p>
+            <h2 data-i18n="users.title">用户中心</h2>
+            <p data-i18n="users.subtitle">查找用户并处理账号或会员操作</p>
           </div>
         </div>
         <section class="panel">
           <div class="panel-body">
             <div class="user-toolbar">
-              <input class="control search" value="" placeholder="用户 ID / 姓名 / 登录账号">
-              <select class="control"><option>用户类型：全部</option><option>正式用户</option><option>游客用户</option></select>
-              <select class="control"><option>用户状态：全部</option><option>已付费</option><option>体验中</option></select>
-              <select class="control"><option>业务线：泰国</option><option>业务线：越南</option></select>
-              <button class="btn small">搜索</button>
+              <input class="control search" value="" placeholder="用户 ID / 姓名 / 登录账号" data-i18n-placeholder="users.searchPlaceholder">
+              <select class="control"><option data-i18n="users.userTypeAll">用户类型：全部</option><option data-i18n="users.formal">正式用户</option><option data-i18n="users.guest">游客用户</option></select>
+              <select class="control"><option data-i18n="users.userStatusAll">用户状态：全部</option><option data-i18n="status.paid">已付费</option><option data-i18n="status.trial">体验中</option></select>
+              <select class="control"><option data-i18n="users.businessTh">业务线：泰国</option><option data-i18n="users.businessVn">业务线：越南</option></select>
+              <button class="btn small" data-i18n="common.search">搜索</button>
             </div>
           </div>
           <div class="table-wrap">
             <table class="user-table">
-              <thead><tr><th>用户 ID</th><th>姓名</th><th>用户状态</th><th>用户类型</th><th>注册方式</th><th>登录账号</th><th>渠道来源</th><th>操作</th></tr></thead>
+              <thead><tr><th data-i18n="users.userId">用户 ID</th><th data-i18n="users.name">姓名</th><th data-i18n="users.userStatus">用户状态</th><th data-i18n="users.userType">用户类型</th><th data-i18n="users.signup">注册方式</th><th data-i18n="users.loginAccount">登录账号</th><th data-i18n="users.channel">渠道来源</th><th data-i18n="users.actions">操作</th></tr></thead>
               <tbody>
                 <tr class="btn-row">
-                  <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td><span class="status success">已付费</span></td><td>正式用户</td><td>App</td><td>pim****@dino.ai</td><td>App</td>
-                  <td><div class="row-actions"><button id="openGrantBtn">添加会员</button><span>·</span><button>修改信息</button></div></td>
+                  <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pim****@dino.ai</td><td>App</td>
+                  <td><div class="row-actions"><button id="openGrantBtn" data-i18n="users.addMember">添加会员</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302281472036721</td><td>Kanya R.</td><td><span class="status processing">体验中</span></td><td>正式用户</td><td>App</td><td>kan****@dino.ai</td><td>App</td>
-                  <td><div class="row-actions"><button class="open-grant-secondary">添加会员</button><span>·</span><button>修改信息</button></div></td>
+                  <td class="mono">2120302281472036721</td><td>Kanya R.</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kan****@dino.ai</td><td>App</td>
+                  <td><div class="row-actions"><button class="open-grant-secondary" data-i18n="users.addMember">添加会员</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302210461928824</td><td>Arunee T.</td><td><span class="status success">已付费</span></td><td>正式用户</td><td>网页</td><td>aru****@dino.ai</td><td>Landing Page</td>
-                  <td><div class="row-actions"><button class="open-grant-secondary">添加会员</button><span>·</span><button>修改信息</button></div></td>
+                  <td class="mono">2120302210461928824</td><td>Arunee T.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td data-i18n="users.web">网页</td><td>aru****@dino.ai</td><td>Landing Page</td>
+                  <td><div class="row-actions"><button class="open-grant-secondary" data-i18n="users.addMember">添加会员</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="table-foot"><span>共 3 条记录</span><div class="pager"><button>‹</button><button class="active">1</button><button>›</button></div></div>
+          <div class="table-foot"><span id="usersRowSummary">共 3 条记录</span><div class="pager"><button>‹</button><button class="active">1</button><button>›</button></div></div>
         </section>
       </section>
     </div>
@@ -209,74 +214,74 @@
   <div class="modal-mask" id="grantModal" hidden>
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="grantTitle">
       <div class="modal-head">
-        <div><h3 id="grantTitle">添加会员 · 2120302255148482561</h3><p>为当前用户添加会员权益</p></div>
-        <button class="icon-close" id="closeGrant" aria-label="关闭">×</button>
+        <div><h3 id="grantTitle">添加会员 · 2120302255148482561</h3><p data-i18n="grant.subtitle">为当前用户添加会员权益</p></div>
+        <button class="icon-close" id="closeGrant" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
       </div>
       <div class="notice" id="grantNotice"></div>
       <div class="modal-body">
         <div class="form-row">
-          <div class="form-label"><span class="req">*</span>开通类型</div>
+          <div class="form-label"><span class="req">*</span><span data-i18n="grant.openType">开通类型</span></div>
           <div class="form-main">
             <div class="radio-line">
-              <label class="radio-option"><input type="radio" name="openType" checked><span><strong>添加体验天数</strong><small>用户可继续通过付费墙购买</small></span></label>
-              <label class="radio-option"><input type="radio" name="openType"><span><strong>手动银行转账</strong><small>按普通会员开通</small></span></label>
+              <label class="radio-option"><input type="radio" name="openType" checked><span><strong data-i18n="grant.trialDays">添加体验天数</strong><small data-i18n="grant.trialDays.note">用户可继续通过付费墙购买</small></span></label>
+              <label class="radio-option"><input type="radio" name="openType"><span><strong data-i18n="grant.manualTransfer">手动银行转账</strong><small data-i18n="grant.manualTransfer.note">按普通会员开通</small></span></label>
             </div>
           </div>
         </div>
         <div class="form-row">
-          <div class="form-label"><span class="req">*</span>权益来源</div>
+          <div class="form-label"><span class="req">*</span><span data-i18n="grant.source">权益来源</span></div>
           <div class="form-main">
             <select class="control" id="sourceSelect">
-              <option value="regular">常规赠送</option>
-              <option value="referral">拉新推荐</option>
-              <option value="social">社媒分享</option>
+              <option value="regular" data-i18n="source.regular">常规赠送</option>
+              <option value="referral" data-i18n="source.referral">拉新推荐</option>
+              <option value="social" data-i18n="source.social">社媒分享</option>
             </select>
           </div>
         </div>
         <div id="referralFields" hidden>
           <div class="form-row">
-            <div class="form-label"><span class="req">*</span>被推荐人用户 ID</div>
+            <div class="form-label"><span class="req">*</span><span data-i18n="grant.referredPhone">被推荐人手机号</span></div>
             <div class="form-main">
               <div class="inline-input">
-                <input class="control" id="referredId" placeholder="输入完整的用户 ID">
-                <button class="btn" id="verifyBtn">核验</button>
+                <input class="control" id="referredPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="输入带国际区号的完整手机号" data-i18n-placeholder="grant.referredPhone.placeholder">
+                <button class="btn" id="verifyBtn" data-i18n="grant.verify">核验</button>
               </div>
-              <div class="helper">核验注册状态、业务线、推荐唯一性和有效付费会员订单</div>
+              <div class="helper" data-i18n="grant.verify.note">按推荐人所属业务线匹配手机号，并核验注册状态、推荐唯一性和有效付费会员订单</div>
               <div class="verify-result" id="verifyResult" hidden></div>
             </div>
           </div>
         </div>
         <div id="socialFields" hidden>
           <div class="form-row">
-            <div class="form-label"><span class="req">*</span>内容链接</div>
+            <div class="form-label"><span class="req">*</span><span data-i18n="grant.contentLink">内容链接</span></div>
             <div class="form-main">
               <input class="control" id="socialLink" placeholder="https://">
-              <div class="helper">保存本次社媒分享归因，不进入内容审核队列</div>
+              <div class="helper" data-i18n="grant.contentLink.note">保存本次社媒分享归因，不进入内容审核队列</div>
             </div>
           </div>
         </div>
         <div class="form-row">
-          <div class="form-label"><span class="req">*</span>有效期天数</div>
+          <div class="form-label"><span class="req">*</span><span data-i18n="grant.validityDays">有效期天数</span></div>
           <div class="form-main">
             <div class="inline-input">
               <input class="control" id="daysInput" type="number" value="30">
-              <span style="padding-top:7px;color:var(--text-2)">天</span>
+              <span style="padding-top:7px;color:var(--text-2)" data-i18n="common.days">天</span>
             </div>
-            <div class="helper" id="daysHelper">新用户从当前时间起算；未付费体验中的用户在现体验到期时间上累加。</div>
-            <div class="reward-summary" id="rewardSummary" hidden><span>系统核验奖励</span><strong>+1 个月</strong></div>
+            <div class="helper" id="daysHelper" data-i18n="grant.helper.regular">新用户从当前时间起算；未付费体验中的用户在现体验到期时间上累加。</div>
+            <div class="reward-summary" id="rewardSummary" hidden><span data-i18n="grant.systemReward">系统核验奖励</span><strong id="rewardSummaryValue">+1 个月</strong></div>
           </div>
         </div>
         <div class="form-row">
-          <div class="form-label"><span class="req">*</span>开通原因</div>
+          <div class="form-label"><span class="req">*</span><span data-i18n="grant.reason">开通原因</span></div>
           <div class="form-main">
-            <textarea class="reason" id="reasonInput">好友推荐活动权益</textarea>
-            <div class="helper">拉新推荐会写入推荐人、被推荐人和订单，无需再手工备注 referral</div>
+            <textarea class="reason" id="reasonInput" data-i18n="grant.reason.friend">好友推荐活动权益</textarea>
+            <div class="helper" data-i18n="grant.reason.note">拉新推荐会写入推荐人、被推荐人和订单，无需再手工备注 referral</div>
           </div>
         </div>
       </div>
       <div class="modal-foot">
-        <button class="btn" id="cancelGrant">取消</button>
-        <button class="btn primary" id="confirmGrant" disabled>确认发放</button>
+        <button class="btn" id="cancelGrant" data-i18n="common.cancel">取消</button>
+        <button class="btn primary" id="confirmGrant" disabled data-i18n="grant.confirm">确认发放</button>
       </div>
     </section>
   </div>
@@ -284,14 +289,14 @@
   <div class="drawer-mask" id="detailDrawer" hidden>
     <aside class="drawer">
       <div class="drawer-head">
-        <div><h3>推荐关系详情</h3><p id="drawerId">RR-202611-0086</p></div>
-        <button class="icon-close" id="closeDrawer" aria-label="关闭">×</button>
+        <div><h3 data-i18n="drawer.title">推荐关系详情</h3><p id="drawerId">RR-202611-0086</p></div>
+        <button class="icon-close" id="closeDrawer" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
       </div>
       <div class="drawer-body" id="drawerBody"></div>
     </aside>
   </div>
 
-  <div class="toast" id="toast">推荐关系已绑定，权益已发放</div>
+  <div class="toast" id="toast" data-i18n="toast.referralSuccess">推荐关系已绑定，权益已发放</div>
 
   <script src="app.js"></script>
 </body>

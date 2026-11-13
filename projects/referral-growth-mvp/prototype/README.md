@@ -1,6 +1,8 @@
-# 拉新裂变 MVP 原型
+# 拉新裂变 MVP 原型 / Referral Growth MVP Prototype
 
-原型展示上线后的拉新归因页面、关系详情和“添加会员”操作。
+原型展示上线后的拉新归因页面、关系详情和“添加会员”操作，并提供中文和英文双版本切换。
+
+The prototype includes the post-launch referral attribution page, relationship details, and the Add Membership flow, with complete Chinese and English versions.
 
 ## 本地预览
 
@@ -18,4 +20,5 @@ python3 -m http.server 4176 --bind 127.0.0.1
 | 默认首屏 | 拉新归因指标、筛选和关系列表 |
 | 点击关系行 | 推荐关系、订单、CC 和权益详情 |
 | 左侧“用户列表” | 找到推荐人并打开“添加会员” |
-| 添加会员 → 拉新推荐 | 核验 C、自动匹配奖励并发权益 |
+| 添加会员 → 拉新推荐 | 输入 C 手机号、按推荐人业务线匹配账号、自动匹配奖励并发权益 |
+| 右上角 `中文 / EN` | 切换完整中文或英文界面；英文可用 `?lang=en` 直达 |
