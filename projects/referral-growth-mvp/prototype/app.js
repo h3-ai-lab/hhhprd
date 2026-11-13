@@ -9,6 +9,8 @@ const I18N = {
     "nav.orders": "订单中心",
     "nav.marketing": "营销与增长",
     "nav.growth": "拉新归因",
+    "nav.bindings": "拉新关系维护",
+    "bindings.title": "拉新关系维护",
     "nav.system": "系统管理",
     "nav.settings": "系统配置",
     "footer.status": "服务运行正常",
@@ -55,7 +57,7 @@ const I18N = {
     "option.allCc": "全部 CC",
     "option.allStatuses": "全部状态",
     "source.referral": "拉新推荐",
-    "source.social": "社媒分享",
+    "source.social": "社媒推荐",
     "source.regular": "常规赠送",
     "status.success": "已发放",
     "status.processing": "待发放",
@@ -94,6 +96,7 @@ const I18N = {
     "users.channel": "渠道来源",
     "users.actions": "操作",
     "users.addMember": "添加会员",
+    "users.maintainBinding": "维护拉新关系",
     "users.editInfo": "修改信息",
     "users.web": "网页",
     "users.count": "共 {count} 条记录",
@@ -110,7 +113,7 @@ const I18N = {
     "grant.verify": "核验",
     "grant.verify.note": "按推荐人所属业务线匹配手机号，并核验注册状态、推荐唯一性和有效付费会员订单",
     "grant.contentLink": "内容链接",
-    "grant.contentLink.note": "保存本次社媒分享归因，不进入内容审核队列",
+    "grant.contentLink.note": "社媒推荐由独立拉新关系页面维护",
     "grant.validityDays": "有效期天数",
     "grant.systemReward": "系统核验奖励",
     "grant.reason": "开通原因",
@@ -118,10 +121,10 @@ const I18N = {
     "grant.confirm": "确认发放",
     "grant.issuing": "发放中…",
     "grant.helper.regular": "新用户从当前时间起算；未付费体验中的用户在现体验到期时间上累加。",
-    "grant.helper.social": "社媒分享本期沿用现有手动天数，保存来源、链接、CC 和权益流水。",
+    "grant.helper.social": "社媒推荐由独立拉新关系页面维护并按内容状态自动发奖。",
     "grant.helper.referral": "拉新推荐奖励由订单套餐自动确定，有效期单位不可修改。",
     "grant.reason.friend": "好友推荐活动权益",
-    "grant.reason.social": "社媒分享活动权益 · 有效发布",
+    "grant.reason.social": "社媒推荐活动权益 · 有效发布",
     "grant.reason.generated": "拉新推荐 · {referrer}推荐{referred} · {plan}套餐 · 对应订单 {order}",
     "grant.error.empty": "请输入被推荐人手机号",
     "grant.error.format": "手机号格式无效，请输入带国际区号的完整手机号",
@@ -151,7 +154,7 @@ const I18N = {
     "grant.rewardMonths": "+{count} 个月",
     "toast.refreshed": "数据已刷新",
     "toast.referralSuccess": "推荐关系已绑定，权益已发放",
-    "toast.socialSuccess": "社媒分享记录已保存",
+    "toast.socialSuccess": "社媒推荐记录已保存",
     "drawer.title": "推荐关系详情",
     "drawer.relationInfo": "关系信息",
     "drawer.referrer": "推荐人",
@@ -198,6 +201,8 @@ const I18N = {
     "nav.orders": "Order Center",
     "nav.marketing": "Marketing & Growth",
     "nav.growth": "Referral Attribution",
+    "nav.bindings": "Growth Relationships",
+    "bindings.title": "Growth Relationships",
     "nav.system": "System",
     "nav.settings": "System Settings",
     "footer.status": "All services operational",
@@ -244,7 +249,7 @@ const I18N = {
     "option.allCc": "All CCs",
     "option.allStatuses": "All statuses",
     "source.referral": "Referral",
-    "source.social": "Social post",
+    "source.social": "Social recommendation",
     "source.regular": "Standard grant",
     "status.success": "Issued",
     "status.processing": "Pending",
@@ -283,6 +288,7 @@ const I18N = {
     "users.channel": "Channel",
     "users.actions": "Actions",
     "users.addMember": "Add membership",
+    "users.maintainBinding": "Manage referral relationship",
     "users.editInfo": "Edit info",
     "users.web": "Web",
     "users.count": "{count} records",
@@ -299,7 +305,7 @@ const I18N = {
     "grant.verify": "Verify",
     "grant.verify.note": "Match the phone within the referrer's business line, then verify registration, referral uniqueness, and a valid paid membership order",
     "grant.contentLink": "Content link",
-    "grant.contentLink.note": "Save the social-post attribution without adding it to a content review queue",
+    "grant.contentLink.note": "Social recommendations are managed in the dedicated Growth Relationships page",
     "grant.validityDays": "Validity",
     "grant.systemReward": "Verified reward",
     "grant.reason": "Grant reason",
@@ -307,10 +313,10 @@ const I18N = {
     "grant.confirm": "Confirm and issue",
     "grant.issuing": "Issuing…",
     "grant.helper.regular": "New users start from the current time. Unpaid users on trial receive the benefit after their current trial end date.",
-    "grant.helper.social": "The MVP keeps the current manual duration for social posts and records the source, link, CC, and entitlement transaction.",
+    "grant.helper.social": "Social recommendations are managed separately and rewarded automatically from content status.",
     "grant.helper.referral": "The referral reward is determined by the order plan. The validity unit cannot be edited.",
     "grant.reason.friend": "Friend referral benefit",
-    "grant.reason.social": "Social post benefit · Valid post",
+    "grant.reason.social": "Social recommendation benefit · Valid post",
     "grant.reason.generated": "Referral · {referrer} referred {referred} · {plan} plan · Order {order}",
     "grant.error.empty": "Enter the referred user's phone number",
     "grant.error.format": "Invalid phone number. Enter the full number with its country code.",
@@ -340,7 +346,7 @@ const I18N = {
     "grant.rewardMonths": "+{count} months",
     "toast.refreshed": "Data refreshed",
     "toast.referralSuccess": "Referral linked and benefit issued",
-    "toast.socialSuccess": "Social post attribution saved",
+    "toast.socialSuccess": "Social recommendation saved",
     "drawer.title": "Referral Relationship",
     "drawer.relationInfo": "Relationship",
     "drawer.referrer": "Referrer",
@@ -589,12 +595,15 @@ function applyStaticTranslations() {
   document.documentElement.lang = state.lang === "en" ? "en" : "zh-CN";
   document.title = t("document.title");
   document.querySelectorAll("[data-i18n]").forEach((element) => {
+    if (element.closest("#bindingsView, #referralModal, #socialModal")) return;
     element.textContent = t(element.dataset.i18n);
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    if (element.closest("#bindingsView, #referralModal, #socialModal")) return;
     element.placeholder = t(element.dataset.i18nPlaceholder);
   });
   document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    if (element.closest("#bindingsView, #referralModal, #socialModal")) return;
     element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
   });
   document.querySelectorAll("[data-lang]").forEach((button) => {
@@ -603,8 +612,10 @@ function applyStaticTranslations() {
   document.getElementById("usersRowSummary").textContent = countLabel("users.count", 3);
   document.getElementById("grantTitle").textContent = t("grant.title", { id: "2120302255148482561" });
   document.getElementById("rewardSummaryValue").textContent = ruleLabel(1);
-  document.getElementById("pageTitle").textContent = t(state.view === "dashboard" ? "nav.growth" : "users.title");
-  document.getElementById("crumb").textContent = t(state.view === "dashboard" ? "crumb.growth" : "crumb.users");
+  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "bindings" ? "bindings.title" : "users.title";
+  const viewCrumb = state.view === "dashboard" ? "crumb.growth" : "crumb.users";
+  document.getElementById("pageTitle").textContent = t(viewTitle);
+  document.getElementById("crumb").textContent = t(viewCrumb);
 }
 
 function renderRows() {
@@ -706,12 +717,15 @@ function openDrawer(id) {
 function setView(view) {
   state.view = view;
   const dashboard = view === "dashboard";
+  const bindings = view === "bindings";
   document.getElementById("dashboardView").hidden = !dashboard;
-  document.getElementById("usersView").hidden = dashboard;
-  document.getElementById("pageTitle").textContent = t(dashboard ? "nav.growth" : "users.title");
-  document.getElementById("crumb").textContent = t(dashboard ? "crumb.growth" : "crumb.users");
+  document.getElementById("bindingsView").hidden = !bindings;
+  document.getElementById("usersView").hidden = dashboard || bindings;
+  document.getElementById("pageTitle").textContent = t(dashboard ? "nav.growth" : bindings ? "bindings.title" : "users.title");
+  document.getElementById("crumb").textContent = t(dashboard || bindings ? "crumb.growth" : "crumb.users");
   document.querySelectorAll(".nav-item[data-view]").forEach((item) => item.classList.toggle("active", item.dataset.view === view));
   document.getElementById("sidebar").classList.remove("open");
+  if (bindings) window.GrowthBindingView?.activate();
 }
 
 function resetGrantForm() {
@@ -826,8 +840,8 @@ function verifyReferredUser() {
 }
 
 function openGrant() {
-  resetGrantForm();
-  document.getElementById("grantModal").hidden = false;
+  setView("bindings");
+  window.GrowthBindingView?.openReferral();
 }
 
 function closeGrant() {
@@ -908,7 +922,8 @@ function setLanguage(language) {
     // Local file previews may block history updates.
   }
   applyStaticTranslations();
-  document.getElementById("pageTitle").textContent = t(state.view === "dashboard" ? "nav.growth" : "users.title");
+  const viewTitle = state.view === "dashboard" ? "nav.growth" : state.view === "bindings" ? "bindings.title" : "users.title";
+  document.getElementById("pageTitle").textContent = t(viewTitle);
   document.getElementById("crumb").textContent = t(state.view === "dashboard" ? "crumb.growth" : "crumb.users");
   renderRows();
   if (!document.getElementById("grantModal").hidden) {
@@ -919,6 +934,7 @@ function setLanguage(language) {
     }
   }
   if (state.selectedId && !document.getElementById("detailDrawer").hidden) openDrawer(state.selectedId);
+  window.dispatchEvent(new CustomEvent("growth-language-change", { detail: { lang: state.lang } }));
 }
 
 document.querySelectorAll("[data-lang]").forEach((button) => {
@@ -1003,3 +1019,4 @@ document.addEventListener("click", (event) => {
 
 applyStaticTranslations();
 renderRows();
+window.dispatchEvent(new CustomEvent("growth-language-change", { detail: { lang: state.lang } }));

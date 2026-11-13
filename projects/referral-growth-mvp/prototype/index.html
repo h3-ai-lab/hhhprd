@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>拉新归因 · Dino CRM</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="binding.css">
 </head>
 <body>
   <svg class="sprite" aria-hidden="true">
@@ -32,6 +33,7 @@
       <button class="nav-item"><svg><use href="#i-box"></use></svg><span data-i18n="nav.orders">订单中心</span></button>
       <div class="nav-label" data-i18n="nav.marketing">营销与增长</div>
       <button class="nav-item active" data-view="dashboard"><svg><use href="#i-chart"></use></svg><span data-i18n="nav.growth">拉新归因</span></button>
+      <button class="nav-item" data-view="bindings"><svg><use href="#i-users"></use></svg><span data-i18n="nav.bindings">拉新关系维护</span></button>
       <div class="nav-label" data-i18n="nav.system">系统管理</div>
       <button class="nav-item"><svg><use href="#i-settings"></use></svg><span data-i18n="nav.settings">系统配置</span></button>
     </nav>
@@ -169,6 +171,118 @@
         </section>
       </section>
 
+      <section class="view" id="bindingsView" hidden>
+        <div class="view-head">
+          <div>
+            <h2 data-i18n="bindings.title">拉新关系维护</h2>
+            <p data-i18n="bindings.subtitle">先绑定关系，后由业务事件自动发放权益</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" id="newSocialBtn" data-i18n="bindings.newSocial">登记社媒推荐</button>
+            <button class="btn primary" id="newReferralBtn" data-i18n="bindings.newReferral">新建好友推荐</button>
+          </div>
+        </div>
+
+        <div class="binding-summary">
+          <article class="stat">
+            <div class="stat-top"><span class="stat-label" data-i18n="bindings.bound">已绑定关系</span><span class="status bound" data-i18n="bindStatus.bound">已绑定</span></div>
+            <strong>126</strong><small data-i18n="bindings.boundNote">等待首课、购买或归属异常处理</small>
+          </article>
+          <article class="stat">
+            <div class="stat-top"><span class="stat-label" data-i18n="bindings.pending">待注册绑定</span><span class="status pending-registration" data-i18n="bindStatus.pending">待注册</span></div>
+            <strong>8</strong><small data-i18n="bindings.pendingNote">注册后按手机号自动关联用户</small>
+          </article>
+          <article class="stat">
+            <div class="stat-top"><span class="stat-label" data-i18n="bindings.automatic">自动发放</span><span class="event-type">EVENT</span></div>
+            <strong>94.2%</strong><small data-i18n="bindings.automaticNote">首课、购买与社媒事件</small>
+          </article>
+        </div>
+
+        <div class="section-tabs" role="tablist">
+          <button class="section-tab active" data-tab="referral" data-i18n="bindings.tabReferral">好友推荐</button>
+          <button class="section-tab" data-tab="social" data-i18n="bindings.tabSocial">社媒推荐</button>
+          <button class="section-tab" data-tab="events" data-i18n="bindings.tabEvents">奖励事件</button>
+        </div>
+
+        <section class="panel" id="referralPanel">
+          <div class="panel-head">
+            <div>
+              <h3 data-i18n="bindings.referralList">好友推荐关系</h3>
+              <div class="inline-meta"><span><b data-i18n="bindings.ruleOne">规则：</b><span data-i18n="bindings.ruleOneText">先绑定，后自动发奖</span></span></div>
+            </div>
+            <span class="event-type">FRIEND_REFERRAL</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="table.referrer">推荐人</th>
+                <th data-i18n="table.referred">被推荐人</th>
+                <th data-i18n="table.referredPhone">被推荐人手机号</th>
+                <th data-i18n="table.businessLine">业务线</th>
+                <th data-i18n="table.owner">归属 CC</th>
+                <th data-i18n="table.bindStatus">绑定状态</th>
+                <th data-i18n="table.boundAt">绑定时间</th>
+                <th data-i18n="table.nextTrigger">下一触发</th>
+                <th data-i18n="table.latestReward">最近奖励</th>
+              </tr></thead>
+              <tbody id="referralRows"></tbody>
+            </table>
+          </div>
+          <div class="table-foot"><span id="referralCount"></span><span data-i18n="bindings.page">第 1 页</span></div>
+        </section>
+
+        <section class="panel" id="socialPanel" hidden>
+          <div class="panel-head">
+            <div>
+              <h3 data-i18n="bindings.socialList">社媒推荐内容</h3>
+              <div class="inline-meta"><span><b data-i18n="bindings.platformNote">数据：</b><span data-i18n="bindings.platformNoteText">平台、内容类型、授权状态、内容状态</span></span></div>
+            </div>
+            <span class="event-type">SOCIAL_POST</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="table.user">用户</th>
+                <th data-i18n="table.platform">平台</th>
+                <th data-i18n="table.contentType">内容类型</th>
+                <th data-i18n="table.contentStatus">内容状态</th>
+                <th data-i18n="table.authorization">官方使用授权</th>
+                <th data-i18n="table.publishedAt">发布时间</th>
+                <th data-i18n="table.operator">操作 CC</th>
+                <th data-i18n="table.reward">奖励</th>
+                <th data-i18n="table.status">权益状态</th>
+              </tr></thead>
+              <tbody id="socialRows"></tbody>
+            </table>
+          </div>
+          <div class="table-foot"><span id="socialCount"></span><span data-i18n="bindings.page">第 1 页</span></div>
+        </section>
+
+        <section class="panel" id="eventsPanel" hidden>
+          <div class="panel-head">
+            <div>
+              <h3 data-i18n="bindings.eventList">自动奖励事件</h3>
+              <div class="inline-meta"><span><b data-i18n="bindings.eventNote">说明：</b><span data-i18n="bindings.eventNoteText">绑定状态和奖励状态分开维护</span></span></div>
+            </div>
+            <span class="event-type">EVENT_ID</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="table.eventType">事件类型</th>
+                <th data-i18n="table.eventSourceId">业务事件 ID</th>
+                <th data-i18n="table.triggeredAt">触发时间</th>
+                <th data-i18n="table.benefit">奖励值</th>
+                <th data-i18n="table.status">权益状态</th>
+                <th data-i18n="table.failureReason">失败原因</th>
+              </tr></thead>
+              <tbody id="eventRows"></tbody>
+            </table>
+          </div>
+          <div class="table-foot"><span id="eventCount"></span><span data-i18n="bindings.page">第 1 页</span></div>
+        </section>
+      </section>
+
       <section class="view" id="usersView" hidden>
         <div class="view-head">
           <div>
@@ -192,15 +306,15 @@
               <tbody>
                 <tr class="btn-row">
                   <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pim****@dino.ai</td><td>App</td>
-                  <td><div class="row-actions"><button id="openGrantBtn" data-i18n="users.addMember">添加会员</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
+                  <td><div class="row-actions"><button id="openGrantBtn" data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">2120302281472036721</td><td>Kanya R.</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kan****@dino.ai</td><td>App</td>
-                  <td><div class="row-actions"><button class="open-grant-secondary" data-i18n="users.addMember">添加会员</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
+                  <td><div class="row-actions"><button class="open-grant-secondary" data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">2120302210461928824</td><td>Arunee T.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td data-i18n="users.web">网页</td><td>aru****@dino.ai</td><td>Landing Page</td>
-                  <td><div class="row-actions"><button class="open-grant-secondary" data-i18n="users.addMember">添加会员</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
+                  <td><div class="row-actions"><button class="open-grant-secondary" data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button data-i18n="users.editInfo">修改信息</button></div></td>
                 </tr>
               </tbody>
             </table>
@@ -210,6 +324,81 @@
       </section>
     </div>
   </main>
+
+  <div class="modal-mask" id="referralModal" hidden>
+    <section class="modal binding-modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <div><h3 data-i18n="referralModal.title">新建好友推荐</h3><p data-i18n="referralModal.subtitle">仅绑定关系，不发放会员权益</p></div>
+        <button class="icon-close close-binding-modal" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
+      </div>
+      <div class="notice" id="referralNotice"></div>
+      <div class="modal-body">
+        <div class="binding-context">
+          <strong data-i18n="referralModal.referrer">推荐人</strong>
+          <span>Pimchanok S. · 2120302255148482561 · Thailand · CC: Thanya C.</span>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span><span data-i18n="referralModal.phone">被推荐人手机号</span></div>
+          <div class="form-main">
+            <div class="inline-input">
+              <input class="control" id="bindingPhone" type="tel" inputmode="tel" placeholder="+66 81 234 5678">
+              <button class="btn" id="verifyBindingPhone" data-i18n="referralModal.verify">核验</button>
+            </div>
+            <div class="helper" data-i18n="referralModal.verifyNote">按推荐人业务线匹配；未注册手机号可创建待注册预绑定</div>
+            <div class="relation-hint" id="bindingResult" hidden></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-label" data-i18n="referralModal.note">绑定备注</div>
+          <div class="form-main"><textarea class="reason-box" id="bindingNote" placeholder="例如父母与孩子的对应关系" data-i18n-placeholder="referralModal.notePlaceholder"></textarea></div>
+        </div>
+        <div class="enum-note">
+          <span data-i18n="referralModal.enumLabel">绑定状态枚举：</span>
+          <code>PENDING_REGISTRATION</code> · <code>BOUND</code> · <code>INVALID</code>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn close-binding-modal" data-i18n="common.cancel">取消</button>
+        <button class="btn primary" id="confirmBinding" disabled data-i18n="referralModal.confirm">确认绑定</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-mask" id="socialModal" hidden>
+    <section class="modal binding-modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <div><h3 data-i18n="socialModal.title">登记社媒推荐</h3><p data-i18n="socialModal.subtitle">先保存内容记录，状态变化后自动发奖</p></div>
+        <button class="icon-close close-social-modal" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
+      </div>
+      <div class="notice" id="socialNotice"></div>
+      <div class="modal-body">
+        <div class="binding-context">
+          <strong data-i18n="socialModal.user">发布用户</strong>
+          <span>Pimchanok S. · 2120302255148482561 · Thailand · CC: Thanya C.</span>
+        </div>
+        <div class="field-grid" style="margin-top:15px">
+          <div class="field"><label data-i18n="socialModal.platform">发布平台</label><select class="control" id="socialPlatform"><option value="FACEBOOK">Facebook</option><option value="INSTAGRAM">Instagram</option><option value="TIKTOK">TikTok</option><option value="YOUTUBE">YouTube</option><option value="OTHER" data-i18n="platform.other">其他</option></select></div>
+          <div class="field"><label data-i18n="socialModal.contentType">内容类型</label><select class="control" id="socialType"><option value="PHOTO" data-i18n="social.photo">图片</option><option value="VIDEO" data-i18n="social.video">视频</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span><span data-i18n="socialModal.link">内容链接</span></div>
+          <div class="form-main"><input class="control" id="socialUrl" placeholder="https://"></div>
+        </div>
+        <div class="field-grid">
+          <div class="field"><label data-i18n="socialModal.authorization">官方使用授权</label><select class="control" id="socialAuthorization"><option value="AUTHORIZED_OFFICIAL_USE" data-i18n="social.authorized">已授权</option><option value="NOT_AUTHORIZED" data-i18n="social.notAuthorized">未授权</option></select></div>
+          <div class="field"><label data-i18n="socialModal.status">内容状态</label><select class="control" id="socialStatus"><option value="PUBLISHED" data-i18n="social.published">已发布</option><option value="VALID_NOT_SELECTED" data-i18n="social.notSelected">有效未选中</option><option value="OFFICIALLY_SELECTED" data-i18n="social.selected">官方选中</option><option value="INVALID" data-i18n="social.invalid">无效</option></select></div>
+        </div>
+        <div class="enum-note">
+          <span data-i18n="socialModal.enumLabel">数据枚举：</span>
+          <code>PHOTO</code> · <code>VIDEO</code> / <code>AUTHORIZED_OFFICIAL_USE</code> · <code>NOT_AUTHORIZED</code> / <code>PUBLISHED</code> · <code>VALID_NOT_SELECTED</code> · <code>OFFICIALLY_SELECTED</code> · <code>INVALID</code>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn close-social-modal" data-i18n="common.cancel">取消</button>
+        <button class="btn primary" id="confirmSocial" data-i18n="socialModal.confirm">保存记录</button>
+      </div>
+    </section>
+  </div>
 
   <div class="modal-mask" id="grantModal" hidden>
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="grantTitle">
@@ -298,6 +487,7 @@
 
   <div class="toast" id="toast" data-i18n="toast.referralSuccess">推荐关系已绑定，权益已发放</div>
 
+  <script src="binding-view.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
