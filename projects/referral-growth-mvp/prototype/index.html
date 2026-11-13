@@ -33,7 +33,7 @@
       <button class="nav-item" data-view="orders"><svg><use href="#i-box"></use></svg><span data-i18n="nav.orders">订单中心</span></button>
       <div class="nav-label" data-i18n="nav.marketing">营销与增长</div>
       <button class="nav-item active" data-view="dashboard"><svg><use href="#i-chart"></use></svg><span data-i18n="nav.growth">拉新关系</span></button>
-      <button class="nav-item" data-view="community"><svg><use href="#i-users"></use></svg><span data-i18n="nav.community">社群上传</span></button>
+      <button class="nav-item" data-view="community"><svg><use href="#i-users"></use></svg><span data-i18n="nav.community">社媒推荐</span></button>
       <div class="nav-label" data-i18n="nav.system">系统管理</div>
       <button class="nav-item"><svg><use href="#i-settings"></use></svg><span data-i18n="nav.settings">系统配置</span></button>
     </nav>
@@ -73,7 +73,7 @@
             <p data-i18n="dashboard.subtitle">泰国业务线 · 关系、业务事件、赠送订单与权益结果</p>
           </div>
           <div class="head-actions">
-            <button class="btn" data-view="community" data-i18n="nav.community">社群上传</button>
+            <button class="btn" data-view="community" data-i18n="nav.community">社媒推荐</button>
             <button class="btn primary" id="newReferralBtn" data-i18n="bindings.newReferral">新建好友推荐</button>
             <button class="btn" id="refreshBtn" data-i18n="common.refresh">刷新数据</button>
           </div>
@@ -126,7 +126,7 @@
               </div>
               <div class="field">
                 <label data-i18n="filter.source">来源</label>
-                <select class="control" id="sourceFilter"><option value="" data-i18n="option.allSources">全部来源</option><option value="referral" data-i18n="source.referral">拉新推荐</option><option value="social" data-i18n="source.social">社群上传</option></select>
+                <select class="control" id="sourceFilter"><option value="" data-i18n="option.allSources">全部来源</option><option value="referral" data-i18n="source.referral">拉新推荐</option><option value="social" data-i18n="source.social">社媒推荐</option></select>
               </div>
               <div class="field">
                 <label data-i18n="filter.ownerCc">归属 CC</label>
@@ -254,7 +254,7 @@
             <p data-i18n="bindings.subtitle">先绑定关系，后由业务事件自动发放权益</p>
           </div>
           <div class="head-actions">
-            <button class="btn" id="legacyNewSocialBtn" data-i18n="bindings.newSocial">登记社群上传</button>
+            <button class="btn" id="legacyNewSocialBtn" data-i18n="bindings.newSocial">登记社媒推荐</button>
             <button class="btn primary" id="legacyNewReferralBtn" data-i18n="bindings.newReferral">新建好友推荐</button>
           </div>
         </div>
@@ -270,13 +270,13 @@
           </article>
           <article class="stat">
             <div class="stat-top"><span class="stat-label" data-i18n="bindings.automatic">自动发放</span><span class="event-type">EVENT</span></div>
-            <strong>94.2%</strong><small data-i18n="bindings.automaticNote">首课、购买与社群上传事件</small>
+            <strong>94.2%</strong><small data-i18n="bindings.automaticNote">首课、购买与社媒推荐事件</small>
           </article>
         </div>
 
         <div class="section-tabs" role="tablist">
           <button class="section-tab active" data-tab="referral" data-i18n="bindings.tabReferral">好友推荐</button>
-          <button class="section-tab" data-tab="social" data-i18n="bindings.tabSocial">社群上传</button>
+          <button class="section-tab" data-tab="social" data-i18n="bindings.tabSocial">社媒推荐</button>
           <button class="section-tab" data-tab="events" data-i18n="bindings.tabEvents">奖励事件</button>
         </div>
 
@@ -310,10 +310,10 @@
         <section class="panel" id="socialPanel" hidden>
           <div class="panel-head">
             <div>
-              <h3 data-i18n="bindings.socialList">社群上传内容</h3>
+              <h3 data-i18n="bindings.socialList">社媒推荐内容</h3>
               <div class="inline-meta"><span><b data-i18n="bindings.platformNote">数据：</b><span data-i18n="bindings.platformNoteText">平台、内容类型、授权状态、内容状态</span></span></div>
             </div>
-            <span class="event-type">COMMUNITY_UPLOAD</span>
+            <span class="event-type">SOCIAL_MEDIA_RECOMMENDATION</span>
           </div>
           <div class="table-wrap">
             <table>
@@ -362,15 +362,15 @@
       <section class="view" id="communityView" hidden>
         <div class="view-head">
           <div>
-            <h2 data-i18n="community.title">社群上传</h2>
-            <p data-i18n="community.subtitle">CC 代用户登记内容，社群运营审核，按审核和官方选中结果自动发奖</p>
+            <h2 data-i18n="community.title">社媒推荐</h2>
+            <p data-i18n="community.subtitle">CC 代用户登记内容，社媒运营审核，按审核和官方选中结果自动发奖</p>
           </div>
           <div class="head-actions">
-            <button class="btn primary" id="openCommunityCreate" data-i18n="community.create">登记社群上传</button>
+            <button class="btn primary" id="openCommunityCreate" data-i18n="community.create">登记社媒推荐</button>
           </div>
         </div>
         <div class="stat-grid">
-          <article class="stat"><span class="stat-label" data-i18n="community.pendingReview">待审核</span><strong id="communityPendingCount">0</strong><small data-i18n="community.pendingReviewNote">需社群运营处理</small></article>
+          <article class="stat"><span class="stat-label" data-i18n="community.pendingReview">待审核</span><strong id="communityPendingCount">0</strong><small data-i18n="community.pendingReviewNote">需社媒运营处理</small></article>
           <article class="stat"><span class="stat-label" data-i18n="community.awaitingSelection">待确认选中</span><strong id="communityAwaitingSelectionCount">0</strong><small data-i18n="community.awaitingSelectionNote">基础 +5 天已处理</small></article>
           <article class="stat"><span class="stat-label" data-i18n="community.selected">官方选中</span><strong id="communitySelectedCount">0</strong><small data-i18n="community.selectedNote">额外 +2 个月</small></article>
           <article class="stat"><span class="stat-label" data-i18n="community.rejected">审核无效</span><strong id="communityRejectedCount">0</strong><small data-i18n="community.rejectedNote">不发放权益</small></article>
@@ -378,7 +378,7 @@
         <section class="panel">
           <div class="panel-head">
             <h3 data-i18n="community.listTitle">投稿审核</h3>
-            <span class="event-type">COMMUNITY_UPLOAD</span>
+            <span class="event-type">SOCIAL_MEDIA_RECOMMENDATION</span>
           </div>
           <div class="panel-body">
             <div class="filters">
@@ -419,7 +419,7 @@
               </tr></thead>
               <tbody id="communityRows"></tbody>
             </table>
-            <div class="empty" id="communityEmpty" hidden data-i18n="community.empty">当前筛选下没有社群上传记录</div>
+            <div class="empty" id="communityEmpty" hidden data-i18n="community.empty">当前筛选下没有社媒推荐记录</div>
           </div>
           <div class="table-foot"><span id="communityCount"></span><span data-i18n="bindings.page">第 1 页</span></div>
         </section>
@@ -460,15 +460,15 @@
               <tbody>
                 <tr class="btn-row">
                   <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="sales.connected">已接通</td><td>Thanya C.</td>
-                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-i18n="community.create">登记社群上传</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-i18n="community.create">登记社媒推荐</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">2120302281472036721</td><td>Kanya R.</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="sales.pendingCall">待外呼</td><td>Mina P.</td>
-                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302281472036721" data-user-name="Kanya R." data-i18n="community.create">登记社群上传</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302281472036721" data-user-name="Kanya R." data-i18n="community.create">登记社媒推荐</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">2120302210461928824</td><td>Arunee T.</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="sales.connected">已接通</td><td>Nok S.</td>
-                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302210461928824" data-user-name="Arunee T." data-i18n="community.create">登记社群上传</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
+                  <td><div class="row-actions"><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button><span>·</span><button class="open-community-create" data-user-id="2120302210461928824" data-user-name="Arunee T." data-i18n="community.create">登记社媒推荐</button><span>·</span><button data-i18n="sales.call">拨号</button><span>·</span><button data-i18n="sales.followUp">更新跟进</button></div></td>
                 </tr>
               </tbody>
             </table>
@@ -516,7 +516,7 @@
                   <td class="mono">GRT202611080041</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.referral">拉新推荐</td><td>Pimchanok S.</td><td class="mono">+66 82 **** 2233</td><td>Thanya C.</td><td>฿0</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit14d">+14 天</td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">GRT202611080056</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.social">社群上传</td><td>Pimchanok S.</td><td class="mono">+66 82 **** 2233</td><td>Thanya C.</td><td>฿0</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit2m">+2 个月</td>
+                  <td class="mono">GRT202611080056</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.social">社媒推荐</td><td>Pimchanok S.</td><td class="mono">+66 82 **** 2233</td><td>Thanya C.</td><td>฿0</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit2m">+2 个月</td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">GRT202611090018</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.referral">拉新推荐</td><td>Arunee T.</td><td class="mono">+66 88 **** 7712</td><td>Nok S.</td><td>฿0</td><td><span class="status processing" data-i18n="orders.created">已生成待发放</span></td><td data-i18n="orders.benefit3m">+3 个月</td>
@@ -573,7 +573,7 @@
   <div class="modal-mask" id="communityCreateModal" hidden>
     <section class="modal binding-modal" role="dialog" aria-modal="true">
       <div class="modal-head">
-        <div><h3 data-i18n="communityCreate.title">登记社群上传</h3><p data-i18n="communityCreate.subtitle">代用户登记内容，提交后进入社群运营审核</p></div>
+        <div><h3 data-i18n="communityCreate.title">登记社媒推荐</h3><p data-i18n="communityCreate.subtitle">代用户登记内容，提交后进入社媒运营审核</p></div>
         <button class="icon-close" id="closeCommunityCreate" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
       </div>
       <div class="notice" id="communityCreateNotice"></div>
@@ -593,7 +593,6 @@
           <div class="field">
             <label data-i18n="community.platform">平台</label>
             <select class="control" id="communityCreatePlatform">
-              <option value="community.platformDino" data-i18n="community.platformDino">App 社群</option>
               <option value="community.platformFacebook" data-i18n="community.platformFacebook">Facebook</option>
               <option value="community.platformInstagram" data-i18n="community.platformInstagram">Instagram</option>
               <option value="community.platformTiktok" data-i18n="community.platformTiktok">TikTok</option>
@@ -665,7 +664,7 @@
   <div class="modal-mask" id="communityReviewModal" hidden>
     <section class="modal binding-modal" role="dialog" aria-modal="true">
       <div class="modal-head">
-        <div><h3 data-i18n="communityReview.title">审核社群上传</h3><p id="communityReviewId">—</p></div>
+        <div><h3 data-i18n="communityReview.title">审核社媒推荐</h3><p id="communityReviewId">—</p></div>
         <button class="icon-close" id="closeCommunityReview" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
       </div>
       <div class="notice" id="communityReviewNotice"></div>
@@ -758,7 +757,7 @@
   <div class="modal-mask" id="socialModal" hidden>
     <section class="modal binding-modal" role="dialog" aria-modal="true">
       <div class="modal-head">
-        <div><h3 data-i18n="socialModal.title">登记社群上传</h3><p data-i18n="socialModal.subtitle">先保存内容记录，审核结果变化后自动发奖</p></div>
+        <div><h3 data-i18n="socialModal.title">登记社媒推荐</h3><p data-i18n="socialModal.subtitle">先保存内容记录，审核结果变化后自动发奖</p></div>
         <button class="icon-close close-social-modal" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
       </div>
       <div class="notice" id="socialNotice"></div>
@@ -814,7 +813,7 @@
             <select class="control" id="sourceSelect">
               <option value="regular" data-i18n="source.regular">常规赠送</option>
               <option value="referral" data-i18n="source.referral">拉新推荐</option>
-              <option value="social" data-i18n="source.social">社群上传</option>
+              <option value="social" data-i18n="source.social">社媒推荐</option>
             </select>
           </div>
         </div>
@@ -836,7 +835,7 @@
             <div class="form-label"><span class="req">*</span><span data-i18n="grant.contentLink">内容链接</span></div>
             <div class="form-main">
               <input class="control" id="socialLink" placeholder="https://">
-              <div class="helper" data-i18n="grant.contentLink.note">社群上传由营销中心独立审核列表维护</div>
+              <div class="helper" data-i18n="grant.contentLink.note">社媒推荐由营销中心独立审核列表维护</div>
             </div>
           </div>
         </div>

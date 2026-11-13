@@ -2,7 +2,7 @@ version: 1
 sources:
   - id: original-referrals
     uri: https://qjphu5vphyf4.jp.larksuite.com/wiki/OewiwN0BCiDituksN8dj7HDupNd
-    purpose: 原始泰国转介绍和社群上传活动规则
+    purpose: 原始泰国转介绍和社媒推荐活动规则
     priority: high
   - id: updated-referrals
     uri: https://qjphu5vphyf4.jp.larksuite.com/wiki/XB2PwcT9lie4WMkSmAUjGIvopxh
