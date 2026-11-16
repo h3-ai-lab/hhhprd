@@ -15,6 +15,7 @@ PROJECTS = {
     "referral-growth-mvp": "拉新裂变mvp",
     "crm-line-messaging": "crm-LINE 消息发送",
     "user-consultation-lead": "用户顾问咨询预约沉淀为线索跟进节点",
+    "outbound-capability": "外呼能力一期",
 }
 
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
