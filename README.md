@@ -23,6 +23,7 @@
 | 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 | CRM组织架构&数据权限 | PRD 待评审 | [PRD](projects/crm-org-data-permissions/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
 | crm-LINE 消息发送 | 待评审 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
+| 用户顾问咨询预约沉淀为线索跟进节点 | 待评审 | [PRD](projects/user-consultation-lead/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/) |
 | 多级业务线调研 | 归档于 REQ-ORG-001 | [调研资料](projects/crm-org-data-permissions/research/README.md) | — |
 
 ## GitHub Pages
@@ -38,6 +39,8 @@
 - 引入首跟节点&首跟看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/>
 - 引入首跟节点&首跟看板-2 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html>
 - CRM组织架构&数据权限 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-org-data-permissions.html>
+- 用户顾问咨询预约 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-user-consultation-lead.html>
+- 用户顾问咨询预约原型：<https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/>
 
 ## 目录结构
 

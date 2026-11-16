@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dino CRM 用户顾问咨询预约">
+  <title>Dino CRM · 用户顾问咨询预约</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-4.2 2.8-6.5 6.5-6.5s6.5 2.3 6.5 6.5M16 5.5a3 3 0 0 1 0 5.8M17.5 14c2.6.4 4 2.4 4 6"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M8 4 5 6c0 7 6 13 13 13l2-3-4-2-2 2c-2-1-4-3-5-5l2-2z"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-5 3-8 8-8s8 3 8 8"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19zM12 9v5M12 17.5h.01"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <div class="brand-copy">
+          <strong>Dino CRM</strong>
+          <span data-i18n="brandSub">客户经营工作台</span>
+        </div>
+      </div>
+      <nav class="side-nav" aria-label="主导航">
+        <div class="nav-group-label" data-i18n="customerOps">客户经营</div>
+        <button class="nav-item" data-route="sales">
+          <svg><use href="#i-list"></use></svg>
+          <span data-i18n="salesCenter">销售中心</span>
+        </button>
+        <button class="nav-item" data-route="users">
+          <svg><use href="#i-users"></use></svg>
+          <span data-i18n="userCenter">用户中心</span>
+        </button>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="online-dot"></span>
+        <span data-i18n="systemOnline">系统运行正常</span>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="title-area">
+          <div class="breadcrumb" id="breadcrumb"></div>
+          <h1 id="page-title"></h1>
+        </div>
+        <div class="top-actions">
+          <div class="language-switch" role="group" aria-label="Language">
+            <button class="lang-btn is-active" data-lang="zh">中</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <div class="account">
+            <div class="avatar">L</div>
+            <div class="account-copy">
+              <strong data-i18n="accountName">Linh Nguyen</strong>
+              <span data-i18n="accountRole">销售运营组长</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content" id="content" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div class="drawer-layer" id="drawer-layer" aria-hidden="true">
+    <button class="drawer-scrim" id="drawer-scrim" aria-label="关闭详情"></button>
+    <aside class="drawer" id="drawer" aria-label="客户详情"></aside>
+  </div>
+
+  <div class="modal-layer" id="export-layer" aria-hidden="true">
+    <button class="modal-scrim" id="export-scrim" aria-label="关闭导出"></button>
+    <section class="modal" id="export-modal" role="dialog" aria-modal="true" aria-labelledby="export-title"></section>
+  </div>
+
+  <div class="action-menu" id="action-menu" role="menu" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script defer src="./app.js"></script>
+</body>
+</html>
+
