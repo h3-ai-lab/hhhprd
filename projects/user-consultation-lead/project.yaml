@@ -1,5 +1,5 @@
 id: REQ-CONSULT-001
-name: 用户顾问咨询预约沉淀为线索跟进节点
+name: 用户咨询预约时间
 status: 待评审
 workflow:
   base: ../../shared/workflows/prd-2.0.md

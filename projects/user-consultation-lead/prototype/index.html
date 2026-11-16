@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dino CRM 用户顾问咨询预约">
-  <title>Dino CRM · 用户顾问咨询预约</title>
+  <meta name="description" content="Dino CRM 用户咨询预约时间">
+  <title>Dino CRM · 用户咨询预约时间</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css">
 </head>
@@ -37,11 +37,11 @@
         <div class="nav-group-label" data-i18n="customerOps">客户经营</div>
         <button class="nav-item" data-route="sales">
           <svg><use href="#i-list"></use></svg>
-          <span data-i18n="salesCenter">销售中心</span>
+          <span data-i18n="sales">销售中心</span>
         </button>
         <button class="nav-item" data-route="users">
           <svg><use href="#i-users"></use></svg>
-          <span data-i18n="userCenter">用户中心</span>
+          <span data-i18n="users">用户中心</span>
         </button>
       </nav>
       <div class="sidebar-foot">
@@ -64,7 +64,7 @@
           <div class="account">
             <div class="avatar">L</div>
             <div class="account-copy">
-              <strong data-i18n="accountName">Linh Nguyen</strong>
+              <strong>Linh Nguyen</strong>
               <span data-i18n="accountRole">销售运营组长</span>
             </div>
           </div>
@@ -75,17 +75,11 @@
     </div>
   </div>
 
-  <div class="drawer-layer" id="drawer-layer" aria-hidden="true">
-    <button class="drawer-scrim" id="drawer-scrim" aria-label="关闭详情"></button>
-    <aside class="drawer" id="drawer" aria-label="客户详情"></aside>
-  </div>
-
   <div class="modal-layer" id="export-layer" aria-hidden="true">
     <button class="modal-scrim" id="export-scrim" aria-label="关闭导出"></button>
     <section class="modal" id="export-modal" role="dialog" aria-modal="true" aria-labelledby="export-title"></section>
   </div>
 
-  <div class="action-menu" id="action-menu" role="menu" aria-hidden="true"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script defer src="./app.js"></script>
 </body>
