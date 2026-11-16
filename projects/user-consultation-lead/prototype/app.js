@@ -123,7 +123,7 @@ const people = [
     outbound: "called",
     consultation: {
       status: "booked",
-      source: "historical",
+      source: "unknown",
       submittedAt: "2026-10-14T11:31:28+07:00",
       clientEventAt: null,
       requestId: "CONS-20261014-00074",
@@ -174,7 +174,7 @@ const people = [
     outbound: "called",
     consultation: {
       status: "booked",
-      source: "historical",
+      source: "unknown",
       submittedAt: "2026-11-15T13:09:00+08:00",
       clientEventAt: null,
       requestId: "CONS-20261115-00112",
@@ -303,9 +303,9 @@ const i18n = {
     viewRequest: "查看预约节点",
     updateFollow: "更新跟进",
     noSource: "—",
-    sourceRegister: "注册后邀请",
-    sourcePaywall: "Paywall 返回后邀请",
-    sourceHistorical: "历史数据",
+    sourceRegister: "注册后",
+    sourcePaywall: "Paywall 返回后",
+    sourceUnknown: "来源未采集",
     emptyTitle: "暂无符合条件的客户",
     emptyText: "请调整筛选条件后重试，或重置筛选。",
     userEmptyTitle: "暂无符合条件的用户",
@@ -443,9 +443,9 @@ const i18n = {
     viewRequest: "View request",
     updateFollow: "Update follow-up",
     noSource: "—",
-    sourceRegister: "Registration invite",
-    sourcePaywall: "Paywall return invite",
-    sourceHistorical: "Historical data",
+    sourceRegister: "After registration",
+    sourcePaywall: "After Paywall return",
+    sourceUnknown: "Source not collected",
     emptyTitle: "No matching customers",
     emptyText: "Adjust the filters or reset them to see more customers.",
     userEmptyTitle: "No matching users",
@@ -540,7 +540,7 @@ function optionList(values, selected, allLabel) {
 }
 
 function sourceLabel(source) {
-  return { register: t("sourceRegister"), paywall: t("sourcePaywall"), historical: t("sourceHistorical") }[source] || t("noSource");
+  return { register: t("sourceRegister"), paywall: t("sourcePaywall"), unknown: t("sourceUnknown") }[source] || t("noSource");
 }
 
 function businessLabel(value) {
