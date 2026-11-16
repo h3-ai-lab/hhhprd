@@ -20,18 +20,19 @@ const STR = {
     allBusinessLine: "全部业务线",
     allStatus: "全部状态",
     addNumber: "新增号码",
+    importNumbers: "批量导入",
     refresh: "刷新",
     colNumber: "号码",
     colSupplier: "所属供应商",
     colRoute: "线路",
     colLines: "可用业务线",
     colStatus: "可用状态",
+    colAvailableTime: "可用时间",
     colConcurrency: "并发",
     colFrequency: "被叫频次限制",
     colActions: "操作",
     enabled: "可用",
     disabled: "停用",
-    activeCalls: "当前 {count} 通",
     perDay: "{count} 次/人/日",
     edit: "编辑",
     disable: "停用",
@@ -56,6 +57,10 @@ const STR = {
     frequency: "被叫频次限制",
     concurrencyHint: "允许同时进行的最大通话数，1–100",
     frequencyHint: "同一被叫号码每日最多外呼次数，1–20",
+    unlimitedTime: "不限",
+    customTime: "每日时间段",
+    availableTimeHint: "北京时间，支持跨午夜",
+    timeRange: "{start}–{end}",
     cancel: "取消",
     create: "创建",
     save: "保存",
@@ -154,6 +159,39 @@ const STR = {
     followupAddedTrial: "已加入体验课",
     followupQuoteSent: "报价已发送",
     followupGradeUnclear: "未确认课程等级",
+    importTitle: "批量导入号码",
+    importSubtitle: "使用 CSV 模板上传号码，校验后导入有效行",
+    downloadTemplate: "下载模板",
+    chooseFile: "选择 CSV 文件",
+    importFormatTitle: "导入字段",
+    importFormatText: "号码、所属供应商、线路、可用业务线、可用状态、可用时间、并发、被叫频次限制",
+    importRuleText: "可用业务线用 | 分隔；可用时间填写“不限”或“HH:mm-HH:mm”；最终以预览结果为准。",
+    importFileError: "无法读取该文件，请使用 UTF-8 CSV 模板",
+    importHeaderError: "CSV 表头与模板不一致，请重新下载模板",
+    importPreviewTitle: "校验预览",
+    importTotalRows: "总行数",
+    importValidRows: "有效行",
+    importInvalidRows: "无效行",
+    importRow: "行号",
+    importValidation: "校验结果",
+    importReady: "可导入",
+    importHasError: "需修正",
+    importConfirm: "导入有效行",
+    importNoValid: "没有可导入的有效行",
+    importResultTitle: "导入完成",
+    importResultMeta: "成功导入 {success} 个号码，跳过 {failed} 行",
+    downloadFailedRows: "下载失败行",
+    importAnother: "重新选择文件",
+    errorPhone: "号码格式错误",
+    errorSupplier: "供应商不在枚举中",
+    errorRoute: "线路不在枚举中",
+    errorLines: "业务线无效",
+    errorStatus: "可用状态无效",
+    errorTime: "可用时间格式错误",
+    errorConcurrency: "并发必须为 1–100",
+    errorFrequency: "频次必须为 1–20",
+    errorDuplicateFile: "文件内号码重复",
+    errorDuplicatePool: "号码已存在",
     agentNames: { "anh.nguyen@dino.ai": "Nguyễn Anh", "mali@dino.ai": "Mali Tan", "porn@dino.ai": "Porn K." }
   },
   en: {
@@ -177,18 +215,19 @@ const STR = {
     allBusinessLine: "All business lines",
     allStatus: "All statuses",
     addNumber: "Add Number",
+    importNumbers: "Bulk Import",
     refresh: "Refresh",
     colNumber: "Number",
     colSupplier: "Supplier",
     colRoute: "Route",
     colLines: "Business Lines",
     colStatus: "Status",
+    colAvailableTime: "Available Time",
     colConcurrency: "Concurrency",
     colFrequency: "Callee Frequency Limit",
     colActions: "Actions",
     enabled: "Available",
     disabled: "Disabled",
-    activeCalls: "{count} active",
     perDay: "{count} / callee / day",
     edit: "Edit",
     disable: "Disable",
@@ -213,6 +252,10 @@ const STR = {
     frequency: "Callee Frequency Limit",
     concurrencyHint: "Maximum simultaneous calls, 1–100",
     frequencyHint: "Maximum daily calls per callee, 1–20",
+    unlimitedTime: "Any time",
+    customTime: "Daily time range",
+    availableTimeHint: "Beijing time; cross-midnight ranges are supported",
+    timeRange: "{start}–{end}",
     cancel: "Cancel",
     create: "Create",
     save: "Save",
@@ -311,6 +354,39 @@ const STR = {
     followupAddedTrial: "Added to trial lesson",
     followupQuoteSent: "Quote sent",
     followupGradeUnclear: "Course level not confirmed",
+    importTitle: "Bulk Import Numbers",
+    importSubtitle: "Upload numbers from a CSV template and import the valid rows after review",
+    downloadTemplate: "Download Template",
+    chooseFile: "Choose CSV File",
+    importFormatTitle: "Import Fields",
+    importFormatText: "Number, Supplier, Route, Business Lines, Status, Available Time, Concurrency, Callee Frequency Limit",
+    importRuleText: "Separate business lines with |. Enter “Any time” or HH:mm-HH:mm. The validation preview is authoritative.",
+    importFileError: "Unable to read this file. Use the UTF-8 CSV template.",
+    importHeaderError: "The CSV header does not match the template. Download the latest template and retry.",
+    importPreviewTitle: "Validation Preview",
+    importTotalRows: "Total rows",
+    importValidRows: "Valid rows",
+    importInvalidRows: "Invalid rows",
+    importRow: "Row",
+    importValidation: "Validation",
+    importReady: "Ready",
+    importHasError: "Needs correction",
+    importConfirm: "Import Valid Rows",
+    importNoValid: "There are no valid rows to import",
+    importResultTitle: "Import Complete",
+    importResultMeta: "{success} numbers imported; {failed} rows skipped",
+    downloadFailedRows: "Download Failed Rows",
+    importAnother: "Choose Another File",
+    errorPhone: "Invalid number",
+    errorSupplier: "Supplier is not in the fixed list",
+    errorRoute: "Route is not in the fixed list",
+    errorLines: "Invalid business line",
+    errorStatus: "Invalid status",
+    errorTime: "Invalid available time",
+    errorConcurrency: "Concurrency must be from 1 to 100",
+    errorFrequency: "Frequency must be from 1 to 20",
+    errorDuplicateFile: "Duplicate number in file",
+    errorDuplicatePool: "Number already exists",
     agentNames: { "anh.nguyen@dino.ai": "Nguyễn Anh", "mali@dino.ai": "Mali Tan", "porn@dino.ai": "Porn K." }
   }
 };
@@ -320,21 +396,22 @@ const BUSINESS_LINES = [
   { value: "VN", zh: "越南", en: "Vietnam" },
   { value: "TH", zh: "泰国", en: "Thailand" }
 ];
-const SUPPLIERS = ["智齿", "Omicall"];
+const SUPPLIERS = ["供应商1", "供应商2", "供应商3"];
 const ROUTES = [
-  { value: "ZHICHI_DEFAULT", supplier: "智齿", zh: "智齿-默认线路", en: "Zhici Default Route" },
-  { value: "OMICALL_DEFAULT", supplier: "Omicall", zh: "Omicall-默认线路", en: "Omicall Default Route" }
+  { value: "ROUTE_1", zh: "线路1", en: "Route 1" },
+  { value: "ROUTE_2", zh: "线路2", en: "Route 2" },
+  { value: "ROUTE_3", zh: "线路3", en: "Route 3" }
 ];
 
 let numbers = [
-  { id: "n1", phone: "+60112345678", supplier: "智齿", route: "ZHICHI_DEFAULT", lines: ["MY"], status: "active", concurrency: 12, active: 5, frequency: 3 },
-  { id: "n2", phone: "+60119876543", supplier: "Omicall", route: "OMICALL_DEFAULT", lines: ["MY", "TH"], status: "active", concurrency: 8, active: 8, frequency: 2 },
-  { id: "n3", phone: "+84912345678", supplier: "智齿", route: "ZHICHI_DEFAULT", lines: ["VN"], status: "active", concurrency: 20, active: 7, frequency: 3 },
-  { id: "n4", phone: "+84987654321", supplier: "Omicall", route: "OMICALL_DEFAULT", lines: ["VN", "TH"], status: "active", concurrency: 10, active: 2, frequency: 4 },
-  { id: "n5", phone: "+66812345678", supplier: "智齿", route: "ZHICHI_DEFAULT", lines: ["TH"], status: "active", concurrency: 16, active: 6, frequency: 3 },
-  { id: "n6", phone: "+66898765432", supplier: "Omicall", route: "OMICALL_DEFAULT", lines: ["TH"], status: "disabled", concurrency: 6, active: 0, frequency: 2 },
-  { id: "n7", phone: "+60321234567", supplier: "智齿", route: "ZHICHI_DEFAULT", lines: ["MY"], status: "active", concurrency: 4, active: 1, frequency: 1 },
-  { id: "n8", phone: "+84281234567", supplier: "Omicall", route: "OMICALL_DEFAULT", lines: ["VN"], status: "disabled", concurrency: 5, active: 0, frequency: 3 }
+  { id: "n1", phone: "+60112345678", supplier: "供应商1", route: "ROUTE_1", lines: ["MY"], status: "active", availableWindow: null, concurrency: 12, frequency: 3 },
+  { id: "n2", phone: "+60119876543", supplier: "供应商2", route: "ROUTE_2", lines: ["MY", "TH"], status: "active", availableWindow: { start: "08:30", end: "20:00" }, concurrency: 8, frequency: 2 },
+  { id: "n3", phone: "+84912345678", supplier: "供应商1", route: "ROUTE_2", lines: ["VN"], status: "active", availableWindow: null, concurrency: 20, frequency: 3 },
+  { id: "n4", phone: "+84987654321", supplier: "供应商3", route: "ROUTE_3", lines: ["VN", "TH"], status: "active", availableWindow: { start: "22:00", end: "02:00" }, concurrency: 10, frequency: 4 },
+  { id: "n5", phone: "+66812345678", supplier: "供应商2", route: "ROUTE_1", lines: ["TH"], status: "active", availableWindow: { start: "09:00", end: "18:00" }, concurrency: 16, frequency: 3 },
+  { id: "n6", phone: "+66898765432", supplier: "供应商3", route: "ROUTE_3", lines: ["TH"], status: "disabled", availableWindow: null, concurrency: 6, frequency: 2 },
+  { id: "n7", phone: "+60321234567", supplier: "供应商1", route: "ROUTE_1", lines: ["MY"], status: "active", availableWindow: { start: "08:00", end: "17:30" }, concurrency: 4, frequency: 1 },
+  { id: "n8", phone: "+84281234567", supplier: "供应商2", route: "ROUTE_2", lines: ["VN"], status: "disabled", availableWindow: null, concurrency: 5, frequency: 3 }
 ];
 
 let calls = [
@@ -370,6 +447,9 @@ const t = (key, vars = {}) => {
 };
 const businessLabel = line => BUSINESS_LINES.find(item => item.value === line)?.[state.lang] || line;
 const routeLabel = routeValue => ROUTES.find(item => item.value === routeValue)?.[state.lang] || routeValue;
+const availableWindowLabel = windowValue => windowValue
+  ? t("timeRange", { start: windowValue.start, end: windowValue.end })
+  : t("unlimitedTime");
 const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
 const normalizePhone = value => value.replace(/[\s()-]/g, "");
 const resultLabel = result => t(result);
@@ -449,6 +529,7 @@ function renderNumbersPage() {
         <div class="panel-title">${t("numberPanel")}<span class="count-pill">${t("totalNumbers", { count: rows.length })}</span></div>
         <div class="row-actions">
           <button class="button ghost" data-action="refresh-numbers"><svg><use href="#i-refresh"></use></svg>${t("refresh")}</button>
+          <button class="button" data-action="open-import"><svg><use href="#i-download"></use></svg>${t("importNumbers")}</button>
           <button class="button primary" data-action="add-number"><svg><use href="#i-plus"></use></svg>${t("addNumber")}</button>
         </div>
       </div>
@@ -478,7 +559,7 @@ function renderNumbersPage() {
       ${pageRows.length ? `<div class="table-wrap"><table>
         <thead><tr>
           <th>${t("colNumber")}</th><th>${t("colSupplier")}</th><th>${t("colRoute")}</th>
-          <th>${t("colLines")}</th><th>${t("colStatus")}</th><th>${t("colConcurrency")}</th>
+          <th>${t("colLines")}</th><th>${t("colStatus")}</th><th>${t("colAvailableTime")}</th><th>${t("colConcurrency")}</th>
           <th>${t("colFrequency")}</th><th>${t("colActions")}</th>
         </tr></thead>
         <tbody>${pageRows.map(item => `
@@ -488,7 +569,8 @@ function renderNumbersPage() {
             <td>${esc(routeLabel(item.route))}</td>
             <td><div class="line-tags">${item.lines.map(line => `<span class="tag blue">${esc(businessLabel(line))}</span>`).join("")}</div></td>
             <td><span class="status ${item.status}">${item.status === "active" ? t("enabled") : t("disabled")}</span></td>
-            <td><strong>${item.concurrency}</strong><span class="subtext">${t("activeCalls", { count: item.active })}</span></td>
+            <td>${availableWindowLabel(item.availableWindow)}</td>
+            <td><strong>${item.concurrency}</strong></td>
             <td>${t("perDay", { count: item.frequency })}</td>
             <td><div class="row-actions">
               <button class="text-button" data-action="edit-number" data-id="${item.id}">${t("edit")}</button>
@@ -682,8 +764,8 @@ function openNumberForm(id = null) {
 
 function renderNumberForm(item) {
   const supplier = item?.supplier || SUPPLIERS[0];
-  const routeOptions = ROUTES.filter(route => route.supplier === supplier);
-  const selectedRoute = item?.route || routeOptions[0].value;
+  const selectedRoute = item?.route || ROUTES[0].value;
+  const timeMode = item?.availableWindow ? "custom" : "unlimited";
   openModal(`
     ${modalHeader(item ? t("editNumberTitle") : t("addNumberTitle"), item ? esc(item.phone) : t("numberHint"))}
     <form id="number-form" novalidate>
@@ -704,7 +786,7 @@ function renderNumberForm(item) {
           <div class="field">
             <label for="form-route">${t("route")} *</label>
             <select id="form-route" name="route">
-              ${routeOptions.map(route => `<option value="${route.value}" ${route.value === selectedRoute ? "selected" : ""}>${esc(route[state.lang])}</option>`).join("")}
+              ${ROUTES.map(route => `<option value="${route.value}" ${route.value === selectedRoute ? "selected" : ""}>${esc(route[state.lang])}</option>`).join("")}
             </select>
           </div>
           <div class="field full">
@@ -719,6 +801,21 @@ function renderNumberForm(item) {
               <label><input type="radio" name="status" value="active" ${!item || item.status === "active" ? "checked" : ""}>${t("enabled")}</label>
               <label><input type="radio" name="status" value="disabled" ${item?.status === "disabled" ? "checked" : ""}>${t("disabled")}</label>
             </div>
+          </div>
+          <div class="field full">
+            <label for="form-time-mode">${t("colAvailableTime")} *</label>
+            <div class="time-config">
+              <select id="form-time-mode" name="timeMode">
+                <option value="unlimited" ${timeMode === "unlimited" ? "selected" : ""}>${t("unlimitedTime")}</option>
+                <option value="custom" ${timeMode === "custom" ? "selected" : ""}>${t("customTime")}</option>
+              </select>
+              <div class="time-inputs" id="time-inputs">
+                <input id="form-time-start" type="time" name="timeStart" value="${esc(item?.availableWindow?.start || "09:00")}" ${timeMode === "unlimited" ? "disabled" : ""} aria-label="${t("startTime")}">
+                <span>—</span>
+                <input id="form-time-end" type="time" name="timeEnd" value="${esc(item?.availableWindow?.end || "18:00")}" ${timeMode === "unlimited" ? "disabled" : ""} aria-label="${t("endTime")}">
+              </div>
+            </div>
+            <span class="hint">${t("availableTimeHint")}</span>
           </div>
           <div class="field">
             <label for="form-concurrency">${t("concurrency")} *</label>
@@ -737,9 +834,10 @@ function renderNumberForm(item) {
         <button type="submit" class="button primary">${item ? t("save") : t("create")}</button>
       </div>
     </form>`, false);
-  $("#form-supplier").addEventListener("change", event => {
-    const routes = ROUTES.filter(route => route.supplier === event.target.value);
-    $("#form-route").innerHTML = routes.map(route => `<option value="${route.value}">${esc(route[state.lang])}</option>`).join("");
+  $("#form-time-mode").addEventListener("change", event => {
+    const custom = event.target.value === "custom";
+    $("#form-time-start").disabled = !custom;
+    $("#form-time-end").disabled = !custom;
   });
   $("#number-form").addEventListener("submit", submitNumberForm);
 }
@@ -747,14 +845,18 @@ function renderNumberForm(item) {
 function submitNumberForm(event) {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
-  const phone = normalizePhone(data.get("phone") || "");
+  const id = state.modal?.id;
+  const existing = id ? numbers.find(entry => entry.id === id) : null;
+  const phone = normalizePhone(existing?.phone || data.get("phone") || "");
   const supplier = data.get("supplier");
   const route = data.get("route");
   const lines = data.getAll("lines");
   const status = data.get("status");
+  const timeMode = data.get("timeMode");
+  const timeStart = data.get("timeStart");
+  const timeEnd = data.get("timeEnd");
   const concurrency = Number(data.get("concurrency"));
   const frequency = Number(data.get("frequency"));
-  const id = state.modal?.id;
   const error = $("#number-form-error");
   const fail = message => {
     error.textContent = message;
@@ -766,19 +868,248 @@ function submitNumberForm(event) {
   if (!lines.length) return fail(t("missingLines"));
   if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 100) return fail(t("invalidConcurrency"));
   if (!Number.isInteger(frequency) || frequency < 1 || frequency > 20) return fail(t("invalidFrequency"));
-  if (id) {
-    const item = numbers.find(entry => entry.id === id);
-    Object.assign(item, { supplier, route, lines, status, concurrency, frequency });
+  if (timeMode === "custom" && (!timeStart || !timeEnd || timeStart === timeEnd)) return fail(t("errorTime"));
+  const availableWindow = timeMode === "custom" ? { start: timeStart, end: timeEnd } : null;
+  if (existing) {
+    Object.assign(existing, { supplier, route, lines, status, availableWindow, concurrency, frequency });
     closeModal();
     renderNumbersPage();
     showToast(t("savedNumber"));
   } else {
-    numbers.unshift({ id: `n${Date.now()}`, phone, supplier, route, lines, status, concurrency, active: 0, frequency });
+    numbers.unshift({ id: `n${Date.now()}`, phone, supplier, route, lines, status, availableWindow, concurrency, frequency });
     state.numberPage = 1;
     closeModal();
     renderNumbersPage();
     showToast(t("savedNewNumber"));
   }
+}
+
+function openImportModal() {
+  state.modal = { type: "import", stage: "upload", fileName: "", fileError: "", rows: [], result: null };
+  renderImportModal();
+}
+
+function renderImportModal() {
+  if (!state.modal) return;
+  if (state.modal.stage === "upload") {
+    openModal(`
+      ${modalHeader(t("importTitle"), t("importSubtitle"))}
+      <div class="modal-body">
+        <div class="import-guide">
+          <div><strong>${t("importFormatTitle")}</strong><p>${t("importFormatText")}</p></div>
+          <button class="button" data-action="download-import-template"><svg><use href="#i-download"></use></svg>${t("downloadTemplate")}</button>
+        </div>
+        <div class="notice">${t("importRuleText")}</div>
+        ${state.modal.fileError ? `<div class="form-error show">${esc(state.modal.fileError)}</div>` : ""}
+        <label class="file-drop">
+          <input id="import-file" type="file" accept=".csv,text/csv">
+          <span class="file-drop-icon"><svg><use href="#i-file"></use></svg></span>
+          <strong>${t("chooseFile")}</strong>
+          <small>UTF-8 CSV</small>
+        </label>
+      </div>
+      <div class="modal-foot"><button class="button" data-action="close-modal">${t("cancel")}</button></div>`, true);
+    $("#import-file").addEventListener("change", handleImportFile);
+  } else if (state.modal.stage === "preview") {
+    const valid = state.modal.rows.filter(row => !row.errors.length);
+    const invalid = state.modal.rows.length - valid.length;
+    openModal(`
+      ${modalHeader(t("importPreviewTitle"), state.modal.fileName)}
+      <div class="modal-body">
+        <div class="summary-grid import-summary">
+          <div class="summary-item"><span>${t("importTotalRows")}</span><strong>${state.modal.rows.length}</strong></div>
+          <div class="summary-item"><span>${t("importValidRows")}</span><strong>${valid.length}</strong></div>
+          <div class="summary-item"><span>${t("importInvalidRows")}</span><strong>${invalid}</strong></div>
+        </div>
+        <div class="import-table-wrap">
+          <table class="import-table">
+            <thead><tr>
+              <th>${t("importRow")}</th><th>${t("colNumber")}</th><th>${t("colSupplier")}</th><th>${t("colRoute")}</th>
+              <th>${t("colLines")}</th><th>${t("colStatus")}</th><th>${t("colAvailableTime")}</th>
+              <th>${t("colConcurrency")}</th><th>${t("colFrequency")}</th><th>${t("importValidation")}</th>
+            </tr></thead>
+            <tbody>${state.modal.rows.map(row => `<tr class="${row.errors.length ? "has-errors" : ""}">
+              <td>${row.lineNo}</td><td class="phone">${esc(row.raw.phone)}</td><td>${esc(row.raw.supplier)}</td><td>${esc(row.raw.route)}</td>
+              <td>${esc(row.raw.lines)}</td><td>${esc(row.raw.status)}</td><td>${esc(row.raw.time)}</td>
+              <td>${esc(row.raw.concurrency)}</td><td>${esc(row.raw.frequency)}</td>
+              <td>${row.errors.length ? `<div class="validation-tags">${row.errors.map(error => `<span class="tag red">${esc(error)}</span>`).join("")}</div>` : `<span class="tag green">${t("importReady")}</span>`}</td>
+            </tr>`).join("")}</tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="button" data-action="reset-import">${t("importAnother")}</button>
+        <button class="button primary" data-action="confirm-import" ${valid.length ? "" : "disabled"}>${t("importConfirm")} (${valid.length})</button>
+      </div>`, true);
+  } else if (state.modal.stage === "result") {
+    const result = state.modal.result;
+    openModal(`
+      ${modalHeader(t("importResultTitle"))}
+      <div class="modal-body">
+        <div class="success-block">
+          <div class="success-icon"><svg><use href="#i-check"></use></svg></div>
+          <h3>${t("importResultTitle")}</h3>
+          <p>${t("importResultMeta", { success: result.success, failed: result.failedRows.length })}</p>
+        </div>
+      </div>
+      <div class="modal-foot">
+        ${result.failedRows.length ? `<button class="button" data-action="download-import-errors">${t("downloadFailedRows")}</button>` : ""}
+        <button class="button primary" data-action="close-modal">${t("close")}</button>
+      </div>`, true);
+  }
+}
+
+const IMPORT_HEADER_SETS = {
+  zh: ["号码","所属供应商","线路","可用业务线","可用状态","可用时间","并发","被叫频次限制"],
+  en: ["Number","Supplier","Route","Business Lines","Status","Available Time","Concurrency","Callee Frequency Limit"]
+};
+
+function csvParse(text) {
+  const rows = [];
+  let row = [], cell = "", quoted = false;
+  const source = text.replace(/^\uFEFF/, "");
+  for (let index = 0; index < source.length; index++) {
+    const char = source[index];
+    if (quoted && char === '"' && source[index + 1] === '"') {
+      cell += '"';
+      index++;
+    } else if (char === '"') {
+      quoted = !quoted;
+    } else if (char === "," && !quoted) {
+      row.push(cell);
+      cell = "";
+    } else if ((char === "\n" || char === "\r") && !quoted) {
+      if (char === "\r" && source[index + 1] === "\n") index++;
+      row.push(cell);
+      if (row.some(value => value.trim() !== "")) rows.push(row);
+      row = [];
+      cell = "";
+    } else {
+      cell += char;
+    }
+  }
+  row.push(cell);
+  if (row.some(value => value.trim() !== "")) rows.push(row);
+  return rows;
+}
+
+async function handleImportFile(event) {
+  const file = event.target.files?.[0];
+  if (!file || !state.modal) return;
+  try {
+    const parsed = csvParse(await file.text());
+    if (!parsed.length) throw new Error("empty");
+    const headers = parsed[0].map(value => value.trim());
+    const headerSet = Object.values(IMPORT_HEADER_SETS).find(set => set.length === headers.length && set.every((value, index) => value === headers[index]));
+    if (!headerSet) {
+      state.modal.fileError = t("importHeaderError");
+      renderImportModal();
+      return;
+    }
+    const seen = new Set();
+    const rows = parsed.slice(1).map((cells, index) => validateImportRow(cells, index + 2, seen));
+    state.modal.fileName = file.name;
+    state.modal.rows = rows;
+    state.modal.fileError = "";
+    state.modal.stage = "preview";
+    renderImportModal();
+  } catch {
+    state.modal.fileError = t("importFileError");
+    renderImportModal();
+  }
+}
+
+function validateImportRow(cells, lineNo, seen) {
+  const raw = {
+    phone: (cells[0] || "").trim(),
+    supplier: (cells[1] || "").trim(),
+    route: (cells[2] || "").trim(),
+    lines: (cells[3] || "").trim(),
+    status: (cells[4] || "").trim(),
+    time: (cells[5] || "").trim(),
+    concurrency: (cells[6] || "").trim(),
+    frequency: (cells[7] || "").trim()
+  };
+  const errors = [];
+  const phone = normalizePhone(raw.phone);
+  if (!/^\+[1-9]\d{7,14}$/.test(phone)) errors.push(t("errorPhone"));
+  if (seen.has(phone)) errors.push(t("errorDuplicateFile"));
+  if (numbers.some(item => item.phone === phone)) errors.push(t("errorDuplicatePool"));
+  seen.add(phone);
+  if (!SUPPLIERS.includes(raw.supplier)) errors.push(t("errorSupplier"));
+  const route = ROUTES.find(item => [item.value,item.zh,item.en].includes(raw.route));
+  if (!route) errors.push(t("errorRoute"));
+  const lines = raw.lines.split("|").map(value => value.trim()).filter(Boolean).map(value => {
+    const match = BUSINESS_LINES.find(item => [item.value,item.zh,item.en].includes(value));
+    return match?.value;
+  });
+  if (!lines.length || lines.some(value => !value)) errors.push(t("errorLines"));
+  const status = raw.status === "可用" || raw.status === "Available" ? "active"
+    : raw.status === "停用" || raw.status === "Disabled" ? "disabled" : null;
+  if (!status) errors.push(t("errorStatus"));
+  let availableWindow = null;
+  if (!["不限","Any time"].includes(raw.time)) {
+    const match = raw.time.replace(/[–—]/g, "-").match(/^([0-2]\d:[0-5]\d)-([0-2]\d:[0-5]\d)$/);
+    if (!match || match[1] === match[2] || Number(match[1].slice(0,2)) > 23 || Number(match[2].slice(0,2)) > 23) {
+      errors.push(t("errorTime"));
+    } else {
+      availableWindow = { start: match[1], end: match[2] };
+    }
+  }
+  const concurrency = Number(raw.concurrency);
+  if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 100) errors.push(t("errorConcurrency"));
+  const frequency = Number(raw.frequency);
+  if (!Number.isInteger(frequency) || frequency < 1 || frequency > 20) errors.push(t("errorFrequency"));
+  return {
+    lineNo,
+    raw,
+    errors,
+    normalized: { phone, supplier: raw.supplier, route: route?.value, lines, status, availableWindow, concurrency, frequency }
+  };
+}
+
+function downloadImportTemplate() {
+  const headers = IMPORT_HEADER_SETS[state.lang];
+  const sample = state.lang === "zh"
+    ? ["+60123456789","供应商1","线路1","马来西亚|泰国","可用","不限","10","3"]
+    : ["+60123456789","供应商1","线路1","Malaysia|Thailand","Available","Any time","10","3"];
+  const csv = "\uFEFF" + [headers, sample].map(row => row.map(csvCell).join(",")).join("\r\n");
+  downloadBlob(new Blob([csv], { type: "text/csv;charset=utf-8" }), state.lang === "zh" ? "号码池批量导入模板.csv" : "number_pool_import_template.csv");
+}
+
+function confirmImport() {
+  if (!state.modal || state.modal.stage !== "preview") return;
+  const validRows = state.modal.rows.filter(row => !row.errors.length);
+  const failedRows = state.modal.rows.filter(row => row.errors.length);
+  validRows.slice().reverse().forEach(row => {
+    const item = row.normalized;
+    numbers.unshift({ id: `n${Date.now()}${Math.random().toString(16).slice(2)}`, ...item });
+  });
+  state.modal.result = { success: validRows.length, failedRows };
+  state.modal.stage = "result";
+  state.numberPage = 1;
+  renderNumbersPage();
+  renderImportModal();
+}
+
+function downloadImportErrors() {
+  if (!state.modal?.result?.failedRows?.length) return;
+  const headers = [...IMPORT_HEADER_SETS[state.lang], state.lang === "zh" ? "错误原因" : "Errors"];
+  const rows = state.modal.result.failedRows.map(row => [
+    row.raw.phone,row.raw.supplier,row.raw.route,row.raw.lines,row.raw.status,row.raw.time,row.raw.concurrency,row.raw.frequency,row.errors.join("; ")
+  ]);
+  const csv = "\uFEFF" + [headers, ...rows].map(row => row.map(csvCell).join(",")).join("\r\n");
+  downloadBlob(new Blob([csv], { type: "text/csv;charset=utf-8" }), state.lang === "zh" ? "号码池导入失败行.csv" : "number_pool_import_failed_rows.csv");
+}
+
+function resetImport() {
+  if (!state.modal) return;
+  state.modal.stage = "upload";
+  state.modal.rows = [];
+  state.modal.fileName = "";
+  state.modal.fileError = "";
+  state.modal.result = null;
+  renderImportModal();
 }
 
 function openExportModal() {
@@ -1149,11 +1480,15 @@ document.addEventListener("click", event => {
   const id = target.dataset.id;
   if (action === "close-modal") closeModal();
   else if (action === "add-number") openNumberForm();
+  else if (action === "open-import") openImportModal();
+  else if (action === "download-import-template") downloadImportTemplate();
+  else if (action === "reset-import") resetImport();
+  else if (action === "confirm-import") confirmImport();
+  else if (action === "download-import-errors") downloadImportErrors();
   else if (action === "edit-number") openNumberForm(id);
   else if (action === "toggle-number") {
     const item = numbers.find(entry => entry.id === id);
     item.status = item.status === "active" ? "disabled" : "active";
-    if (item.status === "disabled") item.active = 0;
     renderNumbersPage();
     showToast(t("statusChanged"));
   }
@@ -1191,6 +1526,7 @@ $("#lang-switch").addEventListener("click", () => {
   applyStaticTranslations();
   renderPage();
   if (state.modal?.type === "number-form") renderNumberForm(state.modal.id ? numbers.find(item => item.id === state.modal.id) : null);
+  else if (state.modal?.type === "import") renderImportModal();
   else if (state.modal?.type === "export") renderExportModal();
   else if (state.modal?.type === "tasks") openTasks();
   else if (state.modal?.type === "audio") renderAudioModal(callById(state.modal.callId));
