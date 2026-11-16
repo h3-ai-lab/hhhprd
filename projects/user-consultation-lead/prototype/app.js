@@ -183,7 +183,7 @@ const messages = {
     exportTitle: "下载当前筛选结果",
     exportSub: "文件将使用当前筛选和现有数据权限。",
     exportCount: "共 {count} 条记录",
-    exportFields: "包含字段：用户 ID、用户预约时间",
+    exportFields: "包含字段：用户 ID、用户咨询预约、用户预约时间",
     cancel: "取消",
     confirm: "确认下载",
     exported: "文件已生成。",
@@ -251,7 +251,7 @@ const messages = {
     exportTitle: "Download Current Results",
     exportSub: "The file uses the current filters and existing data permissions.",
     exportCount: "{count} records",
-    exportFields: "Fields: User ID, Appointment Time",
+    exportFields: "Fields: User ID, Consultation Request, Appointment Time",
     cancel: "Cancel",
     confirm: "Download",
     exported: "File generated.",
@@ -329,6 +329,12 @@ function formatTime(value) {
   }).format(new Date(value)).replace(/\//g, "-");
 }
 
+function consultationStatus(person) {
+  return person.appointmentTime
+    ? `<span class="status booked">${t("booked")}</span>`
+    : `<span class="status not-booked">${t("notBooked")}</span>`;
+}
+
 function filterForm() {
   const f = state.filters;
   const business = options([["vn", t("vn")], ["my", t("my")], ["id", t("id")], ["th", t("th")]], f.business);
@@ -353,12 +359,13 @@ function salesTable(rows, paged, pages) {
   return `<section class="table-card">
     <div class="table-head"><div class="table-title"><h3>${t("followTitle")}</h3><span class="count-badge">${rows.length}</span></div><span class="table-meta">${t("latest")}</span></div>
     <div class="table-scroll"><table>
-      <thead><tr><th>${t("userID")}</th><th>${t("student")}</th><th>${t("intent")}</th><th>${t("userStatus")}</th><th>${t("appointmentTime")}</th><th>${t("userType")}</th><th>${t("age")}</th><th>${t("level")}</th><th>${t("login")}</th><th>${t("landing")}</th><th>${t("action")}</th></tr></thead>
+      <thead><tr><th>${t("userID")}</th><th>${t("student")}</th><th>${t("intent")}</th><th>${t("userStatus")}</th><th>${t("userConsult")}</th><th>${t("appointmentTime")}</th><th>${t("userType")}</th><th>${t("age")}</th><th>${t("level")}</th><th>${t("login")}</th><th>${t("landing")}</th><th>${t("action")}</th></tr></thead>
       <tbody>${paged.map(person => `<tr>
         <td><span class="mono">${person.id}</span></td>
         <td><strong>${escapeHTML(person.name)}</strong></td>
         <td><span class="tag-neutral">${{ interested: t("interested"), not_interested: t("notInterested"), unfilled: t("unfilled") }[person.intent]}</span></td>
         <td><span class="status ${person.userStatus === "paid" ? "paid" : person.userStatus === "trial" ? "trial" : "unpaid"}">${statusLabel(person.userStatus)}</span></td>
+        <td>${consultationStatus(person)}</td>
         <td>${formatTime(person.appointmentTime)}</td>
         <td>${t(person.userType)}</td><td>${person.age}</td><td>${person.level}</td><td>${escapeHTML(person.login)}</td><td>${escapeHTML(person.sourceLanding)}</td>
         <td><button class="mini-btn" data-dial="${person.id}"><svg><use href="#i-phone"></use></svg>${t("dial")}</button></td>
@@ -372,11 +379,12 @@ function usersTable(rows, paged, pages) {
   return `<section class="table-card">
     <div class="table-head"><div class="table-title"><h3>${t("userListTitle")}</h3><span class="count-badge">${rows.length}</span></div><span class="table-meta">${t("latest")}</span></div>
     <div class="table-scroll"><table>
-      <thead><tr><th>${t("userID")}</th><th>${t("student")}</th><th>${t("userStatus")}</th><th>${t("appointmentTime")}</th><th>${t("userType")}</th><th>${t("age")}</th><th>${t("level")}</th><th>${t("register")}</th><th>${t("login")}</th><th>${t("landing")}</th></tr></thead>
+      <thead><tr><th>${t("userID")}</th><th>${t("student")}</th><th>${t("userStatus")}</th><th>${t("userConsult")}</th><th>${t("appointmentTime")}</th><th>${t("userType")}</th><th>${t("age")}</th><th>${t("level")}</th><th>${t("register")}</th><th>${t("login")}</th><th>${t("landing")}</th></tr></thead>
       <tbody>${paged.map(person => `<tr>
         <td><span class="mono">${person.id}</span></td>
         <td><strong>${escapeHTML(person.name)}</strong></td>
         <td><span class="status ${person.userStatus === "paid" ? "paid" : person.userStatus === "trial" ? "trial" : "unpaid"}">${statusLabel(person.userStatus)}</span></td>
+        <td>${consultationStatus(person)}</td>
         <td>${formatTime(person.appointmentTime)}</td>
         <td>${t(person.userType)}</td><td>${person.age}</td><td>${person.level}</td><td>${t(person.register)}</td><td>${escapeHTML(person.login)}</td><td>${escapeHTML(person.sourceLanding)}</td>
       </tr>`).join("")}</tbody>
@@ -476,7 +484,7 @@ function closeExport() {
 }
 
 function download(rows) {
-  const csv = [["user_id", "user_appointment_time"], ...rows.map(person => [person.id, person.appointmentTime || ""])]
+  const csv = [["user_id", "user_consultation_booking_status", "user_appointment_time"], ...rows.map(person => [person.id, person.appointmentTime ? "BOOKED" : "NOT_BOOKED", person.appointmentTime || ""])]
     .map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(","))
     .join("\n");
   const blob = new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" });
