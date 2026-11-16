@@ -34,7 +34,7 @@
       </div>
       <nav class="side-nav" aria-label="主导航">
         <div class="nav-label">业务中心</div>
-        <button class="nav-item" data-route="dashboard"><svg><use href="#i-dashboard"></use></svg><span>数据权限</span></button>
+        <button class="nav-item" data-route="dashboard" data-phase-only="2"><svg><use href="#i-dashboard"></use></svg><span>数据权限</span></button>
         <button class="nav-item" data-route="sales"><svg><use href="#i-sales"></use></svg><span>销售中心</span></button>
         <div class="nav-label">管理</div>
         <button class="nav-item is-active" data-route="system"><svg><use href="#i-system"></use></svg><span>系统配置</span></button>
@@ -51,6 +51,10 @@
           </div>
         </div>
         <div class="topbar-right">
+          <div class="phase-switch" role="group" aria-label="实施阶段">
+            <button class="phase-option is-active" type="button" data-phase="1">一期</button>
+            <button class="phase-option" type="button" data-phase="2">二期</button>
+          </div>
           <span class="scope-tag" id="scope-label"><i></i>1区及下级</span>
           <label class="account identity-account">
             <span class="avatar" id="current-avatar">L</span>

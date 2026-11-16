@@ -1,4 +1,5 @@
 const state = {
+  phase: 1,
   currentUserId: "m_super",
   route: "system",
   systemTab: "organization",
@@ -180,6 +181,13 @@ const operatorScopeLabel = () => {
   const names = grants.flatMap((grant) => grant.orgIds || []).map((id) => orgById(id)?.name).filter(Boolean);
   return names.length ? `${names.join("、")}及下级` : "本人";
 };
+const phaseScopeLabel = () => {
+  if (state.phase === 2) return operatorScopeLabel();
+  const user = currentUser();
+  if (user.roleId === "role_super") return "全部业务线";
+  const lines = [...new Set(memberGrants(user).map((grant) => grant.line).filter(Boolean))];
+  return lines.map((line) => line.endsWith("业务线") ? line : `${line}业务线`).join("、") || "当前业务线";
+};
 const orgPath = (id) => {
   const parts = [];
   let current = orgById(id);
@@ -194,7 +202,7 @@ const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (char) => (
 const orgOptions = (line = "", selected = "", allowRoot = true) => {
   const allowed = operatorAllowedIds();
   return orgs
-  .filter((org) => allowed.has(org.id) && (!line || org.line === line) && (allowRoot || org.level > 1))
+  .filter((org) => org.status === "启用" && allowed.has(org.id) && (!line || org.line === line) && (allowRoot || org.level > 1))
   .map((org) => `<option value="${org.id}" ${org.id === selected ? "selected" : ""}>${"　".repeat(org.level - 1)}${escapeHtml(org.name)} · ${levelName(org.level)}</option>`)
   .join("");
 };
@@ -222,9 +230,13 @@ function setChrome() {
   el.pageTitle.textContent = title;
   document.title = `Dino CRM · ${title}`;
   document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.route === state.route));
+  document.querySelectorAll(".phase-option").forEach((item) => item.classList.toggle("is-active", Number(item.dataset.phase) === state.phase));
+  document.querySelectorAll("[data-phase-only]").forEach((item) => {
+    item.hidden = Number(item.dataset.phaseOnly) > state.phase;
+  });
   const user = currentUser();
   document.getElementById("identity-switch").value = user.id;
-  document.getElementById("scope-label").innerHTML = `<i></i>${escapeHtml(operatorScopeLabel())}`;
+  document.getElementById("scope-label").innerHTML = `<i></i>${escapeHtml(phaseScopeLabel())}`;
   document.getElementById("current-avatar").textContent = user.name.slice(0, 1);
 }
 
@@ -290,7 +302,7 @@ function renderOrganizationTab() {
         <div class="toolbar-group">
           <button class="btn" data-action="add-business-line" ${canAddLine ? "" : "disabled"} title="${canAddLine ? "" : "仅超级管理员可新增业务线"}">${icon("plus")}新增业务线</button>
           <button class="btn" data-action="edit-org" ${selectedEditable ? "" : "disabled"}>${icon("edit")}编辑</button>
-          <button class="btn primary" data-action="add-org" ${selectedEditable && selected?.level < 4 ? "" : "disabled"}>${icon("plus")}新增组织</button>
+          <button class="btn primary" data-action="add-org" ${selectedEditable && selected?.status === "启用" && selected?.level < 4 ? "" : "disabled"}>${icon("plus")}新增组织</button>
         </div>
       </div>
       <div class="table-wrap"><table>
@@ -316,6 +328,7 @@ function renderOrganizationTab() {
 
 function renderMembersTab() {
   const f = state.memberFilters;
+  const showDataScope = state.phase === 2;
   const allowed = operatorAllowedIds();
   const lines = [...new Set(visibleBusinessLineRoots().map((org) => org.line))];
   const candidates = orgs.filter((org) => allowed.has(org.id) && (!f.line || org.line === f.line));
@@ -338,19 +351,19 @@ function renderMembersTab() {
     <div class="actions"><button class="btn" data-action="reset-member-filter">重置</button><button class="btn primary" data-action="search-members">${icon("search")}搜索</button><button class="btn" data-action="add-member">${icon("plus")}新增成员</button></div>
   </div>
   <div class="table-wrap"><table>
-    <thead><tr><th>成员账号</th><th>姓名</th><th>人员类型</th><th>功能角色</th><th>数据授权</th><th>主组织</th><th>状态</th><th>最近登录</th><th>外呼能力</th><th>操作</th></tr></thead>
+    <thead><tr><th>成员账号</th><th>姓名</th><th>人员类型</th><th>功能角色</th>${showDataScope ? "<th>数据授权</th>" : ""}<th>主组织</th><th>状态</th><th>最近登录</th><th>外呼能力</th><th>操作</th></tr></thead>
     <tbody>${filtered.map((member) => `<tr>
       <td>${escapeHtml(member.email)}</td>
       <td><div class="member-name"><span class="primary-text">${escapeHtml(member.name)}</span></div></td>
       <td><span class="tag ${member.userType === "CC" ? "blue" : ""}">${member.userType === "CC" ? "一线销售" : member.userType}</span></td>
       <td><span class="tag blue">${escapeHtml(roleName(member.roleId))}</span></td>
-      <td><div class="role-line">${memberGrants(member).map((grant) => `<span>${escapeHtml(grant.line)} · ${escapeHtml(scopeLabel(grant))}</span><span class="secondary-text">${grant.scope === "nodes" ? (grant.orgIds || []).map(orgPath).join("；") : ""}</span>`).join("")}</div></td>
+      ${showDataScope ? `<td><div class="role-line">${memberGrants(member).map((grant) => `<span>${escapeHtml(grant.line)} · ${escapeHtml(scopeLabel(grant))}</span><span class="secondary-text">${grant.scope === "nodes" ? (grant.orgIds || []).map(orgPath).join("；") : ""}</span>`).join("")}</div></td>` : ""}
       <td><div class="path">${memberGrants(member).map((grant) => `${escapeHtml(grant.line)}：${escapeHtml(orgPath(grant.primaryOrgId))}`).join("<br>")}</div></td>
       <td><span class="tag ${member.status === "启用" ? "green" : ""}">${member.status}</span></td>
       <td>${member.lastLogin || "—"}</td>
       <td>${member.userType === "CC" ? '<span class="tag blue">已绑定</span>' : "—"}</td>
       <td>${memberGrants(member).some((grant) => grant.scope === "global") ? '<span class="secondary-text">系统内置</span>' : `<button class="btn ghost" data-member-edit="${member.id}">编辑成员</button>`}</td>
-    </tr>`).join("") || '<tr><td colspan="10" class="secondary-text">暂无匹配成员</td></tr>'}</tbody>
+    </tr>`).join("") || `<tr><td colspan="${showDataScope ? 10 : 9}" class="secondary-text">暂无匹配成员</td></tr>`}</tbody>
   </table></div>`;
 }
 
@@ -414,7 +427,10 @@ function renderSales() {
   const allowedIds = new Set(allowed.map((org) => org.id));
   if (!allowedIds.has(state.salesOrg)) state.salesOrg = currentUser().primaryOrgId;
   const selectedIds = new Set(subtreeIds(state.salesOrg));
-  const scopedLeads = leads.filter((lead) => selectedIds.has(lead.orgId));
+  const currentLines = new Set(memberGrants(currentUser()).map((grant) => grant.line));
+  const scopedLeads = state.phase === 1
+    ? leads.filter((lead) => currentUser().roleId === "role_super" || currentLines.has(orgById(lead.orgId)?.line))
+    : leads.filter((lead) => selectedIds.has(lead.orgId));
   const firstCcIds = [...new Set(scopedLeads.map((lead) => lead.firstOwnerId).filter(Boolean))];
   const currentCcIds = [...new Set(scopedLeads.map((lead) => lead.ownerId).filter(Boolean))];
   const rows = scopedLeads.filter((lead) =>
@@ -429,14 +445,14 @@ function renderSales() {
   el.content.innerHTML = `<section class="page-card">
     <div class="page-heading"><div class="section-title">销售线索</div><button class="btn" data-action="sales-settings">${icon("filter")}分配与掉库设置</button></div>
     <div class="table-tabs">
-      <button class="${state.salesTab === "pool" ? "is-active" : ""}" data-sales-tab="pool">公海 (${leads.filter((lead) => !lead.ownerId && selectedIds.has(lead.orgId)).length})</button>
-      <button class="${state.salesTab === "follow" ? "is-active" : ""}" data-sales-tab="follow">我的跟进 (${leads.filter((lead) => lead.ownerId && selectedIds.has(lead.orgId)).length})</button>
+      <button class="${state.salesTab === "pool" ? "is-active" : ""}" data-sales-tab="pool">公海 (${scopedLeads.filter((lead) => !lead.ownerId).length})</button>
+      <button class="${state.salesTab === "follow" ? "is-active" : ""}" data-sales-tab="follow">我的跟进 (${scopedLeads.filter((lead) => lead.ownerId).length})</button>
       <button class="${state.salesTab === "calls" ? "is-active" : ""}" data-sales-tab="calls">通话记录</button>
     </div>
     <div class="filters">
       <input class="field search-field" id="sales-search" placeholder="搜索用户 ID / 姓名 / 登录账号" value="${escapeHtml(state.salesSearch)}">
       <select class="select"><option>越南</option></select>
-      <select class="select" id="sales-org-filter">${allowed.map((org) => `<option value="${org.id}" ${state.salesOrg === org.id ? "selected" : ""}>${"　".repeat(Math.max(0, org.level - 2))}${escapeHtml(org.name)}</option>`).join("")}</select>
+      ${state.phase === 2 ? `<select class="select" id="sales-org-filter">${allowed.map((org) => `<option value="${org.id}" ${state.salesOrg === org.id ? "selected" : ""}>${"　".repeat(Math.max(0, org.level - 2))}${escapeHtml(org.name)}</option>`).join("")}</select>` : ""}
       <select class="select" id="sales-first-cc-filter"><option value="">全部首位 CC</option>${firstCcIds.map((id) => `<option value="${id}" ${state.salesFirstCc === id ? "selected" : ""}>${escapeHtml(memberName(id))}</option>`).join("")}</select>
       <select class="select" id="sales-current-cc-filter"><option value="">全部当前 CC</option>${currentCcIds.map((id) => `<option value="${id}" ${state.salesCurrentCc === id ? "selected" : ""}>${escapeHtml(memberName(id))}</option>`).join("")}</select>
       <select class="select" id="sales-stage-filter"><option value="">全部跟进阶段</option>${["跟进中","已预约","已付费","暂不跟进","待领取"].map((stage) => `<option ${state.salesStage === stage ? "selected" : ""}>${stage}</option>`).join("")}</select>
@@ -452,7 +468,7 @@ function renderSales() {
         <td>${!lead.ownerId ? `<button class="btn ghost" data-lead-assign="${lead.id}">分配</button>` : `<button class="btn ghost" data-action="view-lead">${icon("phone")}外呼</button>`}</td>
       </tr>`).join("") || `<tr><td colspan="17" class="secondary-text">当前筛选范围暂无线索</td></tr>`}</tbody>
     </table></div>
-    <div class="muted-note" style="margin-top:10px">数据范围：${escapeHtml(operatorScopeLabel())}</div>
+    <div class="muted-note" style="margin-top:10px">数据范围：${state.phase === 2 ? escapeHtml(operatorScopeLabel()) : "当前业务线权限"}</div>
   </section>`;
 }
 
@@ -520,11 +536,25 @@ function render() {
 }
 
 function setRoute(route, tab) {
+  if (state.phase === 1 && route === "dashboard") {
+    route = "system";
+    tab = "organization";
+  }
   state.route = route;
   if (route === "system" && tab) state.systemTab = tab;
   const hash = route === "system" ? `/system/${state.systemTab}` : `/${route}`;
   history.replaceState(null, "", `#${hash}`);
   el.sidebar.classList.remove("is-open");
+  render();
+}
+
+function setPhase(phase) {
+  state.phase = Number(phase);
+  if (state.phase === 1 && state.route === "dashboard") {
+    state.route = "system";
+    state.systemTab = "organization";
+    history.replaceState(null, "", "#/system/organization");
+  }
   render();
 }
 
@@ -536,6 +566,10 @@ function routeFromHash() {
   } else if (path === "sales" || path === "dashboard") {
     state.route = path;
   } else {
+    state.route = "system";
+    state.systemTab = "organization";
+  }
+  if (state.phase === 1 && state.route === "dashboard") {
     state.route = "system";
     state.systemTab = "organization";
   }
@@ -651,8 +685,8 @@ function organizationChangeTargetOptions(org, mode) {
 function impactSummaryHtml(impact) {
   return `<div class="impact-summary">
     <div class="impact-card"><span>受影响成员</span><strong>${impact.members}</strong><small>按成员去重</small></div>
-    <div class="impact-card"><span>受影响线索</span><strong>${impact.leads}</strong><small>当前归属在节点子树内</small></div>
-    <div class="impact-card"><span>受影响分配规则</span><strong>${impact.rules}</strong><small>状态为启用</small></div>
+    ${state.phase === 2 ? `<div class="impact-card"><span>受影响线索</span><strong>${impact.leads}</strong><small>当前归属在节点子树内</small></div>
+    <div class="impact-card"><span>受影响分配规则</span><strong>${impact.rules}</strong><small>状态为启用</small></div>` : ""}
     <div class="impact-card"><span>涉及组织节点</span><strong>${impact.organizations}</strong><small>含当前节点及下级</small></div>
   </div>`;
 }
@@ -664,19 +698,25 @@ function openOrganizationImpactModal(mode, orgId) {
   const configs = {
     move: {
       title: "更换上级",
-      hint: "保存后，该节点及全部下级会进入新的组织路径，相关成员的数据范围和看板范围随之调整。",
+      hint: state.phase === 2
+        ? "保存后，该节点及全部下级会进入新的组织路径，相关成员的数据范围和看板范围随之调整。"
+        : "保存后，该节点及全部下级会进入新的组织路径，相关人员的主组织路径同步更新。",
       confirm: "确认更换",
       action: "更换上级"
     },
     merge: {
       title: "合并组织",
-      hint: "合并后，当前成员、线索和分配规则按目标组织处理；已发生业务的组织快照不回写。",
+      hint: state.phase === 2
+        ? "合并后，当前成员、线索和分配规则按目标组织处理；已发生业务的组织快照不回写。"
+        : "合并后，当前成员和下级组织按目标组织处理；业务数据不受影响。",
       confirm: "确认合并",
       action: "合并"
     },
     disable: {
       title: "停用组织",
-      hint: "停用后停止新增成员、授权和线索分配，历史数据仍可查看。",
+      hint: state.phase === 2
+        ? "停用后停止新增成员、授权和线索分配，历史数据仍可查看。"
+        : "停用后停止新增成员和下级组织，已有人员主组织记录仍可追溯。",
       confirm: "确认停用",
       action: "停用"
     }
@@ -741,7 +781,9 @@ function openOrganizationImpactModal(mode, orgId) {
       members.forEach((member) => {
         memberGrants(member).forEach((grant) => {
           if (affectedIds.has(grant.primaryOrgId)) grant.primaryOrgId = target.id;
-          grant.orgIds = [...new Set((grant.orgIds || []).map((nodeId) => affectedIds.has(nodeId) ? target.id : nodeId))];
+          if (state.phase === 2) {
+            grant.orgIds = [...new Set((grant.orgIds || []).map((nodeId) => affectedIds.has(nodeId) ? target.id : nodeId))];
+          }
         });
         const primary = memberGrants(member)[0];
         if (primary) {
@@ -751,12 +793,14 @@ function openOrganizationImpactModal(mode, orgId) {
           member.primaryOrgId = primary.primaryOrgId;
         }
       });
-      leads.forEach((lead) => {
-        if (affectedIds.has(lead.orgId)) lead.orgId = target.id;
-      });
-      assignmentRules.forEach((rule) => {
-        if (affectedIds.has(rule.orgId)) rule.orgId = target.id;
-      });
+      if (state.phase === 2) {
+        leads.forEach((lead) => {
+          if (affectedIds.has(lead.orgId)) lead.orgId = target.id;
+        });
+        assignmentRules.forEach((rule) => {
+          if (affectedIds.has(rule.orgId)) rule.orgId = target.id;
+        });
+      }
       org.status = "停用";
       state.selectedOrg = target.id;
       state.logs.unshift({
@@ -764,7 +808,9 @@ function openOrganizationImpactModal(mode, orgId) {
         module: "组织架构",
         action: "合并",
         target: `${orgPath(org.id)} → ${orgPath(target.id)}`,
-        detail: `成员 ${impact.members}、线索 ${impact.leads}、规则 ${impact.rules}；原因：${reason}`,
+        detail: state.phase === 2
+          ? `成员 ${impact.members}、线索 ${impact.leads}、规则 ${impact.rules}；原因：${reason}`
+          : `成员 ${impact.members}、组织节点 ${impact.organizations}；原因：${reason}`,
         actor: currentUser().email
       });
       closeModal();
@@ -778,7 +824,9 @@ function openOrganizationImpactModal(mode, orgId) {
       module: "组织架构",
       action: "停用",
       target: orgPath(org.id),
-      detail: `成员 ${impact.members}、线索 ${impact.leads}、规则 ${impact.rules}；原因：${reason}`,
+      detail: state.phase === 2
+        ? `成员 ${impact.members}、线索 ${impact.leads}、规则 ${impact.rules}；原因：${reason}`
+        : `成员 ${impact.members}、组织节点 ${impact.organizations}；原因：${reason}`,
       actor: currentUser().email
     });
     closeModal();
@@ -796,7 +844,7 @@ function enableOrganization(orgId) {
     module: "组织架构",
     action: "启用",
     target: orgPath(org.id),
-    detail: "恢复新增成员、授权和线索分配",
+    detail: state.phase === 2 ? "恢复新增成员、授权和线索分配" : "恢复新增成员和下级组织",
     actor: currentUser().email
   });
   render();
@@ -819,7 +867,8 @@ function finishMemberSave({ member, next, name, grants, changedLines, affectedLe
         const fallbackOwner = members.find((candidate) => candidate.id !== member?.id
           && candidate.status === "启用"
           && candidate.userType === "CC"
-          && memberGrants(candidate).some((grant) => grant.primaryOrgId === lead.orgId));
+          && memberGrants(candidate).some((grant) => grant.primaryOrgId === lead.orgId)
+          && orgById(lead.orgId)?.status === "启用");
         if (fallbackOwner) {
           lead.ownerId = fallbackOwner.id;
           lead.stage = "跟进中";
@@ -873,7 +922,7 @@ function openPrimaryOrgChangePrompt(saveContext) {
 
 function memberGrantOrgs(line) {
   const allowed = operatorAllowedIds();
-  return orgs.filter((org) => org.line === line && org.level > 1 && allowed.has(org.id));
+  return orgs.filter((org) => org.status === "启用" && org.line === line && org.level > 1 && allowed.has(org.id));
 }
 
 function hasSelectedAncestor(org, selectedIds) {
@@ -927,6 +976,16 @@ function memberGrantCardsHtml() {
     const displayName = orgs.find((org) => org.level === 1 && org.line === line)?.name || line;
     const rootOrg = orgs.find((org) => org.level === 1 && org.line === line);
     const canGrantLine = !!rootOrg && operatorAllowedIds().has(rootOrg.id);
+    if (state.phase === 1) {
+      return `<section class="grant-card" data-grant-card="${escapeHtml(line)}">
+        <div class="grant-card-head"><strong>${escapeHtml(displayName)}</strong><button class="btn ghost" type="button" data-remove-member-line="${escapeHtml(line)}">移除</button></div>
+        <div class="form-grid">
+          <div class="form-item full"><label>主组织 <em>*</em></label>
+            <select class="select" data-grant-primary="${escapeHtml(line)}"><option value="">请选择主组织</option>${orgOptions(line, draft.primaryOrgId || "")}</select>
+          </div>
+        </div>
+      </section>`;
+    }
     return `<section class="grant-card" data-grant-card="${escapeHtml(line)}">
       <div class="grant-card-head"><strong>${escapeHtml(displayName)}</strong><button class="btn ghost" type="button" data-remove-member-line="${escapeHtml(line)}">移除</button></div>
       <div class="form-grid">
@@ -968,7 +1027,9 @@ function openMemberModal(memberId = "") {
       <div class="form-item full"><label>人员类型 <em>*</em></label><select class="select" name="userType"><option ${member?.userType === "CC" ? "selected" : ""}>CC</option><option ${member?.userType !== "CC" ? "selected" : ""}>其他</option></select></div>
     </div>
     <div class="form-section" style="margin-top:18px">权限配置</div>
-    <div class="permission-hint">功能角色决定可用功能；数据授权决定可操作的组织数据；主组织决定人员行政归属，不自动增加数据或管理权限。</div>
+    <div class="permission-hint">${state.phase === 2
+      ? "功能角色决定可用功能；数据授权决定可操作的组织数据；主组织决定人员行政归属，不自动增加数据或管理权限。"
+      : "功能角色决定可用功能；主组织决定人员行政归属。客户数据权限继续沿用现有规则。"}</div>
     <div class="form-grid">
       <div class="form-item full"><label>功能角色 <em>*</em></label><select class="select" name="roleId"><option value="">请选择功能角色</option>${assignableRoles.map((role) => `<option value="${role.id}" ${member?.roleId === role.id ? "selected" : ""}>${role.name}</option>`).join("")}</select></div>
       <div class="form-item full"><label>业务线（可多选） <em>*</em></label><div id="member-line-selector">${memberBusinessLineSelectorHtml()}</div></div>
@@ -1062,10 +1123,12 @@ function openMemberModal(memberId = "") {
       if (!grant.primaryOrgId) return setError("member-error", `${grant.line}业务线请选择主组织`);
       if (!allowed.has(grant.primaryOrgId)) return setError("member-error", "主组织超出当前操作人的数据权限");
       if (orgById(grant.primaryOrgId)?.line !== grant.line) return setError("member-error", "主组织必须属于对应业务线");
-      const rootOrg = orgs.find((org) => org.level === 1 && org.line === grant.line);
-      if (grant.scope === "line" && (!rootOrg || !allowed.has(rootOrg.id))) return setError("member-error", "当前操作人无权授予该业务线全部数据");
-      if (grant.scope === "nodes" && !grant.orgIds.length) return setError("member-error", `${grant.line}业务线请至少选择一个授权组织`);
-      if (grant.scope === "nodes" && grant.orgIds.some((id) => orgById(id)?.level === 1 || !allowed.has(id))) return setError("member-error", "授权组织超出当前操作人的数据权限");
+      if (state.phase === 2) {
+        const rootOrg = orgs.find((org) => org.level === 1 && org.line === grant.line);
+        if (grant.scope === "line" && (!rootOrg || !allowed.has(rootOrg.id))) return setError("member-error", "当前操作人无权授予该业务线全部数据");
+        if (grant.scope === "nodes" && !grant.orgIds.length) return setError("member-error", `${grant.line}业务线请至少选择一个授权组织`);
+        if (grant.scope === "nodes" && grant.orgIds.some((id) => orgById(id)?.level === 1 || !allowed.has(id))) return setError("member-error", "授权组织超出当前操作人的数据权限");
+      }
     }
     const primary = grants[0];
     const next = {
@@ -1087,7 +1150,7 @@ function openMemberModal(memberId = "") {
       const previous = previousGrants.find((item) => item.line === grant.line);
       return previous && previous.primaryOrgId !== grant.primaryOrgId;
     }).map((grant) => grant.line));
-    const affectedLeads = member
+    const affectedLeads = state.phase === 2 && member
       ? leads.filter((lead) => lead.ownerId === member.id && changedLines.has(orgById(lead.orgId)?.line))
       : [];
     const saveContext = { member, next, name, grants, changedLines, affectedLeads };
@@ -1104,7 +1167,7 @@ function openAssignmentModal(leadId) {
   if (!lead) return;
   const leadLine = orgById(lead.orgId)?.line;
   const candidates = members.filter((member) => member.status === "启用" && member.userType === "CC"
-    && memberGrants(member).some((grant) => grant.line === leadLine && grant.primaryOrgId));
+    && memberGrants(member).some((grant) => grant.line === leadLine && grant.primaryOrgId && orgById(grant.primaryOrgId)?.status === "启用"));
   openModal(`<form id="assign-form">
     <div class="modal-head"><h2 id="modal-title">分配线索</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
     <div class="form-grid">
@@ -1266,6 +1329,10 @@ document.querySelector(".side-nav").addEventListener("click", (event) => {
   if (nav) setRoute(nav.dataset.route);
 });
 
+document.querySelector(".phase-switch").addEventListener("click", (event) => {
+  const option = event.target.closest("[data-phase]");
+  if (option) setPhase(option.dataset.phase);
+});
 document.getElementById("menu-toggle").addEventListener("click", () => el.sidebar.classList.toggle("is-open"));
 document.getElementById("identity-switch").addEventListener("change", (event) => {
   state.currentUserId = event.target.value;

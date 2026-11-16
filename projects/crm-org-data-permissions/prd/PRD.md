@@ -8,7 +8,7 @@
 
 [打开完整交互原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/)
 
-原型展示第二期的完整目标状态；第一期能力是其组织配置子集。
+原型支持在同一入口切换第一期和第二期：第一期展示组织架构与人员主组织，第二期展示完整数据权限与各列表影响。
 
 ## 项目总览
 
