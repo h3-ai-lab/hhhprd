@@ -1,0 +1,23 @@
+version: 1
+sources:
+  - id: vn-advisor-consultation
+    url: https://qjphu5vphyf4.jp.larksuite.com/wiki/W6gEwwc0oiLYnLk4H5CjDfRfp5d
+    purpose: 越南顾问咨询预约的客户端入口、提交规则、CRM 记录和 AF 事件
+    priority: authoritative
+  - id: crm-consultation-live-list
+    url: https://app.dinoenglish.ai/admin/consultation-intent.html
+    purpose: 现有意向用户列表、字段、筛选和提交时间
+    priority: authoritative
+  - id: crm-sales-manual
+    path: ../../../../crm-manual/docs/sales/S-00.md
+    purpose: 销售中心现有页签、列、筛选和运营边界
+    priority: authoritative
+  - id: crm-user-manual
+    path: ../../../../crm-manual/docs/user/U-01.md
+    purpose: 用户中心现有列、筛选、导出和敏感字段权限
+    priority: authoritative
+  - id: crm-current-state
+    path: ../../../shared/memory/current-state.md
+    purpose: CRM 用户、线索、外呼与权限的当前边界
+    priority: high
+

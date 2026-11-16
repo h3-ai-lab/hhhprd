@@ -38,6 +38,7 @@ jobs:
           test -f hhhprd-site/prd-crm-org-data-permissions.html
           test -f hhhprd-site/prd-referral-growth-mvp.html
           test -f hhhprd-site/prd-crm-line-messaging.html
+          test -f hhhprd-site/prd-user-consultation-lead.html
           test -f hhhprd-site/prd-outbound-capability.html
           for project in projects/*/; do
             test -f "$project/project.yaml"
@@ -61,6 +62,7 @@ jobs:
           cp hhhprd-site/prd-crm-org-data-permissions.html public/prd-crm-org-data-permissions.html
           cp hhhprd-site/prd-referral-growth-mvp.html public/prd-referral-growth-mvp.html
           cp hhhprd-site/prd-crm-line-messaging.html public/prd-crm-line-messaging.html
+          cp hhhprd-site/prd-user-consultation-lead.html public/prd-user-consultation-lead.html
           cp hhhprd-site/prd-outbound-capability.html public/prd-outbound-capability.html
           cp -R projects/. public/projects/
           for project in projects/*/; do
