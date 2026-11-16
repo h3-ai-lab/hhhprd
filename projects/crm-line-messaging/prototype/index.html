@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dino CRM - LINE Messaging">
+  <title>Dino CRM · LINE消息</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-4 2.5-6.5 6-6.5s6 2.5 6 6.5"/><path d="M15 5.5a3 3 0 0 1 0 5.8M17.5 14c2.2.6 3.5 2.6 3.5 5"/></symbol>
+    <symbol id="i-message" viewBox="0 0 24 24"><path d="M4 5.5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M19 12a7 7 0 1 0-2 5"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="m3 4 18 8-18 8 4-8zM7 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <div class="brand-copy"><strong>Dino CRM</strong><span data-i18n="brandSub">客户沟通工作台</span></div>
+      </div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <div class="nav-label" data-i18n="navGroup">用户管理</div>
+        <button class="nav-item"><svg><use href="#i-users"></use></svg><span data-i18n="navUsers">用户列表</span></button>
+        <button class="nav-item is-active"><svg><use href="#i-message"></use></svg><span data-i18n="navLine">LINE消息</span></button>
+      </nav>
+      <div class="sidebar-foot"><i></i><span data-i18n="serviceOnline">消息服务运行中</span></div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="heading-wrap">
+          <div class="crumb"><span data-i18n="crumbCrm">Dino CRM</span><b>/</b><span data-i18n="navGroup">用户管理</span><b>/</b><span data-i18n="navLine">LINE消息</span></div>
+          <h1 data-i18n="pageTitle">LINE消息</h1>
+        </div>
+        <div class="top-actions">
+          <button class="lang-switch" id="lang-switch" aria-label="Switch language"><span class="is-active" data-lang="zh">中</span><span data-lang="en">EN</span></button>
+          <div class="scope"><i></i><span data-i18n="scope">全业务线</span></div>
+          <div class="account"><div class="avatar">O</div><div><strong data-i18n="roleName">运营管理员</strong><span data-i18n="roleSub">消息发送</span></div></div>
+        </div>
+      </header>
+
+      <main class="content" id="content" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div class="modal-layer" id="modal-layer" aria-hidden="true">
+    <button class="modal-scrim" data-action="close-modal" aria-label="Close"></button>
+    <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"></section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script defer src="./app.js"></script>
+</body>
+</html>

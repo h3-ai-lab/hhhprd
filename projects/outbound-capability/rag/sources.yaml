@@ -1,0 +1,22 @@
+version: 1
+sources:
+  - id: crm-current-state
+    path: ../../../shared/memory/current-state.md
+    purpose: CRM 外呼边界、第三方线路和敏感能力现状
+    priority: high
+  - id: crm-product-framework
+    path: ../../../shared/memory/product-framework.md
+    purpose: CRM 与外呼供应商、线路、录音系统的职责边界
+    priority: high
+  - id: call-records-manual
+    path: ../../../../crm-manual/docs/sales/S-05.md
+    purpose: 通话记录现有入口、字段、录音和文字稿状态
+    priority: authoritative
+  - id: call-records-screenshot
+    path: ../../../../crm-manual/docs/images/S-05-callrecords.png
+    purpose: 2026-11-10 通话记录筛选区和默认列顺序
+    priority: secondary
+  - id: role-permissions
+    path: ../../../../crm-manual/docs/system/A-03.md
+    purpose: 现有角色、业务线数据范围和敏感导出原则
+    priority: high

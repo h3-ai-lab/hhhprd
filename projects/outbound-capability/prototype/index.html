@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dino CRM - Outbound calling">
+  <title>Dino CRM · 外呼管理</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M8.1 3.7 10 8.1 7.8 10a16.6 16.6 0 0 0 6.2 6.2l1.9-2.2 4.4 1.9v3a2 2 0 0 1-2.1 2A17.3 17.3 0 0 1 2.9 5.8 2 2 0 0 1 4.9 3.7z"/></symbol>
+    <symbol id="i-call" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.7 1.7a15 15 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/><path d="m15 4 5 5M16 3l5 5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M19 12a7 7 0 1 0-2 5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 12h6M9 16h6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <div><strong>Dino CRM</strong><span data-i18n="brandSub">外呼管理工作台</span></div>
+      </div>
+      <nav class="side-nav" aria-label="外呼管理" data-i18n-aria="navOutbound">
+        <div class="nav-label" data-i18n="navOutbound">外呼管理</div>
+        <button class="nav-item is-active" data-page="numbers">
+          <svg><use href="#i-phone"></use></svg><span data-i18n="navNumbers">号码池管理</span>
+        </button>
+        <button class="nav-item" data-page="calls">
+          <svg><use href="#i-call"></use></svg><span data-i18n="navCalls">通话记录</span>
+        </button>
+      </nav>
+      <div class="sidebar-foot"><i></i><span data-i18n="serviceOnline">外呼服务运行中</span></div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="heading-wrap">
+          <div class="crumb"><span>Dino CRM</span><b>/</b><span data-i18n="crumbGroup">外呼管理</span><b>/</b><span id="crumb-current"></span></div>
+          <h1 id="page-title"></h1>
+        </div>
+        <div class="top-actions">
+          <button class="lang-switch" id="lang-switch" aria-label="Switch language">
+            <span class="is-active" data-lang="zh">中</span><span data-lang="en">EN</span>
+          </button>
+          <div class="scope"><i></i><span data-i18n="scope">全业务线</span></div>
+          <div class="account"><div class="avatar">S</div><div><strong data-i18n="roleName">系统管理员</strong><span data-i18n="roleSub">外呼配置</span></div></div>
+        </div>
+      </header>
+
+      <main class="content" id="content" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div class="modal-layer" id="modal-layer" aria-hidden="true">
+    <button class="modal-scrim" data-action="close-modal" data-i18n-aria="close" aria-label="关闭"></button>
+    <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"></section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script defer src="./app.js"></script>
+</body>
+</html>
