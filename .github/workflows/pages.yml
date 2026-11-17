@@ -41,6 +41,7 @@ jobs:
           test -f hhhprd-site/prd-user-consultation-lead.html
           test -f hhhprd-site/prd-outbound-capability.html
           test -f hhhprd-site/prd-crm-lead-quality-analysis.html
+          test -f hhhprd-site/prd-crm-learning-plan-progress.html
           for project in projects/*/; do
             test -f "$project/project.yaml"
             test -f "$project/workflow/overrides.md"
@@ -66,6 +67,7 @@ jobs:
           cp hhhprd-site/prd-user-consultation-lead.html public/prd-user-consultation-lead.html
           cp hhhprd-site/prd-outbound-capability.html public/prd-outbound-capability.html
           cp hhhprd-site/prd-crm-lead-quality-analysis.html public/prd-crm-lead-quality-analysis.html
+          cp hhhprd-site/prd-crm-learning-plan-progress.html public/prd-crm-learning-plan-progress.html
           cp -R projects/. public/projects/
           for project in projects/*/; do
             slug="$(basename "$project")"

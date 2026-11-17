@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CRM学习计划与课程进度 · PRD</title>
+  <style>
+    :root{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    main{max-width:1040px;margin:0 auto;padding:42px 24px 80px}article{background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:34px}h2,h3,h4{line-height:1.35}
+    h2{font-size:28px;margin:0 0 20px}h3{font-size:21px;margin:30px 0 10px}h4{font-size:17px;margin:22px 0 8px}
+    p{margin:10px 0}a{color:var(--blue)}table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+    th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f7f9fc}
+    blockquote{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}
+    code{background:#f1f4f8;padding:1px 5px;border-radius:4px}pre code{background:transparent;padding:0;border-radius:0;color:inherit}pre{overflow:auto;background:#101828;
+    color:#eef2f7;padding:16px;border-radius:8px}.mermaid{background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:16px;overflow:auto}.top{display:flex;gap:14px;margin-bottom:18px}
+    .top a{text-decoration:none;font-weight:600}
+    @media(max-width:700px){main{padding:16px 10px}article{padding:20px 16px}}
+  </style>
+</head>
+<body><main>
+  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/crm-learning-plan-progress/prd/PRD.md">查看 Markdown 源文件</a></div>
+  <article><h2>CRM学习计划与课程进度</h2>
+<blockquote>在用户列表、销售列表、用户详情和管理看板展示用户的学习计划、当前课程进度、学习活跃度与到期风险，帮助 CC 判断跟进节点，并让管理者掌握整体学习情况。<br>需求编号：REQ-LEARN-001｜状态：待评审｜更新时间：2026-11-17<br>需求类型：看板与指标｜补充类型：表单字段列表、集成自动化、权限与审计</blockquote>
+<h3>交互原型</h3>
+<p><a href="https://h3-ai-lab.github.io/hhhprd/projects/crm-learning-plan-progress/prototype/" target="_blank" rel="noopener">打开完整交互原型</a></p>
+<p>原型包含用户列表、销售列表、用户详情和管理看板内的学习进度页面，可在同一地址切换中文和英文。</p>
+<h3>目标与范围</h3>
+<h4>业务目标</h4>
+<p>CC 在跟进用户时，需要快速判断当前应提醒学习、继续推进体验、维护学习习惯还是推动续费。管理者需要在不导出数据的情况下掌握学习计划使用率和学习活跃度。</p>
+<h4>本期做</h4>
+<ul><li>用户列表增加学习计划、当前进度、本周进度、最近学习时间和学习状态。</li><li>销售列表增加同一组学习信息，并支持筛选。</li><li>用户详情增加完整学习计划、课程进度、学习时长、到期提醒和近期学习记录。</li><li>管理看板新增“学习进度”页签，展示学习计划、活跃学习、零学习、课次完成和到期预警。</li><li>统一学习计划、课程体系、周学习安排和 Lesson 的定义与展示。</li><li>支持用户列表、销售列表按学习计划、学习状态和到期范围筛选。</li></ul>
+<h4>本期不做</h4>
+<ul><li>不修改课程内容、课程顺序、定级规则和学习计划权益。</li><li>不回写课程系统，不从 CRM 修改学习进度。</li><li>不把 Play 游戏计入有效学习或课程完成。</li><li>不把体验课计入正式主课进度。</li><li>不新增用户、订单或支付流程。</li><li>不对用户列表和销售列表新增排序能力。</li><li>不在本需求计算销售业绩、员工绩效或现金奖励。</li></ul>
+<h3>业务流程</h3>
+<div class="mermaid">flowchart LR
+    A[用户购买学习计划] --&gt; B[生成有效期与每周主课额度]
+    C[完成定级] --&gt; D[确定起始 Level]
+    B --&gt; E[生成周学习安排]
+    D --&gt; E
+    E --&gt; F[按顺序解锁 Lesson]
+    F --&gt; G[课程系统记录 Class、Practice、Explore]
+    G --&gt; H[同步至 CRM]
+    H --&gt; I[用户列表、销售列表和用户详情]
+    H --&gt; J[管理看板学习进度]
+    K[Play] --&gt; L[单独展示但不计有效学习]
+    M[体验课] --&gt; N[单独统计且不计正式主课]</div>
+<h3>统一术语</h3>
+<table><thead><tr><th>术语</th><th>定义</th><th>不应混用为</th></tr></thead><tbody><tr><td>学习计划</td><td>用户购买的 Pro、Max 等有期限方案，决定有效期、每周主课额度和内容访问范围</td><td>某个 Level、Unit 或固定课时数量</td></tr><tr><td>周学习安排</td><td>学习计划在每一周生成的主课额度和练习安排</td><td>课程体系层级</td></tr><tr><td>课程体系</td><td>6 个 Level 组成的完整主课路径，共 864 个 Lesson</td><td>学习计划</td></tr><tr><td>Level</td><td>能力级别，共 L1–L6；每个 Level 12 个 Unit、144 个 Lesson</td><td>学习计划有效期</td></tr><tr><td>Unit</td><td>主题单元；每个 Unit 12 个 Lesson</td><td>一周的学习额度</td></tr><tr><td>Learning Cycle</td><td>每 6 个 Lesson 组成的内容分组；每个 Unit 有 2 个</td><td>固定自然周</td></tr><tr><td>Lesson</td><td>最小正式主课课次，约 12–15 分钟，不可重上</td><td>课后 Practice 或 Play</td></tr><tr><td>体验课</td><td>未购买学习计划用户的试听和定级内容，不属于 864 个正式 Lesson</td><td>正式主课进度</td></tr><tr><td>Practice</td><td>课后复习，包含 Words &amp; Sentences、Speaking、Listening 等</td><td>正式主课课次</td></tr><tr><td>Explore</td><td>与课程关联的拓展学习</td><td>正式主课课次</td></tr><tr><td>Play</td><td>单词对战、盲盒等游戏，不计有效学习</td><td>Practice 或 Lesson</td></tr></tbody></table>
+<p>学习计划与课程体系是两条独立数据：</p>
+<ul><li>学习计划决定用户何时可以学习、每周解锁多少 Lesson。</li><li>课程体系决定用户按哪个 Level、Unit、Lesson 顺序学习。</li></ul>
+<h3>课程与解锁模型</h3>
+<pre><code class="text">学习计划
+└── 有效期 + 周学习安排
+
+课程体系
+└── Level 1–6
+    └── Unit 1–12
+        └── Learning Cycle 1–2
+            └── Lesson 1–6</code></pre>
+<ul><li>正式主课共 <code>6 × 12 × 12 = 864</code> 个 Lesson。</li><li>每个 Level 共 <code>12 × 12 = 144</code> 个 Lesson。</li><li>Pro 每周解锁 3 个 Lesson，Max 每周解锁 5 个 Lesson。</li><li>主课按 Lesson 顺序学习；完成本周额度后，本周不再新增主课。</li><li>Learning Cycle 是 6 个 Lesson 的内容分组，不等同于自然周。</li><li>按 4 个完整学习周计算，Pro 完成 12 个 Lesson，即 1 个 Unit；Max 完成 20 个 Lesson，即 1 个 Unit 加第 2 个 Unit 的 8 个 Lesson。</li></ul>
+<h3>核心规则</h3>
+<ul><li>用户完成定级后，从指定 Level 的 Unit 1 开始生成个人学习路径。</li><li>当前周学习安排以业务线时区计算，周起始沿用学习系统的现有规则。</li><li>本周可学主课数来自当前生效学习计划的周额度。</li><li>本周剩余可学主课数 = 本周已解锁主课数 − 本周已完成主课数，最小为 0。</li><li>学习计划到期或失效后，未使用额度不再解锁；已产生的学习历史保留。</li><li>用户同时只能存在一个有效学习计划；出现重叠有效计划时保留最新有效数据并标记数据异常。</li><li>Lesson 完成、Practice、Explore 和 Play 分别记录，不能用任一行为替代其他行为。</li><li>“正在上课”只采用课程系统明确返回的当前学习会话状态，不用最近学习时间推断。</li><li>页面时间字段按浏览器所在时区展示；学习周和学习活跃度按业务线时区计算。</li></ul>
+<h3>学习状态</h3>
+<h4>学习计划状态</h4>
+<table><thead><tr><th>状态</th><th>判定</th></tr></thead><tbody><tr><td>未购买</td><td>用户没有学习计划记录</td></tr><tr><td>未开始</td><td>学习计划已创建，尚未到生效时间</td></tr><tr><td>生效中</td><td>当前时间位于学习计划有效期内</td></tr><tr><td>已到期</td><td>当前时间已超过学习计划结束时间</td></tr><tr><td>已取消</td><td>学习计划被撤销或退款</td></tr></tbody></table>
+<h4>学习活跃状态</h4>
+<table><thead><tr><th>状态</th><th>判定</th><th>CC 动作</th></tr></thead><tbody><tr><td>未开课</td><td>学习计划生效未满 7 天，且尚无完成 Lesson 或有效学习记录</td><td>确认定级、首课安排和设备状态</td></tr><tr><td>正在上课</td><td>课程系统返回用户当前处于 Lesson 学习会话</td><td>不主动打扰</td></tr><tr><td>近 7 天活跃</td><td>最近 7 个自然日内至少产生一条有效学习记录</td><td>结合课程进度正常跟进</td></tr><tr><td>7 天未学习</td><td>学习计划已生效满 7 天，且最近 7 天没有有效学习记录</td><td>提醒学习并确认卡点</td></tr><tr><td>已到期</td><td>学习计划已到期</td><td>判断续费或停止跟进</td></tr></tbody></table>
+<p>状态优先级：<code>已到期 → 正在上课 → 未开课 → 近 7 天活跃 → 7 天未学习</code>。</p>
+<h4>有效学习</h4>
+<ul><li>Class、Practice、Explore 中被课程系统判定为有效完成的学习行为。</li><li>Play 不计入有效学习。</li><li>体验课单独统计，不进入正式主课完成数。</li><li>同一学习事件重复回写时按事件 ID 去重。</li></ul>
+<h3>现状与字段顺序</h3>
+<p>页面现状基于 2026-11-10 已归档 CRM 页面快照：</p>
+<h4>用户列表</h4>
+<p>现有列顺序：</p>
+<p><code>用户 ID → 学生姓名 → 用户状态 → 用户类型 → 年龄段 → 课程等级 → 注册方式 → 登录账号 → 短信验证码 → 渠道来源-落地页 → 操作</code></p>
+<p>目标列顺序：</p>
+<p><code>用户 ID → 学生姓名 → 用户状态 → 用户类型 → 年龄段 → 课程等级 → 当前学习进度 → 本周进度 → 学习计划 → 最近学习时间 → 学习状态 → 注册方式 → 登录账号 → 短信验证码 → 渠道来源-落地页 → 操作</code></p>
+<p>现有筛选顺序：</p>
+<p><code>搜索 → 用户类型 → 注册方式 → 渠道来源-落地页 → 渠道来源-App → 业务线 → 用户状态 → 导出</code></p>
+<p>目标筛选顺序：</p>
+<p><code>搜索 → 用户类型 → 注册方式 → 渠道来源-落地页 → 渠道来源-App → 业务线 → 用户状态 → 学习计划 → 学习状态 → 到期范围 → 导出</code></p>
+<h4>销售列表</h4>
+<p>公海、我的跟进和已付费使用同一套学习字段与筛选。</p>
+<p>现有列顺序：</p>
+<p><code>用户 ID → 学生姓名 → 购买意向 → 用户状态 → 用户类型 → 年龄段 → 课程等级 → 登录账号 → 渠道来源-落地页 → 操作</code></p>
+<p>目标列顺序：</p>
+<p><code>用户 ID → 学生姓名 → 购买意向 → 用户状态 → 用户类型 → 年龄段 → 课程等级 → 当前学习进度 → 本周进度 → 学习计划 → 最近学习时间 → 学习状态 → 登录账号 → 渠道来源-落地页 → 操作</code></p>
+<p>现有筛选布局：</p>
+<ul><li>第一行：搜索、业务线、购买意向、CC。</li><li>第二行：当前跟进阶段、年龄段、课程等级、渠道来源-落地页、渠道来源-App。</li><li>第三行：用户状态、销售咨询预约、预约外呼、注册日期及起止日期。</li></ul>
+<p>目标筛选布局：</p>
+<ul><li>在第三行用户状态之后增加：学习计划、学习状态、到期范围。</li><li>不改变现有筛选器的相对顺序。</li></ul>
+<h4>用户详情</h4>
+<ul><li>在现有用户基本信息之后增加“学习进度”分组。</li><li>学习进度分组包含学习计划、当前进度、本周安排、累计学习、到期提醒和近期学习记录。</li><li>用户联系方式、账号资料和原有操作保持原位。</li></ul>
+<h4>管理看板</h4>
+<ul><li>在现有页签“销售跟进”之后、“支付结果”之前增加“学习进度”。</li><li>新增页签使用独立的业务线、CC、学习计划和当前 Level 筛选。</li><li>原有“转化总览”“销售跟进”“支付结果”的筛选和指标不变。</li></ul>
+<h4>字段顺序比对</h4>
+<table><thead><tr><th>页面</th><th>现有位置</th><th>新增或调整</th><th>目标位置</th></tr></thead><tbody><tr><td>用户列表</td><td>课程等级之后为注册方式</td><td>学习进度摘要字段组</td><td>课程等级之后</td></tr><tr><td>用户筛选</td><td>用户状态之后为导出</td><td>学习计划、学习状态、到期范围</td><td>用户状态之后</td></tr><tr><td>销售列表</td><td>课程等级之后为登录账号</td><td>学习进度摘要字段组</td><td>课程等级之后</td></tr><tr><td>销售筛选</td><td>用户状态之后为销售咨询预约</td><td>学习计划、学习状态、到期范围</td><td>用户状态之后</td></tr><tr><td>用户详情</td><td>基本信息之后为原有操作信息</td><td>学习进度分组</td><td>基本信息之后</td></tr><tr><td>管理看板</td><td>销售跟进之后为支付结果</td><td>学习进度页签</td><td>销售跟进与支付结果之间</td></tr></tbody></table>
+<h3>字段定义</h3>
+<table><thead><tr><th>字段</th><th>来源与含义</th><th>展示与空值</th><th>排序</th></tr></thead><tbody><tr><td>学习计划</td><td>当前有效计划类型，如 Pro、Max</td><td>无计划显示“未购买”</td><td>不支持；列表没有排序入口</td></tr><tr><td>当前学习进度</td><td>当前 Level、Unit、Lesson 序号</td><td>未开始显示“未开课”</td><td>不支持；列表没有排序入口</td></tr><tr><td>本周进度</td><td>本周已完成主课数 / 本周额度</td><td>无有效计划显示 <code>0 / 0</code></td><td>不支持；列表没有排序入口</td></tr><tr><td>最近学习时间</td><td>最近一条有效学习事件时间</td><td>无记录显示 <code>—</code></td><td>不支持；列表没有排序入口</td></tr><tr><td>学习状态</td><td>未开课、正在上课、近 7 天活跃、7 天未学习、已到期</td><td>无计划显示“未购买”</td><td>不支持；列表没有排序入口</td></tr><tr><td>当前 Level</td><td>正式课程当前级别 L1–L6</td><td>未开课显示定级结果或 <code>—</code></td><td>不支持；列表没有排序入口</td></tr><tr><td>当前 Unit</td><td>当前正在学习或下一待学习的 Unit</td><td>无进度显示 <code>—</code></td><td>不支持；列表没有排序入口</td></tr><tr><td>当前 Lesson</td><td>当前正在学习或下一待学习的 Lesson</td><td>无进度显示 <code>—</code></td><td>不支持；列表没有排序入口</td></tr><tr><td>本周课次额度</td><td>Pro=3，Max=5</td><td>无有效计划显示 0</td><td>不支持；列表没有排序入口</td></tr><tr><td>本周已完成主课数</td><td>本周完成状态为完成的 Lesson 数</td><td>无记录显示 0</td><td>不支持；列表没有排序入口</td></tr><tr><td>本周剩余可学课次</td><td>本周额度和本周已完成的差值，最小为 0</td><td>无有效计划显示 0</td><td>不支持；列表没有排序入口</td></tr><tr><td>当前 Level 已完成主课数</td><td>当前 Level 完成 Lesson 数，最大 144</td><td>无记录显示 0</td><td>不支持；列表没有排序入口</td></tr><tr><td>当前 Level 剩余主课数</td><td>144 − 当前 Level 已完成主课数</td><td>无记录显示 144</td><td>不支持；列表没有排序入口</td></tr><tr><td>累计完成主课数</td><td>用户全部正式主课完成数，最大 864</td><td>无记录显示 0</td><td>不支持；列表没有排序入口</td></tr><tr><td>累计有效学习时长</td><td>Class、Practice、Explore 的有效学习时长之和</td><td>无记录显示 <code>—</code></td><td>不支持；列表没有排序入口</td></tr><tr><td>学习计划到期时间</td><td>当前有效计划的结束日期</td><td>无计划显示 <code>—</code></td><td>不支持；列表没有排序入口</td></tr><tr><td>到期剩余天数</td><td>到期日与当前业务线自然日差值</td><td>已到期显示 0</td><td>不支持；列表没有排序入口</td></tr></tbody></table>
+<p>“已完成课程”统一改称“已完成主课课次”。Unit 和 Level 完成度必须使用各自完整名称，不使用模糊的“课程数”。</p>
+<h3>用户详情</h3>
+<p>学习进度分组包含：</p>
+<h4>学习计划</h4>
+<ul><li>计划类型：Pro、Max。</li><li>计划状态。</li><li>有效期开始和结束时间。</li><li>到期剩余天数。</li><li>每周主课额度。</li></ul>
+<h4>当前进度</h4>
+<ul><li>当前 Level。</li><li>当前 Unit 和 Unit 完成数，如 <code>Unit 3，7 / 12</code>。</li><li>当前 Lesson 名称、Lesson 类型和状态。</li><li>当前 Level 完成数，如 <code>32 / 144</code>。</li><li>累计完成主课数，如 <code>32 / 864</code>。</li></ul>
+<h4>本周安排</h4>
+<ul><li>本周课次额度。</li><li>本周已完成主课数。</li><li>本周剩余可学课次。</li><li>下一待学习 Lesson。</li><li>最近一次解锁时间。</li></ul>
+<h4>学习表现</h4>
+<ul><li>最近学习时间。</li><li>近 7 天有效学习事件数。</li><li>近 7 天学习天数。</li><li>累计有效学习时长。</li><li>正在上课状态及数据更新时间。</li></ul>
+<h4>近期学习记录</h4>
+<ul><li>按时间倒序展示最近学习事件。</li><li>每条记录展示时间、模块、Level/Unit/Lesson、结果和有效学习时长。</li><li>Play 可展示为游戏行为，但标记“不计有效学习”。</li></ul>
+<h3>管理看板</h3>
+<p>入口：<code>管理看板 → 学习进度</code>。</p>
+<h4>筛选</h4>
+<table><thead><tr><th>筛选项</th><th>规则</th></tr></thead><tbody><tr><td>业务线</td><td>沿用当前角色数据权限</td></tr><tr><td>当前 CC</td><td>当前线索归属人；候选受业务线和团队范围限制</td></tr><tr><td>学习计划</td><td>全部、Pro、Max、未购买</td></tr><tr><td>当前 Level</td><td>全部、L1–L6、未开课</td></tr><tr><td>活跃窗口</td><td>近 7 天、近 14 天、近 30 天；默认近 7 天</td></tr></tbody></table>
+<h4>指标卡</h4>
+<table><thead><tr><th>指标</th><th>分子</th><th>分母</th><th>单位</th><th>时间与去重</th></tr></thead><tbody><tr><td>生效学习计划用户数</td><td>当前学习计划状态为生效中的用户数</td><td>—</td><td>人</td><td>当前快照；按用户 ID 去重</td></tr><tr><td>正在上课人数</td><td>课程系统当前状态为正在上课的用户数</td><td>—</td><td>人</td><td>当前快照；按用户 ID 去重</td></tr><tr><td>近 7 天活跃学习者</td><td>近 7 个业务线自然日内至少有一条有效学习记录的用户数</td><td>—</td><td>人</td><td>当前生效计划用户集合；按用户 ID 去重</td></tr><tr><td>近 7 天零学习用户</td><td>学习计划生效已满 7 天，且近 7 个业务线自然日无有效学习记录的用户数</td><td>—</td><td>人</td><td>不含生效不足 7 天用户；按用户 ID 去重</td></tr><tr><td>本周完成主课课次</td><td>当前学习周内完成状态为完成的 Lesson 数</td><td>—</td><td>节</td><td>主课按 Lesson ID 去重</td></tr><tr><td>7 天内到期用户</td><td>当前生效计划在 0–7 个业务线自然日内到期的用户数</td><td>—</td><td>人</td><td>当前快照；按用户 ID 去重</td></tr><tr><td>学习活跃率</td><td>近 7 天活跃学习者数</td><td>近 7 天活跃学习者数 + 近 7 天零学习用户数</td><td>百分比</td><td>分母为 0 时显示 <code>—</code></td></tr></tbody></table>
+<p>每个指标右上角提供“口径”角标，展示分子、分母、单位、统计范围、时间字段、去重键和零值规则。</p>
+<h4>分组明细</h4>
+<p>页面下方展示按 <code>业务线 → 学习计划 → 当前 Level</code> 分组的明细：</p>
+<table><thead><tr><th>分组</th><th>生效学习计划用户数</th><th>正在上课人数</th><th>近 7 天活跃学习者</th><th>近 7 天零学习用户</th><th>本周完成主课课次</th><th>7 天内到期用户</th><th>学习活跃率</th></tr></thead><tbody><tr><td>当前业务线、学习计划和 Level</td><td>当前分组用户数</td><td>当前分组在课用户数</td><td>当前分组活跃用户数</td><td>当前分组零学习用户数</td><td>当前分组完成课次数</td><td>当前分组临期用户数</td><td>活跃用户 / 有效观察用户</td></tr></tbody></table>
+<p>同一用户只计入一个当前学习计划和一个当前 Level，不跨组重复统计。</p>
+<h3>列表与筛选</h3>
+<ul><li>用户中心、销售中心和团队监控只展示只读学习数据。</li><li>用户列表和销售列表的筛选组合同时生效。</li><li>学习状态筛选使用当前学习活跃状态。</li><li>学习计划筛选使用当前有效计划；无有效计划归入“未购买”或“已到期”状态。</li><li>到期范围支持不限制、7 天内、30 天内和已到期。</li><li>列表切换页签、翻页和筛选后保持当前筛选。</li><li>空数据和无权限使用不同状态；课程系统同步失败时展示最近成功值及更新时间。</li></ul>
+<h3>导出</h3>
+<p>用户中心和销售中心继续使用现有导出入口。</p>
+<p>导出字段增加：</p>
+<p><code>learning_plan_type、learning_plan_status、learning_plan_start_at、learning_plan_end_at、current_level、current_unit、current_lesson、level_completed_lessons、level_total_lessons、weekly_quota、weekly_completed_lessons、weekly_remaining_lessons、last_learning_at、learning_activity_status、learning_days_7d、effective_learning_minutes</code></p>
+<ul><li>导出使用当前筛选范围，不受分页影响。</li><li>时间字段在 CSV 中保留完整时间值和时区偏移。</li><li>查看权限与导出权限分别校验。</li><li>导出操作记录操作人、筛选条件、数据范围、行数和生成时间。</li></ul>
+<h3>RBAC 权限数据</h3>
+<h4>功能权限</h4>
+<table><thead><tr><th>页面 / 动作</th><th>默认角色</th><th>数据范围</th><th>审计</th></tr></thead><tbody><tr><td>用户中心查看学习字段与筛选</td><td>沿用用户中心现有查看角色</td><td>现有业务线及用户数据范围</td><td>普通查询不记录</td></tr><tr><td>销售中心查看学习字段与筛选</td><td>沿用销售中心现有查看角色</td><td>现有业务线、团队和本人线索范围</td><td>普通查询不记录</td></tr><tr><td>用户详情查看学习进度</td><td>沿用用户详情现有查看角色</td><td>与用户查看范围一致</td><td>普通查询不记录</td></tr><tr><td>管理看板“学习进度”查看</td><td>超级管理员、管理员；已具备管理看板权限的角色</td><td>授权业务线和团队范围</td><td>普通查询不记录</td></tr><tr><td>用户中心导出</td><td>需现有用户中心导出权限</td><td>与用户中心查看范围取交集</td><td>记录筛选、行数和时间</td></tr><tr><td>销售中心下载数据</td><td>需现有销售中心导出权限</td><td>与销售中心查看范围取交集</td><td>记录筛选、行数和时间</td></tr></tbody></table>
+<h4>字段与数据权限</h4>
+<table><thead><tr><th>字段组 / 页面</th><th>可见角色</th><th>编辑</th><th>隐藏与异常</th><th>可导出</th></tr></thead><tbody><tr><td>学习计划与有效期</td><td>有对应用户或线索查看权限的角色</td><td>无</td><td>无权限不返回；缺失显示未购买或 <code>—</code></td><td>需现有导出权限</td></tr><tr><td>课程进度与课次</td><td>有对应用户或线索查看权限的角色</td><td>无</td><td>无权限不返回；数据延迟显示更新时间</td><td>需现有导出权限</td></tr><tr><td>学习活跃度与时长</td><td>有对应用户或线索查看权限的角色</td><td>无</td><td>Play 不进入有效学习</td><td>需现有导出权限</td></tr><tr><td>管理看板学习指标与明细</td><td>具备学习进度页签权限的角色</td><td>无</td><td>无权限不展示页签、筛选或数据</td><td>沿用看板现有导出权限</td></tr></tbody></table>
+<h4>权限数据变更</h4>
+<table><thead><tr><th>变更类型</th><th>权限层级</th><th>权限项</th><th>业务说明</th><th>默认角色 / 数据范围</th><th>新增审计</th></tr></thead><tbody><tr><td>新增</td><td>页面</td><td><code>管理看板 → 学习进度</code></td><td>进入学习进度页签</td><td>超级管理员、管理员及当前拥有管理看板权限的角色</td><td>否</td></tr><tr><td>复用</td><td>页面</td><td>用户中心查看</td><td>控制用户学习字段与筛选</td><td>沿用用户中心角色和用户范围</td><td>否</td></tr><tr><td>复用</td><td>页面</td><td>销售中心查看</td><td>控制销售列表学习字段与筛选</td><td>沿用销售中心角色和线索范围</td><td>否</td></tr><tr><td>复用</td><td>页面</td><td>用户详情查看</td><td>控制学习进度分组</td><td>沿用用户详情现有角色</td><td>否</td></tr><tr><td>修改</td><td>导出</td><td>用户中心现有导出字段清单</td><td>增加学习计划与课程进度字段</td><td>需现有用户导出权限</td><td>是</td></tr><tr><td>修改</td><td>导出</td><td>销售中心现有下载字段清单</td><td>增加学习计划与课程进度字段</td><td>需现有销售导出权限</td><td>是</td></tr></tbody></table>
+<h3>数据来源与同步</h3>
+<table><thead><tr><th>数据</th><th>来源</th><th>唯一标识</th><th>时效与失败处理</th></tr></thead><tbody><tr><td>学习计划购买与有效期</td><td>订单、支付和学习计划权益</td><td><code>learning_plan_id</code></td><td>状态变化进入操作记录；失败保留最近成功值</td></tr><tr><td>学习计划类型与周额度</td><td>学习计划配置</td><td><code>learning_plan_type</code></td><td>Pro=3、Max=5；配置异常时展示未知</td></tr><tr><td>当前 Level/Unit/Lesson</td><td>课程系统</td><td><code>level_id</code>、<code>unit_id</code>、<code>lesson_id</code></td><td>按用户最新有效进度更新</td></tr><tr><td>Lesson 完成状态</td><td>课程系统学习记录</td><td><code>lesson_id</code> + 完成事件 ID</td><td>重复、乱序事件不重复计数</td></tr><tr><td>学习会话与实时在课状态</td><td>课程系统</td><td><code>learning_session_id</code></td><td>仅采用明确的在课状态；异常时不清空最近成功值</td></tr><tr><td>Practice/Explore 学习记录</td><td>课程系统</td><td><code>learning_event_id</code></td><td>计入有效学习；Play 单独标记且不计入</td></tr><tr><td>学习时长</td><td>课程系统</td><td><code>learning_session_id</code></td><td>排除 Play；重复事件去重</td></tr><tr><td>数据快照时间</td><td>课程系统同步任务</td><td>快照 ID</td><td>页面展示最近一次完整更新时间</td></tr></tbody></table>
+<p>同一用户的数据以最早可验证的 Level 起点为基础，课程事件按顺序回放；不能根据当前单元反推已完成 Lesson 数。</p>
+<h3>离职、停用与调岗</h3>
+<ul><li>用户学习计划、课程进度和学习历史不因 CC 转派、离职或调岗而消失。</li><li>CC 离职后的线索交接沿用现有离职账号管理流程；新 CC 获得当前线索跟进权限后，可查看该用户的学习信息。</li><li>管理看板的“当前 CC”沿用现有销售归属；历史 CC 和当前 CC 的具体统计规则不因本需求改变。</li><li>停用账号立即失去 CRM 查看和导出权限，其名下客户数据按现有流程交接。</li><li>历史学习时长、课程完成数和到期时间不因负责人变化重算。</li></ul>
+<h3>异常与边界</h3>
+<table><thead><tr><th>场景</th><th>页面处理</th></tr></thead><tbody><tr><td>无学习计划</td><td>展示“未购买”，学习额度和课程进度显示 <code>—</code> 或 0</td></tr><tr><td>计划到期</td><td>保留历史进度，不再展示新的周额度</td></tr><tr><td>计划生效不足 7 天</td><td>不进入“近 7 天零学习用户”，避免误判</td></tr><tr><td>课程系统延迟</td><td>展示最近成功进度和更新时间</td></tr><tr><td>无法确认是否正在上课</td><td>不展示“正在上课”，保留最近学习状态</td></tr><tr><td>同一用户多个学习计划</td><td>只展示一个当前有效计划；重叠计划进入数据异常</td></tr><tr><td>体验课</td><td>单独展示，不计正式 Level、Unit、Lesson 完成数</td></tr><tr><td>Play</td><td>可展示活跃时间，但不计有效学习时长</td></tr><tr><td>课程完成事件重复</td><td>按 Lesson/事件 ID 去重</td></tr><tr><td>用户没有当前 Level</td><td>显示“未定级”，不显示 L1</td></tr><tr><td>无权限</td><td>不返回学习字段、筛选候选、指标或导出数据</td></tr></tbody></table>
+<h3>用户故事</h3>
+<pre><code class="text">CC 打开销售中心
+→ 按学习状态筛选“7 天未学习”
+→ 查看用户最近学习时间和当前课程位置
+→ 联系用户确认学习卡点
+
+CC 打开用户详情
+→ 查看学习计划、Level/Unit/Lesson、本周额度和到期时间
+→ 判断当前应提醒学习、继续跟进还是推动续费
+
+管理者打开管理看板
+→ 进入“学习进度”
+→ 按业务线、CC、学习计划和 Level 筛选
+→ 查看活跃率、零学习用户、本周完成课次和 7 天内到期用户</code></pre></article>
+</main>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+</script>
+</body></html>
