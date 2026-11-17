@@ -109,6 +109,7 @@ const STR = {
     exportCreating: "正在创建任务…",
     exportProgress: "正在整理录音与逐字稿",
     exportProgressCount: "{done} / {total} 通",
+    backgroundExportNotice: "关闭下方进度弹窗不会中断任务，可稍后在“导出任务”中查看进度、取消或下载。",
     cancelTask: "取消任务",
     exportSuccess: "导出包已生成",
     exportSuccessMeta: "任务 {task} · {groups} 个录音目录 · {missing} 个缺失文件",
@@ -126,8 +127,13 @@ const STR = {
     taskStatusDone: "已完成",
     taskStatusRunning: "处理中",
     taskStatusCanceled: "已取消",
+    taskStatusFailed: "失败",
     taskRows: "{count} 条记录 · {groups} 个录音目录",
     taskDataRows: "{count} 条记录",
+    taskCreatedAt: "创建于 {time}",
+    taskProgress: "进度 {percent}% · {done}/{total} 通",
+    taskUpdatedAt: "更新于 {time}",
+    taskCancel: "取消",
     download: "下载",
     recordingTitle: "播放录音",
     recordingOwner: "通话 {callId}",
@@ -287,6 +293,7 @@ const STR = {
     exportCreating: "Creating task…",
     exportProgress: "Preparing recordings and transcripts",
     exportProgressCount: "{done} / {total} calls",
+    backgroundExportNotice: "Closing this progress dialog will not stop the task. Reopen Export Tasks to view progress, cancel, or download.",
     cancelTask: "Cancel Task",
     exportSuccess: "Export package ready",
     exportSuccessMeta: "Task {task} · {groups} recording folders · {missing} missing files",
@@ -304,8 +311,13 @@ const STR = {
     taskStatusDone: "Completed",
     taskStatusRunning: "Processing",
     taskStatusCanceled: "Canceled",
+    taskStatusFailed: "Failed",
     taskRows: "{count} records · {groups} recording folders",
     taskDataRows: "{count} records",
+    taskCreatedAt: "Created {time}",
+    taskProgress: "Progress {percent}% · {done}/{total} calls",
+    taskUpdatedAt: "Updated {time}",
+    taskCancel: "Cancel",
     download: "Download",
     recordingTitle: "Play Recording",
     recordingOwner: "Call {callId}",
@@ -411,6 +423,9 @@ const t = (key, vars = {}) => {
   Object.entries(vars).forEach(([name, replacement]) => { value = value.replaceAll(`{${name}}`, String(replacement)); });
   return value;
 };
+const formatTaskTime = iso => new Intl.DateTimeFormat(state.lang === "zh" ? "zh-CN" : "en-US", {
+  month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
+}).format(new Date(iso));
 const businessLabel = line => BUSINESS_LINES.find(item => item.value === line)?.[state.lang] || line;
 const routeLabel = routeValue => ROUTES.find(item => item.value === routeValue)?.[state.lang] || routeValue;
 const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
@@ -696,10 +711,6 @@ function openModal(content, wide = false) {
 }
 
 function closeModal() {
-  if (state.exportTimer && state.modal?.type === "export") {
-    clearInterval(state.exportTimer);
-    state.exportTimer = null;
-  }
   if (state.audioTimer) {
     clearInterval(state.audioTimer);
     state.audioTimer = null;
@@ -1064,19 +1075,23 @@ function renderExportModal() {
       renderExportModal();
     });
   } else if (state.modal.stage === "progress") {
+    const task = state.tasks.find(item => item.id === state.modal.taskId);
+    if (!task) return;
+    const percent = Math.round((task.progress / Math.max(1, task.total)) * 100);
     openModal(`
       ${modalHeader(t("exportTitle"), t("exportProgress"))}
       <div class="modal-body">
         <div class="progress-wrap">
-          <div class="progress-head"><span>${t("exportProgressCount", { done: state.modal.progress, total: stats.connected })}</span><strong>${Math.round((state.modal.progress / Math.max(1, stats.connected)) * 100)}%</strong></div>
-          <div class="progress-track"><div class="progress-bar" style="width:${Math.round((state.modal.progress / Math.max(1, stats.connected)) * 100)}%"></div></div>
+          <div class="progress-head"><span>${t("exportProgressCount", { done: task.progress, total: task.total })}</span><strong>${percent}%</strong></div>
+          <div class="progress-track"><div class="progress-bar" style="width:${percent}%"></div></div>
         </div>
+        <div class="notice" style="margin-top:14px">${t("backgroundExportNotice")}</div>
         <div class="bundle-preview" style="margin-top:18px">manifest.csv
 call-records.csv
 files/{call_id}/recording.{ext}
 files/{call_id}/transcript.{ext}</div>
       </div>
-      <div class="modal-foot"><button class="button" data-action="cancel-export">${t("cancelTask")}</button></div>`, true);
+      <div class="modal-foot"><button class="button" data-action="cancel-export" data-id="${task.id}">${t("cancelTask")}</button></div>`, true);
   } else if (state.modal.stage === "success") {
     const task = state.tasks.find(item => item.id === state.modal.taskId);
     openModal(`
@@ -1099,50 +1114,99 @@ function startExport() {
   if (!state.modal) return;
   const rows = state.modal.rows.map(id => calls.find(item => item.id === id)).filter(Boolean);
   const stats = exportStats(rows);
+  const now = new Date();
+  const task = {
+    id: `OB${now.toISOString().replace(/\D/g,"").slice(0,14)}${Math.random().toString(16).slice(2,6).toUpperCase()}`,
+    createdAt: now.toISOString(),
+    updatedAt: now.toISOString(),
+    rows: [...state.modal.rows],
+    includeRecording: state.modal.includeRecording,
+    status: "running",
+    progress: 0,
+    total: stats.connected,
+    groups: state.modal.includeRecording ? stats.locatable : 0,
+    missing: state.modal.includeRecording ? stats.missing : 0
+  };
+  state.tasks.unshift(task);
   state.modal.stage = "progress";
-  state.modal.progress = 0;
+  state.modal.taskId = task.id;
   renderExportModal();
-  state.exportTimer = setInterval(() => {
-    if (!state.modal || state.modal.stage !== "progress") return;
-    state.modal.progress = Math.min(stats.connected, state.modal.progress + Math.max(1, Math.ceil(stats.connected / 6)));
-    if (state.modal.progress >= stats.connected) {
-      clearInterval(state.exportTimer);
-      state.exportTimer = null;
-      const task = {
-        id: `OB${new Date().toISOString().replace(/\D/g,"").slice(0,14)}`,
-        createdAt: new Date().toISOString(),
-        rows: [...state.modal.rows],
-        includeRecording: state.modal.includeRecording,
-        status: "done",
-        groups: state.modal.includeRecording ? stats.locatable : 0,
-        missing: state.modal.includeRecording ? stats.missing : 0
-      };
-      state.tasks.unshift(task);
-      state.modal.stage = "success";
-      state.modal.taskId = task.id;
-    }
-    renderExportModal();
-  }, 260);
+  ensureExportTicker();
 }
 
-function cancelExport() {
-  if (state.exportTimer) clearInterval(state.exportTimer);
-  state.exportTimer = null;
-  closeModal();
-  renderCallsPage();
+function ensureExportTicker() {
+  if (state.exportTimer) return;
+  state.exportTimer = setInterval(advanceExportTasks, 260);
+}
+
+function advanceExportTasks() {
+  const running = state.tasks.filter(task => task.status === "running");
+  running.forEach(task => {
+    task.progress = Math.min(task.total, task.progress + Math.max(1, Math.ceil(task.total / 6)));
+    task.updatedAt = new Date().toISOString();
+    if (task.progress >= task.total) {
+      task.progress = task.total;
+      task.status = "done";
+    }
+  });
+  if (!state.tasks.some(task => task.status === "running")) {
+    clearInterval(state.exportTimer);
+    state.exportTimer = null;
+  }
+  if (state.modal?.type === "export" && state.modal.stage === "progress") {
+    const task = state.tasks.find(item => item.id === state.modal.taskId);
+    if (task?.status === "done") {
+      state.modal.stage = "success";
+      renderExportModal();
+    } else if (task?.status === "running") {
+      renderExportModal();
+    }
+  } else if (state.modal?.type === "tasks") {
+    openTasks();
+  }
+}
+
+function cancelTask(id) {
+  const task = state.tasks.find(item => item.id === id);
+  if (!task || task.status !== "running") return;
+  task.status = "canceled";
+  task.updatedAt = new Date().toISOString();
+  if (!state.tasks.some(item => item.status === "running")) {
+    clearInterval(state.exportTimer);
+    state.exportTimer = null;
+  }
   showToast(t("taskCanceled"));
+  if (state.modal?.type === "export") {
+    state.modal = { type: "tasks" };
+    openTasks();
+  } else {
+    openTasks();
+  }
+}
+
+function legacyCancelExport() {}
+
+function cancelExport(id) {
+  const taskId = id || state.modal?.taskId;
+  if (taskId) cancelTask(taskId);
 }
 
 function openTasks() {
   state.modal = { type: "tasks" };
+  const statusMeta = task => {
+    const percent = Math.round((task.progress / Math.max(1, task.total)) * 100);
+    const statusLabel = task.status === "done" ? t("taskStatusDone") : task.status === "canceled" ? t("taskStatusCanceled") : t("taskStatusRunning");
+    const action = task.status === "running"
+      ? `<button class="button" data-action="cancel-task" data-id="${task.id}">${t("taskCancel")}</button>`
+      : task.status === "done"
+        ? `<button class="button" data-action="download-task" data-id="${task.id}"><svg><use href="#i-download"></use></svg>${t("download")}</button>`
+        : "";
+    return `<div class="task-item"><div><strong>${esc(task.id)}</strong><span>${task.includeRecording ? t("taskRows", { count: task.rows.length, groups: task.groups }) : t("taskDataRows", { count: task.rows.length })}</span><span>${t("taskProgress", { percent, done: task.progress, total: task.total })}</span><span>${statusLabel} · ${t("taskCreatedAt", { time: formatTaskTime(task.createdAt) })} · ${t("taskUpdatedAt", { time: formatTaskTime(task.updatedAt) })}</span></div>${action}</div>`;
+  };
   openModal(`
     ${modalHeader(t("exportTaskTitle"))}
     <div class="modal-body">
-      ${state.tasks.length ? `<div class="task-list">${state.tasks.map(task => `
-        <div class="task-item">
-          <div><strong>${esc(task.id)}</strong><span>${task.includeRecording ? t("taskRows", { count: task.rows.length, groups: task.groups }) : t("taskDataRows", { count: task.rows.length })}</span><span>${t("taskStatusDone")}</span></div>
-          <button class="button" data-action="download-task" data-id="${task.id}"><svg><use href="#i-download"></use></svg>${t("download")}</button>
-        </div>`).join("")}</div>` : `<div class="empty-state"><div class="empty-icon"><svg><use href="#i-clock"></use></svg></div><strong>${t("noTasks")}</strong><p>${t("noTasksSub")}</p></div>`}
+      ${state.tasks.length ? `<div class="task-list">${state.tasks.map(statusMeta).join("")}</div>` : `<div class="empty-state"><div class="empty-icon"><svg><use href="#i-clock"></use></svg></div><strong>${t("noTasks")}</strong><p>${t("noTasksSub")}</p></div>`}
     </div>
     <div class="modal-foot"><button class="button" data-action="close-modal">${t("close")}</button></div>`, false);
 }
@@ -1212,7 +1276,7 @@ function downloadTranscript(id) {
 
 function downloadTask(id) {
   const task = state.tasks.find(item => item.id === id);
-  if (!task) return;
+  if (!task || task.status !== "done") return;
   const rows = task.rows.map(callId => callById(callId)).filter(Boolean);
   const resultData = buildResultCsv(rows);
   if (!task.includeRecording) {
@@ -1414,6 +1478,7 @@ document.addEventListener("click", event => {
   else if (action === "open-export") openExportModal();
   else if (action === "start-export") startExport();
   else if (action === "cancel-export") cancelExport();
+  else if (action === "cancel-task") cancelTask(id);
   else if (action === "open-tasks") openTasks();
   else if (action === "download-task") downloadTask(id);
   else if (action === "play-recording") openRecording(id);
