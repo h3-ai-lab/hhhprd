@@ -136,7 +136,7 @@
       const ad = ADS.find(item => item.adId === lead.adId) || null;
       return {...lead, ad, registrationMethod:"phone", landingSource:ad ? `${ad.channel.toLowerCase()}_lead` : "organic",
         appSource:ad?.channel || "organic", ageRange:index % 3 === 0 ? "6-8" : "3-5", courseLevel:index % 4 === 0 ? "—" : "L1",
-        consultationBooked:lead.booked, outboundBooked:false, loginAccount:lead.userType==="guest"?"—":`user-${lead.userId.slice(-4)}@dino.ai`, smsCode:"••••"};
+        consultationBooked:lead.booked, outboundBooked:false, firstPaymentAt:lead.paid?`${lead.registered} ${String(10+(index%8)).padStart(2,"0")}:${String(15+(index%4)*10).padStart(2,"0")}`:"", loginAccount:lead.userType==="guest"?"—":`user-${lead.userId.slice(-4)}@dino.ai`, smsCode:"••••"};
     });
 
     const TEXT = {
@@ -147,7 +147,7 @@
         userType:"用户类型",registration:"注册方式",landingSource:"渠道来源-落地页",appSource:"渠道来源-App",businessLine:"业务线",
         userStatus:"用户状态",channel:"广告渠道",campaign:"活动",adset:"广告组",ad:"广告",reset:"重置",export:"导出",selectedCount:"已选 {count} 项",clearSelection:"清空选择",
         batchAssign:"批量分配",crossLineBlocked:"所选线索包含多个业务线，请缩小选择范围后再分配。",singleLineReady:"所选线索属于同一业务线，可以继续批量分配。",
-        userId:"用户 ID",studentName:"学生姓名",status:"用户状态",age:"年龄段",course:"课程等级",login:"登录账号",
+        userId:"用户 ID",studentName:"学生姓名",status:"用户状态",paymentEvent:"支付事件",age:"年龄段",course:"课程等级",login:"登录账号",
         sourceLanding:"渠道来源-落地页",intent:"购买意向",stage:"当前跟进",cc:"CC",registered:"注册日期",download:"下载数据",
         pool:"公海",mine:"我的跟进",paid:"已付费",overview:"转化总览",followup:"销售跟进",payment:"支付结果",
         allCc:"全部 CC",dateFrom:"开始日期",dateTo:"结束日期",detailTitle:"转化明细",firstBy:"先按",secondBy:"再按",dateDimension:"注册日期",ccDimension:"当前 CC",adDimension:"投放",noBreakdown:"不再细分",adLevel:"投放层级",byChannel:"广告渠道",byCampaign:"活动",byAdset:"广告组",byAd:"广告",sameLevelError:"先按和再按不能选择相同投放层级",
@@ -179,7 +179,7 @@
         userType:"User Type",registration:"Registration",landingSource:"Landing Source",appSource:"App Source",businessLine:"Business Line",
         userStatus:"User Status",channel:"Ad Channel",campaign:"Campaign",adset:"Ad Set",ad:"Ad",reset:"Reset",export:"Export",selectedCount:"{count} selected",clearSelection:"Clear selection",
         batchAssign:"Bulk assign",crossLineBlocked:"Selected leads span multiple business lines. Narrow the selection before assigning.",singleLineReady:"All selected leads belong to one business line and can be bulk assigned.",
-        userId:"User ID",studentName:"Student",status:"User Status",age:"Age",course:"Course Level",login:"Login Account",
+        userId:"User ID",studentName:"Student",status:"User Status",paymentEvent:"Payment Event",age:"Age",course:"Course Level",login:"Login Account",
         sourceLanding:"Landing Source",intent:"Purchase Intent",stage:"Follow-up Stage",cc:"CC",registered:"Registration Date",download:"Download Data",
         pool:"Lead Pool",mine:"My Follow-ups",paid:"Paid",overview:"Conversion Overview",followup:"Sales Follow-up",payment:"Payment Results",
         allCc:"All CC",dateFrom:"Start Date",dateTo:"End Date",detailTitle:"Conversion Detail",firstBy:"First by",secondBy:"Then by",dateDimension:"Registration Date",ccDimension:"Current CC",adDimension:"Ads",noBreakdown:"No further breakdown",adLevel:"Ad level",byChannel:"Ad Channel",byCampaign:"Campaign",byAdset:"Ad Set",byAd:"Ad",sameLevelError:"First-by and then-by ad levels must be different",
@@ -362,11 +362,11 @@
     }
 
     function userTable(rows) {
-      return `<div class="tableWrap"><table class="table"><thead><tr><th>${t("userId")}</th><th>${t("studentName")}</th><th>${t("status")}</th>
+      return `<div class="tableWrap"><table class="table"><thead><tr><th>${t("userId")}</th><th>${t("studentName")}</th><th>${t("status")}</th><th>${t("paymentEvent")}</th>
         <th>${t("userType")}</th><th>${t("age")}</th><th>${t("course")}</th><th>${t("registration")}</th><th>${t("login")}</th><th>${t("smsCode")}</th><th>${t("sourceLanding")}</th>
         <th>${t("channel")}</th><th>${t("campaign")}</th><th>${t("adset")}</th><th>${t("ad")}</th></tr></thead>
         <tbody>${rows.map(lead=>`<tr><td class="mono">${lead.userId}</td><td><strong>${esc(lead.name)}</strong></td>
-        <td><span class="tag ${lead.userStatus==="paid"?"green":lead.userStatus==="trial"?"amber":"gray"}">${label(lead.userStatus)}</span></td>
+        <td><span class="tag ${lead.userStatus==="paid"?"green":lead.userStatus==="trial"?"amber":"gray"}">${label(lead.userStatus)}</span></td><td class="mono">${lead.firstPaymentAt || "—"}</td>
         <td>${label(lead.userType)}</td><td>${lead.ageRange}</td><td>${lead.courseLevel}</td><td>${t("phone")}</td><td>${esc(lead.loginAccount)}</td><td>${lead.smsCode}</td>
         <td>${esc(lead.landingSource)}</td>${adCells(lead)}</tr>`).join("")}</tbody></table></div>`;
     }
@@ -394,10 +394,10 @@
 
     function salesTable(rows) {
       return `<div class="tableWrap"><table class="table"><thead><tr><th></th><th>${t("userId")}</th><th>${t("studentName")}</th><th>${t("intent")}</th>
-        <th>${t("userStatus")}</th><th>${t("userType")}</th><th>${t("age")}</th><th>${t("course")}</th><th>${t("login")}</th><th>${t("sourceLanding")}</th>
+        <th>${t("userStatus")}</th><th>${t("paymentEvent")}</th><th>${t("userType")}</th><th>${t("age")}</th><th>${t("course")}</th><th>${t("login")}</th><th>${t("sourceLanding")}</th>
         <th>${t("businessLine")}</th><th>${t("stage")}</th><th>${t("channel")}</th><th>${t("campaign")}</th><th>${t("adset")}</th><th>${t("ad")}</th></tr></thead>
         <tbody>${rows.map(lead=>`<tr><td><input type="checkbox" data-select-lead="${lead.leadId}" ${state.selectedLeadIds.has(lead.leadId)?"checked":""} aria-label="${esc(lead.leadId)}"></td><td class="mono">${lead.userId}</td><td><strong>${esc(lead.name)}</strong></td><td>${label(lead.intent)}</td>
-        <td>${label(lead.userStatus)}</td><td>${label(lead.userType)}</td><td>${lead.ageRange}</td><td>${lead.courseLevel}</td><td>${esc(lead.loginAccount)}</td><td>${esc(lead.landingSource)}</td>
+        <td>${label(lead.userStatus)}</td><td class="mono">${lead.firstPaymentAt || "—"}</td><td>${label(lead.userType)}</td><td>${lead.ageRange}</td><td>${lead.courseLevel}</td><td>${esc(lead.loginAccount)}</td><td>${esc(lead.landingSource)}</td>
         <td>${lead.line}</td><td><span class="tag blue">${stageLabel(lead.stage)}</span></td>${adCells(lead)}</tr>`).join("")}</tbody></table></div>`;
     }
 
@@ -533,8 +533,8 @@
 
     function exportRows(kind) {
       const rows=kind==="userFilters"?filteredUsers():filteredSales();
-      const header=["lead_id","user_id","name","business_line","media_source","campaign_id","campaign_name","adset_id","adset_name","ad_id","ad_name"];
-      const body=rows.map(x=>[x.leadId,x.userId,x.name,x.line,x.ad?.channel||"",x.ad?.campaignId||"",x.ad?.campaignName||"",x.ad?.adsetId||"",x.ad?.adsetName||"",x.ad?.adId||"",x.ad?.adName||""]);
+      const header=["lead_id","user_id","name","user_status","payment_event","business_line","media_source","campaign_id","campaign_name","adset_id","adset_name","ad_id","ad_name"];
+      const body=rows.map(x=>[x.leadId,x.userId,x.name,x.userStatus,x.firstPaymentAt||"",x.line,x.ad?.channel||"",x.ad?.campaignId||"",x.ad?.campaignName||"",x.ad?.adsetId||"",x.ad?.adsetName||"",x.ad?.adId||"",x.ad?.adName||""]);
       const csv="\uFEFF"+[header,...body].map(row=>row.map(cell=>`"${String(cell).replaceAll('"','""')}"`).join(",")).join("\r\n");
       const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
       const a=document.createElement("a");a.href=url;a.download="crm-lead-quality.csv";a.click();URL.revokeObjectURL(url);showToast(t("exportDone"));
