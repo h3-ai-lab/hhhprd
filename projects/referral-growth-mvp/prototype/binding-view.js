@@ -22,7 +22,7 @@ const TEXT = {
     "bindings.newSocial": "登记社媒推荐",
     "bindings.newReferral": "新建好友推荐",
     "bindings.bound": "已生效关系",
-    "bindings.boundNote": "等待首课、购买或归属异常处理",
+    "bindings.boundNote": "等待首课、购买或奖励发放结果",
     "bindings.pending": "待转移关系",
     "bindings.pendingNote": "等待原归属 CC 重新分配线索",
     "bindings.automatic": "自动发放",
@@ -98,7 +98,7 @@ const TEXT = {
     "trigger.firstTrial": "等待首课完课",
     "trigger.purchase": "等待首次购买",
     "trigger.socialReview": "等待社媒推荐审核或选中结果",
-    "trigger.assignment": "处理归属异常",
+    "trigger.assignment": "等待销售中心处理归属",
     "reward.firstTrial": "+14 天",
     "reward.purchase": "+{count} 个月",
     "reward.published": "+5 天",
@@ -153,8 +153,6 @@ const TEXT = {
     "trialStatus.COMPLETED": "已完成",
     "referralModal.successPending": "绑定成功，被推荐人当前归属 {owner}，请联系其重新分配线索",
     "referralModal.successActive": "绑定成功，被推荐人已归属目标归属 CC，后续业务事件将自动触发奖励",
-    "transfer.action": "重新分配线索",
-    "transfer.success": "被推荐人已转给 {owner}，绑定关系生效",
     "socialModal.title": "登记社媒推荐",
     "socialModal.subtitle": "先保存内容记录，审核结果变化后自动发奖",
     "socialModal.user": "发布用户",
@@ -201,7 +199,7 @@ const TEXT = {
     "bindings.newSocial": "Record social media recommendation",
     "bindings.newReferral": "New friend referral",
     "bindings.bound": "Active relationships",
-    "bindings.boundNote": "Awaiting first lesson, purchase, or assignment review",
+    "bindings.boundNote": "Waiting for the first lesson, purchase, or reward issuance result",
     "bindings.pending": "Pending ownership transfer",
     "bindings.pendingNote": "Waiting for the current CC to reassign the lead",
     "bindings.automatic": "Automatic issuance",
@@ -277,7 +275,7 @@ const TEXT = {
     "trigger.firstTrial": "Awaiting first lesson completion",
     "trigger.purchase": "Awaiting first purchase",
     "trigger.socialReview": "Awaiting social media review or selection",
-    "trigger.assignment": "Assignment review",
+    "trigger.assignment": "Awaiting ownership handling in Sales Center",
     "reward.firstTrial": "+14 days",
     "reward.purchase": "+{count} months",
     "reward.published": "+5 days",
@@ -332,8 +330,6 @@ const TEXT = {
     "trialStatus.COMPLETED": "Completed",
     "referralModal.successPending": "Relationship linked. The referred user currently belongs to {owner}; contact them to reassign the lead.",
     "referralModal.successActive": "Relationship linked. The referred user already belongs to the target owner CC; business events will now trigger rewards.",
-    "transfer.action": "Reassign lead",
-    "transfer.success": "Referred user reassigned to {owner}; the referral relationship is now active.",
     "socialModal.title": "Record Social Media Recommendation",
     "socialModal.subtitle": "Save the content first; review outcomes trigger rewards automatically",
     "socialModal.user": "Publishing user",
@@ -909,23 +905,9 @@ function renderUnified() {
       <td>${row.reward}</td>
       <td><span class="mono">${row.giftOrderId}</span><span class="secondary">${t(`giftStatus.${row.giftOrderStatus}`)} · ฿0</span></td>
       <td>${rewardStatusLabel(row.rewardStatus)}</td>
-      <td>${row.source === "referral" && row.bindingStatus === "pendingTransfer" ? `<button class="btn small transfer-lead" data-binding-id="${row.id}">${t("transfer.action")}</button>` : "—"}</td>
     </tr>`).join("");
   document.getElementById("unifiedEmpty").hidden = rows.length > 0;
   document.getElementById("unifiedCount").textContent = t("unified.count", { count: rows.length });
-  body.querySelectorAll(".transfer-lead").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.stopPropagation();
-      const relation = referrals.find((item) => item.id === button.dataset.bindingId);
-      if (!relation) return;
-      relation.bindingStatus = "active";
-      relation.currentOwner = relation.owner;
-      relation.nextTrigger = "trigger.firstTrial";
-      renderUnified();
-      renderReferrals();
-      showToast("transfer.success", { owner: relation.owner });
-    });
-  });
   body.querySelectorAll("[data-detail-id]").forEach((rowElement) => {
     rowElement.addEventListener("click", () => {
       const row = rows.find((item) => item.id === rowElement.dataset.detailId);

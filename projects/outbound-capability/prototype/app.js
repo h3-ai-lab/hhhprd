@@ -64,6 +64,7 @@ const STR = {
     totalCalls: "共 {count} 通",
     searchCalls: "搜索用户 ID、姓名、登录账号或主叫号码",
     callResult: "全部通话结果",
+    allCallers: "全部主叫号码",
     allAgents: "全部外呼坐席",
     startTime: "开始时间",
     endTime: "结束时间",
@@ -107,9 +108,6 @@ const STR = {
     bundleNotice: "每通电话使用 call_id 独立目录，manifest.csv 保存文件路径与缺失原因。",
     createExport: "创建导出任务",
     exportCreating: "正在创建任务…",
-    exportProgress: "正在整理录音与逐字稿",
-    exportProgressCount: "{done} / {total} 通",
-    backgroundExportNotice: "关闭下方进度弹窗不会中断任务，可稍后在“导出任务”中查看进度、取消或下载。",
     cancelTask: "取消任务",
     exportSuccess: "导出包已生成",
     exportSuccessMeta: "任务 {task} · {groups} 个录音目录 · {missing} 个缺失文件",
@@ -121,17 +119,18 @@ const STR = {
     taskCanceled: "导出任务已取消",
     bundleDownloaded: "导出包已开始下载",
     dataDownloaded: "数据文件已开始下载",
-    exportTaskTitle: "导出任务",
+    exportTaskTitle: "通话记录导出任务",
     noTasks: "暂无导出任务",
     noTasksSub: "从通话记录创建录音导出任务后会显示在这里",
     taskStatusDone: "已完成",
     taskStatusRunning: "处理中",
     taskStatusCanceled: "已取消",
     taskStatusFailed: "失败",
+    taskStatusExpired: "已过期",
     taskRows: "{count} 条记录 · {groups} 个录音目录",
     taskDataRows: "{count} 条记录",
     taskCreatedAt: "创建于 {time}",
-    taskProgress: "进度 {percent}% · {done}/{total} 通",
+    taskEta: "预计完成 {time}",
     taskUpdatedAt: "更新于 {time}",
     taskCancel: "取消",
     download: "下载",
@@ -248,6 +247,7 @@ const STR = {
     totalCalls: "{count} calls",
     searchCalls: "Search user ID, name, login, or caller number",
     callResult: "All call results",
+    allCallers: "All caller numbers",
     allAgents: "All agents",
     startTime: "Start time",
     endTime: "End time",
@@ -291,9 +291,6 @@ const STR = {
     bundleNotice: "Each call has a call_id folder. manifest.csv stores file paths and missing-file reasons.",
     createExport: "Create Export Task",
     exportCreating: "Creating task…",
-    exportProgress: "Preparing recordings and transcripts",
-    exportProgressCount: "{done} / {total} calls",
-    backgroundExportNotice: "Closing this progress dialog will not stop the task. Reopen Export Tasks to view progress, cancel, or download.",
     cancelTask: "Cancel Task",
     exportSuccess: "Export package ready",
     exportSuccessMeta: "Task {task} · {groups} recording folders · {missing} missing files",
@@ -305,17 +302,18 @@ const STR = {
     taskCanceled: "Export task canceled",
     bundleDownloaded: "Package download started",
     dataDownloaded: "Data file download started",
-    exportTaskTitle: "Export Tasks",
+    exportTaskTitle: "Call Record Export Tasks",
     noTasks: "No export tasks",
     noTasksSub: "Recording export tasks created from Call Records will appear here",
     taskStatusDone: "Completed",
     taskStatusRunning: "Processing",
     taskStatusCanceled: "Canceled",
     taskStatusFailed: "Failed",
+    taskStatusExpired: "Expired",
     taskRows: "{count} records · {groups} recording folders",
     taskDataRows: "{count} records",
     taskCreatedAt: "Created {time}",
-    taskProgress: "Progress {percent}% · {done}/{total} calls",
+    taskEta: "Estimated completion {time}",
     taskUpdatedAt: "Updated {time}",
     taskCancel: "Cancel",
     download: "Download",
@@ -410,7 +408,7 @@ const state = {
   numberPage: 1,
   callPage: 1,
   numberFilters: { q: "", supplier: "", route: "", line: "", status: "" },
-  callFilters: { q: "", line: "", result: "", agent: "", start: "", end: "" },
+  callFilters: { q: "", line: "", caller: "", result: "", agent: "", start: "", end: "" },
   modal: null,
   tasks: [],
   exportTimer: null,
@@ -481,6 +479,7 @@ function filteredCalls() {
     const date = item.time.slice(0, 10);
     return (!query || haystack.includes(query))
       && (!f.line || item.line === f.line)
+      && (!f.caller || item.caller === f.caller)
       && (!f.result || item.result === f.result)
       && (!f.agent || item.agent === f.agent)
       && (!f.start || date >= f.start)
@@ -598,6 +597,7 @@ function renderCallsPage() {
   const pageRows = rows.slice((state.callPage - 1) * perPage, state.callPage * perPage);
   const f = state.callFilters;
   const agents = [...new Set(calls.map(item => item.agent))];
+  const callers = [...new Set(calls.map(item => item.caller).filter(Boolean))].sort();
   $("#content").innerHTML = `
     <div class="helper-banner"><svg><use href="#i-alert"></use></svg><span>${state.lang === "zh" ? "外呼系统与 CRM 轻量集成：坐席点击号码发起外呼，挂断后填写通话小结，系统自动归档到客户档案与销售跟进记录。" : "The calling system is integrated with CRM: agents dial from a lead, complete the call summary, and the system archives the call and follow-up."}</span></div>
     <section class="panel">
@@ -616,6 +616,10 @@ function renderCallsPage() {
         <select class="control select" id="call-line" aria-label="${t("colLines")}">
           <option value="">${t("allBusinessLine")}</option>
           ${BUSINESS_LINES.map(item => `<option value="${item.value}" ${f.line === item.value ? "selected" : ""}>${esc(item[state.lang])}</option>`).join("")}
+        </select>
+        <select class="control select" id="call-caller" aria-label="${t("colCaller")}">
+          <option value="">${t("allCallers")}</option>
+          ${callers.map(caller => `<option value="${caller}" ${f.caller === caller ? "selected" : ""}>${esc(caller)}</option>`).join("")}
         </select>
         <select class="control select" id="call-result" aria-label="${t("colResult")}">
           <option value="">${t("callResult")}</option>
@@ -693,7 +697,7 @@ function bindCallFilters() {
     input.setSelectionRange(input.value.length, input.value.length);
   });
   [
-    ["call-line", "line"], ["call-result", "result"], ["call-agent", "agent"], ["call-start", "start"], ["call-end", "end"]
+    ["call-line", "line"], ["call-caller", "caller"], ["call-result", "result"], ["call-agent", "agent"], ["call-start", "start"], ["call-end", "end"]
   ].forEach(([id, key]) => {
     $(`#${id}`).addEventListener("change", event => {
       state.callFilters[key] = event.target.value;
@@ -1026,7 +1030,7 @@ function resetImport() {
 
 function openExportModal() {
   const rows = filteredCalls();
-  state.modal = { type: "export", stage: "form", includeRecording: false, rows: rows.map(row => row.id), progress: 0 };
+  state.modal = { type: "export", includeRecording: false, rows: rows.map(row => row.id) };
   renderExportModal();
 }
 
@@ -1041,73 +1045,38 @@ function renderExportModal() {
   if (!state.modal) return;
   const rows = state.modal.rows.map(id => calls.find(item => item.id === id)).filter(Boolean);
   const stats = exportStats(rows);
-  if (state.modal.stage === "form") {
-    const include = state.modal.includeRecording;
-    openModal(`
-      ${modalHeader(t("exportTitle"), t("exportSubtitle"))}
-      <div class="modal-body">
-        <div class="summary-grid">
-          <div class="summary-item"><span>${t("resultRows")}</span><strong>${stats.rows}</strong></div>
-          <div class="summary-item"><span>${t("connectedRows")}</span><strong>${stats.connected}</strong></div>
-          <div class="summary-item"><span>${t("locatableGroups")}</span><strong>${stats.locatable}</strong></div>
-          <div class="summary-item"><span>${t("missingFiles")}</span><strong>${stats.missing}</strong></div>
-        </div>
-        <div class="export-option">
-          <div><strong>${t("includeRecording")}</strong><p>${t("includeRecordingHint")}</p></div>
-          <label class="switch"><input id="include-recording" type="checkbox" ${include ? "checked" : ""} aria-label="${t("includeRecording")}"><span></span></label>
-        </div>
-        ${include ? `
-          <div class="bundle-preview">outbound_recording_ALL_20261116123000_OB20261116001.zip
+  const include = state.modal.includeRecording;
+  openModal(`
+    ${modalHeader(t("exportTitle"), t("exportSubtitle"))}
+    <div class="modal-body">
+      <div class="summary-grid">
+        <div class="summary-item"><span>${t("resultRows")}</span><strong>${stats.rows}</strong></div>
+        <div class="summary-item"><span>${t("connectedRows")}</span><strong>${stats.connected}</strong></div>
+        <div class="summary-item"><span>${t("locatableGroups")}</span><strong>${stats.locatable}</strong></div>
+        <div class="summary-item"><span>${t("missingFiles")}</span><strong>${stats.missing}</strong></div>
+      </div>
+      <div class="export-option">
+        <div><strong>${t("includeRecording")}</strong><p>${t("includeRecordingHint")}</p></div>
+        <label class="switch"><input id="include-recording" type="checkbox" ${include ? "checked" : ""} aria-label="${t("includeRecording")}"><span></span></label>
+      </div>
+      ${include ? `
+        <div class="bundle-preview">outbound_recording_ALL_20261116123000_OB20261116001.zip
 ├── manifest.csv
 ├── call-records.csv
 └── files/
     └── {call_id}/
         ├── recording.{ext}
         └── transcript.{ext}</div>
-          <div class="notice">${t("bundleNotice")}</div>` : ""}
-      </div>
-      <div class="modal-foot">
-        <button class="button" data-action="close-modal">${t("cancel")}</button>
-        <button class="button primary" data-action="start-export">${t("createExport")}</button>
-      </div>`, true);
-    $("#include-recording").addEventListener("change", event => {
-      state.modal.includeRecording = event.target.checked;
-      renderExportModal();
-    });
-  } else if (state.modal.stage === "progress") {
-    const task = state.tasks.find(item => item.id === state.modal.taskId);
-    if (!task) return;
-    const percent = Math.round((task.progress / Math.max(1, task.total)) * 100);
-    openModal(`
-      ${modalHeader(t("exportTitle"), t("exportProgress"))}
-      <div class="modal-body">
-        <div class="progress-wrap">
-          <div class="progress-head"><span>${t("exportProgressCount", { done: task.progress, total: task.total })}</span><strong>${percent}%</strong></div>
-          <div class="progress-track"><div class="progress-bar" style="width:${percent}%"></div></div>
-        </div>
-        <div class="notice" style="margin-top:14px">${t("backgroundExportNotice")}</div>
-        <div class="bundle-preview" style="margin-top:18px">manifest.csv
-call-records.csv
-files/{call_id}/recording.{ext}
-files/{call_id}/transcript.{ext}</div>
-      </div>
-      <div class="modal-foot"><button class="button" data-action="cancel-export" data-id="${task.id}">${t("cancelTask")}</button></div>`, true);
-  } else if (state.modal.stage === "success") {
-    const task = state.tasks.find(item => item.id === state.modal.taskId);
-    openModal(`
-      ${modalHeader(t("exportTitle"))}
-      <div class="modal-body">
-        <div class="success-block">
-          <div class="success-icon"><svg><use href="#i-check"></use></svg></div>
-          <h3>${task.includeRecording ? t("exportSuccess") : t("dataExportSuccess")}</h3>
-          <p>${task.includeRecording ? t("exportSuccessMeta", { task: task.id, groups: task.groups, missing: task.missing }) : t("dataExportMeta", { task: task.id, count: task.rows.length })}</p>
-        </div>
-      </div>
-      <div class="modal-foot">
-        <button class="button" data-action="close-modal">${t("close")}</button>
-        <button class="button primary" data-action="download-task" data-id="${task.id}"><svg><use href="#i-download"></use></svg>${task.includeRecording ? t("downloadBundle") : t("downloadDataFile")}</button>
-      </div>`, true);
-  }
+        <div class="notice">${t("bundleNotice")}</div>` : ""}
+    </div>
+    <div class="modal-foot">
+      <button class="button" data-action="close-modal">${t("cancel")}</button>
+      <button class="button primary" data-action="start-export">${t("createExport")}</button>
+    </div>`, true);
+  $("#include-recording").addEventListener("change", event => {
+    state.modal.includeRecording = event.target.checked;
+    renderExportModal();
+  });
 }
 
 function startExport() {
@@ -1122,15 +1091,16 @@ function startExport() {
     rows: [...state.modal.rows],
     includeRecording: state.modal.includeRecording,
     status: "running",
-    progress: 0,
     total: stats.connected,
+    remainingTicks: 20,
+    estimatedAt: new Date(now.getTime() + 6000).toISOString(),
+    expiresAt: new Date(now.getTime() + 7 * 86400000).toISOString(),
     groups: state.modal.includeRecording ? stats.locatable : 0,
     missing: state.modal.includeRecording ? stats.missing : 0
   };
   state.tasks.unshift(task);
-  state.modal.stage = "progress";
-  state.modal.taskId = task.id;
-  renderExportModal();
+  state.modal = { type: "tasks" };
+  openTasks();
   ensureExportTicker();
 }
 
@@ -1140,28 +1110,16 @@ function ensureExportTicker() {
 }
 
 function advanceExportTasks() {
-  const running = state.tasks.filter(task => task.status === "running");
-  running.forEach(task => {
-    task.progress = Math.min(task.total, task.progress + Math.max(1, Math.ceil(task.total / 6)));
+  state.tasks.filter(task => task.status === "running").forEach(task => {
+    task.remainingTicks = Math.max(0, (task.remainingTicks || 0) - 1);
     task.updatedAt = new Date().toISOString();
-    if (task.progress >= task.total) {
-      task.progress = task.total;
-      task.status = "done";
-    }
+    if (task.remainingTicks === 0) task.status = "done";
   });
   if (!state.tasks.some(task => task.status === "running")) {
     clearInterval(state.exportTimer);
     state.exportTimer = null;
   }
-  if (state.modal?.type === "export" && state.modal.stage === "progress") {
-    const task = state.tasks.find(item => item.id === state.modal.taskId);
-    if (task?.status === "done") {
-      state.modal.stage = "success";
-      renderExportModal();
-    } else if (task?.status === "running") {
-      renderExportModal();
-    }
-  } else if (state.modal?.type === "tasks") {
+  if (state.modal?.type === "tasks") {
     openTasks();
   }
 }
@@ -1176,32 +1134,25 @@ function cancelTask(id) {
     state.exportTimer = null;
   }
   showToast(t("taskCanceled"));
-  if (state.modal?.type === "export") {
-    state.modal = { type: "tasks" };
-    openTasks();
-  } else {
-    openTasks();
-  }
-}
-
-function legacyCancelExport() {}
-
-function cancelExport(id) {
-  const taskId = id || state.modal?.taskId;
-  if (taskId) cancelTask(taskId);
+  if (state.modal?.type === "tasks") openTasks();
+  else renderCallsPage();
 }
 
 function openTasks() {
   state.modal = { type: "tasks" };
   const statusMeta = task => {
-    const percent = Math.round((task.progress / Math.max(1, task.total)) * 100);
-    const statusLabel = task.status === "done" ? t("taskStatusDone") : task.status === "canceled" ? t("taskStatusCanceled") : t("taskStatusRunning");
+    const expired = task.status === "done" && Date.now() > new Date(task.expiresAt).getTime();
+    const effectiveStatus = expired ? "expired" : task.status;
+    const statusLabel = effectiveStatus === "expired" ? t("taskStatusExpired") : effectiveStatus === "done" ? t("taskStatusDone") : effectiveStatus === "canceled" ? t("taskStatusCanceled") : t("taskStatusRunning");
+    const timing = effectiveStatus === "running"
+      ? t("taskEta", { time: formatTaskTime(task.estimatedAt) })
+      : t("taskUpdatedAt", { time: formatTaskTime(task.updatedAt) });
     const action = task.status === "running"
       ? `<button class="button" data-action="cancel-task" data-id="${task.id}">${t("taskCancel")}</button>`
       : task.status === "done"
-        ? `<button class="button" data-action="download-task" data-id="${task.id}"><svg><use href="#i-download"></use></svg>${t("download")}</button>`
+        ? expired ? "" : `<button class="button" data-action="download-task" data-id="${task.id}"><svg><use href="#i-download"></use></svg>${t("download")}</button>`
         : "";
-    return `<div class="task-item"><div><strong>${esc(task.id)}</strong><span>${task.includeRecording ? t("taskRows", { count: task.rows.length, groups: task.groups }) : t("taskDataRows", { count: task.rows.length })}</span><span>${t("taskProgress", { percent, done: task.progress, total: task.total })}</span><span>${statusLabel} · ${t("taskCreatedAt", { time: formatTaskTime(task.createdAt) })} · ${t("taskUpdatedAt", { time: formatTaskTime(task.updatedAt) })}</span></div>${action}</div>`;
+    return `<div class="task-item"><div><strong>${esc(task.id)}</strong><span>${task.includeRecording ? t("taskRows", { count: task.rows.length, groups: task.groups }) : t("taskDataRows", { count: task.rows.length })}</span><span>${statusLabel} · ${timing}</span><span>${t("taskCreatedAt", { time: formatTaskTime(task.createdAt) })}</span></div>${action}</div>`;
   };
   openModal(`
     ${modalHeader(t("exportTaskTitle"))}
@@ -1469,7 +1420,7 @@ document.addEventListener("click", event => {
   else if (action === "number-prev") { state.numberPage--; renderNumbersPage(); }
   else if (action === "number-next") { state.numberPage++; renderNumbersPage(); }
   else if (action === "reset-call-filters") {
-    state.callFilters = { q:"", line:"", result:"", agent:"", start:"", end:"" };
+    state.callFilters = { q:"", line:"", caller:"", result:"", agent:"", start:"", end:"" };
     state.callPage = 1;
     renderCallsPage();
   }
@@ -1477,7 +1428,6 @@ document.addEventListener("click", event => {
   else if (action === "call-next") { state.callPage++; renderCallsPage(); }
   else if (action === "open-export") openExportModal();
   else if (action === "start-export") startExport();
-  else if (action === "cancel-export") cancelExport();
   else if (action === "cancel-task") cancelTask(id);
   else if (action === "open-tasks") openTasks();
   else if (action === "download-task") downloadTask(id);
