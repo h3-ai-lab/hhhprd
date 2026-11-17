@@ -1,6 +1,6 @@
 id: REQ-ORG-001
 name: CRM组织架构&数据权限
-status: 待评审
+status: 评审后修订
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

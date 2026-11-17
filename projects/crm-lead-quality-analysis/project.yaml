@@ -1,6 +1,6 @@
 id: REQ-LQA-001
 name: CRM 线索质量分析
-status: 待评审
+status: 评审后修订
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md
