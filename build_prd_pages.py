@@ -16,6 +16,7 @@ PROJECTS = {
     "crm-line-messaging": "crm-LINE 消息发送",
     "user-consultation-lead": "用户咨询预约时间",
     "outbound-capability": "外呼能力一期",
+    "crm-lead-quality-analysis": "CRM 线索质量分析",
 }
 
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
