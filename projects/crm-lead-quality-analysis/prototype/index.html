@@ -54,6 +54,11 @@
       width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:12px}.help:hover{background:#e2eaf5;color:var(--blue)}
     .dashboardFilters{margin-bottom:14px}.dashboardBody{padding:16px}.dashboardHeading{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:13px}
     .dashboardHeading h2{font-size:18px;margin:0}.dataTime{color:var(--muted);font-size:12px}
+    .breakdownBar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line);background:#fff}
+    .breakdownLabel{font-size:12px;color:#68788c;font-weight:650;white-space:nowrap}.segment{display:flex;border:1px solid #cdd9e8;border-radius:8px;overflow:hidden}
+    .segment button{border:0;border-right:1px solid #cdd9e8;background:#fff;color:#52647a;padding:7px 12px;cursor:pointer;white-space:nowrap}
+    .segment button:last-child{border-right:0}.segment button.active{background:var(--blue);color:#fff}
+    .levelSelect{height:34px;min-width:130px}.breakdownError{color:var(--red);font-size:12px}
     .metricTable th,.metricTable td{text-align:right}.metricTable th:first-child,.metricTable td:first-child{text-align:left}
     .rate{font-weight:650}.rate small{display:block;font-weight:400;color:#8a98a9}
     .modalLayer{position:fixed;inset:0;background:rgba(7,22,38,.48);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
@@ -127,16 +132,16 @@
     const TEXT = {
       zh:{
         userCenter:"用户中心",salesCenter:"销售中心",dashboard:"管理看板",dinoCrm:"Dino CRM",navLabel:"线索质量分析",
-        userSub:"查询用户广告归因及业务状态",salesSub:"在线索处理过程中查看广告来源与跟进阶段",dashboardSub:"按广告层级比较线索业务表现",
+        userSub:"查询用户广告归因及业务状态",salesSub:"在线索处理过程中查看广告来源与跟进阶段",dashboardSub:"按投放角度查看线索业务表现",
         filters:"筛选条件",adAttribution:"广告归因",all:"全部",search:"搜索",searchUsers:"用户 ID / 姓名 / 登录账号",searchLeads:"用户 ID / 姓名 / 手机号",
         userType:"用户类型",registration:"注册方式",landingSource:"渠道来源-落地页",appSource:"渠道来源-App",businessLine:"业务线",
         userStatus:"用户状态",channel:"广告渠道",campaign:"活动",adset:"广告组",ad:"广告",reset:"重置",export:"导出",
         userId:"用户 ID",studentName:"学生姓名",status:"用户状态",age:"年龄段",course:"课程等级",login:"登录账号",
         sourceLanding:"渠道来源-落地页",intent:"购买意向",stage:"当前跟进",cc:"CC",registered:"注册日期",download:"下载数据",
         pool:"公海",mine:"我的跟进",paid:"已付费",overview:"转化总览",followup:"销售跟进",payment:"支付结果",
-        allCc:"全部 CC",dateFrom:"开始日期",dateTo:"结束日期",groupBy:"分组维度",byChannel:"按广告渠道",byCampaign:"按活动",byAdset:"按广告组",byAd:"按广告",
+        allCc:"全部 CC",dateFrom:"开始日期",dateTo:"结束日期",detailTitle:"转化明细",firstBy:"先按",secondBy:"再按",dateDimension:"注册日期",ccDimension:"当前 CC",adDimension:"投放",noBreakdown:"不再细分",adLevel:"投放层级",byChannel:"广告渠道",byCampaign:"活动",byAdset:"广告组",byAd:"广告",sameLevelError:"先按和再按不能选择相同投放层级",
         metricLeads:"线索数",metricOutbound:"外呼人数",metricConnected:"接通人数",metricBooked:"预约人数",metricTrial:"体验课完成人数",metricPaid:"已支付人数",
-        l2s:"L2S",qualityTable:"广告质量表",
+        l2s:"L2S",qualityTable:"转化明细",
         currentGroup:"当前分组",dataTime:"数据截止：2026-11-15 23:59",emptyTitle:"当前条件下暂无数据",emptySub:"调整筛选条件后重试",
         consultation:"销售咨询预约",yes:"是",no:"否",
         noAttribution:"未归因",metricHelp:"指标口径",close:"关闭",resetDone:"筛选条件已重置",exportDone:"已生成当前筛选结果",
@@ -158,16 +163,16 @@
       },
       en:{
         userCenter:"User Center",salesCenter:"Sales Center",dashboard:"Dashboard",dinoCrm:"Dino CRM",navLabel:"Lead Quality",
-        userSub:"Review ad attribution and user business status",salesSub:"View ad source and follow-up stage while working leads",dashboardSub:"Compare lead business outcomes by ad level",
+        userSub:"Review ad attribution and user business status",salesSub:"View ad source and follow-up stage while working leads",dashboardSub:"Review lead business outcomes by ad perspective",
         filters:"Filters",adAttribution:"Ad Attribution",all:"All",search:"Search",searchUsers:"User ID / name / login",searchLeads:"User ID / name / phone",
         userType:"User Type",registration:"Registration",landingSource:"Landing Source",appSource:"App Source",businessLine:"Business Line",
         userStatus:"User Status",channel:"Ad Channel",campaign:"Campaign",adset:"Ad Set",ad:"Ad",reset:"Reset",export:"Export",
         userId:"User ID",studentName:"Student",status:"User Status",age:"Age",course:"Course Level",login:"Login Account",
         sourceLanding:"Landing Source",intent:"Purchase Intent",stage:"Follow-up Stage",cc:"CC",registered:"Registration Date",download:"Download Data",
         pool:"Lead Pool",mine:"My Follow-ups",paid:"Paid",overview:"Conversion Overview",followup:"Sales Follow-up",payment:"Payment Results",
-        allCc:"All CC",dateFrom:"Start Date",dateTo:"End Date",groupBy:"Group By",byChannel:"Ad Channel",byCampaign:"Campaign",byAdset:"Ad Set",byAd:"Ad",
+        allCc:"All CC",dateFrom:"Start Date",dateTo:"End Date",detailTitle:"Conversion Detail",firstBy:"First by",secondBy:"Then by",dateDimension:"Registration Date",ccDimension:"Current CC",adDimension:"Ads",noBreakdown:"No further breakdown",adLevel:"Ad level",byChannel:"Ad Channel",byCampaign:"Campaign",byAdset:"Ad Set",byAd:"Ad",sameLevelError:"First-by and then-by ad levels must be different",
         metricLeads:"Leads",metricOutbound:"Outbound Users",metricConnected:"Connected Users",metricBooked:"Booked Users",metricTrial:"Trial-completed Users",metricPaid:"Paid Users",
-        l2s:"L2S",qualityTable:"Ad Quality",
+        l2s:"L2S",qualityTable:"Conversion Detail",
         currentGroup:"Current Group",dataTime:"Data through: 2026-11-15 23:59",emptyTitle:"No data for these filters",emptySub:"Adjust the filters and try again",
         consultation:"Consultation Booked",yes:"Yes",no:"No",
         noAttribution:"Unattributed",metricHelp:"Metric Definition",close:"Close",resetDone:"Filters reset",exportDone:"Current results exported",
@@ -194,10 +199,13 @@
       page: "users",
       salesTab: "mine",
       dashboardTab: "overview",
-      groupBy: "channel",
+      firstGroup: "date",
+      secondGroup: "none",
+      firstAdLevel: "channel",
+      secondAdLevel: "campaign",
       userFilters: {q:"",userType:"",registration:"",landingSource:"",appSource:"",businessLine:"",userStatus:"",channel:"",campaign:"",adset:"",ad:""},
       salesFilters: {q:"",businessLine:"",intent:"",cc:"",stage:"",ageRange:"",courseLevel:"",landingSource:"",appSource:"",userStatus:"",consultation:"",from:"",to:"",channel:"",campaign:"",adset:"",ad:""},
-      dashFilters: {businessLine:"",cc:"",from:"2026-11-09",to:"2026-11-15",channel:"",campaign:"",adset:"",ad:""}
+      dashFilters: {businessLine:"",cc:"",from:"2026-11-09",to:"2026-11-15"}
     };
     const t = (key,vars={}) => {
       let value = TEXT[state.lang][key] ?? key;
@@ -293,8 +301,7 @@
       return LEADS.filter(lead => (!f.businessLine || lead.line === f.businessLine)
         && (!f.cc || lead.cc === f.cc)
         && (!f.from || lead.registered >= f.from)
-        && (!f.to || lead.registered <= f.to)
-        && matchesAd(lead,f));
+        && (!f.to || lead.registered <= f.to));
     }
 
     function selectFilters(kind,fields) {
@@ -380,25 +387,32 @@
 
     function renderDashboard() {
       const rows = filteredDashboard(), f = state.dashFilters, m = metricCounts(rows);
-      const tabs = [["overview",t("overview")],["followup",t("followup")],["payment",t("payment")]];
+      const tabs = [["overview",t("overview")],["followup",t("followup")]];
       const definitions = dashboardMetricSets(m);
       return `<div class="pageHead"><div><h1>${t("dashboard")}</h1><p class="sub">${t("dashboardSub")}</p></div></div>
         <section class="panel"><div class="tabs">${tabs.map(([key,name])=>`<button class="tab ${state.dashboardTab===key?"active":""}" data-dashboard-tab="${key}">${name}</button>`).join("")}</div>
         <div class="filterPanel dashboardFilters">${selectFilters("dashFilters",[
           ["businessLine",t("businessLine"),["VN","MY","TH"],t("all")],["cc",t("cc"),["Nguyễn Anh","Mali Tan","Porn K."],t("allCc")]
-        ])}${adFilterHtml("dashFilters")}
+        ])}
         <div class="filterRow"><div class="field"><label>${t("dateFrom")}</label><input type="date" class="control" data-filter-kind="dashFilters" data-filter-key="from" value="${f.from}"></div>
         <div class="field"><label>${t("dateTo")}</label><input type="date" class="control" data-filter-kind="dashFilters" data-filter-key="to" value="${f.to}"></div>
-        <div class="field"><label>${t("groupBy")}</label><select class="control" data-group-by>${[["channel",t("byChannel")],["campaign",t("byCampaign")],["adset",t("byAdset")],["ad",t("byAd")]].map(([v,l])=>option(v,l,state.groupBy)).join("")}</select></div>
         <div class="actionRow"><button class="button ghost" data-action="reset-dashboard">${t("reset")}</button></div></div></div></section>
         <div class="metrics">${definitions.map(def=>metricCard(def,m)).join("")}</div>
-        <section class="panel dashboardBody"><div class="dashboardHeading"><h2>${t("qualityTable")}</h2><span class="dataTime">${t("dataTime")}</span></div>
-        ${rows.length ? qualityTable(rows) : emptyState()}</section>`;
+        <section class="panel"><div class="dashboardHeading" style="padding:16px 18px 0"><h2>${t("detailTitle")}</h2><span class="dataTime">${t("dataTime")}</span></div>
+        <div class="breakdownBar">
+          <span class="breakdownLabel">${t("firstBy")}</span>
+          <div class="segment">${[["date",t("dateDimension")],["cc",t("ccDimension")],["ad",t("adDimension")]].map(([value,name])=>`<button data-breakdown="first" data-value="${value}" class="${state.firstGroup===value?"active":""}">${name}</button>`).join("")}</div>
+          ${state.firstGroup==="ad"?adLevelSelect("first",state.firstAdLevel):""}
+          <span class="breakdownLabel">${t("secondBy")}</span>
+          <div class="segment">${[["none",t("noBreakdown")],["cc",t("ccDimension")],["ad",t("adDimension")]].map(([value,name])=>`<button data-breakdown="second" data-value="${value}" class="${state.secondGroup===value?"active":""}">${name}</button>`).join("")}</div>
+          ${state.secondGroup==="ad"?adLevelSelect("second",state.secondAdLevel):""}
+          ${state.firstGroup==="ad"&&state.secondGroup==="ad"&&state.firstAdLevel===state.secondAdLevel?`<span class="breakdownError">${t("sameLevelError")}</span>`:""}
+        </div>
+        <div class="dashboardBody">${rows.length ? qualityTable(rows) : emptyState()}</div></section>`;
     }
 
     function dashboardMetricSets(m) {
       const base = [{key:"leads",value:m.leads},{key:"outbound",value:m.outbound},{key:"connected",value:m.connected},{key:"booked",value:m.booked},{key:"trial",value:m.trial},{key:"paid",value:m.paid}];
-      if (state.dashboardTab === "payment") return [{key:"leads",value:m.leads},{key:"paid",value:m.paid},{key:"l2s",num:m.paid,den:m.leads}];
       if (state.dashboardTab === "followup") return [{key:"leads",value:m.leads},{key:"connected",value:m.connected},{key:"booked",value:m.booked},{key:"trial",value:m.trial},{key:"paid",value:m.paid}];
       return [...base,{key:"l2s",num:m.paid,den:m.leads}];
     }
@@ -416,27 +430,47 @@
     }
 
     function qualityTable(rows) {
-      const groups = groupLeads(rows,state.groupBy);
+      const invalid = state.firstGroup==="ad" && state.secondGroup==="ad" && state.firstAdLevel===state.secondAdLevel;
+      if(invalid) return `<div class="empty"><strong>${t("sameLevelError")}</strong></div>`;
+      const showSecond = state.secondGroup !== "none";
+      const groups = groupLeads(rows);
       const keys = ["leads","outbound","connected","booked","trial","paid"];
-      return `<div class="tableWrap"><table class="table metricTable"><thead><tr><th>${t("currentGroup")}</th>${keys.map(key=>`<th>${metricLabel(key)} <button class="help" data-metric="${key}" style="position:relative;top:auto;right:auto;vertical-align:middle">i</button></th>`).join("")}
+      return `<div class="tableWrap"><table class="table metricTable"><thead><tr><th>${t("firstBy")} · ${dimensionLabel(state.firstGroup)}</th>${showSecond?`<th>${t("secondBy")} · ${dimensionLabel(state.secondGroup)}</th>`:""}${keys.map(key=>`<th>${metricLabel(key)} <button class="help" data-metric="${key}" style="position:relative;top:auto;right:auto;vertical-align:middle">i</button></th>`).join("")}
         <th>${t("l2s")} <button class="help" data-metric="l2s" style="position:relative;top:auto;right:auto;vertical-align:middle">i</button></th></tr></thead>
-        <tbody>${groups.map(group=>{const m=metricCounts(group.rows);return `<tr><td><strong>${esc(group.label)}</strong><span class="subtext">${esc(group.id || "")}</span></td>
+        <tbody>${groups.map(group=>{const m=metricCounts(group.rows);return `<tr><td><strong>${esc(group.firstLabel)}</strong><span class="subtext">${esc(group.firstId || "")}</span></td>${showSecond?`<td><strong>${esc(group.secondLabel)}</strong><span class="subtext">${esc(group.secondId || "")}</span></td>`:""}
           <td>${m.leads}</td><td>${m.outbound}</td><td>${m.connected}</td><td>${m.booked}</td><td>${m.trial}</td><td>${m.paid}</td>
           <td class="rate">${pct(m.paid,m.leads)}<small>${m.paid} / ${m.leads}</small></td></tr>`}).join("")}</tbody></table></div>`;
     }
 
-    function groupLeads(rows,key) {
+    function groupLeads(rows) {
       const map = new Map();
       rows.forEach(lead=>{
-        const ad=adFor(lead);
-        let label,id;
-        if(key==="channel"){label=ad?.channel || t("noAttribution");id=ad?.channel || "";}
-        if(key==="campaign"){label=ad?.campaignName || t("noAttribution");id=ad?.campaignId || "";}
-        if(key==="adset"){label=ad?.adsetName || t("noAttribution");id=ad?.adsetId || "";}
-        if(key==="ad"){label=ad?.adName || t("noAttribution");id=ad?.adId || "";}
-        const mapKey=`${label}|${id}`; if(!map.has(mapKey)) map.set(mapKey,{label,id,rows:[]}); map.get(mapKey).rows.push(lead);
+        const first=dimensionMeta(lead,state.firstGroup,state.firstAdLevel);
+        const second=dimensionMeta(lead,state.secondGroup,state.secondAdLevel);
+        const mapKey=`${first.label}|${first.id}|${second.label}|${second.id}`;
+        if(!map.has(mapKey)) map.set(mapKey,{firstLabel:first.label,firstId:first.id,secondLabel:second.label,secondId:second.id,rows:[]});
+        map.get(mapKey).rows.push(lead);
       });
-      return [...map.values()].sort((a,b)=>a.label.localeCompare(b.label,state.lang === "zh" ? "zh-CN" : "en"));
+      return [...map.values()].sort((a,b)=>`${a.firstLabel}|${a.secondLabel}`.localeCompare(`${b.firstLabel}|${b.secondLabel}`,state.lang==="zh"?"zh-CN":"en"));
+    }
+
+    function dimensionLabel(value) {
+      return {date:t("dateDimension"),cc:t("ccDimension"),ad:t("adDimension"),none:t("noBreakdown")}[value] || value;
+    }
+
+    function dimensionMeta(lead,type,adLevel) {
+      if(type==="date") return {label:lead.registered,id:""};
+      if(type==="cc") return {label:lead.cc,id:""};
+      if(type==="none") return {label:"",id:""};
+      const ad=adFor(lead);
+      if(adLevel==="channel") return {label:ad?.channel || t("noAttribution"),id:ad?.channel || ""};
+      if(adLevel==="campaign") return {label:ad?.campaignName || t("noAttribution"),id:ad?.campaignId || ""};
+      if(adLevel==="adset") return {label:ad?.adsetName || t("noAttribution"),id:ad?.adsetId || ""};
+      return {label:ad?.adName || t("noAttribution"),id:ad?.adId || ""};
+    }
+
+    function adLevelSelect(which,value) {
+      return `<select class="control levelSelect" data-ad-level="${which}" aria-label="${t("adLevel")}">${[["channel",t("byChannel")],["campaign",t("byCampaign")],["adset",t("byAdset")],["ad",t("byAd")]].map(([key,label])=>option(key,label,value)).join("")}</select>`;
     }
 
     function emptyState() {
@@ -469,7 +503,7 @@
     function resetFilters(kind) {
       if(kind==="userFilters") state.userFilters={q:"",userType:"",registration:"",landingSource:"",appSource:"",businessLine:"",userStatus:"",channel:"",campaign:"",adset:"",ad:""};
       if(kind==="salesFilters") state.salesFilters={q:"",businessLine:"",intent:"",cc:"",stage:"",ageRange:"",courseLevel:"",landingSource:"",appSource:"",userStatus:"",consultation:"",from:"",to:"",channel:"",campaign:"",adset:"",ad:""};
-      if(kind==="dashFilters") state.dashFilters={businessLine:"",cc:"",from:"2026-11-09",to:"2026-11-15",channel:"",campaign:"",adset:"",ad:""};
+      if(kind==="dashFilters") state.dashFilters={businessLine:"",cc:"",from:"2026-11-09",to:"2026-11-15"};
     }
 
     function exportRows(kind) {
@@ -496,6 +530,7 @@
       const nav=event.target.closest("[data-page]"); if(nav){state.page=nav.dataset.page;render();return;}
       const salesTab=event.target.closest("[data-sales-tab]"); if(salesTab){state.salesTab=salesTab.dataset.salesTab;render();return;}
       const dashTab=event.target.closest("[data-dashboard-tab]"); if(dashTab){state.dashboardTab=dashTab.dataset.dashboardTab;render();return;}
+      const breakdown=event.target.closest("[data-breakdown]"); if(breakdown){if(breakdown.dataset.breakdown==="first")state.firstGroup=breakdown.dataset.value;else state.secondGroup=breakdown.dataset.value;render();return;}
       const metric=event.target.closest("[data-metric]"); if(metric){openMetric(metric.dataset.metric);return;}
       const action=event.target.closest("[data-action]"); if(action){
         if(action.dataset.action==="reset-users"){resetFilters("userFilters");render();showToast(t("resetDone"));}
@@ -511,7 +546,7 @@
     document.addEventListener("change",event=>{
       const el=event.target.closest("[data-filter-kind]");
       if(el){setFilter(el.dataset.filterKind,el.dataset.filterKey,el.value);return;}
-      if(event.target.matches("[data-group-by]")){state.groupBy=event.target.value;render();}
+      if(event.target.matches("[data-ad-level]")){if(event.target.dataset.adLevel==="first")state.firstAdLevel=event.target.value;else state.secondAdLevel=event.target.value;render();}
     });
     document.addEventListener("input",event=>{
       const el=event.target.closest("[data-filter-kind]");
