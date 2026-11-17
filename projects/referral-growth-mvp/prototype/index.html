@@ -55,7 +55,7 @@
         </div>
         <div class="user">
           <div class="avatar">TH</div>
-          <div class="user-copy"><strong>Thanya C.</strong><small>CC_TH</small></div>
+          <div class="user-copy"><strong>Thanya C.</strong><small data-i18n="account.role">销售组长</small></div>
         </div>
       </div>
     </header>
@@ -205,7 +205,7 @@
               </div>
               <div class="field">
                 <label data-i18n="filter.bindingStatus">绑定状态</label>
-                <select class="control" id="unifiedBindingFilter"><option value="" data-i18n="option.allStatuses">全部状态</option><option value="active" data-i18n="bindStatus.active">已生效</option><option value="pendingTransfer" data-i18n="bindStatus.pendingTransfer">待原 CC 转移</option><option value="invalid" data-i18n="bindStatus.invalid">已失效</option></select>
+                <select class="control" id="unifiedBindingFilter"><option value="" data-i18n="option.allStatuses">全部状态</option><option value="active" data-i18n="bindStatus.active">已生效</option><option value="pendingTransfer" data-i18n="bindStatus.pendingTransfer">待管理者审批</option><option value="invalid" data-i18n="bindStatus.invalid">已失效</option></select>
               </div>
               <div class="field">
                 <label data-i18n="filter.status">奖励状态</label>
@@ -233,6 +233,7 @@
                 <th data-i18n="table.reward">奖励</th>
                 <th data-i18n="table.giftOrder">赠送订单</th>
                 <th data-i18n="table.status">奖励状态</th>
+                <th data-i18n="table.action">操作</th>
               </tr></thead>
               <tbody id="unifiedRows"></tbody>
             </table>
@@ -263,8 +264,8 @@
             <strong>126</strong><small data-i18n="bindings.boundNote">等待首课、购买或归属异常处理</small>
           </article>
           <article class="stat">
-            <div class="stat-top"><span class="stat-label" data-i18n="bindings.pending">待转移关系</span><span class="status pending-registration" data-i18n="bindStatus.pendingTransfer">待原 CC 转移</span></div>
-            <strong>8</strong><small data-i18n="bindings.pendingNote">等待原归属 CC 重新分配线索</small>
+            <div class="stat-top"><span class="stat-label" data-i18n="bindings.pending">待转移关系</span><span class="status pending-registration" data-i18n="bindStatus.pendingTransfer">待管理者审批</span></div>
+            <strong>8</strong><small data-i18n="bindings.pendingNote">等待管理者审批转移</small>
           </article>
           <article class="stat">
             <div class="stat-top"><span class="stat-label" data-i18n="bindings.automatic">自动发放</span><span class="event-type">EVENT</span></div>
@@ -897,6 +898,28 @@
       <div class="modal-foot">
         <button class="btn" id="cancelGrant" data-i18n="common.cancel">取消</button>
         <button class="btn primary" id="confirmGrant" disabled data-i18n="grant.confirm">确认发放</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-mask" id="transferApprovalModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="transferApprovalTitle">
+      <div class="modal-head">
+        <div><h3 id="transferApprovalTitle" data-i18n="approval.title">审批线索转移</h3><p id="transferApprovalId">—</p></div>
+        <button class="icon-close" type="button" id="closeTransferApproval" aria-label="关闭" data-i18n-aria-label="common.close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="binding-context" id="transferApprovalSummary">—</div>
+        <div class="permission-hint" data-i18n="approval.hint">—</div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span><span data-i18n="approval.reason">审批意见</span></div>
+          <div class="form-main"><textarea class="reason-box" id="transferApprovalReason" data-i18n-placeholder="approval.reasonPlaceholder"></textarea></div>
+        </div>
+        <div class="notice" id="transferApprovalNotice"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" type="button" id="rejectTransfer" data-i18n="approval.reject">驳回</button>
+        <button class="btn primary" type="button" id="approveTransfer" data-i18n="approval.approve">批准并转移</button>
       </div>
     </section>
   </div>

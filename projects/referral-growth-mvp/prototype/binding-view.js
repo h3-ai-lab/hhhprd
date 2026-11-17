@@ -15,6 +15,7 @@ const TEXT = {
     "footer.status": "服务运行正常",
     "footer.updated": "数据更新于刚刚",
     "env.production": "生产环境",
+    "account.role": "销售组长",
     "aria.openMenu": "展开菜单",
     "crumb.marketing": "营销中心",
     "bindings.title": "拉新关系维护",
@@ -24,7 +25,7 @@ const TEXT = {
     "bindings.bound": "已生效关系",
     "bindings.boundNote": "等待首课、购买或奖励发放结果",
     "bindings.pending": "待转移关系",
-    "bindings.pendingNote": "等待原归属 CC 重新分配线索",
+    "bindings.pendingNote": "等待管理者审批转移",
     "bindings.automatic": "自动发放",
     "bindings.automaticNote": "首课、购买与社媒推荐事件",
     "bindings.tabReferral": "好友推荐",
@@ -84,7 +85,7 @@ const TEXT = {
     "source.referral": "拉新推荐",
     "source.social": "社媒推荐",
     "bindStatus.active": "已生效",
-    "bindStatus.pendingTransfer": "待原 CC 转移",
+    "bindStatus.pendingTransfer": "待管理者审批",
     "bindStatus.invalid": "已失效",
     "eventStatus.waiting": "待触发",
     "eventStatus.processing": "待发放",
@@ -94,11 +95,21 @@ const TEXT = {
     "giftStatus.CREATED": "已生成，待发放",
     "giftStatus.FULFILLED": "已完成",
     "giftStatus.NOT_CREATED": "未生成",
-    "trigger.transfer": "等待重新分配线索",
+    "trigger.transfer": "等待管理者审批",
     "trigger.firstTrial": "等待首课完课",
     "trigger.purchase": "等待首次购买",
     "trigger.socialReview": "等待社媒推荐审核或选中结果",
-    "trigger.assignment": "等待销售中心处理归属",
+    "trigger.assignment": "等待管理者审批归属转移",
+    "approval.action": "审批并转移",
+    "approval.title": "审批线索转移",
+    "approval.hint": "审批通过后，系统将被推荐人的当前归属转移到目标归属 CC；审批不会修改关系中的目标 CC。",
+    "approval.reason": "审批意见",
+    "approval.reasonPlaceholder": "请输入审批意见",
+    "approval.reasonRequired": "请填写审批意见",
+    "approval.approve": "批准并转移",
+    "approval.reject": "驳回",
+    "approval.success": "审批通过，被推荐人已转移给 {owner}",
+    "approval.rejected": "已驳回本次转移申请，关系保持待审批",
     "reward.firstTrial": "+14 天",
     "reward.purchase": "+{count} 个月",
     "reward.published": "+5 天",
@@ -151,7 +162,7 @@ const TEXT = {
     "trialStatus.SCHEDULED": "待上课",
     "trialStatus.IN_PROGRESS": "体验中",
     "trialStatus.COMPLETED": "已完成",
-    "referralModal.successPending": "绑定成功，被推荐人当前归属 {owner}，请联系其重新分配线索",
+    "referralModal.successPending": "绑定成功，已提交管理者审批；被推荐人当前归属 {owner}",
     "referralModal.successActive": "绑定成功，被推荐人已归属目标归属 CC，后续业务事件将自动触发奖励",
     "socialModal.title": "登记社媒推荐",
     "socialModal.subtitle": "先保存内容记录，审核结果变化后自动发奖",
@@ -192,6 +203,7 @@ const TEXT = {
     "footer.status": "All services operational",
     "footer.updated": "Data updated just now",
     "env.production": "Production",
+    "account.role": "Sales Team Lead",
     "aria.openMenu": "Open navigation",
     "crumb.marketing": "Marketing",
     "bindings.title": "Growth Relationships",
@@ -201,7 +213,7 @@ const TEXT = {
     "bindings.bound": "Active relationships",
     "bindings.boundNote": "Waiting for the first lesson, purchase, or reward issuance result",
     "bindings.pending": "Pending ownership transfer",
-    "bindings.pendingNote": "Waiting for the current CC to reassign the lead",
+    "bindings.pendingNote": "Waiting for manager approval",
     "bindings.automatic": "Automatic issuance",
     "bindings.automaticNote": "First lesson, purchase, and social-media recommendation events",
     "bindings.tabReferral": "Friend referrals",
@@ -261,7 +273,7 @@ const TEXT = {
     "source.referral": "Referral",
     "source.social": "Social media recommendation",
     "bindStatus.active": "Active",
-    "bindStatus.pendingTransfer": "Pending original-CC transfer",
+    "bindStatus.pendingTransfer": "Pending manager approval",
     "bindStatus.invalid": "Invalid",
     "eventStatus.waiting": "Waiting",
     "eventStatus.processing": "Pending issuance",
@@ -271,11 +283,21 @@ const TEXT = {
     "giftStatus.CREATED": "Created, pending fulfillment",
     "giftStatus.FULFILLED": "Fulfilled",
     "giftStatus.NOT_CREATED": "Not created",
-    "trigger.transfer": "Awaiting lead reassignment",
+    "trigger.transfer": "Awaiting manager approval",
     "trigger.firstTrial": "Awaiting first lesson completion",
     "trigger.purchase": "Awaiting first purchase",
     "trigger.socialReview": "Awaiting social media review or selection",
-    "trigger.assignment": "Awaiting ownership handling in Sales Center",
+    "trigger.assignment": "Awaiting approval of ownership transfer",
+    "approval.action": "Approve and transfer",
+    "approval.title": "Approve Lead Transfer",
+    "approval.hint": "Approval transfers the referred user from the current owner to the target owner in this relationship. The target owner cannot be changed during approval.",
+    "approval.reason": "Approval note",
+    "approval.reasonPlaceholder": "Enter an approval note",
+    "approval.reasonRequired": "Enter an approval note",
+    "approval.approve": "Approve and transfer",
+    "approval.reject": "Reject",
+    "approval.success": "Approved. The referred user was transferred to {owner}.",
+    "approval.rejected": "Transfer request rejected; the relationship remains pending approval.",
     "reward.firstTrial": "+14 days",
     "reward.purchase": "+{count} months",
     "reward.published": "+5 days",
@@ -328,7 +350,7 @@ const TEXT = {
     "trialStatus.SCHEDULED": "Scheduled",
     "trialStatus.IN_PROGRESS": "In progress",
     "trialStatus.COMPLETED": "Completed",
-    "referralModal.successPending": "Relationship linked. The referred user currently belongs to {owner}; contact them to reassign the lead.",
+    "referralModal.successPending": "Relationship linked and submitted for manager approval. The referred user currently belongs to {owner}.",
     "referralModal.successActive": "Relationship linked. The referred user already belongs to the target owner CC; business events will now trigger rewards.",
     "socialModal.title": "Record Social Media Recommendation",
     "socialModal.subtitle": "Save the content first; review outcomes trigger rewards automatically",
@@ -356,6 +378,8 @@ const TEXT = {
   },
 };
 
+const safeText = (value = "") => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+
 const state = {
   lang: "zh",
   tab: "referral",
@@ -365,6 +389,7 @@ const state = {
   bindingResult: null,
   unifiedDateField: "bind",
   selectedDetailId: "",
+  approvalId: "",
   socialNoticeKey: "",
   toastKey: "",
   toastValues: {},
@@ -905,9 +930,16 @@ function renderUnified() {
       <td>${row.reward}</td>
       <td><span class="mono">${row.giftOrderId}</span><span class="secondary">${t(`giftStatus.${row.giftOrderStatus}`)} · ฿0</span></td>
       <td>${rewardStatusLabel(row.rewardStatus)}</td>
+      <td>${row.source === "referral" && row.bindingStatus === "pendingTransfer" ? `<button class="btn small" type="button" data-approve-transfer="${row.id}">${t("approval.action")}</button>` : "—"}</td>
     </tr>`).join("");
   document.getElementById("unifiedEmpty").hidden = rows.length > 0;
   document.getElementById("unifiedCount").textContent = t("unified.count", { count: rows.length });
+  body.querySelectorAll("[data-approve-transfer]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openTransferApproval(button.dataset.approveTransfer);
+    });
+  });
   body.querySelectorAll("[data-detail-id]").forEach((rowElement) => {
     rowElement.addEventListener("click", () => {
       const row = rows.find((item) => item.id === rowElement.dataset.detailId);
@@ -963,6 +995,59 @@ function exportUnified() {
   showToast("export.success", { count: data.length });
 }
 
+function closeTransferApproval() {
+  document.getElementById("transferApprovalModal").hidden = true;
+  state.approvalId = "";
+  document.getElementById("transferApprovalNotice").classList.remove("show");
+}
+
+function openTransferApproval(bindingId) {
+  const relation = referrals.find((item) => item.id === bindingId);
+  if (!relation || relation.bindingStatus !== "pendingTransfer") return;
+  state.approvalId = bindingId;
+  document.getElementById("transferApprovalId").textContent = relation.id;
+  document.getElementById("transferApprovalSummary").innerHTML =
+    `<span>${t("table.referrer")}: <b>${safeText(relation.referrer)}</b></span>` +
+    `<span>${t("table.referred")}: <b>${safeText(relation.referred)}</b></span>` +
+    `<span>${t("table.currentOwner")}: <b>${safeText(relation.currentOwner || "—")}</b></span>` +
+    `<span>${t("table.targetOwner")}: <b>${safeText(relation.owner)}</b></span>`;
+  document.getElementById("transferApprovalReason").value = "";
+  document.getElementById("transferApprovalNotice").textContent = "";
+  document.getElementById("transferApprovalNotice").classList.remove("show");
+  document.getElementById("transferApprovalModal").hidden = false;
+}
+
+function resolveTransferApproval(decision) {
+  const relation = referrals.find((item) => item.id === state.approvalId);
+  const reason = document.getElementById("transferApprovalReason").value.trim();
+  const notice = document.getElementById("transferApprovalNotice");
+  if (!relation) return closeTransferApproval();
+  if (!reason) {
+    notice.textContent = t("approval.reasonRequired");
+    notice.classList.add("show");
+    return;
+  }
+  relation.approvalStatus = decision;
+  relation.approvalReason = reason;
+  relation.approvedBy = "Thanya C.";
+  relation.approvedAt = "2026-11-17 19:30";
+  if (decision === "APPROVED") {
+    relation.bindingStatus = "active";
+    relation.currentOwner = relation.owner;
+    relation.nextTrigger = "trigger.firstTrial";
+    closeTransferApproval();
+    renderReferrals();
+    renderUnified();
+    showToast("approval.success", { owner: relation.owner });
+  } else {
+    relation.nextTrigger = "trigger.transfer";
+    closeTransferApproval();
+    renderReferrals();
+    renderUnified();
+    showToast("approval.rejected");
+  }
+}
+
 function openReferralDetail(row) {
   state.selectedDetailId = row.id;
   document.getElementById("drawerId").textContent = row.id;
@@ -998,7 +1083,7 @@ function openReferralDetail(row) {
 }
 
 function applyTranslations() {
-  const roots = ["bindingsView", "referralModal", "socialModal"].map((id) => document.getElementById(id));
+  const roots = ["bindingsView", "referralModal", "socialModal", "transferApprovalModal"].map((id) => document.getElementById(id));
   roots.forEach((root) => {
     root.querySelectorAll("[data-i18n]").forEach((element) => {
       element.textContent = t(element.dataset.i18n);
@@ -1322,6 +1407,12 @@ document.getElementById("referralModal").addEventListener("click", (event) => {
 document.getElementById("socialModal").addEventListener("click", (event) => {
   if (event.target.id === "socialModal") closeSocialModal();
 });
+document.getElementById("closeTransferApproval").addEventListener("click", closeTransferApproval);
+document.getElementById("transferApprovalModal").addEventListener("click", (event) => {
+  if (event.target.id === "transferApprovalModal") closeTransferApproval();
+});
+document.getElementById("approveTransfer").addEventListener("click", () => resolveTransferApproval("APPROVED"));
+document.getElementById("rejectTransfer").addEventListener("click", () => resolveTransferApproval("REJECTED"));
 window.addEventListener("growth-language-change", (event) => {
   if (event.detail?.lang === "zh" || event.detail?.lang === "en") setBindingLanguage(event.detail.lang);
 });
