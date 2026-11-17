@@ -27,7 +27,8 @@ const TEXT = {
     "community.submissionId": "投稿 ID",
     "community.channel": "提交渠道",
     "community.platform": "平台",
-    "community.lesson": "课堂信息",
+    "community.content": "内容",
+    "community.preview": "预览内容",
     "community.submittedAt": "提交时间",
     "community.empty": "当前筛选下没有社媒推荐记录",
     "community.count": "共 {count} 条记录",
@@ -73,7 +74,6 @@ const TEXT = {
     "communityReview.rejectedHint": "审核无效，不生成奖励事件和赠送订单",
     "communityReason.contentNotFound": "内容不存在或无法访问",
     "communityReason.notOwnContent": "非本人内容",
-    "communityReason.notDinoClass": "不属于 Dino AI 课堂",
     "communityReason.duplicateContent": "重复内容",
     "communityReason.other": "其他",
     "communityAuth.authorized": "已授权官方使用",
@@ -83,9 +83,7 @@ const TEXT = {
     "communityCreate.userId": "用户 ID",
     "communityCreate.userIdPlaceholder": "输入完整用户 ID",
     "communityCreate.verify": "核验",
-    "communityCreate.verifyNote": "精确核验用户、正式注册状态、业务线和可关联的课堂记录",
-    "communityCreate.lesson": "课堂证据",
-    "communityCreate.lessonPlaceholder": "请选择用户课堂",
+    "communityCreate.verifyNote": "精确核验被推荐人、正式注册状态和业务线",
     "communityCreate.authorization": "官方使用授权",
     "communityCreate.contentRefType": "内容凭证类型",
     "communityCreate.externalLink": "外部内容链接",
@@ -103,7 +101,6 @@ const TEXT = {
     "communityCreate.notFound": "未找到可登记的正式注册用户",
     "communityCreate.businessLineMismatch": "该用户与当前 CC 不属于同一业务线，不能登记",
     "communityCreate.verified": "已核验正式用户",
-    "communityCreate.lessonRequired": "请选择该用户的课堂记录",
     "communityCreate.linkRequired": "请输入可访问的内容链接",
     "communityCreate.linkInvalid": "内容链接必须为完整的 http 或 https 地址",
     "communityCreate.fileRequired": "请上传可核验的内容文件",
@@ -157,7 +154,8 @@ const TEXT = {
     "community.submissionId": "Submission ID",
     "community.channel": "Submission channel",
     "community.platform": "Platform",
-    "community.lesson": "Lesson",
+    "community.content": "Content",
+    "community.preview": "Preview content",
     "community.submittedAt": "Submitted at",
     "community.empty": "No social media recommendations match the current filters",
     "community.count": "{count} records",
@@ -203,7 +201,6 @@ const TEXT = {
     "communityReview.rejectedHint": "Rejected; no reward event or gift order is created",
     "communityReason.contentNotFound": "Content not found or inaccessible",
     "communityReason.notOwnContent": "Content does not belong to the user",
-    "communityReason.notDinoClass": "Not a Dino AI class",
     "communityReason.duplicateContent": "Duplicate content",
     "communityReason.other": "Other",
     "communityAuth.authorized": "Authorized for official use",
@@ -213,9 +210,7 @@ const TEXT = {
     "communityCreate.userId": "User ID",
     "communityCreate.userIdPlaceholder": "Enter the complete user ID",
     "communityCreate.verify": "Verify",
-    "communityCreate.verifyNote": "Verify the user, registration type, business line, and eligible lesson records",
-    "communityCreate.lesson": "Lesson evidence",
-    "communityCreate.lessonPlaceholder": "Select a user lesson",
+    "communityCreate.verifyNote": "Verify the referred user, registration type, and business line",
     "communityCreate.authorization": "Official-use authorization",
     "communityCreate.contentRefType": "Evidence type",
     "communityCreate.externalLink": "External content link",
@@ -233,7 +228,6 @@ const TEXT = {
     "communityCreate.notFound": "No eligible registered user was found",
     "communityCreate.businessLineMismatch": "The user and current CC are not in the same business line",
     "communityCreate.verified": "Verified registered user",
-    "communityCreate.lessonRequired": "Select a lesson record for this user",
     "communityCreate.linkRequired": "Enter an accessible content link",
     "communityCreate.linkInvalid": "The content link must be a complete http or https URL",
     "communityCreate.fileRequired": "Upload a verifiable content file",
@@ -278,7 +272,6 @@ const COMMUNITY_USERS = {
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Thanya C.",
-    lessons: ["Dino Starter · Nov 08", "Dino Explorer · Nov 07"],
   },
   "2120302281472036721": {
     id: "2120302281472036721",
@@ -286,7 +279,6 @@ const COMMUNITY_USERS = {
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Mina P.",
-    lessons: ["Dino Explorer · Nov 07", "Dino Creator · Nov 06"],
   },
   "2120302210461928824": {
     id: "2120302210461928824",
@@ -294,7 +286,6 @@ const COMMUNITY_USERS = {
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Nok S.",
-    lessons: ["Dino Creator · Nov 06", "Dino Starter · Nov 05"],
   },
   "2120302261184209917": {
     id: "2120302261184209917",
@@ -302,7 +293,6 @@ const COMMUNITY_USERS = {
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Nok S.",
-    lessons: ["Dino Explorer · Nov 10", "Dino Starter · Nov 09"],
   },
   "2120302247228042882": {
     id: "2120302247228042882",
@@ -310,7 +300,6 @@ const COMMUNITY_USERS = {
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Nok S.",
-    lessons: ["Dino Creator · Nov 05"],
   },
   "2120302273820914407": {
     id: "2120302273820914407",
@@ -318,7 +307,6 @@ const COMMUNITY_USERS = {
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Nok S.",
-    lessons: ["Dino Starter · Nov 04"],
   },
   "2120302295479900": {
     id: "2120302295479900",
@@ -326,7 +314,6 @@ const COMMUNITY_USERS = {
     businessLineCode: "vietnam",
     businessLine: "community.businessVietnam",
     currentOwner: "Mina P.",
-    lessons: ["Dino Starter · Nov 05"],
   },
 };
 
@@ -342,7 +329,6 @@ const submissions = [
     contentRefType: "EXTERNAL_LINK",
     contentLink: "https://facebook.com/share/p/20261109038",
     contentType: "community.photo",
-    lesson: "Dino Starter · Nov 08",
     submittedAt: "2026-11-09 18:20",
     authorized: true,
     reviewStatus: "PENDING_REVIEW",
@@ -364,7 +350,6 @@ const submissions = [
     contentRefType: "EXTERNAL_LINK",
     contentLink: "https://facebook.com/share/p/20261108034",
     contentType: "community.video",
-    lesson: "Dino Explorer · Nov 07",
     submittedAt: "2026-11-08 15:42",
     authorized: false,
     reviewStatus: "APPROVED",
@@ -386,7 +371,6 @@ const submissions = [
     contentRefType: "EXTERNAL_LINK",
     contentLink: "https://instagram.com/p/20261107029",
     contentType: "community.photo",
-    lesson: "Dino Creator · Nov 06",
     submittedAt: "2026-11-07 20:08",
     authorized: true,
     reviewStatus: "APPROVED",
@@ -408,7 +392,6 @@ const submissions = [
     contentRefType: "EXTERNAL_LINK",
     contentLink: "https://tiktok.com/@dino/video/20261106022",
     contentType: "community.video",
-    lesson: "Dino Starter · Nov 05",
     submittedAt: "2026-11-06 12:14",
     authorized: false,
     reviewStatus: "APPROVED",
@@ -430,7 +413,6 @@ const submissions = [
     contentRefType: "UPLOADED_FILE",
     contentLink: "https://youtube.com/shorts/20261105019",
     contentType: "community.video",
-    lesson: "Dino Creator · Nov 05",
     submittedAt: "2026-11-05 16:10",
     authorized: true,
     reviewStatus: "REJECTED",
@@ -439,7 +421,7 @@ const submissions = [
     giftOrderId: "—",
     giftOrderStatus: "NOT_CREATED",
     rewardStatus: "NOT_APPLICABLE",
-    reviewNote: "课堂视频重复",
+    reviewNote: "视频内容重复",
     reviewReason: "DUPLICATE_CONTENT",
   },
   {
@@ -453,7 +435,6 @@ const submissions = [
     contentRefType: "EXTERNAL_LINK",
     contentLink: "https://example.com/dino-class-post",
     contentType: "community.photo",
-    lesson: "Dino Starter · Nov 04",
     submittedAt: "2026-11-04 11:25",
     authorized: true,
     reviewStatus: "APPROVED",
@@ -475,7 +456,6 @@ const submissions = [
     contentRefType: "EXTERNAL_LINK",
     contentLink: "https://facebook.com/share/p/20261103012",
     contentType: "community.photo",
-    lesson: "Dino Starter · Nov 03",
     submittedAt: "2026-11-03 10:40",
     authorized: true,
     reviewStatus: "APPROVED",
@@ -491,6 +471,16 @@ const submissions = [
 function t(key, values = {}) {
   const template = TEXT[state.lang]?.[key] ?? TEXT.zh[key] ?? key;
   return template.replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? `{${name}}`));
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[char]));
 }
 
 function statusClass(status) {
@@ -556,7 +546,7 @@ function renderRows() {
       <td>${t(row.channel)}<span class="secondary">${row.registeredBy}</span></td>
       <td>${t(row.platform)}</td>
       <td>${t(row.contentType)}</td>
-      <td>${row.lesson}</td>
+      <td><a class="content-preview" href="${escapeHtml(row.contentLink)}" target="_blank" rel="noopener" title="${escapeHtml(row.contentLink)}">${escapeHtml(row.contentLink)}</a></td>
       <td>${row.submittedAt}</td>
       <td><span class="status ${statusClass(row.reviewStatus)}">${reviewLabel(row.reviewStatus)}</span></td>
       <td>${selectionLabel(row.selectionStatus)}</td>
@@ -598,12 +588,6 @@ function renderCreateUserResult() {
     <span>${t("table.owner")}: ${user.currentOwner}</span>`;
 }
 
-function updateCreateLessonOptions(user) {
-  const select = document.getElementById("communityCreateLesson");
-  const lessonOptions = user?.lessons || [];
-  select.innerHTML = `<option value="">${t("communityCreate.lessonPlaceholder")}</option>${lessonOptions.map((lesson) => `<option value="${lesson}">${lesson}</option>`).join("")}`;
-}
-
 function toggleCreateContentRef() {
   const upload = document.getElementById("communityCreateRefType").value === "UPLOADED_FILE";
   document.getElementById("communityContentLinkField").hidden = upload;
@@ -623,7 +607,6 @@ function openCommunityCreate(prefill = null) {
   document.getElementById("communityCreateContentFile").value = "";
   document.getElementById("communityCreateNote").value = "";
   document.getElementById("saveCommunityCreate").disabled = true;
-  updateCreateLessonOptions(null);
   toggleCreateContentRef();
   renderCreateUserResult();
   document.getElementById("communityCreateModal").hidden = false;
@@ -638,8 +621,6 @@ function verifyCommunityUser() {
   const value = document.getElementById("communityCreateUserId").value.trim();
   state.createUser = null;
   document.getElementById("saveCommunityCreate").disabled = true;
-  updateCreateLessonOptions(null);
-
   if (!value) {
     showCreateNotice("communityCreate.emptyUser");
     renderCreateUserResult();
@@ -666,7 +647,6 @@ function verifyCommunityUser() {
   state.createNoticeKey = "";
   document.getElementById("communityCreateNotice").classList.remove("show");
   document.getElementById("saveCommunityCreate").disabled = false;
-  updateCreateLessonOptions(user);
   renderCreateUserResult();
 }
 
@@ -675,13 +655,8 @@ function saveCommunityCreate() {
     showCreateNotice("communityCreate.notFound");
     return;
   }
-  const lesson = document.getElementById("communityCreateLesson").value;
   const refType = document.getElementById("communityCreateRefType").value;
   const contentLink = document.getElementById("communityCreateContentLink").value.trim();
-  if (!lesson) {
-    showCreateNotice("communityCreate.lessonRequired");
-    return;
-  }
   let contentRef = contentLink;
   if (refType === "EXTERNAL_LINK") {
     if (!contentLink) {
@@ -701,7 +676,7 @@ function saveCommunityCreate() {
       showCreateNotice("communityCreate.fileRequired");
       return;
     }
-    contentRef = `upload://${file.name}`;
+    contentRef = URL.createObjectURL(file);
   }
   if (submissions.some((row) => row.userId === state.createUser.id && row.contentLink?.toLowerCase() === contentRef.toLowerCase())) {
     showCreateNotice("communityCreate.duplicate");
@@ -719,7 +694,6 @@ function saveCommunityCreate() {
     contentRefType: refType,
     contentLink: contentRef,
     contentType: document.getElementById("communityCreateType").value,
-    lesson,
     submittedAt: "2026-11-13 17:30",
     authorized: document.getElementById("communityCreateAuthorization").value === "AUTHORIZED",
     reviewStatus: "PENDING_REVIEW",
@@ -755,7 +729,11 @@ function openReview(id) {
   state.selectedId = id;
   document.getElementById("communityReviewId").textContent = row.id;
   document.getElementById("communitySubmissionSummary").innerHTML =
-    `<strong>${row.user} · ${row.userId}</strong><span>${t(row.channel)} · ${t(row.platform)} · ${t(row.contentType)} · ${row.lesson}</span><span>${t(row.authorized ? "communityAuth.authorized" : "communityAuth.notAuthorized")} · CC: ${row.registeredBy}</span>`;
+    `<strong>${row.user} · ${row.userId}</strong><span>${t(row.channel)} · ${t(row.platform)} · ${t(row.contentType)}</span><span>${t(row.authorized ? "communityAuth.authorized" : "communityAuth.notAuthorized")} · CC: ${row.registeredBy}</span>`;
+  const previewLink = document.getElementById("communityPreviewLink");
+  previewLink.href = row.contentLink;
+  previewLink.hidden = !row.contentLink;
+  document.getElementById("communityPreviewUrl").textContent = row.contentLink || "—";
   document.getElementById("communityReviewResult").value = row.reviewStatus === "REJECTED" ? "REJECTED" : "APPROVED";
   document.getElementById("communitySelectionStatus").value = row.selectionStatus || "PENDING_SELECTION";
   document.getElementById("communityReviewNote").value = row.reviewNote || "";
@@ -849,7 +827,6 @@ document.getElementById("communityCreateUserId").addEventListener("input", () =>
   state.createNoticeKey = "";
   document.getElementById("communityCreateNotice").classList.remove("show");
   document.getElementById("saveCommunityCreate").disabled = true;
-  updateCreateLessonOptions(null);
   renderCreateUserResult();
 });
 document.getElementById("communityCreateUserId").addEventListener("keydown", (event) => {

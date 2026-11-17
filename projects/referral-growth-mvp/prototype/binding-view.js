@@ -124,7 +124,7 @@ const TEXT = {
     "referralModal.referredUserId": "被推荐人用户 ID",
     "referralModal.userIdPlaceholder": "输入被推荐人的完整用户 ID",
     "referralModal.verify": "核验",
-    "referralModal.verifyNote": "精确核验用户、业务线、活动新注册状态、已有推荐关系和当前归属 CC",
+    "referralModal.verifyNote": "精确核验被推荐人的业务线、注册来源、注册时间、体验课状态、已有推荐关系和当前归属 CC",
     "referralModal.note": "绑定备注",
     "referralModal.notePlaceholder": "补充可核实的业务说明",
     "referralModal.enumLabel": "绑定状态枚举：",
@@ -136,13 +136,21 @@ const TEXT = {
     "referralModal.disabled": "该用户账号已停用，不能绑定",
     "referralModal.otherLine": "该用户属于越南业务线，与推荐人泰国业务线不一致",
     "referralModal.notNew": "该用户注册时间早于活动开始时间，不属于活动新用户",
+    "referralModal.notOrganic": "该被推荐人注册来源不是 organic，不属于活动新注册",
+    "referralModal.trialStarted": "该被推荐人已有体验课，当前状态为“{status}”，不属于活动新注册",
     "referralModal.alreadyBound": "该用户已绑定其他推荐人，不能重复绑定",
-    "referralModal.existing": "Narin K. · 活动新注册用户",
-    "referralModal.eligible": "可绑定：正式注册、同业务线且无其他推荐关系",
+    "referralModal.existing": "活动新注册用户",
+    "referralModal.eligible": "可绑定：正式注册、organic 来源、同业务线、无体验中/已完成体验课且无其他推荐关系",
     "referralModal.registeredAt": "注册时间",
+    "referralModal.registrationSource": "注册来源",
+    "referralModal.trialLessonStatus": "体验课状态",
     "referralModal.campaignStart": "活动开始",
     "referralModal.newRegistration": "新注册判定",
     "referralModal.currentOwner": "当前归属 CC",
+    "trialStatus.NONE": "未开始",
+    "trialStatus.SCHEDULED": "待上课",
+    "trialStatus.IN_PROGRESS": "体验中",
+    "trialStatus.COMPLETED": "已完成",
     "referralModal.successPending": "绑定成功，被推荐人当前归属 {owner}，请联系其重新分配线索",
     "referralModal.successActive": "绑定成功，被推荐人已归属目标归属 CC，后续业务事件将自动触发奖励",
     "transfer.action": "重新分配线索",
@@ -288,7 +296,7 @@ const TEXT = {
     "referralModal.referredUserId": "Referred user ID",
     "referralModal.userIdPlaceholder": "Enter the referred user's complete user ID",
     "referralModal.verify": "Verify",
-    "referralModal.verifyNote": "Verify the user, business line, campaign registration, existing referral, and current owner CC",
+    "referralModal.verifyNote": "Verify the referred user's business line, registration source, registration time, trial status, existing referral, and current owner CC",
     "referralModal.note": "Binding note",
     "referralModal.notePlaceholder": "Add verifiable business context",
     "referralModal.enumLabel": "Binding status enums: ",
@@ -300,13 +308,21 @@ const TEXT = {
     "referralModal.disabled": "This user account is disabled and cannot be linked",
     "referralModal.otherLine": "The user belongs to the Vietnam business line, which does not match the referrer's Thailand business line",
     "referralModal.notNew": "The user registered before the campaign start and is not a new campaign user",
+    "referralModal.notOrganic": "The referred user's registration source is not organic and does not qualify as a new campaign registration",
+    "referralModal.trialStarted": "The referred user already has a trial lesson in the “{status}” status and does not qualify as a new campaign registration",
     "referralModal.alreadyBound": "This user is already linked to another referrer",
-    "referralModal.existing": "Narin K. · New campaign registration",
-    "referralModal.eligible": "Eligible: registered, same business line, and no existing referral",
+    "referralModal.existing": "New campaign registration",
+    "referralModal.eligible": "Eligible: registered, organic source, same business line, no in-progress/completed trial, and no existing referral",
     "referralModal.registeredAt": "Registered at",
+    "referralModal.registrationSource": "Registration source",
+    "referralModal.trialLessonStatus": "Trial lesson status",
     "referralModal.campaignStart": "Campaign start",
     "referralModal.newRegistration": "New registration",
     "referralModal.currentOwner": "Current owner CC",
+    "trialStatus.NONE": "Not started",
+    "trialStatus.SCHEDULED": "Scheduled",
+    "trialStatus.IN_PROGRESS": "In progress",
+    "trialStatus.COMPLETED": "Completed",
     "referralModal.successPending": "Relationship linked. The referred user currently belongs to {owner}; contact them to reassign the lead.",
     "referralModal.successActive": "Relationship linked. The referred user already belongs to the target owner CC; business events will now trigger rewards.",
     "transfer.action": "Reassign lead",
@@ -357,6 +373,8 @@ const USER_DIRECTORY = {
     businessLine: "thailand",
     userType: "FORMAL",
     registeredAt: "2026-11-08",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Nok S.",
     existingBinding: true,
   },
@@ -366,6 +384,8 @@ const USER_DIRECTORY = {
     businessLine: "thailand",
     userType: "FORMAL",
     registeredAt: "2026-11-10",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Nok S.",
     existingBinding: false,
   },
@@ -375,6 +395,8 @@ const USER_DIRECTORY = {
     businessLine: "thailand",
     userType: "FORMAL",
     registeredAt: "2026-10-20",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Nok S.",
     existingBinding: false,
   },
@@ -384,6 +406,8 @@ const USER_DIRECTORY = {
     businessLine: "thailand",
     userType: "FORMAL",
     registeredAt: "2026-11-03",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Nok S.",
     existingBinding: true,
   },
@@ -393,6 +417,8 @@ const USER_DIRECTORY = {
     businessLine: "vietnam",
     userType: "FORMAL",
     registeredAt: "2026-11-05",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Mina P.",
     existingBinding: false,
   },
@@ -403,6 +429,41 @@ const USER_DIRECTORY = {
     userType: "FORMAL",
     accountActive: false,
     registeredAt: "2026-11-02",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
+    currentOwner: "Thanya C.",
+    existingBinding: false,
+  },
+  "2120302298307215251": {
+    userId: "2120302298307215251",
+    name: "Pong M.",
+    businessLine: "thailand",
+    userType: "FORMAL",
+    registeredAt: "2026-11-09",
+    registrationSource: "paid",
+    trialLessonStatus: "NONE",
+    currentOwner: "Nok S.",
+    existingBinding: false,
+  },
+  "2120302297446883001": {
+    userId: "2120302297446883001",
+    name: "Aom S.",
+    businessLine: "thailand",
+    userType: "FORMAL",
+    registeredAt: "2026-11-09",
+    registrationSource: "organic",
+    trialLessonStatus: "IN_PROGRESS",
+    currentOwner: "Nok S.",
+    existingBinding: false,
+  },
+  "2120302263019845102": {
+    userId: "2120302263019845102",
+    name: "Krit S.",
+    businessLine: "thailand",
+    userType: "FORMAL",
+    registeredAt: "2026-11-08",
+    registrationSource: "organic",
+    trialLessonStatus: "COMPLETED",
     currentOwner: "Thanya C.",
     existingBinding: false,
   },
@@ -661,12 +722,14 @@ function renderBindingResult() {
       <span>${t("referralModal.eligible")}</span>
       <span class="mono">${user.userId}</span>
       <span>${t("referralModal.registeredAt")}: ${user.registeredAt}</span>
+      <span>${t("referralModal.registrationSource")}: ${user.registrationSource}</span>
       <span>${t("referralModal.campaignStart")}: ${CAMPAIGN_START}</span>
+      <span>${t("referralModal.trialLessonStatus")}: ${t(`trialStatus.${user.trialLessonStatus}`)}</span>
       <span>${t("referralModal.newRegistration")}: NEW_REGISTRATION</span>
       <span>${t("referralModal.currentOwner")}: ${user.currentOwner || "—"}</span>`;
     return;
   }
-  result.textContent = t(state.bindingResult.key);
+  result.textContent = t(state.bindingResult.key, state.bindingResult.values);
   result.classList.add("is-error");
 }
 
@@ -987,6 +1050,22 @@ function verifyReferredUser() {
     return;
   }
 
+  if (user.registrationSource !== "organic") {
+    state.bindingResult = { kind: "error", key: "referralModal.notOrganic" };
+    renderBindingResult();
+    return;
+  }
+
+  if (["IN_PROGRESS", "COMPLETED"].includes(user.trialLessonStatus)) {
+    state.bindingResult = {
+      kind: "error",
+      key: "referralModal.trialStarted",
+      values: { status: t(`trialStatus.${user.trialLessonStatus}`) },
+    };
+    renderBindingResult();
+    return;
+  }
+
   if (user.existingBinding) {
     state.bindingResult = { kind: "error", key: "referralModal.alreadyBound" };
     renderBindingResult();
@@ -1011,6 +1090,8 @@ function confirmBinding() {
     referredId: state.verifiedUser.userId,
     referred: state.verifiedUser.name,
     registeredAt: state.verifiedUser.registeredAt,
+    registrationSource: state.verifiedUser.registrationSource,
+    trialLessonStatus: state.verifiedUser.trialLessonStatus,
     newRegistration: "NEW_REGISTRATION",
     line: "thailand",
     owner: activeReferrer.owner,

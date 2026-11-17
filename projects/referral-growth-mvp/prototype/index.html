@@ -447,7 +447,7 @@
                 <th data-i18n="community.channel">提交渠道</th>
                 <th data-i18n="community.platform">平台</th>
                 <th data-i18n="table.contentType">内容类型</th>
-                <th data-i18n="community.lesson">课堂信息</th>
+                <th data-i18n="community.content">内容</th>
                 <th data-i18n="community.submittedAt">提交时间</th>
                 <th data-i18n="community.reviewStatus">审核状态</th>
                 <th data-i18n="community.selectionStatus">选中状态</th>
@@ -565,44 +565,56 @@
         <section class="panel">
           <div class="table-wrap">
             <table class="user-table">
-              <thead><tr><th data-i18n="users.userId">用户 ID</th><th data-i18n="users.name">姓名</th><th data-i18n="filter.businessLine">业务线</th><th data-i18n="users.userStatus">用户状态</th><th data-i18n="users.userType">用户类型</th><th data-i18n="users.signup">注册方式</th><th data-i18n="users.loginAccount">登录账号</th><th data-i18n="users.channel">渠道来源</th><th data-i18n="users.actions">操作</th></tr></thead>
+              <thead><tr><th data-i18n="users.userId">用户 ID</th><th data-i18n="users.name">姓名</th><th data-i18n="filter.businessLine">业务线</th><th data-i18n="users.registrationSource">注册来源</th><th data-i18n="users.trialLessonStatus">体验课状态</th><th data-i18n="users.userStatus">用户状态</th><th data-i18n="users.userType">用户类型</th><th data-i18n="users.signup">注册方式</th><th data-i18n="users.loginAccount">登录账号</th><th data-i18n="users.channel">渠道来源</th><th data-i18n="users.actions">操作</th></tr></thead>
               <tbody>
                 <tr class="btn-row">
-                  <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td data-i18n="option.thailand">泰国</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pim****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pim****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302281472036721</td><td>Kanya R.</td><td data-i18n="option.thailand">泰国</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kan****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302281472036721</td><td>Kanya R.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kan****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302281472036721" data-user-name="Kanya R." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302210461928824</td><td>Arunee T.</td><td data-i18n="option.thailand">泰国</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td data-i18n="users.web">网页</td><td>aru****@dino.ai</td><td>Landing Page</td>
+                  <td class="mono">2120302210461928824</td><td>Arunee T.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td data-i18n="users.web">网页</td><td>aru****@dino.ai</td><td>Landing Page</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302210461928824" data-user-name="Arunee T." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302261184209917</td><td>Nicha T.</td><td data-i18n="option.thailand">泰国</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>nic****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302261184209917</td><td>Nicha T.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>nic****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302261184209917" data-user-name="Nicha T." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302261184209917" data-referrer-name="Nicha T." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302247228042882</td><td>Waraporn L.</td><td data-i18n="option.thailand">泰国</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>war****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302247228042882</td><td>Waraporn L.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>war****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302247228042882" data-user-name="Waraporn L." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302247228042882" data-referrer-name="Waraporn L." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302273820914407</td><td>Siriporn W.</td><td data-i18n="option.thailand">泰国</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>sir****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302273820914407</td><td>Siriporn W.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>sir****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302273820914407" data-user-name="Siriporn W." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302273820914407" data-referrer-name="Siriporn W." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302295479900</td><td>Linh N.</td><td data-i18n="option.vietnam">越南</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>lin****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302295479900</td><td>Linh N.</td><td data-i18n="option.vietnam">越南</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>lin****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302295479900" data-user-name="Linh N." data-business-line="vietnam" data-role-id="CC_VN" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302295479900" data-referrer-name="Linh N." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr>
-                  <td class="mono">2120302209943102568</td><td>Malee P.</td><td data-i18n="option.thailand">泰国</td><td><span class="status invalid" data-i18n="status.disabled">已停用</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>mal****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302209943102568</td><td>Malee P.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status invalid" data-i18n="status.disabled">已停用</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>mal****@dino.ai</td><td>App</td>
                   <td>—</td>
+                </tr>
+                <tr class="btn-row">
+                  <td class="mono">2120302298307215251</td><td>Pong M.</td><td data-i18n="option.thailand">泰国</td><td class="mono">paid</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pon****@dino.ai</td><td>App</td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302298307215251" data-user-name="Pong M." data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302298307215251" data-referrer-name="Pong M." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
+                </tr>
+                <tr class="btn-row">
+                  <td class="mono">2120302297446883001</td><td>Aom S.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.IN_PROGRESS">体验中</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>aom****@dino.ai</td><td>App</td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302297446883001" data-user-name="Aom S." data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302297446883001" data-referrer-name="Aom S." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
+                </tr>
+                <tr class="btn-row">
+                  <td class="mono">2120302263019845102</td><td>Krit S.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.COMPLETED">已完成</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kri****@dino.ai</td><td>App</td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302263019845102" data-user-name="Krit S." data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302263019845102" data-referrer-name="Krit S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="table-foot"><span id="usersRowSummary">共 8 条记录</span><span data-i18n="bindings.page">第 1 页</span></div>
+          <div class="table-foot"><span id="usersRowSummary">共 11 条记录</span><span data-i18n="bindings.page">第 1 页</span></div>
         </section>
       </section>
     </div>
@@ -623,7 +635,7 @@
               <input class="control" id="communityCreateUserId" placeholder="输入完整用户 ID" data-i18n-placeholder="communityCreate.userIdPlaceholder">
               <button class="btn" id="verifyCommunityUser" data-i18n="communityCreate.verify">核验</button>
             </div>
-            <div class="helper" data-i18n="communityCreate.verifyNote">精确核验用户、正式注册状态、业务线和可关联的课堂记录</div>
+            <div class="helper" data-i18n="communityCreate.verifyNote">精确核验被推荐人、正式注册状态和业务线</div>
             <div class="relation-hint" id="communityCreateUserResult" hidden></div>
           </div>
         </div>
@@ -643,15 +655,6 @@
             <select class="control" id="communityCreateType">
               <option value="community.photo" data-i18n="community.photo">图片</option>
               <option value="community.video" data-i18n="community.video">视频</option>
-            </select>
-          </div>
-          <div class="field">
-            <label data-i18n="communityCreate.lesson">课堂证据</label>
-            <select class="control" id="communityCreateLesson">
-              <option value="" data-i18n="communityCreate.lessonPlaceholder">请选择用户课堂</option>
-              <option value="Dino Starter · Nov 08">Dino Starter · Nov 08</option>
-              <option value="Dino Explorer · Nov 07">Dino Explorer · Nov 07</option>
-              <option value="Dino Creator · Nov 06">Dino Creator · Nov 06</option>
             </select>
           </div>
           <div class="field">
@@ -708,6 +711,10 @@
       <div class="notice" id="communityReviewNotice"></div>
       <div class="modal-body">
         <div class="binding-context" id="communitySubmissionSummary">—</div>
+        <div class="enum-note content-preview-row">
+          <a id="communityPreviewLink" class="content-preview" href="#" target="_blank" rel="noopener" data-i18n="community.preview">预览内容</a>
+          <span class="mono content-preview-url" id="communityPreviewUrl">—</span>
+        </div>
         <div class="field-grid" style="margin-top:15px">
           <div class="field">
             <label data-i18n="communityReview.result">审核结果</label>
@@ -721,7 +728,6 @@
             <select class="control" id="communityReviewReason">
               <option value="CONTENT_NOT_FOUND" data-i18n="communityReason.contentNotFound">内容不存在或无法访问</option>
               <option value="NOT_OWN_CONTENT" data-i18n="communityReason.notOwnContent">非本人内容</option>
-              <option value="NOT_DINO_CLASS" data-i18n="communityReason.notDinoClass">不属于 Dino AI 课堂</option>
               <option value="DUPLICATE_CONTENT" data-i18n="communityReason.duplicateContent">重复内容</option>
               <option value="OTHER" data-i18n="communityReason.other">其他</option>
             </select>
