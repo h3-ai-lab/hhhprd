@@ -48,6 +48,7 @@ const I18N = {
     "filter.keyword": "关键词",
     "filter.keyword.placeholder": "用户 ID / 手机号 / 订单 ID",
     "common.reset": "重置筛选",
+    "common.export": "导出",
     "common.search": "搜索",
     "common.cancel": "取消",
     "common.close": "关闭",
@@ -61,6 +62,7 @@ const I18N = {
     "option.allSources": "全部来源",
     "option.allCc": "全部 CC",
     "option.allStatuses": "全部状态",
+    "option.allRegistrationSources": "全部注册来源",
     "source.referral": "拉新推荐",
     "source.social": "社媒推荐",
     "status.success": "已发放",
@@ -78,6 +80,10 @@ const I18N = {
     "status.paid": "已付费",
     "status.trial": "体验中",
     "status.disabled": "已停用",
+    "trialStatus.NONE": "未开始",
+    "trialStatus.SCHEDULED": "待上课",
+    "trialStatus.IN_PROGRESS": "体验中",
+    "trialStatus.COMPLETED": "已完成",
     "table.referrer": "推荐人",
     "table.referred": "被推荐人",
     "table.businessLine": "业务线",
@@ -156,6 +162,8 @@ const I18N = {
     "users.name": "姓名",
     "users.userStatus": "用户状态",
     "users.userType": "用户类型",
+    "users.registrationSource": "注册来源",
+    "users.trialLessonStatus": "体验课状态",
     "users.signup": "注册方式",
     "users.loginAccount": "登录账号",
     "users.channel": "渠道来源",
@@ -166,6 +174,7 @@ const I18N = {
     "users.editInfo": "修改信息",
     "users.web": "网页",
     "users.count": "共 {count} 条记录",
+    "users.empty": "当前筛选下没有用户",
     "grant.title": "增加用户时长 · {id}",
     "grant.subtitle": "为当前用户增加会员时长",
     "grant.openType": "开通类型",
@@ -183,6 +192,8 @@ const I18N = {
     "grant.error.days": "请输入有效的有效期天数",
     "grant.error.reason": "请输入开通原因",
     "toast.refreshed": "数据已刷新",
+    "export.empty": "当前筛选下没有可导出的数据",
+    "export.success": "已导出 {count} 条记录",
     "toast.referralSuccess": "推荐关系已绑定，权益已发放",
     "toast.socialSuccess": "社媒推荐记录已保存",
     "toast.grantSuccess": "用户时长已增加",
@@ -271,6 +282,7 @@ const I18N = {
     "filter.keyword": "Keyword",
     "filter.keyword.placeholder": "User ID / phone / order ID",
     "common.reset": "Reset filters",
+    "common.export": "Export",
     "common.search": "Search",
     "common.cancel": "Cancel",
     "common.close": "Close",
@@ -284,6 +296,7 @@ const I18N = {
     "option.allSources": "All sources",
     "option.allCc": "All CCs",
     "option.allStatuses": "All statuses",
+    "option.allRegistrationSources": "All registration sources",
     "source.referral": "Referral",
     "source.social": "Social media recommendation",
     "status.success": "Issued",
@@ -301,6 +314,10 @@ const I18N = {
     "status.paid": "Paid",
     "status.trial": "On trial",
     "status.disabled": "Disabled",
+    "trialStatus.NONE": "Not started",
+    "trialStatus.SCHEDULED": "Scheduled",
+    "trialStatus.IN_PROGRESS": "In progress",
+    "trialStatus.COMPLETED": "Completed",
     "table.referrer": "Referrer",
     "table.referred": "Referred user",
     "table.businessLine": "Business line",
@@ -379,6 +396,8 @@ const I18N = {
     "users.name": "Name",
     "users.userStatus": "User status",
     "users.userType": "User type",
+    "users.registrationSource": "Registration source",
+    "users.trialLessonStatus": "Trial lesson status",
     "users.signup": "Signup method",
     "users.loginAccount": "Login account",
     "users.channel": "Channel",
@@ -389,6 +408,7 @@ const I18N = {
     "users.editInfo": "Edit info",
     "users.web": "Web",
     "users.count": "{count} records",
+    "users.empty": "No users match the current filters",
     "grant.title": "Add user duration · {id}",
     "grant.subtitle": "Increase membership duration for this user",
     "grant.openType": "Activation type",
@@ -406,6 +426,8 @@ const I18N = {
     "grant.error.days": "Enter a valid validity period",
     "grant.error.reason": "Enter a grant reason",
     "toast.refreshed": "Data refreshed",
+    "export.empty": "No data to export under the current filters",
+    "export.success": "Exported {count} records",
     "toast.referralSuccess": "Referral linked and benefit issued",
     "toast.socialSuccess": "Social media recommendation saved",
     "toast.grantSuccess": "User duration increased",
@@ -637,6 +659,43 @@ function money(value) {
   return `฿${Number(value).toLocaleString("en-US")}`;
 }
 
+function csvCell(value) {
+  let text = String(value ?? "");
+  if (/^[=+\-@]/.test(text)) text = `'${text}`;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+window.CRMPrototypeExport = {
+  download(filename, headers, rows) {
+    const csv = [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n");
+    const blob = new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  },
+};
+
+function applyUserFilters() {
+  const registrationSource = document.getElementById("userRegistrationSourceFilter").value;
+  const trialStatus = document.getElementById("userTrialStatusFilter").value;
+  const rows = [...document.querySelectorAll("#usersView tbody tr")];
+  let visibleCount = 0;
+  rows.forEach((row) => {
+    const source = row.querySelector("[data-registration-source]")?.dataset.registrationSource || "";
+    const trial = row.querySelector("[data-trial-status]")?.dataset.trialStatus || "";
+    const visible = (!registrationSource || source === registrationSource) && (!trialStatus || trial === trialStatus);
+    row.hidden = !visible;
+    if (visible) visibleCount += 1;
+  });
+  document.getElementById("userEmpty").hidden = visibleCount > 0;
+  document.getElementById("usersRowSummary").textContent = countLabel("users.count", visibleCount);
+}
+
 function viewMeta(view) {
   if (view === "dashboard") return { title: "nav.growth", crumb: "crumb.growth" };
   if (view === "community") return { title: "community.title", crumb: "crumb.growth" };
@@ -663,7 +722,7 @@ function applyStaticTranslations() {
   document.querySelectorAll("[data-lang]").forEach((button) => {
     button.classList.toggle("active", button.dataset.lang === state.lang);
   });
-  document.getElementById("usersRowSummary").textContent = countLabel("users.count", document.querySelectorAll("#usersView tbody tr").length);
+  applyUserFilters();
   const meta = viewMeta(state.view);
   document.getElementById("pageTitle").textContent = t(meta.title);
   document.getElementById("crumb").textContent = t(meta.crumb);
@@ -957,6 +1016,14 @@ document.getElementById("resetFilters").addEventListener("click", () => {
   renderRows();
 });
 document.getElementById("refreshBtn").addEventListener("click", () => showToast(t("toast.refreshed")));
+["userRegistrationSourceFilter", "userTrialStatusFilter"].forEach((id) => {
+  document.getElementById(id).addEventListener("change", applyUserFilters);
+});
+document.getElementById("userFilterReset").addEventListener("click", () => {
+  document.getElementById("userRegistrationSourceFilter").value = "";
+  document.getElementById("userTrialStatusFilter").value = "";
+  applyUserFilters();
+});
 document.querySelectorAll(".open-grant-user").forEach((button) => button.addEventListener("click", () => openGrant(button)));
 document.querySelectorAll("[data-sales-tab]").forEach((button) => {
   button.addEventListener("click", () => applySalesTab(button.dataset.salesTab));

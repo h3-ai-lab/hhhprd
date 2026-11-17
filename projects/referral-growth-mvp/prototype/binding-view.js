@@ -22,7 +22,7 @@ const TEXT = {
     "bindings.newSocial": "登记社媒推荐",
     "bindings.newReferral": "新建好友推荐",
     "bindings.bound": "已生效关系",
-    "bindings.boundNote": "等待首课、购买或归属异常处理",
+    "bindings.boundNote": "等待首课、购买或奖励发放结果",
     "bindings.pending": "待转移关系",
     "bindings.pendingNote": "等待原归属 CC 重新分配线索",
     "bindings.automatic": "自动发放",
@@ -98,7 +98,7 @@ const TEXT = {
     "trigger.firstTrial": "等待首课完课",
     "trigger.purchase": "等待首次购买",
     "trigger.socialReview": "等待社媒推荐审核或选中结果",
-    "trigger.assignment": "处理归属异常",
+    "trigger.assignment": "等待销售中心处理归属",
     "reward.firstTrial": "+14 天",
     "reward.purchase": "+{count} 个月",
     "reward.published": "+5 天",
@@ -124,7 +124,7 @@ const TEXT = {
     "referralModal.referredUserId": "被推荐人用户 ID",
     "referralModal.userIdPlaceholder": "输入被推荐人的完整用户 ID",
     "referralModal.verify": "核验",
-    "referralModal.verifyNote": "精确核验用户、业务线、活动新注册状态、已有推荐关系和当前归属 CC",
+    "referralModal.verifyNote": "精确核验被推荐人的业务线、注册来源、注册时间、体验课状态、已有推荐关系和当前归属 CC",
     "referralModal.note": "绑定备注",
     "referralModal.notePlaceholder": "补充可核实的业务说明",
     "referralModal.enumLabel": "绑定状态枚举：",
@@ -136,17 +136,23 @@ const TEXT = {
     "referralModal.disabled": "该用户账号已停用，不能绑定",
     "referralModal.otherLine": "该用户属于越南业务线，与推荐人泰国业务线不一致",
     "referralModal.notNew": "该用户注册时间早于活动开始时间，不属于活动新用户",
+    "referralModal.notOrganic": "该被推荐人注册来源为“{source}”，不是 organic，不属于活动新注册",
+    "referralModal.trialStarted": "该被推荐人已有体验课，当前状态为“{status}”，不属于活动新注册",
     "referralModal.alreadyBound": "该用户已绑定其他推荐人，不能重复绑定",
-    "referralModal.existing": "Narin K. · 活动新注册用户",
-    "referralModal.eligible": "可绑定：正式注册、同业务线且无其他推荐关系",
+    "referralModal.existing": "活动新注册用户",
+    "referralModal.eligible": "可绑定：正式注册、organic 来源、同业务线、无体验中/已完成体验课且无其他推荐关系",
     "referralModal.registeredAt": "注册时间",
+    "referralModal.registrationSource": "注册来源",
+    "referralModal.trialLessonStatus": "体验课状态",
     "referralModal.campaignStart": "活动开始",
     "referralModal.newRegistration": "新注册判定",
     "referralModal.currentOwner": "当前归属 CC",
+    "trialStatus.NONE": "未开始",
+    "trialStatus.SCHEDULED": "待上课",
+    "trialStatus.IN_PROGRESS": "体验中",
+    "trialStatus.COMPLETED": "已完成",
     "referralModal.successPending": "绑定成功，被推荐人当前归属 {owner}，请联系其重新分配线索",
     "referralModal.successActive": "绑定成功，被推荐人已归属目标归属 CC，后续业务事件将自动触发奖励",
-    "transfer.action": "重新分配线索",
-    "transfer.success": "被推荐人已转给 {owner}，绑定关系生效",
     "socialModal.title": "登记社媒推荐",
     "socialModal.subtitle": "先保存内容记录，审核结果变化后自动发奖",
     "socialModal.user": "发布用户",
@@ -162,6 +168,13 @@ const TEXT = {
     "socialModal.success": "社媒推荐记录已保存，奖励事件已按状态自动生成",
     "common.cancel": "取消",
     "common.close": "关闭",
+    "common.export": "导出",
+    "export.empty": "当前筛选下没有可导出的数据",
+    "export.success": "已导出 {count} 条记录",
+    "csv.referrerId": "推荐人用户 ID",
+    "csv.referredId": "被推荐人用户 ID",
+    "csv.nextTrigger": "下一触发条件",
+    "csv.rewardStatus": "奖励状态",
     "toast.registered": "已打开推荐人 Pimchanok S. 的关系维护",
   },
   en: {
@@ -186,7 +199,7 @@ const TEXT = {
     "bindings.newSocial": "Record social media recommendation",
     "bindings.newReferral": "New friend referral",
     "bindings.bound": "Active relationships",
-    "bindings.boundNote": "Awaiting first lesson, purchase, or assignment review",
+    "bindings.boundNote": "Waiting for the first lesson, purchase, or reward issuance result",
     "bindings.pending": "Pending ownership transfer",
     "bindings.pendingNote": "Waiting for the current CC to reassign the lead",
     "bindings.automatic": "Automatic issuance",
@@ -262,7 +275,7 @@ const TEXT = {
     "trigger.firstTrial": "Awaiting first lesson completion",
     "trigger.purchase": "Awaiting first purchase",
     "trigger.socialReview": "Awaiting social media review or selection",
-    "trigger.assignment": "Assignment review",
+    "trigger.assignment": "Awaiting ownership handling in Sales Center",
     "reward.firstTrial": "+14 days",
     "reward.purchase": "+{count} months",
     "reward.published": "+5 days",
@@ -288,7 +301,7 @@ const TEXT = {
     "referralModal.referredUserId": "Referred user ID",
     "referralModal.userIdPlaceholder": "Enter the referred user's complete user ID",
     "referralModal.verify": "Verify",
-    "referralModal.verifyNote": "Verify the user, business line, campaign registration, existing referral, and current owner CC",
+    "referralModal.verifyNote": "Verify the referred user's business line, registration source, registration time, trial status, existing referral, and current owner CC",
     "referralModal.note": "Binding note",
     "referralModal.notePlaceholder": "Add verifiable business context",
     "referralModal.enumLabel": "Binding status enums: ",
@@ -300,17 +313,23 @@ const TEXT = {
     "referralModal.disabled": "This user account is disabled and cannot be linked",
     "referralModal.otherLine": "The user belongs to the Vietnam business line, which does not match the referrer's Thailand business line",
     "referralModal.notNew": "The user registered before the campaign start and is not a new campaign user",
+    "referralModal.notOrganic": "The referred user's registration source is “{source}”, not organic, so they do not qualify as a new campaign registration",
+    "referralModal.trialStarted": "The referred user already has a trial lesson in the “{status}” status and does not qualify as a new campaign registration",
     "referralModal.alreadyBound": "This user is already linked to another referrer",
-    "referralModal.existing": "Narin K. · New campaign registration",
-    "referralModal.eligible": "Eligible: registered, same business line, and no existing referral",
+    "referralModal.existing": "New campaign registration",
+    "referralModal.eligible": "Eligible: registered, organic source, same business line, no in-progress/completed trial, and no existing referral",
     "referralModal.registeredAt": "Registered at",
+    "referralModal.registrationSource": "Registration source",
+    "referralModal.trialLessonStatus": "Trial lesson status",
     "referralModal.campaignStart": "Campaign start",
     "referralModal.newRegistration": "New registration",
     "referralModal.currentOwner": "Current owner CC",
+    "trialStatus.NONE": "Not started",
+    "trialStatus.SCHEDULED": "Scheduled",
+    "trialStatus.IN_PROGRESS": "In progress",
+    "trialStatus.COMPLETED": "Completed",
     "referralModal.successPending": "Relationship linked. The referred user currently belongs to {owner}; contact them to reassign the lead.",
     "referralModal.successActive": "Relationship linked. The referred user already belongs to the target owner CC; business events will now trigger rewards.",
-    "transfer.action": "Reassign lead",
-    "transfer.success": "Referred user reassigned to {owner}; the referral relationship is now active.",
     "socialModal.title": "Record Social Media Recommendation",
     "socialModal.subtitle": "Save the content first; review outcomes trigger rewards automatically",
     "socialModal.user": "Publishing user",
@@ -326,6 +345,13 @@ const TEXT = {
     "socialModal.success": "Social media recommendation saved. Reward events were generated from the content status.",
     "common.cancel": "Cancel",
     "common.close": "Close",
+    "common.export": "Export",
+    "export.empty": "No data to export under the current filters",
+    "export.success": "Exported {count} records",
+    "csv.referrerId": "Referrer user ID",
+    "csv.referredId": "Referred user ID",
+    "csv.nextTrigger": "Next trigger",
+    "csv.rewardStatus": "Reward status",
     "toast.registered": "Opened relationship management for referrer Pimchanok S.",
   },
 };
@@ -349,6 +375,8 @@ const state = {
   },
 };
 
+let visibleUnifiedRows = [];
+
 const CAMPAIGN_START = "2026-11-01";
 const USER_DIRECTORY = {
   "2120302295478341": {
@@ -357,6 +385,8 @@ const USER_DIRECTORY = {
     businessLine: "thailand",
     userType: "FORMAL",
     registeredAt: "2026-11-08",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Nok S.",
     existingBinding: true,
   },
@@ -366,6 +396,8 @@ const USER_DIRECTORY = {
     businessLine: "thailand",
     userType: "FORMAL",
     registeredAt: "2026-11-10",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Nok S.",
     existingBinding: false,
   },
@@ -375,6 +407,8 @@ const USER_DIRECTORY = {
     businessLine: "thailand",
     userType: "FORMAL",
     registeredAt: "2026-10-20",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Nok S.",
     existingBinding: false,
   },
@@ -384,6 +418,8 @@ const USER_DIRECTORY = {
     businessLine: "thailand",
     userType: "FORMAL",
     registeredAt: "2026-11-03",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Nok S.",
     existingBinding: true,
   },
@@ -393,6 +429,8 @@ const USER_DIRECTORY = {
     businessLine: "vietnam",
     userType: "FORMAL",
     registeredAt: "2026-11-05",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
     currentOwner: "Mina P.",
     existingBinding: false,
   },
@@ -403,6 +441,41 @@ const USER_DIRECTORY = {
     userType: "FORMAL",
     accountActive: false,
     registeredAt: "2026-11-02",
+    registrationSource: "organic",
+    trialLessonStatus: "NONE",
+    currentOwner: "Thanya C.",
+    existingBinding: false,
+  },
+  "2120302298307215251": {
+    userId: "2120302298307215251",
+    name: "Pong M.",
+    businessLine: "thailand",
+    userType: "FORMAL",
+    registeredAt: "2026-11-09",
+    registrationSource: "facebook_lead",
+    trialLessonStatus: "NONE",
+    currentOwner: "Nok S.",
+    existingBinding: false,
+  },
+  "2120302297446883001": {
+    userId: "2120302297446883001",
+    name: "Aom S.",
+    businessLine: "thailand",
+    userType: "FORMAL",
+    registeredAt: "2026-11-09",
+    registrationSource: "organic",
+    trialLessonStatus: "IN_PROGRESS",
+    currentOwner: "Nok S.",
+    existingBinding: false,
+  },
+  "2120302263019845102": {
+    userId: "2120302263019845102",
+    name: "Krit S.",
+    businessLine: "thailand",
+    userType: "FORMAL",
+    registeredAt: "2026-11-08",
+    registrationSource: "organic",
+    trialLessonStatus: "COMPLETED",
     currentOwner: "Thanya C.",
     existingBinding: false,
   },
@@ -640,9 +713,17 @@ function statusLabel(key) {
   return `<span class="status ${cls}">${t(`bindStatus.${key}`)}</span>`;
 }
 
+function statusText(key) {
+  return t(`bindStatus.${key}`);
+}
+
 function rewardStatusLabel(key) {
   const cls = key === "issued" ? "success" : key === "failed" ? "failed" : key === "invalid" ? "invalid" : "processing";
   return `<span class="status ${cls}">${t(`eventStatus.${key}`)}</span>`;
+}
+
+function rewardStatusText(key) {
+  return t(`eventStatus.${key}`);
 }
 
 function renderBindingResult() {
@@ -661,12 +742,14 @@ function renderBindingResult() {
       <span>${t("referralModal.eligible")}</span>
       <span class="mono">${user.userId}</span>
       <span>${t("referralModal.registeredAt")}: ${user.registeredAt}</span>
+      <span>${t("referralModal.registrationSource")}: ${user.registrationSource}</span>
       <span>${t("referralModal.campaignStart")}: ${CAMPAIGN_START}</span>
+      <span>${t("referralModal.trialLessonStatus")}: ${t(`trialStatus.${user.trialLessonStatus}`)}</span>
       <span>${t("referralModal.newRegistration")}: NEW_REGISTRATION</span>
       <span>${t("referralModal.currentOwner")}: ${user.currentOwner || "—"}</span>`;
     return;
   }
-  result.textContent = t(state.bindingResult.key);
+  result.textContent = t(state.bindingResult.key, state.bindingResult.values);
   result.classList.add("is-error");
 }
 
@@ -806,6 +889,7 @@ function renderUnified() {
     const dateMatch = (!start || rowDate >= start) && (!end || rowDate <= end);
     return businessMatch && sourceMatch && ownerMatch && bindingMatch && rewardMatch && keywordMatch && dateMatch;
   });
+  visibleUnifiedRows = rows;
   const body = document.getElementById("unifiedRows");
   body.innerHTML = rows.map((row) => `
     <tr data-detail-id="${row.id}">
@@ -821,29 +905,62 @@ function renderUnified() {
       <td>${row.reward}</td>
       <td><span class="mono">${row.giftOrderId}</span><span class="secondary">${t(`giftStatus.${row.giftOrderStatus}`)} · ฿0</span></td>
       <td>${rewardStatusLabel(row.rewardStatus)}</td>
-      <td>${row.source === "referral" && row.bindingStatus === "pendingTransfer" ? `<button class="btn small transfer-lead" data-binding-id="${row.id}">${t("transfer.action")}</button>` : "—"}</td>
     </tr>`).join("");
   document.getElementById("unifiedEmpty").hidden = rows.length > 0;
   document.getElementById("unifiedCount").textContent = t("unified.count", { count: rows.length });
-  body.querySelectorAll(".transfer-lead").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.stopPropagation();
-      const relation = referrals.find((item) => item.id === button.dataset.bindingId);
-      if (!relation) return;
-      relation.bindingStatus = "active";
-      relation.currentOwner = relation.owner;
-      relation.nextTrigger = "trigger.firstTrial";
-      renderUnified();
-      renderReferrals();
-      showToast("transfer.success", { owner: relation.owner });
-    });
-  });
   body.querySelectorAll("[data-detail-id]").forEach((rowElement) => {
     rowElement.addEventListener("click", () => {
       const row = rows.find((item) => item.id === rowElement.dataset.detailId);
       if (row) openReferralDetail(row);
     });
   });
+}
+
+function exportUnified() {
+  if (!visibleUnifiedRows.length) {
+    showToast("export.empty");
+    return;
+  }
+  const headers = [
+    t("table.record"),
+    t("table.source"),
+    t("table.referrer"),
+    t("csv.referrerId"),
+    t("table.referred"),
+    t("csv.referredId"),
+    t("table.businessLine"),
+    t("table.bindStatus"),
+    t("table.targetOwner"),
+    t("table.currentOwner"),
+    t("csv.nextTrigger"),
+    t("table.triggerEvent"),
+    t("table.reward"),
+    t("csv.rewardStatus"),
+    t("table.giftOrder"),
+    t("table.giftStatus"),
+    t("table.boundAt"),
+  ];
+  const data = visibleUnifiedRows.map((row) => [
+    row.id,
+    bindingSourceLabel(row.source),
+    row.user,
+    row.userId,
+    row.referred,
+    row.referredId,
+    businessLineLabel(row.businessLine),
+    statusText(row.bindingStatus),
+    row.owner,
+    row.currentOwner || "—",
+    t(row.nextTrigger),
+    row.eventType,
+    row.reward,
+    rewardStatusText(row.rewardStatus),
+    row.giftOrderId,
+    t(`giftStatus.${row.giftOrderStatus}`),
+    row.boundAt,
+  ]);
+  window.CRMPrototypeExport.download(`referral-relationships-${new Date().toISOString().slice(0, 10)}.csv`, headers, data);
+  showToast("export.success", { count: data.length });
 }
 
 function openReferralDetail(row) {
@@ -987,6 +1104,26 @@ function verifyReferredUser() {
     return;
   }
 
+  if (user.registrationSource !== "organic") {
+    state.bindingResult = {
+      kind: "error",
+      key: "referralModal.notOrganic",
+      values: { source: user.registrationSource || "—" },
+    };
+    renderBindingResult();
+    return;
+  }
+
+  if (["IN_PROGRESS", "COMPLETED"].includes(user.trialLessonStatus)) {
+    state.bindingResult = {
+      kind: "error",
+      key: "referralModal.trialStarted",
+      values: { status: t(`trialStatus.${user.trialLessonStatus}`) },
+    };
+    renderBindingResult();
+    return;
+  }
+
   if (user.existingBinding) {
     state.bindingResult = { kind: "error", key: "referralModal.alreadyBound" };
     renderBindingResult();
@@ -1011,6 +1148,8 @@ function confirmBinding() {
     referredId: state.verifiedUser.userId,
     referred: state.verifiedUser.name,
     registeredAt: state.verifiedUser.registeredAt,
+    registrationSource: state.verifiedUser.registrationSource,
+    trialLessonStatus: state.verifiedUser.trialLessonStatus,
     newRegistration: "NEW_REGISTRATION",
     line: "thailand",
     owner: activeReferrer.owner,
@@ -1138,6 +1277,7 @@ document.querySelectorAll("[data-unified-date]").forEach((button) => {
   });
 });
 document.getElementById("newReferralBtn").addEventListener("click", () => openReferralModal());
+document.getElementById("exportUnified").addEventListener("click", exportUnified);
 ["unifiedBusinessFilter", "unifiedSourceFilter", "unifiedCcFilter", "unifiedBindingFilter", "unifiedRewardFilter", "unifiedStartDate", "unifiedEndDate"].forEach((id) => {
   document.getElementById(id).addEventListener("change", renderUnified);
 });

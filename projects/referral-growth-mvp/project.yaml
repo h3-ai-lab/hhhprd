@@ -1,6 +1,6 @@
 id: REQ-GRW-001
 name: 拉新裂变mvp
-status: 待评审
+status: 评审后修订
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

@@ -1,6 +1,6 @@
 id: REQ-OB-001
 name: 外呼能力一期
-status: 待评审
+status: 评审后修订
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

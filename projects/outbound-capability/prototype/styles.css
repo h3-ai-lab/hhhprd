@@ -159,9 +159,6 @@ tbody tr:last-child td{border-bottom:0}
 .import-table tr.has-errors td{background:#fffafa}
 .import-table td:last-child{min-width:220px}
 .validation-tags{display:flex;flex-wrap:wrap;gap:4px}.validation-tags .tag{white-space:normal}
-.progress-wrap{padding:18px 0 4px}
-.progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:12px;color:var(--muted)}
-.progress-track{height:8px;background:#edf1f6;border-radius:99px;overflow:hidden}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#4f8cff,#2563eb);transition:width .2s ease}
 .success-block{text-align:center;padding:18px 8px 8px}.success-icon{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--green-soft);color:var(--green);margin:0 auto 12px}
 .success-icon svg{width:28px;height:28px}.success-block h3{margin:0 0 4px;font-size:18px}.success-block p{margin:0;color:var(--muted);font-size:12px}
 .task-list{display:flex;flex-direction:column;gap:9px}
