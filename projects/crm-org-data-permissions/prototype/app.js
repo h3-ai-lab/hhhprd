@@ -289,7 +289,6 @@ function renderOrganizationTab() {
   const editable = operatorAllowedIds();
   const rows = (selected ? [selected, ...descendantsOf(selected.id)] : orgs).filter((org) => visible.has(org.id));
   const selectedEditable = !!selected && editable.has(selected.id);
-  const canAddLine = currentUser().roleId === "role_super";
   return `<div class="org-layout">
     <aside class="side-panel">
       <div class="side-panel-title">组织架构</div>
@@ -300,7 +299,6 @@ function renderOrganizationTab() {
       <div class="org-summary">
         <div><h2>${escapeHtml(selected?.name ?? "组织架构")}</h2><p>${escapeHtml(orgPath(selected?.id))} · ${selected?.status ?? ""}${selected && !selectedEditable ? " · 祖先路径只读" : ""}</p></div>
         <div class="toolbar-group">
-          <button class="btn" data-action="add-business-line" ${canAddLine ? "" : "disabled"} title="${canAddLine ? "" : "仅超级管理员可新增业务线"}">${icon("plus")}新增业务线</button>
           <button class="btn" data-action="edit-org" ${selectedEditable ? "" : "disabled"}>${icon("edit")}编辑</button>
           <button class="btn primary" data-action="add-org" ${selectedEditable && selected?.status === "启用" && selected?.level < 4 ? "" : "disabled"}>${icon("plus")}新增组织</button>
         </div>
@@ -315,7 +313,7 @@ function renderOrganizationTab() {
           <td><span class="tag ${org.status === "启用" ? "green" : ""}">${org.status}</span></td>
           <td><div class="row-actions">
             ${editable.has(org.id) ? `<button class="btn ghost" data-org-edit="${org.id}">编辑</button>` : '<span class="secondary-text">只读</span>'}
-            ${editable.has(org.id) && org.level > 1 ? `<button class="btn ghost" data-org-move="${org.id}">更换上级</button><button class="btn ghost" data-org-merge="${org.id}">合并</button>` : ""}
+            ${editable.has(org.id) && org.level > 1 ? `<button class="btn ghost" data-org-move="${org.id}">更换上级</button><button class="btn ghost" data-org-transfer="${org.id}">批量转移成员</button>` : ""}
             ${editable.has(org.id) ? (org.status === "启用"
               ? `<button class="btn ghost danger" data-org-disable="${org.id}">停用</button>`
               : `<button class="btn ghost" data-org-enable="${org.id}">启用</button>`) : ""}
@@ -583,7 +581,7 @@ function openOrgModal(mode, orgId = state.selectedOrg) {
   const title = editing ? "编辑组织" : nextLevel === 2 ? "新增区" : nextLevel === 3 ? "新增部" : "新增组";
   openModal(`<form id="org-form">
     <div class="modal-head"><h2 id="modal-title">${title}</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
-    ${editing ? '<div class="permission-hint">更换上级、合并和停用请使用组织列表中的独立操作入口，系统会在保存前展示影响并要求填写原因。</div>' : ""}
+    ${editing ? '<div class="permission-hint">更换上级、批量转移成员和停用请使用组织列表中的独立操作入口，系统会在保存前展示影响并要求填写原因。</div>' : ""}
     <div class="form-section">组织信息</div>
     <div class="form-grid">
       <div class="form-item"><label>业务线</label><input class="field" value="${escapeHtml(line || "—")}" disabled></div>
@@ -634,33 +632,6 @@ function openOrgModal(mode, orgId = state.selectedOrg) {
   });
 }
 
-function openBusinessLineModal() {
-  openModal(`<form id="business-line-form">
-    <div class="modal-head"><h2 id="modal-title">新增业务线</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
-    <div class="form-section">业务线信息</div>
-    <div class="form-grid">
-      <div class="form-item full"><label>业务线名称 <em>*</em></label><input class="field" name="name" placeholder="请输入业务线名称"></div>
-      <div class="form-item"><label>状态</label><select class="select" name="status"><option>启用</option><option>停用</option></select></div>
-    </div>
-    <div class="form-error" id="line-error"></div>
-    <div class="modal-actions"><button class="btn" type="button" data-action="close-modal">取消</button><button class="btn primary" type="submit">保存</button></div>
-  </form>`);
-  document.getElementById("business-line-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const name = String(form.get("name") || "").trim();
-    if (!name) return setError("line-error", "请输入业务线名称");
-    if (orgs.some((org) => org.level === 1 && org.name === name)) return setError("line-error", "业务线名称不能重复");
-    const org = { id: `line_${Date.now()}`, name, line: name, level: 1, parentId: null, status: String(form.get("status") || "启用") };
-    orgs.push(org);
-    state.selectedOrg = org.id;
-    state.logs.unshift({ time: "2026-11-11 18:42:10", module: "组织架构", action: "新增业务线", target: name, actor: currentUser().email });
-    closeModal();
-    render();
-    showToast("业务线已新增");
-  });
-}
-
 function setError(id, text) {
   const target = document.getElementById(id);
   if (target) target.textContent = text;
@@ -704,13 +675,13 @@ function openOrganizationImpactModal(mode, orgId) {
       confirm: "确认更换",
       action: "更换上级"
     },
-    merge: {
-      title: "合并组织",
+    transfer: {
+      title: "批量转移成员",
       hint: state.phase === 2
-        ? "合并后，当前成员、线索和分配规则按目标组织处理；已发生业务的组织快照不回写。"
-        : "合并后，当前成员和下级组织按目标组织处理；业务数据不受影响。",
-      confirm: "确认合并",
-      action: "合并"
+        ? "仅转移所选成员在当前节点下的主组织，不移动组织、线索、分配规则或历史组织快照。"
+        : "仅转移所选成员的当前主组织，不移动组织节点，也不回写历史记录。",
+      confirm: "确认转移",
+      action: "批量转移成员"
     },
     disable: {
       title: "停用组织",
@@ -723,6 +694,8 @@ function openOrganizationImpactModal(mode, orgId) {
   };
   const config = configs[mode];
   const options = mode === "disable" ? "" : organizationChangeTargetOptions(org, mode);
+  const affectedIds = new Set(subtreeIds(org.id));
+  const affectedMembers = members.filter((member) => memberGrants(member).some((grant) => affectedIds.has(grant.primaryOrgId)));
   openModal(`<form id="org-impact-form">
     <div class="modal-head"><h2 id="modal-title">${config.title}</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
     <div class="permission-hint">操作对象：${escapeHtml(orgPath(org.id))}。${config.hint}</div>
@@ -731,8 +704,12 @@ function openOrganizationImpactModal(mode, orgId) {
       <label>新的上级组织 <em>*</em></label>
       <select class="select" name="targetOrgId"><option value="">请选择新的上级组织</option>${options}</select>
     </div>` : ""}
-    ${mode === "merge" ? `<div class="form-section">合并目标</div><div class="form-item full">
-      <label>合并到 <em>*</em></label>
+    ${mode === "transfer" ? `<div class="form-section">转移成员</div>
+    <div class="form-item full"><label>选择成员 <em>*</em></label><div class="org-multiselect">
+      ${affectedMembers.length ? affectedMembers.map((member) => `<label class="org-check-row"><input type="checkbox" name="memberIds" value="${member.id}" checked><span>${escapeHtml(member.name)}</span><span class="level-badge">${escapeHtml(memberGrants(member).filter((grant) => affectedIds.has(grant.primaryOrgId)).map((grant) => `${grant.line} · ${orgPath(grant.primaryOrgId)}`).join("；"))}</span></label>`).join("") : '<span class="secondary-text">当前节点下没有可转移成员</span>'}
+    </div></div>
+    <div class="form-item full">
+      <label>目标组织 <em>*</em></label>
       <select class="select" name="targetOrgId"><option value="">请选择目标组织</option>${options}</select>
     </div>` : ""}
     <div class="form-item full" style="margin-top:14px">
@@ -749,7 +726,7 @@ function openOrganizationImpactModal(mode, orgId) {
     const reason = String(form.get("reason") || "").trim();
     const targetId = String(form.get("targetOrgId") || "");
     if (!reason) return setError("org-impact-error", "请填写操作原因");
-    if (mode !== "disable" && !targetId) return setError("org-impact-error", mode === "move" ? "请选择新的上级组织" : "请选择合并目标");
+    if (mode !== "disable" && !targetId) return setError("org-impact-error", mode === "move" ? "请选择新的上级组织" : "请选择目标组织");
 
     const timestamp = "2026-11-11 19:12:36";
     if (mode === "move") {
@@ -770,20 +747,15 @@ function openOrganizationImpactModal(mode, orgId) {
       return showToast("组织上级已更换");
     }
 
-    if (mode === "merge") {
+    if (mode === "transfer") {
       const target = orgById(targetId);
       if (!target) return setError("org-impact-error", "目标组织已发生变化，请刷新后重试");
-      const affectedIds = new Set(subtreeIds(org.id));
-      childrenOf(org.id).forEach((child) => {
-        child.parentId = target.id;
-        updateOrgLevels(child.id);
-      });
-      members.forEach((member) => {
+      const selectedIds = new Set(form.getAll("memberIds").map(String));
+      if (!selectedIds.size) return setError("org-impact-error", "请至少选择一名成员");
+      const transferred = members.filter((member) => selectedIds.has(member.id));
+      transferred.forEach((member) => {
         memberGrants(member).forEach((grant) => {
-          if (affectedIds.has(grant.primaryOrgId)) grant.primaryOrgId = target.id;
-          if (state.phase === 2) {
-            grant.orgIds = [...new Set((grant.orgIds || []).map((nodeId) => affectedIds.has(nodeId) ? target.id : nodeId))];
-          }
+          if (grant.line === org.line && affectedIds.has(grant.primaryOrgId)) grant.primaryOrgId = target.id;
         });
         const primary = memberGrants(member)[0];
         if (primary) {
@@ -793,29 +765,17 @@ function openOrganizationImpactModal(mode, orgId) {
           member.primaryOrgId = primary.primaryOrgId;
         }
       });
-      if (state.phase === 2) {
-        leads.forEach((lead) => {
-          if (affectedIds.has(lead.orgId)) lead.orgId = target.id;
-        });
-        assignmentRules.forEach((rule) => {
-          if (affectedIds.has(rule.orgId)) rule.orgId = target.id;
-        });
-      }
-      org.status = "停用";
-      state.selectedOrg = target.id;
       state.logs.unshift({
         time: timestamp,
         module: "组织架构",
-        action: "合并",
-        target: `${orgPath(org.id)} → ${orgPath(target.id)}`,
-        detail: state.phase === 2
-          ? `成员 ${impact.members}、线索 ${impact.leads}、规则 ${impact.rules}；原因：${reason}`
-          : `成员 ${impact.members}、组织节点 ${impact.organizations}；原因：${reason}`,
+        action: "批量转移成员",
+        target: `${transferred.map((member) => member.name).join("、")} → ${orgPath(target.id)}`,
+        detail: `原组织：${orgPath(org.id)}；成功：${transferred.length}；原因：${reason}`,
         actor: currentUser().email
       });
       closeModal();
       render();
-      return showToast("组织已合并");
+      return showToast(`已转移 ${transferred.length} 名成员`);
     }
 
     org.status = "停用";
@@ -1000,7 +960,7 @@ function memberGrantCardsHtml() {
           <select class="select" data-grant-primary="${escapeHtml(line)}"><option value="">请选择主组织</option>${orgOptions(line, draft.primaryOrgId || "")}</select>
         </div>
         ${draft.scope === "nodes" ? `<div class="form-item full"><label>授权组织 <em>*</em></label><div>${memberOrgSelectorHtml(line)}</div></div>` : ""}
-        ${draft.scope === "self" ? '<div class="form-item full"><div class="scope-note">本人仅包含当前线索归属人为本人账号的线索及直接关联数据；不含公共池和其他成员线索。公共池领取由功能角色和主组织另行控制。</div></div>' : ""}
+        ${draft.scope === "self" ? '<div class="form-item full"><div class="scope-note">本人包含本人账号过去和当前产生的全部数据，调岗或组织变化后仍可查看；不含其他成员线索和公共池。</div></div>' : ""}
       </div>
     </section>`;
   }).join("");
@@ -1214,8 +1174,8 @@ el.content.addEventListener("click", (event) => {
   if (orgEdit) return openOrgModal("edit", orgEdit.dataset.orgEdit);
   const orgMove = event.target.closest("[data-org-move]");
   if (orgMove) return openOrganizationImpactModal("move", orgMove.dataset.orgMove);
-  const orgMerge = event.target.closest("[data-org-merge]");
-  if (orgMerge) return openOrganizationImpactModal("merge", orgMerge.dataset.orgMerge);
+  const orgTransfer = event.target.closest("[data-org-transfer]");
+  if (orgTransfer) return openOrganizationImpactModal("transfer", orgTransfer.dataset.orgTransfer);
   const orgDisable = event.target.closest("[data-org-disable]");
   if (orgDisable) return openOrganizationImpactModal("disable", orgDisable.dataset.orgDisable);
   const orgEnable = event.target.closest("[data-org-enable]");
@@ -1232,7 +1192,6 @@ el.content.addEventListener("click", (event) => {
   const action = event.target.closest("[data-action]")?.dataset.action;
   if (!action) return;
   if (action === "close-modal") return closeModal();
-  if (action === "add-business-line") return openBusinessLineModal();
   if (action === "add-org") return openOrgModal("add");
   if (action === "edit-org") return openOrgModal("edit", state.selectedOrg);
   if (action === "add-member") return openMemberModal();

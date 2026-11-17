@@ -41,6 +41,16 @@
       border-radius:10px;padding:12px;margin-top:10px}.adGroupTitle{font-size:12px;color:#49617a;font-weight:700;margin:0 0 9px}
     .adGrid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px}.sectionTitle{display:flex;align-items:center;justify-content:space-between;
       padding:15px 18px;border-bottom:1px solid var(--line)}.sectionTitle h2{font-size:16px;margin:0}.pill{font-size:12px;color:#536174;background:#f1f5f9;border-radius:20px;padding:3px 9px}
+    .multiSelect{position:relative}.multiSelect summary{list-style:none;min-height:38px;border:1px solid #d6dfea;border-radius:8px;background:#fff;
+      padding:7px 30px 7px 10px;cursor:pointer;display:flex;align-items:center;gap:5px;flex-wrap:wrap;position:relative}
+    .multiSelect summary::-webkit-details-marker{display:none}.multiSelect summary:after{content:"⌄";position:absolute;right:11px;top:9px;color:#728196}
+    .multiSelect[open] summary{border-color:#7da9ff;box-shadow:0 0 0 3px rgba(36,107,253,.1)}.multiTags{display:flex;gap:4px;flex-wrap:wrap}
+    .multiTag{background:#edf4ff;color:#2867d8;border-radius:5px;padding:2px 6px;font-size:11px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .multiPlaceholder{color:#667085;font-size:13px}.multiPanel{position:absolute;z-index:20;left:0;right:0;top:calc(100% + 5px);background:#fff;border:1px solid #d6dfea;
+      border-radius:9px;box-shadow:0 12px 26px rgba(22,42,70,.15);padding:7px;max-height:230px;overflow:auto}
+    .multiOption{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;cursor:pointer}.multiOption:hover{background:#f5f8fd}
+    .multiOption span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.multiClear{width:100%;border:0;border-bottom:1px solid #edf1f6;background:#fff;color:var(--blue);
+      text-align:left;padding:7px 8px 9px;cursor:pointer}
     .tableWrap{overflow:auto}.table{width:100%;border-collapse:collapse;white-space:nowrap}.table th{position:sticky;top:0;background:#f8fafc;color:#5c6b7d;
       text-align:left;font-size:12px;font-weight:700;padding:12px;border-bottom:1px solid var(--line)}.table td{padding:12px;border-bottom:1px solid #edf1f6;vertical-align:middle}
     .table tr:last-child td{border-bottom:0}.table tbody tr:hover{background:#f9fbff}.mono{font-variant-numeric:tabular-nums;color:#42536a}.subtext{display:block;color:#91a0b2;font-size:11px;margin-top:2px}
@@ -135,7 +145,8 @@
         userSub:"查询用户广告归因及业务状态",salesSub:"在线索处理过程中查看广告来源与跟进阶段",dashboardSub:"按投放角度查看线索业务表现",
         filters:"筛选条件",adAttribution:"广告归因",all:"全部",search:"搜索",searchUsers:"用户 ID / 姓名 / 登录账号",searchLeads:"用户 ID / 姓名 / 手机号",
         userType:"用户类型",registration:"注册方式",landingSource:"渠道来源-落地页",appSource:"渠道来源-App",businessLine:"业务线",
-        userStatus:"用户状态",channel:"广告渠道",campaign:"活动",adset:"广告组",ad:"广告",reset:"重置",export:"导出",
+        userStatus:"用户状态",channel:"广告渠道",campaign:"活动",adset:"广告组",ad:"广告",reset:"重置",export:"导出",selectedCount:"已选 {count} 项",clearSelection:"清空选择",
+        batchAssign:"批量分配",crossLineBlocked:"所选线索包含多个业务线，请缩小选择范围后再分配。",singleLineReady:"所选线索属于同一业务线，可以继续批量分配。",
         userId:"用户 ID",studentName:"学生姓名",status:"用户状态",age:"年龄段",course:"课程等级",login:"登录账号",
         sourceLanding:"渠道来源-落地页",intent:"购买意向",stage:"当前跟进",cc:"CC",registered:"注册日期",download:"下载数据",
         pool:"公海",mine:"我的跟进",paid:"已付费",overview:"转化总览",followup:"销售跟进",payment:"支付结果",
@@ -166,7 +177,8 @@
         userSub:"Review ad attribution and user business status",salesSub:"View ad source and follow-up stage while working leads",dashboardSub:"Review lead business outcomes by ad perspective",
         filters:"Filters",adAttribution:"Ad Attribution",all:"All",search:"Search",searchUsers:"User ID / name / login",searchLeads:"User ID / name / phone",
         userType:"User Type",registration:"Registration",landingSource:"Landing Source",appSource:"App Source",businessLine:"Business Line",
-        userStatus:"User Status",channel:"Ad Channel",campaign:"Campaign",adset:"Ad Set",ad:"Ad",reset:"Reset",export:"Export",
+        userStatus:"User Status",channel:"Ad Channel",campaign:"Campaign",adset:"Ad Set",ad:"Ad",reset:"Reset",export:"Export",selectedCount:"{count} selected",clearSelection:"Clear selection",
+        batchAssign:"Bulk assign",crossLineBlocked:"Selected leads span multiple business lines. Narrow the selection before assigning.",singleLineReady:"All selected leads belong to one business line and can be bulk assigned.",
         userId:"User ID",studentName:"Student",status:"User Status",age:"Age",course:"Course Level",login:"Login Account",
         sourceLanding:"Landing Source",intent:"Purchase Intent",stage:"Follow-up Stage",cc:"CC",registered:"Registration Date",download:"Download Data",
         pool:"Lead Pool",mine:"My Follow-ups",paid:"Paid",overview:"Conversion Overview",followup:"Sales Follow-up",payment:"Payment Results",
@@ -198,13 +210,15 @@
       lang: localStorage.getItem("lqa-lang") || "zh",
       page: "users",
       salesTab: "mine",
+      selectedLeadIds: new Set(),
       dashboardTab: "overview",
       firstGroup: "date",
       secondGroup: "none",
       firstAdLevel: "channel",
       secondAdLevel: "campaign",
-      userFilters: {q:"",userType:"",registration:"",landingSource:"",appSource:"",businessLine:"",userStatus:"",channel:"",campaign:"",adset:"",ad:""},
-      salesFilters: {q:"",businessLine:"",intent:"",cc:"",stage:"",ageRange:"",courseLevel:"",landingSource:"",appSource:"",userStatus:"",consultation:"",from:"",to:"",channel:"",campaign:"",adset:"",ad:""},
+      openAdFilter: "",
+      userFilters: {q:"",userType:"",registration:"",landingSource:"",appSource:"",businessLine:"",userStatus:"",channel:[],campaign:[],adset:[],ad:[]},
+      salesFilters: {q:"",businessLine:"",intent:"",cc:"",stage:"",ageRange:"",courseLevel:"",landingSource:"",appSource:"",userStatus:"",consultation:"",from:"",to:"",channel:[],campaign:[],adset:[],ad:[]},
       dashFilters: {businessLine:"",cc:"",from:"2026-11-09",to:"2026-11-15"}
     };
     const t = (key,vars={}) => {
@@ -229,9 +243,9 @@
     function allOptions(kind) {
       const f = state[kind];
       let rows = LEADS.filter(lead => adFor(lead));
-      if (f.channel) rows = rows.filter(lead => channelValue(lead) === f.channel);
-      if (f.campaign) rows = rows.filter(lead => campaignValue(lead) === f.campaign);
-      if (f.adset) rows = rows.filter(lead => adsetValue(lead) === f.adset);
+      if (f.channel.length) rows = rows.filter(lead => f.channel.includes(channelValue(lead)));
+      if (f.campaign.length) rows = rows.filter(lead => f.campaign.includes(campaignValue(lead)));
+      if (f.adset.length) rows = rows.filter(lead => f.adset.includes(adsetValue(lead)));
       return {
         channels:[...new Set(LEADS.map(channelValue).filter(Boolean))],
         campaigns:[...new Set(rows.map(campaignValue).filter(Boolean))],
@@ -242,10 +256,10 @@
 
     function normalizeAdFilters(kind) {
       const f = state[kind]; const o = allOptions(kind);
-      if (f.channel && !o.channels.includes(f.channel)) f.channel = "";
-      if (f.campaign && !allOptions(kind).campaigns.includes(f.campaign)) f.campaign = "";
-      if (f.adset && !allOptions(kind).adsets.includes(f.adset)) f.adset = "";
-      if (f.ad && !allOptions(kind).ads.includes(f.ad)) f.ad = "";
+      f.channel = f.channel.filter(value => o.channels.includes(value));
+      f.campaign = f.campaign.filter(value => o.campaigns.includes(value));
+      f.adset = f.adset.filter(value => o.adsets.includes(value));
+      f.ad = f.ad.filter(value => o.ads.includes(value));
     }
 
     function adFilterHtml(kind) {
@@ -254,15 +268,26 @@
       const controls = [
         ["channel",t("channel"),o.channels],["campaign",t("campaign"),o.campaigns],["adset",t("adset"),o.adsets],["ad",t("ad"),o.ads]
       ];
-      return `<div class="adGroup"><p class="adGroupTitle">${t("adAttribution")}</p><div class="adGrid">${controls.map(([key,name,values]) =>
-        `<div class="field"><label>${name}</label><select class="control" data-filter-kind="${kind}" data-filter-key="${key}">${option("",t("all"),f[key])}${values.map(value=>option(value,value,f[key])).join("")}</select></div>`).join("")}</div></div>`;
+      return `<div class="adGroup"><p class="adGroupTitle">${t("adAttribution")}</p><div class="adGrid">${controls.map(([key,name,values]) => {
+        const selected = f[key];
+        const tags = selected.slice(0, 2).map(value => `<span class="multiTag" title="${esc(value)}">${esc(value)}</span>`).join("");
+        const more = selected.length > 2 ? `<span class="multiTag">+${selected.length - 2}</span>` : "";
+        const openKey = `${kind}:${key}`;
+        return `<div class="field"><label>${name}</label><details class="multiSelect" data-ad-filter-menu="${openKey}" ${state.openAdFilter === openKey ? "open" : ""}>
+          <summary aria-label="${esc(name)}">${selected.length ? `<span class="multiTags">${tags}${more}</span>` : `<span class="multiPlaceholder">${t("all")}</span>`}</summary>
+          <div class="multiPanel">
+            <button type="button" class="multiClear" data-clear-ad-filter="${kind}" data-ad-filter-key="${key}">${t("clearSelection")}</button>
+            ${values.map(value => `<label class="multiOption"><input type="checkbox" data-ad-filter-kind="${kind}" data-ad-filter-key="${key}" value="${esc(value)}" ${selected.includes(value) ? "checked" : ""}><span title="${esc(value)}">${esc(value)}</span></label>`).join("") || `<div class="multiPlaceholder">${t("all")}</div>`}
+          </div>
+        </details></div>`;
+      }).join("")}</div></div>`;
     }
 
     function matchesAd(lead,f) {
-      return (!f.channel || channelValue(lead) === f.channel)
-        && (!f.campaign || campaignValue(lead) === f.campaign)
-        && (!f.adset || adsetValue(lead) === f.adset)
-        && (!f.ad || adValue(lead) === f.ad);
+      return (!f.channel.length || f.channel.includes(channelValue(lead)))
+        && (!f.campaign.length || f.campaign.includes(campaignValue(lead)))
+        && (!f.adset.length || f.adset.includes(adsetValue(lead)))
+        && (!f.ad.length || f.ad.includes(adValue(lead)));
     }
 
     function filteredUsers() {
@@ -362,16 +387,16 @@
           ["userStatus",t("userStatus"),["no_trial","trial","paid"],t("allStatus")],
           ["consultation",t("consultation"),[["true",t("yes")],["false",t("no")]],t("all")],
           ["from",t("dateFrom"),[],"","date"],["to",t("dateTo"),[],"","date"]
-        ])}<div class="filterRow"><div class="actionRow"><button class="button ghost" data-action="reset-sales">${t("reset")}</button><button class="button primary" data-action="export-sales">${t("download")}</button></div></div></div></section>
+        ])}<div class="filterRow"><div class="actionRow"><button class="button ghost" data-action="reset-sales">${t("reset")}</button><button class="button" data-action="batch-assign">${t("batchAssign")}${state.selectedLeadIds.size?` · ${state.selectedLeadIds.size}`:""}</button><button class="button primary" data-action="export-sales">${t("download")}</button></div></div></div></section>
         <section class="panel"><div class="sectionTitle"><h2>${tabs.find(x=>x[0]===state.salesTab)[1]}</h2><span class="pill">${rows.length} ${t("countUnit")}</span></div>
         ${rows.length ? salesTable(rows) : emptyState()}</section>`;
     }
 
     function salesTable(rows) {
-      return `<div class="tableWrap"><table class="table"><thead><tr><th>${t("userId")}</th><th>${t("studentName")}</th><th>${t("intent")}</th>
+      return `<div class="tableWrap"><table class="table"><thead><tr><th></th><th>${t("userId")}</th><th>${t("studentName")}</th><th>${t("intent")}</th>
         <th>${t("userStatus")}</th><th>${t("userType")}</th><th>${t("age")}</th><th>${t("course")}</th><th>${t("login")}</th><th>${t("sourceLanding")}</th>
         <th>${t("businessLine")}</th><th>${t("stage")}</th><th>${t("channel")}</th><th>${t("campaign")}</th><th>${t("adset")}</th><th>${t("ad")}</th></tr></thead>
-        <tbody>${rows.map(lead=>`<tr><td class="mono">${lead.userId}</td><td><strong>${esc(lead.name)}</strong></td><td>${label(lead.intent)}</td>
+        <tbody>${rows.map(lead=>`<tr><td><input type="checkbox" data-select-lead="${lead.leadId}" ${state.selectedLeadIds.has(lead.leadId)?"checked":""} aria-label="${esc(lead.leadId)}"></td><td class="mono">${lead.userId}</td><td><strong>${esc(lead.name)}</strong></td><td>${label(lead.intent)}</td>
         <td>${label(lead.userStatus)}</td><td>${label(lead.userType)}</td><td>${lead.ageRange}</td><td>${lead.courseLevel}</td><td>${esc(lead.loginAccount)}</td><td>${esc(lead.landingSource)}</td>
         <td>${lead.line}</td><td><span class="tag blue">${stageLabel(lead.stage)}</span></td>${adCells(lead)}</tr>`).join("")}</tbody></table></div>`;
     }
@@ -492,17 +517,17 @@
 
     function setFilter(kind,key,value) {
       const f=state[kind]; f[key]=value;
-      if(key==="channel"){f.campaign="";f.adset="";f.ad="";}
-      if(key==="campaign"){f.adset="";f.ad="";}
-      if(key==="adset"){f.ad="";}
+      if(key==="channel"){f.campaign=[];f.adset=[];f.ad=[];}
+      if(key==="campaign"){f.adset=[];f.ad=[];}
+      if(key==="adset"){f.ad=[];}
       render();
       const id = `${kind}-${key}`; const node=document.getElementById(id);
       if(node){node.focus();if(node.tagName==="INPUT"&&node.type==="text")node.setSelectionRange(node.value.length,node.value.length);}
     }
 
     function resetFilters(kind) {
-      if(kind==="userFilters") state.userFilters={q:"",userType:"",registration:"",landingSource:"",appSource:"",businessLine:"",userStatus:"",channel:"",campaign:"",adset:"",ad:""};
-      if(kind==="salesFilters") state.salesFilters={q:"",businessLine:"",intent:"",cc:"",stage:"",ageRange:"",courseLevel:"",landingSource:"",appSource:"",userStatus:"",consultation:"",from:"",to:"",channel:"",campaign:"",adset:"",ad:""};
+      if(kind==="userFilters") state.userFilters={q:"",userType:"",registration:"",landingSource:"",appSource:"",businessLine:"",userStatus:"",channel:[],campaign:[],adset:[],ad:[]};
+      if(kind==="salesFilters") state.salesFilters={q:"",businessLine:"",intent:"",cc:"",stage:"",ageRange:"",courseLevel:"",landingSource:"",appSource:"",userStatus:"",consultation:"",from:"",to:"",channel:[],campaign:[],adset:[],ad:[]};
       if(kind==="dashFilters") state.dashFilters={businessLine:"",cc:"",from:"2026-11-09",to:"2026-11-15"};
     }
 
@@ -513,6 +538,15 @@
       const csv="\uFEFF"+[header,...body].map(row=>row.map(cell=>`"${String(cell).replaceAll('"','""')}"`).join(",")).join("\r\n");
       const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
       const a=document.createElement("a");a.href=url;a.download="crm-lead-quality.csv";a.click();URL.revokeObjectURL(url);showToast(t("exportDone"));
+    }
+
+    function openBatchAssignment() {
+      const selected = LEADS.filter(lead => state.selectedLeadIds.has(lead.leadId));
+      const lines = [...new Set(selected.map(lead => lead.line))];
+      const blocked = lines.length > 1;
+      document.getElementById("modal").innerHTML=`<div class="modalHead"><h3>${t("batchAssign")}</h3><button class="close" data-action="close-modal" aria-label="${t("close")}">×</button></div>
+        <div class="modalBody"><div class="formula"><strong>${selected.length} ${t("countUnit")}</strong><br>${esc(blocked ? t("crossLineBlocked") : t("singleLineReady"))}</div></div>`;
+      document.getElementById("modalLayer").classList.add("open");document.getElementById("modalLayer").setAttribute("aria-hidden","false");
     }
 
     function showToast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show"),1800);}
@@ -527,23 +561,44 @@
 
     document.addEventListener("click",event=>{
       const lang=event.target.closest("[data-lang]"); if(lang){state.lang=lang.dataset.lang;localStorage.setItem("lqa-lang",state.lang);render();return;}
-      const nav=event.target.closest("[data-page]"); if(nav){state.page=nav.dataset.page;render();return;}
-      const salesTab=event.target.closest("[data-sales-tab]"); if(salesTab){state.salesTab=salesTab.dataset.salesTab;render();return;}
+      const nav=event.target.closest("[data-page]"); if(nav){state.page=nav.dataset.page;state.selectedLeadIds.clear();render();return;}
+      const salesTab=event.target.closest("[data-sales-tab]"); if(salesTab){state.salesTab=salesTab.dataset.salesTab;state.selectedLeadIds.clear();render();return;}
       const dashTab=event.target.closest("[data-dashboard-tab]"); if(dashTab){state.dashboardTab=dashTab.dataset.dashboardTab;render();return;}
+      const adMenu=event.target.closest("[data-ad-filter-menu] summary"); if(adMenu){const menu=adMenu.parentElement;state.openAdFilter=menu.open?menu.dataset.adFilterMenu:"";return;}
+      const clearAd=event.target.closest("[data-clear-ad-filter]"); if(clearAd){state[clearAd.dataset.clearAdFilter][clearAd.dataset.adFilterKey]=[];render();return;}
       const breakdown=event.target.closest("[data-breakdown]"); if(breakdown){if(breakdown.dataset.breakdown==="first")state.firstGroup=breakdown.dataset.value;else state.secondGroup=breakdown.dataset.value;render();return;}
       const metric=event.target.closest("[data-metric]"); if(metric){openMetric(metric.dataset.metric);return;}
       const action=event.target.closest("[data-action]"); if(action){
         if(action.dataset.action==="reset-users"){resetFilters("userFilters");render();showToast(t("resetDone"));}
-        if(action.dataset.action==="reset-sales"){resetFilters("salesFilters");render();showToast(t("resetDone"));}
+        if(action.dataset.action==="reset-sales"){resetFilters("salesFilters");state.selectedLeadIds.clear();render();showToast(t("resetDone"));}
         if(action.dataset.action==="reset-dashboard"){resetFilters("dashFilters");render();showToast(t("resetDone"));}
         if(action.dataset.action==="export-users") exportRows("userFilters");
         if(action.dataset.action==="export-sales") exportRows("salesFilters");
+        if(action.dataset.action==="batch-assign") openBatchAssignment();
         if(action.dataset.action==="reset-current"){resetFilters(state.page==="users"?"userFilters":state.page==="sales"?"salesFilters":"dashFilters");render();showToast(t("resetDone"));}
         if(action.dataset.action==="close-modal") closeModal();
       }
       if(event.target.id==="modalLayer") closeModal();
     });
     document.addEventListener("change",event=>{
+      if(event.target.matches("[data-select-lead]")){
+        if(event.target.checked)state.selectedLeadIds.add(event.target.dataset.selectLead);else state.selectedLeadIds.delete(event.target.dataset.selectLead);
+        render();
+        return;
+      }
+      const adFilter=event.target.closest("[data-ad-filter-kind]");
+      if(adFilter){
+        const kind=adFilter.dataset.adFilterKind,key=adFilter.dataset.adFilterKey;
+        const f=state[kind]; const values=new Set(f[key]);
+        if(adFilter.checked) values.add(adFilter.value); else values.delete(adFilter.value);
+        f[key]=[...values];
+        if(key==="channel"){f.campaign=[];f.adset=[];f.ad=[];}
+        if(key==="campaign"){f.adset=[];f.ad=[];}
+        if(key==="adset"){f.ad=[];}
+        state.openAdFilter=`${kind}:${key}`;
+        render();
+        return;
+      }
       const el=event.target.closest("[data-filter-kind]");
       if(el){setFilter(el.dataset.filterKind,el.dataset.filterKey,el.value);return;}
       if(event.target.matches("[data-ad-level]")){if(event.target.dataset.adLevel==="first")state.firstAdLevel=event.target.value;else state.secondAdLevel=event.target.value;render();}

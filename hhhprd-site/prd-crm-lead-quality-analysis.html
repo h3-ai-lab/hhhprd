@@ -14,6 +14,8 @@
     p{margin:10px 0}a{color:var(--blue)}table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
     th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f7f9fc}
     blockquote{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}
+    ins{color:#d93025;text-decoration:none;font-weight:600}
+    del{color:#6b7280;text-decoration-thickness:1.5px}
     code{background:#f1f4f8;padding:1px 5px;border-radius:4px}pre code{background:transparent;padding:0;border-radius:0;color:inherit}pre{overflow:auto;background:#101828;
     color:#eef2f7;padding:16px;border-radius:8px}.mermaid{background:#fff;border:1px solid var(--line);
     border-radius:8px;padding:16px;overflow:auto}.top{display:flex;gap:14px;margin-bottom:18px}
@@ -24,7 +26,7 @@
 <body><main>
   <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/crm-lead-quality-analysis/prd/PRD.md">查看 Markdown 源文件</a></div>
   <article><h2>CRM 线索质量分析</h2>
-<blockquote>在 CRM 用户中心、销售中心和管理看板增加广告渠道、活动、广告组和广告归因，用同一批 Leads 的接通、预约、体验课完成和付费结果判断广告来源质量。<br>需求编号：REQ-LQA-001｜状态：待评审｜更新时间：2026-11-17<br>需求类型：看板与指标｜补充类型：表单字段列表、集成自动化、权限与审计</blockquote>
+<blockquote>在 CRM 用户中心、销售中心和管理看板增加广告渠道、活动、广告组和广告归因，用同一批 Leads 的接通、预约、体验课完成和付费结果判断广告来源质量。<br>需求编号：REQ-LQA-001｜状态：评审后修订｜更新时间：2026-11-17<br>需求类型：看板与指标｜补充类型：表单字段列表、集成自动化、权限与审计<br>文档修订：v1.1｜基线：v1.0（2026-11-17）｜本页为本次变更评审版<br>标记说明：[新增/修改后] 红色表示本版现行内容；[删除/修改前] 删除线表示内容已失效。</blockquote>
 <h3>交互原型</h3>
 <p><a href="https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/" target="_blank" rel="noopener">打开完整交互原型</a></p>
 <p>原型包含用户中心、销售中心和管理看板三个入口，可在同一地址切换中文和英文。</p>
@@ -34,9 +36,9 @@
 <p>本需求建立一条可追溯链路：</p>
 <p><code>广告渠道 → 活动 → 广告组 → 广告 → CRM Leads → 外呼、预约、体验和付费结果</code></p>
 <h4>本期做</h4>
-<ul><li>在用户中心和销售中心增加广告四级筛选与只读字段。</li><li>在管理看板“转化总览”和“销售跟进”的“转化明细”中，给“先按”和“再按”增加 <code>投放</code> 分组方式。</li><li>用户中心和销售中心现有导出包含广告归因字段。</li><li>保存广告稳定 ID、展示名称和首次有效归因时间。</li><li>历史数据在能够通过用户或线索稳定 ID 关联时回填；无法确认时显示“未归因”。</li></ul>
+<ul><li>在用户中心和销售中心增加广告四级筛选与只读字段；<ins>[新增] 四个广告筛选分别支持多选，业务线保持单选。</ins></li><li>在管理看板“转化总览”和“销售跟进”的“转化明细”中，给“先按”和“再按”增加 <code>投放</code> 分组方式。</li><li>用户中心和销售中心现有导出包含广告归因字段。</li><li>保存广告稳定 ID、展示名称和首次有效归因时间。</li><li>历史数据在能够通过用户或线索稳定 ID 关联时回填；无法确认时显示“未归因”。</li></ul>
 <h4>本期不做</h4>
-<ul><li>不展示广告费用、曝光、点击、CTR、CPL、CPA、ROAS 或广告平台归因报表。</li><li>不在经营数据中心建设新页面，数据中心只作为 CRM 的广告归因数据来源。</li><li>不修改线索分配、领取、掉库、转派、跟进、预约、课程或订单规则。</li><li>不根据广告名称或手机号猜测归因关系。</li><li>不新增用户中心、销售中心或管理看板菜单。</li><li>不新增列表排序能力。</li></ul>
+<ul><li>不展示广告费用、曝光、点击、CTR、CPL、CPA、ROAS 或广告平台归因报表。</li><li>不在经营数据中心建设新页面，数据中心只作为 CRM 的广告归因数据来源。</li><li><del>[原] 不修改线索分配、领取、掉库、转派、跟进、预约、课程或订单规则。</del> <ins>[现行] 不改变线索分配策略；仅新增跨业务线批量分配校验，选中线索包含多个业务线时阻止提交。</ins></li><li>不根据广告名称或手机号猜测归因关系。</li><li>不新增用户中心、销售中心或管理看板菜单。</li><li>不新增列表排序能力。</li><li><ins>[新增] 本期不建设按角色自定义筛选器可见性、字段自定义和默认折叠；筛选区拥挤问题后续单独立项。</ins></li></ul>
 <h3>端到端流程</h3>
 <div class="mermaid">flowchart LR
     A[经营数据中心形成广告归因数据] --&gt; B[按用户 ID 或线索 ID 匹配 CRM 对象]
@@ -104,7 +106,9 @@
 <h4>公共字段</h4>
 <table><thead><tr><th>字段</th><th>类型与来源</th><th>编辑规则</th><th>空值规则</th><th>权限</th><th>排序</th></tr></thead><tbody><tr><td>广告渠道</td><td>标准枚举，来源 <code>media_source</code></td><td>只读；来自归因快照</td><td>无时显示“未归因”</td><td>随页面查看权限</td><td>不支持；用户中心、销售中心和看板均不新增排序</td></tr><tr><td>活动</td><td>文本，来源 <code>campaign_name</code> + <code>campaign_id</code></td><td>只读</td><td>缺失显示 <code>—</code></td><td>随页面查看权限</td><td>不支持；页面未提供可排序表头</td></tr><tr><td>广告组</td><td>文本，来源 <code>adset_name</code> + <code>adset_id</code></td><td>只读</td><td>缺失显示 <code>—</code></td><td>随页面查看权限</td><td>不支持；页面未提供可排序表头</td></tr><tr><td>广告</td><td>文本，来源 <code>ad_name</code> + <code>ad_id</code></td><td>只读</td><td>缺失显示 <code>—</code></td><td>随页面查看权限</td><td>不支持；页面未提供可排序表头</td></tr></tbody></table>
 <h4>筛选交互</h4>
-<ul><li>四级筛选允许任意一级单独使用，也允许组合使用。</li><li>选择广告渠道后，活动候选仅包含该渠道数据；活动、广告组和广告依次联动。</li><li>修改上级筛选时，清空不再属于新范围的下级选择。</li><li>每级均提供“全部”选项；清空全部广告条件后恢复当前页面原有数据范围。</li><li>活动、广告组和广告名称通过搜索选择，不一次加载全部历史数据。</li><li>筛选候选只包含当前操作人业务线及数据范围内至少关联一条可见用户或线索的广告对象。</li><li>筛选条件在页签切换、翻页和语言切换时保留。</li><li>筛选无结果、无权限、加载失败和数据未同步使用不同状态。</li></ul>
+<ul><li><ins>[新增] 广告渠道、活动、广告组、广告分别支持多选；业务线筛选保持单选。</ins></li><li>四级筛选允许任意一级单独使用，也允许组合使用。</li><li>选择广告渠道后，活动候选仅包含该渠道数据；活动、广告组和广告依次联动。</li><li>修改上级筛选时，清空不再属于新范围的下级选择。</li><li>每级均提供“全部”选项；清空全部广告条件后恢复当前页面原有数据范围。</li><li>活动、广告组和广告名称通过搜索选择，不一次加载全部历史数据。</li><li>筛选候选只包含当前操作人业务线及数据范围内至少关联一条可见用户或线索的广告对象。</li><li>筛选条件在页签切换、翻页和语言切换时保留。</li><li>筛选无结果、无权限、加载失败和数据未同步使用不同状态。</li><li><ins>[新增] 多选项以标签展示已选值，支持逐个移除和一键清空；选择数量不改变当前页签和数据权限。</ins></li></ul>
+<h4>批量分配校验</h4>
+<ul><li><ins>[新增] 批量选择线索执行分配时，先校验选中线索的业务线集合。</ins></li><li><ins>[新增] 若选中线索跨越多个业务线，按当前分配规则无法确定唯一目标范围，阻止提交并提示用户缩小选择范围。</ins></li><li><ins>[新增] 单一业务线的批量分配沿用现有规则，不改变分配策略、候选成员或掉库逻辑。</ins></li></ul>
 <h4>用户中心</h4>
 <ul><li>用户列表展示首次有效广告归因。</li><li>广告字段位于现有“渠道来源-落地页”之后。</li><li>现有导出包含四个广告字段，并额外输出 <code>campaign_id</code>、<code>adset_id</code> 和 <code>ad_id</code>。</li><li>现有用户查询、资料与会员操作不因广告字段变化。</li></ul>
 <h4>销售中心</h4>
@@ -141,21 +145,23 @@
 <table><thead><tr><th>场景</th><th>页面处理</th></tr></thead><tbody><tr><td>无广告归因</td><td>显示“未归因”，不归入自然流量或任一广告</td></tr><tr><td>仅广告渠道存在</td><td>广告渠道正常显示，活动、广告组、广告显示 <code>—</code></td></tr><tr><td>广告名称为空</td><td>使用稳定 ID 展示，不隐藏该层级</td></tr><tr><td>广告改名</td><td>ID 和归因关系不变，筛选历史线索仍命中同一广告</td></tr><tr><td>活动名称重复</td><td>使用稳定 ID 区分，下拉候选同时展示名称和 ID</td></tr><tr><td>先按和再按选择同一投放层级</td><td>不应用查询，提示选择不同投放层级</td></tr><tr><td>用户多次触发广告</td><td>展示首次有效广告归因，后续触点不覆盖</td></tr><tr><td>历史无法回填</td><td>标记未归因；不得根据当前广告或用户轨迹推测</td></tr><tr><td>筛选无结果</td><td>展示筛选无结果状态，不修改筛选条件</td></tr><tr><td>数据同步失败</td><td>展示最近成功快照、更新时间及同步失败状态</td></tr><tr><td>零分母</td><td>比率显示 <code>—</code> 和 <code>0 / 0</code></td></tr><tr><td>比率高于 100%</td><td>原样展示并提示核对阶段事件和数据同步</td></tr><tr><td>权限撤销</td><td>下一次请求立即隐藏广告字段、筛选、指标和导出</td></tr></tbody></table>
 <h3>用户故事</h3>
 <pre><code class="text">用户支持人员打开用户中心
-→ 按广告渠道或具体广告筛选
+→ 按一个或多个广告渠道或具体广告筛选
 → 查看用户首次广告归因及当前业务状态
 → 按现有权限导出结果
 
 销售组长打开销售中心
-→ 在公海或我的跟进筛选广告活动/广告组/广告
+→ 在公海或我的跟进多选广告活动/广告组/广告
 → 查看线索当前跟进阶段和广告来源
-→ 保持现有页面操作不变
+→ 批量分配时若选中多个业务线则被拦截
 
 业务负责人打开管理看板
 → 选择业务线、CC和注册日期
 → 在转化明细的“先按”或“再按”选择投放
 → 选择广告渠道、活动、广告组或广告层级
 → 对比线索数、接通、预约、体验和付费表现
-→ 打开指标口径确认计算规则</code></pre></article>
+→ 打开指标口径确认计算规则</code></pre>
+<h3>本次修订记录</h3>
+<table><thead><tr><th>编号</th><th>类型</th><th>位置</th><th>变更前</th><th>变更后</th><th>对开发的影响</th></tr></thead><tbody><tr><td>R-01</td><td>新增</td><td>用户中心与销售中心筛选</td><td>四级广告筛选未明确多选</td><td>广告渠道、活动、广告组、广告分别支持多选</td><td>筛选控件和查询参数改为多值</td></tr><tr><td>R-02</td><td>修改</td><td>业务线筛选</td><td>与广告筛选规则未区分</td><td>业务线保持单选</td><td>业务线查询参数维持单值</td></tr><tr><td>R-03</td><td>修改</td><td>线索分配边界</td><td>不修改任何分配规则</td><td>仅增加跨业务线批量分配拦截</td><td>批量分配提交前校验业务线集合</td></tr><tr><td>R-04</td><td>新增</td><td>多选交互</td><td>仅提供“全部”和单值选择</td><td>展示已选标签，支持逐个移除和清空</td><td>增加多选状态展示和联动清理</td></tr><tr><td>R-05</td><td>新增</td><td>本期边界</td><td>未说明筛选区拥挤方案</td><td>不进入按角色字段可见性、自定义字段和默认折叠</td><td>避免本期扩大页面配置范围</td></tr></tbody></table></article>
 </main>
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
