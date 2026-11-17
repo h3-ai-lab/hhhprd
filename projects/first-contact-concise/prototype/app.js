@@ -187,8 +187,6 @@ const state = {
 const content = document.querySelector("#content");
 const drawerLayer = document.querySelector("#drawer-layer");
 const drawer = document.querySelector("#drawer");
-const exportLayer = document.querySelector("#export-layer");
-const exportModal = document.querySelector("#export-modal");
 const toast = document.querySelector("#toast");
 
 function routeFromHash() {
@@ -206,6 +204,21 @@ function esc(value) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
+}
+
+function browserTimeLabel(value) {
+  if (!value || value === "—" || value === "历史未知") return value;
+  const match = String(value).match(/^(\d{4}-\d{2}-\d{2})\s(\d{2}:\d{2})(?:\s\(([+-]\d{2})\))?$/);
+  if (!match) return value;
+  const offset = match[3] ? `${match[3]}:00` : "Z";
+  const date = new Date(`${match[1]}T${match[2]}:00${offset}`);
+  if (Number.isNaN(date.getTime())) return value;
+  const pad = (number) => String(number).padStart(2, "0");
+  const rawOffset = -date.getTimezoneOffset();
+  const sign = rawOffset >= 0 ? "+" : "-";
+  const absOffset = Math.abs(rawOffset);
+  const zone = `UTC${sign}${pad(Math.floor(absOffset / 60))}:${pad(absOffset % 60)}`;
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())} (${zone})`;
 }
 
 function initials(name) {
@@ -310,7 +323,7 @@ const METRIC_HELP = {
 };
 
 function metricHelp(key) {
-  const text = `${METRIC_HELP[key] || ""} 统计范围：当前业务线、首跟 CC、日期类型和日期范围筛选后的线索；时间按所选日期字段和业务线时区统计；人数类按 Lead ID 去重，次数类按 Call ID 去重；分母为 0 时显示“—”。`;
+  const text = `${METRIC_HELP[key] || ""} 统计范围：当前业务线、首跟 CC、日期类型和日期范围筛选后的线索；列表和详情时间按浏览器所在时区展示，日期筛选沿用所选日期字段；人数类按 Lead ID 去重，次数类按 Call ID 去重；分母为 0 时显示“—”。`;
   return `<button type="button" class="metric-help" data-metric-help="${esc(text)}" title="${esc(text)}" aria-label="${esc(text)}">口径</button>`;
 }
 
@@ -463,9 +476,9 @@ function leadRows(rows) {
       <td>${firstUser}</td>
       <td>${currentUser}</td>
       <td><span class="cell-title">${esc(lead.stage)}</span></td>
-      <td>${lead.assignedText === "—" ? '<span class="empty-time">—</span>' : esc(lead.assignedText)}</td>
-      <td>${lead.outboundText === "—" ? '<span class="empty-time">—</span>' : esc(lead.outboundText)}</td>
-      <td>${lead.connectedText === "—" ? '<span class="empty-time">—</span>' : esc(lead.connectedText)}</td>
+      <td>${lead.assignedText === "—" ? '<span class="empty-time">—</span>' : esc(browserTimeLabel(lead.assignedText))}</td>
+      <td>${lead.outboundText === "—" ? '<span class="empty-time">—</span>' : esc(browserTimeLabel(lead.outboundText))}</td>
+      <td>${lead.connectedText === "—" ? '<span class="empty-time">—</span>' : esc(browserTimeLabel(lead.connectedText))}</td>
       <td><strong>${lead.attempts}</strong></td>
       <td><strong>${lead.connected}</strong></td>
       <td><button class="btn btn-small btn-secondary" data-lead="${lead.id}">查看</button></td>
@@ -498,7 +511,7 @@ function renderLeads() {
         <div><strong>线索明细</strong></div>
         <div class="spacer"></div>
         <div class="active-filters">${activeFilterChips()}</div>
-        <button class="btn btn-small" data-action="open-export" ${rows.length ? "" : "disabled"}>${icon("download")} 预览并下载</button>
+        <button class="btn btn-small" data-action="open-export" ${rows.length ? "" : "disabled"}>${icon("download")} 下载数据</button>
       </div>
       <div class="table-wrap"><table class="data-table">
         <thead><tr>
@@ -734,27 +747,27 @@ function notify(message) {
 
 function openDrawer(lead) {
   const firstLine = lead.firstCc
-    ? `<li class="timeline-item first"><span class="timeline-dot"></span><strong>首次分配给 ${esc(lead.firstCc)}</strong><span>${esc(lead.assignedText)} · 写入首跟 CC 与分配历史</span></li>`
+    ? `<li class="timeline-item first"><span class="timeline-dot"></span><strong>首次分配给 ${esc(lead.firstCc)}</strong><span>${esc(browserTimeLabel(lead.assignedText))} · 写入首跟 CC 与分配历史</span></li>`
     : `<li class="timeline-item first"><span class="timeline-dot"></span><strong>历史归属无法确认</strong><span>缺少可验证分配事件 · 不使用当前负责人倒推</span></li>`;
   const outboundLine = lead.hasOutbound
-    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>首次外呼</strong><span>${esc(lead.outboundText)} · 不区分本次外呼结果</span></li>`
+    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>首次外呼</strong><span>${esc(browserTimeLabel(lead.outboundText))} · 不区分本次外呼结果</span></li>`
     : `<li class="timeline-item"><span class="timeline-dot"></span><strong>尚未产生首次外呼</strong><span>首次外呼时间保持为空</span></li>`;
   const connectedLine = lead.connectedText !== "—"
-    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>首次接通</strong><span>${esc(lead.connectedText)} · 首次接通独立记录</span></li>`
+    ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>首次接通</strong><span>${esc(browserTimeLabel(lead.connectedText))} · 首次接通独立记录</span></li>`
     : `<li class="timeline-item"><span class="timeline-dot"></span><strong>尚未产生首次接通</strong><span>首次接通时间保持为空</span></li>`;
   const transferLine = !lead.firstCcId
     ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前负责人为 ${esc(lead.currentCc)}</strong><span>首跟 CC 历史未知</span></li>`
     : !lead.currentCcId
-      ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前未分配</strong><span>${esc(lead.currentAssignedText)}</span></li>`
-      : `<li class="timeline-item ${lead.currentTeam === "TMK" ? "tmk" : ""}"><span class="timeline-dot"></span><strong>当前负责人为 ${esc(lead.currentCc)}</strong><span>${esc(lead.currentAssignedText)}</span></li>`;
+      ? `<li class="timeline-item"><span class="timeline-dot"></span><strong>当前未分配</strong><span>${esc(browserTimeLabel(lead.currentAssignedText))}</span></li>`
+      : `<li class="timeline-item ${lead.currentTeam === "TMK" ? "tmk" : ""}"><span class="timeline-dot"></span><strong>当前负责人为 ${esc(lead.currentCc)}</strong><span>${esc(browserTimeLabel(lead.currentAssignedText))}</span></li>`;
   drawer.innerHTML = `<div class="drawer-head"><div><small>${esc(lead.id)}</small><h3>${esc(lead.name)}</h3></div><button class="icon-btn" data-action="close-drawer" aria-label="关闭">${icon("close")}</button></div>
     <div class="drawer-body">
       <div class="drawer-block"><h4>首跟节点与关键时间</h4><dl class="facts">
         <dt>业务线</dt><dd>${esc(businessLineLabel(lead.businessLine))}</dd>
         <dt>首跟 CC</dt><dd>${lead.firstCc ? esc(lead.firstCc) : "历史未知"}</dd>
-        <dt>首次分配</dt><dd>${esc(lead.assignedText)}</dd>
-        <dt>首次外呼</dt><dd>${esc(lead.outboundText)}</dd>
-        <dt>首次接通</dt><dd>${esc(lead.connectedText)}</dd>
+        <dt>首次分配</dt><dd>${esc(browserTimeLabel(lead.assignedText))}</dd>
+        <dt>首次外呼</dt><dd>${esc(browserTimeLabel(lead.outboundText))}</dd>
+        <dt>首次接通</dt><dd>${esc(browserTimeLabel(lead.connectedText))}</dd>
         <dt>当前 CC</dt><dd>${esc(lead.currentCc)}</dd>
       </dl></div>
       <div class="drawer-block"><h4>Lead &gt; Update 分配历史</h4><ol class="timeline">${firstLine}${outboundLine}${connectedLine}${transferLine}</ol></div>
@@ -775,30 +788,14 @@ function closeDrawer() {
   drawerLayer.setAttribute("aria-hidden", "true");
 }
 
-function openExport(sourceRows = filteredRows(), scope = "线索筛选") {
+function exportCurrentRows(sourceRows = filteredRows()) {
   const rows = sourceRows;
   state.exportRows = rows;
   if (!rows.length) {
     notify("当前筛选没有可导出的数据");
     return;
   }
-  const dateValues = rows.map((row) => state.filters.dateField === "assigned" ? row.assignedDate : row.registrationDate).filter(Boolean).sort();
-  const firstDate = dateValues[0] || "不限";
-  const lastDate = dateValues.at(-1) || "不限";
-  exportModal.innerHTML = `<div class="modal-head"><div><h3 id="export-title">下载当前筛选数据</h3><p>来源：${esc(scope)}。预览确认后生成 CSV，内容与当前筛选口径一致。</p></div><button class="icon-btn" data-action="close-export" aria-label="关闭">${icon("close")}</button></div>
-    <div class="modal-body">
-      <div class="export-summary"><div class="export-metric"><span>数据行数</span><strong>${rows.length}</strong></div><div class="export-metric"><span>${dateFieldLabel(state.filters.dateField)}范围</span><strong style="font-size:13px">${firstDate} 至 ${lastDate}</strong></div><div class="export-metric"><span>时间口径</span><strong style="font-size:13px">按业务线时区</strong></div></div>
-      <div class="field-list">${["lead_id", "user_id", "business_line", "first_cc_id", "first_cc_name", "first_assigned_at", "first_outbound_at", "first_connected_at", "outbound_count", "outbound_connected_count", "current_cc_id"].map((field) => `<code>${field}</code>`).join("")}</div>
-      <div class="drawer-note" style="margin-top:12px">下载会记录操作人、筛选条件、数据范围和行数。联系方式与录音字段继续遵循现有导出权限，不在本需求中扩大。</div>
-    </div>
-    <div class="modal-foot"><button class="btn" data-action="close-export">取消</button><button class="btn btn-primary" data-action="download-csv">${icon("download")} 生成 CSV</button></div>`;
-  exportLayer.classList.add("is-open");
-  exportLayer.setAttribute("aria-hidden", "false");
-}
-
-function closeExport() {
-  exportLayer.classList.remove("is-open");
-  exportLayer.setAttribute("aria-hidden", "true");
+  downloadCSV();
 }
 
 function csvCell(value) {
@@ -825,7 +822,6 @@ function downloadCSV() {
   link.click();
   link.remove();
   URL.revokeObjectURL(url);
-  closeExport();
   notify(`已生成 ${rows.length} 行 CSV，并记录导出审计`);
 }
 
@@ -871,17 +867,14 @@ document.addEventListener("click", (event) => {
   if (action === "apply-monitor-filters") applyMonitorFilters();
   if (action === "reset-monitor-filters") resetMonitorFilters();
   if (action === "close-drawer") closeDrawer();
-  if (action === "open-export") openExport();
-  if (action === "monitor-export") openExport(periodRows(), "团队监控");
-  if (action === "close-export") closeExport();
-  if (action === "download-csv") downloadCSV();
+  if (action === "open-export") exportCurrentRows();
+  if (action === "monitor-export") exportCurrentRows(periodRows());
 });
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && event.target.id === "filter-query") applyFilters();
   if (event.key === "Escape") {
     closeDrawer();
-    closeExport();
     document.querySelector("#sidebar").classList.remove("is-open");
   }
 });
@@ -893,7 +886,6 @@ document.querySelector("#menu-toggle").addEventListener("click", () => {
 window.addEventListener("hashchange", () => {
   state.route = routeFromHash();
   closeDrawer();
-  closeExport();
   render();
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
