@@ -48,6 +48,7 @@ const I18N = {
     "filter.keyword": "关键词",
     "filter.keyword.placeholder": "用户 ID / 手机号 / 订单 ID",
     "common.reset": "重置筛选",
+    "common.export": "导出",
     "common.search": "搜索",
     "common.cancel": "取消",
     "common.close": "关闭",
@@ -191,6 +192,8 @@ const I18N = {
     "grant.error.days": "请输入有效的有效期天数",
     "grant.error.reason": "请输入开通原因",
     "toast.refreshed": "数据已刷新",
+    "export.empty": "当前筛选下没有可导出的数据",
+    "export.success": "已导出 {count} 条记录",
     "toast.referralSuccess": "推荐关系已绑定，权益已发放",
     "toast.socialSuccess": "社媒推荐记录已保存",
     "toast.grantSuccess": "用户时长已增加",
@@ -279,6 +282,7 @@ const I18N = {
     "filter.keyword": "Keyword",
     "filter.keyword.placeholder": "User ID / phone / order ID",
     "common.reset": "Reset filters",
+    "common.export": "Export",
     "common.search": "Search",
     "common.cancel": "Cancel",
     "common.close": "Close",
@@ -422,6 +426,8 @@ const I18N = {
     "grant.error.days": "Enter a valid validity period",
     "grant.error.reason": "Enter a grant reason",
     "toast.refreshed": "Data refreshed",
+    "export.empty": "No data to export under the current filters",
+    "export.success": "Exported {count} records",
     "toast.referralSuccess": "Referral linked and benefit issued",
     "toast.socialSuccess": "Social media recommendation saved",
     "toast.grantSuccess": "User duration increased",
@@ -652,6 +658,27 @@ function countLabel(key, count) {
 function money(value) {
   return `฿${Number(value).toLocaleString("en-US")}`;
 }
+
+function csvCell(value) {
+  let text = String(value ?? "");
+  if (/^[=+\-@]/.test(text)) text = `'${text}`;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+window.CRMPrototypeExport = {
+  download(filename, headers, rows) {
+    const csv = [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n");
+    const blob = new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  },
+};
 
 function applyUserFilters() {
   const registrationSource = document.getElementById("userRegistrationSourceFilter").value;

@@ -125,6 +125,11 @@ const TEXT = {
     "common.reset": "重置筛选",
     "common.cancel": "取消",
     "common.close": "关闭",
+    "common.export": "导出",
+    "export.empty": "当前筛选下没有可导出的数据",
+    "export.success": "已导出 {count} 条记录",
+    "community.reviewReason": "无效原因",
+    "community.reviewNote": "审核备注",
     "bindings.page": "第 1 页",
   },
   en: {
@@ -252,6 +257,11 @@ const TEXT = {
     "common.reset": "Reset filters",
     "common.cancel": "Cancel",
     "common.close": "Close",
+    "common.export": "Export",
+    "export.empty": "No data to export under the current filters",
+    "export.success": "Exported {count} records",
+    "community.reviewReason": "Rejection reason",
+    "community.reviewNote": "Review note",
     "bindings.page": "Page 1",
   },
 };
@@ -261,9 +271,12 @@ const state = {
   selectedId: "",
   noticeKey: "",
   toastKey: "",
+  toastValues: {},
   createUser: null,
   createNoticeKey: "",
 };
+
+let visibleSubmissions = [];
 
 const COMMUNITY_USERS = {
   "2120302255148482561": {
@@ -514,6 +527,10 @@ function businessLineLabel(value) {
 }
 
 function rewardStatusLabel(status) {
+  return `<span class="status ${status === "ISSUED" ? "success" : status === "FAILED" ? "failed" : "processing"}">${rewardStatusText(status)}</span>`;
+}
+
+function rewardStatusText(status) {
   return t(`community.status.${{ PENDING_REVIEW: "pendingReview", WAITING: "waiting", PROCESSING: "processing", ISSUED: "issued", FAILED: "failed", NOT_APPLICABLE: "notApplicable" }[status] || "waiting"}`);
 }
 
@@ -538,6 +555,7 @@ function renderRows() {
     const date = row.submittedAt.slice(0, 10);
     return businessMatch && registeredMatch && platformMatch && reviewMatch && selectionMatch && rewardMatch && keywordMatch && (!start || date >= start) && (!end || date <= end);
   });
+  visibleSubmissions = rows;
   document.getElementById("communityRows").innerHTML = rows.map((row) => `
     <tr>
       <td class="mono">${row.id}</td>
@@ -552,7 +570,7 @@ function renderRows() {
       <td>${selectionLabel(row.selectionStatus)}</td>
       <td>${rewardText(row)}</td>
       <td><span class="mono">${row.giftOrderId}</span><span class="secondary">${t(`giftStatus.${row.giftOrderStatus}`)} · ฿0</span></td>
-      <td><span class="status ${row.rewardStatus === "ISSUED" ? "success" : row.rewardStatus === "FAILED" ? "failed" : "processing"}">${rewardStatusLabel(row.rewardStatus)}</span></td>
+      <td>${rewardStatusLabel(row.rewardStatus)}</td>
       <td><button class="btn small review-submission" data-id="${row.id}">${t("community.action")}</button></td>
     </tr>`).join("");
   document.getElementById("communityEmpty").hidden = rows.length > 0;
@@ -562,6 +580,55 @@ function renderRows() {
   document.getElementById("communitySelectedCount").textContent = submissions.filter((row) => row.selectionStatus === "OFFICIALLY_SELECTED").length;
   document.getElementById("communityRejectedCount").textContent = submissions.filter((row) => row.reviewStatus === "REJECTED").length;
   document.querySelectorAll(".review-submission").forEach((button) => button.addEventListener("click", () => openReview(button.dataset.id)));
+}
+
+function exportSubmissions() {
+  if (!visibleSubmissions.length) {
+    showToast("export.empty");
+    return;
+  }
+  const headers = [
+    t("community.submissionId"),
+    t("table.user"),
+    "User ID",
+    t("filter.businessLine"),
+    t("community.registeredCc"),
+    t("community.channel"),
+    t("community.platform"),
+    t("table.contentType"),
+    t("community.content"),
+    t("community.submittedAt"),
+    t("community.reviewStatus"),
+    t("community.reviewReason"),
+    t("community.reviewNote"),
+    t("community.selectionStatus"),
+    t("table.reward"),
+    t("community.rewardStatus"),
+    t("table.giftOrder"),
+    t("table.giftStatus"),
+  ];
+  const data = visibleSubmissions.map((row) => [
+    row.id,
+    row.user,
+    row.userId,
+    businessLineLabel(row.businessLine),
+    row.registeredBy,
+    t(row.channel),
+    t(row.platform),
+    t(row.contentType),
+    row.contentLink,
+    row.submittedAt,
+    reviewLabel(row.reviewStatus),
+    row.reviewReason || "",
+    row.reviewNote || "",
+    selectionLabel(row.selectionStatus),
+    rewardText(row),
+    rewardStatusText(row.rewardStatus),
+    row.giftOrderId,
+    t(`giftStatus.${row.giftOrderStatus}`),
+  ]);
+  window.CRMPrototypeExport.download(`social-media-recommendations-${new Date().toISOString().slice(0, 10)}.csv`, headers, data);
+  showToast("export.success", { count: data.length });
 }
 
 function showCreateNotice(key) {
@@ -720,7 +787,7 @@ function applyTranslations() {
   if (state.noticeKey) document.getElementById("communityReviewNotice").textContent = t(state.noticeKey);
   if (state.createNoticeKey) document.getElementById("communityCreateNotice").textContent = t(state.createNoticeKey);
   renderCreateUserResult();
-  if (state.toastKey) document.getElementById("toast").textContent = t(state.toastKey);
+  if (state.toastKey) document.getElementById("toast").textContent = t(state.toastKey, state.toastValues);
 }
 
 function openReview(id) {
@@ -750,14 +817,15 @@ function toggleReason() {
   document.getElementById("communitySelectionField").hidden = rejected;
 }
 
-function showToast(message) {
+function showToast(message, values = {}) {
   state.toastKey = message;
+  state.toastValues = values;
   const toast = document.getElementById("toast");
-  toast.textContent = t(message);
+  toast.textContent = t(message, values);
   toast.classList.remove("show");
   void toast.offsetWidth;
   toast.classList.add("show");
-  setTimeout(() => { toast.classList.remove("show"); state.toastKey = ""; }, 2200);
+  setTimeout(() => { toast.classList.remove("show"); state.toastKey = ""; state.toastValues = {}; }, 2200);
 }
 
 function saveReview() {
@@ -815,6 +883,7 @@ function saveReview() {
 }
 
 document.getElementById("openCommunityCreate").addEventListener("click", () => openCommunityCreate());
+document.getElementById("exportCommunity").addEventListener("click", exportSubmissions);
 document.querySelectorAll(".open-community-create").forEach((button) => button.addEventListener("click", () => {
   openCommunityCreate({
     userId: button.dataset.userId,

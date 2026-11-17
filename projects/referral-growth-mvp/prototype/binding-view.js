@@ -170,6 +170,13 @@ const TEXT = {
     "socialModal.success": "社媒推荐记录已保存，奖励事件已按状态自动生成",
     "common.cancel": "取消",
     "common.close": "关闭",
+    "common.export": "导出",
+    "export.empty": "当前筛选下没有可导出的数据",
+    "export.success": "已导出 {count} 条记录",
+    "csv.referrerId": "推荐人用户 ID",
+    "csv.referredId": "被推荐人用户 ID",
+    "csv.nextTrigger": "下一触发条件",
+    "csv.rewardStatus": "奖励状态",
     "toast.registered": "已打开推荐人 Pimchanok S. 的关系维护",
   },
   en: {
@@ -342,6 +349,13 @@ const TEXT = {
     "socialModal.success": "Social media recommendation saved. Reward events were generated from the content status.",
     "common.cancel": "Cancel",
     "common.close": "Close",
+    "common.export": "Export",
+    "export.empty": "No data to export under the current filters",
+    "export.success": "Exported {count} records",
+    "csv.referrerId": "Referrer user ID",
+    "csv.referredId": "Referred user ID",
+    "csv.nextTrigger": "Next trigger",
+    "csv.rewardStatus": "Reward status",
     "toast.registered": "Opened relationship management for referrer Pimchanok S.",
   },
 };
@@ -364,6 +378,8 @@ const state = {
     owner: "Thanya C.",
   },
 };
+
+let visibleUnifiedRows = [];
 
 const CAMPAIGN_START = "2026-11-01";
 const USER_DIRECTORY = {
@@ -701,9 +717,17 @@ function statusLabel(key) {
   return `<span class="status ${cls}">${t(`bindStatus.${key}`)}</span>`;
 }
 
+function statusText(key) {
+  return t(`bindStatus.${key}`);
+}
+
 function rewardStatusLabel(key) {
   const cls = key === "issued" ? "success" : key === "failed" ? "failed" : key === "invalid" ? "invalid" : "processing";
   return `<span class="status ${cls}">${t(`eventStatus.${key}`)}</span>`;
+}
+
+function rewardStatusText(key) {
+  return t(`eventStatus.${key}`);
 }
 
 function renderBindingResult() {
@@ -869,6 +893,7 @@ function renderUnified() {
     const dateMatch = (!start || rowDate >= start) && (!end || rowDate <= end);
     return businessMatch && sourceMatch && ownerMatch && bindingMatch && rewardMatch && keywordMatch && dateMatch;
   });
+  visibleUnifiedRows = rows;
   const body = document.getElementById("unifiedRows");
   body.innerHTML = rows.map((row) => `
     <tr data-detail-id="${row.id}">
@@ -907,6 +932,53 @@ function renderUnified() {
       if (row) openReferralDetail(row);
     });
   });
+}
+
+function exportUnified() {
+  if (!visibleUnifiedRows.length) {
+    showToast("export.empty");
+    return;
+  }
+  const headers = [
+    t("table.record"),
+    t("table.source"),
+    t("table.referrer"),
+    t("csv.referrerId"),
+    t("table.referred"),
+    t("csv.referredId"),
+    t("table.businessLine"),
+    t("table.bindStatus"),
+    t("table.targetOwner"),
+    t("table.currentOwner"),
+    t("csv.nextTrigger"),
+    t("table.triggerEvent"),
+    t("table.reward"),
+    t("csv.rewardStatus"),
+    t("table.giftOrder"),
+    t("table.giftStatus"),
+    t("table.boundAt"),
+  ];
+  const data = visibleUnifiedRows.map((row) => [
+    row.id,
+    bindingSourceLabel(row.source),
+    row.user,
+    row.userId,
+    row.referred,
+    row.referredId,
+    businessLineLabel(row.businessLine),
+    statusText(row.bindingStatus),
+    row.owner,
+    row.currentOwner || "—",
+    t(row.nextTrigger),
+    row.eventType,
+    row.reward,
+    rewardStatusText(row.rewardStatus),
+    row.giftOrderId,
+    t(`giftStatus.${row.giftOrderStatus}`),
+    row.boundAt,
+  ]);
+  window.CRMPrototypeExport.download(`referral-relationships-${new Date().toISOString().slice(0, 10)}.csv`, headers, data);
+  showToast("export.success", { count: data.length });
 }
 
 function openReferralDetail(row) {
@@ -1223,6 +1295,7 @@ document.querySelectorAll("[data-unified-date]").forEach((button) => {
   });
 });
 document.getElementById("newReferralBtn").addEventListener("click", () => openReferralModal());
+document.getElementById("exportUnified").addEventListener("click", exportUnified);
 ["unifiedBusinessFilter", "unifiedSourceFilter", "unifiedCcFilter", "unifiedBindingFilter", "unifiedRewardFilter", "unifiedStartDate", "unifiedEndDate"].forEach((id) => {
   document.getElementById(id).addEventListener("change", renderUnified);
 });

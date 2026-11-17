@@ -173,9 +173,12 @@
               <h3 data-i18n="unified.title">统一拉新记录</h3>
               <div class="inline-meta"><span><b data-i18n="unified.note">口径：</b><span data-i18n="unified.noteText">绑定、奖励事件、赠送订单和权益状态在同一列表追踪</span></span></div>
             </div>
-            <div class="date-tabs" aria-label="业务日期">
-              <button class="date-tab active" data-unified-date="bind" data-i18n="records.bindDate">关系绑定时间</button>
-              <button class="date-tab" data-unified-date="order" data-i18n="records.orderDate">订单支付时间</button>
+            <div class="head-actions">
+              <div class="date-tabs" aria-label="业务日期">
+                <button class="date-tab active" data-unified-date="bind" data-i18n="records.bindDate">关系绑定时间</button>
+                <button class="date-tab" data-unified-date="order" data-i18n="records.orderDate">订单支付时间</button>
+              </div>
+              <button class="btn small" id="exportUnified" data-i18n="common.export">导出</button>
             </div>
           </div>
           <div class="panel-body">
@@ -374,7 +377,10 @@
         <section class="panel">
           <div class="panel-head">
             <h3 data-i18n="community.listTitle">投稿审核</h3>
-            <span class="event-type">SOCIAL_MEDIA_RECOMMENDATION</span>
+            <div class="head-actions">
+              <span class="event-type">SOCIAL_MEDIA_RECOMMENDATION</span>
+              <button class="btn small" id="exportCommunity" data-i18n="common.export">导出</button>
+            </div>
           </div>
           <div class="panel-body">
             <div class="filters">
