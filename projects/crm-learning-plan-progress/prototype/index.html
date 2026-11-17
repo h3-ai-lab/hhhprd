@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dino CRM · 学习计划与课程进度</title>
+  <style>
+    :root{--nav:#081f33;--bg:#f3f6fa;--panel:#fff;--ink:#172235;--muted:#67778a;--line:#dfe6ef;--blue:#246bfd;
+      --blue-soft:#edf4ff;--green:#0f9f6e;--green-soft:#e8f8f1;--amber:#b7791f;--amber-soft:#fff6df;--red:#d64545;--radius:12px}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    button,input,select{font:inherit}.app{min-height:100vh;display:grid;grid-template-columns:228px 1fr}.sidebar{background:linear-gradient(180deg,var(--nav),#041624);
+      color:#d9e6f2;padding:22px 14px;position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:11px;padding:0 8px 22px}
+    .brandMark{width:40px;height:40px;border-radius:10px;background:#2576ff;color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px}
+    .brand strong{display:block;color:#fff;font-size:16px}.brand span{font-size:12px;color:#91a8bb}.navLabel{font-size:11px;color:#7390a8;padding:15px 10px 7px;letter-spacing:.12em}
+    .navItem{width:100%;border:0;background:transparent;color:#b8cad9;text-align:left;padding:11px 13px;border-radius:9px;display:flex;align-items:center;gap:10px;cursor:pointer;margin:3px 0}
+    .navItem:hover{background:#12354f;color:#fff}.navItem.active{background:#1e65d9;color:#fff}.navIcon{width:22px;text-align:center}.main{min-width:0}
+    .topbar{height:62px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+    .crumb{color:var(--muted);font-size:13px}.crumb strong{color:var(--ink)}.topActions{display:flex;align-items:center;gap:12px}.langSwitch{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+    .langSwitch button{border:0;background:#fff;color:var(--muted);padding:6px 10px;cursor:pointer}.langSwitch button.active{background:var(--nav);color:#fff}
+    .account{background:var(--nav);color:#fff;border-radius:8px;padding:8px 13px;font-size:12px}.content{padding:22px 24px 64px;max-width:1800px;margin:0 auto}
+    .pageHead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}h1{font-size:24px;margin:0 0 4px}.sub{color:var(--muted);margin:0}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 3px 12px rgba(24,42,68,.035)}
+    .tabs{display:flex;gap:5px;border-bottom:1px solid var(--line);padding:0 18px}.tab{border:0;background:transparent;color:var(--muted);padding:14px;border-bottom:2px solid transparent;cursor:pointer;font-weight:600}
+    .tab.active{color:var(--blue);border-bottom-color:var(--blue)}.filterPanel{padding:16px;margin:14px 0}.filterRow{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+    .filterRow + .filterRow{margin-top:10px}.field{display:flex;flex-direction:column;gap:5px;min-width:145px;flex:1 1 145px}.field.search{min-width:260px;flex:2 1 280px}
+    .field label{font-size:11px;color:#7c8999}.control{height:38px;border:1px solid #d6dfea;border-radius:8px;background:#fff;color:var(--ink);padding:0 11px;outline:none;width:100%}
+    .control:focus{border-color:#7da9ff;box-shadow:0 0 0 3px rgba(36,107,253,.1)}.button{height:38px;border:1px solid #d6dfea;background:#fff;border-radius:8px;padding:0 14px;color:var(--ink);cursor:pointer}
+    .button.primary{background:var(--blue);border-color:var(--blue);color:#fff}.button.ghost{background:#f8fafc}.actionRow{display:flex;gap:9px;justify-content:flex-end;margin-left:auto}
+    .tableWrap{overflow:auto}.table{width:100%;border-collapse:collapse;white-space:nowrap}.table th{background:#f8fafc;color:#5c6b7d;text-align:left;font-size:12px;padding:12px;border-bottom:1px solid var(--line)}
+    .table td{padding:12px;border-bottom:1px solid #edf1f6;vertical-align:middle}.table tbody tr:hover{background:#f9fbff}.mono{font-variant-numeric:tabular-nums;color:#42536a}
+    .sectionTitle{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--line)}.sectionTitle h2{font-size:16px;margin:0}.pill{font-size:12px;color:#536174;background:#f1f5f9;border-radius:20px;padding:3px 9px}
+    .tag{display:inline-flex;align-items:center;border-radius:20px;padding:3px 8px;font-size:12px;font-weight:600}.tag.blue{background:#ecf3ff;color:#2867d8}
+    .tag.green{background:var(--green-soft);color:var(--green)}.tag.amber{background:var(--amber-soft);color:var(--amber)}.tag.red{background:#fff0f0;color:var(--red)}
+    .tag.gray{background:#f0f2f5;color:#718096}.progressLine{font-weight:700}.subtext{display:block;color:#91a0b2;font-size:11px;margin-top:2px}.empty{padding:54px 20px;text-align:center;color:var(--muted)}
+    .empty strong{display:block;color:var(--ink);font-size:16px;margin-bottom:5px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:12px;margin:14px 0}
+    .metric{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;position:relative}.metricName{font-size:12px;color:#607086;padding-right:24px}
+    .metricValue{font-size:27px;font-weight:750;margin:7px 0 2px}.metricMeta{font-size:11px;color:#8794a5}.help{position:absolute;top:11px;right:10px;border:0;background:#eef3f8;color:#68788c;width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:12px}
+    .dashboardBody{padding:16px}.dashboardHeading{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:13px}.dashboardHeading h2{font-size:18px;margin:0}
+    .metricTable th,.metricTable td{text-align:right}.metricTable th:first-child,.metricTable td:first-child,.metricTable th:nth-child(2),.metricTable td:nth-child(2){text-align:left}
+    .rate{font-weight:650}.rate small{display:block;font-weight:400;color:#8a98a9}.drawerLayer{position:fixed;inset:0;z-index:40;display:none}.drawerLayer.open{display:block}
+    .drawerScrim{position:absolute;inset:0;border:0;background:rgba(5,20,36,.42)}.drawer{position:absolute;top:0;right:0;height:100%;width:min(720px,100%);background:#fff;overflow:auto;padding:22px;box-shadow:-18px 0 60px rgba(3,17,32,.2)}
+    .drawerHead{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:14px}.drawerHead h2{margin:0}.close{border:0;background:#f1f4f8;width:32px;height:32px;border-radius:50%;cursor:pointer}
+    .detailGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}.detailCard{border:1px solid var(--line);border-radius:10px;padding:14px}.detailCard h3{font-size:14px;margin:0 0 10px}
+    .factGrid{display:grid;grid-template-columns:130px 1fr;gap:8px 12px;margin:0}.factGrid dt{color:#7b899b}.factGrid dd{margin:0;font-weight:600}.timeline{margin:0;padding:0;list-style:none}.timeline li{padding:11px 0;border-bottom:1px solid #edf1f6}
+    .timeline li:last-child{border-bottom:0}.timeline strong{display:block}.timeline span{color:#718095;font-size:12px}.modalLayer{position:fixed;inset:0;background:rgba(7,22,38,.48);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+    .modalLayer.open{display:flex}.modal{background:#fff;border-radius:14px;width:min(520px,100%);box-shadow:0 30px 80px rgba(2,19,38,.32)}.modalHead{display:flex;align-items:center;justify-content:space-between;padding:17px 19px;border-bottom:1px solid var(--line)}
+    .modalHead h3{margin:0;font-size:17px}.modalBody{padding:18px 19px;color:#45556a;line-height:1.8}.formula{background:#f6f9fd;border:1px solid #e1eaf5;border-radius:9px;padding:12px;color:#263a52}
+    .toast{position:fixed;right:24px;bottom:24px;background:#0b2237;color:#fff;border-radius:9px;padding:11px 15px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;z-index:60}
+    .toast.show{opacity:1;transform:none}.mobileNav{display:none}@media(max-width:1050px){.app{display:block}.sidebar{display:none}.mobileNav{display:flex;gap:8px;padding:10px 16px;background:var(--nav)}
+    .mobileNav button{border:0;background:#123852;color:#dce8f5;border-radius:7px;padding:8px 10px;cursor:pointer}.mobileNav button.active{background:var(--blue);color:#fff}.metrics{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:700px){.topbar{padding:10px 14px;height:auto}.account,.crumb span:first-child{display:none}.content{padding:14px}.field,.field.search{min-width:100%}.actionRow{width:100%;justify-content:flex-start}
+    .metrics{grid-template-columns:1fr}.detailGrid{grid-template-columns:1fr}.drawer{padding:16px}.button{flex:1}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="brandMark">D</div><div><strong>Dino CRM</strong><span>Learning Progress</span></div></div>
+      <div class="navLabel" id="navLabel"></div>
+      <button class="navItem" data-page="users"><span class="navIcon">◉</span><span data-label="userList"></span></button>
+      <button class="navItem" data-page="sales"><span class="navIcon">◎</span><span data-label="salesList"></span></button>
+      <button class="navItem" data-page="dashboard"><span class="navIcon">▥</span><span data-label="dashboard"></span></button>
+    </aside>
+    <div class="main">
+      <div class="mobileNav" id="mobileNav"></div>
+      <header class="topbar"><div class="crumb"><span data-label="dinoCrm"></span> / <strong id="crumbCurrent"></strong></div>
+        <div class="topActions"><div class="langSwitch"><button data-lang="zh">中</button><button data-lang="en">EN</button></div><div class="account">system.manager@dino.ai</div></div>
+      </header>
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+  <div class="drawerLayer" id="drawerLayer"><button class="drawerScrim" data-action="close-detail" aria-label="关闭"></button><aside class="drawer" id="drawer"></aside></div>
+  <div class="modalLayer" id="modalLayer"><div class="modal" id="modal"></div></div>
+  <div class="toast" id="toast"></div>
+  <script>
+    const LEARNERS = [
+      {userId:"U-829104",name:"Linh Tran",line:"VN",cc:"Nguyễn Anh",userType:"formal",userStatus:"paid",level:"L2",unit:3,lesson:7,plan:"Pro",planStatus:"active",planStart:"2026-10-20",planEnd:"2026-11-30",quota:3,weekDone:2,lastLearning:"2026-11-17 09:20 (+07)",activity:"active",completed:47,minutes:412,learningDays7:5,inClass:false,intent:"interested",stage:"paid",bucket:"paid"},
+      {userId:"U-829117",name:"Minh Nguyen",line:"VN",cc:"Nguyễn Anh",userType:"formal",userStatus:"trial",level:"L1",unit:2,lesson:8,plan:"Max",planStatus:"active",planStart:"2026-11-02",planEnd:"2026-12-02",quota:5,weekDone:5,lastLearning:"2026-11-17 11:05 (+07)",activity:"in_class",completed:20,minutes:286,learningDays7:6,inClass:true,intent:"interested",stage:"trial",bucket:"mine"},
+      {userId:"U-829121",name:"Huy Le",line:"VN",cc:"Nguyễn Anh",userType:"formal",userStatus:"no_trial",level:"L1",unit:1,lesson:1,plan:"Pro",planStatus:"active",planStart:"2026-11-11",planEnd:"2026-12-11",quota:3,weekDone:0,lastLearning:null,activity:"not_started",completed:0,minutes:0,learningDays7:0,inClass:false,intent:"unknown",stage:"new",bucket:"pool"},
+      {userId:"U-829208",name:"Aina Lim",line:"MY",cc:"Mali Tan",userType:"formal",userStatus:"trial",level:"L3",unit:5,lesson:2,plan:"Max",planStatus:"active",planStart:"2026-10-25",planEnd:"2026-11-25",quota:5,weekDone:1,lastLearning:"2026-11-10 19:10 (+08)",activity:"inactive7",completed:50,minutes:528,learningDays7:0,inClass:false,intent:"interested",stage:"booked",bucket:"mine"},
+      {userId:"U-829214",name:"Siti R.",line:"MY",cc:"Mali Tan",userType:"guest",userStatus:"no_trial",level:"—",unit:null,lesson:null,plan:null,planStatus:"none",planStart:null,planEnd:null,quota:0,weekDone:0,lastLearning:null,activity:"none",completed:0,minutes:0,learningDays7:0,inClass:false,intent:"not_interested",stage:"following",bucket:"mine"},
+      {userId:"U-829319",name:"Nur A.",line:"MY",cc:"Mali Tan",userType:"formal",userStatus:"paid",level:"L2",unit:8,lesson:4,plan:"Pro",planStatus:"active",planStart:"2026-10-01",planEnd:"2026-11-21",quota:3,weekDone:3,lastLearning:"2026-11-16 20:40 (+08)",activity:"active",completed:88,minutes:930,learningDays7:4,inClass:false,intent:"interested",stage:"paid",bucket:"paid"},
+      {userId:"U-829321",name:"Kanya P.",line:"TH",cc:"Porn K.",userType:"formal",userStatus:"trial",level:"L4",unit:1,lesson:6,plan:"Max",planStatus:"active",planStart:"2026-10-18",planEnd:"2026-11-23",quota:5,weekDone:3,lastLearning:"2026-11-17 08:48 (+07)",activity:"active",completed:6,minutes:104,learningDays7:5,inClass:false,intent:"interested",stage:"trial",bucket:"mine"},
+      {userId:"U-829405",name:"Pim S.",line:"TH",cc:"Porn K.",userType:"formal",userStatus:"no_trial",level:"L2",unit:4,lesson:9,plan:"Pro",planStatus:"expired",planStart:"2026-09-15",planEnd:"2026-11-15",quota:3,weekDone:0,lastLearning:"2026-11-14 18:20 (+07)",activity:"expired",completed:45,minutes:376,learningDays7:2,inClass:false,intent:"interested",stage:"connected",bucket:"mine"},
+      {userId:"U-829410",name:"Nok C.",line:"TH",cc:"Porn K.",userType:"formal",userStatus:"trial",level:"L1",unit:1,lesson:5,plan:"Max",planStatus:"active",planStart:"2026-10-30",planEnd:"2026-12-05",quota:5,weekDone:4,lastLearning:"2026-11-16 09:14 (+07)",activity:"active",completed:5,minutes:91,learningDays7:3,inClass:false,intent:"unknown",stage:"new",bucket:"pool"},
+      {userId:"U-829512",name:"Bao Tran",line:"VN",cc:"Nguyễn Anh",userType:"formal",userStatus:"paid",level:"L5",unit:2,lesson:10,plan:"Max",planStatus:"active",planStart:"2026-11-01",planEnd:"2026-11-20",quota:5,weekDone:5,lastLearning:"2026-11-17 07:56 (+07)",activity:"active",completed:154,minutes:1640,learningDays7:7,inClass:false,intent:"interested",stage:"paid",bucket:"paid"},
+      {userId:"U-829518",name:"Thao Vo",line:"VN",cc:"Nguyễn Anh",userType:"formal",userStatus:"no_trial",level:"L1",unit:2,lesson:1,plan:"Pro",planStatus:"active",planStart:"2026-10-28",planEnd:"2026-11-27",quota:3,weekDone:0,lastLearning:"2026-11-08 18:20 (+07)",activity:"inactive7",completed:13,minutes:120,learningDays7:0,inClass:false,intent:"unknown",stage:"following",bucket:"mine"},
+      {userId:"U-829622",name:"Mei Tan",line:"MY",cc:"Mali Tan",userType:"formal",userStatus:"trial",level:"L3",unit:7,lesson:3,plan:"Pro",planStatus:"active",planStart:"2026-11-10",planEnd:"2026-12-10",quota:3,weekDone:1,lastLearning:"2026-11-16 21:06 (+08)",activity:"active",completed:75,minutes:790,learningDays7:4,inClass:false,intent:"interested",stage:"booked",bucket:"mine"},
+      {userId:"U-829710",name:"Anan S.",line:"TH",cc:"Porn K.",userType:"guest",userStatus:"no_trial",level:"—",unit:null,lesson:null,plan:null,planStatus:"none",planStart:null,planEnd:null,quota:0,weekDone:0,lastLearning:null,activity:"none",completed:0,minutes:0,learningDays7:0,inClass:false,intent:"unknown",stage:"new",bucket:"pool"}
+    ];
+    const EVENTS = {
+      "U-829104":[
+        {time:"2026-11-17 09:20 (+07)",module:"Class",content:"Level 2 · Unit 3 · Lesson 7",minutes:14,effective:true},
+        {time:"2026-11-16 19:35 (+07)",module:"Practice",content:"Words & Sentences",minutes:9,effective:true},
+        {time:"2026-11-16 18:58 (+07)",module:"Play",content:"Word Battle",minutes:6,effective:false}
+      ],
+      "U-829117":[
+        {time:"2026-11-17 11:05 (+07)",module:"Class",content:"Level 1 · Unit 2 · Lesson 8",minutes:13,effective:true},
+        {time:"2026-11-16 20:12 (+07)",module:"Explore",content:"Listening",minutes:8,effective:true}
+      ],
+      "U-829208":[
+        {time:"2026-11-10 19:10 (+08)",module:"Class",content:"Level 3 · Unit 5 · Lesson 2",minutes:14,effective:true}
+      ]
+    };
+    const T = {
+      zh:{app:"学习计划与进度",nav:"学习跟进",userList:"用户列表",salesList:"销售列表",dashboard:"管理看板",dinoCrm:"Dino CRM",
+        userSub:"查看用户学习计划与课程进度",salesSub:"按学习状态识别当前跟进节点",dashSub:"查看学习计划使用、学习活跃与到期风险",
+        searchUser:"用户 ID / 姓名 / 登录账号",searchLead:"用户 ID / 姓名 / 手机号",line:"业务线",plan:"学习计划",planStatus:"学习计划状态",learningStatus:"学习状态",
+        expiry:"到期范围",userStatus:"用户状态",intent:"购买意向",cc:"CC",stage:"当前跟进",level:"当前 Level",all:"全部",reset:"重置",export:"导出",download:"下载数据",
+        userId:"用户 ID",name:"学生姓名",currentProgress:"当前学习进度",weekProgress:"本周进度",lastLearning:"最近学习时间",actions:"操作",view:"查看",
+        allPlans:"全部计划",allPlanStatus:"全部状态",activePlan:"生效中",expiredPlan:"已到期",noPlan:"未购买",notStartedPlan:"未开始",cancelledPlan:"已取消",allStatus:"全部学习状态",notStarted:"未开课",inClass:"正在上课",active:"近 7 天活跃",inactive7:"7 天未学习",expired:"已到期",
+        allExpiry:"全部到期范围",expiry7:"7 天内到期",expiry30:"30 天内到期",alreadyExpired:"已到期",allLevel:"全部 Level",noLevel:"未定级",
+        detail:"用户学习详情",planInfo:"学习计划",currentPosition:"当前课程进度",weekPlan:"本周安排",learningPerf:"学习表现",recent:"近期学习记录",
+        planName:"计划类型",validity:"有效期",remainingDays:"剩余天数",weeklyQuota:"每周额度",completedWeek:"本周完成",remainingWeek:"本周剩余",
+        currentLesson:"当前课次",levelDone:"本 Level 完成",totalDone:"累计完成",validMinutes:"累计有效学习",lastEvent:"最近学习",days7:"近 7 天学习天数",update:"数据更新时间",
+        effective:"计有效学习",play:"不计有效学习",close:"关闭",noData:"当前条件下暂无数据",noDataSub:"调整筛选条件后重试",metricHelp:"指标口径",dataTime:"数据截止：2026-11-17 15:00",
+        metrics:["生效学习计划用户","正在上课人数","近 7 天活跃学习者","近 7 天零学习用户","本周完成主课节数","7 天内到期用户","学习活跃率"],
+        groupLine:"业务线",groupPlan:"学习计划",groupLevel:"当前 Level",activeUsers:"生效学习计划用户",inClassUsers:"正在上课人数",activeLearners:"近 7 天活跃学习者",inactiveLearners:"近 7 天零学习用户",weekLessons:"本周完成主课节数",expiringUsers:"7 天内到期用户",activityRate:"学习活跃率",
+        overview:"转化总览",followup:"销售跟进",learningTab:"学习进度",payment:"支付结果",overviewText:"按注册批次查看转化概况",followupText:"按销售阶段查看跟进概况",paymentText:"按支付状态查看结果概况",
+        leads:"线索",paid:"已付费",outbound:"已外呼",connected:"已接通",booked:"已预约",trial:"已体验",emptyPlan:"—",user:"用户",people:"人",lessons:"节",
+        pool:"公海",mine:"我的跟进",allCc:"全部 CC",allIntents:"全部意向",allStages:"全部阶段",to:"至",weekDone:"{done}/{quota}",days:"{count} 天"},
+      en:{app:"Learning Plans & Progress",nav:"Learning Follow-up",userList:"User List",salesList:"Sales List",dashboard:"Dashboard",dinoCrm:"Dino CRM",
+        userSub:"Review each user's learning plan and course progress",salesSub:"Identify the next follow-up action by learning status",dashSub:"Review learning plan usage, activity, and expiration risk",
+        searchUser:"User ID / name / login",searchLead:"User ID / name / phone",line:"Business Line",plan:"Learning Plan",planStatus:"Plan Status",learningStatus:"Learning Status",
+        expiry:"Expiry",userStatus:"User Status",intent:"Purchase Intent",cc:"CC",stage:"Follow-up Stage",level:"Current Level",all:"All",reset:"Reset",export:"Export",download:"Download Data",
+        userId:"User ID",name:"Student",currentProgress:"Current Progress",weekProgress:"This Week",lastLearning:"Last Learning",actions:"Actions",view:"View",
+        allPlans:"All plans",allPlanStatus:"All statuses",activePlan:"Active",expiredPlan:"Expired",noPlan:"Not purchased",notStartedPlan:"Not started",cancelledPlan:"Cancelled",allStatus:"All learning statuses",notStarted:"Not started",inClass:"In class",active:"Active in 7 days",inactive7:"No learning for 7 days",expired:"Expired",
+        allExpiry:"All expiry ranges",expiry7:"Expires in 7 days",expiry30:"Expires in 30 days",alreadyExpired:"Expired",allLevel:"All levels",noLevel:"Not placed",
+        detail:"Learning Detail",planInfo:"Learning Plan",currentPosition:"Current Course Progress",weekPlan:"This Week's Plan",learningPerf:"Learning Performance",recent:"Recent Learning",
+        planName:"Plan",validity:"Validity",remainingDays:"Days Remaining",weeklyQuota:"Weekly Quota",completedWeek:"Completed This Week",remainingWeek:"Available This Week",
+        currentLesson:"Current Lesson",levelDone:"Level Completed",totalDone:"Total Completed",validMinutes:"Effective Learning Time",lastEvent:"Last Learning",days7:"Learning Days in 7d",update:"Data updated",
+        effective:"Counts as effective learning",play:"Does not count",close:"Close",noData:"No data for these filters",noDataSub:"Adjust filters and try again",metricHelp:"Metric Definition",dataTime:"Data through: 2026-11-17 15:00",
+        metrics:["Active Plan Users","In-class Users","Active Learners in 7d","Zero-learning Users in 7d","Lessons Completed This Week","Users Expiring in 7d","Learning Activity Rate"],
+        groupLine:"Business Line",groupPlan:"Learning Plan",groupLevel:"Current Level",activeUsers:"Active Plan Users",inClassUsers:"In-class Users",activeLearners:"Active Learners in 7d",inactiveLearners:"Zero-learning Users in 7d",weekLessons:"Lessons Completed This Week",expiringUsers:"Users Expiring in 7d",activityRate:"Learning Activity Rate",
+        overview:"Conversion Overview",followup:"Sales Follow-up",learningTab:"Learning Progress",payment:"Payment Results",overviewText:"Registration cohort conversion overview",followupText:"Sales pipeline overview",paymentText:"Payment outcome overview",
+        leads:"Leads",paid:"Paid",outbound:"Outbound",connected:"Connected",booked:"Booked",trial:"Trial completed",emptyPlan:"—",user:"users",people:"users",lessons:"lessons",
+        pool:"Lead Pool",mine:"My Follow-ups",allCc:"All CC",allIntents:"All intents",allStages:"All stages",to:"to",weekDone:"{done}/{quota}",days:"{count} days"}
+    };
+    const state={lang:localStorage.getItem("learn-lang")||"zh",page:"users",salesTab:"mine",dashTab:"learning",detailUser:null,
+      userFilters:{q:"",line:"",plan:"",activity:"",expiry:"",level:""},
+      salesFilters:{q:"",line:"",cc:"",intent:"",stage:"",plan:"",activity:"",expiry:"",level:""},
+      dashFilters:{line:"",cc:"",plan:"",level:""}};
+    const t=(key,vars={})=>{let v=T[state.lang][key]??key;Object.entries(vars).forEach(([k,x])=>v=String(v).replaceAll(`{${k}}`,String(x)));return v;};
+    const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const option=(v,l,s)=>`<option value="${esc(v)}" ${v===s?"selected":""}>${esc(l)}</option>`;
+    const fmt=p=>p?p.replace(/\s\(\+\d{2}\)$/,""):"—";
+    const activityLabel=v=>({not_started:t("notStarted"),in_class:t("inClass"),active:t("active"),inactive7:t("inactive7"),expired:t("expired"),none:t("noPlan")}[v]||v);
+    const planStatusLabel=v=>({active:t("activePlan"),expired:t("expiredPlan"),none:t("noPlan"),not_started:t("notStartedPlan"),cancelled:t("cancelledPlan")}[v]||v);
+    const planLabel=v=>v||t("emptyPlan");
+    const progressLabel=u=>u.level==="—"?t("notStarted"):`${u.level} · U${u.unit} · L${u.lesson}`;
+    const activityTag=v=>`<span class="tag ${v==="in_class"?"green":v==="active"?"blue":v==="inactive7"?"amber":v==="expired"?"red":"gray"}">${activityLabel(v)}</span>`;
+    const remainingDays=u=>{if(!u.planEnd)return null;const end=new Date(`${u.planEnd}T23:59:59+08:00`);const now=new Date("2026-11-17T23:59:59+08:00");return Math.max(0,Math.ceil((end-now)/86400000));};
+    const matchExpiry=(u,value)=>{const days=remainingDays(u);if(!value)return true;if(value==="expired")return u.planStatus==="expired";if(days===null)return false;if(value==="7")return days<=7;if(value==="30")return days<=30;return true;};
+    const matches=(u,f)=>(!f.line||u.line===f.line)&&(!f.plan||u.plan===f.plan)&&(!f.planStatus||u.planStatus===f.planStatus)&&(!f.activity||u.activity===f.activity)&&(!f.level||u.level===f.level)&&matchExpiry(u,f.expiry);
+    const filteredUsers=()=>LEARNERS.filter(u=>{const f=state.userFilters,q=f.q.toLowerCase().trim();return(!q||`${u.userId} ${u.name}`.toLowerCase().includes(q))&&matches(u,f);});
+    const filteredSales=()=>LEARNERS.filter(u=>{const f=state.salesFilters,q=f.q.toLowerCase().trim();return u.bucket===state.salesTab&&(!q||`${u.userId} ${u.name}`.toLowerCase().includes(q))&&(!f.cc||u.cc===f.cc)&&(!f.intent||u.intent===f.intent)&&(!f.stage||u.stage===f.stage)&&matches(u,f);});
+    const filteredDashboard=()=>LEARNERS.filter(u=>{const f=state.dashFilters;return(!f.line||u.line===f.line)&&(!f.cc||u.cc===f.cc)&&(!f.plan||u.plan===f.plan)&&(!f.level||u.level===f.level);});
+    const filterSelect=(kind,key,name,values,selected,allLabel)=>`<div class="field"><label>${name}</label><select class="control" data-filter-kind="${kind}" data-filter-key="${key}">${option("",allLabel,selected)}${values.map(v=>Array.isArray(v)?option(v[0],v[1],selected):option(v,v,selected)).join("")}</select></div>`;
+    function customerFilters(kind){const f=state[kind];return `<div class="filterRow"><div class="field search"><label>${kind==="userFilters"?t("searchUser"):t("searchLead")}</label><input class="control" id="${kind}-q" data-filter-kind="${kind}" data-filter-key="q" value="${esc(f.q)}"></div>
+      ${filterSelect(kind,"line",t("line"),["VN","MY","TH"],f.line,t("all"))}
+      ${kind==="salesFilters"?filterSelect(kind,"cc",t("cc"),["Nguyễn Anh","Mali Tan","Porn K."],f.cc,t("allCc")):""}</div>
+      <div class="filterRow">${filterSelect(kind,"plan",t("plan"),[["Pro","Pro"],["Max","Max"]],f.plan,t("allPlans"))}
+      ${filterSelect(kind,"activity",t("learningStatus"),[["not_started",t("notStarted")],["in_class",t("inClass")],["active",t("active")],["inactive7",t("inactive7")],["expired",t("expired")],["none",t("noPlan")]],f.activity,t("allStatus"))}
+      ${filterSelect(kind,"expiry",t("expiry"),[["7",t("expiry7")],["30",t("expiry30")],["expired",t("alreadyExpired")]],f.expiry,t("allExpiry"))}
+      ${filterSelect(kind,"level",t("level"),["L1","L2","L3","L4","L5","L6","—"],f.level,t("allLevel"))}</div>`;}
+    function renderUsers(){const rows=filteredUsers();return `<div class="pageHead"><div><h1>${t("userList")}</h1><p class="sub">${t("userSub")}</p></div></div>
+      <section class="panel filterPanel">${customerFilters("userFilters")}<div class="filterRow"><div class="actionRow"><button class="button ghost" data-action="reset-user">${t("reset")}</button><button class="button primary" data-action="export-user">${t("export")}</button></div></div></section>
+      <section class="panel"><div class="sectionTitle"><h2>${t("userList")}</h2><span class="pill">${rows.length} ${t("people")}</span></div>${rows.length?learnerTable(rows):emptyState()}</section>`;}
+    function renderSales(){const rows=filteredSales();return `<div class="pageHead"><div><h1>${t("salesList")}</h1><p class="sub">${t("salesSub")}</p></div></div>
+      <section class="panel"><div class="tabs">${[["pool",t("pool")],["mine",t("mine")],["paid",t("paid")]].map(([k,l])=>`<button class="tab ${state.salesTab===k?"active":""}" data-sales-tab="${k}">${l}</button>`).join("")}</div><div class="filterPanel">${customerFilters("salesFilters")}<div class="filterRow"><div class="actionRow"><button class="button ghost" data-action="reset-sales">${t("reset")}</button><button class="button primary" data-action="export-sales">${t("download")}</button></div></div></div></section>
+      <section class="panel"><div class="sectionTitle"><h2>${t("salesList")}</h2><span class="pill">${rows.length} ${t("people")}</span></div>${rows.length?learnerTable(rows):emptyState()}</section>`;}
+    function learnerTable(rows){return `<div class="tableWrap"><table class="table"><thead><tr><th>${t("userId")}</th><th>${t("name")}</th><th>${t("plan")}</th><th>${t("currentProgress")}</th><th>${t("weekProgress")}</th><th>${t("lastLearning")}</th><th>${t("learningStatus")}</th><th>${t("expiry")}</th><th>${t("actions")}</th></tr></thead><tbody>${rows.map(u=>`<tr><td class="mono">${u.userId}</td><td><strong>${esc(u.name)}</strong><span class="subtext">${u.line} · ${u.cc}</span></td><td>${planLabel(u.plan)}</td><td><span class="progressLine">${progressLabel(u)}</span></td><td>${u.plan?t("weekDone",{done:u.weekDone,quota:u.quota}):"—"}<span class="subtext">${u.plan?`${t("remainingWeek")} ${Math.max(0,u.quota-u.weekDone)}`: ""}</span></td><td>${fmt(u.lastLearning)}</td><td>${activityTag(u.activity)}</td><td>${u.planEnd?`${u.planEnd}<span class="subtext">${remainingDays(u)} ${t("days",{count:remainingDays(u)})}</span>`:"—"}</td><td><button class="button" data-user="${u.userId}">${t("view")}</button></td></tr>`).join("")}</tbody></table></div>`;}
+    const metricDefs={
+      activeUsers:{zh:"当前学习计划状态为生效中的用户数，按用户 ID 去重。",en:"Users with an active learning plan, deduplicated by User ID."},
+      inClassUsers:{zh:"课程系统当前明确返回正在上课的用户数，按用户 ID 去重。",en:"Users currently reported as in class by the learning system, deduplicated by User ID."},
+      activeLearners:{zh:"生效学习计划用户中，近 7 个业务线自然日内至少有一条有效学习记录的用户数。",en:"Active-plan users with at least one effective learning event in the last 7 business-line days."},
+      inactiveLearners:{zh:"学习计划生效已满 7 天，且近 7 个业务线自然日没有有效学习记录的用户数。",en:"Users whose plan has been active at least 7 days with no effective learning event in the last 7 business-line days."},
+      weekLessons:{zh:"当前业务线学习周内完成状态为完成的正式 Lesson 数，按 Lesson ID 去重。",en:"Completed formal Lessons in the current business-line learning week, deduplicated by Lesson ID."},
+      expiringUsers:{zh:"当前生效学习计划将在 0–7 个业务线自然日内到期的用户数。",en:"Active-plan users expiring within 0–7 business-line calendar days."},
+      activityRate:{zh:"近 7 天活跃学习者数 ÷（近 7 天活跃学习者数 + 近 7 天零学习用户数）。",en:"Active learners in 7d ÷ (active learners in 7d + zero-learning users in 7d)."}
+    };
+    const metrics={activeUsers:rows=>rows.filter(u=>u.planStatus==="active").length,inClassUsers:rows=>rows.filter(u=>u.inClass).length,activeLearners:rows=>rows.filter(u=>u.planStatus==="active"&&u.learningDays7>0).length,inactiveLearners:rows=>rows.filter(u=>u.planStatus==="active"&&u.learningDays7===0&&new Date("2026-11-17T23:59:59+08:00")-new Date(`${u.planStart}T00:00:00+08:00`)>=7*86400000).length,weekLessons:rows=>rows.filter(u=>u.planStatus==="active").reduce((s,u)=>s+u.weekDone,0),expiringUsers:rows=>rows.filter(u=>u.planStatus==="active"&&remainingDays(u)<=7).length};
+    function dashboardContent(rows){const stat={};Object.keys(metrics).forEach(k=>stat[k]=metrics[k](rows));const denom=stat.activeLearners+stat.inactiveLearners;stat.activityRate=denom?(stat.activeLearners/denom*100).toFixed(1):"—";const keys=["activeUsers","inClassUsers","activeLearners","inactiveLearners","weekLessons","expiringUsers","activityRate"];return `<div class="metrics">${keys.map(k=>`<article class="metric"><button class="help" data-metric="${k}">i</button><div class="metricName">${metricName(k)}</div><div class="metricValue">${stat[k]==="—"?"—":stat[k]}${k==="activityRate"&&stat[k]!=="—"?"%":""}</div><div class="metricMeta">${k==="weekLessons"?t("lessons"):k==="activityRate"&&denom?`${stat.activeLearners} / ${denom}`:t("people")}</div></article>`).join("")}</div>
+      <div class="dashboardBody">${detailTable(rows)}</div>`;}
+    function metricName(k){return({activeUsers:t("activeUsers"),inClassUsers:t("inClassUsers"),activeLearners:t("activeLearners"),inactiveLearners:t("inactiveLearners"),weekLessons:t("weekLessons"),expiringUsers:t("expiringUsers"),activityRate:t("activityRate")})[k]||k;}
+    function detailTable(rows){const groups=new Map();rows.forEach(u=>{const key=`${u.line}|${u.plan||"—"}|${u.level||"—"}`;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(u);});const metricKeys=["activeUsers","inClassUsers","activeLearners","inactiveLearners","weekLessons","expiringUsers"];return `<div class="dashboardHeading"><h2>${t("learningTab")}</h2><span class="pill">${rows.length} ${t("people")}</span><span class="sub">${t("dataTime")}</span></div><div class="tableWrap"><table class="table metricTable"><thead><tr><th>${t("groupLine")}</th><th>${t("groupPlan")}</th><th>${t("groupLevel")}</th>${metricKeys.map(k=>`<th>${metricName(k)} <button class="help" data-metric="${k}" style="position:relative;top:auto;right:auto;vertical-align:middle">i</button></th>`).join("")}<th>${t("activityRate")} <button class="help" data-metric="activityRate" style="position:relative;top:auto;right:auto;vertical-align:middle">i</button></th></tr></thead><tbody>${[...groups.entries()].map(([key,g])=>{const [line,plan,level]=key.split("|");const s={};Object.keys(metrics).forEach(k=>s[k]=metrics[k](g));const d=s.activeLearners+s.inactiveLearners;return `<tr><td>${line}</td><td>${plan}</td><td>${level}</td><td>${s.activeUsers}</td><td>${s.inClassUsers}</td><td>${s.activeLearners}</td><td>${s.inactiveLearners}</td><td>${s.weekLessons}</td><td>${s.expiringUsers}</td><td class="rate">${d?(s.activeLearners/d*100).toFixed(1)+"%":"—"}<small>${s.activeLearners} / ${d}</small></td></tr>`}).join("")}</tbody></table></div>`;}
+    function renderDashboard(){const rows=filteredDashboard(), f=state.dashFilters;const tabs=[["overview",t("overview")],["followup",t("followup")],["learning",t("learningTab")],["payment",t("payment")]];let body="";if(state.dashTab==="learning"){body=dashboardContent(rows);}else if(state.dashTab==="overview"){body=`<div class="dashboardBody"><p class="sub">${t("overviewText")}</p><div class="metrics">${[["leads",LEARNERS.length],["outbound",10],["connected",8],["booked",7],["trial",5],["paid",3]].map(([k,v])=>`<article class="metric"><div class="metricName">${t(k)}</div><div class="metricValue">${v}</div></article>`).join("")}</div></div>`;}else if(state.dashTab==="followup"){body=`<div class="dashboardBody"><p class="sub">${t("followupText")}</p></div>`;}else{body=`<div class="dashboardBody"><p class="sub">${t("paymentText")}</p></div>`;}return `<div class="pageHead"><div><h1>${t("dashboard")}</h1><p class="sub">${t("dashSub")}</p></div></div><section class="panel"><div class="tabs">${tabs.map(([k,l])=>`<button class="tab ${state.dashTab===k?"active":""}" data-dash-tab="${k}">${l}</button>`).join("")}</div>${state.dashTab==="learning"?`<div class="filterPanel"><div class="filterRow">${filterSelect("dashFilters","line",t("line"),["VN","MY","TH"],f.line,t("all"))}${filterSelect("dashFilters","cc",t("cc"),["Nguyễn Anh","Mali Tan","Porn K."],f.cc,t("allCc"))}${filterSelect("dashFilters","plan",t("plan"),[["Pro","Pro"],["Max","Max"]],f.plan,t("allPlans"))}${filterSelect("dashFilters","level",t("level"),["L1","L2","L3","L4","L5","L6","—"],f.level,t("allLevel"))}</div><div class="filterRow"><div class="actionRow"><button class="button ghost" data-action="reset-dashboard">${t("reset")}</button></div></div></div>`:""}${body}</section>`;}
+    function emptyState(){return `<div class="empty"><strong>${t("noData")}</strong><span>${t("noDataSub")}</span></div>`;}
+    function openDetail(id){const u=LEARNERS.find(x=>x.userId===id);if(!u)return;state.detailUser=id;const events=EVENTS[id]||[];document.getElementById("drawer").innerHTML=`<div class="drawerHead"><div><span class="pill">${u.userId}</span><h2>${esc(u.name)}</h2><p class="sub">${u.line} · ${u.cc}</p></div><button class="close" data-action="close-detail">×</button></div>
+      <div class="detailGrid"><div class="detailCard"><h3>${t("planInfo")}</h3><dl class="factGrid"><dt>${t("planName")}</dt><dd>${planLabel(u.plan)}</dd><dt>${t("planStatus")}</dt><dd>${planStatusLabel(u.planStatus)}</dd><dt>${t("validity")}</dt><dd>${u.planStart||"—"} ${t("to")} ${u.planEnd||"—"}</dd><dt>${t("remainingDays")}</dt><dd>${u.planEnd?remainingDays(u):"—"}</dd></dl></div>
+      <div class="detailCard"><h3>${t("currentPosition")}</h3><dl class="factGrid"><dt>${t("level")}</dt><dd>${u.level}</dd><dt>${t("currentLesson")}</dt><dd>${u.unit?`U${u.unit} · L${u.lesson}`:"—"}</dd><dt>${t("levelDone")}</dt><dd>${u.completed} / 144</dd><dt>${t("totalDone")}</dt><dd>${u.level!=="—"?(Number(u.level.slice(1))-1)*144+u.completed:0} / 864</dd></dl></div>
+      <div class="detailCard"><h3>${t("weekPlan")}</h3><dl class="factGrid"><dt>${t("weeklyQuota")}</dt><dd>${u.quota||0}</dd><dt>${t("completedWeek")}</dt><dd>${u.weekDone||0}</dd><dt>${t("remainingWeek")}</dt><dd>${u.plan?Math.max(0,u.quota-u.weekDone):0}</dd></dl></div>
+      <div class="detailCard"><h3>${t("learningPerf")}</h3><dl class="factGrid"><dt>${t("lastEvent")}</dt><dd>${fmt(u.lastLearning)}</dd><dt>${t("days7")}</dt><dd>${u.learningDays7}</dd><dt>${t("validMinutes")}</dt><dd>${u.minutes} min</dd><dt>${t("learningStatus")}</dt><dd>${activityTag(u.activity)}</dd></dl></div></div>
+      <div class="detailCard"><h3>${t("recent")}</h3><ul class="timeline">${events.length?events.map(e=>`<li><strong>${esc(e.module)} · ${esc(e.content)}</strong><span>${fmt(e.time)} · ${e.minutes} min · ${e.effective?t("effective"):t("play")}</span></li>`).join(""):`<li><span>${t("noData")}</span></li>`}</ul></div>`;
+      document.getElementById("drawerLayer").classList.add("open");}
+    function closeDetail(){document.getElementById("drawerLayer").classList.remove("open");document.getElementById("drawer").innerHTML="";state.detailUser=null;}
+    function openMetric(k){document.getElementById("modal").innerHTML=`<div class="modalHead"><h3>${metricName(k)} · ${t("metricHelp")}</h3><button class="close" data-action="close-modal">×</button></div><div class="modalBody"><div class="formula">${metricDefs[k]?.[state.lang]||""}</div></div>`;document.getElementById("modalLayer").classList.add("open");}
+    function closeModal(){document.getElementById("modalLayer").classList.remove("open");}
+    function toast(msg){const e=document.getElementById("toast");e.textContent=msg;e.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>e.classList.remove("show"),1800);}
+    function exportRows(rows){const header=["user_id","name","business_line","learning_plan","plan_status","plan_start","plan_end","current_level","current_unit","current_lesson","weekly_quota","weekly_completed","weekly_remaining","last_learning_at","learning_status","completed_lessons","effective_learning_minutes"];const data=rows.map(u=>[u.userId,u.name,u.line,u.plan||"",u.planStatus,u.planStart||"",u.planEnd||"",u.level,u.unit??"",u.lesson??"",u.quota,u.weekDone,Math.max(0,u.quota-u.weekDone),u.lastLearning||"",u.activity,u.completed,u.minutes]);const csv="\uFEFF"+[header,...data].map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\r\n");const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download="crm-learning-progress.csv";a.click();URL.revokeObjectURL(url);toast("Learning progress exported");}
+    function reset(kind){if(kind==="userFilters")state.userFilters={q:"",line:"",plan:"",activity:"",expiry:"",level:""};if(kind==="salesFilters")state.salesFilters={q:"",line:"",cc:"",intent:"",stage:"",plan:"",activity:"",expiry:"",level:""};if(kind==="dashFilters")state.dashFilters={line:"",cc:"",plan:"",level:""};}
+    function render(){document.documentElement.lang=state.lang==="zh"?"zh-CN":"en";document.title=`Dino CRM · ${t("app")}`;document.getElementById("navLabel").textContent=t("nav");document.querySelectorAll("[data-label]").forEach(e=>e.textContent=t(e.dataset.label));document.querySelectorAll("[data-lang]").forEach(e=>e.classList.toggle("active",e.dataset.lang===state.lang));document.querySelectorAll(".navItem").forEach(e=>e.classList.toggle("active",e.dataset.page===state.page));document.getElementById("mobileNav").innerHTML=[["users",t("userList")],["sales",t("salesList")],["dashboard",t("dashboard")]].map(([k,l])=>`<button class="${state.page===k?"active":""}" data-page="${k}">${l}</button>`).join("");document.getElementById("crumbCurrent").textContent=t(state.page==="users"?"userList":state.page==="sales"?"salesList":"dashboard");document.getElementById("content").innerHTML=state.page==="users"?renderUsers():state.page==="sales"?renderSales():renderDashboard();}
+    function setFilter(kind,key,value){state[kind][key]=value;render();const e=document.getElementById(`${kind}-${key}`);if(e){e.focus();if(e.tagName==="INPUT")e.setSelectionRange(e.value.length,e.value.length);}}
+    document.addEventListener("click",e=>{const lang=e.target.closest("[data-lang]");if(lang){state.lang=lang.dataset.lang;localStorage.setItem("learn-lang",state.lang);render();return;}const nav=e.target.closest("[data-page]");if(nav){state.page=nav.dataset.page;render();return;}const st=e.target.closest("[data-sales-tab]");if(st){state.salesTab=st.dataset.salesTab;render();return;}const dt=e.target.closest("[data-dash-tab]");if(dt){state.dashTab=dt.dataset.dashTab;render();return;}const user=e.target.closest("[data-user]");if(user){openDetail(user.dataset.user);return;}const metric=e.target.closest("[data-metric]");if(metric){openMetric(metric.dataset.metric);return;}const action=e.target.closest("[data-action]")?.dataset.action;if(!action)return;if(action==="reset-user"){reset("userFilters");render();}if(action==="reset-sales"){reset("salesFilters");render();}if(action==="reset-dashboard"){reset("dashFilters");render();}if(action==="export-user")exportRows(filteredUsers());if(action==="export-sales")exportRows(filteredSales());if(action==="close-detail")closeDetail();if(action==="close-modal")closeModal();if(e.target.id==="modalLayer")closeModal();});
+    document.addEventListener("change",e=>{const f=e.target.closest("[data-filter-kind]");if(f&&f.tagName==="SELECT")setFilter(f.dataset.filterKind,f.dataset.filterKey,f.value);});
+    document.addEventListener("input",e=>{const f=e.target.closest("[data-filter-kind]");if(f&&f.tagName==="INPUT")setFilter(f.dataset.filterKind,f.dataset.filterKey,f.value);});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeDetail();closeModal();}});
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+version: 1
+sources:
+  - id: lark-learning-requirement-chat
+    type: lark-p2p
+    purpose: 用户实时学习状态、课程信息、零学习提醒与续费目标
+    participants: 胡海昊、Tran Trung Nghia
+    priority: authoritative
+  - id: lark-curriculum-forward
+    type: lark-merged-forward
+    purpose: 课程产品指南、学习计划和课程原始资料入口
+    participants: 孔丽莉、张歆玥
+    priority: authoritative
+  - id: dino-product-guide
+    url: https://qjphu5vphyf4.jp.larksuite.com/wiki/I7ZcwTktdiKJtEk6Vysjxtp2pie
+    purpose: 正式课程、体验课、学习计划和会员权益
+    priority: authoritative
+  - id: dino-learning-plan-guide
+    url: https://qjphu5vphyf4.jp.larksuite.com/wiki/XOOvwB3qEiKZzmklkDpjz164prc
+    purpose: Class/Practice/Explore/Play、有效学习与 Pro/Max 周计划
+    priority: authoritative
+  - id: dino-curriculum-raw
+    url: https://qjphu5vphyf4.jp.larksuite.com/wiki/WetqwnudcidfL7kgR4ijQMR6pae
+    purpose: Level、Unit、Learning Cycle、Lesson 和 lesson type 原始结构
+    priority: authoritative
+  - id: user-center-screenshot
+    path: ../../../../crm-manual/docs/images/U-01-userlist.png
+    purpose: 用户列表筛选与字段现状快照
+    priority: secondary
+  - id: sales-center-screenshot
+    path: ../../../../crm-manual/docs/images/S-00-myfollow.png
+    purpose: 销售中心筛选与字段现状快照
+    priority: secondary
+  - id: dashboard-screenshot
+    path: ../../../../crm-manual/docs/images/D-01-dashboard.png
+    purpose: 管理看板页签、筛选和指标现状快照
+    priority: secondary

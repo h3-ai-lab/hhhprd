@@ -26,6 +26,7 @@
 | 用户咨询预约时间 | 待评审 | [PRD](projects/user-consultation-lead/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/) |
 | 外呼能力一期 | 待评审 | [PRD](projects/outbound-capability/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/outbound-capability/prototype/) |
 | CRM 线索质量分析 | 待评审 | [PRD](projects/crm-lead-quality-analysis/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/) |
+| CRM学习计划与课程进度 | 待评审 | [PRD](projects/crm-learning-plan-progress/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-learning-plan-progress/prototype/) |
 | 多级业务线调研 | 归档于 REQ-ORG-001 | [调研资料](projects/crm-org-data-permissions/research/README.md) | — |
 
 ## GitHub Pages
@@ -43,6 +44,8 @@
 - 外呼能力一期原型：<https://h3-ai-lab.github.io/hhhprd/projects/outbound-capability/prototype/>
 - CRM 线索质量分析 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-lead-quality-analysis.html>
 - CRM 线索质量分析原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/>
+- CRM学习计划与课程进度 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-learning-plan-progress.html>
+- CRM学习计划与课程进度原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-learning-plan-progress/prototype/>
 - 引入首跟节点&首跟看板 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact.html>
 - 引入首跟节点&首跟看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/>
 - 引入首跟节点&首跟看板-2 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html>
