@@ -1,6 +1,6 @@
 id: REQ-CC-002
 name: 引入首跟节点&首跟看板-2
-status: 参考样例
+status: 评审后修订
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md
