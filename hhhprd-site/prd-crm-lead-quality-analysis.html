@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CRM 线索质量分析 · PRD</title>
+  <style>
+    :root{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    main{max-width:1040px;margin:0 auto;padding:42px 24px 80px}article{background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:34px}h2,h3,h4{line-height:1.35}
+    h2{font-size:28px;margin:0 0 20px}h3{font-size:21px;margin:30px 0 10px}h4{font-size:17px;margin:22px 0 8px}
+    p{margin:10px 0}a{color:var(--blue)}table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+    th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f7f9fc}
+    blockquote{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}
+    code{background:#f1f4f8;padding:1px 5px;border-radius:4px}pre code{background:transparent;padding:0;border-radius:0;color:inherit}pre{overflow:auto;background:#101828;
+    color:#eef2f7;padding:16px;border-radius:8px}.mermaid{background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:16px;overflow:auto}.top{display:flex;gap:14px;margin-bottom:18px}
+    .top a{text-decoration:none;font-weight:600}
+    @media(max-width:700px){main{padding:16px 10px}article{padding:20px 16px}}
+  </style>
+</head>
+<body><main>
+  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/crm-lead-quality-analysis/prd/PRD.md">查看 Markdown 源文件</a></div>
+  <article><h2>CRM 线索质量分析</h2>
+<blockquote>在 CRM 用户中心、销售中心和管理看板增加广告渠道、活动、广告组和广告归因，用同一批 Leads 的接通、预约、体验课完成和付费结果判断广告来源质量。<br>需求编号：REQ-LQA-001｜状态：待评审｜更新时间：2026-11-17<br>需求类型：看板与指标｜补充类型：表单字段列表、集成自动化、权限与审计</blockquote>
+<h3>交互原型</h3>
+<p><a href="https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/" target="_blank" rel="noopener">打开完整交互原型</a></p>
+<p>原型包含用户中心、销售中心和管理看板三个入口，可在同一地址切换中文和英文。</p>
+<h3>目标与范围</h3>
+<h4>业务目标</h4>
+<p>业务需要知道广告渠道、活动和广告带来的 Leads 在 CRM 中是否真正接通、预约、完成体验课并付费，而不是只看广告平台产生的安装或表单。</p>
+<p>本需求建立一条可追溯链路：</p>
+<p><code>广告渠道 → 活动 → 广告组 → 广告 → CRM Leads → 外呼、预约、体验和付费结果</code></p>
+<h4>本期做</h4>
+<ul><li>在用户中心和销售中心增加广告四级筛选与只读字段。</li><li>在管理看板增加同一组广告筛选，并支持按广告渠道、活动、广告组或广告分组查看线索业务表现。</li><li>用户中心和销售中心现有导出包含广告归因字段。</li><li>保存广告稳定 ID、展示名称和首次有效归因时间。</li><li>历史数据在能够通过用户或线索稳定 ID 关联时回填；无法确认时显示“未归因”。</li></ul>
+<h4>本期不做</h4>
+<ul><li>不展示广告费用、曝光、点击、CTR、CPL、CPA、ROAS 或广告平台归因报表。</li><li>不在经营数据中心建设新页面，数据中心只作为 CRM 的广告归因数据来源。</li><li>不修改线索分配、领取、掉库、转派、跟进、预约、课程或订单规则。</li><li>不根据广告名称或手机号猜测归因关系。</li><li>不新增用户中心、销售中心或管理看板菜单。</li><li>不新增列表排序能力。</li></ul>
+<h3>端到端流程</h3>
+<div class="mermaid">flowchart LR
+    A[经营数据中心形成广告归因数据] --&gt; B[按用户 ID 或线索 ID 匹配 CRM 对象]
+    B --&gt; C{首次有效广告归因是否存在}
+    C --&gt;|是| D[写入广告渠道、活动、广告组、广告及稳定 ID]
+    C --&gt;|否| E[标记未归因]
+    D --&gt; F[用户中心按用户展示与筛选]
+    D --&gt; G[销售中心按线索展示与筛选]
+    D --&gt; H[管理看板按广告层级汇总]
+    F --&gt; I[现有导出包含广告字段]
+    G --&gt; I
+    H --&gt; J[查看接通、预约、体验和付费表现]</div>
+<div class="mermaid">flowchart LR
+    L[注册批次线索] --&gt; O[外呼人数]
+    O --&gt; C[接通人数]
+    L --&gt; B[预约人数]
+    L --&gt; T[体验课完成人数]
+    L --&gt; P[已支付人数]
+    P --&gt; R[L2S]</div>
+<p>同一批 Leads 可以跳过部分阶段，各阶段数量不强制逐级递减。</p>
+<h3>广告归因规则</h3>
+<h4>归因对象</h4>
+<ul><li>用户中心按 <code>user_id</code> 展示该用户首次有效广告归因。</li><li>销售中心按 <code>lead_id</code> 展示该线索继承的首次有效广告归因。</li><li>管理看板以 <code>lead_id</code> 为业务对象计算广告质量。</li><li>同一用户产生多条线索时，每条线索必须有可确认的归因映射；不能仅凭用户当前广告字段批量覆盖全部历史线索。</li></ul>
+<h4>首次有效归因</h4>
+<ul><li>用户或线索首次获得完整且可验证的广告触点时，写入广告归因。</li><li>后续广告点击、再次留资或新渠道进入只追加来源，不覆盖首次有效广告归因。</li><li>归因必须能确认到至少一个稳定层级 ID；只有名称、没有稳定 ID 的数据不视为有效归因。</li><li>一次归因快照包含 <code>media_source</code>、活动、广告组、广告及各自稳定 ID。</li><li>广告名称后续修改时，历史归因关系不变；页面使用来源字典中的最新可见名称，导出同时保留名称快照和稳定 ID。</li></ul>
+<h4>归因层级</h4>
+<table><thead><tr><th>业务名称</th><th>稳定标识</th><th>展示规则</th></tr></thead><tbody><tr><td>广告渠道</td><td><code>media_source</code></td><td>展示渠道标准名称，如 Meta、TikTok、Google</td></tr><tr><td>活动</td><td><code>campaign_id</code></td><td>展示 <code>campaign_name</code>，详情和导出保留 ID</td></tr><tr><td>广告组</td><td><code>adset_id</code></td><td>展示 <code>adset_name</code>，详情和导出保留 ID</td></tr><tr><td>广告</td><td><code>ad_id</code></td><td>展示 <code>ad_name</code>，详情和导出保留 ID</td></tr></tbody></table>
+<p>广告层级按实际来源逐级填写。较高层级存在、较低层级缺失时，已有层级正常展示，缺失层级显示 <code>—</code>。广告渠道为空时统一显示“未归因”，不能自动归类为自然流量。</p>
+<h3>现状与字段顺序</h3>
+<p>现状核对基线为 2026-11-10 已归档页面快照；本需求不改变既有字段的相对顺序。</p>
+<h4>用户中心</h4>
+<p>现有筛选顺序：</p>
+<p><code>搜索 → 用户类型 → 注册方式 → 渠道来源-落地页 → 渠道来源-App → 业务线 → 用户状态 → 导出</code></p>
+<p>现有列表顺序：</p>
+<p><code>用户 ID → 学生姓名 → 用户状态 → 用户类型 → 年龄段 → 课程等级 → 注册方式 → 登录账号 → 短信验证码 → 渠道来源-落地页 → 操作</code></p>
+<p>目标筛选顺序：</p>
+<p><code>搜索 → 用户类型 → 注册方式 → 渠道来源-落地页 → 渠道来源-App → 广告渠道 → 活动 → 广告组 → 广告 → 业务线 → 用户状态 → 导出</code></p>
+<p>目标列表顺序：</p>
+<p><code>用户 ID → 学生姓名 → 用户状态 → 用户类型 → 年龄段 → 课程等级 → 注册方式 → 登录账号 → 短信验证码 → 渠道来源-落地页 → 广告渠道 → 活动 → 广告组 → 广告 → 操作</code></p>
+<h4>销售中心</h4>
+<p>公海、我的跟进和已付费使用同一组广告筛选和字段。通话记录不在本需求新增广告字段。</p>
+<p>现有筛选顺序：</p>
+<ul><li>第一行：<code>搜索 → 业务线 → 购买意向 → CC</code></li><li>第二行：<code>当前跟进阶段 → 年龄段 → 课程等级 → 渠道来源-落地页 → 渠道来源-App</code></li><li>第三行：<code>用户状态 → 销售咨询预约 → 预约外呼 → 注册日期 → 开始日期 → 结束日期</code></li><li>操作区：<code>重置筛选 → 导入 leads → 下载数据</code></li></ul>
+<p>现有列表顺序：</p>
+<p><code>用户 ID → 学生姓名 → 购买意向 → 用户状态 → 用户类型 → 年龄段 → 课程等级 → 登录账号 → 渠道来源-落地页 → 操作</code></p>
+<p>目标筛选顺序：</p>
+<ul><li>在第二行 <code>渠道来源-App</code> 之后增加：<code>广告渠道 → 活动 → 广告组 → 广告</code></li><li>其余现有筛选保持原顺序。</li></ul>
+<p>目标列表顺序：</p>
+<p><code>用户 ID → 学生姓名 → 购买意向 → 用户状态 → 用户类型 → 年龄段 → 课程等级 → 登录账号 → 渠道来源-落地页 → 广告渠道 → 活动 → 广告组 → 广告 → 操作</code></p>
+<h4>管理看板</h4>
+<p>现有筛选区顺序：</p>
+<p><code>业务线 → CC → 注册日期及起止日期</code></p>
+<p>现有“转化总览”展示：</p>
+<p><code>线索数（含已付费）→ 外呼人数 → 接通人数 → 预约人数 → 体验课完成人数 → 已支付人数 → L2S</code></p>
+<p>目标筛选顺序：</p>
+<p><code>业务线 → CC → 广告渠道 → 活动 → 广告组 → 广告 → 注册日期及起止日期</code></p>
+<p>四个广告筛选放在同一筛选区、紧随 CC 之后，不放到筛选区末尾。三个看板页签共享当前广告筛选条件。</p>
+<h4>字段顺序比对</h4>
+<table><thead><tr><th>页面</th><th>现有字段/位置</th><th>新增或调整</th><th>目标位置</th><th>变更原因</th></tr></thead><tbody><tr><td>用户中心筛选</td><td>渠道来源-App 后为业务线</td><td>新增广告渠道、活动、广告组、广告</td><td>渠道来源-App 之后</td><td>与现有来源筛选归为同一组</td></tr><tr><td>用户中心列表</td><td>渠道来源-落地页后为操作</td><td>新增四个广告字段</td><td>渠道来源-落地页之后、操作之前</td><td>保持来源字段连续</td></tr><tr><td>销售中心筛选</td><td>渠道来源-App 后进入用户状态行</td><td>新增四个广告筛选</td><td>渠道来源-App 之后</td><td>保留现有业务筛选顺序</td></tr><tr><td>销售中心列表</td><td>渠道来源-落地页后为操作</td><td>新增四个广告字段</td><td>渠道来源-落地页之后、操作之前</td><td>保持来源字段连续</td></tr><tr><td>管理看板筛选</td><td>CC 后为注册日期</td><td>新增四个广告筛选</td><td>CC 之后、注册日期之前</td><td>广告归因属于分析维度</td></tr><tr><td>管理看板内容</td><td>现有六环和 L2S</td><td>新增广告分组表</td><td>指标卡之后</td><td>支持同层广告横向比较</td></tr></tbody></table>
+<h3>页面与交互</h3>
+<h4>公共字段</h4>
+<table><thead><tr><th>字段</th><th>类型与来源</th><th>编辑规则</th><th>空值规则</th><th>权限</th><th>排序</th></tr></thead><tbody><tr><td>广告渠道</td><td>标准枚举，来源 <code>media_source</code></td><td>只读；来自归因快照</td><td>无时显示“未归因”</td><td>随页面查看权限</td><td>不支持；用户中心、销售中心和看板均不新增排序</td></tr><tr><td>活动</td><td>文本，来源 <code>campaign_name</code> + <code>campaign_id</code></td><td>只读</td><td>缺失显示 <code>—</code></td><td>随页面查看权限</td><td>不支持；页面未提供可排序表头</td></tr><tr><td>广告组</td><td>文本，来源 <code>adset_name</code> + <code>adset_id</code></td><td>只读</td><td>缺失显示 <code>—</code></td><td>随页面查看权限</td><td>不支持；页面未提供可排序表头</td></tr><tr><td>广告</td><td>文本，来源 <code>ad_name</code> + <code>ad_id</code></td><td>只读</td><td>缺失显示 <code>—</code></td><td>随页面查看权限</td><td>不支持；页面未提供可排序表头</td></tr></tbody></table>
+<h4>筛选交互</h4>
+<ul><li>四级筛选允许任意一级单独使用，也允许组合使用。</li><li>选择广告渠道后，活动候选仅包含该渠道数据；活动、广告组和广告依次联动。</li><li>修改上级筛选时，清空不再属于新范围的下级选择。</li><li>每级均提供“全部”选项；清空全部广告条件后恢复当前页面原有数据范围。</li><li>活动、广告组和广告名称通过搜索选择，不一次加载全部历史数据。</li><li>筛选候选只包含当前操作人业务线及数据范围内至少关联一条可见用户或线索的广告对象。</li><li>筛选条件在页签切换、翻页和语言切换时保留。</li><li>筛选无结果、无权限、加载失败和数据未同步使用不同状态。</li></ul>
+<h4>用户中心</h4>
+<ul><li>用户列表展示首次有效广告归因。</li><li>广告字段位于现有“渠道来源-落地页”之后。</li><li>现有导出包含四个广告字段，并额外输出 <code>campaign_id</code>、<code>adset_id</code> 和 <code>ad_id</code>。</li><li>现有用户查询、资料与会员操作不因广告字段变化。</li></ul>
+<h4>销售中心</h4>
+<ul><li>公海、我的跟进和已付费均展示相同广告字段。</li><li>切换页签时保留广告筛选，并按新页签原有业务条件重新查询。</li><li>现有下载数据包含四个广告字段和三个稳定 ID。</li><li>广告字段为只读，不参与领取、分配、转派、跟进或外呼操作。</li></ul>
+<h4>管理看板</h4>
+<ul><li>现有转化总览、销售跟进和支付结果共享广告筛选。</li><li>增加“广告层级”视图选择：按广告渠道、按活动、按广告组、按广告。</li><li>指标卡展示聚合结果；指标卡下方新增广告质量表，表内按所选广告层级分组。</li><li>未选择具体广告时默认按广告渠道分组。</li><li>切换分组层级时不改变当前筛选。</li><li>广告质量表展示当前所选层级的业务表现，不展示任何媒体投放指标。</li></ul>
+<h3>指标具体口径</h3>
+<h4>公共统计口径</h4>
+<ul><li><strong>业务对象</strong>：CRM 线索及其关联用户；用户中心和销售中心保留各自现有对象粒度，管理看板沿用现有注册批次口径。</li><li><strong>统计范围</strong>：业务线、CC、广告筛选、注册日期筛选后的线索集合。</li><li><strong>时间字段</strong>：使用线索注册日期选择 cohort；日期起止均包含。</li><li><strong>后续结果窗口</strong>：从线索注册时间起统计至页面当前有效数据截止时间。</li><li><strong>去重键</strong>：管理看板全部指标沿用现有“按用户 ID 去重”口径；同一用户多次外呼、预约、体验或支付只计一次。</li><li><strong>业务线时区</strong>：按各业务线现行时区解释注册日期。</li><li><strong>数据截止时间</strong>：页面展示来源数据最近一次完整快照时间。</li><li><strong>零分母</strong>：显示 <code>—</code> 和 <code>0 / 0</code>，不显示 <code>0%</code>。</li><li><strong>比率精度</strong>：保留一位小数；异常超过 100% 时原样展示，不截断。</li></ul>
+<h4>指标定义</h4>
+<table><thead><tr><th>指标</th><th>分子</th><th>分母</th><th>单位</th><th>页面与业务用途</th></tr></thead><tbody><tr><td>线索数</td><td>统计范围内去重的线索用户数</td><td>—</td><td>条</td><td>指标卡和广告质量表；表示广告带来的线索规模</td></tr><tr><td>外呼人数</td><td>至少存在一条有效外呼记录的用户数</td><td>—</td><td>人</td><td>指标卡和广告质量表；表示销售触达覆盖</td></tr><tr><td>接通人数</td><td>至少存在一条外呼结果为接通的用户数</td><td>—</td><td>人</td><td>指标卡和广告质量表；表示广告线索可触达程度</td></tr><tr><td>预约人数</td><td>至少存在一次有效咨询预约的用户数</td><td>—</td><td>人</td><td>指标卡和广告质量表；表示接通后的预约表现</td></tr><tr><td>体验课完成人数</td><td>至少完成一次有效体验课的用户数</td><td>—</td><td>人</td><td>指标卡和广告质量表；表示体验履约表现</td></tr><tr><td>已支付人数</td><td>至少存在一笔有效已支付订单的用户数</td><td>—</td><td>人</td><td>指标卡和广告质量表；表示最终付费表现</td></tr><tr><td>L2S</td><td>已支付人数</td><td>线索数</td><td>百分比</td><td>指标卡和广告质量表；线索到付费转化</td></tr></tbody></table>
+<p>每个指标卡和指标列右上角提供“口径”角标，展示分子、分母、统计范围、时间字段、去重键和零分母规则。</p>
+<p>指标允许阶段跳跃，例如未接通但已预约、未预约但完成体验课或直接付费；各阶段人数不强制小于上一阶段。</p>
+<h3>广告质量表</h3>
+<table><thead><tr><th>当前分组</th><th>线索数</th><th>外呼人数</th><th>接通人数</th><th>预约人数</th><th>体验课完成人数</th><th>已支付人数</th><th>L2S</th></tr></thead><tbody><tr><td>当前广告渠道/活动/广告组/广告</td><td>当前分组去重线索数</td><td>当前分组去重外呼人数</td><td>当前分组去重接通人数</td><td>当前分组去重预约人数</td><td>当前分组去重体验人数</td><td>当前分组去重已支付人数</td><td>已支付人数 / 线索数</td></tr></tbody></table>
+<p>第一列显示所选层级名称，并在次级位置显示稳定 ID。广告层级视图可按名称搜索；无匹配分组时不显示空行。</p>
+<h3>数据中心来源</h3>
+<h4>来源范围</h4>
+<p>经营数据中心提供广告归因来源，不直接作为本需求的用户页面。</p>
+<table><thead><tr><th>数据</th><th>最小内容</th><th>唯一标识</th><th>时效与失败处理</th></tr></thead><tbody><tr><td>广告字典</td><td>渠道、活动、广告组、广告及各级名称</td><td>各级稳定 ID</td><td>名称更新不改变 ID；加载失败保留最近成功字典</td></tr><tr><td>用户广告归因</td><td><code>user_id</code>、四级广告字段、首次归因时间</td><td><code>user_id</code> + 广告层级 ID</td><td>同一用户只采用首次有效归因</td></tr><tr><td>线索广告归因</td><td><code>lead_id</code>、四级广告字段、首次归因时间</td><td><code>lead_id</code> + 广告层级 ID</td><td>新事件重复或乱序不覆盖首次有效归因</td></tr><tr><td>数据快照时间</td><td>最近一次完整同步时间</td><td>快照 ID</td><td>页面显示数据截止时间，不把未同步解释为零</td></tr></tbody></table>
+<h4>同步与一致性</h4>
+<ul><li>广告归因同步随数据中心有效快照更新。</li><li>同一业务事件重复同步产生相同结果，不重复写入。</li><li>同一用户或线索出现多个候选归因时，只采用首次有效广告归因；若首次有效时间相同且无法判定先后，保留原有已确认归因并进入数据异常处理。</li><li>广告 ID 无法映射到名称时，页面显示稳定 ID；不能在用户页面展示空名称。</li><li>来源数据完全不可用时，用户中心和销售中心保留最近成功的只读字段；管理看板展示最近完整快照及更新时间。</li></ul>
+<h3>RBAC 权限数据</h3>
+<h4>功能权限</h4>
+<table><thead><tr><th>页面 / 动作</th><th>默认角色</th><th>数据范围</th><th>审计</th></tr></thead><tbody><tr><td>用户中心查看广告字段与筛选</td><td>复用用户中心现有查看角色</td><td>现有业务线及用户数据范围</td><td>普通查询不记录</td></tr><tr><td>销售中心查看广告字段与筛选</td><td>复用销售中心现有查看角色</td><td>现有业务线、团队和本人线索范围</td><td>普通查询不记录</td></tr><tr><td>管理看板筛选与广告分组</td><td>复用管理看板现有查看角色</td><td>现有业务线、团队和 CC 范围</td><td>普通查询不记录</td></tr><tr><td>用户中心导出</td><td>需现有用户中心导出权限</td><td>与用户中心查看范围取交集</td><td>记录操作人、筛选、行数和时间</td></tr><tr><td>销售中心下载数据</td><td>需现有销售中心导出权限</td><td>与销售中心查看范围取交集</td><td>记录操作人、筛选、行数和时间</td></tr><tr><td>管理看板查看指标口径</td><td>复用管理看板查看角色</td><td>与当前看板筛选范围一致</td><td>不单独记录</td></tr></tbody></table>
+<h4>字段与数据权限</h4>
+<table><thead><tr><th>字段组 / 列表</th><th>可见角色</th><th>编辑</th><th>隐藏与异常</th><th>可导出</th><th>候选范围限制</th></tr></thead><tbody><tr><td>用户中心广告归因字段组</td><td>具备用户中心查看权限的角色</td><td>无</td><td>无权限不返回；缺失显示未归因或 <code>—</code></td><td>需现有用户导出权限</td><td>当前业务线及可见用户范围</td></tr><tr><td>销售中心广告归因字段组</td><td>具备销售中心查看权限的角色</td><td>无</td><td>无权限不返回；缺失显示未归因或 <code>—</code></td><td>需现有销售下载权限</td><td>当前业务线及可见线索范围</td></tr><tr><td>管理看板广告归因筛选与分组</td><td>具备对应看板页签查看权限的角色</td><td>无</td><td>无权限不展示筛选与数据</td><td>不新增看板导出</td><td>当前业务线与 CC 数据范围</td></tr><tr><td>广告稳定 ID</td><td>具备对应页面查看权限的角色</td><td>无</td><td>随详情和导出提供</td><td>与所属页面导出权限一致</td><td>同上</td></tr></tbody></table>
+<h4>权限数据变更</h4>
+<table><thead><tr><th>变更类型</th><th>权限层级</th><th>权限项</th><th>业务说明</th><th>默认角色 / 数据范围</th><th>是否新增审计</th></tr></thead><tbody><tr><td>复用</td><td>页面</td><td>用户中心现有查看权限</td><td>控制广告字段和筛选可见性</td><td>沿用用户中心当前角色与数据范围</td><td>否</td></tr><tr><td>复用</td><td>页面</td><td>销售中心现有查看权限</td><td>控制广告字段和筛选可见性</td><td>沿用销售中心当前角色与线索范围</td><td>否</td></tr><tr><td>复用</td><td>页面</td><td>管理看板现有查看权限</td><td>控制广告筛选、分组、指标卡和广告质量表</td><td>沿用当前角色、业务线和 CC 范围</td><td>否</td></tr><tr><td>修改</td><td>导出</td><td>用户中心现有导出字段清单</td><td>增加广告名称和稳定 ID</td><td>需现有用户中心导出权限</td><td>是</td></tr><tr><td>修改</td><td>导出</td><td>销售中心现有下载字段清单</td><td>增加广告名称和稳定 ID</td><td>需现有销售中心导出权限</td><td>是</td></tr></tbody></table>
+<p>本需求不新增菜单、页面或动作权限。无广告数据不等于无页面权限；无权限时字段、筛选项和指标均不得返回。</p>
+<h3>历史与员工状态</h3>
+<ul><li>广告归因属于用户和线索的来源事实，不因线索转派、负责人调岗或账号停用而变化。</li><li>线索转派后，历史广告归因保持不变；管理看板按现有 CC 筛选口径限定线索集合，不重算广告来源。</li><li>离职或停用员工仍按现有管理看板规则保留在历史 CC 筛选和统计中，并显示现有停用状态。</li><li>员工离职后的线索交接沿用离职账号管理流程，不改变广告归因、外呼、预约、体验或付费历史。</li><li>新负责人获得当前线索处理权限，不继承被转派线索的广告来源变更能力。</li><li>账号停用后立即失去用户中心、销售中心和管理看板访问及导出权限；符合数据权限的现任管理者仍可查看历史业务数据。</li></ul>
+<h3>异常与边界</h3>
+<table><thead><tr><th>场景</th><th>页面处理</th></tr></thead><tbody><tr><td>无广告归因</td><td>显示“未归因”，不归入自然流量或任一广告</td></tr><tr><td>仅广告渠道存在</td><td>广告渠道正常显示，活动、广告组、广告显示 <code>—</code></td></tr><tr><td>广告名称为空</td><td>使用稳定 ID 展示，不隐藏该层级</td></tr><tr><td>广告改名</td><td>ID 和归因关系不变，筛选历史线索仍命中同一广告</td></tr><tr><td>活动名称重复</td><td>使用稳定 ID 区分，下拉候选同时展示名称和 ID</td></tr><tr><td>用户多次触发广告</td><td>展示首次有效广告归因，后续触点不覆盖</td></tr><tr><td>历史无法回填</td><td>标记未归因；不得根据当前广告或用户轨迹推测</td></tr><tr><td>筛选无结果</td><td>展示筛选无结果状态，不修改筛选条件</td></tr><tr><td>数据同步失败</td><td>展示最近成功快照、更新时间及同步失败状态</td></tr><tr><td>零分母</td><td>比率显示 <code>—</code> 和 <code>0 / 0</code></td></tr><tr><td>比率高于 100%</td><td>原样展示并提示核对阶段事件和数据同步</td></tr><tr><td>权限撤销</td><td>下一次请求立即隐藏广告字段、筛选、指标和导出</td></tr></tbody></table>
+<h3>用户故事</h3>
+<pre><code class="text">用户支持人员打开用户中心
+→ 按广告渠道或具体广告筛选
+→ 查看用户首次广告归因及当前业务状态
+→ 按现有权限导出结果
+
+销售组长打开销售中心
+→ 在公海或我的跟进筛选广告活动/广告组/广告
+→ 查看线索当前跟进阶段和广告来源
+→ 保持现有页面操作不变
+
+业务负责人打开管理看板
+→ 选择业务线、CC、注册日期和广告筛选
+→ 切换按广告渠道、活动、广告组或广告分组
+→ 对比线索数、接通、预约、体验和付费表现
+→ 打开指标口径确认计算规则</code></pre></article>
+</main>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+</script>
+</body></html>

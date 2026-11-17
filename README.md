@@ -1,7 +1,7 @@
 # Dino 产品需求与原型库
 
 > 本地主稿、飞书归档。按“公共能力 + 项目空间”组织需求、原型与知识资料。
-> 更新时间：2026-11-12
+> 更新时间：2026-11-17
 
 ## 先看这里
 
@@ -25,6 +25,7 @@
 | crm-LINE 消息发送 | 待评审 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
 | 用户咨询预约时间 | 待评审 | [PRD](projects/user-consultation-lead/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/) |
 | 外呼能力一期 | 待评审 | [PRD](projects/outbound-capability/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/outbound-capability/prototype/) |
+| CRM 线索质量分析 | 待评审 | [PRD](projects/crm-lead-quality-analysis/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/) |
 | 多级业务线调研 | 归档于 REQ-ORG-001 | [调研资料](projects/crm-org-data-permissions/research/README.md) | — |
 
 ## GitHub Pages
@@ -40,6 +41,8 @@
 - 用户咨询预约时间原型：<https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/>
 - 外呼能力一期 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-outbound-capability.html>
 - 外呼能力一期原型：<https://h3-ai-lab.github.io/hhhprd/projects/outbound-capability/prototype/>
+- CRM 线索质量分析 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-lead-quality-analysis.html>
+- CRM 线索质量分析原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/>
 - 引入首跟节点&首跟看板 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact.html>
 - 引入首跟节点&首跟看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/>
 - 引入首跟节点&首跟看板-2 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html>
