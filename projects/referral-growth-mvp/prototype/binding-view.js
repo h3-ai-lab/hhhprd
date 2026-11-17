@@ -136,7 +136,7 @@ const TEXT = {
     "referralModal.disabled": "该用户账号已停用，不能绑定",
     "referralModal.otherLine": "该用户属于越南业务线，与推荐人泰国业务线不一致",
     "referralModal.notNew": "该用户注册时间早于活动开始时间，不属于活动新用户",
-    "referralModal.notOrganic": "该被推荐人注册来源不是 organic，不属于活动新注册",
+    "referralModal.notOrganic": "该被推荐人注册来源为“{source}”，不是 organic，不属于活动新注册",
     "referralModal.trialStarted": "该被推荐人已有体验课，当前状态为“{status}”，不属于活动新注册",
     "referralModal.alreadyBound": "该用户已绑定其他推荐人，不能重复绑定",
     "referralModal.existing": "活动新注册用户",
@@ -308,7 +308,7 @@ const TEXT = {
     "referralModal.disabled": "This user account is disabled and cannot be linked",
     "referralModal.otherLine": "The user belongs to the Vietnam business line, which does not match the referrer's Thailand business line",
     "referralModal.notNew": "The user registered before the campaign start and is not a new campaign user",
-    "referralModal.notOrganic": "The referred user's registration source is not organic and does not qualify as a new campaign registration",
+    "referralModal.notOrganic": "The referred user's registration source is “{source}”, not organic, so they do not qualify as a new campaign registration",
     "referralModal.trialStarted": "The referred user already has a trial lesson in the “{status}” status and does not qualify as a new campaign registration",
     "referralModal.alreadyBound": "This user is already linked to another referrer",
     "referralModal.existing": "New campaign registration",
@@ -440,7 +440,7 @@ const USER_DIRECTORY = {
     businessLine: "thailand",
     userType: "FORMAL",
     registeredAt: "2026-11-09",
-    registrationSource: "paid",
+    registrationSource: "facebook_lead",
     trialLessonStatus: "NONE",
     currentOwner: "Nok S.",
     existingBinding: false,
@@ -1051,7 +1051,11 @@ function verifyReferredUser() {
   }
 
   if (user.registrationSource !== "organic") {
-    state.bindingResult = { kind: "error", key: "referralModal.notOrganic" };
+    state.bindingResult = {
+      kind: "error",
+      key: "referralModal.notOrganic",
+      values: { source: user.registrationSource || "—" },
+    };
     renderBindingResult();
     return;
   }

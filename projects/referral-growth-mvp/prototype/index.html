@@ -563,56 +563,76 @@
           </div>
         </div>
         <section class="panel">
+          <div class="panel-body">
+            <div class="user-toolbar">
+              <select class="control" id="userRegistrationSourceFilter">
+                <option value="" data-i18n="option.allRegistrationSources">全部注册来源</option>
+                <option value="organic">organic</option>
+                <option value="facebook_lead">facebook_lead</option>
+                <option value="tiktok_lead">tiktok_lead</option>
+                <option value="google_lead">google_lead</option>
+              </select>
+              <select class="control" id="userTrialStatusFilter">
+                <option value="" data-i18n="option.allStatuses">全部状态</option>
+                <option value="NONE" data-i18n="trialStatus.NONE">未开始</option>
+                <option value="SCHEDULED" data-i18n="trialStatus.SCHEDULED">待上课</option>
+                <option value="IN_PROGRESS" data-i18n="trialStatus.IN_PROGRESS">体验中</option>
+                <option value="COMPLETED" data-i18n="trialStatus.COMPLETED">已完成</option>
+              </select>
+              <button class="btn small" id="userFilterReset" data-i18n="common.reset">重置筛选</button>
+            </div>
+          </div>
           <div class="table-wrap">
             <table class="user-table">
               <thead><tr><th data-i18n="users.userId">用户 ID</th><th data-i18n="users.name">姓名</th><th data-i18n="filter.businessLine">业务线</th><th data-i18n="users.registrationSource">注册来源</th><th data-i18n="users.trialLessonStatus">体验课状态</th><th data-i18n="users.userStatus">用户状态</th><th data-i18n="users.userType">用户类型</th><th data-i18n="users.signup">注册方式</th><th data-i18n="users.loginAccount">登录账号</th><th data-i18n="users.channel">渠道来源</th><th data-i18n="users.actions">操作</th></tr></thead>
               <tbody>
                 <tr class="btn-row">
-                  <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pim****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="organic">organic</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pim****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302281472036721</td><td>Kanya R.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kan****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302281472036721</td><td>Kanya R.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="facebook_lead">facebook_lead</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kan****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302281472036721" data-user-name="Kanya R." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302281472036721" data-referrer-name="Kanya R." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302210461928824</td><td>Arunee T.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td data-i18n="users.web">网页</td><td>aru****@dino.ai</td><td>Landing Page</td>
+                  <td class="mono">2120302210461928824</td><td>Arunee T.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="tiktok_lead">tiktok_lead</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td data-i18n="users.web">网页</td><td>aru****@dino.ai</td><td>Landing Page</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302210461928824" data-user-name="Arunee T." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302210461928824" data-referrer-name="Arunee T." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302261184209917</td><td>Nicha T.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>nic****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302261184209917</td><td>Nicha T.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="organic">organic</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>nic****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302261184209917" data-user-name="Nicha T." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302261184209917" data-referrer-name="Nicha T." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302247228042882</td><td>Waraporn L.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>war****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302247228042882</td><td>Waraporn L.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="organic">organic</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>war****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302247228042882" data-user-name="Waraporn L." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302247228042882" data-referrer-name="Waraporn L." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302273820914407</td><td>Siriporn W.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>sir****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302273820914407</td><td>Siriporn W.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="google_lead">google_lead</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>sir****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302273820914407" data-user-name="Siriporn W." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302273820914407" data-referrer-name="Siriporn W." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302295479900</td><td>Linh N.</td><td data-i18n="option.vietnam">越南</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>lin****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302295479900</td><td>Linh N.</td><td data-i18n="option.vietnam">越南</td><td class="mono" data-registration-source="organic">organic</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>lin****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302295479900" data-user-name="Linh N." data-business-line="vietnam" data-role-id="CC_VN" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302295479900" data-referrer-name="Linh N." data-owner="Mina P." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr>
-                  <td class="mono">2120302209943102568</td><td>Malee P.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status invalid" data-i18n="status.disabled">已停用</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>mal****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302209943102568</td><td>Malee P.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="organic">organic</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status invalid" data-i18n="status.disabled">已停用</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>mal****@dino.ai</td><td>App</td>
                   <td>—</td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302298307215251</td><td>Pong M.</td><td data-i18n="option.thailand">泰国</td><td class="mono">paid</td><td data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pon****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302298307215251</td><td>Pong M.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="facebook_lead">facebook_lead</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pon****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302298307215251" data-user-name="Pong M." data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302298307215251" data-referrer-name="Pong M." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302297446883001</td><td>Aom S.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.IN_PROGRESS">体验中</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>aom****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302297446883001</td><td>Aom S.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="organic">organic</td><td data-trial-status="IN_PROGRESS" data-i18n="trialStatus.IN_PROGRESS">体验中</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>aom****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302297446883001" data-user-name="Aom S." data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302297446883001" data-referrer-name="Aom S." data-owner="Nok S." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
-                  <td class="mono">2120302263019845102</td><td>Krit S.</td><td data-i18n="option.thailand">泰国</td><td class="mono">organic</td><td data-i18n="trialStatus.COMPLETED">已完成</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kri****@dino.ai</td><td>App</td>
+                  <td class="mono">2120302263019845102</td><td>Krit S.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="organic">organic</td><td data-trial-status="COMPLETED" data-i18n="trialStatus.COMPLETED">已完成</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kri****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302263019845102" data-user-name="Krit S." data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302263019845102" data-referrer-name="Krit S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
               </tbody>
             </table>
+            <div class="empty" id="userEmpty" hidden data-i18n="users.empty">当前筛选下没有用户</div>
           </div>
           <div class="table-foot"><span id="usersRowSummary">共 11 条记录</span><span data-i18n="bindings.page">第 1 页</span></div>
         </section>

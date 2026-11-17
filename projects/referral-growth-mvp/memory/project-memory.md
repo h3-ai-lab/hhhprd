@@ -15,6 +15,7 @@
 - CC 在绑定阶段只录入被推荐人用户 ID 并确认关系，不选择奖励、不填写天数、不调用权益服务。
 - 被推荐人必须是正式注册用户；未注册或游客用户不能绑定。
 - 活动新注册同时要求 `registration_source = organic`、`campaign_start_at ≤ registered_at ≤ binding_time`，且不存在 `IN_PROGRESS` 或 `COMPLETED` 的体验课；非 organic、来源为空或已有体验中/已完成体验课均不符合资格。
+- 原型注册来源枚举沿用现有渠道来源值：`organic / facebook_lead / tiktok_lead / google_lead`，并支持逐值筛选。
 - 绑定成功后提示被推荐人的当前归属 CC；当前归属 CC 使用销售中心“重新分配线索”完成转移后关系才生效。
 - 待转移期间不生成奖励；转移完成后补评估绑定后已发生且尚未发放的课程、订单和社媒推荐事件。
 - 系统自动核验被推荐人的有效付费会员订单，并带出推荐奖励；CC 不再手工判断订单和奖励时长。

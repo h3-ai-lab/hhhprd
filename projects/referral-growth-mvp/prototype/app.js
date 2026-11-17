@@ -61,6 +61,7 @@ const I18N = {
     "option.allSources": "全部来源",
     "option.allCc": "全部 CC",
     "option.allStatuses": "全部状态",
+    "option.allRegistrationSources": "全部注册来源",
     "source.referral": "拉新推荐",
     "source.social": "社媒推荐",
     "status.success": "已发放",
@@ -172,6 +173,7 @@ const I18N = {
     "users.editInfo": "修改信息",
     "users.web": "网页",
     "users.count": "共 {count} 条记录",
+    "users.empty": "当前筛选下没有用户",
     "grant.title": "增加用户时长 · {id}",
     "grant.subtitle": "为当前用户增加会员时长",
     "grant.openType": "开通类型",
@@ -290,6 +292,7 @@ const I18N = {
     "option.allSources": "All sources",
     "option.allCc": "All CCs",
     "option.allStatuses": "All statuses",
+    "option.allRegistrationSources": "All registration sources",
     "source.referral": "Referral",
     "source.social": "Social media recommendation",
     "status.success": "Issued",
@@ -401,6 +404,7 @@ const I18N = {
     "users.editInfo": "Edit info",
     "users.web": "Web",
     "users.count": "{count} records",
+    "users.empty": "No users match the current filters",
     "grant.title": "Add user duration · {id}",
     "grant.subtitle": "Increase membership duration for this user",
     "grant.openType": "Activation type",
@@ -649,6 +653,22 @@ function money(value) {
   return `฿${Number(value).toLocaleString("en-US")}`;
 }
 
+function applyUserFilters() {
+  const registrationSource = document.getElementById("userRegistrationSourceFilter").value;
+  const trialStatus = document.getElementById("userTrialStatusFilter").value;
+  const rows = [...document.querySelectorAll("#usersView tbody tr")];
+  let visibleCount = 0;
+  rows.forEach((row) => {
+    const source = row.querySelector("[data-registration-source]")?.dataset.registrationSource || "";
+    const trial = row.querySelector("[data-trial-status]")?.dataset.trialStatus || "";
+    const visible = (!registrationSource || source === registrationSource) && (!trialStatus || trial === trialStatus);
+    row.hidden = !visible;
+    if (visible) visibleCount += 1;
+  });
+  document.getElementById("userEmpty").hidden = visibleCount > 0;
+  document.getElementById("usersRowSummary").textContent = countLabel("users.count", visibleCount);
+}
+
 function viewMeta(view) {
   if (view === "dashboard") return { title: "nav.growth", crumb: "crumb.growth" };
   if (view === "community") return { title: "community.title", crumb: "crumb.growth" };
@@ -675,7 +695,7 @@ function applyStaticTranslations() {
   document.querySelectorAll("[data-lang]").forEach((button) => {
     button.classList.toggle("active", button.dataset.lang === state.lang);
   });
-  document.getElementById("usersRowSummary").textContent = countLabel("users.count", document.querySelectorAll("#usersView tbody tr").length);
+  applyUserFilters();
   const meta = viewMeta(state.view);
   document.getElementById("pageTitle").textContent = t(meta.title);
   document.getElementById("crumb").textContent = t(meta.crumb);
@@ -969,6 +989,14 @@ document.getElementById("resetFilters").addEventListener("click", () => {
   renderRows();
 });
 document.getElementById("refreshBtn").addEventListener("click", () => showToast(t("toast.refreshed")));
+["userRegistrationSourceFilter", "userTrialStatusFilter"].forEach((id) => {
+  document.getElementById(id).addEventListener("change", applyUserFilters);
+});
+document.getElementById("userFilterReset").addEventListener("click", () => {
+  document.getElementById("userRegistrationSourceFilter").value = "";
+  document.getElementById("userTrialStatusFilter").value = "";
+  applyUserFilters();
+});
 document.querySelectorAll(".open-grant-user").forEach((button) => button.addEventListener("click", () => openGrant(button)));
 document.querySelectorAll("[data-sales-tab]").forEach((button) => {
   button.addEventListener("click", () => applySalesTab(button.dataset.salesTab));

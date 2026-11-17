@@ -72,7 +72,7 @@
 <h4>用户与关系</h4>
 <ul><li>推荐人和被推荐人均须为有效正式注册用户，账号状态正常。</li><li>被推荐人使用完整用户 ID 精确匹配，不接受手机号、姓名或模糊搜索。</li><li>被推荐人必须与推荐人属于同一业务线。</li><li>业务线枚举为 <code>THAILAND / VIETNAM / SAUDI_ARABIA</code>；本期拉新活动只在泰国业务线执行，其他业务线仅用于现有账号识别和跨业务线拦截。</li><li>被推荐人不得是推荐人本人；用户 ID 或已验证手机号相同均视为自荐。</li><li><strong>活动新注册判定</strong>：被推荐人须同时满足以下条件；任一条件不满足均判定为 <code>NOT_NEW_REGISTRATION</code>：</li></ul>
 <ol><li>正式账号有效且账号状态正常。</li><li>注册来源 <code>registration_source = organic</code>。</li><li>正式账号注册时间满足 <code>campaign_start_at ≤ registered_at ≤ binding_time</code>，起止边界均包含。</li><li>截至绑定时不存在状态为 <code>IN_PROGRESS</code> 或 <code>COMPLETED</code> 的体验课记录。</li></ol>
-<ul><li>注册来源取正式账号首次注册时的快照；非 <code>organic</code>、来源为空或来源无法确认时均不属于活动新注册。</li><li>体验课状态取课程服务快照；存在体验中或已完成体验课的用户不属于活动新注册，待上课或未开始不单独构成排除条件。</li><li>活动开始前已有正式账号的用户即使重新登录或补充资料，仍判定为非新注册。</li><li>新注册判定结果在绑定时保存快照，不因后续活动配置变化重算。</li><li>推荐人可以绑定多个不同被推荐人；每个被推荐人独立形成一条关系和奖励记录。</li></ul>
+<ul><li>注册来源取正式账号首次注册时的快照；非 <code>organic</code>、来源为空或来源无法确认时均不属于活动新注册。</li><li>注册来源完整枚举沿用现有渠道来源值：<code>organic / facebook_lead / tiktok_lead / google_lead</code>。</li><li>体验课状态取课程服务快照；存在体验中或已完成体验课的用户不属于活动新注册，待上课或未开始不单独构成排除条件。</li><li>活动开始前已有正式账号的用户即使重新登录或补充资料，仍判定为非新注册。</li><li>新注册判定结果在绑定时保存快照，不因后续活动配置变化重算。</li><li>推荐人可以绑定多个不同被推荐人；每个被推荐人独立形成一条关系和奖励记录。</li></ul>
 <h4>绑定、转移与状态</h4>
 <p>绑定只建立关系，不发放权益。目标归属 CC 默认取推荐人当前 CC；推荐人无有效 CC 时取操作 CC，有权限的组长或管理员可在提交前调整。</p>
 <table><thead><tr><th>状态</th><th>进入条件</th><th>是否发奖</th><th>退出条件</th></tr></thead><tbody><tr><td><code>BOUND_PENDING_TRANSFER</code></td><td>被推荐人当前归属其他 CC 或无归属</td><td>否，事件先缓存</td><td>完成线索重新分配</td></tr><tr><td><code>BOUND_ACTIVE</code></td><td>被推荐人已归属目标 CC</td><td>是</td><td>退款或人工确认无效时进入失效</td></tr><tr><td><code>INVALID</code></td><td>重复、自荐、跨业务线或人工确认无效</td><td>否</td><td>不可恢复，保留审计</td></tr></tbody></table>
