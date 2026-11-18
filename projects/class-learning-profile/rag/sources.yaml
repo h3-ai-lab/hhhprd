@@ -1,7 +1,0 @@
-sources:
-  - id: user-brief-2026-11-18
-    type: requirement
-    title: 班级学习画像看板需求说明
-    provided_by: user
-    date: 2026-11-18
-    notes: 项目背景、角色、功能范围、业务规则、异常场景、非功能要求和交付物要求
