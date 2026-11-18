@@ -18,6 +18,7 @@ PROJECTS = {
     "outbound-capability": "外呼能力一期",
     "crm-lead-quality-analysis": "CRM 线索质量分析",
     "crm-learning-plan-progress": "CRM学习计划与课程进度",
+    "class-learning-profile": "班级学习画像看板",
 }
 
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
