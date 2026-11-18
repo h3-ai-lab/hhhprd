@@ -28,7 +28,6 @@ PROJECT_REQUIRED = [
     "prd/PRD.md",
 ]
 PROTOTYPE_LINK = re.compile(r"\[打开完整交互原型\]\((https://[^)]+)\)")
-PROTOTYPE_SOLUTION_LINK = re.compile(r"\[查看原型方案\]\((https://[^)]+)\)")
 BANNED_HEADINGS = [
     "## 待确认",
     "## 已确认",
@@ -71,23 +70,14 @@ def main() -> int:
             if not (project / relative).is_file():
                 errors.append(f"{project.relative_to(ROOT)}: missing {relative}")
 
-        project_config = (project / "project.yaml").read_text(encoding="utf-8") if (project / "project.yaml").is_file() else ""
-        has_prototype_solution = "prototype_solution:" in project_config
         prd = project / "prd" / "PRD.md"
         if prd.is_file():
             text = prd.read_text(encoding="utf-8")
-            interactive_links = len(PROTOTYPE_LINK.findall(text))
-            solution_links = len(PROTOTYPE_SOLUTION_LINK.findall(text))
-            if has_prototype_solution and solution_links != 1:
-                errors.append(f"{prd.relative_to(ROOT)}: expected exactly one prototype solution URL")
-            if not has_prototype_solution and interactive_links != 1:
+            if len(PROTOTYPE_LINK.findall(text)) != 1:
                 errors.append(f"{prd.relative_to(ROOT)}: expected exactly one prototype URL")
             for heading in BANNED_HEADINGS:
                 if heading in text:
                     errors.append(f"{prd.relative_to(ROOT)}: forbidden heading {heading}")
-
-        if has_prototype_solution and not (project / "prototype" / "solution.md").is_file():
-            errors.append(f"{project.relative_to(ROOT)}: missing prototype/solution.md")
 
         if (project / "PRD.md").exists():
             errors.append(f"{project.relative_to(ROOT)}: legacy root PRD.md still exists")

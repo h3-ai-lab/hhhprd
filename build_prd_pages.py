@@ -20,9 +20,6 @@ PROJECTS = {
     "crm-learning-plan-progress": "CRM学习计划与课程进度",
     "class-learning-profile": "班级学习画像看板",
 }
-SOLUTION_PROJECTS = {
-    "class-learning-profile": "班级学习画像看板 · 原型方案",
-}
 
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
 CODE_RE = re.compile(r"`([^`]+)`")
@@ -218,48 +215,7 @@ def build_project(slug, title):
 def main():
     for slug, title in PROJECTS.items():
         build_project(slug, title)
-    for slug, title in SOLUTION_PROJECTS.items():
-        build_solution(slug, title)
     build_architecture()
-
-
-def build_solution(slug, title):
-    project = ROOT / "projects" / slug
-    source = (project / "prototype" / "solution.md").read_text(encoding="utf-8")
-    output = project / "prototype" / "index.html"
-    content = markdown_to_html(source)
-    page = f"""<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{html.escape(title)}</title>
-  <style>
-    :root{{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}}
-    *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);
-    font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}}
-    main{{max-width:1080px;margin:0 auto;padding:42px 24px 80px}}article{{background:var(--card);
-    border:1px solid var(--line);border-radius:14px;padding:34px}}h2,h3,h4{{line-height:1.35}}
-    h2{{font-size:28px;margin:0 0 20px}}h3{{font-size:21px;margin:30px 0 10px}}h4{{font-size:17px;margin:22px 0 8px}}
-    p{{margin:10px 0}}a{{color:var(--blue)}}table{{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}}
-    th,td{{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}}th{{background:#f7f9fc}}
-    blockquote{{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e;color:#65522f}}
-    code{{background:#f1f4f8;padding:1px 5px;border-radius:4px}}pre code{{background:transparent;padding:0;border-radius:0;color:inherit}}
-    pre{{overflow:auto;background:#101828;color:#eef2f7;padding:16px;border-radius:8px}}
-    .mermaid{{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px;overflow:auto}}
-    @media(max-width:700px){{main{{padding:16px 10px}}article{{padding:20px 16px}}}}
-  </style>
-</head>
-<body><main>
-  <article>{content}</article>
-</main>
-<script type="module">
-  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-  mermaid.initialize({{ startOnLoad: true, theme: "neutral" }});
-</script>
-</body></html>"""
-    output.write_text(page, encoding="utf-8")
-    print(f"Generated {output}")
 
 
 def build_architecture():
