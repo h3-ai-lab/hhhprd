@@ -65,7 +65,7 @@
         <div class="view-head">
           <div>
             <h2 data-i18n="nav.growth">拉新关系</h2>
-            <p data-i18n="dashboard.subtitle">泰国业务线 · 关系、业务事件、赠送订单与权益结果</p>
+            <p data-i18n="dashboard.subtitle">泰国业务线 · 关系、业务事件、权益等级与发放日志</p>
           </div>
           <div class="head-actions">
             <button class="btn" data-view="community" data-i18n="nav.community">社媒推荐</button>
@@ -171,7 +171,7 @@
           <div class="panel-head">
             <div>
               <h3 data-i18n="unified.title">统一拉新记录</h3>
-              <div class="inline-meta"><span><b data-i18n="unified.note">口径：</b><span data-i18n="unified.noteText">绑定、奖励事件、赠送订单和权益状态在同一列表追踪</span></span></div>
+              <div class="inline-meta"><span><b data-i18n="unified.note">口径：</b><span data-i18n="unified.noteText">绑定、奖励事件、权益等级、发放日志和权益状态在同一列表追踪</span></span></div>
             </div>
             <div class="head-actions">
               <div class="date-tabs" aria-label="业务日期">
@@ -213,7 +213,7 @@
               </div>
               <div class="field">
                 <label data-i18n="filter.keyword">关键词</label>
-                <input class="control search" id="unifiedKeywordFilter" placeholder="用户 ID / 事件 ID / 订单 ID" data-i18n-placeholder="unified.keywordPlaceholder">
+                <input class="control search" id="unifiedKeywordFilter" placeholder="用户 ID / 事件 ID / 发放日志 ID" data-i18n-placeholder="unified.keywordPlaceholder">
               </div>
               <button class="btn small" id="unifiedReset" style="align-self:flex-end" data-i18n="common.reset">重置筛选</button>
             </div>
@@ -226,12 +226,14 @@
                 <th data-i18n="table.referrer">推荐人</th>
                 <th data-i18n="table.referred">被推荐人</th>
                 <th data-i18n="table.businessLine">业务线</th>
+                <th data-i18n="table.registrationSourceAfter">绑定后注册来源</th>
                 <th data-i18n="table.targetOwner">目标归属 CC</th>
                 <th data-i18n="table.currentOwner">当前归属 CC</th>
                 <th data-i18n="table.bindStatus">关系状态</th>
                 <th data-i18n="table.triggerEvent">触发事件</th>
                 <th data-i18n="table.reward">奖励</th>
-                <th data-i18n="table.giftOrder">赠送订单</th>
+                <th data-i18n="table.benefitLevel">权益等级</th>
+                <th data-i18n="table.grantLog">发放日志</th>
                 <th data-i18n="table.status">奖励状态</th>
                 <th data-i18n="table.action">操作</th>
               </tr></thead>
@@ -325,6 +327,8 @@
                 <th data-i18n="table.publishedAt">发布时间</th>
                 <th data-i18n="table.operator">操作 CC</th>
                 <th data-i18n="table.reward">奖励</th>
+                <th data-i18n="table.benefitLevel">权益等级</th>
+                <th data-i18n="table.grantLog">发放日志</th>
                 <th data-i18n="table.status">权益状态</th>
               </tr></thead>
               <tbody id="socialRows"></tbody>
@@ -348,6 +352,8 @@
                 <th data-i18n="table.eventSourceId">业务事件 ID</th>
                 <th data-i18n="table.triggeredAt">触发时间</th>
                 <th data-i18n="table.benefit">奖励值</th>
+                <th data-i18n="table.benefitLevel">权益等级</th>
+                <th data-i18n="table.grantLog">发放日志</th>
                 <th data-i18n="table.status">权益状态</th>
                 <th data-i18n="table.failureReason">失败原因</th>
               </tr></thead>
@@ -458,7 +464,8 @@
                 <th data-i18n="community.reviewStatus">审核状态</th>
                 <th data-i18n="community.selectionStatus">选中状态</th>
                 <th data-i18n="table.reward">奖励</th>
-                <th data-i18n="table.giftOrder">赠送订单</th>
+                <th data-i18n="table.benefitLevel">权益等级</th>
+                <th data-i18n="table.grantLog">发放日志</th>
                 <th data-i18n="community.rewardStatus">奖励状态</th>
                 <th data-i18n="table.action">操作</th>
               </tr></thead>
@@ -518,15 +525,11 @@
         <div class="view-head">
           <div>
             <h2 data-i18n="orders.title">订单中心</h2>
-            <p data-i18n="orders.subtitle">查询付款订单与系统赠送订单</p>
+            <p data-i18n="orders.subtitle">查询真实付费订单</p>
           </div>
         </div>
         <section class="panel">
           <div class="panel-head">
-            <div class="date-tabs">
-              <button class="date-tab active" data-order-tab="all" data-i18n="orders.allOrders">全部订单</button>
-              <button class="date-tab" data-order-tab="gift" data-i18n="orders.giftOrders">赠送订单</button>
-            </div>
           </div>
           <div class="table-wrap">
             <table>
@@ -542,22 +545,13 @@
                 <th data-i18n="orders.benefitChange">权益变化</th>
               </tr></thead>
               <tbody>
-                <tr class="btn-row order-row" data-order-type="gift">
-                  <td class="mono">GRT202611080041</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.referral">拉新推荐</td><td>Pimchanok S.</td><td class="mono">+66 82 **** 2233</td><td>Thanya C.</td><td>฿0</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit14d">+14 天</td>
-                </tr>
-                <tr class="btn-row order-row" data-order-type="gift">
-                  <td class="mono">GRT202611080056</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.social">社媒推荐</td><td>Pimchanok S.</td><td class="mono">+66 82 **** 2233</td><td>Thanya C.</td><td>฿0</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit2m">+2 个月</td>
-                </tr>
-                <tr class="btn-row order-row" data-order-type="gift">
-                  <td class="mono">GRT202611090018</td><td><span class="status processing" data-i18n="orders.membershipGrant">会员赠送</span></td><td data-i18n="source.referral">拉新推荐</td><td>Arunee T.</td><td class="mono">+66 88 **** 7712</td><td>Nok S.</td><td>฿0</td><td><span class="status processing" data-i18n="orders.created">已生成待发放</span></td><td data-i18n="orders.benefit3m">+3 个月</td>
-                </tr>
                 <tr class="btn-row order-row" data-order-type="paid">
                   <td class="mono">PO202611020018</td><td><span class="status success" data-i18n="orders.paid">付费订单</span></td><td data-i18n="orders.directPurchase">直接购买</td><td>Narin K.</td><td class="mono">+66 81 **** 5678</td><td>Thanya C.</td><td>฿3,490</td><td><span class="status success" data-i18n="orders.fulfilled">已完成</span></td><td data-i18n="orders.benefit3m">+3 个月</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="table-foot"><span id="ordersCount">4</span><span data-i18n="bindings.page">第 1 页</span></div>
+          <div class="table-foot"><span id="ordersCount">1</span><span data-i18n="bindings.page">第 1 页</span></div>
         </section>
       </section>
 
@@ -577,6 +571,7 @@
                 <option value="facebook_lead">facebook_lead</option>
                 <option value="tiktok_lead">tiktok_lead</option>
                 <option value="google_lead">google_lead</option>
+                <option value="REFERRAL">REFERRAL</option>
               </select>
               <select class="control" id="userTrialStatusFilter">
                 <option value="" data-i18n="option.allStatuses">全部状态</option>
@@ -595,6 +590,10 @@
                 <tr class="btn-row">
                   <td class="mono">2120302255148482561</td><td>Pimchanok S.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="organic">organic</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>pim****@dino.ai</td><td>App</td>
                   <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302255148482561" data-user-name="Pimchanok S." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302255148482561" data-referrer-name="Pimchanok S." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
+                </tr>
+                <tr class="btn-row">
+                  <td class="mono">2120302295478341</td><td>Narin K.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="REFERRAL">REFERRAL</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status success" data-i18n="status.paid">已付费</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>nar****@dino.ai</td><td>App</td>
+                  <td><div class="row-actions"><button class="open-grant-user" data-user-id="2120302295478341" data-user-name="Narin K." data-business-line="thailand" data-role-id="CC_TH" data-i18n="users.addDuration">增加用户时长</button><span>·</span><button class="open-binding-sales" data-referrer-id="2120302295478341" data-referrer-name="Narin K." data-owner="Thanya C." data-i18n="users.maintainBinding">维护拉新关系</button></div></td>
                 </tr>
                 <tr class="btn-row">
                   <td class="mono">2120302281472036721</td><td>Kanya R.</td><td data-i18n="option.thailand">泰国</td><td class="mono" data-registration-source="facebook_lead">facebook_lead</td><td data-trial-status="NONE" data-i18n="trialStatus.NONE">未开始</td><td><span class="status processing" data-i18n="status.trial">体验中</span></td><td data-i18n="users.formal">正式用户</td><td>App</td><td>kan****@dino.ai</td><td>App</td>
@@ -640,7 +639,7 @@
             </table>
             <div class="empty" id="userEmpty" hidden data-i18n="users.empty">当前筛选下没有用户</div>
           </div>
-          <div class="table-foot"><span id="usersRowSummary">共 11 条记录</span><span data-i18n="bindings.page">第 1 页</span></div>
+          <div class="table-foot"><span id="usersRowSummary">共 12 条记录</span><span data-i18n="bindings.page">第 1 页</span></div>
         </section>
       </section>
     </div>
