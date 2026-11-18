@@ -44,9 +44,9 @@ const TEXT = {
     "bindings.count": "共 {count} 条记录",
     "unified.title": "统一拉新记录",
     "unified.note": "口径：",
-    "unified.noteText": "绑定、奖励事件、赠送订单和权益状态在同一列表追踪",
+    "unified.noteText": "绑定、奖励事件、权益等级、发放日志和权益状态在同一列表追踪",
     "unified.empty": "当前筛选下没有拉新记录",
-    "unified.keywordPlaceholder": "用户 ID / 事件 ID / 订单 ID",
+    "unified.keywordPlaceholder": "用户 ID / 事件 ID / 发放日志 ID",
     "unified.count": "共 {count} 条记录",
     "business.thailand": "泰国",
     "business.vietnam": "越南",
@@ -77,8 +77,9 @@ const TEXT = {
     "table.record": "业务记录",
     "table.related": "关联对象",
     "table.triggerEvent": "触发事件",
-    "table.giftOrder": "赠送订单",
-    "table.giftStatus": "订单状态",
+    "table.benefitLevel": "权益等级",
+    "table.grantLog": "发放日志",
+    "table.registrationSourceAfter": "绑定后注册来源",
     "table.action": "操作",
     "table.targetOwner": "目标归属 CC",
     "table.currentOwner": "当前归属 CC",
@@ -92,9 +93,6 @@ const TEXT = {
     "eventStatus.issued": "已发放",
     "eventStatus.failed": "发放失败",
     "eventStatus.invalid": "归因失效",
-    "giftStatus.CREATED": "已生成，待发放",
-    "giftStatus.FULFILLED": "已完成",
-    "giftStatus.NOT_CREATED": "未生成",
     "trigger.transfer": "等待管理者审批",
     "trigger.firstTrial": "等待首课完课",
     "trigger.purchase": "等待首次购买",
@@ -153,7 +151,7 @@ const TEXT = {
     "referralModal.existing": "活动新注册用户",
     "referralModal.eligible": "可绑定：正式注册、organic 来源、同业务线、无体验中/已完成体验课且无其他推荐关系",
     "referralModal.registeredAt": "注册时间",
-    "referralModal.registrationSource": "注册来源",
+    "referralModal.registrationSource": "绑定前注册来源",
     "referralModal.trialLessonStatus": "体验课状态",
     "referralModal.campaignStart": "活动开始",
     "referralModal.newRegistration": "新注册判定",
@@ -162,8 +160,11 @@ const TEXT = {
     "trialStatus.SCHEDULED": "待上课",
     "trialStatus.IN_PROGRESS": "体验中",
     "trialStatus.COMPLETED": "已完成",
-    "referralModal.successPending": "绑定成功，已提交管理者审批；被推荐人当前归属 {owner}",
-    "referralModal.successActive": "绑定成功，被推荐人已归属目标归属 CC，后续业务事件将自动触发奖励",
+    "referralModal.successPending": "绑定成功，注册来源已更新为 REFERRAL，并提交管理者审批；被推荐人当前归属 {owner}",
+    "referralModal.successActive": "绑定成功，注册来源已更新为 REFERRAL；被推荐人已归属目标归属 CC，后续业务事件将自动触发奖励",
+    "referralModal.sourceBefore": "绑定前注册来源",
+    "referralModal.membershipLevel": "当前会员等级",
+    "referralModal.benefitLevel": "本次赠送等级",
     "socialModal.title": "登记社媒推荐",
     "socialModal.subtitle": "先保存内容记录，审核结果变化后自动发奖",
     "socialModal.user": "发布用户",
@@ -232,9 +233,9 @@ const TEXT = {
     "bindings.count": "{count} records",
     "unified.title": "Unified Growth Records",
     "unified.note": "Scope: ",
-    "unified.noteText": "Binding, reward events, gift orders, and benefit status are tracked in one list",
+    "unified.noteText": "Binding, reward events, benefit tier, grant log, and benefit status are tracked in one list",
     "unified.empty": "No growth records match the current filters",
-    "unified.keywordPlaceholder": "User ID / event ID / order ID",
+    "unified.keywordPlaceholder": "User ID / event ID / grant log ID",
     "unified.count": "{count} records",
     "business.thailand": "Thailand",
     "business.vietnam": "Vietnam",
@@ -265,8 +266,9 @@ const TEXT = {
     "table.record": "Business record",
     "table.related": "Related object",
     "table.triggerEvent": "Trigger event",
-    "table.giftOrder": "Gift order",
-    "table.giftStatus": "Order status",
+    "table.benefitLevel": "Benefit tier",
+    "table.grantLog": "Grant log",
+    "table.registrationSourceAfter": "Registration source after linking",
     "table.action": "Action",
     "table.targetOwner": "Target owner CC",
     "table.currentOwner": "Current owner CC",
@@ -280,9 +282,6 @@ const TEXT = {
     "eventStatus.issued": "Issued",
     "eventStatus.failed": "System failure",
     "eventStatus.invalid": "Attribution invalid",
-    "giftStatus.CREATED": "Created, pending fulfillment",
-    "giftStatus.FULFILLED": "Fulfilled",
-    "giftStatus.NOT_CREATED": "Not created",
     "trigger.transfer": "Awaiting manager approval",
     "trigger.firstTrial": "Awaiting first lesson completion",
     "trigger.purchase": "Awaiting first purchase",
@@ -341,7 +340,7 @@ const TEXT = {
     "referralModal.existing": "New campaign registration",
     "referralModal.eligible": "Eligible: registered, organic source, same business line, no in-progress/completed trial, and no existing referral",
     "referralModal.registeredAt": "Registered at",
-    "referralModal.registrationSource": "Registration source",
+    "referralModal.registrationSource": "Registration source before linking",
     "referralModal.trialLessonStatus": "Trial lesson status",
     "referralModal.campaignStart": "Campaign start",
     "referralModal.newRegistration": "New registration",
@@ -350,8 +349,11 @@ const TEXT = {
     "trialStatus.SCHEDULED": "Scheduled",
     "trialStatus.IN_PROGRESS": "In progress",
     "trialStatus.COMPLETED": "Completed",
-    "referralModal.successPending": "Relationship linked and submitted for manager approval. The referred user currently belongs to {owner}.",
-    "referralModal.successActive": "Relationship linked. The referred user already belongs to the target owner CC; business events will now trigger rewards.",
+    "referralModal.successPending": "Relationship linked and the registration source updated to REFERRAL. Submitted for manager approval; the referred user currently belongs to {owner}.",
+    "referralModal.successActive": "Relationship linked and the registration source updated to REFERRAL. The referred user already belongs to the target owner CC; business events will now trigger rewards.",
+    "referralModal.sourceBefore": "Registration source before linking",
+    "referralModal.membershipLevel": "Current membership tier",
+    "referralModal.benefitLevel": "Gift tier",
     "socialModal.title": "Record Social Media Recommendation",
     "socialModal.subtitle": "Save the content first; review outcomes trigger rewards automatically",
     "socialModal.user": "Publishing user",
@@ -397,12 +399,21 @@ const state = {
     id: "2120302255148482561",
     name: "Pimchanok S.",
     owner: "Thanya C.",
+    membershipLevel: "MAX",
   },
 };
 
 let visibleUnifiedRows = [];
 
 const CAMPAIGN_START = "2026-11-01";
+const USER_MEMBERSHIP_LEVEL = {
+  "2120302255148482561": "MAX",
+  "2120302210461928824": "PRO",
+  "2120302247228042882": "PRO",
+  "2120302266318527041": "NONE",
+  "2120302238814957263": "PRO",
+  "2120302281472036721": "MAX",
+};
 const USER_DIRECTORY = {
   "2120302295478341": {
     userId: "2120302295478341",
@@ -522,8 +533,9 @@ const referrals = [
     nextTrigger: "trigger.transfer",
     latestReward: "reward.none",
     rewardStatus: "waiting",
-    giftOrderId: "—",
-    giftOrderStatus: "NOT_CREATED",
+    registrationSource: "REFERRAL",
+    sourceBeforeBinding: "organic",
+    grantLogId: "—",
   },
   {
     id: "BIND-202611-0204",
@@ -540,8 +552,9 @@ const referrals = [
     nextTrigger: "trigger.firstTrial",
     latestReward: "reward.none",
     rewardStatus: "waiting",
-    giftOrderId: "—",
-    giftOrderStatus: "NOT_CREATED",
+    registrationSource: "REFERRAL",
+    sourceBeforeBinding: "organic",
+    grantLogId: "—",
   },
   {
     id: "BIND-202611-0186",
@@ -560,8 +573,9 @@ const referrals = [
     planMonths: 12,
     rewardMonths: 3,
     rewardStatus: "processing",
-    giftOrderId: "GRT202611090018",
-    giftOrderStatus: "CREATED",
+    registrationSource: "REFERRAL",
+    sourceBeforeBinding: "organic",
+    grantLogId: "GRANT-202611090018",
   },
   {
     id: "BIND-202611-0172",
@@ -576,10 +590,11 @@ const referrals = [
     bindingStatus: "active",
     boundAt: "2026-11-04",
     nextTrigger: "trigger.firstTrial",
-    latestReward: "reward.none",
-    rewardStatus: "waiting",
-    giftOrderId: "—",
-    giftOrderStatus: "NOT_CREATED",
+    latestReward: "reward.firstTrial",
+    rewardStatus: "processing",
+    registrationSource: "REFERRAL",
+    sourceBeforeBinding: "organic",
+    grantLogId: "GRANT-202611100027",
   },
   {
     id: "BIND-202611-0164",
@@ -595,8 +610,9 @@ const referrals = [
     nextTrigger: "trigger.firstTrial",
     latestReward: "reward.firstTrial",
     rewardStatus: "issued",
-    giftOrderId: "GRT202611030021",
-    giftOrderStatus: "FULFILLED",
+    registrationSource: "REFERRAL",
+    sourceBeforeBinding: "organic",
+    grantLogId: "GRANT-202611030021",
   },
   {
     id: "BIND-202611-0157",
@@ -614,8 +630,9 @@ const referrals = [
     planMonths: 3,
     rewardMonths: 1,
     rewardStatus: "failed",
-    giftOrderId: "GRT202611020014",
-    giftOrderStatus: "CREATED",
+    registrationSource: "REFERRAL",
+    sourceBeforeBinding: "organic",
+    grantLogId: "GRANT-202611020014",
   },
   {
     id: "BIND-202611-0149",
@@ -631,14 +648,16 @@ const referrals = [
     nextTrigger: "trigger.assignment",
     latestReward: "reward.none",
     rewardStatus: "invalid",
-    giftOrderId: "—",
-    giftOrderStatus: "NOT_CREATED",
+    registrationSource: "REFERRAL",
+    sourceBeforeBinding: "organic",
+    grantLogId: "—",
   },
 ];
 
 const socialRecords = [
   {
     id: "SOC-202611-0031",
+    userId: "2120302255148482561",
     user: "Pimchanok S.",
     platform: "FACEBOOK",
     contentType: "social.photo",
@@ -649,11 +668,11 @@ const socialRecords = [
     reward: "reward.published",
     rewardDetail: "reward.selected",
     status: "issued",
-    giftOrderId: "GRT202611080056",
-    giftOrderStatus: "FULFILLED",
+    grantLogId: "GRANT-202611080056",
   },
   {
     id: "SOC-202611-0034",
+    userId: "2120302281472036721",
     user: "Kanya R.",
     platform: "TIKTOK",
     contentType: "social.video",
@@ -664,11 +683,11 @@ const socialRecords = [
     reward: "reward.published",
     rewardDetail: "reward.notSelected",
     status: "issued",
-    giftOrderId: "GRT202611090072",
-    giftOrderStatus: "FULFILLED",
+    grantLogId: "GRANT-202611090072",
   },
   {
     id: "SOC-202611-0038",
+    userId: "2120302210461928824",
     user: "Arunee T.",
     platform: "INSTAGRAM",
     contentType: "social.photo",
@@ -679,19 +698,30 @@ const socialRecords = [
     reward: "reward.published",
     rewardDetail: "",
     status: "processing",
-    giftOrderId: "GRT202611090069",
-    giftOrderStatus: "CREATED",
+    grantLogId: "GRANT-202611090069",
   },
 ];
 
 const rewardEvents = [
   {
     type: "REFERRAL_FIRST_TRIAL_COMPLETED",
+    sourceId: "LSN-20261110-3188",
+    triggeredAt: "2026-11-10 11:08",
+    benefit: "reward.firstTrial",
+    status: "processing",
+    memberLevel: "NONE",
+    benefitLevel: "PRO",
+    grantLogId: "GRANT-202611100027",
+  },
+  {
+    type: "REFERRAL_FIRST_TRIAL_COMPLETED",
     sourceId: "LSN-20261108-3041",
     triggeredAt: "2026-11-08 16:42",
     benefit: "reward.firstTrial",
     status: "issued",
-    giftOrderId: "GRT202611080041",
+    memberLevel: "MAX",
+    benefitLevel: "MAX",
+    grantLogId: "GRANT-202611080041",
   },
   {
     type: "REFERRAL_FIRST_PURCHASE_3M",
@@ -700,7 +730,9 @@ const rewardEvents = [
     benefit: "reward.purchase",
     months: 1,
     status: "processing",
-    giftOrderId: "GRT202611090018",
+    memberLevel: "PRO",
+    benefitLevel: "PRO",
+    grantLogId: "GRANT-202611090018",
   },
   {
     type: "SOCIAL_MEDIA_APPROVED",
@@ -708,7 +740,9 @@ const rewardEvents = [
     triggeredAt: "2026-11-06 19:18",
     benefit: "reward.published",
     status: "issued",
-    giftOrderId: "GRT202611060033",
+    memberLevel: "MAX",
+    benefitLevel: "MAX",
+    grantLogId: "GRANT-202611060033",
   },
   {
     type: "SOCIAL_MEDIA_OFFICIALLY_SELECTED",
@@ -716,7 +750,9 @@ const rewardEvents = [
     triggeredAt: "2026-11-08 11:20",
     benefit: "reward.selected",
     status: "issued",
-    giftOrderId: "GRT202611080056",
+    memberLevel: "MAX",
+    benefitLevel: "MAX",
+    grantLogId: "GRANT-202611080056",
   },
   {
     type: "SOCIAL_MEDIA_NOT_SELECTED",
@@ -724,7 +760,9 @@ const rewardEvents = [
     triggeredAt: "2026-11-09 15:05",
     benefit: "reward.notSelected",
     status: "issued",
-    giftOrderId: "GRT202611090072",
+    memberLevel: "MAX",
+    benefitLevel: "MAX",
+    grantLogId: "GRANT-202611090072",
   },
 ];
 
@@ -787,13 +825,21 @@ function businessLineLabel(value) {
   return t(`business.${value || "thailand"}`);
 }
 
+function membershipLevel(userId) {
+  return USER_MEMBERSHIP_LEVEL[userId] || "NONE";
+}
+
+function benefitLevelFor(userId) {
+  return membershipLevel(userId) === "MAX" ? "MAX" : "PRO";
+}
+
 function bindingSourceLabel(value) {
   return t(value === "social" ? "source.social" : "source.referral");
 }
 
 function renderReferrerSummary() {
   document.getElementById("referrerSummary").textContent =
-    `${state.referrer.name} · ${state.referrer.id} · ${t("business.thailand")} · CC: ${state.referrer.owner}`;
+    `${state.referrer.name} · ${state.referrer.id} · ${t("business.thailand")} · CC: ${state.referrer.owner} · ${t("referralModal.membershipLevel")}: ${state.referrer.membershipLevel || "NONE"} · ${t("referralModal.benefitLevel")}: ${benefitLevelFor(state.referrer.id)}`;
 }
 
 function renderReferrals() {
@@ -807,7 +853,7 @@ function renderReferrals() {
       <td>${statusLabel(row.bindingStatus)}</td>
       <td>${row.boundAt}</td>
       <td>${t(row.nextTrigger)}</td>
-      <td>${t(row.latestReward, { count: row.rewardMonths })} ${rewardStatusLabel(row.rewardStatus)}</td>
+      <td>${t(row.latestReward, { count: row.rewardMonths })}${row.latestReward === "reward.none" ? "" : ` · ${benefitLevelFor(row.referrerId)}`} ${rewardStatusLabel(row.rewardStatus)}</td>
     </tr>`).join("");
   document.getElementById("referralCount").textContent = t("bindings.count", { count: referrals.length });
 }
@@ -825,6 +871,8 @@ function renderSocial() {
         <td>${row.publishedAt}</td>
         <td>${row.operator}</td>
         <td>${rewardText}</td>
+        <td>${benefitLevelFor(row.userId)}</td>
+        <td class="mono">${row.grantLogId}</td>
         <td>${rewardStatusLabel(row.status)}</td>
       </tr>`;
   }).join("");
@@ -839,6 +887,8 @@ function renderEvents() {
       <td class="mono">${row.sourceId}</td>
       <td>${row.triggeredAt}</td>
       <td class="event-value ${row.benefit.includes("purchase") || row.benefit.includes("selected") ? "month" : "benefit"}">${t(row.benefit, { count: row.months })}</td>
+      <td>${row.benefitLevel}</td>
+      <td class="mono">${row.grantLogId}</td>
       <td>${rewardStatusLabel(row.status)}</td>
       <td>${row.status === "failed" ? "ENTITLEMENT_REQUEST_TIMEOUT" : "—"}</td>
     </tr>`).join("");
@@ -864,14 +914,17 @@ function unifiedRows() {
         ? `REFERRAL_FIRST_PURCHASE_${row.planMonths}M`
         : "—",
     reward: t(row.latestReward, { count: row.rewardMonths }),
+    registrationSource: row.registrationSource,
+    sourceBeforeBinding: row.sourceBeforeBinding,
+    memberLevel: membershipLevel(row.referrerId),
+    benefitLevel: row.latestReward === "reward.none" ? "—" : benefitLevelFor(row.referrerId),
     rewardStatus: row.rewardStatus,
-    giftOrderId: row.giftOrderId,
-    giftOrderStatus: row.giftOrderStatus,
+    grantLogId: row.grantLogId,
     nextTrigger: row.nextTrigger,
     boundAt: row.boundAt,
     date: row.boundAt,
     orderDate: row.orderAt || "",
-    keywords: [row.id, row.referrerId, row.referredId, row.giftOrderId, row.referrer, row.referred],
+    keywords: [row.id, row.referrerId, row.referredId, row.grantLogId, row.referrer, row.referred],
   }));
   const socialRows = socialRecords.map((row) => ({
     id: row.id,
@@ -885,11 +938,13 @@ function unifiedRows() {
     bindingText: row.contentStatus,
     eventType: row.rewardDetail ? `SOCIAL_MEDIA_${row.rewardDetail === "reward.selected" ? "OFFICIALLY_SELECTED" : "NOT_SELECTED"}` : "SOCIAL_MEDIA_APPROVED",
     reward: row.rewardDetail ? `${t(row.reward)} + ${t(row.rewardDetail)}` : t(row.reward),
+    registrationSource: "—",
+    memberLevel: membershipLevel(row.userId),
+    benefitLevel: benefitLevelFor(row.userId),
     rewardStatus: row.status,
-    giftOrderId: row.giftOrderId,
-    giftOrderStatus: row.giftOrderStatus,
+    grantLogId: row.grantLogId,
     date: row.publishedAt,
-    keywords: [row.id, row.user, row.giftOrderId, row.platform, t(row.contentStatus)],
+    keywords: [row.id, row.user, row.grantLogId, row.platform, t(row.contentStatus)],
   }));
   return referralRows;
 }
@@ -923,12 +978,18 @@ function renderUnified() {
       <td><span>${row.user}</span>${row.userId ? `<span class="secondary mono">${row.userId}</span>` : ""}</td>
       <td>${row.related}</td>
       <td>${businessLineLabel(row.businessLine)}</td>
+      <td>${row.registrationSource || "—"}</td>
       <td>${row.owner}</td>
       <td>${row.currentOwner || "—"}</td>
-      <td>${row.bindingStatus === "pendingTransfer" ? `<span class="status pending">${t("bindStatus.pendingTransfer")}</span>` : `<span class="status bound">${row.bindingText ? t(row.bindingText) : t("bindStatus.active")}</span>`}</td>
+      <td>${row.bindingStatus === "pendingTransfer"
+        ? `<span class="status pending">${t("bindStatus.pendingTransfer")}</span>`
+        : row.bindingStatus === "invalid"
+          ? `<span class="status invalid">${t("bindStatus.invalid")}</span>`
+          : `<span class="status bound">${row.bindingText ? t(row.bindingText) : t("bindStatus.active")}</span>`}</td>
       <td><span class="event-type">${row.eventType}</span></td>
       <td>${row.reward}</td>
-      <td><span class="mono">${row.giftOrderId}</span><span class="secondary">${t(`giftStatus.${row.giftOrderStatus}`)} · ฿0</span></td>
+      <td>${row.benefitLevel}</td>
+      <td class="mono">${row.grantLogId}</td>
       <td>${rewardStatusLabel(row.rewardStatus)}</td>
       <td>${row.source === "referral" && row.bindingStatus === "pendingTransfer" ? `<button class="btn small" type="button" data-approve-transfer="${row.id}">${t("approval.action")}</button>` : "—"}</td>
     </tr>`).join("");
@@ -961,15 +1022,16 @@ function exportUnified() {
     t("table.referred"),
     t("csv.referredId"),
     t("table.businessLine"),
+    t("table.registrationSourceAfter"),
     t("table.bindStatus"),
     t("table.targetOwner"),
     t("table.currentOwner"),
     t("csv.nextTrigger"),
     t("table.triggerEvent"),
     t("table.reward"),
+    t("table.benefitLevel"),
     t("csv.rewardStatus"),
-    t("table.giftOrder"),
-    t("table.giftStatus"),
+    t("table.grantLog"),
     t("table.boundAt"),
   ];
   const data = visibleUnifiedRows.map((row) => [
@@ -980,18 +1042,19 @@ function exportUnified() {
     row.referred,
     row.referredId,
     businessLineLabel(row.businessLine),
+    row.registrationSource || "—",
     statusText(row.bindingStatus),
     row.owner,
     row.currentOwner || "—",
     t(row.nextTrigger),
     row.eventType,
     row.reward,
+    row.benefitLevel,
     rewardStatusText(row.rewardStatus),
-    row.giftOrderId,
-    t(`giftStatus.${row.giftOrderStatus}`),
+    row.grantLogId,
     row.boundAt,
   ]);
-  window.CRMPrototypeExport.download(`referral-relationships-${new Date().toISOString().slice(0, 10)}.csv`, headers, data);
+  window.CRMPrototypeExport.download(`referral-relationships-${new Date().toISOString().slice(0, 10)}.xls`, headers, data);
   showToast("export.success", { count: data.length });
 }
 
@@ -1058,6 +1121,8 @@ function openReferralDetail(row) {
         <dt>${t("table.referrer")}</dt><dd>${row.user}<br><span class="mono">${row.userId}</span></dd>
         <dt>${t("table.referred")}</dt><dd>${row.referred}<br><span class="mono">${row.referredId}</span></dd>
         <dt>${t("table.businessLine")}</dt><dd>${businessLineLabel(row.businessLine)}</dd>
+        <dt>${t("referralModal.sourceBefore")}</dt><dd>${row.sourceBeforeBinding || "—"}</dd>
+        <dt>${t("table.registrationSourceAfter")}</dt><dd>${row.registrationSource || "—"}</dd>
         <dt>${t("table.boundAt")}</dt><dd>${row.boundAt}</dd>
       </dl>
     </div>
@@ -1074,9 +1139,10 @@ function openReferralDetail(row) {
       <h4>${t("table.latestReward")}</h4>
       <dl class="facts">
         <dt>${t("table.reward")}</dt><dd>${row.reward}</dd>
+        <dt>${t("referralModal.membershipLevel")}</dt><dd>${row.memberLevel}</dd>
+        <dt>${t("table.benefitLevel")}</dt><dd>${row.benefitLevel}</dd>
+        <dt>${t("table.grantLog")}</dt><dd class="mono">${row.grantLogId}</dd>
         <dt>${t("table.status")}</dt><dd>${rewardStatusLabel(row.rewardStatus)}</dd>
-        <dt>${t("table.giftOrder")}</dt><dd class="mono">${row.giftOrderId}</dd>
-        <dt>${t("table.giftStatus")}</dt><dd>${t(`giftStatus.${row.giftOrderStatus}`)}</dd>
       </dl>
     </div>`;
   document.getElementById("detailDrawer").hidden = false;
@@ -1122,7 +1188,7 @@ function setTab(tab) {
 }
 
 function openReferralModal(referrer = null) {
-  if (referrer) state.referrer = referrer;
+  if (referrer) state.referrer = { ...referrer, membershipLevel: membershipLevel(referrer.id) };
   state.verified = false;
   state.verifiedUser = null;
   state.bindingResult = null;
@@ -1225,7 +1291,18 @@ function verifyReferredUser() {
 function confirmBinding() {
   if (!state.verified) return;
   const activeReferrer = { ...state.referrer };
+  const sourceBeforeBinding = state.verifiedUser.registrationSource;
+  const referredUserId = state.verifiedUser.userId;
   const pendingTransfer = state.verifiedUser.currentOwner !== activeReferrer.owner;
+  if (USER_DIRECTORY[referredUserId]) USER_DIRECTORY[referredUserId].registrationSource = "REFERRAL";
+  [...document.querySelectorAll("#usersView tbody tr")].forEach((row) => {
+    if (row.cells[0]?.textContent.trim() !== referredUserId) return;
+    const sourceCell = row.querySelector("[data-registration-source]");
+    if (!sourceCell) return;
+    sourceCell.textContent = "REFERRAL";
+    sourceCell.dataset.registrationSource = "REFERRAL";
+  });
+  document.getElementById("userRegistrationSourceFilter")?.dispatchEvent(new Event("change", { bubbles: true }));
   referrals.unshift({
     id: `BIND-202611-${String(210 + referrals.length).padStart(4, "0")}`,
     referrerId: activeReferrer.id,
@@ -1233,7 +1310,8 @@ function confirmBinding() {
     referredId: state.verifiedUser.userId,
     referred: state.verifiedUser.name,
     registeredAt: state.verifiedUser.registeredAt,
-    registrationSource: state.verifiedUser.registrationSource,
+    registrationSource: "REFERRAL",
+    sourceBeforeBinding,
     trialLessonStatus: state.verifiedUser.trialLessonStatus,
     newRegistration: "NEW_REGISTRATION",
     line: "thailand",
@@ -1244,13 +1322,13 @@ function confirmBinding() {
     nextTrigger: pendingTransfer ? "trigger.transfer" : "trigger.firstTrial",
     latestReward: "reward.none",
     rewardStatus: "waiting",
-    giftOrderId: "—",
-    giftOrderStatus: "NOT_CREATED",
+    grantLogId: "—",
   });
   state.referrer = {
     id: "2120302255148482561",
     name: "Pimchanok S.",
     owner: "Thanya C.",
+    membershipLevel: "MAX",
   };
   closeReferralModal();
   setTab("referral");
@@ -1305,9 +1383,10 @@ function confirmSocial() {
     OFFICIALLY_SELECTED: "social.selected",
     INVALID: "social.invalid",
   }[status];
-  const giftOrderId = status === "INVALID" ? "—" : `GRT202611${String(130 + socialRecords.length).padStart(4, "0")}`;
+  const grantLogId = status === "INVALID" ? "—" : `GRANT-202611${String(130 + socialRecords.length).padStart(4, "0")}`;
   socialRecords.unshift({
     id: `SOC-202611-${String(40 + socialRecords.length).padStart(4, "0")}`,
+    userId: "2120302255148482561",
     user: "Pimchanok S.",
     platform: document.getElementById("socialPlatform").value,
     contentType: document.getElementById("socialType").value === "PHOTO" ? "social.photo" : "social.video",
@@ -1318,8 +1397,7 @@ function confirmSocial() {
     reward,
     rewardDetail,
     status: status === "INVALID" ? "failed" : "processing",
-    giftOrderId,
-    giftOrderStatus: status === "INVALID" ? "NOT_CREATED" : "CREATED",
+    grantLogId,
   });
   if (status !== "INVALID") {
     rewardEvents.unshift({
@@ -1327,6 +1405,9 @@ function confirmSocial() {
       sourceId: socialRecords[0].id,
       triggeredAt: "2026-11-13 10:30",
       benefit: rewardDetail || reward,
+      memberLevel: "MAX",
+      benefitLevel: "MAX",
+      grantLogId,
       status: "processing",
     });
   }

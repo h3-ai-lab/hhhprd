@@ -20,7 +20,7 @@ const I18N = {
     "aria.openMenu": "展开菜单",
     "crumb.growth": "营销中心",
     "crumb.users": "用户管理",
-    "dashboard.subtitle": "泰国业务线 · 关系、业务事件、赠送订单与权益结果",
+    "dashboard.subtitle": "泰国业务线 · 关系、业务事件、权益等级与发放日志",
     "common.refresh": "刷新数据",
     "metric.referrers": "推荐人数",
     "metric.referrers.note": "按推荐人用户 ID 去重",
@@ -105,15 +105,17 @@ const I18N = {
     "table.record": "业务记录",
     "table.related": "关联对象",
     "table.triggerEvent": "触发事件",
-    "table.giftOrder": "赠送订单",
+    "table.benefitLevel": "权益等级",
+    "table.grantLog": "发放日志",
+    "table.registrationSourceAfter": "绑定后注册来源",
     "table.action": "操作",
     "table.targetOwner": "目标归属 CC",
     "table.currentOwner": "当前归属 CC",
     "unified.title": "统一拉新记录",
     "unified.note": "口径：",
-    "unified.noteText": "绑定、奖励事件、赠送订单和权益状态在同一列表追踪",
+    "unified.noteText": "绑定、奖励事件、权益等级、发放日志和权益状态在同一列表追踪",
     "unified.empty": "当前筛选下没有拉新记录",
-    "unified.keywordPlaceholder": "用户 ID / 事件 ID / 订单 ID",
+    "unified.keywordPlaceholder": "用户 ID / 事件 ID / 发放日志 ID",
     "bindings.page": "第 1 页",
     "community.create": "登记社媒推荐",
     "bindings.newSocial": "登记社媒推荐",
@@ -130,12 +132,10 @@ const I18N = {
     "sales.followUp": "更新跟进",
     "sales.addDuration": "增加用户时长",
     "orders.title": "订单中心",
-    "orders.subtitle": "查询付款订单与系统赠送订单",
+    "orders.subtitle": "查询真实付费订单",
     "orders.allOrders": "全部订单",
-    "orders.giftOrders": "赠送订单",
     "orders.searchPlaceholder": "订单 ID / 用户 ID / 手机号",
     "orders.orderTypeAll": "订单类型：全部",
-    "orders.membershipGrant": "会员赠送",
     "orders.paid": "付费订单",
     "orders.directPurchase": "直接购买",
     "orders.orderId": "订单 ID",
@@ -146,7 +146,6 @@ const I18N = {
     "orders.orderStatus": "订单状态",
     "orders.benefitChange": "权益变化",
     "orders.fulfilled": "已完成",
-    "orders.created": "已生成待发放",
     "orders.benefit14d": "+14 天",
     "orders.benefit2m": "+2 个月",
     "orders.benefit3m": "+3 个月",
@@ -255,7 +254,7 @@ const I18N = {
     "aria.openMenu": "Open navigation",
     "crumb.growth": "Marketing",
     "crumb.users": "User Management",
-    "dashboard.subtitle": "Thailand business line · Relationships, business events, gift orders, and benefits",
+    "dashboard.subtitle": "Thailand business line · Relationships, business events, benefit tiers, and grant logs",
     "common.refresh": "Refresh",
     "metric.referrers": "Referrers",
     "metric.referrers.note": "Unique by referrer user ID",
@@ -340,15 +339,17 @@ const I18N = {
     "table.record": "Business record",
     "table.related": "Related object",
     "table.triggerEvent": "Trigger event",
-    "table.giftOrder": "Gift order",
+    "table.benefitLevel": "Benefit tier",
+    "table.grantLog": "Grant log",
+    "table.registrationSourceAfter": "Registration source after linking",
     "table.action": "Action",
     "table.targetOwner": "Target owner CC",
     "table.currentOwner": "Current owner CC",
     "unified.title": "Unified Growth Records",
     "unified.note": "Scope: ",
-    "unified.noteText": "Binding, reward events, gift orders, and benefit status are tracked in one list",
+    "unified.noteText": "Binding, reward events, benefit tier, grant log, and benefit status are tracked in one list",
     "unified.empty": "No growth records match the current filters",
-    "unified.keywordPlaceholder": "User ID / event ID / order ID",
+    "unified.keywordPlaceholder": "User ID / event ID / grant log ID",
     "bindings.page": "Page 1",
     "community.create": "Register social media recommendation",
     "bindings.newSocial": "Record social media recommendation",
@@ -365,12 +366,10 @@ const I18N = {
     "sales.followUp": "Log follow-up",
     "sales.addDuration": "Add user duration",
     "orders.title": "Order Center",
-    "orders.subtitle": "Paid orders and system gift orders",
+    "orders.subtitle": "Query paid orders",
     "orders.allOrders": "All orders",
-    "orders.giftOrders": "Gift orders",
     "orders.searchPlaceholder": "Order ID / user ID / phone",
     "orders.orderTypeAll": "Order type: All",
-    "orders.membershipGrant": "Membership grant",
     "orders.paid": "Paid order",
     "orders.directPurchase": "Direct purchase",
     "orders.orderId": "Order ID",
@@ -381,7 +380,6 @@ const I18N = {
     "orders.orderStatus": "Order status",
     "orders.benefitChange": "Benefit change",
     "orders.fulfilled": "Fulfilled",
-    "orders.created": "Created, pending fulfillment",
     "orders.benefit14d": "+14 days",
     "orders.benefit2m": "+2 months",
     "orders.benefit3m": "+3 months",
@@ -661,16 +659,16 @@ function money(value) {
   return `฿${Number(value).toLocaleString("en-US")}`;
 }
 
-function csvCell(value) {
+function spreadsheetCell(value) {
   let text = String(value ?? "");
   if (/^[=+\-@]/.test(text)) text = `'${text}`;
-  return `"${text.replace(/"/g, '""')}"`;
+  return text.replace(/\t/g, " ").replace(/\r?\n/g, " ");
 }
 
 window.CRMPrototypeExport = {
   download(filename, headers, rows) {
-    const csv = [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n");
-    const blob = new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8" });
+    const content = [headers, ...rows].map((row) => row.map(spreadsheetCell).join("\t")).join("\r\n");
+    const blob = new Blob([`\uFEFF${content}`], { type: "application/vnd.ms-excel;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;

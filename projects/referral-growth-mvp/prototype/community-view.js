@@ -23,7 +23,7 @@ const TEXT = {
     "community.pendingSelection": "待选择",
     "community.officiallySelected": "官方选中",
     "community.notSelected": "未选中",
-    "community.keywordPlaceholder": "用户 ID / 投稿 ID / 订单 ID",
+    "community.keywordPlaceholder": "用户 ID / 投稿 ID / 发放日志 ID",
     "community.submissionId": "投稿 ID",
     "community.channel": "提交渠道",
     "community.platform": "平台",
@@ -53,9 +53,6 @@ const TEXT = {
     "community.status.issued": "已发放",
     "community.status.failed": "发放失败",
     "community.status.notApplicable": "不发放",
-    "giftStatus.CREATED": "已生成，待发放",
-    "giftStatus.FULFILLED": "已完成",
-    "giftStatus.NOT_CREATED": "未生成",
     "communityReview.title": "审核社媒推荐",
     "communityReview.result": "审核结果",
     "communityReview.reason": "无效原因",
@@ -68,10 +65,10 @@ const TEXT = {
     "communityReview.noteRequired": "拒绝投稿时必须填写审核备注",
     "communityReview.authRequired": "官方选中前必须取得官方使用授权",
     "communityReview.success": "社媒推荐审核结果已保存",
-    "communityReview.approvedBase": "投稿有效，已创建基础 +5 天奖励订单",
-    "communityReview.selectedTotal": "投稿有效，已生成 +5 天与 +2 个月奖励订单",
-    "communityReview.notSelectedTotal": "投稿有效，已生成 +5 天与 +15 天奖励订单",
-    "communityReview.rejectedHint": "审核无效，不生成奖励事件和赠送订单",
+    "communityReview.approvedBase": "投稿有效，基础 +5 天奖励已进入权益发放",
+    "communityReview.selectedTotal": "投稿有效，+5 天与 +2 个月奖励已进入权益发放",
+    "communityReview.notSelectedTotal": "投稿有效，+5 天与 +15 天奖励已进入权益发放",
+    "communityReview.rejectedHint": "审核无效，不生成奖励事件和权益发放日志",
     "communityReason.contentNotFound": "内容不存在或无法访问",
     "communityReason.notOwnContent": "非本人内容",
     "communityReason.duplicateContent": "重复内容",
@@ -109,7 +106,8 @@ const TEXT = {
     "table.user": "用户",
     "table.contentType": "内容类型",
     "table.reward": "奖励",
-    "table.giftOrder": "赠送订单",
+    "table.benefitLevel": "权益等级",
+    "table.grantLog": "发放日志",
     "table.action": "操作",
     "filter.keyword": "关键词",
     "filter.dateRange": "日期范围",
@@ -155,7 +153,7 @@ const TEXT = {
     "community.pendingSelection": "Pending selection",
     "community.officiallySelected": "Officially selected",
     "community.notSelected": "Not selected",
-    "community.keywordPlaceholder": "User ID / submission ID / order ID",
+    "community.keywordPlaceholder": "User ID / submission ID / grant log ID",
     "community.submissionId": "Submission ID",
     "community.channel": "Submission channel",
     "community.platform": "Platform",
@@ -185,9 +183,6 @@ const TEXT = {
     "community.status.issued": "Issued",
     "community.status.failed": "System failure",
     "community.status.notApplicable": "Not issued",
-    "giftStatus.CREATED": "Created, pending fulfillment",
-    "giftStatus.FULFILLED": "Fulfilled",
-    "giftStatus.NOT_CREATED": "Not created",
     "communityReview.title": "Review Social Media Recommendation",
     "communityReview.result": "Review result",
     "communityReview.reason": "Rejection reason",
@@ -200,10 +195,10 @@ const TEXT = {
     "communityReview.noteRequired": "A review note is required when rejecting a submission",
     "communityReview.authRequired": "Official-use authorization is required before official selection",
     "communityReview.success": "Social media recommendation review saved",
-    "communityReview.approvedBase": "Content approved; base +5-day reward order created",
-    "communityReview.selectedTotal": "Content approved; +5-day and +2-month reward orders created",
-    "communityReview.notSelectedTotal": "Content approved; +5-day and +15-day reward orders created",
-    "communityReview.rejectedHint": "Rejected; no reward event or gift order is created",
+    "communityReview.approvedBase": "Content approved; the base +5-day benefit is being issued",
+    "communityReview.selectedTotal": "Content approved; the +5-day and +2-month benefits are being issued",
+    "communityReview.notSelectedTotal": "Content approved; the +5-day and +15-day benefits are being issued",
+    "communityReview.rejectedHint": "Rejected; no reward event or grant log is created",
     "communityReason.contentNotFound": "Content not found or inaccessible",
     "communityReason.notOwnContent": "Content does not belong to the user",
     "communityReason.duplicateContent": "Duplicate content",
@@ -241,7 +236,8 @@ const TEXT = {
     "table.user": "User",
     "table.contentType": "Content type",
     "table.reward": "Reward",
-    "table.giftOrder": "Gift order",
+    "table.benefitLevel": "Benefit tier",
+    "table.grantLog": "Grant log",
     "table.action": "Action",
     "filter.keyword": "Keyword",
     "filter.dateRange": "Date range",
@@ -282,6 +278,7 @@ const COMMUNITY_USERS = {
   "2120302255148482561": {
     id: "2120302255148482561",
     name: "Pimchanok S.",
+    membershipLevel: "MAX",
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Thanya C.",
@@ -289,6 +286,7 @@ const COMMUNITY_USERS = {
   "2120302281472036721": {
     id: "2120302281472036721",
     name: "Kanya R.",
+    membershipLevel: "MAX",
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Mina P.",
@@ -296,6 +294,7 @@ const COMMUNITY_USERS = {
   "2120302210461928824": {
     id: "2120302210461928824",
     name: "Arunee T.",
+    membershipLevel: "PRO",
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Nok S.",
@@ -303,6 +302,7 @@ const COMMUNITY_USERS = {
   "2120302261184209917": {
     id: "2120302261184209917",
     name: "Nicha T.",
+    membershipLevel: "PRO",
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Nok S.",
@@ -310,6 +310,7 @@ const COMMUNITY_USERS = {
   "2120302247228042882": {
     id: "2120302247228042882",
     name: "Waraporn L.",
+    membershipLevel: "PRO",
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Nok S.",
@@ -317,6 +318,7 @@ const COMMUNITY_USERS = {
   "2120302273820914407": {
     id: "2120302273820914407",
     name: "Siriporn W.",
+    membershipLevel: "NONE",
     businessLineCode: "thailand",
     businessLine: "community.businessThailand",
     currentOwner: "Nok S.",
@@ -324,6 +326,7 @@ const COMMUNITY_USERS = {
   "2120302295479900": {
     id: "2120302295479900",
     name: "Linh N.",
+    membershipLevel: "PRO",
     businessLineCode: "vietnam",
     businessLine: "community.businessVietnam",
     currentOwner: "Mina P.",
@@ -347,8 +350,7 @@ const submissions = [
     reviewStatus: "PENDING_REVIEW",
     selectionStatus: "PENDING_SELECTION",
     reward: "—",
-    giftOrderId: "—",
-    giftOrderStatus: "NOT_CREATED",
+    grantLogId: "—",
     rewardStatus: "PENDING_REVIEW",
     reviewNote: "",
   },
@@ -368,8 +370,7 @@ const submissions = [
     reviewStatus: "APPROVED",
     selectionStatus: "NOT_SELECTED",
     reward: "community.baseReward|community.notSelectedReward",
-    giftOrderId: "GRT202611080072",
-    giftOrderStatus: "FULFILLED",
+    grantLogId: "GRANT-202611080072",
     rewardStatus: "ISSUED",
     reviewNote: "",
   },
@@ -389,8 +390,7 @@ const submissions = [
     reviewStatus: "APPROVED",
     selectionStatus: "OFFICIALLY_SELECTED",
     reward: "community.baseReward|community.selectedReward",
-    giftOrderId: "GRT202611070081",
-    giftOrderStatus: "FULFILLED",
+    grantLogId: "GRANT-202611070081",
     rewardStatus: "ISSUED",
     reviewNote: "",
   },
@@ -410,8 +410,7 @@ const submissions = [
     reviewStatus: "APPROVED",
     selectionStatus: "PENDING_SELECTION",
     reward: "community.baseReward",
-    giftOrderId: "GRT202611060066",
-    giftOrderStatus: "CREATED",
+    grantLogId: "GRANT-202611060066",
     rewardStatus: "PROCESSING",
     reviewNote: "",
   },
@@ -431,8 +430,7 @@ const submissions = [
     reviewStatus: "REJECTED",
     selectionStatus: null,
     reward: "—",
-    giftOrderId: "—",
-    giftOrderStatus: "NOT_CREATED",
+    grantLogId: "—",
     rewardStatus: "NOT_APPLICABLE",
     reviewNote: "视频内容重复",
     reviewReason: "DUPLICATE_CONTENT",
@@ -453,8 +451,7 @@ const submissions = [
     reviewStatus: "APPROVED",
     selectionStatus: "PENDING_SELECTION",
     reward: "community.baseReward",
-    giftOrderId: "GRT202611040051",
-    giftOrderStatus: "CREATED",
+    grantLogId: "GRANT-202611040051",
     rewardStatus: "FAILED",
     reviewNote: "",
   },
@@ -474,8 +471,7 @@ const submissions = [
     reviewStatus: "APPROVED",
     selectionStatus: "PENDING_SELECTION",
     reward: "—",
-    giftOrderId: "—",
-    giftOrderStatus: "NOT_CREATED",
+    grantLogId: "—",
     rewardStatus: "WAITING",
     reviewNote: "",
   },
@@ -526,6 +522,10 @@ function businessLineLabel(value) {
   return t("community.businessThailand");
 }
 
+function benefitLevelFor(userId) {
+  return COMMUNITY_USERS[userId]?.membershipLevel === "MAX" ? "MAX" : "PRO";
+}
+
 function rewardStatusLabel(status) {
   return `<span class="status ${status === "ISSUED" ? "success" : status === "FAILED" ? "failed" : "processing"}">${rewardStatusText(status)}</span>`;
 }
@@ -551,7 +551,7 @@ function renderRows() {
     const reviewMatch = !review || row.reviewStatus === review;
     const selectionMatch = !selection || row.selectionStatus === selection;
     const rewardMatch = !rewardStatus || row.rewardStatus === rewardStatus;
-    const keywordMatch = !keyword || [row.id, row.userId, row.user, row.giftOrderId, row.contentLink, row.registeredBy, t(row.platform)].some((value) => String(value || "").toLowerCase().includes(keyword));
+    const keywordMatch = !keyword || [row.id, row.userId, row.user, row.grantLogId, row.contentLink, row.registeredBy, t(row.platform)].some((value) => String(value || "").toLowerCase().includes(keyword));
     const date = row.submittedAt.slice(0, 10);
     return businessMatch && registeredMatch && platformMatch && reviewMatch && selectionMatch && rewardMatch && keywordMatch && (!start || date >= start) && (!end || date <= end);
   });
@@ -569,7 +569,8 @@ function renderRows() {
       <td><span class="status ${statusClass(row.reviewStatus)}">${reviewLabel(row.reviewStatus)}</span></td>
       <td>${selectionLabel(row.selectionStatus)}</td>
       <td>${rewardText(row)}</td>
-      <td><span class="mono">${row.giftOrderId}</span><span class="secondary">${t(`giftStatus.${row.giftOrderStatus}`)} · ฿0</span></td>
+      <td>${row.reward === "—" ? "—" : benefitLevelFor(row.userId)}</td>
+      <td class="mono">${row.grantLogId}</td>
       <td>${rewardStatusLabel(row.rewardStatus)}</td>
       <td><button class="btn small review-submission" data-id="${row.id}">${t("community.action")}</button></td>
     </tr>`).join("");
@@ -603,9 +604,9 @@ function exportSubmissions() {
     t("community.reviewNote"),
     t("community.selectionStatus"),
     t("table.reward"),
+    t("table.benefitLevel"),
     t("community.rewardStatus"),
-    t("table.giftOrder"),
-    t("table.giftStatus"),
+    t("table.grantLog"),
   ];
   const data = visibleSubmissions.map((row) => [
     row.id,
@@ -623,11 +624,11 @@ function exportSubmissions() {
     row.reviewNote || "",
     selectionLabel(row.selectionStatus),
     rewardText(row),
+    row.reward === "—" ? "—" : benefitLevelFor(row.userId),
     rewardStatusText(row.rewardStatus),
-    row.giftOrderId,
-    t(`giftStatus.${row.giftOrderStatus}`),
+    row.grantLogId,
   ]);
-  window.CRMPrototypeExport.download(`social-media-recommendations-${new Date().toISOString().slice(0, 10)}.csv`, headers, data);
+  window.CRMPrototypeExport.download(`social-media-recommendations-${new Date().toISOString().slice(0, 10)}.xls`, headers, data);
   showToast("export.success", { count: data.length });
 }
 
@@ -766,8 +767,7 @@ function saveCommunityCreate() {
     reviewStatus: "PENDING_REVIEW",
     selectionStatus: "PENDING_SELECTION",
     reward: "—",
-    giftOrderId: "—",
-    giftOrderStatus: "NOT_CREATED",
+    grantLogId: "—",
     rewardStatus: "PENDING_REVIEW",
     reviewNote: document.getElementById("communityCreateNote").value.trim(),
   });
@@ -848,8 +848,7 @@ function saveReview() {
     row.reviewReason = reviewReason;
     row.reviewNote = reviewNote;
     row.reward = "—";
-    row.giftOrderId = "—";
-    row.giftOrderStatus = "NOT_CREATED";
+    row.grantLogId = "—";
     row.rewardStatus = "NOT_APPLICABLE";
     state.noticeKey = "communityReview.rejectedHint";
   } else {
@@ -868,8 +867,7 @@ function saveReview() {
       : selectionStatus === "NOT_SELECTED"
         ? "community.baseReward|community.notSelectedReward"
         : "community.baseReward";
-    row.giftOrderId = row.giftOrderId === "—" ? `GRT202611${String(160 + submissions.indexOf(row)).padStart(4, "0")}` : row.giftOrderId;
-    row.giftOrderStatus = "CREATED";
+    row.grantLogId = row.grantLogId === "—" ? `GRANT-202611${String(160 + submissions.indexOf(row)).padStart(4, "0")}` : row.grantLogId;
     row.rewardStatus = "PROCESSING";
     state.noticeKey = selectionStatus === "PENDING_SELECTION"
       ? "communityReview.approvedBase"
