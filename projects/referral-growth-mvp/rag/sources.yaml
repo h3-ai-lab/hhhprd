@@ -1,5 +1,9 @@
 version: 1
 sources:
+  - id: referral-growth-mvp-lark
+    uri: https://qjphu5vphyf4.jp.larksuite.com/wiki/ZfNSwFSnJiWkJ7k9nUQjfFD1pgb
+    purpose: 拉新裂变 MVP 飞书正式 PRD；与本地 v1.2 评审后版本同步
+    priority: authoritative
   - id: original-referrals
     uri: https://qjphu5vphyf4.jp.larksuite.com/wiki/OewiwN0BCiDituksN8dj7HDupNd
     purpose: 原始泰国转介绍和社媒推荐活动规则

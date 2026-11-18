@@ -6,6 +6,7 @@
 |---|---|
 | 状态 | 评审后修订 |
 | 需求编号 | REQ-GRW-001 |
+| 飞书 PRD | [拉新裂变mvp（6.1）](https://qjphu5vphyf4.jp.larksuite.com/wiki/ZfNSwFSnJiWkJ7k9nUQjfFD1pgb) |
 | 正式 PRD | [PRD](prd/PRD.md) |
 | 线上原型 | [打开线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/) |
 | 原型源码 | [prototype/index.html](prototype/index.html) |
