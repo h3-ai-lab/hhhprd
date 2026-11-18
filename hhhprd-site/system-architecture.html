@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dino 业务系统整体架构</title>
+  <style>
+    :root{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    main{max-width:1400px;margin:0 auto;padding:42px 24px 80px}article{background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:34px}h2,h3,h4{line-height:1.35}
+    h2{font-size:30px;margin:0 0 20px}h3{font-size:22px;margin:34px 0 12px}h4{font-size:17px;margin:22px 0 8px}
+    p{margin:10px 0}a{color:var(--blue)}blockquote{margin:12px 0;padding:10px 14px;
+    background:#fff8e8;border-left:3px solid #d4941e;color:#5c4a24}table{width:100%;
+    border-collapse:collapse;margin:14px 0;font-size:14px}th,td{border:1px solid var(--line);
+    padding:9px 11px;text-align:left;vertical-align:top}th{background:#f7f9fc}
+    code{background:#f1f4f8;padding:1px 5px;border-radius:4px}.document-image{display:block;
+    width:100%;height:auto;margin:18px 0;border-radius:12px}.top{display:flex;gap:14px;
+    margin-bottom:18px}.top a{text-decoration:none;font-weight:600}
+    @media(max-width:700px){main{padding:16px 10px}article{padding:20px 16px}}
+  </style>
+</head>
+<body><main>
+  <div class="top"><a href="index.html">← 返回项目入口</a>
+  <a href="https://github.com/h3-ai-lab/hhhprd/blob/main/shared/architecture/target-system-architecture.md">查看 Markdown 源文件</a></div>
+  <article><h2>Dino 业务系统整体架构</h2>
+<blockquote>定位：产品系统边界与目标蓝图，不限定微服务、前端容器或具体技术实现。<br>状态：目标架构建议｜更新日期：2026-11-18</blockquote>
+<h3>1. 核心原则</h3>
+<ul><li>CRM 是销售履约与客户经营工作台，不是所有业务领域共用的后台。</li><li>按业务域拆系统，不按组织部门拆系统；组织职能通过角色和数据权限映射。</li><li>每个业务对象只有一个主数据 Owner，其他系统通过 API、事件或只读视图使用。</li><li>对用户保留统一登录和统一导航，但不要求所有领域共用一个后端。</li><li>跨域操作进入对应后台完成，CRM 不同时维护客户、商品、支付、课程等主数据。</li></ul>
+<h3>2. 目标架构</h3>
+<p><img class="document-image" src="assets/dino-system-architecture.png" alt="Dino 业务系统整体架构"></p>
+<h3>3. 后台职责</h3>
+<table><thead><tr><th>后台</th><th>核心职责</th><th>主要主数据</th><th>CRM 的关系</th></tr></thead><tbody><tr><td>企业治理后台</td><td>业务线、组织、成员、角色、功能权限、数据权限、审计、字典、接口凭证</td><td>业务线、组织、成员、角色</td><td>使用授权结果，不维护全局账号和组织</td></tr><tr><td>营销运营后台</td><td>渠道、广告账户、活动、素材、落地页、表单、短链、来源映射</td><td>渠道、活动、表单、落地页、短链</td><td>接收标准线索与归因结果</td></tr><tr><td>客户中心</td><td>用户账号、客户资料、偏好、营销授权、业务线归属、客户关系</td><td>用户主数据、客户授权</td><td>提供只读 Customer 360 查询</td></tr><tr><td>CRM 销售后台</td><td>线索池、分配、领取、转派、跟进、预约、外呼、漏斗、归属、销售绩效</td><td>线索当前归属、销售过程</td><td>销售履约核心工作台</td></tr><tr><td>交易与权益后台</td><td>商品、SKU、价格、优惠、订单、支付、退款、订阅、赠送订单、权益</td><td>商品、价格、订单、支付、权益</td><td>只读展示订单摘要与支付事件</td></tr><tr><td>学习交付后台</td><td>课包、课程、单元、课节、排课、到课、学习进度、完课、报告</td><td>课程结构与学习进度</td><td>只读展示跟进所需学习结果</td></tr><tr><td>联络中心</td><td>号码池、线路、坐席、外呼任务、通话记录、录音、逐字稿</td><td>通话记录、媒体资产</td><td>接收通话结果和录音索引</td></tr><tr><td>数据与集成后台</td><td>线索接入、事件总线、归因、数仓、指标层、看板、通用导出任务</td><td>标准事件、指标口径、快照</td><td>为 CRM 提供看板和明细只读能力</td></tr></tbody></table>
+<h3>4. 现有模块归属</h3>
+<table><thead><tr><th>当前能力</th><th>目标归属</th><th>处理方式</th></tr></thead><tbody><tr><td>营销中心：渠道、活动、素材、落地页、表单、短链</td><td>营销运营后台</td><td>迁出 CRM；CRM 保留来源结果和跳转入口</td></tr><tr><td>营销中心：SKU、价格、优惠</td><td>交易与权益后台</td><td>迁出 CRM；营销页通过接口引用</td></tr><tr><td>营销中心：广告归因数据</td><td>数据与集成后台</td><td>统一接入、映射和快照，CRM 只读展示</td></tr><tr><td>线索接入与来源标准化</td><td>数据与集成后台</td><td>先标准化、去重、补全，再进入 CRM</td></tr><tr><td>用户中心</td><td>客户中心 + CRM 只读视图</td><td>客户主数据由客户中心维护</td></tr><tr><td>用户学习结果与报告</td><td>学习交付后台</td><td>CRM 只读展示销售所需信息</td></tr><tr><td>销售中心</td><td>CRM 销售后台</td><td>保留并继续强化</td></tr><tr><td>通话记录、录音、逐字稿</td><td>联络中心 + CRM 只读视图</td><td>通话能力归联络中心，CRM 承接业务结果</td></tr><tr><td>订单、支付、退款、会员权益</td><td>交易与权益后台</td><td>CRM 只读展示，支付和退款在原系统操作</td></tr><tr><td>角色、成员、业务线、组织与审计</td><td>企业治理后台</td><td>作为所有后台的共享权限底座</td></tr><tr><td>管理看板与指标</td><td>数据与集成后台</td><td>统一定义指标并嵌入 CRM</td></tr><tr><td>CRM 业务分配规则、跟进规则、销售流程</td><td>CRM 销售后台</td><td>保留在 CRM</td></tr></tbody></table>
+<h3>5. 数据与集成边界</h3>
+<table><thead><tr><th>对象</th><th>唯一 Owner</th><th>关键标识</th><th>CRM 使用方式</th></tr></thead><tbody><tr><td>业务线、组织、成员、角色</td><td>企业治理后台</td><td><code>org_id</code>、<code>member_id</code>、<code>role_id</code></td><td>获取权限和候选范围</td></tr><tr><td>用户与客户资料</td><td>客户中心</td><td><code>user_id</code></td><td>只读查询，不重复建档</td></tr><tr><td>渠道、活动、落地页、短链</td><td>营销运营后台</td><td><code>channel_id</code>、<code>campaign_id</code>、<code>form_id</code>、<code>short_link_id</code></td><td>读取来源与归因结果</td></tr><tr><td>线索与当前销售归属</td><td>CRM 销售后台</td><td><code>lead_id</code></td><td>CRM 主操作对象</td></tr><tr><td>商品、价格、订单、支付、权益</td><td>交易与权益后台</td><td><code>sku_id</code>、<code>order_id</code>、<code>payment_id</code></td><td>只读摘要、支付状态和权益状态</td></tr><tr><td>课程与学习进度</td><td>学习交付后台</td><td><code>course_id</code>、<code>lesson_id</code>、<code>learning_record_id</code></td><td>只读展示</td></tr><tr><td>通话与媒体文件</td><td>联络中心</td><td><code>call_id</code></td><td>只读展示、按权限下载</td></tr><tr><td>指标、快照与导出任务</td><td>数据与集成后台</td><td><code>metric_id</code>、<code>snapshot_id</code>、<code>task_id</code></td><td>嵌入 CRM 看板与导出任务</td></tr></tbody></table>
+<h3>6. 关键流程</h3>
+<h4>线索接入</h4>
+<p><code>广告平台 / 表单 / App / Web → 数据与集成后台 → 标准化与去重 → CRM 销售后台</code></p>
+<h4>销售履约</h4>
+<p><code>CRM 销售后台 → 销售跟进 / 预约 / 外呼 → 成交 → 交易与权益后台</code></p>
+<h4>跨域只读</h4>
+<p><code>客户中心 / 交易与权益 / 学习交付 / 联络中心 → 统一事件和查询接口 → CRM 只读展示</code></p>
+<h4>经营分析</h4>
+<p><code>各领域业务事件 → 数据与集成后台 → 指标层 → CRM 看板与明细</code></p>
+<h3>7. 落地顺序</h3>
+<ol><li><strong>治理先行</strong>：建立业务线、组织、角色、数据权限和审计的统一模型。</li><li><strong>统一标识</strong>：冻结 <code>user_id</code>、<code>lead_id</code>、<code>campaign_id</code>、<code>sku_id</code>、<code>order_id</code>、<code>org_id</code>。</li><li><strong>停止新增跨域配置</strong>：CRM 不再新增长期由营销、商品、支付或学习系统负责的配置功能。</li><li><strong>先读后写</strong>：CRM 先增加只读视图和跳转入口，再迁移写操作。</li><li><strong>按域迁移</strong>：依次迁移企业治理、营销运营、交易权益、学习交付和数据分析。</li><li><strong>统一门户</strong>：保持统一登录、导航和权限提示，允许各后台独立发布。</li></ol>
+<h3>8. 架构约束</h3>
+<ul><li>一个业务对象只能有一个写入 Owner。</li><li>禁止通过数据库直连或其他系统页面反向覆盖主数据。</li><li>跨系统关联必须使用稳定 ID，不使用姓名、手机号或展示名称作为主键。</li><li>跨域查询、看板和导出必须复用同一数据权限结果。</li><li>前台体验可以统一，后端系统边界和数据 Owner 必须清晰。</li><li>不因组织部门调整重命名业务系统；组织变化只调整角色、权限和可见菜单。</li></ul>
+<h3>9. 成功标准</h3>
+<ul><li>业务人员能在统一门户找到自己的工作入口，不再依赖 CRM 承载所有配置。</li><li>每个核心对象都有唯一主数据系统和清晰的责任边界。</li><li>CRM、营销、交易、学习、数据和治理之间通过标准接口与事件协作。</li><li>页面不重复维护相同数据，权限、审计和指标口径保持一致。</li><li>新业务线或新组织接入时，无需复制一套 CRM 页面或主数据。</li></ul></article>
+</main></body></html>

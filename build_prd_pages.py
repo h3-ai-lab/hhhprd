@@ -22,6 +22,7 @@ PROJECTS = {
 
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
 CODE_RE = re.compile(r"`([^`]+)`")
+IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 CHANGE_TAGS = {
     "<ins>": "\ue000",
     "</ins>": "\ue001",
@@ -56,6 +57,13 @@ def linkify(text):
 
 
 def inline(text):
+    images = []
+
+    def stash_image(match):
+        images.append((match.group(1), match.group(2)))
+        return f"\ue100{len(images) - 1}\ue101"
+
+    text = IMAGE_RE.sub(stash_image, text)
     for source, placeholder in CHANGE_TAGS.items():
         text = text.replace(source, placeholder)
     text = linkify(text)
@@ -64,6 +72,12 @@ def inline(text):
     replacements = {"\ue000": "<ins>", "\ue001": "</ins>", "\ue002": "<del>", "\ue003": "</del>"}
     for placeholder, rendered in replacements.items():
         text = text.replace(placeholder, rendered)
+    for index, (alt, source) in enumerate(images):
+        text = text.replace(
+            f"\ue100{index}\ue101",
+            f'<img class="document-image" src="{html.escape(source, quote=True)}" '
+            f'alt="{html.escape(alt, quote=True)}">',
+        )
     return text
 
 
@@ -200,6 +214,44 @@ def build_project(slug, title):
 def main():
     for slug, title in PROJECTS.items():
         build_project(slug, title)
+    build_architecture()
+
+
+def build_architecture():
+    source_path = ROOT / "shared" / "architecture" / "target-system-architecture.md"
+    output = ROOT / "hhhprd-site" / "system-architecture.html"
+    source = source_path.read_text(encoding="utf-8")
+    content = markdown_to_html(source)
+    page = f"""<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dino 业务系统整体架构</title>
+  <style>
+    :root{{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}}
+    *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}}
+    main{{max-width:1400px;margin:0 auto;padding:42px 24px 80px}}article{{background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:34px}}h2,h3,h4{{line-height:1.35}}
+    h2{{font-size:30px;margin:0 0 20px}}h3{{font-size:22px;margin:34px 0 12px}}h4{{font-size:17px;margin:22px 0 8px}}
+    p{{margin:10px 0}}a{{color:var(--blue)}}blockquote{{margin:12px 0;padding:10px 14px;
+    background:#fff8e8;border-left:3px solid #d4941e;color:#5c4a24}}table{{width:100%;
+    border-collapse:collapse;margin:14px 0;font-size:14px}}th,td{{border:1px solid var(--line);
+    padding:9px 11px;text-align:left;vertical-align:top}}th{{background:#f7f9fc}}
+    code{{background:#f1f4f8;padding:1px 5px;border-radius:4px}}.document-image{{display:block;
+    width:100%;height:auto;margin:18px 0;border-radius:12px}}.top{{display:flex;gap:14px;
+    margin-bottom:18px}}.top a{{text-decoration:none;font-weight:600}}
+    @media(max-width:700px){{main{{padding:16px 10px}}article{{padding:20px 16px}}}}
+  </style>
+</head>
+<body><main>
+  <div class="top"><a href="index.html">← 返回项目入口</a>
+  <a href="https://github.com/h3-ai-lab/hhhprd/blob/main/shared/architecture/target-system-architecture.md">查看 Markdown 源文件</a></div>
+  <article>{content}</article>
+</main></body></html>"""
+    output.write_text(page, encoding="utf-8")
+    print(f"Generated {output}")
 
 
 if __name__ == "__main__":
