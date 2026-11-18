@@ -55,8 +55,10 @@ jobs:
 
       - name: Assemble Pages site
         run: |
-          mkdir -p public/projects
+          mkdir -p public/projects public/assets
           cp hhhprd-site/index.html public/index.html
+          cp hhhprd-site/system-architecture.html public/system-architecture.html
+          cp hhhprd-site/assets/dino-system-architecture.png public/assets/dino-system-architecture.png
           cp hhhprd-site/prd-referrals-rewards.html public/prd-referrals-rewards.html
           cp hhhprd-site/prd-first-contact.html public/prd-first-contact.html
           cp hhhprd-site/prd-first-contact-concise.html public/prd-first-contact-concise.html
