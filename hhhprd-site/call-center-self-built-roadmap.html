@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>自研软电话功能架构、边界与分阶段路线</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #fff;
+      --ink: #17202a;
+      --muted: #667085;
+      --line: #dfe5ec;
+      --blue: #2563eb;
+      --blue-soft: #eef4ff;
+      --green: #17845c;
+      --green-soft: #eaf7f1;
+      --orange: #a35b00;
+      --orange-soft: #fff5df;
+      --slate-soft: #f3f6fa;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 15px/1.7 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    main { max-width: 1120px; margin: 0 auto; padding: 42px 24px 80px; }
+    article {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 42px;
+    }
+    h1, h2, h3, h4, p, ul { margin-top: 0; }
+    h1, h2, h3, h4 { line-height: 1.35; }
+    h1 { font-size: 32px; margin-bottom: 10px; }
+    h2 { font-size: 24px; margin: 38px 0 14px; }
+    h3 { font-size: 18px; margin: 0 0 8px; }
+    h4 { font-size: 15px; margin: 0 0 6px; }
+    p { margin-bottom: 10px; }
+    ul { padding-left: 20px; margin-bottom: 0; }
+    li + li { margin-top: 3px; }
+    a { color: var(--blue); }
+
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .top-links { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .top a { text-decoration: none; font-weight: 600; }
+    .print-button {
+      border: 1px solid #b9c8dc;
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--blue);
+      padding: 7px 12px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .hero-sub { color: var(--muted); font-size: 16px; margin-bottom: 18px; }
+    .summary {
+      margin: 16px 0 22px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      background: var(--blue-soft);
+      color: #233a59;
+    }
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px 0 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .toc a {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--slate-soft);
+      color: #44546a;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .toc a:hover { background: var(--blue-soft); color: var(--blue); }
+
+    .two-col, .three-col { display: grid; gap: 16px; align-items: start; }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      background: #fbfcfe;
+    }
+    .panel.target { border-color: #b9cdf2; background: #f7faff; }
+    .panel.green { border-color: #cce7da; background: var(--green-soft); }
+    .eyebrow {
+      display: inline-block;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .muted { color: var(--muted); }
+    .small { font-size: 13px; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 14px;
+    }
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+    .swatch.self { background: #cfe0ff; }
+    .swatch.vendor { background: #ccebdd; }
+    .swatch.context { background: #e7ebf0; }
+
+    .flow-block { display: grid; gap: 10px; }
+    .flow-row {
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+    }
+    .flow-label { color: var(--muted); font-size: 13px; font-weight: 700; }
+    .flow-track {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+    }
+    .node {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    .node.self { color: #194b93; background: #e3edff; }
+    .node.vendor { color: #116643; background: #e2f5eb; }
+    .node.context { color: #475467; background: #eef1f5; }
+    .node.fail { color: #964400; background: var(--orange-soft); }
+    .arrow { color: #8695a8; font-weight: 700; }
+    .merge {
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .boundary-line {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      padding: 14px;
+      background: var(--slate-soft);
+      border-radius: 10px;
+    }
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 18px;
+    }
+    .cap-item { border-top: 1px solid var(--line); padding-top: 10px; }
+    .cap-item strong { display: block; margin-bottom: 2px; }
+
+    .pain-gain { display: grid; gap: 10px; }
+    .pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1.2fr);
+      align-items: center;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+    .pain, .gain {
+      padding: 8px 10px;
+      border-radius: 8px;
+      line-height: 1.45;
+    }
+    .pain { color: #5f6673; background: #eef1f5; }
+    .gain { color: #126443; background: var(--green-soft); font-weight: 600; }
+    .pair .arrow { text-align: center; }
+
+    .stage-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 14px 0 18px;
+    }
+    .stage {
+      position: relative;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--slate-soft);
+    }
+    .stage:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translate(50%, -50%);
+      color: var(--blue);
+      font-weight: 700;
+      background: var(--card);
+      padding: 0 2px;
+      z-index: 1;
+    }
+    .stage strong { display: block; }
+    .stage span { display: block; color: var(--muted); font-size: 13px; }
+    .version {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .phase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .phase {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fbfcfe;
+    }
+    .phase h3 { margin-bottom: 3px; }
+    .phase-sub { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+    .phase-section + .phase-section { margin-top: 13px; }
+    .phase-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      margin-bottom: 4px;
+    }
+    .phase-section ul { margin: 0; }
+    .basis {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .benefit-list { display: grid; gap: 8px; }
+    .benefit {
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #f4f7fb;
+      font-weight: 600;
+    }
+    .user-benefit { background: var(--green-soft); color: #155b40; }
+    .note {
+      margin-top: 22px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--orange);
+      background: #fff9ed;
+      color: #65522f;
+    }
+
+    @media (max-width: 860px) {
+      .two-col, .three-col, .phase-grid { grid-template-columns: 1fr; }
+      .stage-bar { grid-template-columns: 1fr 1fr; }
+      .stage:nth-child(2)::after { display: none; }
+    }
+    @media (max-width: 640px) {
+      main { padding: 16px 10px 48px; }
+      article { padding: 22px 16px; border-radius: 10px; }
+      h1 { font-size: 27px; }
+      h2 { font-size: 21px; margin-top: 32px; }
+      .top { align-items: flex-start; }
+      .flow-row, .merge { grid-template-columns: 1fr; gap: 7px; }
+      .cap-grid { grid-template-columns: 1fr; }
+      .pair { grid-template-columns: 1fr; }
+      .pair .arrow { transform: rotate(90deg); }
+      .stage-bar { grid-template-columns: 1fr; }
+      .stage:not(:last-child)::after {
+        content: "↓";
+        right: 50%;
+        top: auto;
+        bottom: -15px;
+        transform: translateX(50%);
+      }
+    }
+    @media print {
+      @page { size: A4; margin: 12mm; }
+      body { background: #fff; font-size: 11pt; }
+      main { max-width: none; padding: 0; }
+      article { border: 0; padding: 0; }
+      .top, .toc, .print-button { display: none; }
+      h2, h3 { break-after: avoid; }
+      .phase, .panel { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="top">
+      <div class="top-links">
+        <a href="index.html">← 返回项目入口</a>
+      </div>
+      <button class="print-button" type="button" onclick="window.print()">打印 / 导出 PDF</button>
+    </div>
+
+    <article>
+      <h1>自研软电话：功能架构、边界与阶段规划</h1>
+      <p class="hero-sub">从“供应商给什么用什么”转为“Dino 定义流程、策略和体验，供应商执行通信”</p>
+
+      <div class="summary">
+        <strong>核心判断：</strong>自研重点是控制层、软电话交互、统一数据和 AI 侧边栏，不进入运营商网络、线路及基础语音基础设施。建议先在一个业务线跑通 V1，再推进 V2 和 V3。
+      </div>
+
+      <nav class="toc" aria-label="内容导览">
+        <a href="#purpose">换用目的</a>
+        <a href="#routing">外呼原理</a>
+        <a href="#boundary">自研边界</a>
+        <a href="#sidebar">AI 侧边栏</a>
+        <a href="#user-benefit">用户收益</a>
+        <a href="#roadmap">阶段路线</a>
+        <a href="#benefit">收益总结</a>
+      </nav>
+
+      <section id="purpose">
+        <h2>换用目的</h2>
+        <div class="two-col">
+          <div class="panel">
+            <span class="eyebrow">当前</span>
+            <h3>Sobot / Omicall 集成软电话</h3>
+            <p>直接使用供应商集成好的软电话，UI、呼叫控制、状态和功能扩展依赖对方。</p>
+            <p class="muted small">业务数据与交互体验割裂；一旦更换供应商，坐席操作和既有能力都要重新适配。</p>
+          </div>
+          <div class="panel target">
+            <span class="eyebrow">目标</span>
+            <h3>Dino 薄软电话 + 多供应商 SDK 适配</h3>
+            <p>CRM / Call Center → Dino 软电话壳 → 呼叫编排 → 供应商适配 → Sobot / Omicall SDK 与网络。</p>
+            <p class="muted small">Dino 掌握业务流程、账号坐席关系、按业务线选工作台与号码、统一数据、侧边栏和 AI 扩展；电话网络、线路、并发、录音和基础转写继续由供应商提供。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="routing">
+        <h2>外呼工作原理与供应商关系</h2>
+        <div class="legend" aria-label="图例">
+          <span><i class="swatch self"></i>Dino 控制与策略</span>
+          <span><i class="swatch vendor"></i>供应商资源与执行</span>
+          <span><i class="swatch context"></i>业务关系与上下文</span>
+        </div>
+        <div class="flow-block">
+          <div class="flow-row">
+            <div class="flow-label">坐席链</div>
+            <div class="flow-track">
+              <span class="node context">业务线</span><span class="arrow">→</span>
+              <span class="node vendor">工作台 / 坐席供应商</span><span class="arrow">→</span>
+              <span class="node vendor">坐席</span><span class="arrow">→</span>
+              <span class="node self">CRM 账号</span>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-label">号码链</div>
+            <div class="flow-track">
+              <span class="node context">业务线</span><span class="arrow">→</span>
+              <span class="node vendor">号码供应商</span><span class="arrow">→</span>
+              <span class="node vendor">线路</span><span class="arrow">→</span>
+              <span class="node vendor">号码</span>
+            </div>
+          </div>
+          <div class="merge">
+            <div class="flow-label">两链汇合</div>
+            <div class="flow-track">
+              <span class="node self">CRM 账号绑定坐席</span><span class="arrow">+</span>
+              <span class="node self">坐席配置的候选号码</span><span class="arrow">→</span>
+              <span class="node self">选号策略</span><span class="arrow">→</span>
+              <span class="node self">最优号码</span><span class="arrow">→</span>
+              <span class="node vendor">坐席供应商 SDK</span><span class="arrow">→</span>
+              <span class="node vendor">运营商网络</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="boundary">
+        <h2>自研边界</h2>
+        <div class="two-col">
+          <div class="panel">
+            <h3>Dino 需要掌握</h3>
+            <p class="muted">决定业务体验、路由规则、数据标准和后续扩展。</p>
+            <div class="cap-grid">
+              <div class="cap-item">
+                <strong>软电话与侧边栏</strong>
+                <span class="small muted">统一 UI、呼叫状态、当前客户与业务上下文</span>
+              </div>
+              <div class="cap-item">
+                <strong>账号－坐席－供应商</strong>
+                <span class="small muted">按业务线绑定，适配不同供应商 SDK</span>
+              </div>
+              <div class="cap-item">
+                <strong>号码与选号策略</strong>
+                <span class="small muted">号码池、线路映射、候选号码与最优号码选择</span>
+              </div>
+              <div class="cap-item">
+                <strong>统一呼叫数据</strong>
+                <span class="small muted">事件、状态、错误码、录音与逐字稿；结果回写线索、客户与跟进，归属仍由 CRM 决定</span>
+              </div>
+              <div class="cap-item">
+                <strong>权限、合规与审计</strong>
+                <span class="small muted">号码、录音、导出权限，频控和操作日志</span>
+              </div>
+              <div class="cap-item">
+                <strong>AI 扩展接口</strong>
+                <span class="small muted">实时转写、意图、话术、历史摘要与下一步动作</span>
+              </div>
+            </div>
+          </div>
+          <div class="panel green">
+            <h3>供应商继续提供</h3>
+            <p class="muted">只提供专业通信能力，不承接 CRM 线索归属与销售归因。</p>
+            <ul>
+              <li>工作台供应商、坐席供应商与号码供应商</li>
+              <li>运营商网络与实际语音通话</li>
+              <li>电话号码、线路与号码资源</li>
+              <li>并发容量、通话质量与可用性保障</li>
+              <li>录音存储、基础语音转写</li>
+              <li>IVR、预测式外呼、语音机器人</li>
+            </ul>
+          </div>
+        </div>
+        <div class="boundary-line">
+          <span class="node self">Dino 控制面</span><span class="arrow">↔</span>
+          <span class="node self">供应商适配层</span><span class="arrow">↔</span>
+          <span class="node vendor">供应商通信面</span>
+        </div>
+      </section>
+
+      <section id="sidebar">
+        <h2>AI 侧边栏：V3 目标态扩展</h2>
+        <div class="three-col">
+          <div class="panel">
+            <h3>当前业务信息</h3>
+            <p class="muted small">通话前即可看到客户全貌。</p>
+            <ul>
+              <li>当前客户与归属业务线</li>
+              <li>订单、权益与当前业务阶段</li>
+              <li>最近跟进与关键待办</li>
+              <li>历史有效信息摘要</li>
+            </ul>
+          </div>
+          <div class="panel target">
+            <h3>AI 实时辅助</h3>
+            <p class="muted small">通话中直接辅助坐席决策。</p>
+            <ul>
+              <li>实时转写与对话内容分析</li>
+              <li>客户意图识别与风险提示</li>
+              <li>结合客户状态的推荐话术</li>
+              <li>下一步动作建议与智能质检</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>依赖的基础能力</h3>
+            <p class="muted small">业务上下文与实时音频汇入同一侧边栏。</p>
+            <div class="flow-track">
+              <span class="node context">CRM 上下文服务</span>
+              <span class="node context">客户 / 订单 / 跟进</span>
+              <span class="node context">知识库与优秀话术</span>
+              <span class="node context">流式音频 / ASR</span>
+              <span class="node context">模型编排与知识检索</span>
+              <span class="node context">低延迟侧边栏推送</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="user-benefit">
+        <h2>外呼卡点与坐席用户收益</h2>
+        <div class="two-col">
+          <div class="panel">
+            <h3>现在：外呼前与通话中的卡点</h3>
+            <p class="muted small">多个步骤依赖人工完成，任一供应商或登录环节异常都会阻塞外呼。</p>
+            <div class="flow-track">
+              <span class="node context">登录 CRM</span><span class="arrow">→</span>
+              <span class="node vendor">登录 / 授权软电话</span><span class="arrow">→</span>
+              <span class="node context">人工绑定坐席</span><span class="arrow">→</span>
+              <span class="node context">人工选择号码</span><span class="arrow">→</span>
+              <span class="node fail">供应商异常即中断</span><span class="arrow">→</span>
+              <span class="node context">手工补录结果</span>
+            </div>
+          </div>
+          <div class="panel green">
+            <h3>自研后：CRM 内连续完成外呼</h3>
+            <p class="muted small">系统承担匹配、选号、状态回写和供应商路由，坐席专注沟通。</p>
+            <div class="flow-track">
+              <span class="node self">CRM 内一键起呼</span><span class="arrow">→</span>
+              <span class="node self">自动匹配账号与坐席</span><span class="arrow">→</span>
+              <span class="node self">自动选最优号码</span><span class="arrow">→</span>
+              <span class="node vendor">可用供应商路由</span><span class="arrow">→</span>
+              <span class="node self">状态、录音与结果回写</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pain-gain">
+          <div class="pair">
+            <span class="pain">人工绑定 CRM 账号与坐席</span><span class="arrow">→</span>
+            <span class="gain">自动匹配，减少坐席配置等待</span>
+          </div>
+          <div class="pair">
+            <span class="pain">重复登录、授权供应商软电话</span><span class="arrow">→</span>
+            <span class="gain">从 CRM 直接起呼，免重复登录授权</span>
+          </div>
+          <div class="pair">
+            <span class="pain">人工判断并选择外呼号码</span><span class="arrow">→</span>
+            <span class="gain">按业务线与选号策略自动匹配最优号码</span>
+          </div>
+          <div class="pair">
+            <span class="pain">供应商服务异常即无法外呼</span><span class="arrow">→</span>
+            <span class="gain">健康检查与备用路由；具备备用坐席、号码和线路时可切换</span>
+          </div>
+          <div class="pair">
+            <span class="pain">通话结果手工补录、多处切换查资料</span><span class="arrow">→</span>
+            <span class="gain">记录自动回写，客户上下文与通话同屏</span>
+          </div>
+        </div>
+        <p class="muted small" style="margin-top:12px">供应商故障切换的前提：同一业务线已配置可用的备用坐席、号码和线路资源。</p>
+      </section>
+
+      <section id="roadmap">
+        <h2>阶段功能架构</h2>
+        <div class="stage-bar" aria-label="版本演进顺序">
+          <div class="stage">
+            <strong>V0 · 看清能力</strong>
+            <span>统一模型与数据口径</span>
+          </div>
+          <div class="stage">
+            <strong>V1 · 统一入口</strong>
+            <span>自研软电话与供应商适配</span>
+          </div>
+          <div class="stage">
+            <strong>V2 · 规模化运营</strong>
+            <span>任务、策略与线路运营</span>
+          </div>
+          <div class="stage">
+            <strong>V3 · 智能化销售</strong>
+            <span>AI 侧边栏与实时辅助</span>
+          </div>
+        </div>
+
+        <div class="phase-grid">
+          <div class="phase">
+            <span class="version">V0</span>
+            <h3>基础建模</h3>
+            <p class="phase-sub">先看清能力与数据，再开始替换。</p>
+            <div class="phase-section">
+              <div class="phase-label">功能</div>
+              <ul>
+                <li>供应商能力盘点</li>
+                <li>CRM 账号、坐席、号码、线路模型</li>
+                <li>呼叫事件与错误码归一</li>
+                <li>基础通话记录、权限与审计</li>
+              </ul>
+            </div>
+            <div class="phase-section">
+              <div class="phase-label">解决</div>
+              <p>能力边界不清、数据口径不一、故障无法定位。</p>
+            </div>
+            <div class="phase-section">
+              <div class="phase-label">收益</div>
+              <p>形成统一数据底座，为多供应商接入和后续替换做准备。</p>
+            </div>
+            <div class="phase-section basis">
+              <div class="phase-label">基础能力</div>
+              <ul>
+                <li>供应商 API / SDK 能力矩阵</li>
+                <li>统一对象、事件与错误码字典</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="phase">
+            <span class="version">V1</span>
+            <h3>自研软电话</h3>
+            <p class="phase-sub">统一入口，掌握路由与侧边栏框架。</p>
+            <div class="phase-section">
+              <div class="phase-label">功能</div>
+              <ul>
+                <li>多供应商 SDK 适配层</li>
+                <li>业务线 → 账号 → 坐席 → 供应商</li>
+                <li>号码候选池与选号策略</li>
+                <li>统一拨号、挂断、重呼与 CRM 回写</li>
+                <li>软电话壳与可扩展侧边栏框架</li>
+              </ul>
+            </div>
+            <div class="phase-section">
+              <div class="phase-label">解决</div>
+              <p>供应商锁定、手工选号、通话状态和业务体验割裂。</p>
+            </div>
+            <div class="phase-section">
+              <div class="phase-label">收益</div>
+              <p><strong>用户：</strong>免重复登录授权、免人工绑定坐席、免手动选号，CRM 内一键起呼。<br><strong>平台：</strong>统一入口，可按业务线切换供应商并稳定追溯通话。</p>
+            </div>
+            <div class="phase-section basis">
+              <div class="phase-label">基础能力</div>
+              <ul>
+                <li>坐席、号码与业务线路由配置中心</li>
+                <li>供应商适配与统一通话状态机</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="phase">
+            <span class="version">V2</span>
+            <h3>外呼运营</h3>
+            <p class="phase-sub">从能打电话，升级到能规模化运营。</p>
+            <div class="phase-section">
+              <div class="phase-label">功能</div>
+              <ul>
+                <li>外呼任务、重拨与预约回拨</li>
+                <li>时间窗、频控、黑名单与熔断</li>
+                <li>供应商、线路健康与容量监控</li>
+                <li>供应商异常提示与备用路由</li>
+                <li>坐席效率与号码使用分析</li>
+              </ul>
+            </div>
+            <div class="phase-section">
+              <div class="phase-label">解决</div>
+              <p>批量效率低、重复骚扰、异常不可控，运营数据无法归因。</p>
+            </div>
+            <div class="phase-section">
+              <div class="phase-label">收益</div>
+              <p><strong>用户：</strong>任务、重拨和预约回拨由系统承接，异常有提示，减少重复操作与无效等待。<br><strong>平台：</strong>提高外呼效率、合规性和容灾运营能力。</p>
+            </div>
+            <div class="phase-section basis">
+              <div class="phase-label">基础能力</div>
+              <ul>
+                <li>外呼任务引擎与策略规则中心</li>
+                <li>稳定呼叫链路与运营数据底座</li>
+                <li>备用供应商、线路与坐席资源</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="phase">
+            <span class="version">V3</span>
+            <h3>AI 侧边栏</h3>
+            <p class="phase-sub">把通信入口变成销售实时助手。</p>
+            <div class="phase-section">
+              <div class="phase-label">功能</div>
+              <ul>
+                <li>实时转写、意图识别与话术推荐</li>
+                <li>当前客户、订单、跟进与历史有效信息摘要</li>
+                <li>下一步动作推荐与风险提示</li>
+                <li>智能质检与销售辅导</li>
+              </ul>
+            </div>
+            <div class="phase-section">
+              <div class="phase-label">解决</div>
+              <p>过度依赖个人记忆，新人上手慢，话术与服务质量不一致。</p>
+            </div>
+            <div class="phase-section">
+              <div class="phase-label">收益</div>
+              <p><strong>用户：</strong>减少切页查资料与个人记忆依赖，新人更快进入有效沟通。<br><strong>平台：</strong>提升转化和服务质量，把优秀经验沉淀为团队可复制能力。</p>
+            </div>
+            <div class="phase-section basis">
+              <div class="phase-label">基础能力</div>
+              <ul>
+                <li>流式音频 / ASR 与 CRM 上下文服务</li>
+                <li>知识检索、模型编排与低延迟侧边栏推送</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="benefit">
+        <h2>收益总结：坐席用户 + 平台架构</h2>
+        <div class="two-col">
+          <div class="panel green">
+            <h3>坐席 / CRM 用户</h3>
+            <div class="benefit-list">
+              <div class="benefit user-benefit">外呼步骤更少，从 CRM 直接起呼</div>
+              <div class="benefit user-benefit">免重复登录、人工绑定和手动选号</div>
+              <div class="benefit user-benefit">供应商异常有提示，可切换备用路由</div>
+              <div class="benefit user-benefit">通话状态、录音和结果自动回写</div>
+              <div class="benefit user-benefit">客户上下文同屏，减少切页与记忆负担</div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>平台 / 架构</h3>
+            <div class="benefit-list">
+              <div class="benefit">统一坐席体验</div>
+              <div class="benefit">降低供应商切换成本</div>
+              <div class="benefit">号码与业务线策略自主可控</div>
+              <div class="benefit">统一事件、权限和审计</div>
+              <div class="benefit">具备 AI 实时辅助扩展能力</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="note">
+        边界：自研控制层、软电话交互和 AI 侧边栏，不自研运营商网络、线路、并发与录音基础设施。建议先用一个业务线验证 V1，再逐步替换现有集成软电话。
+      </div>
+    </article>
+  </main>
+</body>
+</html>

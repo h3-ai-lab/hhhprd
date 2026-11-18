@@ -109,6 +109,7 @@ python3 build_prd_pages.py
 | 层级 | 文档 | 用途 |
 |---|---|---|
 | 总体架构 | [目标系统架构](shared/architecture/target-system-architecture.md) | 统一门户、领域后台、数据归属和拆分边界 |
+| 外呼架构 | [自研软电话功能架构](hhhprd-site/call-center-self-built-roadmap.html) | 供应商对比、外呼原理、自研边界和分阶段路线 |
 | 公共流程 | `shared/workflows/` | PRD 2.0、文档变更与发布流程 |
 | 公共能力 | `shared/skills/` | PRD、原型、校验、发布能力 |
 | 公共知识 | `shared/rag/` | 原始来源清单与检索规则 |

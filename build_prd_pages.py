@@ -19,6 +19,9 @@ PROJECTS = {
     "crm-lead-quality-analysis": "CRM 线索质量分析",
     "crm-learning-plan-progress": "CRM学习计划与课程进度",
 }
+STATIC_ARCHITECTURE_PAGES = {
+    "call-center-self-built-roadmap.html",
+}
 
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
 CODE_RE = re.compile(r"`([^`]+)`")
@@ -214,7 +217,18 @@ def build_project(slug, title):
 def main():
     for slug, title in PROJECTS.items():
         build_project(slug, title)
+    build_static_architecture_pages()
     build_architecture()
+
+
+def build_static_architecture_pages():
+    source_dir = ROOT / "shared" / "architecture"
+    output_dir = ROOT / "hhhprd-site"
+    for filename in STATIC_ARCHITECTURE_PAGES:
+        source = source_dir / filename
+        output = output_dir / filename
+        output.write_bytes(source.read_bytes())
+        print(f"Copied {output}")
 
 
 def build_architecture():

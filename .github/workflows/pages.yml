@@ -31,6 +31,7 @@ jobs:
           test -f shared/rag/sources.yaml
           test -f shared/memory/README.md
           test -f hhhprd-site/index.html
+          test -f hhhprd-site/call-center-self-built-roadmap.html
           test -f hhhprd-site/prd-referrals-rewards.html
           test -f hhhprd-site/prd-first-contact.html
           test -f hhhprd-site/prd-first-contact-concise.html
@@ -58,6 +59,7 @@ jobs:
           mkdir -p public/projects public/assets
           cp hhhprd-site/index.html public/index.html
           cp hhhprd-site/system-architecture.html public/system-architecture.html
+          cp hhhprd-site/call-center-self-built-roadmap.html public/call-center-self-built-roadmap.html
           cp hhhprd-site/assets/dino-system-architecture.png public/assets/dino-system-architecture.png
           cp hhhprd-site/prd-referrals-rewards.html public/prd-referrals-rewards.html
           cp hhhprd-site/prd-first-contact.html public/prd-first-contact.html
