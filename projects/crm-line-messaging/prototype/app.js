@@ -1,17 +1,18 @@
 const STR = {
   zh: {
-    brandSub: "客户沟通工作台",
-    navGroup: "用户管理",
-    navUsers: "用户列表",
-    navLine: "LINE消息",
+    brandSub: "客户与消息工作台",
+    navGroup: "销售管理",
+    navSales: "销售中心",
+    navUsers: "销售中心",
+    navLine: "消息发送",
     serviceOnline: "消息服务运行中",
     crumbCrm: "Dino CRM",
-    pageTitle: "LINE消息",
+    pageTitle: "销售中心",
     scope: "全业务线",
     roleName: "运营管理员",
-    roleSub: "消息发送",
-    introTitle: "客户消息",
-    introText: "查看客户与 dinoAI 官方账号的绑定状态，多选 1–100 位已关注且已授权的客户，通过 Multicast 批量发送同一文本消息。",
+    roleSub: "销售运营",
+    introTitle: "销售中心",
+    introText: "在当前销售列表中按业务线筛选客户，选择 1–100 位已关注且已授权的客户，通过已上线通道发送相同内容。",
     lastSync: "LINE 状态已同步",
     metricBound: "已绑定客户数",
     metricSendable: "可发送客户数",
@@ -19,12 +20,18 @@ const STR = {
     metricBoundFoot: "当前筛选范围内，关系有效的客户",
     metricSendableFoot: "已关注、已授权，且状态已确认",
     metricAcceptedFoot: "LINE 已受理批次 ÷ 进入消息服务的批次",
-    customerList: "客户列表",
-    customerCount: "共 {count} 位",
+    customerList: "跟进线索",
+    customerCount: "共 {count} 条",
     searchPlaceholder: "搜索用户 ID、姓名或手机号",
     filterBinding: "LINE 绑定",
     filterFriend: "关注状态",
     filterConsent: "营销授权",
+    filterBusiness: "业务线",
+    filterBusinessShort: "业务线",
+    businessAll: "全部业务线",
+    businessTH: "泰国业务线",
+    businessVN: "越南业务线",
+    businessMY: "马来西亚业务线",
     filterBindingShort: "绑定",
     filterFriendShort: "关注",
     filterConsentShort: "授权",
@@ -44,9 +51,13 @@ const STR = {
     selectPage: "选择当前页",
     clearSelection: "清空选择",
     batchSend: "批量发送",
+    batchSendMessage: "批量发送消息",
     batchLimit: "单次最多 100 位",
     maxSelected: "单次最多选择 100 位客户",
     selectedNone: "请先选择可发送客户",
+    mixedBusinessLines: "同一批次只能发送同一业务线客户",
+    channel: "发送通道",
+    channelLine: "LINE 官方账号",
     noCustomers: "当前条件下没有客户",
     noCustomersSub: "调整搜索或筛选条件后重试",
     detailTitle: "客户详情",
@@ -98,6 +109,8 @@ const STR = {
     modalLineId: "LINE 用户 ID",
     modalPreview: "消息内容",
     modalRecipients: "接收客户",
+    modalChannel: "发送通道",
+    modalBusinessLine: "业务线",
     modalRecipientCount: "共 {count} 位客户",
     modalEligible: "可发送 {count} 位",
     modalExcluded: "已排除 {count} 位",
@@ -121,18 +134,19 @@ const STR = {
     nextPage: "下一页"
   },
   en: {
-    brandSub: "Customer messaging workspace",
-    navGroup: "User Management",
-    navUsers: "User List",
-    navLine: "LINE Messages",
+    brandSub: "Customer and messaging workspace",
+    navGroup: "Sales Management",
+    navSales: "Sales Center",
+    navUsers: "Sales Center",
+    navLine: "Messaging",
     serviceOnline: "Messaging service online",
     crumbCrm: "Dino CRM",
-    pageTitle: "LINE Messages",
+    pageTitle: "Sales Center",
     scope: "All Business Lines",
     roleName: "Operations Admin",
-    roleSub: "Messaging",
-    introTitle: "Customer messages",
-    introText: "Review each customer's link to the dinoAI Official Account and send one text message to 1–100 opted-in followers through Multicast.",
+    roleSub: "Sales Operations",
+    introTitle: "Sales Center",
+    introText: "Filter the current sales list by Business Line, then send the same message to 1–100 linked, opted-in customers through an available channel.",
     lastSync: "LINE status synced",
     metricBound: "Linked Customers",
     metricSendable: "Message-ready Customers",
@@ -140,12 +154,18 @@ const STR = {
     metricBoundFoot: "Customers with an active link in the current filters",
     metricSendableFoot: "Following, opted in, and recently verified",
     metricAcceptedFoot: "Accepted batches ÷ batches sent to the service",
-    customerList: "Customers",
-    customerCount: "{count} customers",
+    customerList: "Follow-up Leads",
+    customerCount: "{count} leads",
     searchPlaceholder: "Search user ID, name, or phone",
     filterBinding: "LINE Link",
     filterFriend: "Follow Status",
     filterConsent: "Marketing Opt-in",
+    filterBusiness: "Business Line",
+    filterBusinessShort: "Business Line",
+    businessAll: "All Business Lines",
+    businessTH: "Thailand Business Line",
+    businessVN: "Vietnam Business Line",
+    businessMY: "Malaysia Business Line",
     filterBindingShort: "Link",
     filterFriendShort: "Following",
     filterConsentShort: "Opt-in",
@@ -165,9 +185,13 @@ const STR = {
     selectPage: "Select Current Page",
     clearSelection: "Clear",
     batchSend: "Send in Batch",
+    batchSendMessage: "Send Message in Batch",
     batchLimit: "Maximum 100 recipients",
     maxSelected: "You can select up to 100 customers",
     selectedNone: "Select at least one message-ready customer",
+    mixedBusinessLines: "A batch can contain customers from only one Business Line",
+    channel: "Channel",
+    channelLine: "LINE Official Account",
     noCustomers: "No customers match these filters",
     noCustomersSub: "Adjust the search or filters and try again",
     detailTitle: "Customer Details",
@@ -219,6 +243,8 @@ const STR = {
     modalLineId: "LINE User ID",
     modalPreview: "Message",
     modalRecipients: "Recipients",
+    modalChannel: "Channel",
+    modalBusinessLine: "Business Line",
     modalRecipientCount: "{count} customers",
     modalEligible: "{count} ready to message",
     modalExcluded: "{count} excluded",
@@ -298,6 +324,7 @@ const state = {
   lang: requestedLanguage === "en" || (!requestedLanguage && localStorage.getItem("crm-line-lang") === "en") ? "en" : "zh",
   selectedId: CUSTOMERS[0].userId,
   query: "",
+  businessLine: "all",
   binding: "all",
   friend: "all",
   consent: "all",
@@ -415,6 +442,7 @@ function filteredCustomers() {
       || customer.name.toLowerCase().includes(query)
       || customer.phone.toLowerCase().includes(query);
     return matchesQuery
+      && (state.businessLine === "all" || customer.businessLine === state.businessLine)
       && (state.binding === "all" || customer.binding === state.binding)
       && (state.friend === "all" || customer.friend === state.friend)
       && (state.consent === "all" || customer.consent === state.consent);
@@ -484,6 +512,7 @@ function renderAll() {
         <div class="bulk-bar" id="bulk-bar">
           <div class="bulk-selection">
             <strong id="selected-count">${esc(t("selectedCount", { count: 0 }))}</strong>
+            <span class="channel-pill">${esc(t("channel"))}: ${esc(t("channelLine"))}</span>
             <span>${esc(t("batchLimit"))}</span>
           </div>
           <div class="bulk-actions">
@@ -493,6 +522,12 @@ function renderAll() {
         </div>
         <div class="filter-bar">
           <div class="search-box">${icon("search")}<input id="search" class="control" value="${esc(state.query)}" placeholder="${esc(t("searchPlaceholder"))}" aria-label="${esc(t("searchPlaceholder"))}"></div>
+          <select id="filter-businessLine" class="control" aria-label="${esc(t("filterBusiness"))}">
+            <option value="all">${esc(t("filterBusinessShort"))}: ${esc(t("businessAll"))}</option>
+            <option value="TH">${esc(t("businessTH"))}</option>
+            <option value="VN">${esc(t("businessVN"))}</option>
+            <option value="MY">${esc(t("businessMY"))}</option>
+          </select>
           <select id="filter-binding" class="control" aria-label="${esc(t("filterBinding"))}">
             <option value="all">${esc(t("filterBindingShort"))}: ${esc(t("filterAll"))}</option>
             <option value="ACTIVE">${esc(t("bindingActive"))}</option>
@@ -539,6 +574,7 @@ function renderAll() {
 }
 
 function applySelectValues() {
+  document.querySelector("#filter-businessLine").value = state.businessLine;
   document.querySelector("#filter-binding").value = state.binding;
   document.querySelector("#filter-friend").value = state.friend;
   document.querySelector("#filter-consent").value = state.consent;
@@ -730,7 +766,7 @@ function bindPageEvents() {
     state.selectedUsers.clear();
     updateFilteredView();
   });
-  ["binding", "friend", "consent"].forEach((key) => {
+  ["businessLine", "binding", "friend", "consent"].forEach((key) => {
     document.querySelector(`#filter-${key}`).addEventListener("change", (event) => {
       state[key] = event.target.value;
       state.selectedUsers.clear();
@@ -743,6 +779,10 @@ function bindPageEvents() {
     const recipients = CUSTOMERS.filter((customer) => state.selectedUsers.has(customer.userId) && isSendable(customer));
     if (!recipients.length) {
       showToast(t("selectedNone"));
+      return;
+    }
+    if (new Set(recipients.map((customer) => customer.businessLine)).size > 1) {
+      showToast(t("mixedBusinessLines"));
       return;
     }
     openBatchModal(recipients);
@@ -816,6 +856,7 @@ function openSendModal(customer, text) {
     <div class="modal-body">
       <div class="modal-review">
         <div><span>${esc(t("modalCustomer"))}</span><strong>${esc(customer.name)} · ${esc(customer.userId)}</strong></div>
+        <div><span>${esc(t("modalChannel"))}</span><strong>${esc(t("channelLine"))}</strong></div>
         <div><span>${esc(t("modalBusiness"))}</span><strong>${esc(businessLineLabel(customer.businessLine))}</strong></div>
         <div><span>${esc(t("modalLineId"))}</span><strong>${esc(maskedLineId(customer.lineUserId))}</strong></div>
       </div>
@@ -843,6 +884,8 @@ function openBatchModal(recipients) {
     </div>
     <div class="modal-body">
       <div class="modal-review">
+        <div><span>${esc(t("modalChannel"))}</span><strong>${esc(t("channelLine"))}</strong></div>
+        <div><span>${esc(t("modalBusinessLine"))}</span><strong>${esc(businessLineLabel(recipients[0].businessLine))}</strong></div>
         <div><span>${esc(t("modalRecipients"))}</span><strong>${esc(t("modalRecipientCount", { count: recipients.length }))}</strong></div>
         <div><span>${esc(t("modalEligible", { count: recipients.length }))}</span><strong>${esc(t("modalExcluded", { count: 0 }))}</strong></div>
       </div>
@@ -963,7 +1006,7 @@ function showToast(text) {
 
 function updateChrome() {
   document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
-  document.title = state.lang === "zh" ? "Dino CRM · LINE消息" : "Dino CRM · LINE Messages";
+  document.title = state.lang === "zh" ? "Dino CRM · 销售中心" : "Dino CRM · Sales Center";
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     element.textContent = t(element.dataset.i18n);
   });

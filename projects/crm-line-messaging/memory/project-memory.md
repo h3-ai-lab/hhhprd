@@ -1,4 +1,4 @@
-# crm-LINE 消息发送项目 Memory
+# CRM 多渠道消息发送项目 Memory
 
 ## Confirmed Facts
 
@@ -7,10 +7,14 @@
 - CRM 用户以稳定 `user_id` 识别，LINE 关注人以同一 Provider 下的 `line_user_id` 识别。
 - 好友状态和营销授权必须分别维护；已关注不等于已授权。
 - LINE 接口成功只表示官方账号已受理，不表示已送达或已读。
+- 消息发送入口放在销售中心当前销售列表，不新增独立 LINE 消息页面。
+- 业务线从销售中心现有筛选中获取；同一发送批次只能包含一个业务线。
 
 ## Decisions
 
-- 建立独立 `用户管理 → LINE消息` 工作台，不修改现有用户列表的默认列与筛选。
+- 发送能力嵌入 `销售管理 → 销售中心 → 我的跟进`，复用现有客户、业务线、负责人和数据权限。
+- 建立通用发送任务、发送批次、接收人快照、发送尝试和通道能力模型；LINE 首个接入。
+- 不在公共页面写死 LINE 专属字段；通道差异由通道能力和适配器处理。
 - 客户端绑定事件至少包含 `event_id`、`event_type`、`user_id`、`provider_id`、`line_user_id`、`friend_status`、`marketing_consent`、`consent_version`、`consent_at` 和 `event_at`。
 - Channel Access Token、Channel Secret、用户 Access Token 和 Refresh Token 均不进入客户端到 CRM 的绑定契约。
 - 一个 CRM 用户在同一 Provider 下只有一条有效绑定；同一 LINE 用户也不能同时绑定多个 CRM 用户。
@@ -21,12 +25,14 @@
 - 发送时实时确认关注状态；关注未知、未关注、未授权或绑定冲突时禁止发送。
 - 临时异常自动重试最多 3 次且总时长不超过 10 分钟；业务性错误不自动重试。
 - 单人发送与批量发送使用独立权限；批量发送默认仅开放给销售组长、运营/商业化和管理员。
+- 通用权限使用 `message.*`，LINE 通道再校验 `message.channel.line.send`。
 - 消息发送、批量发送、重试、刷新状态和解绑均纳入 RBAC 与不可篡改审计。
 
 ## Glossary
 
 - 绑定事件：客户端或客户端服务端提交的 dinoAI 用户与 LINE 用户关系及授权状态。
 - 可发送客户：拥有有效绑定、当前已关注、已同意营销授权，且状态在 24 小时内确认的 CRM 用户。
-- 发送批次：一次 Multicast 请求及其 1–100 位客户快照。
+- 发送批次：同一业务线内一次 Multicast 请求及其 1–100 位客户快照。
+- 通道适配器：把统一发送任务转换为具体通道请求并标准化结果的系统组件。
 - LINE 受理：LINE Messaging API 已接受整个批次，不代表终端已收到或已阅读。
 - 绑定冲突：同一 CRM 用户或 LINE 用户试图形成多个有效绑定。

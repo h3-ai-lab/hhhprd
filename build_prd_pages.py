@@ -13,7 +13,7 @@ PROJECTS = {
     "follow-up-funnel": "管理看板新增跟进漏斗",
     "crm-org-data-permissions": "CRM组织架构&数据权限",
     "referral-growth-mvp": "拉新裂变mvp",
-    "crm-line-messaging": "crm-LINE 消息发送",
+    "crm-line-messaging": "CRM 多渠道消息发送（LINE 首发）",
     "user-consultation-lead": "用户咨询预约时间",
     "outbound-capability": "外呼能力一期",
     "crm-lead-quality-analysis": "CRM 线索质量分析",

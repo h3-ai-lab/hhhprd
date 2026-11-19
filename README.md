@@ -22,7 +22,7 @@
 | 引入首跟节点&首跟看板-2 | 单文件参考样例｜评审后修订 | [PRD](projects/first-contact-concise/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
 | 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 | CRM组织架构&数据权限 | 评审后修订 | [PRD](projects/crm-org-data-permissions/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
-| crm-LINE 消息发送 | 待评审 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
+| CRM 多渠道消息发送（LINE 首发） | 待评审 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
 | 用户咨询预约时间 | 待评审 | [PRD](projects/user-consultation-lead/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/) |
 | 外呼能力一期 | 评审后修订 | [PRD](projects/outbound-capability/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/outbound-capability/prototype/) |
 | CRM 线索质量分析 | 评审后修订 | [PRD](projects/crm-lead-quality-analysis/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/) |
@@ -37,8 +37,8 @@
 - 交互原型：<https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/>
 - 拉新裂变mvp PRD：<https://h3-ai-lab.github.io/hhhprd/prd-referral-growth-mvp.html>
 - 拉新裂变mvp原型：<https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/>
-- crm-LINE 消息发送 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-line-messaging.html>
-- crm-LINE 消息发送原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/>
+- CRM 多渠道消息发送（LINE 首发）PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-line-messaging.html>
+- CRM 多渠道消息发送（LINE 首发）原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/>
 - 用户咨询预约时间 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-user-consultation-lead.html>
 - 用户咨询预约时间原型：<https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/>
 - 外呼能力一期 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-outbound-capability.html>
