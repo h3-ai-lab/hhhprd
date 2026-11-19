@@ -1,0 +1,34 @@
+version: 1
+sources:
+  - id: crm-sales-manual
+    path: ../../../../crm-manual/docs/sales/S-00.md
+    purpose: 销售中心页签、当前跟进阶段、用户状态和列表操作现状
+    priority: authoritative
+  - id: crm-user-manual
+    path: ../../../../crm-manual/docs/user/U-01.md
+    purpose: 用户中心列表、用户状态和用户详情入口
+    priority: authoritative
+  - id: crm-user-consultation
+    path: ../../user-consultation-lead/prd/PRD.md
+    purpose: 用户预约时间与销售咨询预约的现有边界
+    priority: authoritative
+  - id: crm-request-tracker
+    path: ../../../../crm-all-requests.ndjson
+    purpose: 现有“咨询已完成”阶段及会议链接诉求
+    priority: high
+  - id: lark-calendar-event-api
+    url: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event/create
+    purpose: 创建带视频会议的日程、会议 Owner 和自动录制设置
+    priority: authoritative
+  - id: lark-meeting-get-api
+    url: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/get
+    purpose: 会议结束状态、参与人快照、智能纪要标识
+    priority: authoritative
+  - id: lark-meeting-events
+    path: ../../../../.agents/skills/lark-event/references/lark-event-vc.md
+    purpose: 会议开始、结束、纪要和录制事件
+    priority: authoritative
+  - id: lark-plans
+    url: https://www.larksuite.com/plans
+    purpose: 公开套餐中的高清会议用量、单场参会人数和智能纪要额度
+    priority: high
