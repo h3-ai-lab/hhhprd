@@ -28,13 +28,13 @@
     <aside class="sidebar">
       <div class="brand">
         <div class="brand-mark">D</div>
-        <div class="brand-copy"><strong>Dino CRM</strong><span data-i18n="brandSub">客户与消息工作台</span></div>
+        <div class="brand-copy"><strong>Dino CRM</strong><span data-i18n="brandSub">销售中心 · 全业务线</span></div>
       </div>
       <nav class="side-nav" aria-label="Main navigation">
         <div class="nav-label" data-i18n="navGroup">销售管理</div>
         <button class="nav-item is-active"><svg><use href="#i-users"></use></svg><span data-i18n="navSales">销售中心</span></button>
       </nav>
-      <div class="sidebar-foot"><i></i><span data-i18n="serviceOnline">消息服务运行中</span></div>
+      <div class="sidebar-foot"><i></i><span data-i18n="serviceOnline">业务数据已同步</span></div>
     </aside>
 
     <div class="workspace">
@@ -57,6 +57,10 @@
   <div class="modal-layer" id="modal-layer" aria-hidden="true">
     <button class="modal-scrim" data-action="close-modal" aria-label="Close"></button>
     <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"></section>
+  </div>
+  <div class="drawer-layer" id="drawer-layer" aria-hidden="true">
+    <button class="drawer-scrim" data-action="close-drawer" aria-label="Close"></button>
+    <aside class="drawer" id="drawer" aria-label="客户详情"></aside>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script defer src="./app.js"></script>

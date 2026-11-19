@@ -1,11 +1,11 @@
 const STR = {
   zh: {
-    brandSub: "客户与消息工作台",
+    brandSub: "销售中心 · 全业务线",
     navGroup: "销售管理",
     navSales: "销售中心",
     navUsers: "销售中心",
     navLine: "消息发送",
-    serviceOnline: "消息服务运行中",
+    serviceOnline: "业务数据已同步",
     crumbCrm: "Dino CRM",
     pageTitle: "销售中心",
     scope: "全业务线",
@@ -13,6 +13,14 @@ const STR = {
     roleSub: "销售运营",
     introTitle: "销售中心",
     introText: "在当前销售列表中按业务线筛选客户，选择 1–100 位已关注且已授权的客户，通过已上线通道发送相同内容。",
+    viewPool: "公海",
+    viewFollowing: "我的跟进",
+    viewPaid: "已付费",
+    listTitle: "线索明细",
+    listCount: "共 {count} 条",
+    resetFilters: "重置筛选",
+    viewDetails: "查看",
+    currentLineState: "LINE 状态",
     lastSync: "LINE 状态已同步",
     metricBound: "已绑定客户数",
     metricSendable: "可发送客户数",
@@ -134,12 +142,12 @@ const STR = {
     nextPage: "下一页"
   },
   en: {
-    brandSub: "Customer and messaging workspace",
+    brandSub: "Sales Center · All Business Lines",
     navGroup: "Sales Management",
     navSales: "Sales Center",
     navUsers: "Sales Center",
     navLine: "Messaging",
-    serviceOnline: "Messaging service online",
+    serviceOnline: "Business data synced",
     crumbCrm: "Dino CRM",
     pageTitle: "Sales Center",
     scope: "All Business Lines",
@@ -147,6 +155,14 @@ const STR = {
     roleSub: "Sales Operations",
     introTitle: "Sales Center",
     introText: "Filter the current sales list by Business Line, then send the same message to 1–100 linked, opted-in customers through an available channel.",
+    viewPool: "Lead Pool",
+    viewFollowing: "My Follow-ups",
+    viewPaid: "Paid",
+    listTitle: "Lead Details",
+    listCount: "{count} leads",
+    resetFilters: "Reset Filters",
+    viewDetails: "View",
+    currentLineState: "LINE Status",
     lastSync: "LINE status synced",
     metricBound: "Linked Customers",
     metricSendable: "Message-ready Customers",
@@ -273,7 +289,7 @@ const ago = (minutes) => new Date(Date.now() - minutes * 60_000).toISOString();
 
 const CUSTOMERS = [
   {
-    userId: "2119933744832167937", name: "Prasert S.", businessLine: "TH", phone: "•••• 4218",
+    userId: "2119933744832167937", name: "Prasert S.", view: "following", businessLine: "TH", phone: "•••• 4218",
     binding: "ACTIVE", friend: "FOLLOWING", consent: "CONSENTED", lineUserId: "U8f2c5b9d19374ae8c71e2aed6a91",
     confirmedAt: ago(8), updatedAt: ago(8),
     messages: [
@@ -282,37 +298,37 @@ const CUSTOMERS = [
     ]
   },
   {
-    userId: "211993114542575618", name: "Narin K.", businessLine: "TH", phone: "•••• 9024",
+    userId: "211993114542575618", name: "Narin K.", view: "following", businessLine: "TH", phone: "•••• 9024",
     binding: "ACTIVE", friend: "FOLLOWING", consent: "WITHDRAWN", lineUserId: "U3a48e1bdb0e46eeabf014b3f23c2",
     confirmedAt: ago(14), updatedAt: ago(45),
     messages: [{ id: "MSG-261110-1021", textKey: "msg1", at: ago(4310), status: "ACCEPTED" }]
   },
   {
-    userId: "211993582872029762", name: "Linh Pham", businessLine: "VN", phone: "•••• 6170",
+    userId: "211993582872029762", name: "Linh Pham", view: "following", businessLine: "VN", phone: "•••• 6170",
     binding: "ACTIVE", friend: "NOT_FOLLOWING", consent: "CONSENTED", lineUserId: "U71df5fbc0e47c45fbdcb4092d88e",
     confirmedAt: ago(21), updatedAt: ago(21),
     messages: []
   },
   {
-    userId: "211993414302876441", name: "Dung Tran", businessLine: "VN", phone: "•••• 3381",
+    userId: "211993414302876441", name: "Dung Tran", view: "pool", businessLine: "VN", phone: "•••• 3381",
     binding: "UNBOUND", friend: "UNKNOWN", consent: "UNKNOWN", lineUserId: "",
     confirmedAt: null, updatedAt: ago(80),
     messages: []
   },
   {
-    userId: "211993778120431105", name: "Giang Vo", businessLine: "TH", phone: "•••• 7256",
+    userId: "211993778120431105", name: "Giang Vo", view: "following", businessLine: "TH", phone: "•••• 7256",
     binding: "ACTIVE", friend: "UNKNOWN", consent: "CONSENTED", lineUserId: "U99a2d1c0f27d49ae8c03acff2b88",
     confirmedAt: ago(1670), updatedAt: ago(1670),
     messages: [{ id: "MSG-261112-0918", textKey: "msgFailedContent", at: ago(1480), status: "FAILED", errorKey: "msgFailedReason" }]
   },
   {
-    userId: "211993723590118302", name: "Khanh Lam", businessLine: "MY", phone: "•••• 1408",
+    userId: "211993723590118302", name: "Khanh Lam", view: "paid", businessLine: "MY", phone: "•••• 1408",
     binding: "CONFLICT", friend: "FOLLOWING", consent: "CONSENTED", lineUserId: "U12ab55de987d4d3ba187aad10c44",
     confirmedAt: ago(31), updatedAt: ago(31),
     messages: []
   },
   {
-    userId: "211993690918140527", name: "Nam Hoang", businessLine: "TH", phone: "•••• 5713",
+    userId: "211993690918140527", name: "Nam Hoang", view: "following", businessLine: "TH", phone: "•••• 5713",
     binding: "ACTIVE", friend: "FOLLOWING", consent: "CONSENTED", lineUserId: "U5481cb479ce346cc80d1f9213b7f",
     confirmedAt: ago(3), updatedAt: ago(3),
     messages: [{ id: "MSG-261113-1048", textKey: "msg2", at: ago(88), status: "ACCEPTED" }]
@@ -324,6 +340,7 @@ const state = {
   lang: requestedLanguage === "en" || (!requestedLanguage && localStorage.getItem("crm-line-lang") === "en") ? "en" : "zh",
   selectedId: CUSTOMERS[0].userId,
   query: "",
+  tab: "following",
   businessLine: "all",
   binding: "all",
   friend: "all",
@@ -334,6 +351,8 @@ const state = {
 const content = document.querySelector("#content");
 const modalLayer = document.querySelector("#modal-layer");
 const modal = document.querySelector("#modal");
+const drawerLayer = document.querySelector("#drawer-layer");
+const drawer = document.querySelector("#drawer");
 const toast = document.querySelector("#toast");
 let toastTimer;
 
@@ -442,11 +461,19 @@ function filteredCustomers() {
       || customer.name.toLowerCase().includes(query)
       || customer.phone.toLowerCase().includes(query);
     return matchesQuery
+      && customer.view === state.tab
       && (state.businessLine === "all" || customer.businessLine === state.businessLine)
       && (state.binding === "all" || customer.binding === state.binding)
       && (state.friend === "all" || customer.friend === state.friend)
       && (state.consent === "all" || customer.consent === state.consent);
   });
+}
+
+function viewCounts() {
+  return CUSTOMERS.reduce((counts, customer) => {
+    counts[customer.view] = (counts[customer.view] || 0) + 1;
+    return counts;
+  }, {});
 }
 
 function selectedCustomer() {
@@ -472,44 +499,56 @@ function metricStats(customers) {
 
 function renderAll() {
   const customers = filteredCustomers();
+  const counts = viewCounts();
   if (!customers.some((customer) => customer.userId === state.selectedId)) {
     state.selectedId = customers[0]?.userId || null;
   }
-  const stats = metricStats(customers);
   content.innerHTML = `
-    <section class="page-intro">
-      <div>
-        <h2>${esc(t("introTitle"))}</h2>
-        <p>${esc(t("introText"))}</p>
+    <section class="page-enter">
+      <div class="view-tabs" role="tablist" aria-label="${esc(t("pageTitle"))}">
+        <button class="view-tab ${state.tab === "pool" ? "is-active" : ""}" data-tab="pool">${esc(t("viewPool"))} <em>${counts.pool || 0}</em></button>
+        <button class="view-tab ${state.tab === "following" ? "is-active" : ""}" data-tab="following">${esc(t("viewFollowing"))} <em>${counts.following || 0}</em></button>
+        <button class="view-tab ${state.tab === "paid" ? "is-active" : ""}" data-tab="paid">${esc(t("viewPaid"))} <em>${counts.paid || 0}</em></button>
       </div>
-      <div class="sync-text">${icon("clock")}<span>${esc(t("lastSync"))} ${formatTime(ago(2))}</span></div>
-    </section>
 
-    <section class="metrics" aria-label="${esc(t("customerList"))}">
-      <article class="metric">
-        <div class="metric-label"><span>${esc(t("metricBound"))}</span><span class="info-dot" title="${esc(t("metricBoundFoot"))}">i</span></div>
-        <div class="metric-value">${stats.bound}<small>${state.lang === "zh" ? "位" : "customers"}</small></div>
-        <div class="metric-foot">${esc(t("metricBoundFoot"))}</div>
-      </article>
-      <article class="metric primary">
-        <div class="metric-label"><span>${esc(t("metricSendable"))}</span><span class="info-dot" title="${esc(t("metricSendableFoot"))}">i</span></div>
-        <div class="metric-value">${stats.sendable}<small>${state.lang === "zh" ? "位" : "customers"}</small></div>
-        <div class="metric-foot">${esc(t("metricSendableFoot"))}</div>
-      </article>
-      <article class="metric">
-        <div class="metric-label"><span>${esc(t("metricAccepted"))}</span><span class="info-dot" title="${esc(t("metricAcceptedFoot"))}">i</span></div>
-        <div class="metric-value">${esc(stats.acceptedRate)}</div>
-        <div class="metric-foot">${esc(t("metricAcceptedFoot"))} · ${esc(stats.acceptedRatio)}</div>
-      </article>
-    </section>
-
-    <section class="workspace-grid">
-      <article class="card">
-        <div class="card-head">
-          <div><h3>${esc(t("customerList"))}</h3><p>${esc(t("customerCount", { count: customers.length }))}</p></div>
-          <span class="count-pill" id="visible-count">${customers.length}</span>
+      <section class="filter-card">
+        <div class="filter-grid">
+          <label class="field search-field"><span class="field-label">${esc(t("searchPlaceholder"))}</span>${icon("search")}<input id="search" class="control" value="${esc(state.query)}" placeholder="${esc(t("searchPlaceholder"))}" aria-label="${esc(t("searchPlaceholder"))}"></label>
+          <label class="field"><span class="field-label">${esc(t("filterBusiness"))}</span><select id="filter-businessLine" class="control" aria-label="${esc(t("filterBusiness"))}">
+            <option value="all">${esc(t("filterBusinessShort"))}: ${esc(t("businessAll"))}</option>
+            <option value="TH">${esc(t("businessTH"))}</option>
+            <option value="VN">${esc(t("businessVN"))}</option>
+            <option value="MY">${esc(t("businessMY"))}</option>
+          </select></label>
+          <label class="field"><span class="field-label">${esc(t("filterBinding"))}</span><select id="filter-binding" class="control" aria-label="${esc(t("filterBinding"))}">
+            <option value="all">${esc(t("filterBindingShort"))}: ${esc(t("filterAll"))}</option>
+            <option value="ACTIVE">${esc(t("bindingActive"))}</option>
+            <option value="CONFLICT">${esc(t("bindingConflict"))}</option>
+            <option value="UNBOUND">${esc(t("bindingUnbound"))}</option>
+          </select></label>
+          <label class="field"><span class="field-label">${esc(t("filterFriend"))}</span><select id="filter-friend" class="control" aria-label="${esc(t("filterFriend"))}">
+            <option value="all">${esc(t("filterFriendShort"))}: ${esc(t("filterAll"))}</option>
+            <option value="FOLLOWING">${esc(t("friendFollowing"))}</option>
+            <option value="NOT_FOLLOWING">${esc(t("friendNotFollowing"))}</option>
+            <option value="UNKNOWN">${esc(t("friendUnknown"))}</option>
+          </select></label>
+          <label class="field"><span class="field-label">${esc(t("filterConsent"))}</span><select id="filter-consent" class="control" aria-label="${esc(t("filterConsent"))}">
+            <option value="all">${esc(t("filterConsentShort"))}: ${esc(t("filterAll"))}</option>
+            <option value="CONSENTED">${esc(t("consentConsented"))}</option>
+            <option value="WITHDRAWN">${esc(t("consentWithdrawn"))}</option>
+            <option value="UNKNOWN">${esc(t("consentUnknown"))}</option>
+          </select></label>
         </div>
-        <div class="bulk-bar" id="bulk-bar">
+        <div class="filter-actions">
+          <button class="btn btn-primary" id="reset-filters">${esc(t("resetFilters"))}</button>
+          <span class="filter-count">${esc(t("lastSync"))} ${formatTime(ago(2))}</span>
+        </div>
+      </section>
+
+      <section class="table-card">
+        <div class="table-toolbar">
+          <div class="table-toolbar-title"><strong>${esc(t("listTitle"))}</strong><span>${esc(t("listCount", { count: customers.length }))}</span></div>
+          <div class="spacer"></div>
           <div class="bulk-selection">
             <strong id="selected-count">${esc(t("selectedCount", { count: 0 }))}</strong>
             <span class="channel-pill">${esc(t("channel"))}: ${esc(t("channelLine"))}</span>
@@ -520,49 +559,21 @@ function renderAll() {
             <button class="btn btn-primary btn-small" id="batch-send" disabled>${icon("send")}<span>${esc(t("batchSend"))}</span></button>
           </div>
         </div>
-        <div class="filter-bar">
-          <div class="search-box">${icon("search")}<input id="search" class="control" value="${esc(state.query)}" placeholder="${esc(t("searchPlaceholder"))}" aria-label="${esc(t("searchPlaceholder"))}"></div>
-          <select id="filter-businessLine" class="control" aria-label="${esc(t("filterBusiness"))}">
-            <option value="all">${esc(t("filterBusinessShort"))}: ${esc(t("businessAll"))}</option>
-            <option value="TH">${esc(t("businessTH"))}</option>
-            <option value="VN">${esc(t("businessVN"))}</option>
-            <option value="MY">${esc(t("businessMY"))}</option>
-          </select>
-          <select id="filter-binding" class="control" aria-label="${esc(t("filterBinding"))}">
-            <option value="all">${esc(t("filterBindingShort"))}: ${esc(t("filterAll"))}</option>
-            <option value="ACTIVE">${esc(t("bindingActive"))}</option>
-            <option value="CONFLICT">${esc(t("bindingConflict"))}</option>
-            <option value="UNBOUND">${esc(t("bindingUnbound"))}</option>
-          </select>
-          <select id="filter-friend" class="control" aria-label="${esc(t("filterFriend"))}">
-            <option value="all">${esc(t("filterFriendShort"))}: ${esc(t("filterAll"))}</option>
-            <option value="FOLLOWING">${esc(t("friendFollowing"))}</option>
-            <option value="NOT_FOLLOWING">${esc(t("friendNotFollowing"))}</option>
-            <option value="UNKNOWN">${esc(t("friendUnknown"))}</option>
-          </select>
-          <select id="filter-consent" class="control" aria-label="${esc(t("filterConsent"))}">
-            <option value="all">${esc(t("filterConsentShort"))}: ${esc(t("filterAll"))}</option>
-            <option value="CONSENTED">${esc(t("consentConsented"))}</option>
-            <option value="WITHDRAWN">${esc(t("consentWithdrawn"))}</option>
-            <option value="UNKNOWN">${esc(t("consentUnknown"))}</option>
-          </select>
-        </div>
         <div class="table-wrap">
           <table>
             <thead><tr>
               <th class="select-column"><input type="checkbox" id="select-page" aria-label="${esc(t("selectPage"))}"></th>
               <th>${esc(t("colUser"))}</th><th>${esc(t("colBusiness"))}</th><th>${esc(t("colBinding"))}</th>
-              <th>${esc(t("colFriend"))}</th><th>${esc(t("colConsent"))}</th><th>${esc(t("colSendable"))}</th><th>${esc(t("colUpdated"))}</th>
+              <th>${esc(t("colFriend"))}</th><th>${esc(t("colConsent"))}</th><th>${esc(t("colSendable"))}</th><th>${esc(t("colUpdated"))}</th><th>${state.lang === "zh" ? "操作" : "Action"}</th>
             </tr></thead>
             <tbody id="customer-body"></tbody>
           </table>
         </div>
-        <div class="pager">
-          <span id="pager-label">${esc(t("customerCount", { count: customers.length }))}</span>
-          <div class="pager-actions"><button class="page-btn" aria-label="${esc(t("prevPage"))}">‹</button><button class="page-btn is-active">1</button><button class="page-btn" aria-label="${esc(t("nextPage"))}">›</button></div>
+        <div class="table-footer">
+          <span id="pager-label">${esc(t("listCount", { count: customers.length }))}</span>
+          <div class="page-buttons"><button aria-label="${esc(t("prevPage"))}">‹</button><button class="is-active">1</button><button aria-label="${esc(t("nextPage"))}">›</button></div>
         </div>
-      </article>
-      <article class="card detail-card" id="detail-card"></article>
+      </section>
     </section>
   `;
   applySelectValues();
@@ -585,7 +596,7 @@ function renderCustomerTable() {
   const body = document.querySelector("#customer-body");
   if (!body) return;
   if (!customers.length) {
-    body.innerHTML = `<tr><td colspan="8"><div class="empty"><strong>${esc(t("noCustomers"))}</strong><span>${esc(t("noCustomersSub"))}</span></div></td></tr>`;
+    body.innerHTML = `<tr><td colspan="9"><div class="empty"><strong>${esc(t("noCustomers"))}</strong><span>${esc(t("noCustomersSub"))}</span></div></td></tr>`;
     return;
   }
   body.innerHTML = customers.map((customer) => `
@@ -598,6 +609,7 @@ function renderCustomerTable() {
       <td>${statusTag(consentLabel(customer.consent), consentKind(customer.consent))}</td>
       <td>${statusTag(t(isSendable(customer) ? "yes" : "no"), isSendable(customer) ? "success" : "neutral")}</td>
       <td>${formatTime(customer.updatedAt)}</td>
+      <td><button class="btn btn-small" data-open-user="${esc(customer.userId)}">${esc(t("viewDetails"))}</button></td>
     </tr>
   `).join("");
   body.querySelectorAll("tr[data-user]").forEach((row) => {
@@ -605,6 +617,7 @@ function renderCustomerTable() {
       state.selectedId = row.dataset.user;
       renderCustomerTable();
       renderDetail();
+      openDrawer();
     };
     row.addEventListener("click", choose);
     row.addEventListener("keydown", (event) => {
@@ -617,6 +630,15 @@ function renderCustomerTable() {
   body.querySelectorAll("[data-select-user]").forEach((checkbox) => {
     checkbox.addEventListener("click", (event) => event.stopPropagation());
     checkbox.addEventListener("change", () => toggleCustomerSelection(checkbox.dataset.selectUser, checkbox.checked));
+  });
+  body.querySelectorAll("[data-open-user]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      state.selectedId = button.dataset.openUser;
+      renderCustomerTable();
+      renderDetail();
+      openDrawer();
+    });
   });
   updateSelectPageControl(customers);
 }
@@ -685,25 +707,29 @@ function selectCurrentPage() {
 }
 
 function renderDetail() {
-  const card = document.querySelector("#detail-card");
   const customer = selectedCustomer();
-  if (!card) return;
   if (!customer) {
-    card.innerHTML = `<div class="empty"><strong>${esc(t("noCustomers"))}</strong><span>${esc(t("noCustomersSub"))}</span></div>`;
+    drawer.innerHTML = `
+      <div class="drawer-head">
+        <div><small>${esc(t("detailTitle"))}</small><h3>${esc(t("noCustomers"))}</h3></div>
+        <button class="icon-btn" data-action="close-drawer" aria-label="${esc(t("close"))}">${icon("close")}</button>
+      </div>
+      <div class="drawer-body"><div class="empty"><strong>${esc(t("noCustomers"))}</strong><span>${esc(t("noCustomersSub"))}</span></div></div>
+    `;
     return;
   }
   const sendable = isSendable(customer);
   const reason = blockedReason(customer);
   const messages = [...customer.messages].sort((a, b) => new Date(b.at) - new Date(a.at));
-  card.innerHTML = `
-    <div class="card-head">
+  drawer.innerHTML = `
+    <div class="drawer-head">
       <div class="detail-heading">
+        <small>${esc(t("detailTitle"))} · ${esc(customer.userId)}</small>
         <h3>${esc(customer.name)}</h3>
-        <div class="detail-id">${esc(customer.userId)}</div>
       </div>
-      <button class="icon-btn" id="refresh-status" aria-label="${esc(t("refreshStatus"))}" title="${esc(t("refreshStatus"))}">${icon("refresh")}</button>
+      <button class="icon-btn" data-action="close-drawer" aria-label="${esc(t("close"))}">${icon("close")}</button>
     </div>
-    <div class="detail-body">
+    <div class="drawer-body">
       <div class="eligibility ${sendable ? "ok" : "blocked"}">
         ${icon(sendable ? "check" : "alert")}
         <div><strong>${esc(t(sendable ? "sendableOkTitle" : "blockedTitle"))}</strong><span>${esc(sendable ? t("sendableOkText") : reason)}</span></div>
@@ -720,7 +746,8 @@ function renderDetail() {
         ${statusTag(consentLabel(customer.consent), consentKind(customer.consent))}
       </div>
       <div class="composer">
-        <div class="composer-label"><label for="message-text">${esc(t("messageTitle"))}</label><span class="char-count" id="char-count">${esc(t("charCount", { count: 0 }))}</span></div>
+        <div class="composer-label"><label for="message-text">${esc(t("messageTitle"))}</label><button class="icon-btn" id="refresh-status" aria-label="${esc(t("refreshStatus"))}" title="${esc(t("refreshStatus"))}">${icon("refresh")}</button></div>
+        <div class="char-count" id="char-count">${esc(t("charCount", { count: 0 }))}</div>
         <div class="templates">
           <button class="template-btn" data-template="greetingTemplate" ${sendable ? "" : "disabled"}>${esc(t("templateGreeting"))}</button>
           <button class="template-btn" data-template="followupTemplate" ${sendable ? "" : "disabled"}>${esc(t("templateFollowup"))}</button>
@@ -760,6 +787,14 @@ function renderMessage(message) {
 }
 
 function bindPageEvents() {
+  document.querySelectorAll("[data-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.tab = button.dataset.tab;
+      state.selectedUsers.clear();
+      closeDrawer();
+      renderAll();
+    });
+  });
   const search = document.querySelector("#search");
   search.addEventListener("input", (event) => {
     state.query = event.target.value;
@@ -772,6 +807,16 @@ function bindPageEvents() {
       state.selectedUsers.clear();
       updateFilteredView();
     });
+  });
+  document.querySelector("#reset-filters").addEventListener("click", () => {
+    state.query = "";
+    state.businessLine = "all";
+    state.binding = "all";
+    state.friend = "all";
+    state.consent = "all";
+    state.selectedUsers.clear();
+    closeDrawer();
+    renderAll();
   });
   document.querySelector("#select-page").addEventListener("change", selectCurrentPage);
   document.querySelector("#clear-selection").addEventListener("click", clearSelection);
@@ -796,19 +841,19 @@ function updateFilteredView() {
   }
   renderCustomerTable();
   renderDetail();
-  const stats = metricStats(customers);
-  const metricValues = document.querySelectorAll(".metric-value");
-  if (metricValues.length === 3) {
-    metricValues[0].innerHTML = `${stats.bound}<small>${state.lang === "zh" ? "位" : "customers"}</small>`;
-    metricValues[1].innerHTML = `${stats.sendable}<small>${state.lang === "zh" ? "位" : "customers"}</small>`;
-    metricValues[2].textContent = stats.acceptedRate;
-    document.querySelectorAll(".metric-foot")[2].textContent = `${t("metricAcceptedFoot")} · ${stats.acceptedRatio}`;
-  }
-  const count = document.querySelector("#visible-count");
-  if (count) count.textContent = customers.length;
   const pager = document.querySelector("#pager-label");
-  if (pager) pager.textContent = t("customerCount", { count: customers.length });
+  if (pager) pager.textContent = t("listCount", { count: customers.length });
   updateBulkControls();
+}
+
+function openDrawer() {
+  drawerLayer.classList.add("is-open");
+  drawerLayer.setAttribute("aria-hidden", "false");
+}
+
+function closeDrawer() {
+  drawerLayer.classList.remove("is-open");
+  drawerLayer.setAttribute("aria-hidden", "true");
 }
 
 function bindDetailEvents(customer, sendable) {
@@ -1014,6 +1059,8 @@ function updateChrome() {
     element.classList.toggle("is-active", element.dataset.lang === state.lang);
   });
   document.querySelector("#lang-switch").setAttribute("aria-label", state.lang === "zh" ? "Switch to English" : "切换到中文");
+  drawer.setAttribute("aria-label", state.lang === "zh" ? "客户详情" : "Customer Details");
+  document.querySelector(".drawer-scrim").setAttribute("aria-label", state.lang === "zh" ? "关闭详情" : "Close");
   document.querySelectorAll(".side-nav [aria-label]").forEach((element) => element.removeAttribute("aria-label"));
 }
 
@@ -1024,8 +1071,10 @@ document.querySelector("#lang-switch").addEventListener("click", () => {
 });
 
 modalLayer.querySelector(".modal-scrim").addEventListener("click", closeModal);
+drawerLayer.querySelector(".drawer-scrim").addEventListener("click", closeDrawer);
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && modalLayer.classList.contains("is-open")) closeModal();
+  else if (event.key === "Escape" && drawerLayer.classList.contains("is-open")) closeDrawer();
 });
 
 renderAll();
