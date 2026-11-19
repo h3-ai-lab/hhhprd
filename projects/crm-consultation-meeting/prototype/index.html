@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dino CRM Lark咨询会议与用户详情回写">
+  <title>Dino CRM · Lark咨询会议</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --blue: #2368d8;
+      --blue-soft: #eaf2ff;
+      --navy: #10233f;
+      --ink: #1d2939;
+      --muted: #667085;
+      --line: #e4e9f1;
+      --bg: #f3f6fa;
+      --white: #fff;
+      --green: #16865b;
+      --green-soft: #e9f8f1;
+      --amber: #a86508;
+      --amber-soft: #fff6df;
+      --red: #c33a3a;
+      --red-soft: #fff0f0;
+      --violet: #6e56b5;
+      --violet-soft: #f1edff;
+      --shadow: 0 12px 32px rgba(29, 50, 78, .1);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 220px minmax(0, 1fr); }
+    .sidebar {
+      background: var(--navy);
+      color: #dce7f7;
+      padding: 22px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 8px; }
+    .brand-mark {
+      width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center;
+      background: #3577e4; color: white; font-size: 18px; font-weight: 800;
+    }
+    .brand strong { display: block; color: #fff; font-size: 16px; }
+    .brand span { font-size: 11px; color: #9fb2cd; }
+    .nav-label { padding: 0 10px; margin-bottom: 6px; color: #8196b4; font-size: 11px; font-weight: 700; letter-spacing: .08em; }
+    .nav-btn {
+      width: 100%; border: 0; background: transparent; color: #dce7f7; text-align: left;
+      padding: 10px 12px; border-radius: 9px; display: flex; align-items: center; gap: 10px; margin-bottom: 5px;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,.07); }
+    .nav-btn.active { background: #2d70df; color: #fff; }
+    .nav-icon { width: 18px; text-align: center; }
+    .sidebar-foot { margin-top: auto; padding: 12px; color: #9fb2cd; font-size: 12px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #54d49a; display: inline-block; margin-right: 7px; }
+    .workspace { min-width: 0; }
+    .topbar {
+      min-height: 78px; padding: 16px 24px; background: #fff; border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .crumb { color: var(--muted); font-size: 12px; margin-bottom: 3px; }
+    .title { margin: 0; font-size: 22px; line-height: 1.25; letter-spacing: -.01em; }
+    .top-actions { display: flex; align-items: center; gap: 14px; }
+    .lang-switch { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+    .lang-btn { border: 0; background: #fff; color: var(--muted); padding: 6px 10px; }
+    .lang-btn.active { background: var(--blue); color: #fff; }
+    .account { display: flex; align-items: center; gap: 9px; }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #eaf2ff; color: var(--blue); font-weight: 800; }
+    .account strong { display: block; font-size: 13px; }
+    .account span { display: block; color: var(--muted); font-size: 11px; }
+    .content { padding: 18px 22px 40px; }
+    .toolbar, .panel { background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 1px 3px rgba(23, 43, 77, .03); }
+    .toolbar { padding: 14px 16px; margin-bottom: 14px; }
+    .filters { display: grid; grid-template-columns: minmax(220px, 1.5fr) minmax(150px, .7fr) minmax(150px, .7fr) auto; gap: 10px; align-items: end; }
+    .field-label { display: block; margin-bottom: 5px; color: #475467; font-size: 12px; font-weight: 600; }
+    .input, .select {
+      width: 100%; border: 1px solid #d9e0ea; background: #fff; color: var(--ink);
+      border-radius: 7px; padding: 8px 10px; min-height: 36px; outline: none;
+    }
+    .input:focus, .select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(35,104,216,.12); }
+    .actions { display: flex; gap: 8px; align-items: center; }
+    .btn {
+      border: 1px solid transparent; border-radius: 7px; min-height: 34px; padding: 6px 12px;
+      color: var(--ink); background: #fff; white-space: nowrap;
+    }
+    .btn:hover { border-color: #bac7d8; }
+    .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 650; }
+    .btn-primary:hover { background: #195dc5; }
+    .btn-soft { background: var(--blue-soft); border-color: #dbe8ff; color: var(--blue); font-weight: 650; }
+    .btn-danger { background: var(--red-soft); border-color: #ffdada; color: var(--red); }
+    .btn-small { min-height: 29px; padding: 4px 9px; font-size: 12px; }
+    .panel-head { padding: 15px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .panel-title { font-weight: 750; font-size: 15px; }
+    .muted { color: var(--muted); }
+    .table-wrap { overflow: auto; }
+    table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+    th { background: #f8fafc; text-align: left; color: #475467; font-size: 12px; padding: 11px 12px; border-bottom: 1px solid var(--line); }
+    td { padding: 12px; border-bottom: 1px solid #edf1f6; vertical-align: middle; }
+    tr:last-child td { border-bottom: 0; }
+    .user-link { border: 0; background: none; padding: 0; color: var(--blue); font-weight: 700; text-align: left; }
+    .user-link:hover { text-decoration: underline; }
+    .uid { color: #667085; font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; margin-top: 2px; }
+    .pill { display: inline-flex; align-items: center; width: fit-content; padding: 3px 8px; border-radius: 999px; font-size: 12px; font-weight: 650; }
+    .pill-blue { color: var(--blue); background: var(--blue-soft); }
+    .pill-green { color: var(--green); background: var(--green-soft); }
+    .pill-amber { color: var(--amber); background: var(--amber-soft); }
+    .pill-red { color: var(--red); background: var(--red-soft); }
+    .pill-violet { color: var(--violet); background: var(--violet-soft); }
+    .empty { text-align: center; padding: 52px 20px; color: var(--muted); }
+    .notice {
+      display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; padding: 11px 13px;
+      border: 1px solid #cfe0ff; background: #f5f9ff; color: #345274; border-radius: 10px;
+    }
+    .notice b { color: #183c6d; }
+    .detail-layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(260px, .7fr); gap: 14px; }
+    .profile { padding: 18px; }
+    .profile-top { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+    .profile h2 { margin: 0 0 4px; font-size: 20px; }
+    .kv { display: grid; grid-template-columns: repeat(2, minmax(120px, 1fr)); gap: 12px 20px; margin-top: 20px; }
+    .kv small { display: block; color: var(--muted); font-size: 11px; margin-bottom: 2px; }
+    .kv strong { font-weight: 600; font-size: 13px; }
+    .meeting-card { border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-top: 12px; background: #fff; }
+    .meeting-card-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+    .meeting-card h3 { margin: 0 0 4px; font-size: 15px; }
+    .meeting-meta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; color: var(--muted); font-size: 12px; }
+    .note-preview {
+      margin-top: 12px; padding: 12px 13px; border-left: 3px solid #a5bbdc;
+      background: #f8fafd; color: #3d4d61; border-radius: 0 8px 8px 0;
+      max-height: 160px; overflow: auto; white-space: pre-wrap;
+    }
+    .section-gap { margin-top: 14px; }
+    .section-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .section-title h2 { margin: 0; font-size: 16px; }
+    .modal-layer {
+      position: fixed; inset: 0; background: rgba(15, 27, 46, .46); display: none;
+      align-items: center; justify-content: center; padding: 24px; z-index: 50;
+    }
+    .modal-layer.open { display: flex; }
+    .modal {
+      width: min(650px, 100%); max-height: min(780px, 92vh); overflow: auto; background: #fff;
+      border-radius: 15px; box-shadow: 0 28px 80px rgba(4, 20, 43, .28);
+    }
+    .modal-head { padding: 17px 19px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+    .modal-head h2 { margin: 0; font-size: 18px; }
+    .icon-btn { border: 0; background: transparent; color: #667085; font-size: 24px; line-height: 1; }
+    .modal-body { padding: 18px 19px; }
+    .modal-foot { padding: 14px 19px 18px; display: flex; justify-content: flex-end; gap: 9px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+    .field.full { grid-column: 1 / -1; }
+    .error { margin-top: 4px; color: var(--red); font-size: 12px; min-height: 16px; }
+    .success-box { border: 1px solid #bee8d4; background: var(--green-soft); padding: 14px; border-radius: 10px; margin-top: 14px; }
+    .link-box { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
+    .link-box input { flex: 1; min-width: 0; background: #fff; }
+    .toast {
+      position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 18px);
+      background: #15273f; color: #fff; padding: 9px 14px; border-radius: 8px;
+      opacity: 0; pointer-events: none; transition: .2s ease; z-index: 100; box-shadow: var(--shadow);
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .back-btn { margin-bottom: 12px; }
+    .tabs { display: flex; gap: 4px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+    .tab { background: transparent; border: 0; border-bottom: 2px solid transparent; padding: 12px 10px 10px; color: #667085; }
+    .tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 700; }
+    .profile-side { padding: 16px; }
+    .side-list { display: grid; gap: 10px; }
+    .side-item { padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; }
+    .side-item small { display: block; color: var(--muted); margin-bottom: 3px; }
+    .hidden { display: none !important; }
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 72px minmax(0, 1fr); }
+      .sidebar { padding: 18px 10px; }
+      .brand-copy, .nav-label, .sidebar-foot, .nav-btn span:last-child { display: none; }
+      .brand { justify-content: center; padding: 0; }
+      .nav-btn { justify-content: center; }
+      .detail-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .content { padding: 12px; }
+      .topbar { padding: 12px 14px; }
+      .account-copy { display: none; }
+      .filters { grid-template-columns: 1fr; }
+      .form-grid, .kv { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .panel-head, .profile-top { align-items: flex-start; flex-direction: column; }
+      .modal-layer { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <div class="brand-copy">
+          <strong>Dino CRM</strong>
+          <span data-i18n="brandSub">客户经营工作台</span>
+        </div>
+      </div>
+      <nav>
+        <div class="nav-label" data-i18n="customerOps">客户经营</div>
+        <button class="nav-btn active" data-route="sales"><span class="nav-icon">▦</span><span data-i18n="sales">销售中心</span></button>
+        <button class="nav-btn" data-route="users"><span class="nav-icon">◎</span><span data-i18n="users">用户中心</span></button>
+      </nav>
+      <div class="sidebar-foot"><span class="status-dot"></span><span data-i18n="systemOnline">系统运行正常</span></div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <div class="crumb" id="breadcrumb"></div>
+          <h1 class="title" id="page-title"></h1>
+        </div>
+        <div class="top-actions">
+          <div class="lang-switch" aria-label="Language">
+            <button class="lang-btn active" data-lang="zh">中</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <div class="account">
+            <div class="avatar">L</div>
+            <div class="account-copy"><strong>Linh Nguyen</strong><span data-i18n="role">销售运营组长</span></div>
+          </div>
+        </div>
+      </header>
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+
+  <div class="modal-layer" id="modal-layer" aria-hidden="true">
+    <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"></section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const I18N = {
+      zh: {
+        brandSub: "客户经营工作台", customerOps: "客户经营", sales: "销售中心", users: "用户中心", role: "销售运营组长",
+        systemOnline: "系统运行正常", salesTitle: "销售中心", usersTitle: "用户中心", crumbSales: "销售管理 / 销售中心",
+        crumbUsers: "用户管理 / 用户中心", crumbUserDetail: "用户管理 / 用户中心 / 用户详情",
+        search: "搜索手机号 / 用户 ID / 姓名", searchPlaceholder: "输入用户 ID 或姓名", businessLine: "业务线",
+        allLines: "全部业务线", stageFilter: "当前跟进阶段", allStages: "全部阶段", reset: "重置筛选",
+        currentUsers: "当前线索", user: "用户", intent: "购买意向", userStatus: "用户状态",
+        followStage: "跟进阶段", owner: "当前 CC", actions: "操作", createMeeting: "创建 Lark 会议",
+        viewScheduled: "查看待开始会议", viewUser: "查看用户", noResults: "暂无符合条件的用户",
+        stageNotice: "仅当前跟进阶段为“已预约”的用户显示创建会议入口。“销售咨询预约”和“用户状态”不用于控制此入口。",
+        createTitle: "创建 Lark 咨询会议", customer: "用户", meetingTitle: "会议主题", startTime: "开始时间",
+        duration: "时长", ownerField: "销售 Owner", copyAfterCreate: "创建成功后自动复制会议链接",
+        cancel: "取消", createCopy: "创建并复制链接", required: "请填写该字段", pastTime: "开始时间不能早于当前时间",
+        meetingCreated: "会议已创建，链接已复制", copyFailed: "链接已创建，请手动复制",
+        meetingLink: "会议链接", copyAgain: "再次复制", openLark: "打开 Lark 会议", close: "关闭",
+        createdEvent: "日程 ID", meetingNo: "会议号", meetingRecord: "咨询会议", noMeeting: "暂无会议记录",
+        scheduled: "待开始", inProgress: "进行中", endedPending: "已结束待判断", attended: "已出勤",
+        absent: "未出勤", pendingConfirm: "待确认", cancelled: "已取消", syncFailed: "同步失败",
+        notePending: "纪要待生成", noteSaved: "纪要已保存", noteFailed: "纪要同步失败",
+        meetingTime: "计划时间", actualTime: "实际时间", actualDuration: "实际时长", attendance: "参会结果",
+        note: "飞书智能纪要", viewNote: "查看纪要", viewMeeting: "查看会议", copyLink: "复制链接",
+        resync: "重新同步", confirmResult: "确认结果", sourceLark: "来源：飞书智能纪要",
+        noteBody: "本次顾问咨询已完成。家长关注孩子口语表达和学习节奏，希望先了解适合的课程级别与上课安排。",
+        noteBody2: "用户完成试课沟通，顾问已介绍课程安排。后续由销售确认报名时间。",
+        backSales: "返回销售中心", basicInfo: "基本信息", contactInfo: "联系与归属", line: "业务线",
+        loginAccount: "登录账号", lastSync: "最近同步", notAvailable: "—", confirmTitle: "确认会议结果",
+        resultLabel: "参会结果", reason: "确认原因", reasonPlaceholder: "说明无法自动识别的原因",
+        submitConfirm: "确认并更新", resultUpdated: "会议结果已更新", synced: "会议和纪要已刷新",
+        syncError: "同步失败，请稍后重试", closeModal: "关闭",
+        quotaTitle: "套餐权益校验", quotaBody: "企业会议并发、高清会议用量和智能纪要额度通过上线前校验。",
+        noCreate: "当前阶段不可创建", meetingEndNotice: "会议结束事件用于判断参会结果；纪要生成事件只负责同步纪要。",
+        copied: "会议链接已复制", userCount: "{n} 位用户", total: "共 {n} 条",
+        viewOnly: "仅可查看", selectedStage: "已预约", confirmAbsent: "未出勤", confirmAttended: "已出勤",
+        ownerName: "当前销售", minutes: "{n} 分钟", noteSourceId: "纪要 ID"
+      },
+      en: {
+        brandSub: "Customer Operations", customerOps: "Customer Operations", sales: "Sales Center", users: "User Center",
+        role: "Sales Operations Lead", systemOnline: "System operational", salesTitle: "Sales Center", usersTitle: "User Center",
+        crumbSales: "Sales Management / Sales Center", crumbUsers: "User Management / User Center",
+        crumbUserDetail: "User Management / User Center / User Detail",
+        search: "Search phone / user ID / name", searchPlaceholder: "Enter user ID or name", businessLine: "Business Line",
+        allLines: "All business lines", stageFilter: "Current Follow-up Stage", allStages: "All stages", reset: "Reset",
+        currentUsers: "Current leads", user: "User", intent: "Purchase Intent", userStatus: "User Status",
+        followStage: "Follow-up Stage", owner: "Current CC", actions: "Actions", createMeeting: "Create Lark Meeting",
+        viewScheduled: "View scheduled meeting", viewUser: "View user", noResults: "No matching users",
+        stageNotice: "Create Meeting is available only when Current Follow-up Stage is Booked. Sales Consultation Appointment and User Status do not control this action.",
+        createTitle: "Create Lark Consultation Meeting", customer: "Customer", meetingTitle: "Meeting Topic",
+        startTime: "Start Time", duration: "Duration", ownerField: "Sales Owner",
+        copyAfterCreate: "The meeting link is copied after creation", cancel: "Cancel", createCopy: "Create and Copy Link",
+        required: "This field is required", pastTime: "Start time cannot be in the past",
+        meetingCreated: "Meeting created and link copied", copyFailed: "Meeting created; copy the link manually",
+        meetingLink: "Meeting Link", copyAgain: "Copy again", openLark: "Open Lark Meeting", close: "Close",
+        createdEvent: "Calendar Event ID", meetingNo: "Meeting No.", meetingRecord: "Consultation Meetings",
+        noMeeting: "No meeting records", scheduled: "Scheduled", inProgress: "In progress",
+        endedPending: "Ended · Pending review", attended: "Attended", absent: "No-show",
+        pendingConfirm: "Pending confirmation", cancelled: "Cancelled", syncFailed: "Sync failed",
+        notePending: "Notes pending", noteSaved: "Notes saved", noteFailed: "Note sync failed",
+        meetingTime: "Scheduled time", actualTime: "Actual time", actualDuration: "Actual duration",
+        attendance: "Attendance", note: "Lark AI Meeting Notes", viewNote: "View notes", viewMeeting: "View meeting",
+        copyLink: "Copy link", resync: "Re-sync", confirmResult: "Confirm result", sourceLark: "Source: Lark AI Meeting Notes",
+        noteBody: "The consultation has been completed. The parent is focused on speaking confidence and learning pace and would like to understand the right course level and schedule.",
+        noteBody2: "The learner completed the trial consultation. The advisor introduced the course schedule. Sales will confirm the enrollment date.",
+        backSales: "Back to Sales Center", basicInfo: "Basic Information", contactInfo: "Contact & Ownership",
+        line: "Business Line", loginAccount: "Login Account", lastSync: "Last synced", notAvailable: "—",
+        confirmTitle: "Confirm Meeting Result", resultLabel: "Attendance result", reason: "Reason",
+        reasonPlaceholder: "Explain why attendance could not be identified", submitConfirm: "Confirm and Update",
+        resultUpdated: "Meeting result updated", synced: "Meeting and notes refreshed",
+        syncError: "Sync failed; try again later", closeModal: "Close",
+        quotaTitle: "Plan entitlement check", quotaBody: "Concurrent meetings, HD meeting usage, and AI note quota are verified before launch.",
+        noCreate: "Not available at this stage", meetingEndNotice: "Meeting-ended events determine attendance; note-generated events only synchronize notes.",
+        copied: "Meeting link copied", userCount: "{n} users", total: "{n} records", viewOnly: "View only",
+        selectedStage: "Booked", confirmAbsent: "No-show", confirmAttended: "Attended",
+        ownerName: "Current sales", minutes: "{n} minutes", noteSourceId: "Note ID"
+      }
+    };
+
+    const STAGE_META = {
+      booked: { zh: "已预约", en: "Booked", cls: "pill-blue" },
+      completed: { zh: "咨询已完成", en: "Consultation completed", cls: "pill-green" },
+      following: { zh: "跟进中", en: "Following up", cls: "pill-violet" },
+      paused: { zh: "暂不跟进", en: "Paused", cls: "pill-amber" },
+      closed: { zh: "已关闭", en: "Closed", cls: "pill-red" }
+    };
+    const MEETING_META = {
+      scheduled: { zh: "待开始", en: "Scheduled", cls: "pill-blue" },
+      in_progress: { zh: "进行中", en: "In progress", cls: "pill-violet" },
+      ended_pending: { zh: "已结束待判断", en: "Ended · Pending review", cls: "pill-amber" },
+      attended: { zh: "已出勤", en: "Attended", cls: "pill-green" },
+      absent: { zh: "未出勤", en: "No-show", cls: "pill-amber" },
+      pending_confirm: { zh: "待确认", en: "Pending confirmation", cls: "pill-amber" },
+      cancelled: { zh: "已取消", en: "Cancelled", cls: "pill-red" },
+      sync_failed: { zh: "同步失败", en: "Sync failed", cls: "pill-red" }
+    };
+
+    const state = {
+      lang: localStorage.getItem("crm-consult-lang") || "zh",
+      route: "sales",
+      userId: null,
+      search: "",
+      stage: "all",
+      overlay: null
+    };
+
+    let users = [
+      { id: "u-1001", leadId: "LD-261119-1001", name: "Nguyễn Minh Anh", line: "Vietnam", intent: "Interested", status: "Unpaid · Trial in progress", stage: "booked", owner: "Linh Nguyen", account: "anh.nguyen@mail.vn", phone: "**** 0186" },
+      { id: "u-1002", leadId: "LD-261119-1002", name: "Tran Bao Chau", line: "Thailand", intent: "Interested", status: "Unpaid · Trial pending", stage: "booked", owner: "Linh Nguyen", account: "chau.tran@mail.vn", phone: "**** 0281" },
+      { id: "u-1003", leadId: "LD-261119-1003", name: "Le Thu Ha", line: "Vietnam", intent: "Interested", status: "Unpaid · Trial completed", stage: "completed", owner: "Linh Nguyen", account: "ha.le@mail.vn", phone: "**** 0366" },
+      { id: "u-1004", leadId: "LD-261119-1004", name: "Pham Gia Linh", line: "Malaysia", intent: "Not filled", status: "Unpaid · Trial pending", stage: "booked", owner: "Linh Nguyen", account: "linh.pham@mail.vn", phone: "**** 0412" },
+      { id: "u-1005", leadId: "LD-261119-1005", name: "Vo Minh Khang", line: "Vietnam", intent: "Interested", status: "Unpaid · Trial pending", stage: "following", owner: "Linh Nguyen", account: "khang.vo@mail.vn", phone: "**** 0573" },
+      { id: "u-1006", leadId: "LD-261119-1006", name: "Do Ngoc Mai", line: "Thailand", intent: "Not interested", status: "Unpaid", stage: "paused", owner: "Linh Nguyen", account: "mai.do@mail.vn", phone: "**** 0649" },
+      { id: "u-1007", leadId: "LD-261119-1007", name: "Bui Anh Tuan", line: "Vietnam", intent: "Interested", status: "Unpaid · Trial pending", stage: "booked", owner: "Linh Nguyen", account: "tuan.bui@mail.vn", phone: "**** 0731" }
+    ];
+
+    let meetings = [
+      {
+        id: "m-2001", userId: "u-1002", eventId: "evt_46d87c31", meetingId: "7321188411932033028",
+        meetingNo: "583 940 126", url: "https://qjphu5vphyf4.jp.larksuite.com/j/583940126",
+        title: "Consultation - Tran Bao Chau", start: "2026-11-20 10:00", end: "2026-11-20 10:30",
+        actualStart: null, actualEnd: null, owner: "Linh Nguyen", status: "scheduled", noteStatus: "none",
+        noteId: null, noteBody: null, lastSync: "2026-11-19 16:42"
+      },
+      {
+        id: "m-2002", userId: "u-1003", eventId: "evt_f1c7a223", meetingId: "7321188411934433028",
+        meetingNo: "426 817 905", url: "https://qjphu5vphyf4.jp.larksuite.com/j/426817905",
+        title: "Consultation - Le Thu Ha", start: "2026-11-18 14:00", end: "2026-11-18 14:30",
+        actualStart: "2026-11-18 14:03", actualEnd: "2026-11-18 14:28", owner: "Linh Nguyen",
+        status: "attended", noteStatus: "saved", noteId: "6943848821689040898",
+        noteBodyKey: "noteBody", lastSync: "2026-11-18 14:31"
+      },
+      {
+        id: "m-2003", userId: "u-1004", eventId: "evt_827e55ca", meetingId: "7321188411935566120",
+        meetingNo: "938 502 117", url: "https://qjphu5vphyf4.jp.larksuite.com/j/938502117",
+        title: "Consultation - Pham Gia Linh", start: "2026-11-17 16:00", end: "2026-11-17 16:30",
+        actualStart: "2026-11-17 16:01", actualEnd: "2026-11-17 16:03", owner: "Linh Nguyen",
+        status: "absent", noteStatus: "none", noteId: null, noteBody: null, lastSync: "2026-11-17 16:04"
+      },
+      {
+        id: "m-2004", userId: "u-1007", eventId: "evt_ac6912d8", meetingId: "7321188411936677811",
+        meetingNo: "715 264 890", url: "https://qjphu5vphyf4.jp.larksuite.com/j/715264890",
+        title: "Consultation - Bui Anh Tuan", start: "2026-11-18 17:00", end: "2026-11-18 17:30",
+        actualStart: "2026-11-18 17:04", actualEnd: "2026-11-18 17:27", owner: "Linh Nguyen",
+        status: "pending_confirm", noteStatus: "failed", noteId: null, noteBody: null, lastSync: "2026-11-18 17:29"
+      }
+    ];
+
+    const $ = (selector, parent = document) => parent.querySelector(selector);
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    const tr = (key) => I18N[state.lang][key] ?? key;
+    const fmt = (key, vars) => tr(key).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
+    const stageLabel = (stage) => STAGE_META[stage] ? STAGE_META[stage][state.lang] : stage;
+    const stagePill = (stage) => `<span class="pill ${STAGE_META[stage]?.cls || "pill-blue"}">${esc(stageLabel(stage))}</span>`;
+    const meetingPill = (status) => `<span class="pill ${MEETING_META[status]?.cls || "pill-blue"}">${esc(MEETING_META[status]?.[state.lang] || status)}</span>`;
+    const userById = (id) => users.find((item) => item.id === id);
+    const meetingsFor = (id) => meetings.filter((item) => item.userId === id).sort((a, b) => b.start.localeCompare(a.start));
+    const pendingMeeting = (id) => meetingsFor(id).find((item) => item.status === "scheduled" || item.status === "in_progress");
+    const intentLabel = (intent) => ({ "Interested": state.lang === "zh" ? "有意向" : "Interested", "Not interested": state.lang === "zh" ? "无意向" : "Not interested", "Not filled": state.lang === "zh" ? "未填写" : "Not filled" }[intent] || intent);
+    const userStatusLabel = (status) => state.lang === "zh"
+      ? status.replace("Unpaid · Trial in progress", "未付费 · 体验中").replace("Unpaid · Trial pending", "未付费 · 未体验").replace("Unpaid · Trial completed", "未付费 · 已体验").replace("Unpaid", "未付费")
+      : status;
+
+    function setRoute(route, userId = null) {
+      state.route = route;
+      state.userId = userId;
+      closeOverlay();
+      render();
+    }
+
+    function updateLanguage(lang) {
+      state.lang = lang;
+      localStorage.setItem("crm-consult-lang", lang);
+      document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+      document.querySelectorAll(".lang-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.lang === lang));
+      document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = tr(node.dataset.i18n); });
+      render();
+    }
+
+    function shellTitle() {
+      if (state.route === "user-detail") return userById(state.userId)?.name || tr("usersTitle");
+      return state.route === "users" ? tr("usersTitle") : tr("salesTitle");
+    }
+
+    function filteredUsers() {
+      const q = state.search.trim().toLowerCase();
+      return users.filter((item) => {
+        const stageOk = state.stage === "all" || item.stage === state.stage;
+        const searchOk = !q || item.name.toLowerCase().includes(q) || item.id.toLowerCase().includes(q);
+        return stageOk && searchOk;
+      });
+    }
+
+    function render() {
+      $("#page-title").textContent = shellTitle();
+      $("#breadcrumb").textContent = state.route === "users" ? tr("crumbUsers") : state.route === "user-detail" ? tr("crumbUserDetail") : tr("crumbSales");
+      document.querySelectorAll(".nav-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.route === (state.route === "user-detail" ? "users" : state.route)));
+      if (state.route === "users") renderUsers();
+      else if (state.route === "user-detail") renderUserDetail();
+      else renderSales();
+    }
+
+    function renderSales() {
+      $("#content").innerHTML = `
+        <div class="notice"><span>ⓘ</span><div><b>${esc(tr("stageNotice"))}</b><div class="muted">${esc(tr("meetingEndNotice"))}</div></div></div>
+        <section class="toolbar">
+          <div class="filters">
+            <label><span class="field-label">${esc(tr("search"))}</span><input class="input" id="search-input" value="${esc(state.search)}" placeholder="${esc(tr("searchPlaceholder"))}"></label>
+            <label><span class="field-label">${esc(tr("businessLine"))}</span><select class="select"><option>${esc(tr("allLines"))}</option><option>Vietnam</option><option>Thailand</option><option>Malaysia</option></select></label>
+            <label><span class="field-label">${esc(tr("stageFilter"))}</span><select class="select" id="stage-filter"><option value="all">${esc(tr("allStages"))}</option>${Object.keys(STAGE_META).map((key) => `<option value="${key}" ${state.stage === key ? "selected" : ""}>${esc(stageLabel(key))}</option>`).join("")}</select></label>
+            <div class="actions"><button class="btn" id="reset-filters">${esc(tr("reset"))}</button></div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><div class="panel-title">${esc(tr("currentUsers"))}</div><span class="muted">${fmt("total", { n: filteredUsers().length })}</span></div>
+          ${renderSalesTable()}
+        </section>`;
+      $("#search-input").addEventListener("input", (event) => {
+        state.search = event.target.value;
+        const panel = $(".panel");
+        panel.outerHTML = `<section class="panel"><div class="panel-head"><div class="panel-title">${esc(tr("currentUsers"))}</div><span class="muted">${fmt("total", { n: filteredUsers().length })}</span></div>${renderSalesTable()}</section>`;
+        bindLeadActions();
+      });
+      $("#stage-filter").addEventListener("change", (event) => { state.stage = event.target.value; renderSales(); });
+      $("#reset-filters").addEventListener("click", () => { state.search = ""; state.stage = "all"; renderSales(); });
+      bindLeadActions();
+    }
+
+    function renderSalesTable() {
+      const rows = filteredUsers();
+      if (!rows.length) return `<div class="empty">${esc(tr("noResults"))}</div>`;
+      return `<div class="table-wrap"><table><thead><tr>
+        <th>${esc(tr("user"))}</th><th>${esc(tr("businessLine"))}</th><th>${esc(tr("intent"))}</th>
+        <th>${esc(tr("userStatus"))}</th><th>${esc(tr("followStage"))}</th><th>${esc(tr("owner"))}</th><th>${esc(tr("actions"))}</th>
+      </tr></thead><tbody>${rows.map((item) => {
+        const pending = pendingMeeting(item.id);
+        const action = item.stage === "booked"
+          ? `<button class="btn btn-primary btn-small" data-create="${item.id}">${esc(pending ? tr("viewScheduled") : tr("createMeeting"))}</button>`
+          : `<button class="btn btn-small" data-user="${item.id}">${esc(tr("viewUser"))}</button>`;
+        return `<tr>
+          <td><button class="user-link" data-user="${item.id}">${esc(item.name)}</button><div class="uid">${esc(item.id)} · ${esc(item.phone)}</div></td>
+          <td>${esc(item.line)}</td><td>${esc(intentLabel(item.intent))}</td><td>${esc(userStatusLabel(item.status))}</td>
+          <td>${stagePill(item.stage)}</td><td>${esc(item.owner)}</td><td>${action}</td>
+        </tr>`;
+      }).join("")}</tbody></table></div>`;
+    }
+
+    function bindLeadActions() {
+      document.querySelectorAll("[data-user]").forEach((btn) => btn.addEventListener("click", () => setRoute("user-detail", btn.dataset.user)));
+      document.querySelectorAll("[data-create]").forEach((btn) => btn.addEventListener("click", () => {
+        const pending = pendingMeeting(btn.dataset.create);
+        if (pending) openMeeting(pending.id);
+        else openCreate(btn.dataset.create);
+      }));
+    }
+
+    function renderUsers() {
+      $("#content").innerHTML = `<section class="panel">
+        <div class="panel-head"><div class="panel-title">${esc(tr("usersTitle"))}</div><span class="muted">${fmt("userCount", { n: users.length })}</span></div>
+        <div class="table-wrap"><table><thead><tr><th>${esc(tr("user"))}</th><th>${esc(tr("businessLine"))}</th><th>${esc(tr("userStatus"))}</th><th>${esc(tr("followStage"))}</th><th>${esc(tr("actions"))}</th></tr></thead>
+        <tbody>${users.map((item) => `<tr><td><button class="user-link" data-user="${item.id}">${esc(item.name)}</button><div class="uid">${esc(item.id)}</div></td><td>${esc(item.line)}</td><td>${esc(userStatusLabel(item.status))}</td><td>${stagePill(item.stage)}</td><td><button class="btn btn-small" data-user="${item.id}">${esc(tr("viewUser"))}</button></td></tr>`).join("")}</tbody></table></div>
+      </section>`;
+      document.querySelectorAll("[data-user]").forEach((btn) => btn.addEventListener("click", () => setRoute("user-detail", btn.dataset.user)));
+    }
+
+    function renderUserDetail() {
+      const user = userById(state.userId);
+      if (!user) { setRoute("users"); return; }
+      const list = meetingsFor(user.id);
+      $("#content").innerHTML = `
+        <button class="btn back-btn" id="back-sales">← ${esc(tr("backSales"))}</button>
+        <div class="detail-layout">
+          <section class="panel">
+            <div class="profile">
+              <div class="profile-top">
+                <div><h2>${esc(user.name)}</h2><div class="muted">${esc(user.id)}</div></div>
+                ${stagePill(user.stage)}
+              </div>
+              <div class="kv">
+                <div><small>${esc(tr("businessLine"))}</small><strong>${esc(user.line)}</strong></div>
+                <div><small>${esc(tr("loginAccount"))}</small><strong>${esc(user.account)}</strong></div>
+                <div><small>${esc(tr("userStatus"))}</small><strong>${esc(userStatusLabel(user.status))}</strong></div>
+                <div><small>${esc(tr("owner"))}</small><strong>${esc(user.owner)}</strong></div>
+              </div>
+            </div>
+            <div class="profile">
+              <div class="section-title"><h2>${esc(tr("meetingRecord"))}</h2>${user.stage === "booked" ? `<button class="btn btn-primary btn-small" id="detail-create">${esc(tr("createMeeting"))}</button>` : ""}</div>
+              ${list.length ? list.map(renderMeetingCard).join("") : `<div class="empty">${esc(tr("noMeeting"))}</div>`}
+            </div>
+          </section>
+          <aside class="panel profile-side">
+            <div class="side-list">
+              <div class="side-item"><small>${esc(tr("quotaTitle"))}</small><strong>${esc(tr("quotaBody"))}</strong></div>
+              <div class="side-item"><small>${esc(tr("meetingEndNotice"))}</small><strong>${esc(tr("sourceLark"))}</strong></div>
+            </div>
+          </aside>
+        </div>`;
+      $("#back-sales").addEventListener("click", () => setRoute("sales"));
+      $("#detail-create")?.addEventListener("click", () => openCreate(user.id));
+      bindMeetingActions();
+    }
+
+    function renderMeetingCard(meeting) {
+      const noteLabel = meeting.noteStatus === "saved" ? tr("noteSaved") : meeting.noteStatus === "failed" ? tr("noteFailed") : tr("notePending");
+      const noteClass = meeting.noteStatus === "failed" ? "pill-red" : meeting.noteStatus === "saved" ? "pill-green" : "pill-amber";
+      return `<article class="meeting-card" data-meeting-id="${meeting.id}">
+        <div class="meeting-card-top">
+          <div><h3>${esc(meeting.title)}</h3><div class="muted">${esc(meeting.owner)} · ${esc(meeting.meetingNo)}</div></div>
+          ${meetingPill(meeting.status)}
+        </div>
+        <div class="meeting-meta">
+          <span>${esc(tr("meetingTime"))}: ${esc(meeting.start)} – ${esc(meeting.end.slice(11))}</span>
+          <span>${esc(tr("actualDuration"))}: ${actualDuration(meeting)}</span>
+          <span>${esc(tr("attendance"))}: ${esc(MEETING_META[meeting.status]?.[state.lang] || meeting.status)}</span>
+          <span>${esc(tr("lastSync"))}: ${esc(meeting.lastSync || "—")}</span>
+        </div>
+        ${meeting.noteStatus === "saved" ? `<div class="note-preview"><strong>${esc(tr("note"))}</strong><br>${esc(tr(meeting.noteBodyKey))}</div>` : ""}
+        <div class="actions section-gap">
+          <button class="btn btn-small" data-open-meeting="${meeting.id}">${esc(tr("viewMeeting"))}</button>
+          <button class="btn btn-small" data-copy-link="${meeting.id}">${esc(tr("copyLink"))}</button>
+          ${meeting.noteStatus === "saved" ? `<button class="btn btn-soft btn-small" data-note="${meeting.id}">${esc(tr("viewNote"))}</button>` : `<span class="pill ${noteClass}">${esc(noteLabel)}</span>`}
+          ${meeting.status === "pending_confirm" ? `<button class="btn btn-small" data-confirm="${meeting.id}">${esc(tr("confirmResult"))}</button>` : ""}
+          ${meeting.noteStatus === "failed" || meeting.status === "sync_failed" ? `<button class="btn btn-small" data-resync="${meeting.id}">${esc(tr("resync"))}</button>` : ""}
+        </div>
+      </article>`;
+    }
+
+    function actualDuration(meeting) {
+      if (!meeting.actualStart || !meeting.actualEnd) return "—";
+      const start = new Date(meeting.actualStart.replace(" ", "T") + ":00");
+      const end = new Date(meeting.actualEnd.replace(" ", "T") + ":00");
+      if (Number.isNaN(start.valueOf()) || Number.isNaN(end.valueOf())) return "—";
+      return `${Math.max(0, Math.round((end - start) / 60000))} ${state.lang === "zh" ? "分钟" : "min"}`;
+    }
+
+    function bindMeetingActions() {
+      document.querySelectorAll("[data-open-meeting]").forEach((btn) => btn.addEventListener("click", () => openMeeting(btn.dataset.openMeeting)));
+      document.querySelectorAll("[data-copy-link]").forEach((btn) => btn.addEventListener("click", () => copyMeetingLink(btn.dataset.copyLink)));
+      document.querySelectorAll("[data-note]").forEach((btn) => btn.addEventListener("click", () => openNote(btn.dataset.note)));
+      document.querySelectorAll("[data-confirm]").forEach((btn) => btn.addEventListener("click", () => openConfirm(btn.dataset.confirm)));
+      document.querySelectorAll("[data-resync]").forEach((btn) => btn.addEventListener("click", () => resyncMeeting(btn.dataset.resync)));
+    }
+
+    function openOverlay(html) {
+      $("#modal").innerHTML = html;
+      $("#modal-layer").classList.add("open");
+      $("#modal-layer").setAttribute("aria-hidden", "false");
+      $("#modal-layer .icon-btn")?.focus();
+    }
+
+    function closeOverlay() {
+      $("#modal-layer").classList.remove("open");
+      $("#modal-layer").setAttribute("aria-hidden", "true");
+      $("#modal").innerHTML = "";
+    }
+
+    function openCreate(userId) {
+      const user = userById(userId);
+      if (!user || user.stage !== "booked") return;
+      if (pendingMeeting(user.id)) { openMeeting(pendingMeeting(user.id).id); return; }
+      openOverlay(`
+        <div class="modal-head"><h2 id="modal-title">${esc(tr("createTitle"))}</h2><button class="icon-btn" data-close aria-label="${esc(tr("close"))}">×</button></div>
+        <form id="create-form">
+          <div class="modal-body">
+            <div class="form-grid">
+              <label class="field full"><span class="field-label">${esc(tr("customer"))}</span><input class="input" value="${esc(user.name)} · ${esc(user.id)}" disabled></label>
+              <label class="field full"><span class="field-label">${esc(tr("meetingTitle"))}</span><input class="input" id="meeting-title" value="Consultation - ${esc(user.name)}" required><div class="error" id="title-error"></div></label>
+              <label class="field"><span class="field-label">${esc(tr("startTime"))}</span><input class="input" type="datetime-local" id="meeting-start" value="2026-11-20T14:00" required><div class="error" id="time-error"></div></label>
+              <label class="field"><span class="field-label">${esc(tr("duration"))}</span><select class="select" id="meeting-duration"><option value="15">15 ${state.lang === "zh" ? "分钟" : "minutes"}</option><option value="30" selected>30 ${state.lang === "zh" ? "分钟" : "minutes"}</option><option value="45">45 ${state.lang === "zh" ? "分钟" : "minutes"}</option><option value="60">60 ${state.lang === "zh" ? "分钟" : "minutes"}</option></select></label>
+              <label class="field full"><span class="field-label">${esc(tr("ownerField"))}</span><input class="input" value="${esc(user.owner)}" disabled></label>
+            </div>
+            <div class="notice section-gap"><span>ⓘ</span><div>${esc(tr("copyAfterCreate"))}</div></div>
+            <div id="create-success"></div>
+          </div>
+          <div class="modal-foot"><button type="button" class="btn" data-close>${esc(tr("cancel"))}</button><button type="submit" class="btn btn-primary" id="create-submit">${esc(tr("createCopy"))}</button></div>
+        </form>`);
+      bindOverlayClose();
+      $("#create-form").addEventListener("submit", (event) => { event.preventDefault(); createMeeting(user); });
+    }
+
+    async function createMeeting(user) {
+      const title = $("#meeting-title").value.trim();
+      const start = $("#meeting-start").value;
+      const duration = $("#meeting-duration").value;
+      $("#title-error").textContent = title ? "" : tr("required");
+      $("#time-error").textContent = start ? "" : tr("required");
+      if (!title || !start) return;
+      const [date, time] = start.split("T");
+      const endDate = new Date(`${start}:00`);
+      endDate.setMinutes(endDate.getMinutes() + Number(duration));
+      const pad = (n) => String(n).padStart(2, "0");
+      const end = `${endDate.getFullYear()}-${pad(endDate.getMonth() + 1)}-${pad(endDate.getDate())} ${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
+      const suffix = String(Date.now()).slice(-9);
+      const meeting = {
+        id: `m-${Date.now()}`, userId: user.id, eventId: `evt_${suffix.slice(-8)}`,
+        meetingId: `73211884119${suffix}`, meetingNo: suffix.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3"),
+        url: `https://qjphu5vphyf4.jp.larksuite.com/j/${suffix}`, title, start: `${date} ${time}`,
+        end, actualStart: null, actualEnd: null, owner: user.owner, status: "scheduled",
+        noteStatus: "none", noteId: null, noteBody: null, lastSync: "2026-11-19 16:42"
+      };
+      meetings.unshift(meeting);
+      const copied = await copyText(meeting.url);
+      $("#create-submit").classList.add("hidden");
+      $("#create-success").innerHTML = `
+        <div class="success-box">
+          <strong>${esc(copied ? tr("meetingCreated") : tr("copyFailed"))}</strong>
+          <div class="link-box"><input class="input" readonly value="${esc(meeting.url)}"><button class="btn btn-soft btn-small" id="copy-again">${esc(tr("copyAgain"))}</button></div>
+          <div class="meeting-meta"><span>${esc(tr("createdEvent"))}: ${esc(meeting.eventId)}</span><span>${esc(tr("meetingNo"))}: ${esc(meeting.meetingNo)}</span></div>
+          <div class="actions section-gap"><button class="btn btn-primary" id="done-create">${esc(tr("close"))}</button><button class="btn" id="open-lark">${esc(tr("openLark"))}</button></div>
+        </div>`;
+      $("#copy-again").addEventListener("click", async () => { await copyText(meeting.url); toast(tr("copied")); });
+      $("#done-create").addEventListener("click", () => { closeOverlay(); render(); });
+      $("#open-lark").addEventListener("click", () => window.open(meeting.url, "_blank", "noopener"));
+      toast(copied ? tr("meetingCreated") : tr("copyFailed"));
+    }
+
+    function openMeeting(id) {
+      const meeting = meetings.find((item) => item.id === id);
+      if (!meeting) return;
+      openOverlay(`
+        <div class="modal-head"><h2 id="modal-title">${esc(meeting.title)}</h2><button class="icon-btn" data-close>×</button></div>
+        <div class="modal-body">
+          <div class="actions">${meetingPill(meeting.status)}<span class="pill ${meeting.noteStatus === "saved" ? "pill-green" : meeting.noteStatus === "failed" ? "pill-red" : "pill-amber"}">${esc(meeting.noteStatus === "saved" ? tr("noteSaved") : meeting.noteStatus === "failed" ? tr("noteFailed") : tr("notePending"))}</span></div>
+          <div class="kv">
+            <div><small>${esc(tr("ownerField"))}</small><strong>${esc(meeting.owner)}</strong></div>
+            <div><small>${esc(tr("meetingNo"))}</small><strong>${esc(meeting.meetingNo)}</strong></div>
+            <div><small>${esc(tr("meetingTime"))}</small><strong>${esc(meeting.start)} – ${esc(meeting.end)}</strong></div>
+            <div><small>${esc(tr("actualTime"))}</small><strong>${meeting.actualStart ? `${esc(meeting.actualStart)} – ${esc(meeting.actualEnd)}` : "—"}</strong></div>
+            <div><small>${esc(tr("attendance"))}</small><strong>${esc(MEETING_META[meeting.status]?.[state.lang] || meeting.status)}</strong></div>
+            <div><small>${esc(tr("lastSync"))}</small><strong>${esc(meeting.lastSync || "—")}</strong></div>
+          </div>
+          <div class="field section-gap"><span class="field-label">${esc(tr("meetingLink"))}</span><input class="input" readonly value="${esc(meeting.url)}"></div>
+          ${meeting.noteStatus === "saved" ? `<div class="note-preview"><strong>${esc(tr("note"))}</strong><br>${esc(tr(meeting.noteBodyKey))}</div>` : ""}
+          <div class="actions section-gap">
+            <button class="btn btn-soft" data-copy-link="${meeting.id}">${esc(tr("copyLink"))}</button>
+            <button class="btn" id="modal-open-lark">${esc(tr("openLark"))}</button>
+            ${meeting.noteStatus === "saved" ? `<button class="btn" data-note="${meeting.id}">${esc(tr("viewNote"))}</button>` : ""}
+          </div>
+        </div>
+        <div class="modal-foot"><button class="btn btn-primary" data-close>${esc(tr("close"))}</button></div>`);
+      bindOverlayClose();
+      bindMeetingActions();
+      $("#modal-open-lark").addEventListener("click", () => window.open(meeting.url, "_blank", "noopener"));
+    }
+
+    function openNote(id) {
+      const meeting = meetings.find((item) => item.id === id);
+      if (!meeting || meeting.noteStatus !== "saved") return;
+      openOverlay(`
+        <div class="modal-head"><h2 id="modal-title">${esc(tr("note"))}</h2><button class="icon-btn" data-close>×</button></div>
+        <div class="modal-body">
+          <div class="muted">${esc(tr("sourceLark"))} · ${esc(tr("noteSourceId"))}: ${esc(meeting.noteId)}</div>
+          <div class="note-preview" style="max-height:none;margin-top:14px">${esc(tr(meeting.noteBodyKey))}</div>
+        </div>
+        <div class="modal-foot"><button class="btn btn-primary" data-close>${esc(tr("close"))}</button></div>`);
+      bindOverlayClose();
+    }
+
+    function openConfirm(id) {
+      const meeting = meetings.find((item) => item.id === id);
+      if (!meeting) return;
+      openOverlay(`
+        <div class="modal-head"><h2 id="modal-title">${esc(tr("confirmTitle"))}</h2><button class="icon-btn" data-close>×</button></div>
+        <form id="confirm-form"><div class="modal-body">
+          <div class="form-grid">
+            <label class="field full"><span class="field-label">${esc(tr("resultLabel"))}</span><select class="select" id="confirm-result"><option value="attended">${esc(tr("confirmAttended"))}</option><option value="absent">${esc(tr("confirmAbsent"))}</option></select></label>
+            <label class="field full"><span class="field-label">${esc(tr("reason"))}</span><textarea class="input" id="confirm-reason" rows="4" placeholder="${esc(tr("reasonPlaceholder"))}" required></textarea></label>
+          </div>
+        </div><div class="modal-foot"><button type="button" class="btn" data-close>${esc(tr("cancel"))}</button><button class="btn btn-primary" type="submit">${esc(tr("submitConfirm"))}</button></div></form>`);
+      bindOverlayClose();
+      $("#confirm-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const reason = $("#confirm-reason").value.trim();
+        if (!reason) { $("#confirm-reason").focus(); return; }
+        meeting.status = $("#confirm-result").value;
+        const user = userById(meeting.userId);
+        if (meeting.status === "attended" && user.stage === "booked") user.stage = "completed";
+        meeting.actualStart ||= meeting.start;
+        meeting.actualEnd ||= meeting.end;
+        closeOverlay();
+        render();
+        toast(tr("resultUpdated"));
+      });
+    }
+
+    function resyncMeeting(id) {
+      const meeting = meetings.find((item) => item.id === id);
+      if (!meeting) return;
+      meeting.status = meeting.status === "sync_failed" ? "ended_pending" : meeting.status;
+      if (meeting.noteStatus === "failed") meeting.noteStatus = "none";
+      meeting.lastSync = "2026-11-19 16:46";
+      closeOverlay();
+      render();
+      toast(tr("synced"));
+    }
+
+    function bindOverlayClose() {
+      document.querySelectorAll("[data-close]").forEach((btn) => btn.addEventListener("click", closeOverlay));
+    }
+
+    async function copyMeetingLink(id) {
+      const meeting = meetings.find((item) => item.id === id);
+      if (!meeting) return;
+      const ok = await copyText(meeting.url);
+      toast(ok ? tr("meetingLink") + " ✓" : tr("copyFailed"));
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        const temp = document.createElement("textarea");
+        temp.value = text;
+        temp.style.position = "fixed";
+        temp.style.opacity = "0";
+        document.body.appendChild(temp);
+        temp.select();
+        const ok = document.execCommand("copy");
+        temp.remove();
+        return ok;
+      }
+    }
+
+    let toastTimer;
+    function toast(message) {
+      const node = $("#toast");
+      node.textContent = message;
+      node.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => node.classList.remove("show"), 2200);
+    }
+
+    document.querySelectorAll(".nav-btn").forEach((btn) => btn.addEventListener("click", () => setRoute(btn.dataset.route)));
+    document.querySelectorAll(".lang-btn").forEach((btn) => btn.addEventListener("click", () => updateLanguage(btn.dataset.lang)));
+    $("#modal-layer").addEventListener("click", (event) => { if (event.target.id === "modal-layer") closeOverlay(); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeOverlay(); });
+
+    updateLanguage(state.lang);
+  </script>
+</body>
+</html>
