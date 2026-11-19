@@ -21,6 +21,28 @@ const STR = {
     resetFilters: "重置筛选",
     viewDetails: "查看",
     currentLineState: "LINE 状态",
+    sendRecords: "发送记录",
+    batchSearch: "搜索批次 ID 或客户",
+    searchLabel: "搜索",
+    batchStatus: "发送状态",
+    batchBusiness: "业务线",
+    batchDate: "发送日期",
+    batchId: "批次 ID",
+    batchOperator: "操作人",
+    batchCreated: "创建时间",
+    batchRecipients: "接收人数",
+    batchExcluded: "排除人数",
+    batchRecipientSplit: "接收 / 排除",
+    batchFailureReason: "失败原因",
+    batchActions: "操作",
+    batchNoRecords: "当前条件下没有发送记录",
+    batchNoRecordsSub: "调整批次状态、业务线或日期后重试。",
+    batchDetailTitle: "发送批次详情",
+    batchDetailRecipients: "接收人明细",
+    batchDetailContent: "消息内容",
+    batchExcludedReason: "排除原因",
+    retryBatch: "重试批次",
+    batchPeopleUnit: "位",
     lastSync: "LINE 状态已同步",
     metricBound: "已绑定客户数",
     metricSendable: "可发送客户数",
@@ -163,6 +185,28 @@ const STR = {
     resetFilters: "Reset Filters",
     viewDetails: "View",
     currentLineState: "LINE Status",
+    sendRecords: "Send Records",
+    batchSearch: "Search batch ID or customer",
+    searchLabel: "Search",
+    batchStatus: "Send Status",
+    batchBusiness: "Business Line",
+    batchDate: "Send Date",
+    batchId: "Batch ID",
+    batchOperator: "Operator",
+    batchCreated: "Created",
+    batchRecipients: "Recipients",
+    batchExcluded: "Excluded",
+    batchRecipientSplit: "Recipients / Excluded",
+    batchFailureReason: "Failure Reason",
+    batchActions: "Action",
+    batchNoRecords: "No send records match these filters",
+    batchNoRecordsSub: "Adjust the status, Business Line, or date and try again.",
+    batchDetailTitle: "Send Batch Details",
+    batchDetailRecipients: "Recipient Details",
+    batchDetailContent: "Message",
+    batchExcludedReason: "Exclusion Reason",
+    retryBatch: "Retry Batch",
+    batchPeopleUnit: "people",
     lastSync: "LINE status synced",
     metricBound: "Linked Customers",
     metricSendable: "Message-ready Customers",
@@ -319,7 +363,10 @@ const CUSTOMERS = [
     userId: "211993778120431105", name: "Giang Vo", view: "following", businessLine: "TH", phone: "•••• 7256",
     binding: "ACTIVE", friend: "UNKNOWN", consent: "CONSENTED", lineUserId: "U99a2d1c0f27d49ae8c03acff2b88",
     confirmedAt: ago(1670), updatedAt: ago(1670),
-    messages: [{ id: "MSG-261112-0918", textKey: "msgFailedContent", at: ago(1480), status: "FAILED", errorKey: "msgFailedReason" }]
+    messages: [{
+      id: "MSG-261112-0918", textKey: "msgFailedContent", at: ago(1480), status: "FAILED", errorKey: "msgFailedReason",
+      excluded: [{ userId: "211993114542575618", name: "Narin K.", reasonKey: "reasonNoConsent" }]
+    }]
   },
   {
     userId: "211993723590118302", name: "Khanh Lam", view: "paid", businessLine: "MY", phone: "•••• 1408",
@@ -345,7 +392,9 @@ const state = {
   binding: "all",
   friend: "all",
   consent: "all",
-  selectedUsers: new Set()
+  selectedUsers: new Set(),
+  drawerMode: null,
+  batchFilters: { query: "", status: "all", businessLine: "all", from: "", to: "" }
 };
 
 const content = document.querySelector("#content");
@@ -555,6 +604,7 @@ function renderAll() {
             <span>${esc(t("batchLimit"))}</span>
           </div>
           <div class="bulk-actions">
+            <button class="btn btn-small" id="send-records">${icon("clock")}${esc(t("sendRecords"))}</button>
             <button class="btn btn-small" id="clear-selection" disabled>${esc(t("clearSelection"))}</button>
             <button class="btn btn-primary btn-small" id="batch-send" disabled>${icon("send")}<span>${esc(t("batchSend"))}</span></button>
           </div>
@@ -616,8 +666,7 @@ function renderCustomerTable() {
     const choose = () => {
       state.selectedId = row.dataset.user;
       renderCustomerTable();
-      renderDetail();
-      openDrawer();
+      openCustomerDrawer();
     };
     row.addEventListener("click", choose);
     row.addEventListener("keydown", (event) => {
@@ -636,8 +685,7 @@ function renderCustomerTable() {
       event.stopPropagation();
       state.selectedId = button.dataset.openUser;
       renderCustomerTable();
-      renderDetail();
-      openDrawer();
+      openCustomerDrawer();
     });
   });
   updateSelectPageControl(customers);
@@ -706,7 +754,229 @@ function selectCurrentPage() {
   updateBulkControls();
 }
 
+function batchRecords() {
+  const records = new Map();
+  CUSTOMERS.forEach((customer) => {
+    customer.messages.forEach((message) => {
+      if (!records.has(message.id)) {
+        records.set(message.id, {
+          id: message.id,
+          at: message.at,
+          text: messageText(message),
+          status: message.status,
+          errorKey: message.errorKey || "",
+          businessLine: customer.businessLine,
+          recipients: [],
+          excluded: []
+        });
+      }
+      const record = records.get(message.id);
+      if (!record.recipients.some((item) => item.userId === customer.userId)) {
+        record.recipients.push({ userId: customer.userId, name: customer.name });
+      }
+      (message.excluded || []).forEach((item) => {
+        if (!record.excluded.some((existing) => existing.userId === item.userId)) {
+          record.excluded.push(item);
+        }
+      });
+      record.at = message.at;
+      record.status = message.status;
+      record.errorKey = message.errorKey || record.errorKey;
+      record.text = messageText(message);
+    });
+  });
+  return [...records.values()].sort((a, b) => new Date(b.at) - new Date(a.at));
+}
+
+function filteredBatches() {
+  const filters = state.batchFilters;
+  const query = filters.query.trim().toLowerCase();
+  const dateKey = (value) => new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Bangkok",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(new Date(value));
+  return batchRecords().filter((batch) => {
+    const matchesQuery = !query
+      || batch.id.toLowerCase().includes(query)
+      || batch.text.toLowerCase().includes(query)
+      || batch.recipients.some((recipient) => recipient.name.toLowerCase().includes(query) || recipient.userId.includes(query));
+    const key = dateKey(batch.at);
+    return matchesQuery
+      && (filters.status === "all" || batch.status === filters.status)
+      && (filters.businessLine === "all" || batch.businessLine === filters.businessLine)
+      && (!filters.from || key >= filters.from)
+      && (!filters.to || key <= filters.to);
+  });
+}
+
+function batchStatusLabel(status) {
+  return t({ PENDING: "pending", FAILED: "failed", ACCEPTED: "batchAccepted" }[status]);
+}
+
+function batchStatusKind(status) {
+  return { PENDING: "warning", FAILED: "danger", ACCEPTED: "success" }[status] || "neutral";
+}
+
+function openBatchRecords() {
+  state.drawerMode = "batch";
+  renderBatchRecords();
+  openDrawer(true);
+}
+
+function renderBatchRecords() {
+  const filters = state.batchFilters;
+  drawer.innerHTML = `
+    <div class="drawer-head">
+      <div class="detail-heading">
+        <small>${esc(t("channelLine"))}</small>
+        <h3>${esc(t("sendRecords"))}</h3>
+      </div>
+      <button class="icon-btn" data-action="close-drawer" aria-label="${esc(t("close"))}">${icon("close")}</button>
+    </div>
+    <div class="drawer-body">
+      <div class="batch-filters">
+        <label class="field batch-search"><span class="field-label">${esc(t("searchLabel"))}</span><span class="search-box">${icon("search")}<input class="control" id="batch-query" value="${esc(filters.query)}" placeholder="${esc(t("batchSearch"))}"></span></label>
+        <label class="field"><span class="field-label">${esc(t("batchStatus"))}</span><select class="control" id="batch-status">
+          <option value="all">${esc(t("filterAll"))}</option>
+          <option value="PENDING">${esc(t("pending"))}</option>
+          <option value="FAILED">${esc(t("failed"))}</option>
+          <option value="ACCEPTED">${esc(t("batchAccepted"))}</option>
+        </select></label>
+        <label class="field"><span class="field-label">${esc(t("batchBusiness"))}</span><select class="control" id="batch-business">
+          <option value="all">${esc(t("businessAll"))}</option>
+          <option value="TH">${esc(t("businessTH"))}</option>
+          <option value="VN">${esc(t("businessVN"))}</option>
+          <option value="MY">${esc(t("businessMY"))}</option>
+        </select></label>
+        <div class="field"><span class="field-label">${esc(t("batchDate"))}</span><div class="range-inputs"><input class="control" type="date" id="batch-from" value="${esc(filters.from)}" aria-label="${esc(t("batchDate"))}"><span>–</span><input class="control" type="date" id="batch-to" value="${esc(filters.to)}" aria-label="${esc(t("batchDate"))}"></div></div>
+      </div>
+      <div class="batch-table-wrap">
+        <table class="batch-table">
+          <thead><tr>
+            <th>${esc(t("batchId"))}</th><th>${esc(t("batchBusiness"))}</th><th>${esc(t("batchRecipientSplit"))}</th><th>${esc(t("batchStatus"))}</th>
+            <th>${esc(t("batchFailureReason"))}</th><th>${esc(t("batchActions"))}</th>
+          </tr></thead>
+          <tbody id="batch-body"></tbody>
+        </table>
+      </div>
+    </div>
+  `;
+  document.querySelector("#batch-status").value = filters.status;
+  document.querySelector("#batch-business").value = filters.businessLine;
+  bindBatchRecordEvents();
+  renderBatchRows();
+}
+
+function bindBatchRecordEvents() {
+  document.querySelector("#batch-query").addEventListener("input", (event) => {
+    state.batchFilters.query = event.target.value;
+    renderBatchRows();
+  });
+  document.querySelector("#batch-status").addEventListener("change", (event) => {
+    state.batchFilters.status = event.target.value;
+    renderBatchRows();
+  });
+  document.querySelector("#batch-business").addEventListener("change", (event) => {
+    state.batchFilters.businessLine = event.target.value;
+    renderBatchRows();
+  });
+  document.querySelector("#batch-from").addEventListener("change", (event) => {
+    state.batchFilters.from = event.target.value;
+    renderBatchRows();
+  });
+  document.querySelector("#batch-to").addEventListener("change", (event) => {
+    state.batchFilters.to = event.target.value;
+    renderBatchRows();
+  });
+}
+
+function renderBatchRows() {
+  const body = document.querySelector("#batch-body");
+  if (!body) return;
+  const records = filteredBatches();
+  if (!records.length) {
+    body.innerHTML = `<tr><td colspan="6"><div class="empty"><strong>${esc(t("batchNoRecords"))}</strong><span>${esc(t("batchNoRecordsSub"))}</span></div></td></tr>`;
+    return;
+  }
+  body.innerHTML = records.map((batch) => `
+    <tr>
+      <td><span class="batch-id">${esc(batch.id)}</span><span class="cell-sub">${esc(t("batchOperator"))}：${esc(t("roleName"))} · ${formatTime(batch.at)}</span></td>
+      <td>${esc(businessLineLabel(batch.businessLine))}</td>
+      <td><strong>${batch.recipients.length}</strong><span class="cell-sub">${esc(t("batchExcluded"))} ${batch.excluded.length}</span></td>
+      <td>${statusTag(batchStatusLabel(batch.status), batchStatusKind(batch.status))}</td>
+      <td><span class="batch-reason">${esc(batch.errorKey ? t(batch.errorKey) : "—")}</span></td>
+      <td><div class="batch-row-actions">
+        <button class="btn btn-small" data-batch-view="${esc(batch.id)}">${esc(t("viewDetails"))}</button>
+        ${batch.status === "FAILED" ? `<button class="btn btn-small btn-danger" data-batch-retry="${esc(batch.id)}">${esc(t("retry"))}</button>` : ""}
+      </div></td>
+    </tr>
+  `).join("");
+  body.querySelectorAll("[data-batch-view]").forEach((button) => {
+    button.addEventListener("click", () => openBatchDetail(button.dataset.batchView));
+  });
+  body.querySelectorAll("[data-batch-retry]").forEach((button) => {
+    button.addEventListener("click", () => retryBatch(button.dataset.batchRetry));
+  });
+}
+
+function openBatchDetail(batchId) {
+  const batch = batchRecords().find((item) => item.id === batchId);
+  if (!batch) return;
+  const rows = batch.recipients.map((recipient) => `
+    <tr><td>${esc(recipient.name)}<span class="cell-sub">${esc(recipient.userId)}</span></td><td>${statusTag(batchStatusLabel(batch.status), batchStatusKind(batch.status))}</td><td>—</td></tr>
+  `).concat(batch.excluded.map((recipient) => `
+    <tr><td>${esc(recipient.name)}<span class="cell-sub">${esc(recipient.userId)}</span></td><td>${statusTag(t("batchExcluded"), "warning")}</td><td>${esc(t(recipient.reasonKey))}</td></tr>
+  `)).join("");
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div><div class="batch-id">${esc(batch.id)}</div><h3 id="modal-title">${esc(t("batchDetailTitle"))}</h3></div>
+      <button class="icon-btn" data-action="close-modal" aria-label="${esc(t("close"))}">${icon("close")}</button>
+    </div>
+    <div class="modal-body batch-detail-body">
+      <div class="modal-review">
+        <div><span>${esc(t("batchBusiness"))}</span><strong>${esc(businessLineLabel(batch.businessLine))}</strong></div>
+        <div><span>${esc(t("batchCreated"))}</span><strong>${formatTime(batch.at)}</strong></div>
+        <div><span>${esc(t("batchOperator"))}</span><strong>${esc(t("roleName"))}</strong></div>
+        <div><span>${esc(t("batchStatus"))}</span><strong>${esc(batchStatusLabel(batch.status))}</strong></div>
+      </div>
+      <div class="batch-content-label">${esc(t("batchDetailContent"))}</div>
+      <div class="modal-preview">${esc(batch.text)}</div>
+      <div class="batch-detail-recips">
+        <strong>${esc(t("batchDetailRecipients"))}</strong>
+        <table><thead><tr><th>${esc(t("modalCustomer"))}</th><th>${esc(t("batchStatus"))}</th><th>${esc(t("batchFailureReason"))}</th></tr></thead><tbody>${rows}</tbody></table>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn" data-action="close-modal">${esc(t("close"))}</button></div>
+  `;
+  modal.classList.add("is-wide");
+  modalLayer.classList.add("is-open");
+  modalLayer.setAttribute("aria-hidden", "false");
+  modalLayer.querySelectorAll("[data-action='close-modal']").forEach((button) => button.addEventListener("click", closeModal));
+}
+
+function retryBatch(batchId) {
+  const messages = CUSTOMERS.flatMap((customer) => customer.messages.filter((message) => message.id === batchId));
+  if (!messages.length) return;
+  messages.forEach((message) => {
+    message.status = "PENDING";
+    delete message.errorKey;
+  });
+  renderBatchRows();
+  showToast(t("toastRetried"));
+  window.setTimeout(() => {
+    messages.forEach((message) => {
+      message.status = "ACCEPTED";
+      message.at = new Date().toISOString();
+    });
+    renderBatchRows();
+    showToast(t("batchAccepted"));
+  }, 850);
+}
+
 function renderDetail() {
+  if (state.drawerMode !== "customer") return;
   const customer = selectedCustomer();
   if (!customer) {
     drawer.innerHTML = `
@@ -820,6 +1090,7 @@ function bindPageEvents() {
   });
   document.querySelector("#select-page").addEventListener("change", selectCurrentPage);
   document.querySelector("#clear-selection").addEventListener("click", clearSelection);
+  document.querySelector("#send-records").addEventListener("click", openBatchRecords);
   document.querySelector("#batch-send").addEventListener("click", () => {
     const recipients = CUSTOMERS.filter((customer) => state.selectedUsers.has(customer.userId) && isSendable(customer));
     if (!recipients.length) {
@@ -846,7 +1117,14 @@ function updateFilteredView() {
   updateBulkControls();
 }
 
-function openDrawer() {
+function openCustomerDrawer() {
+  state.drawerMode = "customer";
+  renderDetail();
+  openDrawer(false);
+}
+
+function openDrawer(wide = false) {
+  drawer.classList.toggle("is-wide", wide);
   drawerLayer.classList.add("is-open");
   drawerLayer.setAttribute("aria-hidden", "false");
 }
@@ -854,6 +1132,7 @@ function openDrawer() {
 function closeDrawer() {
   drawerLayer.classList.remove("is-open");
   drawerLayer.setAttribute("aria-hidden", "true");
+  state.drawerMode = null;
 }
 
 function bindDetailEvents(customer, sendable) {
@@ -978,6 +1257,7 @@ function openBatchModal(recipients) {
 function closeModal() {
   modalLayer.classList.remove("is-open");
   modalLayer.setAttribute("aria-hidden", "true");
+  modal.classList.remove("is-wide");
   modal.innerHTML = "";
 }
 
@@ -1065,9 +1345,12 @@ function updateChrome() {
 }
 
 document.querySelector("#lang-switch").addEventListener("click", () => {
+  const openMode = state.drawerMode;
   state.lang = state.lang === "zh" ? "en" : "zh";
   localStorage.setItem("crm-line-lang", state.lang);
   renderAll();
+  if (openMode === "customer") renderDetail();
+  if (openMode === "batch") renderBatchRecords();
 });
 
 modalLayer.querySelector(".modal-scrim").addEventListener("click", closeModal);
