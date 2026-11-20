@@ -1,0 +1,26 @@
+version: 1
+sources:
+  - id: dino-business-requirements
+    path: ../../../../crm-all-requests.ndjson
+    purpose: 暂停跟进状态下直接预约、关闭或拒绝的原始业务诉求
+    priority: authoritative
+  - id: follow-stage-live
+    url: https://qjphu5vphyf4.jp.larksuite.com/wiki/CAGnwbJhsiavJPkFJopjqSk7p4b
+    purpose: 当前跟进阶段、允许动作、原因和页面交互
+    priority: authoritative
+  - id: follow-stage-design
+    url: https://qjphu5vphyf4.jp.larksuite.com/wiki/PiRSwLWGUiIApxk9OI8jXbqVpUh
+    purpose: 九阶段状态机、生命周期事件和操作收口规则
+    priority: authoritative
+  - id: user-follow-rules
+    url: https://qjphu5vphyf4.jp.larksuite.com/wiki/ZAONwE7MNiiCPZkqGyAj6SrhpZf
+    purpose: 跟进用户、阶段和线索归属规则
+    priority: high
+  - id: sales-manual
+    path: ../../../../crm-manual/docs/sales/S-03.md
+    purpose: 更新跟进入口、现有字段和销售操作说明
+    priority: high
+  - id: current-crm-prototype-source
+    url: https://github.com/zhangyi-source/dino-crm/blob/main/src/pages/SalesCenter.tsx
+    purpose: 更新跟进弹窗、暂停态动作、结果原因和已有状态计算方式
+    priority: high

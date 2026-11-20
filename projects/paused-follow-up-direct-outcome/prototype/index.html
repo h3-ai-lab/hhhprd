@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dino CRM 暂停跟进后直接产生跟进结果">
+  <title>Dino CRM · 销售中心</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232368d8'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' fill='white' font-family='Arial'%3ED%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --blue: #2368d8;
+      --blue-strong: #195dc5;
+      --blue-soft: #eaf2ff;
+      --navy: #10233f;
+      --ink: #1d2939;
+      --muted: #667085;
+      --line: #e3e9f1;
+      --bg: #f3f6fa;
+      --white: #fff;
+      --green: #147a55;
+      --green-soft: #e8f7ef;
+      --amber: #9a6208;
+      --amber-soft: #fff5da;
+      --red: #bd3434;
+      --red-soft: #fff0f0;
+      --violet: #6650b1;
+      --violet-soft: #f0edff;
+      --shadow: 0 18px 50px rgba(25, 46, 77, .18);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 224px minmax(0, 1fr); }
+    .sidebar {
+      background: var(--navy);
+      color: #dbe6f5;
+      padding: 22px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 8px; }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: #3679e5;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .brand strong { display: block; color: #fff; font-size: 16px; }
+    .brand span { font-size: 11px; color: #9fb2cd; }
+    .nav-label { padding: 0 10px; margin-bottom: 7px; color: #8296b4; font-size: 11px; font-weight: 700; letter-spacing: .08em; }
+    .nav-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #dbe6f5;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,.07); }
+    .nav-btn.active { background: #2d70df; color: #fff; }
+    .nav-icon { width: 18px; text-align: center; }
+    .sidebar-foot { margin-top: auto; padding: 12px; color: #9fb2cd; font-size: 12px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #54d49a; display: inline-block; margin-right: 7px; }
+    .workspace { min-width: 0; }
+    .topbar {
+      min-height: 78px;
+      padding: 16px 24px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .crumb { color: var(--muted); font-size: 12px; margin-bottom: 3px; }
+    .title { margin: 0; font-size: 22px; line-height: 1.25; letter-spacing: -.01em; }
+    .top-actions { display: flex; align-items: center; gap: 14px; }
+    .lang-switch { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+    .lang-btn { border: 0; background: #fff; color: var(--muted); padding: 6px 10px; }
+    .lang-btn.active { background: var(--blue); color: #fff; }
+    .account { display: flex; align-items: center; gap: 9px; }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue); font-weight: 800; }
+    .account strong { display: block; font-size: 13px; }
+    .account span { display: block; color: var(--muted); font-size: 11px; }
+    .content { padding: 18px 22px 46px; }
+    .toolbar, .panel { background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 1px 3px rgba(23,43,77,.03); }
+    .toolbar { padding: 14px 16px; margin-bottom: 14px; }
+    .filters { display: grid; grid-template-columns: minmax(220px,1.5fr) minmax(150px,.75fr) minmax(170px,.8fr) auto; gap: 10px; align-items: end; }
+    .field-label { display: block; margin-bottom: 5px; color: #475467; font-size: 12px; font-weight: 600; }
+    .input, .select {
+      width: 100%;
+      border: 1px solid #d8e0eb;
+      background: #fff;
+      color: var(--ink);
+      border-radius: 7px;
+      padding: 8px 10px;
+      min-height: 36px;
+      outline: none;
+    }
+    textarea.input { resize: vertical; min-height: 72px; }
+    .input:focus, .select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(35,104,216,.12); }
+    .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .btn {
+      border: 1px solid transparent;
+      border-radius: 7px;
+      min-height: 34px;
+      padding: 6px 12px;
+      color: var(--ink);
+      background: #fff;
+      white-space: nowrap;
+    }
+    .btn:hover { border-color: #bac7d8; }
+    .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 650; }
+    .btn-primary:hover { background: var(--blue-strong); }
+    .btn-soft { background: var(--blue-soft); border-color: #dbe8ff; color: var(--blue); font-weight: 650; }
+    .btn-small { min-height: 30px; padding: 4px 9px; font-size: 12px; }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .panel-head { padding: 15px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .panel-title { font-weight: 750; font-size: 15px; }
+    .muted { color: var(--muted); }
+    .table-wrap { overflow: auto; }
+    table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+    th { background: #f8fafc; text-align: left; color: #475467; font-size: 12px; padding: 11px 12px; border-bottom: 1px solid var(--line); }
+    td { padding: 12px; border-bottom: 1px solid #edf1f6; vertical-align: middle; }
+    tr:last-child td { border-bottom: 0; }
+    .user-name { font-weight: 700; }
+    .uid { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; margin-top: 2px; }
+    .pill { display: inline-flex; align-items: center; width: fit-content; padding: 3px 8px; border-radius: 999px; font-size: 12px; font-weight: 650; }
+    .pill-blue { color: var(--blue); background: var(--blue-soft); }
+    .pill-green { color: var(--green); background: var(--green-soft); }
+    .pill-amber { color: var(--amber); background: var(--amber-soft); }
+    .pill-red { color: var(--red); background: var(--red-soft); }
+    .pill-violet { color: var(--violet); background: var(--violet-soft); }
+    .pill-neutral { color: #475467; background: #edf1f6; }
+    .empty { text-align: center; padding: 54px 20px; color: var(--muted); }
+    .empty strong { display: block; color: var(--ink); margin-bottom: 4px; }
+    .row-menu { position: relative; display: inline-block; }
+    .menu-pop {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      min-width: 140px;
+      padding: 5px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      box-shadow: var(--shadow);
+      z-index: 20;
+    }
+    .menu-item { width: 100%; border: 0; background: #fff; text-align: left; border-radius: 6px; padding: 9px 10px; color: var(--ink); }
+    .menu-item:hover { background: #f4f7fc; }
+    .modal-layer {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,27,46,.46);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 50;
+    }
+    .modal-layer.open { display: flex; }
+    .modal {
+      width: min(680px,100%);
+      max-height: min(820px,92vh);
+      overflow: auto;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 28px 80px rgba(4,20,43,.28);
+    }
+    .modal-head { padding: 17px 19px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; align-items: center; position: sticky; top: 0; background: #fff; z-index: 3; }
+    .modal-head h2 { margin: 0; font-size: 18px; }
+    .modal-tools { display: flex; align-items: center; gap: 10px; }
+    .modal-tools .lang-btn { padding: 5px 8px; }
+    .icon-btn { border: 0; background: transparent; color: var(--muted); font-size: 24px; line-height: 1; padding: 2px 6px; }
+    .modal-body { padding: 18px 19px; }
+    .modal-foot { padding: 14px 19px 18px; display: flex; justify-content: flex-end; gap: 9px; border-top: 1px solid var(--line); position: sticky; bottom: 0; background: #fff; }
+    .form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; }
+    .field.full { grid-column: 1 / -1; }
+    .error { margin-top: 4px; color: var(--red); font-size: 12px; min-height: 16px; }
+    .stage-line { display: flex; align-items: center; gap: 9px; padding: 10px 12px; background: #f8fafc; border: 1px solid var(--line); border-radius: 9px; margin-bottom: 14px; }
+    .stage-line strong { font-size: 13px; }
+    .hint { padding: 10px 12px; border-radius: 9px; background: var(--blue-soft); color: #315177; margin: 0 0 14px; }
+    .hint.warn { background: var(--amber-soft); color: #714b0d; }
+    .history { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .history-title { font-weight: 750; margin-bottom: 11px; }
+    .timeline { display: grid; gap: 0; }
+    .timeline-item { position: relative; padding: 0 0 15px 22px; }
+    .timeline-item::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: -2px; width: 1px; background: var(--line); }
+    .timeline-item:last-child::before { display: none; }
+    .timeline-dot { position: absolute; left: 1px; top: 5px; width: 9px; height: 9px; border-radius: 50%; background: var(--blue); }
+    .timeline-action { font-weight: 700; }
+    .timeline-meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .timeline-note { margin-top: 5px; color: #3d4d61; white-space: pre-wrap; }
+    .confirm-box { border: 1px solid #f1cf8d; background: var(--amber-soft); padding: 12px; border-radius: 9px; margin-top: 14px; }
+    .confirm-box strong { display: block; margin-bottom: 4px; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%,18px);
+      background: #15273f;
+      color: #fff;
+      padding: 9px 14px;
+      border-radius: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s ease;
+      z-index: 100;
+      box-shadow: var(--shadow);
+      max-width: min(92vw,560px);
+    }
+    .toast.show { opacity: 1; transform: translate(-50%,0); }
+    .toast.error { background: #7d2525; }
+    .hidden { display: none !important; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 20px; }
+    .detail-grid small { display: block; color: var(--muted); font-size: 11px; }
+    .detail-grid strong { font-size: 13px; }
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 72px minmax(0,1fr); }
+      .sidebar { padding: 18px 10px; }
+      .brand-copy, .nav-label, .sidebar-foot, .nav-btn span:last-child { display: none; }
+      .brand { justify-content: center; padding: 0; }
+      .nav-btn { justify-content: center; }
+    }
+    @media (max-width: 700px) {
+      .content { padding: 12px; }
+      .topbar { padding: 12px 14px; }
+      .account-copy { display: none; }
+      .filters, .form-grid, .detail-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .panel-head { align-items: flex-start; flex-direction: column; }
+      .modal-layer { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <div class="brand-copy">
+          <strong>Dino CRM</strong>
+          <span data-i18n="brandSub">客户经营工作台</span>
+        </div>
+      </div>
+      <nav>
+        <div class="nav-label" data-i18n="salesManagement">销售管理</div>
+        <button class="nav-btn active" type="button" data-route="sales">
+          <span class="nav-icon">▦</span><span data-i18n="salesCenter">销售中心</span>
+        </button>
+        <button class="nav-btn" type="button" data-route="users">
+          <span class="nav-icon">◎</span><span data-i18n="userCenter">用户中心</span>
+        </button>
+      </nav>
+      <div class="sidebar-foot"><span class="status-dot"></span><span data-i18n="systemOnline">系统运行正常</span></div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <div class="crumb" id="breadcrumb"></div>
+          <h1 class="title" id="page-title"></h1>
+        </div>
+        <div class="top-actions">
+          <div class="lang-switch" aria-label="Language">
+            <button class="lang-btn active" type="button" data-lang="zh">中</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+          <div class="account">
+            <div class="avatar">L</div>
+            <div class="account-copy"><strong>Linh Nguyen</strong><span data-i18n="role">销售专员</span></div>
+          </div>
+        </div>
+      </header>
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+
+  <div class="modal-layer" id="modal-layer" aria-hidden="true">
+    <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"></section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const I18N = {
+      zh: {
+        brandSub: "客户经营工作台",
+        salesManagement: "销售管理",
+        salesCenter: "销售中心",
+        userCenter: "用户中心",
+        role: "销售专员",
+        systemOnline: "系统运行正常",
+        crumbSales: "销售管理 / 销售中心",
+        crumbUsers: "用户管理 / 用户中心",
+        salesTitle: "销售中心",
+        usersTitle: "用户中心",
+        myFollowups: "我的跟进",
+        search: "搜索",
+        searchPlaceholder: "手机号 / 用户 ID / 姓名",
+        businessLine: "业务线",
+        allLines: "全部业务线",
+        stage: "当前跟进阶段",
+        allStages: "全部阶段",
+        reset: "重置筛选",
+        currentLeads: "当前线索",
+        total: "共 {n} 条",
+        user: "用户",
+        intent: "购买意向",
+        userStatus: "用户状态",
+        followStage: "跟进阶段",
+        currentCC: "当前 CC",
+        actions: "操作",
+        updateFollow: "更新跟进",
+        viewUser: "查看用户",
+        more: "更多",
+        noResults: "没有符合条件的线索",
+        noResultsHint: "请调整搜索或筛选条件后重试",
+        modalTitle: "更新跟进",
+        currentStage: "当前跟进阶段",
+        nextAction: "下一步操作",
+        appointmentTime: "新的预约开始时间",
+        appointmentTimezone: "业务线时间",
+        meetingLink: "Google Meet",
+        meetingOptional: "选填，填写时须为 https:// 地址",
+        reason: "原因",
+        reasonPlaceholder: "请选择原因",
+        reasonOther: "其他原因",
+        note: "本次跟进说明",
+        noteOptional: "补充说明（选填）",
+        notePlaceholder: "填写本次沟通结果或客户反馈",
+        timeline: "跟进记录",
+        cancel: "取消",
+        save: "保存",
+        saving: "保存中…",
+        close: "关闭",
+        required: "请填写该字段",
+        timeRequired: "请选择预约开始时间",
+        httpsOnly: "请输入以 https:// 开头的会议链接",
+        reasonRequired: "请选择原因",
+        otherReasonRequired: "请填写其他原因",
+        noteRequired: "请填写本次跟进说明",
+        directHint: "保存后将直接进入已预约，不会单独生成恢复跟进记录。",
+        pausedLabel: "暂不跟进",
+        resume: "恢复跟进",
+        create: "新建预约",
+        reject: "标记已拒绝",
+        closeLead: "关闭线索",
+        reactivate: "重新激活线索",
+        continueFollow: "记录沟通，继续跟进",
+        pause: "暂停跟进",
+        confirmTitle: "确认提交“{action}”？",
+        confirmReject: "线索将进入已拒绝，并保留现有跟进历史。",
+        confirmClose: "线索将进入已关闭，并停止后续跟进。",
+        confirmReactivate: "线索将恢复为可跟进状态。",
+        confirmButton: "确认提交",
+        back: "返回修改",
+        saveSuccess: "跟进结果已保存",
+        directCreateSuccess: "已直接进入已预约，未生成额外的恢复跟进记录",
+        resumeSuccess: "已恢复跟进",
+        rejectSuccess: "已标记为已拒绝",
+        closeSuccess: "线索已关闭",
+        reactivateSuccess: "线索已重新激活",
+        duplicateBlocked: "正在保存，请勿重复提交",
+        statusPending: "待处理",
+        statusUnpaid: "未付费",
+        statusTrial: "未付费 · 体验中",
+        statusPaid: "已付费",
+        actionResume: "恢复跟进",
+        actionCreate: "新建预约",
+        actionReject: "标记已拒绝",
+        actionClose: "关闭线索",
+        actionReactivate: "重新激活线索",
+        actionPause: "暂停跟进",
+        actionContinue: "记录沟通，继续跟进",
+        beforeStage: "原阶段",
+        userDetail: "用户信息",
+        phone: "联系电话",
+        loginAccount: "登录账号",
+        owner: "当前 CC",
+        leadID: "线索 ID",
+        emptyHistory: "暂无跟进记录",
+        selectAction: "请选择下一步操作",
+        stageWaitingCall: "待外呼",
+        stageUnreached: "未接通 · 待跟进",
+        stageWaitingBooking: "已接通 · 待预约",
+        stageBooked: "已预约",
+        stageNoShow: "未出勤 · 待跟进",
+        stageIncomplete: "咨询未完成 · 待跟进",
+        stagePayment: "咨询已完成 · 待支付",
+        stagePaused: "暂不跟进",
+        stageRejected: "已拒绝",
+        stageClosed: "已关闭",
+        lineVietnam: "越南",
+        lineThailand: "泰国",
+        lineMalaysia: "马来西亚",
+        lineSingapore: "新加坡",
+        intentInterested: "有意向",
+        intentNeutral: "未填写",
+        intentNot: "无意向",
+        reasonNoNeed: "暂无需求",
+        reasonInconvenient: "暂不方便",
+        reasonBudget: "预算原因",
+        reasonOther: "其他",
+        rejectParentDeclined: "家长拒绝接听电话",
+        rejectWrongNumber: "号码错误",
+        rejectNoDemand: "无需求",
+        rejectLater: "稍后回电",
+        rejectUnderAge: "低于 4 岁",
+        rejectOverAge: "超过 13 岁／成人",
+        closeUnsuitable: "课程不适合孩子",
+        closeChildDislike: "孩子不喜欢",
+        closeParentDislike: "家长不喜欢",
+        closeHighFee: "费用高",
+        closeDevice: "设备问题",
+        closePayment: "支付方式问题",
+        closeBrand: "不信任品牌",
+        closeBug: "App 故障／卡顿",
+        closeWaiting: "观望需求",
+        closeTrialOnly: "只想上试听课",
+        closeOther: "其他"
+      },
+      en: {
+        brandSub: "Customer Operations",
+        salesManagement: "Sales Management",
+        salesCenter: "Sales Center",
+        userCenter: "User Center",
+        role: "Sales Representative",
+        systemOnline: "System operational",
+        crumbSales: "Sales Management / Sales Center",
+        crumbUsers: "User Management / User Center",
+        salesTitle: "Sales Center",
+        usersTitle: "User Center",
+        myFollowups: "My follow-ups",
+        search: "Search",
+        searchPlaceholder: "Phone / user ID / name",
+        businessLine: "Business line",
+        allLines: "All business lines",
+        stage: "Current follow-up stage",
+        allStages: "All stages",
+        reset: "Reset filters",
+        currentLeads: "Current leads",
+        total: "{n} records",
+        user: "User",
+        intent: "Purchase intent",
+        userStatus: "User status",
+        followStage: "Follow-up stage",
+        currentCC: "Current CC",
+        actions: "Actions",
+        updateFollow: "Update follow-up",
+        viewUser: "View user",
+        more: "More",
+        noResults: "No matching leads",
+        noResultsHint: "Adjust the search or filters and try again",
+        modalTitle: "Update follow-up",
+        currentStage: "Current follow-up stage",
+        nextAction: "Next action",
+        appointmentTime: "New appointment start time",
+        appointmentTimezone: "Business-line time",
+        meetingLink: "Google Meet",
+        meetingOptional: "Optional; enter an https:// link",
+        reason: "Reason",
+        reasonPlaceholder: "Select a reason",
+        reasonOther: "Other reason",
+        note: "Follow-up note",
+        noteOptional: "Additional notes (optional)",
+        notePlaceholder: "Record the outcome or customer feedback",
+        timeline: "Follow-up history",
+        cancel: "Cancel",
+        save: "Save",
+        saving: "Saving…",
+        close: "Close",
+        required: "This field is required",
+        timeRequired: "Select an appointment start time",
+        httpsOnly: "Enter a meeting link beginning with https://",
+        reasonRequired: "Select a reason",
+        otherReasonRequired: "Enter the other reason",
+        noteRequired: "Enter a follow-up note",
+        directHint: "Saving moves the lead directly to Booked without creating a separate resume-follow-up record.",
+        pausedLabel: "Paused",
+        resume: "Resume follow-up",
+        create: "Create appointment",
+        reject: "Mark rejected",
+        closeLead: "Close lead",
+        reactivate: "Reactivate lead",
+        continueFollow: "Record contact and continue",
+        pause: "Pause follow-up",
+        confirmTitle: "Confirm “{action}”?",
+        confirmReject: "The lead will move to Rejected and its history will be retained.",
+        confirmClose: "The lead will move to Closed and follow-up will stop.",
+        confirmReactivate: "The lead will return to a follow-up stage.",
+        confirmButton: "Confirm",
+        back: "Back",
+        saveSuccess: "Follow-up result saved",
+        directCreateSuccess: "Moved directly to Booked without a separate resume-follow-up record",
+        resumeSuccess: "Follow-up resumed",
+        rejectSuccess: "Lead marked as rejected",
+        closeSuccess: "Lead closed",
+        reactivateSuccess: "Lead reactivated",
+        duplicateBlocked: "Saving is already in progress",
+        statusPending: "Pending",
+        statusUnpaid: "Unpaid",
+        statusTrial: "Unpaid · Trial in progress",
+        statusPaid: "Paid",
+        actionResume: "Resume follow-up",
+        actionCreate: "Create appointment",
+        actionReject: "Mark rejected",
+        actionClose: "Close lead",
+        actionReactivate: "Reactivate lead",
+        actionPause: "Pause follow-up",
+        actionContinue: "Record contact and continue",
+        beforeStage: "Previous stage",
+        userDetail: "User information",
+        phone: "Phone",
+        loginAccount: "Login account",
+        owner: "Current CC",
+        leadID: "Lead ID",
+        emptyHistory: "No follow-up records",
+        selectAction: "Select the next action",
+        stageWaitingCall: "Call pending",
+        stageUnreached: "Not reached",
+        stageWaitingBooking: "Awaiting appointment",
+        stageBooked: "Booked",
+        stageNoShow: "No-show",
+        stageIncomplete: "Consultation incomplete",
+        stagePayment: "Payment pending",
+        stagePaused: "Paused",
+        stageRejected: "Rejected",
+        stageClosed: "Closed",
+        lineVietnam: "Vietnam",
+        lineThailand: "Thailand",
+        lineMalaysia: "Malaysia",
+        lineSingapore: "Singapore",
+        intentInterested: "Interested",
+        intentNeutral: "Not filled",
+        intentNot: "Not interested",
+        reasonNoNeed: "No current need",
+        reasonInconvenient: "Not convenient now",
+        reasonBudget: "Budget",
+        reasonOther: "Other",
+        rejectParentDeclined: "Parent declined the call",
+        rejectWrongNumber: "Wrong number",
+        rejectNoDemand: "No demand",
+        rejectLater: "Call back later",
+        rejectUnderAge: "Under 4 years old",
+        rejectOverAge: "Above 13 / Adult",
+        closeUnsuitable: "Course unsuitable for the child",
+        closeChildDislike: "Child does not like it",
+        closeParentDislike: "Parent does not like it",
+        closeHighFee: "High fee",
+        closeDevice: "Device issue",
+        closePayment: "Payment method issue",
+        closeBrand: "Brand trust issue",
+        closeBug: "App bug / lagging",
+        closeWaiting: "Waiting to decide",
+        closeTrialOnly: "Trial lesson only",
+        closeOther: "Other"
+      }
+    };
+
+    const STAGE_KEYS = ["waiting_call","unreached","waiting_booking","booked","no_show","incomplete","payment_pending","paused","rejected","closed"];
+    const STAGE_META = {
+      waiting_call: { cls: "pill-neutral" },
+      unreached: { cls: "pill-amber" },
+      waiting_booking: { cls: "pill-blue" },
+      booked: { cls: "pill-blue" },
+      no_show: { cls: "pill-amber" },
+      incomplete: { cls: "pill-violet" },
+      payment_pending: { cls: "pill-violet" },
+      paused: { cls: "pill-amber" },
+      rejected: { cls: "pill-red" },
+      closed: { cls: "pill-red" }
+    };
+    const STAGE_I18N = {
+      waiting_call: "stageWaitingCall",
+      unreached: "stageUnreached",
+      waiting_booking: "stageWaitingBooking",
+      booked: "stageBooked",
+      no_show: "stageNoShow",
+      incomplete: "stageIncomplete",
+      payment_pending: "stagePayment",
+      paused: "stagePaused",
+      rejected: "stageRejected",
+      closed: "stageClosed"
+    };
+    const LINE_I18N = {
+      Vietnam: "lineVietnam",
+      Thailand: "lineThailand",
+      Malaysia: "lineMalaysia",
+      Singapore: "lineSingapore"
+    };
+    const INTENT_I18N = { interested: "intentInterested", neutral: "intentNeutral", not_interested: "intentNot" };
+    const STATUS_I18N = { pending: "statusPending", unpaid: "statusUnpaid", trial: "statusTrial", paid: "statusPaid" };
+    const PAUSE_REASONS = ["reasonNoNeed","reasonInconvenient","reasonBudget","reasonOther"];
+    const REJECT_REASONS = ["rejectParentDeclined","rejectWrongNumber","rejectNoDemand","rejectLater","rejectUnderAge","rejectOverAge"];
+    const CLOSE_REASONS = ["closeUnsuitable","closeChildDislike","closeParentDislike","closeHighFee","closeDevice","closePayment","closeBrand","closeBug","closeWaiting","closeTrialOnly","closeOther"];
+
+    const state = {
+      lang: readLang(),
+      route: "sales",
+      line: "all",
+      stage: "all",
+      search: "",
+      editingId: null,
+      action: "",
+      saving: false,
+      confirming: false,
+      openMenuId: null,
+      modalType: null,
+      viewingId: null
+    };
+
+    let leads = [
+      {
+        id: "LD-261120-1001", name: "Nguyễn Minh Anh", line: "Vietnam", intent: "interested",
+        status: "trial", stage: "paused", previousStage: "waiting_call", owner: "Linh Nguyen",
+        account: "anh.nguyen@mail.vn", phone: "**** 0186", appointmentHistory: 0,
+        pauseReason: "reasonInconvenient",
+        history: [
+          { action: "pause", label: "actionPause", at: "2026-11-20 09:30", note: "家长表示本周时间不便，约定下周再联系。", before: "call_pending", after: "paused" },
+          { action: "continue", label: "actionContinue", at: "2026-11-19 16:10", note: "首次电话已接通，家长希望先看课程安排。", before: "waiting_call", after: "waiting_call" }
+        ]
+      },
+      {
+        id: "LD-261120-1002", name: "Tran Bao Chau", line: "Thailand", intent: "interested",
+        status: "unpaid", stage: "paused", previousStage: "no_show", owner: "Linh Nguyen",
+        account: "chau.tran@mail.th", phone: "**** 0281", appointmentHistory: 2,
+        pauseReason: "reasonBudget",
+        history: [
+          { action: "pause", label: "actionPause", at: "2026-11-19 18:20", note: "家长希望月底再做决定。", before: "no_show", after: "paused" },
+          { action: "noShow", label: "stageNoShow", at: "2026-11-18 14:30", note: "客户未出席已安排的咨询。", before: "booked", after: "no_show" }
+        ]
+      },
+      {
+        id: "LD-261120-1003", name: "Le Thu Ha", line: "Malaysia", intent: "neutral",
+        status: "trial", stage: "paused", previousStage: "unreached", owner: "Linh Nguyen",
+        account: "ha.le@mail.my", phone: "**** 0366", appointmentHistory: 0,
+        pauseReason: "reasonNoNeed",
+        history: [
+          { action: "pause", label: "actionPause", at: "2026-11-20 08:45", note: "多次未接通，家长暂不需要继续联系。", before: "unreached", after: "paused" }
+        ]
+      },
+      {
+        id: "LD-261120-1004", name: "Pham Gia Linh", line: "Vietnam", intent: "interested",
+        status: "trial", stage: "booked", previousStage: "booked", owner: "Linh Nguyen",
+        account: "linh.pham@mail.vn", phone: "**** 0412", appointmentHistory: 1,
+        pauseReason: "",
+        history: [
+          { action: "create", label: "actionCreate", at: "2026-11-19 15:10", note: "预约 11 月 21 日 10:00。", before: "waiting_booking", after: "booked" }
+        ]
+      },
+      {
+        id: "LD-261120-1005", name: "Vo Minh Khang", line: "Singapore", intent: "not_interested",
+        status: "unpaid", stage: "rejected", previousStage: "waiting_call", owner: "Linh Nguyen",
+        account: "khang.vo@mail.sg", phone: "**** 0573", appointmentHistory: 0,
+        pauseReason: "",
+        history: [
+          { action: "reject", label: "actionReject", at: "2026-11-18 11:15", note: "家长明确表示暂无需求。", before: "waiting_call", after: "rejected" }
+        ]
+      },
+      {
+        id: "LD-261120-1006", name: "Do Ngoc Mai", line: "Vietnam", intent: "not_interested",
+        status: "unpaid", stage: "closed", previousStage: "payment_pending", owner: "Linh Nguyen",
+        account: "mai.do@mail.vn", phone: "**** 0649", appointmentHistory: 3,
+        pauseReason: "",
+        history: [
+          { action: "close", label: "actionClose", at: "2026-11-17 17:40", note: "家长认为费用超出预算。", before: "payment_pending", after: "closed" }
+        ]
+      }
+    ];
+
+    const $ = (selector, parent = document) => parent.querySelector(selector);
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
+    const tr = (key) => I18N[state.lang][key] ?? key;
+    const fmt = (key, vars) => tr(key).replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? "");
+    const stageLabel = (stage) => tr(STAGE_I18N[stage]);
+    const stagePill = (stage) => `<span class="pill ${STAGE_META[stage]?.cls || "pill-neutral"}">${esc(stageLabel(stage))}</span>`;
+    const lineLabel = (line) => tr(LINE_I18N[line] || line);
+    const leadById = (id) => leads.find((lead) => lead.id === id);
+    const outcome = (lead) => lead.appointmentHistory > 0 ? "close" : "reject";
+    const outcomeLabelKey = (lead) => outcome(lead) === "close" ? "closeLead" : "reject";
+
+    function readLang() {
+      try { return localStorage.getItem("crm-direct-outcome-lang") === "en" ? "en" : "zh"; }
+      catch { return "zh"; }
+    }
+
+    function setLang(lang) {
+      const modalValues = state.modalType === "follow" ? {
+        action: $("#action-select")?.value,
+        appointmentTime: $("#appointment-time")?.value,
+        meetingLink: $("#meeting-link")?.value,
+        reason: $("#reason-select")?.value,
+        otherReason: $("#other-reason")?.value,
+        note: $("#follow-note")?.value,
+        confirming: state.confirming
+      } : null;
+      const editingId = state.editingId;
+      const viewingId = state.viewingId;
+      const modalType = state.modalType;
+      state.lang = lang === "en" ? "en" : "zh";
+      try { localStorage.setItem("crm-direct-outcome-lang", state.lang); } catch {}
+      document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+      document.querySelectorAll(".lang-btn").forEach((button) => {
+        const active = button.dataset.lang === state.lang;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+      document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = tr(node.dataset.i18n); });
+      render();
+      if (modalType === "follow" && editingId && leadById(editingId)) {
+        openFollowModal(editingId);
+        state.action = modalValues?.action || state.action;
+        $("#action-select").value = state.action;
+        updateActionFields(leadById(editingId));
+        if (modalValues?.appointmentTime) $("#appointment-time").value = modalValues.appointmentTime;
+        if (modalValues?.meetingLink) $("#meeting-link").value = modalValues.meetingLink;
+        if (modalValues?.reason) $("#reason-select").value = modalValues.reason;
+        if (modalValues?.otherReason) $("#other-reason").value = modalValues.otherReason;
+        if (modalValues?.note) $("#follow-note").value = modalValues.note;
+        if (modalValues?.reason === "reasonOther" || modalValues?.reason === "closeOther") {
+          $("#other-reason-field").classList.remove("hidden");
+        }
+        if (modalValues?.confirming) {
+          state.confirming = true;
+          updateSaveLabel();
+        }
+      } else if (modalType === "user" && viewingId && leadById(viewingId)) {
+        openUserModal(viewingId);
+      }
+    }
+
+    function filteredLeads() {
+      const q = state.search.trim().toLowerCase();
+      return leads.filter((lead) => {
+        const lineOk = state.line === "all" || lead.line === state.line;
+        const stageOk = state.stage === "all" || lead.stage === state.stage;
+        const queryOk = !q || [lead.name, lead.id, lead.phone, lead.account].some((value) => String(value).toLowerCase().includes(q));
+        return lineOk && stageOk && queryOk;
+      });
+    }
+
+    function render() {
+      state.openMenuId = null;
+      $("#page-title").textContent = state.route === "users" ? tr("usersTitle") : tr("salesTitle");
+      $("#breadcrumb").textContent = state.route === "users" ? tr("crumbUsers") : tr("crumbSales");
+      document.querySelectorAll(".nav-btn").forEach((button) => button.classList.toggle("active", button.dataset.route === state.route));
+      if (state.route === "users") renderUsers();
+      else renderSales();
+    }
+
+    function renderSales() {
+      const rows = filteredLeads();
+      $("#content").innerHTML = `
+        <section class="toolbar">
+          <div class="filters">
+            <label>
+              <span class="field-label">${esc(tr("search"))}</span>
+              <input class="input" id="search-input" value="${esc(state.search)}" placeholder="${esc(tr("searchPlaceholder"))}">
+            </label>
+            <label>
+              <span class="field-label">${esc(tr("businessLine"))}</span>
+              <select class="select" id="line-filter">
+                <option value="all">${esc(tr("allLines"))}</option>
+                ${Object.keys(LINE_I18N).map((line) => `<option value="${line}" ${state.line === line ? "selected" : ""}>${esc(lineLabel(line))}</option>`).join("")}
+              </select>
+            </label>
+            <label>
+              <span class="field-label">${esc(tr("stage"))}</span>
+              <select class="select" id="stage-filter">
+                <option value="all">${esc(tr("allStages"))}</option>
+                ${STAGE_KEYS.map((stage) => `<option value="${stage}" ${state.stage === stage ? "selected" : ""}>${esc(stageLabel(stage))}</option>`).join("")}
+              </select>
+            </label>
+            <div class="actions"><button class="btn" id="reset-filters" type="button">${esc(tr("reset"))}</button></div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">${esc(tr("myFollowups"))}</div>
+            <span class="muted">${esc(fmt("total", { n: rows.length }))}</span>
+          </div>
+          ${renderTable(rows)}
+        </section>`;
+      $("#search-input").addEventListener("input", (event) => {
+        state.search = event.target.value;
+        refreshSalesTable();
+      });
+      $("#line-filter").addEventListener("change", (event) => {
+        state.line = event.target.value;
+        refreshSalesTable();
+      });
+      $("#stage-filter").addEventListener("change", (event) => {
+        state.stage = event.target.value;
+        refreshSalesTable();
+      });
+      $("#reset-filters").addEventListener("click", () => {
+        state.search = "";
+        state.line = "all";
+        state.stage = "all";
+        renderSales();
+      });
+      bindTableActions();
+    }
+
+    function refreshSalesTable() {
+      const panel = $(".panel");
+      const rows = filteredLeads();
+      panel.innerHTML = `
+        <div class="panel-head">
+          <div class="panel-title">${esc(tr("myFollowups"))}</div>
+          <span class="muted">${esc(fmt("total", { n: rows.length }))}</span>
+        </div>
+        ${renderTable(rows)}`;
+      bindTableActions();
+    }
+
+    function renderTable(rows) {
+      if (!rows.length) {
+        return `<div class="empty"><strong>${esc(tr("noResults"))}</strong><span>${esc(tr("noResultsHint"))}</span></div>`;
+      }
+      return `<div class="table-wrap"><table>
+        <thead><tr>
+          <th>${esc(tr("user"))}</th>
+          <th>${esc(tr("businessLine"))}</th>
+          <th>${esc(tr("intent"))}</th>
+          <th>${esc(tr("userStatus"))}</th>
+          <th>${esc(tr("followStage"))}</th>
+          <th>${esc(tr("currentCC"))}</th>
+          <th>${esc(tr("actions"))}</th>
+        </tr></thead>
+        <tbody>${rows.map((lead) => `
+          <tr>
+            <td><div class="user-name">${esc(lead.name)}</div><div class="uid">${esc(lead.id)} · ${esc(lead.phone)}</div></td>
+            <td>${esc(lineLabel(lead.line))}</td>
+            <td>${esc(tr(INTENT_I18N[lead.intent]))}</td>
+            <td>${esc(tr(STATUS_I18N[lead.status]))}</td>
+            <td>${stagePill(lead.stage)}</td>
+            <td>${esc(lead.owner)}</td>
+            <td>
+              <div class="row-menu">
+                <button class="btn btn-small" type="button" data-menu="${lead.id}" aria-haspopup="menu" aria-expanded="false">${esc(tr("more"))}</button>
+                <div class="menu-pop hidden" data-menu-pop="${lead.id}" role="menu">
+                  <button class="menu-item" type="button" data-edit="${lead.id}" role="menuitem">${esc(tr("updateFollow"))}</button>
+                  <button class="menu-item" type="button" data-view="${lead.id}" role="menuitem">${esc(tr("viewUser"))}</button>
+                </div>
+              </div>
+            </td>
+          </tr>`).join("")}</tbody>
+      </table></div>`;
+    }
+
+    function bindTableActions() {
+      document.querySelectorAll("[data-menu]").forEach((button) => button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const id = button.dataset.menu;
+        state.openMenuId = state.openMenuId === id ? null : id;
+        document.querySelectorAll("[data-menu-pop]").forEach((menu) => {
+          const open = menu.dataset.menuPop === state.openMenuId;
+          menu.classList.toggle("hidden", !open);
+          const trigger = document.querySelector(`[data-menu="${menu.dataset.menuPop}"]`);
+          trigger?.setAttribute("aria-expanded", String(open));
+        });
+      }));
+      document.querySelectorAll("[data-edit]").forEach((button) => button.addEventListener("click", () => openFollowModal(button.dataset.edit)));
+      document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => openUserModal(button.dataset.view)));
+    }
+
+    function renderUsers() {
+      $("#content").innerHTML = `<section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">${esc(tr("usersTitle"))}</div>
+          <span class="muted">${esc(fmt("total", { n: leads.length }))}</span>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>${esc(tr("user"))}</th><th>${esc(tr("businessLine"))}</th><th>${esc(tr("userStatus"))}</th><th>${esc(tr("followStage"))}</th><th>${esc(tr("actions"))}</th></tr></thead>
+          <tbody>${leads.map((lead) => `<tr>
+            <td><div class="user-name">${esc(lead.name)}</div><div class="uid">${esc(lead.id)}</div></td>
+            <td>${esc(lineLabel(lead.line))}</td>
+            <td>${esc(tr(STATUS_I18N[lead.status]))}</td>
+            <td>${stagePill(lead.stage)}</td>
+            <td><button class="btn btn-small" type="button" data-view="${lead.id}">${esc(tr("viewUser"))}</button></td>
+          </tr>`).join("")}</tbody>
+        </table></div>
+      </section>`;
+      document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => openUserModal(button.dataset.view)));
+    }
+
+    function openOverlay(html) {
+      document.querySelectorAll("[data-menu-pop]").forEach((menu) => menu.classList.add("hidden"));
+      document.querySelectorAll("[data-menu]").forEach((button) => button.setAttribute("aria-expanded", "false"));
+      state.openMenuId = null;
+      $("#modal").innerHTML = html;
+      $("#modal-layer").classList.add("open");
+      $("#modal-layer").setAttribute("aria-hidden", "false");
+      $("#modal").querySelectorAll(".lang-btn").forEach((button) => button.addEventListener("click", () => setLang(button.dataset.lang)));
+      $("#modal-layer .icon-btn")?.focus();
+    }
+
+    function closeOverlay() {
+      $("#modal-layer").classList.remove("open");
+      $("#modal-layer").setAttribute("aria-hidden", "true");
+      $("#modal").innerHTML = "";
+      state.editingId = null;
+      state.viewingId = null;
+      state.modalType = null;
+      state.action = "";
+      state.confirming = false;
+      state.saving = false;
+    }
+
+    function openUserModal(id) {
+      const lead = leadById(id);
+      if (!lead) return;
+      state.modalType = "user";
+      state.viewingId = id;
+      openOverlay(`
+        <div class="modal-head"><h2 id="modal-title">${esc(tr("userDetail"))}</h2><div class="modal-tools">${modalLanguageSwitch()}<button class="icon-btn" type="button" data-close aria-label="${esc(tr("close"))}">×</button></div></div>
+        <div class="modal-body">
+          <div class="stage-line"><strong>${esc(lead.name)}</strong>${stagePill(lead.stage)}</div>
+          <div class="detail-grid">
+            <div><small>${esc(tr("leadID"))}</small><strong>${esc(lead.id)}</strong></div>
+            <div><small>${esc(tr("phone"))}</small><strong>${esc(lead.phone)}</strong></div>
+            <div><small>${esc(tr("businessLine"))}</small><strong>${esc(lineLabel(lead.line))}</strong></div>
+            <div><small>${esc(tr("loginAccount"))}</small><strong>${esc(lead.account)}</strong></div>
+            <div><small>${esc(tr("intent"))}</small><strong>${esc(tr(INTENT_I18N[lead.intent]))}</strong></div>
+            <div><small>${esc(tr("owner"))}</small><strong>${esc(lead.owner)}</strong></div>
+          </div>
+        </div>
+        <div class="modal-foot"><button class="btn btn-primary" type="button" data-close>${esc(tr("close"))}</button></div>`);
+      bindOverlayClose();
+    }
+
+    function actionOptions(lead) {
+      if (lead.stage === "rejected" || lead.stage === "closed") {
+        return [{ value: "reactivate", label: tr("reactivate") }];
+      }
+      if (lead.stage === "paused") {
+        return [
+          { value: "resume", label: tr("resume") },
+          { value: "create", label: tr("create") },
+          { value: outcome(lead), label: tr(outcomeLabelKey(lead)) }
+        ];
+      }
+      if (lead.stage === "booked") {
+        return [{ value: "continue", label: tr("continueFollow") }];
+      }
+      const options = [{ value: "continue", label: tr("continueFollow") }];
+      if (lead.stage !== "payment_pending") options.push({ value: "create", label: tr("create") });
+      options.push({ value: "pause", label: tr("pause") });
+      options.push({ value: outcome(lead), label: tr(outcomeLabelKey(lead)) });
+      return options;
+    }
+
+    function openFollowModal(id) {
+      const lead = leadById(id);
+      if (!lead) return;
+      state.modalType = "follow";
+      state.viewingId = id;
+      state.editingId = id;
+      const options = actionOptions(lead);
+      state.action = options[0]?.value || "";
+      openOverlay(`
+        <div class="modal-head"><h2 id="modal-title">${esc(tr("modalTitle"))}</h2><div class="modal-tools">${modalLanguageSwitch()}<button class="icon-btn" type="button" data-close aria-label="${esc(tr("close"))}">×</button></div></div>
+        <form id="follow-form">
+          <div class="modal-body">
+            <div class="stage-line">
+              <span class="muted">${esc(tr("currentStage"))}</span>
+              ${stagePill(lead.stage)}
+            </div>
+            <div class="form-grid">
+              <label class="field full">
+                <span class="field-label">${esc(tr("nextAction"))}</span>
+                <select class="select" id="action-select">${options.map((option) => `<option value="${option.value}">${esc(option.label)}</option>`).join("")}</select>
+                <div class="error" id="action-error"></div>
+              </label>
+              <div class="field full hidden" id="direct-hint">
+                <div class="hint">${esc(tr("directHint"))}</div>
+              </div>
+              <label class="field hidden" id="appointment-time-field">
+                <span class="field-label">${esc(tr("appointmentTime"))} · ${esc(tr("appointmentTimezone"))}</span>
+                <input class="input" type="datetime-local" id="appointment-time" value="2026-11-21T10:00">
+                <div class="error" id="time-error"></div>
+              </label>
+              <label class="field hidden" id="meeting-link-field">
+                <span class="field-label">${esc(tr("meetingLink"))}</span>
+                <input class="input" id="meeting-link" placeholder="${esc(tr("meetingOptional"))}">
+                <div class="error" id="meeting-error"></div>
+              </label>
+              <label class="field full hidden" id="reason-field">
+                <span class="field-label">${esc(tr("reason"))}</span>
+                <select class="select" id="reason-select"><option value="">${esc(tr("reasonPlaceholder"))}</option></select>
+                <div class="error" id="reason-error"></div>
+              </label>
+              <label class="field full hidden" id="other-reason-field">
+                <span class="field-label">${esc(tr("reasonOther"))}</span>
+                <textarea class="input" id="other-reason" rows="2"></textarea>
+                <div class="error" id="other-reason-error"></div>
+              </label>
+              <label class="field full">
+                <span class="field-label" id="note-label">${esc(tr("note"))}</span>
+                <textarea class="input" id="follow-note" rows="3" placeholder="${esc(tr("notePlaceholder"))}"></textarea>
+                <div class="error" id="note-error"></div>
+              </label>
+            </div>
+            <div id="confirmation"></div>
+            <section class="history">
+              <div class="history-title">${esc(tr("timeline"))}</div>
+              ${renderTimeline(lead)}
+            </section>
+          </div>
+          <div class="modal-foot">
+            <button class="btn" type="button" data-close>${esc(tr("cancel"))}</button>
+            <button class="btn btn-primary" type="submit" id="save-follow">${esc(tr("save"))}</button>
+          </div>
+        </form>`);
+      bindOverlayClose();
+      $("#action-select").addEventListener("change", (event) => {
+        state.action = event.target.value;
+        state.confirming = false;
+        updateActionFields(lead);
+      });
+      $("#follow-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitFollow(lead);
+      });
+      updateActionFields(lead);
+    }
+
+    function updateActionFields(lead) {
+      const action = state.action;
+      const isCreate = action === "create";
+      const isOutcome = action === "reject" || action === "close";
+      const isResume = action === "resume";
+      $("#direct-hint").classList.toggle("hidden", !isCreate);
+      $("#appointment-time-field").classList.toggle("hidden", !isCreate);
+      $("#meeting-link-field").classList.toggle("hidden", !isCreate);
+      $("#reason-field").classList.toggle("hidden", !isOutcome);
+      $("#other-reason-field").classList.add("hidden");
+      $("#note-label").textContent = isCreate ? tr("noteOptional") : tr("note");
+
+      $("#time-error").textContent = "";
+      $("#meeting-error").textContent = "";
+      $("#reason-error").textContent = "";
+      $("#other-reason-error").textContent = "";
+      $("#note-error").textContent = "";
+      $("#confirmation").innerHTML = "";
+      state.confirming = false;
+      if (isOutcome) {
+        const reasons = action === "reject" ? REJECT_REASONS : CLOSE_REASONS;
+        $("#reason-select").innerHTML = `<option value="">${esc(tr("reasonPlaceholder"))}</option>${reasons.map((key) => `<option value="${key}">${esc(tr(key))}</option>`).join("")}`;
+        $("#reason-select").onchange = () => {
+          $("#other-reason-field").classList.toggle("hidden", $("#reason-select").value !== "reasonOther" && $("#reason-select").value !== "closeOther");
+        };
+      }
+      updateSaveLabel();
+    }
+
+    function renderTimeline(lead) {
+      if (!lead.history.length) return `<div class="muted">${esc(tr("emptyHistory"))}</div>`;
+      return `<div class="timeline">${lead.history.map((item) => `
+        <div class="timeline-item">
+          <span class="timeline-dot"></span>
+          <div class="timeline-action">${esc(tr(item.label))}</div>
+          <div class="timeline-meta">${esc(item.at)} · ${esc(item.before ? stageLabelFromHistory(item.before) : "")} → ${esc(stageLabelFromHistory(item.after))}</div>
+          ${item.note ? `<div class="timeline-note">${esc(item.note)}</div>` : ""}
+        </div>`).join("")}</div>`;
+    }
+
+    function stageLabelFromHistory(stage) {
+      if (stage === "call_pending") return tr("stageWaitingCall");
+      return STAGE_I18N[stage] ? tr(STAGE_I18N[stage]) : stage;
+    }
+
+    function updateSaveLabel() {
+      const save = $("#save-follow");
+      if (!save) return;
+      save.disabled = state.saving;
+      save.textContent = state.saving ? tr("saving") : state.confirming ? tr("confirmButton") : tr("save");
+    }
+
+    function validateFollow(action) {
+      let valid = true;
+      const note = $("#follow-note").value.trim();
+      if (action === "create") {
+        if (!$("#appointment-time").value) {
+          $("#time-error").textContent = tr("timeRequired");
+          valid = false;
+        }
+        const link = $("#meeting-link").value.trim();
+        if (link && !link.startsWith("https://")) {
+          $("#meeting-error").textContent = tr("httpsOnly");
+          valid = false;
+        }
+      }
+      if (action === "reject" || action === "close") {
+        const reason = $("#reason-select").value;
+        if (!reason) {
+          $("#reason-error").textContent = tr("reasonRequired");
+          valid = false;
+        }
+        if ((reason === "reasonOther" || reason === "closeOther") && !$("#other-reason").value.trim()) {
+          $("#other-reason-error").textContent = tr("otherReasonRequired");
+          valid = false;
+        }
+      }
+      if (!note && !["create", "reject", "close", "reactivate"].includes(action)) {
+        $("#note-error").textContent = tr("noteRequired");
+        valid = false;
+      }
+      return valid;
+    }
+
+    function submitFollow(lead) {
+      if (state.saving) {
+        toast(tr("duplicateBlocked"));
+        return;
+      }
+      if (!validateFollow(state.action)) return;
+      if (["reject", "close", "reactivate"].includes(state.action) && !state.confirming) {
+        state.confirming = true;
+        const actionLabel = state.action === "reject" ? tr("reject") : state.action === "close" ? tr("closeLead") : tr("reactivate");
+        const body = state.action === "reject" ? tr("confirmReject") : state.action === "close" ? tr("confirmClose") : tr("confirmReactivate");
+        $("#confirmation").innerHTML = `<div class="confirm-box"><strong>${esc(fmt("confirmTitle", { action: actionLabel }))}</strong><div>${esc(body)}</div></div>`;
+        updateSaveLabel();
+        return;
+      }
+      state.saving = true;
+      updateSaveLabel();
+      applyAction(lead);
+    }
+
+    function applyAction(lead) {
+      const action = state.action;
+      const note = $("#follow-note").value.trim();
+      const now = "2026-11-20 10:15";
+      const before = lead.stage;
+      let successKey = "saveSuccess";
+      let event = null;
+
+      if (action === "create") {
+        lead.appointment = {
+          start: $("#appointment-time").value,
+          link: $("#meeting-link").value.trim()
+        };
+        lead.previousStage = "booked";
+        lead.stage = "booked";
+        lead.appointmentHistory += 1;
+        event = {
+          action: "create",
+          label: "actionCreate",
+          at: now,
+          note: note || `${tr("appointmentTime")}: ${lead.appointment.start.replace("T", " ")}`,
+          before: "paused",
+          after: "booked"
+        };
+        successKey = "directCreateSuccess";
+      } else if (action === "resume") {
+        lead.stage = lead.previousStage || "waiting_call";
+        event = { action: "resume", label: "actionResume", at: now, note, before: "paused", after: lead.stage };
+        successKey = "resumeSuccess";
+      } else if (action === "reject") {
+        lead.stage = "rejected";
+        const selected = $("#reason-select").value;
+        const detail = selected === "reasonOther" ? $("#other-reason").value.trim() : tr(selected);
+        event = { action: "reject", label: "actionReject", at: now, note: note ? `${detail}\n${note}` : detail, before, after: "rejected" };
+        successKey = "rejectSuccess";
+      } else if (action === "close") {
+        lead.stage = "closed";
+        const selected = $("#reason-select").value;
+        const detail = selected === "closeOther" ? $("#other-reason").value.trim() : tr(selected);
+        event = { action: "close", label: "actionClose", at: now, note: note ? `${detail}\n${note}` : detail, before, after: "closed" };
+        successKey = "closeSuccess";
+      } else if (action === "reactivate") {
+        lead.stage = lead.previousStage || "waiting_call";
+        event = { action: "reactivate", label: "actionReactivate", at: now, note: note || tr("reactivate"), before, after: lead.stage };
+        successKey = "reactivateSuccess";
+      } else if (action === "pause") {
+        lead.stage = "paused";
+        event = { action: "pause", label: "actionPause", at: now, note, before, after: "paused" };
+      } else {
+        event = { action: "continue", label: "actionContinue", at: now, note, before, after: before };
+      }
+
+      lead.history.unshift(event);
+      state.saving = false;
+      closeOverlay();
+      render();
+      toast(tr(successKey));
+    }
+
+    function bindOverlayClose() {
+      document.querySelectorAll("[data-close]").forEach((button) => button.addEventListener("click", closeOverlay));
+    }
+
+    function modalLanguageSwitch() {
+      return `<div class="lang-switch" aria-label="Language">
+        <button class="lang-btn ${state.lang === "zh" ? "active" : ""}" type="button" data-lang="zh" aria-pressed="${state.lang === "zh"}">中</button>
+        <button class="lang-btn ${state.lang === "en" ? "active" : ""}" type="button" data-lang="en" aria-pressed="${state.lang === "en"}">EN</button>
+      </div>`;
+    }
+
+    let toastTimer;
+    function toast(message, isError = false) {
+      const node = $("#toast");
+      node.textContent = message;
+      node.classList.toggle("error", isError);
+      node.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => node.classList.remove("show"), 2600);
+    }
+
+    document.querySelectorAll(".nav-btn").forEach((button) => button.addEventListener("click", () => {
+      state.route = button.dataset.route;
+      closeOverlay();
+      render();
+    }));
+    document.querySelectorAll(".lang-btn").forEach((button) => button.addEventListener("click", () => setLang(button.dataset.lang)));
+    $("#modal-layer").addEventListener("click", (event) => { if (event.target.id === "modal-layer") closeOverlay(); });
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".row-menu")) {
+        document.querySelectorAll("[data-menu-pop]").forEach((menu) => menu.classList.add("hidden"));
+        document.querySelectorAll("[data-menu]").forEach((button) => button.setAttribute("aria-expanded", "false"));
+        state.openMenuId = null;
+      }
+    });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeOverlay(); });
+
+    setLang(state.lang);
+  </script>
+</body>
+</html>
