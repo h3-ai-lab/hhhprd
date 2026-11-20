@@ -842,59 +842,6 @@ function renderReferrerSummary() {
     `${state.referrer.name} · ${state.referrer.id} · ${t("business.thailand")} · CC: ${state.referrer.owner} · ${t("referralModal.membershipLevel")}: ${state.referrer.membershipLevel || "NONE"} · ${t("referralModal.benefitLevel")}: ${benefitLevelFor(state.referrer.id)}`;
 }
 
-function renderReferrals() {
-  document.getElementById("referralRows").innerHTML = referrals.map((row) => `
-    <tr>
-      <td><span class="mono">${row.referrerId}</span><span class="secondary">${row.referrer}</span></td>
-      <td><span class="mono">${row.referredId || "—"}</span><span class="secondary">${row.referred}</span></td>
-      <td class="mono">${row.phone}</td>
-      <td>${t("business.thailand")}</td>
-      <td>${row.owner}</td>
-      <td>${statusLabel(row.bindingStatus)}</td>
-      <td>${row.boundAt}</td>
-      <td>${t(row.nextTrigger)}</td>
-      <td>${t(row.latestReward, { count: row.rewardMonths })}${row.latestReward === "reward.none" ? "" : ` · ${benefitLevelFor(row.referrerId)}`} ${rewardStatusLabel(row.rewardStatus)}</td>
-    </tr>`).join("");
-  document.getElementById("referralCount").textContent = t("bindings.count", { count: referrals.length });
-}
-
-function renderSocial() {
-  document.getElementById("socialRows").innerHTML = socialRecords.map((row) => {
-    const rewardText = row.rewardDetail ? `${t(row.reward)} + ${t(row.rewardDetail)}` : t(row.reward);
-    return `
-      <tr>
-        <td>${row.user}</td>
-        <td>${platformLabel(row.platform)}</td>
-        <td>${t(row.contentType)}</td>
-        <td>${t(row.contentStatus)}</td>
-        <td>${t(row.authorization)}</td>
-        <td>${row.publishedAt}</td>
-        <td>${row.operator}</td>
-        <td>${rewardText}</td>
-        <td>${benefitLevelFor(row.userId)}</td>
-        <td class="mono">${row.grantLogId}</td>
-        <td>${rewardStatusLabel(row.status)}</td>
-      </tr>`;
-  }).join("");
-  document.getElementById("socialCount").textContent = t("bindings.count", { count: socialRecords.length });
-  if (state.socialNoticeKey) document.getElementById("socialNotice").textContent = t(state.socialNoticeKey);
-}
-
-function renderEvents() {
-  document.getElementById("eventRows").innerHTML = rewardEvents.map((row) => `
-    <tr>
-      <td><span class="event-type">${row.type}</span></td>
-      <td class="mono">${row.sourceId}</td>
-      <td>${row.triggeredAt}</td>
-      <td class="event-value ${row.benefit.includes("purchase") || row.benefit.includes("selected") ? "month" : "benefit"}">${t(row.benefit, { count: row.months })}</td>
-      <td>${row.benefitLevel}</td>
-      <td class="mono">${row.grantLogId}</td>
-      <td>${rewardStatusLabel(row.status)}</td>
-      <td>${row.status === "failed" ? "ENTITLEMENT_REQUEST_TIMEOUT" : "—"}</td>
-    </tr>`).join("");
-  document.getElementById("eventCount").textContent = t("bindings.count", { count: rewardEvents.length });
-}
-
 function unifiedRows() {
   const referralRows = referrals.map((row) => ({
     id: row.id,
@@ -925,26 +872,6 @@ function unifiedRows() {
     date: row.boundAt,
     orderDate: row.orderAt || "",
     keywords: [row.id, row.referrerId, row.referredId, row.grantLogId, row.referrer, row.referred],
-  }));
-  const socialRows = socialRecords.map((row) => ({
-    id: row.id,
-    source: "social",
-    user: row.user,
-    userId: "",
-    related: `${platformLabel(row.platform)} · ${t(row.contentType)}`,
-    owner: "Thanya C.",
-    currentOwner: "—",
-    bindingStatus: "active",
-    bindingText: row.contentStatus,
-    eventType: row.rewardDetail ? `SOCIAL_MEDIA_${row.rewardDetail === "reward.selected" ? "OFFICIALLY_SELECTED" : "NOT_SELECTED"}` : "SOCIAL_MEDIA_APPROVED",
-    reward: row.rewardDetail ? `${t(row.reward)} + ${t(row.rewardDetail)}` : t(row.reward),
-    registrationSource: "—",
-    memberLevel: membershipLevel(row.userId),
-    benefitLevel: benefitLevelFor(row.userId),
-    rewardStatus: row.status,
-    grantLogId: row.grantLogId,
-    date: row.publishedAt,
-    keywords: [row.id, row.user, row.grantLogId, row.platform, t(row.contentStatus)],
   }));
   return referralRows;
 }
@@ -1099,13 +1026,11 @@ function resolveTransferApproval(decision) {
     relation.currentOwner = relation.owner;
     relation.nextTrigger = "trigger.firstTrial";
     closeTransferApproval();
-    renderReferrals();
     renderUnified();
     showToast("approval.success", { owner: relation.owner });
   } else {
     relation.nextTrigger = "trigger.transfer";
     closeTransferApproval();
-    renderReferrals();
     renderUnified();
     showToast("approval.rejected");
   }
@@ -1149,7 +1074,7 @@ function openReferralDetail(row) {
 }
 
 function applyTranslations() {
-  const roots = ["bindingsView", "referralModal", "socialModal", "transferApprovalModal"].map((id) => document.getElementById(id));
+  const roots = ["referralModal", "transferApprovalModal"].map((id) => document.getElementById(id));
   roots.forEach((root) => {
     root.querySelectorAll("[data-i18n]").forEach((element) => {
       element.textContent = t(element.dataset.i18n);
@@ -1161,9 +1086,6 @@ function applyTranslations() {
       element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
     });
   });
-  renderReferrals();
-  renderSocial();
-  renderEvents();
   renderUnified();
   renderBindingResult();
   renderReferrerSummary();
@@ -1177,14 +1099,6 @@ function applyTranslations() {
 function setBindingLanguage(lang) {
   state.lang = lang;
   applyTranslations();
-}
-
-function setTab(tab) {
-  state.tab = tab;
-  document.getElementById("referralPanel").hidden = tab !== "referral";
-  document.getElementById("socialPanel").hidden = tab !== "social";
-  document.getElementById("eventsPanel").hidden = tab !== "events";
-  document.querySelectorAll(".section-tab").forEach((button) => button.classList.toggle("active", button.dataset.tab === tab));
 }
 
 function openReferralModal(referrer = null) {
@@ -1331,92 +1245,10 @@ function confirmBinding() {
     membershipLevel: "MAX",
   };
   closeReferralModal();
-  setTab("referral");
-  renderReferrals();
   renderUnified();
   showToast(pendingTransfer ? "referralModal.successPending" : "referralModal.successActive", {
     owner: state.verifiedUser.currentOwner || "—",
   });
-}
-
-function openSocialModal() {
-  document.getElementById("socialUrl").value = "";
-  state.socialNoticeKey = "";
-  document.getElementById("socialNotice").classList.remove("show");
-  document.getElementById("socialModal").hidden = false;
-}
-
-function closeSocialModal() {
-  document.getElementById("socialModal").hidden = true;
-}
-
-function getSocialReward(status) {
-  if (status === "OFFICIALLY_SELECTED") return ["reward.published", "reward.selected"];
-  if (status === "VALID_NOT_SELECTED") return ["reward.published", "reward.notSelected"];
-  if (status === "PUBLISHED") return ["reward.published", ""];
-  return ["reward.none", ""];
-}
-
-function confirmSocial() {
-  const link = document.getElementById("socialUrl").value.trim();
-  const status = document.getElementById("socialStatus").value;
-  const authorization = document.getElementById("socialAuthorization").value;
-  const notice = document.getElementById("socialNotice");
-  if (!link) {
-    state.socialNoticeKey = "socialModal.emptyLink";
-    notice.textContent = t(state.socialNoticeKey);
-    notice.classList.add("show");
-    return;
-  }
-  if (status === "OFFICIALLY_SELECTED" && authorization !== "AUTHORIZED_OFFICIAL_USE") {
-    state.socialNoticeKey = "socialModal.authRequired";
-    notice.textContent = t(state.socialNoticeKey);
-    notice.classList.add("show");
-    return;
-  }
-  state.socialNoticeKey = "";
-  notice.classList.remove("show");
-  const [reward, rewardDetail] = getSocialReward(status);
-  const statusKey = {
-    PUBLISHED: "social.published",
-    VALID_NOT_SELECTED: "social.notSelected",
-    OFFICIALLY_SELECTED: "social.selected",
-    INVALID: "social.invalid",
-  }[status];
-  const grantLogId = status === "INVALID" ? "—" : `GRANT-202611${String(130 + socialRecords.length).padStart(4, "0")}`;
-  socialRecords.unshift({
-    id: `SOC-202611-${String(40 + socialRecords.length).padStart(4, "0")}`,
-    userId: "2120302255148482561",
-    user: "Pimchanok S.",
-    platform: document.getElementById("socialPlatform").value,
-    contentType: document.getElementById("socialType").value === "PHOTO" ? "social.photo" : "social.video",
-    contentStatus: statusKey,
-    authorization: authorization === "AUTHORIZED_OFFICIAL_USE" ? "social.authorized" : "social.notAuthorized",
-    publishedAt: "2026-11-13",
-    operator: "Thanya C.",
-    reward,
-    rewardDetail,
-    status: status === "INVALID" ? "failed" : "processing",
-    grantLogId,
-  });
-  if (status !== "INVALID") {
-    rewardEvents.unshift({
-      type: status === "PUBLISHED" ? "SOCIAL_MEDIA_APPROVED" : status === "VALID_NOT_SELECTED" ? "SOCIAL_MEDIA_NOT_SELECTED" : "SOCIAL_MEDIA_OFFICIALLY_SELECTED",
-      sourceId: socialRecords[0].id,
-      triggeredAt: "2026-11-13 10:30",
-      benefit: rewardDetail || reward,
-      memberLevel: "MAX",
-      benefitLevel: "MAX",
-      grantLogId,
-      status: "processing",
-    });
-  }
-  closeSocialModal();
-  setTab("social");
-  renderSocial();
-  renderEvents();
-  renderUnified();
-  showToast("socialModal.success");
 }
 
 function showToast(key, values = {}) {
@@ -1434,7 +1266,6 @@ function showToast(key, values = {}) {
   }, 2400);
 }
 
-document.querySelectorAll(".section-tab").forEach((button) => button.addEventListener("click", () => setTab(button.dataset.tab)));
 document.querySelectorAll("[data-unified-date]").forEach((button) => {
   button.addEventListener("click", () => {
     state.unifiedDateField = button.dataset.unifiedDate;
@@ -1479,14 +1310,9 @@ document.getElementById("bindingUserId").addEventListener("keydown", (event) => 
   if (event.key === "Enter") verifyReferredUser();
 });
 document.getElementById("confirmBinding").addEventListener("click", confirmBinding);
-document.getElementById("confirmSocial").addEventListener("click", confirmSocial);
 document.querySelectorAll(".close-binding-modal").forEach((button) => button.addEventListener("click", closeReferralModal));
-document.querySelectorAll(".close-social-modal").forEach((button) => button.addEventListener("click", closeSocialModal));
 document.getElementById("referralModal").addEventListener("click", (event) => {
   if (event.target.id === "referralModal") closeReferralModal();
-});
-document.getElementById("socialModal").addEventListener("click", (event) => {
-  if (event.target.id === "socialModal") closeSocialModal();
 });
 document.getElementById("closeTransferApproval").addEventListener("click", closeTransferApproval);
 document.getElementById("transferApprovalModal").addEventListener("click", (event) => {
@@ -1499,9 +1325,6 @@ window.addEventListener("growth-language-change", (event) => {
 });
 window.GrowthBindingView = {
   activate() {
-    renderReferrals();
-    renderSocial();
-    renderEvents();
     renderUnified();
   },
   openReferral(referrer = null) {

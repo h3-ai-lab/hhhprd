@@ -176,7 +176,7 @@ const I18N = {
     "users.count": "共 {count} 条记录",
     "users.empty": "当前筛选下没有用户",
     "grant.title": "增加用户时长 · {id}",
-    "grant.subtitle": "为当前用户增加会员时长",
+    "grant.subtitle": "手工处理用户会员时长，不用于拉新或社媒活动发奖",
     "grant.openType": "开通类型",
     "grant.trialDays": "添加体验天数",
     "grant.trialDays.note": "用户可继续通过付费墙购买",
@@ -188,7 +188,7 @@ const I18N = {
     "grant.confirm": "确认增加",
     "grant.issuing": "处理中…",
     "grant.helper.regular": "新用户从当前时间起算；未付费体验中的用户在现体验到期时间上累加。",
-    "grant.reason.friend": "运营补充用户时长",
+    "grant.reason.placeholder": "填写本次手工操作原因",
     "grant.error.days": "请输入有效的有效期天数",
     "grant.error.reason": "请输入开通原因",
     "toast.refreshed": "数据已刷新",
@@ -410,7 +410,7 @@ const I18N = {
     "users.count": "{count} records",
     "users.empty": "No users match the current filters",
     "grant.title": "Add user duration · {id}",
-    "grant.subtitle": "Increase membership duration for this user",
+    "grant.subtitle": "Manual membership-duration adjustment; not used for referral or social-media rewards",
     "grant.openType": "Activation type",
     "grant.trialDays": "Add trial days",
     "grant.trialDays.note": "The user can still purchase through the paywall",
@@ -422,7 +422,7 @@ const I18N = {
     "grant.confirm": "Confirm increase",
     "grant.issuing": "Processing…",
     "grant.helper.regular": "New users start from the current time. Unpaid users on trial receive the benefit after their current trial end date.",
-    "grant.reason.friend": "Manual duration increase",
+    "grant.reason.placeholder": "Enter the reason for this manual adjustment",
     "grant.error.days": "Enter a valid validity period",
     "grant.error.reason": "Enter a grant reason",
     "toast.refreshed": "Data refreshed",
@@ -512,151 +512,13 @@ const CURRENT_USER = {
   name: "Thanya C.",
 };
 
-const relationships = [
-  {
-    id: "RR-202611-0086",
-    referrerId: "2120302255148482561",
-    referrer: "Pimchanok S.",
-    referredId: "2120302295478341",
-    referred: "Narin K.",
-    referredPhone: "66812345678",
-    referredPhoneMasked: "+66 81 **** 5678",
-    source: "referral",
-    orderId: "PO202611020018",
-    planMonths: 3,
-    amount: 3490,
-    orderAt: "2026-11-02",
-    bindAt: "2026-11-04",
-    operator: "Thanya C.",
-    owner: "Thanya C.",
-    ruleMonths: 1,
-    status: "success",
-  },
-  {
-    id: "RR-202611-0091",
-    referrerId: "2120302281472036721",
-    referrer: "Kanya R.",
-    referredId: "2120302246091874272",
-    referred: "Mali P.",
-    referredPhone: "66827654321",
-    referredPhoneMasked: "+66 82 **** 4321",
-    source: "referral",
-    orderId: "PO202611030024",
-    planMonths: 6,
-    amount: 5890,
-    orderAt: "2026-11-03",
-    bindAt: "2026-11-05",
-    operator: "Mina P.",
-    owner: "Mina P.",
-    ruleMonths: 2,
-    status: "success",
-  },
-  {
-    id: "RR-202611-0103",
-    referrerId: "2120302210461928824",
-    referrer: "Arunee T.",
-    referredId: "2120302273820914407",
-    referred: "Siriporn W.",
-    referredPhone: "66885551234",
-    referredPhoneMasked: "+66 88 **** 1234",
-    source: "referral",
-    orderId: "PO202611040031",
-    planMonths: 12,
-    amount: 8990,
-    orderAt: "2026-11-04",
-    bindAt: "2026-11-06",
-    operator: "Nok S.",
-    owner: "Nok S.",
-    ruleMonths: 3,
-    status: "processing",
-  },
-  {
-    id: "RR-202611-0111",
-    referrerId: "2120302247228042882",
-    referrer: "Waraporn L.",
-    referredId: "2120302201833059300",
-    referred: "Pattara M.",
-    referredPhone: "66912223333",
-    referredPhoneMasked: "+66 91 **** 3333",
-    source: "referral",
-    orderId: "PO202611050044",
-    planMonths: 3,
-    amount: 3490,
-    orderAt: "2026-11-05",
-    bindAt: "2026-11-07",
-    operator: "Thanya C.",
-    owner: "Thanya C.",
-    ruleMonths: 1,
-    status: "failed",
-  },
-  {
-    id: "RR-202611-0116",
-    referrerId: "2120302266318527041",
-    referrer: "Chanida B.",
-    referredId: "2120302229098319490",
-    referred: "Araya N.",
-    referredPhone: "66958887777",
-    referredPhoneMasked: "+66 95 **** 7777",
-    source: "referral",
-    orderId: "PO202611060008",
-    planMonths: 6,
-    amount: 5890,
-    orderAt: "2026-11-06",
-    bindAt: "2026-11-08",
-    operator: "Mina P.",
-    owner: "Mina P.",
-    ruleMonths: 2,
-    status: "success",
-  },
-  {
-    id: "RR-202611-0122",
-    referrerId: "2120302238814957263",
-    referrer: "Nicha K.",
-    referredId: "2120302256403910560",
-    referred: "Suda P.",
-    referredPhone: "66874446666",
-    referredPhoneMasked: "+66 87 **** 6666",
-    source: "referral",
-    orderId: "PO202611070013",
-    planMonths: 12,
-    amount: 8990,
-    orderAt: "2026-11-07",
-    bindAt: "2026-11-09",
-    operator: "Nok S.",
-    owner: "Nok S.",
-    ruleMonths: 3,
-    status: "invalid",
-  },
-];
-
-
 function t(key, values = {}) {
   const template = I18N[state.lang]?.[key] ?? I18N.zh[key] ?? key;
   return template.replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? `{${name}}`));
 }
 
-function sourceLabel(source) {
-  return t(`source.${source}`);
-}
-
-function statusEntry(status) {
-  return [t(`status.${status}`), status];
-}
-
-function planLabel(months) {
-  return t("plan.months", { count: months });
-}
-
-function ruleLabel(months) {
-  return t("rule.months", { count: months });
-}
-
 function countLabel(key, count) {
   return t(key, { count });
-}
-
-function money(value) {
-  return `฿${Number(value).toLocaleString("en-US")}`;
 }
 
 function spreadsheetCell(value) {
@@ -708,15 +570,15 @@ function applyStaticTranslations() {
   document.documentElement.lang = state.lang === "en" ? "en" : "zh-CN";
   document.title = t("document.title");
   document.querySelectorAll("[data-i18n]").forEach((element) => {
-    if (element.closest("#bindingsView, #communityView, #communityCreateModal, #communityReviewModal, #referralModal, #socialModal")) return;
+    if (element.closest("#communityView, #communityCreateModal, #communityReviewModal, #referralModal")) return;
     element.textContent = t(element.dataset.i18n);
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
-    if (element.closest("#bindingsView, #communityView, #communityCreateModal, #communityReviewModal, #referralModal, #socialModal")) return;
+    if (element.closest("#communityView, #communityCreateModal, #communityReviewModal, #referralModal")) return;
     element.placeholder = t(element.dataset.i18nPlaceholder);
   });
   document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
-    if (element.closest("#bindingsView, #communityView, #communityCreateModal, #communityReviewModal, #referralModal, #socialModal")) return;
+    if (element.closest("#communityView, #communityCreateModal, #communityReviewModal, #referralModal")) return;
     element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
   });
   document.querySelectorAll("[data-lang]").forEach((button) => {
@@ -726,102 +588,6 @@ function applyStaticTranslations() {
   const meta = viewMeta(state.view);
   document.getElementById("pageTitle").textContent = t(meta.title);
   document.getElementById("crumb").textContent = t(meta.crumb);
-}
-
-function renderRows() {
-  const filtered = relationships.filter((row) => {
-    const sourceMatch = !state.source || row.source === state.source;
-    const ccMatch = !state.cc || row.owner === state.cc;
-    const statusMatch = !state.status || row.status === state.status;
-    const term = state.keyword.trim().toLowerCase();
-    const keywordMatch = !term || [row.referrerId, row.referredId, row.referredPhone, row.referredPhoneMasked, row.orderId, row.referrer, row.referred]
-      .some((value) => value.toLowerCase().includes(term));
-    return sourceMatch && ccMatch && statusMatch && keywordMatch;
-  });
-
-  const body = document.getElementById("growthRows");
-  if (!filtered.length) {
-    body.innerHTML = "";
-    document.getElementById("emptyState").hidden = false;
-    document.getElementById("rowSummary").textContent = countLabel("records.count", 0);
-    return;
-  }
-
-  document.getElementById("emptyState").hidden = true;
-  body.innerHTML = filtered.map((row) => {
-    const [label, cls] = statusEntry(row.status);
-    return `
-      <tr data-id="${row.id}">
-        <td><span class="mono">${row.referrerId}</span><span class="secondary">${row.referrer}</span></td>
-        <td><span class="mono">${row.referredId}</span><span class="secondary">${row.referred}</span></td>
-        <td class="mono">${row.referredPhoneMasked}</td>
-        <td><span class="source ${row.source === "social" ? "social" : ""}">${sourceLabel(row.source)}</span></td>
-        <td class="mono">${row.orderId}</td>
-        <td>${planLabel(row.planMonths)}</td>
-        <td>${money(row.amount)}</td>
-        <td>${row.orderAt}</td>
-        <td>${row.bindAt}</td>
-        <td>${row.operator}</td>
-        <td>${row.owner}</td>
-        <td>${ruleLabel(row.ruleMonths)}</td>
-        <td><span class="status ${cls}">${label}</span></td>
-      </tr>`;
-  }).join("");
-  document.getElementById("rowSummary").textContent = countLabel("records.count", filtered.length);
-
-  body.querySelectorAll("tr").forEach((tr) => {
-    tr.addEventListener("click", () => openDrawer(tr.dataset.id));
-  });
-}
-
-function openDrawer(id) {
-  const row = relationships.find((item) => item.id === id);
-  if (!row) return;
-  state.selectedId = id;
-  const [statusLabel, statusClass] = statusEntry(row.status);
-  document.getElementById("drawerId").textContent = row.id;
-  document.getElementById("drawerBody").innerHTML = `
-    <div class="detail-block">
-      <h4>${t("drawer.relationInfo")}</h4>
-      <dl class="facts">
-        <dt>${t("drawer.referrer")}</dt><dd><span class="mono">${row.referrerId}</span><br>${row.referrer}</dd>
-        <dt>${t("drawer.referred")}</dt><dd><span class="mono">${row.referredId}</span><br>${row.referred}</dd>
-        <dt>${t("drawer.referredPhone")}</dt><dd class="mono">${row.referredPhoneMasked}</dd>
-        <dt>${t("drawer.source")}</dt><dd>${sourceLabel(row.source)}</dd>
-        <dt>${t("drawer.boundAt")}</dt><dd>${row.bindAt} 14:32</dd>
-        <dt>${t("drawer.relationStatus")}</dt><dd><span class="status ${statusClass}">${statusLabel}</span></dd>
-      </dl>
-    </div>
-    <div class="detail-block">
-      <h4>${t("drawer.orderInfo")}</h4>
-      <dl class="facts">
-        <dt>${t("drawer.orderId")}</dt><dd class="mono">${row.orderId}</dd>
-        <dt>${t("drawer.plan")}</dt><dd>${planLabel(row.planMonths)}</dd>
-        <dt>${t("drawer.amount")}</dt><dd>${money(row.amount)}</dd>
-        <dt>${t("drawer.paidAt")}</dt><dd>${row.orderAt} 19:48</dd>
-        <dt>${t("drawer.orderStatus")}</dt><dd>${t(row.status === "invalid" ? "drawer.refunded" : "drawer.paid")}</dd>
-      </dl>
-    </div>
-    <div class="detail-block">
-      <h4>${t("drawer.operation")}</h4>
-      <dl class="facts">
-        <dt>${t("drawer.operator")}</dt><dd>${row.operator}</dd>
-        <dt>${t("drawer.owner")}</dt><dd>${row.owner}</dd>
-        <dt>${t("drawer.rule")}</dt><dd>${ruleLabel(row.ruleMonths)}</dd>
-        <dt>${t("drawer.entitlement")}</dt><dd class="mono">${row.status === "processing" ? t("drawer.pendingEntitlement") : `ENT-${row.id.slice(-4)}-TH`}</dd>
-        ${row.status === "failed" ? `<dt>${t("drawer.failureReason")}</dt><dd>${t("drawer.systemFailure")}</dd>` : ""}
-        <dt>${t("drawer.reason")}</dt><dd>${t("drawer.generatedReason", { referrer: row.referrer, referred: row.referred, plan: planLabel(row.planMonths) })}</dd>
-      </dl>
-    </div>
-    <div class="detail-block">
-      <h4>${t("drawer.timeline")}</h4>
-      <div class="timeline">
-        <div class="timeline-item done"><strong>${t("drawer.paymentDone")}</strong><span>${row.orderAt} · ${money(row.amount)}</span></div>
-        <div class="timeline-item done"><strong>${t("drawer.boundDone")}</strong><span>${row.bindAt} · ${t("drawer.operatorLine", { name: row.operator })}</span></div>
-        <div class="timeline-item ${row.status === "success" ? "done" : ""}"><strong>${statusLabel}</strong><span>${row.status === "failed" ? t("drawer.failedDetail") : row.status === "invalid" ? t("drawer.invalidDetail") : t("drawer.auditDetail")}</span></div>
-      </div>
-    </div>`;
-  document.getElementById("detailDrawer").hidden = false;
 }
 
 function applySalesTab(tab) {
@@ -856,7 +622,6 @@ function setView(view) {
   const orders = view === "orders";
   const users = view === "users";
   document.getElementById("dashboardView").hidden = !dashboard;
-  document.getElementById("bindingsView").hidden = true;
   document.getElementById("communityView").hidden = !community;
   document.getElementById("salesView").hidden = !sales;
   document.getElementById("ordersView").hidden = !orders;
@@ -878,7 +643,7 @@ function resetGrantForm() {
   state.submitted = false;
   document.getElementById("daysInput").readOnly = false;
   document.getElementById("daysInput").value = "30";
-  document.getElementById("reasonInput").value = t("grant.reason.friend");
+  document.getElementById("reasonInput").value = "";
   document.getElementById("grantNotice").classList.remove("show");
   document.getElementById("confirmGrant").disabled = false;
   document.getElementById("confirmGrant").textContent = t("grant.confirm");
@@ -954,11 +719,9 @@ function setLanguage(language) {
   const meta = viewMeta(state.view);
   document.getElementById("pageTitle").textContent = t(meta.title);
   document.getElementById("crumb").textContent = t(meta.crumb);
-  renderRows();
   if (!document.getElementById("grantModal").hidden) {
     document.getElementById("grantTitle").textContent = t("grant.title", { id: state.grantContext?.userId ?? "" });
   }
-  if (state.selectedId && !document.getElementById("detailDrawer").hidden) openDrawer(state.selectedId);
   window.dispatchEvent(new CustomEvent("growth-language-change", { detail: { lang: state.lang } }));
 }
 
@@ -980,41 +743,6 @@ document.querySelectorAll(".metric-info").forEach((button) => {
   });
 });
 
-document.querySelectorAll("[data-date-field]").forEach((button) => {
-  button.addEventListener("click", () => {
-    state.dateField = button.dataset.dateField;
-    document.querySelectorAll(".date-tab").forEach((tab) => tab.classList.toggle("active", tab === button));
-    renderRows();
-  });
-});
-
-document.getElementById("sourceFilter").addEventListener("change", (event) => {
-  state.source = event.target.value;
-  renderRows();
-});
-document.getElementById("ccFilter").addEventListener("change", (event) => {
-  state.cc = event.target.value;
-  renderRows();
-});
-document.getElementById("statusFilter").addEventListener("change", (event) => {
-  state.status = event.target.value;
-  renderRows();
-});
-document.getElementById("keywordFilter").addEventListener("input", (event) => {
-  state.keyword = event.target.value;
-  renderRows();
-});
-document.getElementById("resetFilters").addEventListener("click", () => {
-  state.source = "";
-  state.cc = "";
-  state.status = "";
-  state.keyword = "";
-  document.getElementById("sourceFilter").value = "";
-  document.getElementById("ccFilter").value = "";
-  document.getElementById("statusFilter").value = "";
-  document.getElementById("keywordFilter").value = "";
-  renderRows();
-});
 document.getElementById("refreshBtn").addEventListener("click", () => showToast(t("toast.refreshed")));
 ["userRegistrationSourceFilter", "userTrialStatusFilter"].forEach((id) => {
   document.getElementById(id).addEventListener("change", applyUserFilters);
@@ -1057,7 +785,6 @@ document.addEventListener("click", (event) => {
 
 setView(state.view);
 applyStaticTranslations();
-renderRows();
 applySalesTab(state.salesTab);
 applyOrderTab(state.orderTab);
 window.dispatchEvent(new CustomEvent("growth-language-change", { detail: { lang: state.lang } }));
