@@ -3,175 +3,478 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>hhhprd · 需求原型</title>
+  <title>hhhprd · 项目管理</title>
   <style>
-    :root{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#647184;--line:#dfe5ec;--blue:#2563eb}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
-    font:15px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
-    main{max-width:920px;margin:0 auto;padding:64px 24px}.eyebrow{color:var(--blue);font-weight:700;
-    letter-spacing:.08em}h1{font-size:32px;margin:8px 0 10px}.sub{color:var(--muted);margin:0 0 32px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
-    padding:22px;color:inherit;transition:.16s ease}
-    .card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(39,56,78,.09);border-color:#b9c8dc}
-    .card h2{font-size:19px;margin:0 0 8px}.card p{color:var(--muted);margin:0 0 18px}.tag{font-size:12px;
-    color:var(--blue);background:#edf4ff;padding:3px 9px;border-radius:99px}
-    .actions{display:flex;gap:10px;flex-wrap:wrap}.button{padding:8px 13px;border-radius:8px;
-    background:var(--blue);color:#fff;text-decoration:none;font-weight:600}
-    .button.secondary{background:#eef4ff;color:var(--blue)}
+    :root {
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --ink: #17202a;
+      --muted: #667085;
+      --line: #dfe5ec;
+      --blue: #2563eb;
+      --blue-soft: #edf4ff;
+      --orange: #a85c08;
+      --orange-soft: #fff4e5;
+      --green: #137a5a;
+      --green-soft: #e9f8f2;
+      --purple: #7047b8;
+      --purple-soft: #f3efff;
+      --red: #b42318;
+      --red-soft: #fff0ee;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 14px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    a { color: inherit; }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 48px 24px 72px;
+    }
+    .page-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 26px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 5px 0 7px;
+      font-size: 34px;
+      line-height: 1.2;
+    }
+    .subtitle {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+    }
+    .summary {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .summary-chip {
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .section {
+      margin-top: 30px;
+    }
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px 18px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+    }
+    .section-note {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .project-list {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .list-head,
+    .project-row {
+      display: grid;
+      grid-template-columns: minmax(230px, .95fr) minmax(280px, 1.8fr) 110px minmax(190px, auto);
+      gap: 18px;
+      align-items: center;
+    }
+    .list-head {
+      padding: 11px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .project-row {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      transition: background .15s ease;
+    }
+    .project-row:last-child { border-bottom: 0; }
+    .project-row:hover { background: #fbfcfe; }
+    .project-main { min-width: 0; }
+    .project-code {
+      display: inline-block;
+      margin-bottom: 4px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+    .project-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    .project-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .status {
+      display: inline-flex;
+      width: fit-content;
+      padding: 4px 8px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .status.review {
+      background: var(--orange-soft);
+      color: var(--orange);
+    }
+    .status.updated {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+    .status.plan {
+      background: var(--purple-soft);
+      color: var(--purple);
+    }
+    .status.reference {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: flex-end;
+    }
+    .action {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 5px 10px;
+      border: 1px solid #cfdae8;
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .action:hover {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+    .action.primary {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+    .action.primary:hover {
+      background: #174ebc;
+    }
+    .empty {
+      display: none;
+    }
+    @media (max-width: 860px) {
+      .list-head { display: none; }
+      .project-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px 14px;
+        align-items: start;
+      }
+      .project-main { grid-column: 1; }
+      .project-desc { grid-column: 1 / -1; }
+      .project-status { grid-column: 2; grid-row: 1; justify-self: end; }
+      .actions { grid-column: 1 / -1; justify-content: flex-start; }
+    }
+    @media (max-width: 560px) {
+      main { padding: 30px 14px 48px; }
+      h1 { font-size: 29px; }
+      .page-head { align-items: flex-start; }
+      .project-row { padding: 15px 14px; }
+      .project-title { font-size: 15px; }
+      .action { min-height: 36px; padding: 7px 10px; }
+    }
   </style>
 </head>
 <body>
   <main>
-    <div class="eyebrow">HHH PRODUCT SPECS</div>
-    <h1>需求原型</h1>
-    <p class="sub">按需求项目组织的可交互原型。原型使用演示数据，不连接生产环境。</p>
-    <section class="grid">
-      <article class="card">
-        <span class="tag">SYSTEM ARCHITECTURE</span>
-        <h2>Dino 业务系统整体架构</h2>
-        <p>统一门户、领域后台、数据主责边界及现有 CRM 模块迁移方向。</p>
-        <div class="actions">
-          <a class="button" href="system-architecture.html">查看架构文档</a>
+    <header class="page-head">
+      <div>
+        <div class="eyebrow">HHH PRODUCT SPECS</div>
+        <h1>项目管理</h1>
+        <p class="subtitle">按架构规划与需求项目集中管理 PRD、交互原型和管理汇报。列表优先展示项目用途、当前状态和可用入口，便于快速定位与比较。</p>
+      </div>
+      <div class="summary" aria-label="项目统计">
+        <span class="summary-chip">2 项架构规划</span>
+        <span class="summary-chip">14 个需求项目</span>
+      </div>
+    </header>
+
+    <section class="section" aria-labelledby="architecture-title">
+      <div class="section-head">
+        <h2 id="architecture-title">架构与规划</h2>
+        <span class="section-note">系统边界与阶段性能力蓝图</span>
+      </div>
+      <div class="project-list">
+        <div class="list-head" aria-hidden="true">
+          <span>项目</span>
+          <span>内容</span>
+          <span>类型</span>
+          <span>入口</span>
         </div>
-      </article>
-      <article class="card">
-        <span class="tag">CALL CENTER ARCHITECTURE</span>
-        <h2>自研软电话功能架构</h2>
-        <p>供应商对比、外呼工作原理、自研边界、坐席用户收益及 V0–V3 分阶段路线。</p>
-        <div class="actions">
-          <a class="button" href="call-center-self-built-roadmap.html">查看架构文档</a>
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">ARCH-001</span>
+            <h3 class="project-title">Dino 业务系统整体架构</h3>
+          </div>
+          <p class="project-desc">统一门户、领域后台、数据主责边界及 CRM 模块迁移方向。</p>
+          <div class="project-status"><span class="status reference">架构文档</span></div>
+          <div class="actions">
+            <a class="action primary" href="system-architecture.html">查看架构</a>
+          </div>
+        </article>
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">ARCH-002</span>
+            <h3 class="project-title">自研软电话功能架构</h3>
+          </div>
+          <p class="project-desc">供应商对比、外呼工作原理、自研边界、坐席用户收益及 V0–V3 分阶段路线。</p>
+          <div class="project-status"><span class="status reference">规划文档</span></div>
+          <div class="actions">
+            <a class="action primary" href="call-center-self-built-roadmap.html">查看规划</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="projects-title">
+      <div class="section-head">
+        <h2 id="projects-title">需求项目</h2>
+        <span class="section-note">按最近项目入口整理，原型均使用演示数据</span>
+      </div>
+      <div class="project-list">
+        <div class="list-head" aria-hidden="true">
+          <span>项目</span>
+          <span>内容</span>
+          <span>状态</span>
+          <span>交付物</span>
         </div>
-      </article>
-      <article class="card">
-        <span class="tag">PROG-CRM-001</span>
-        <h2>CRM经营闭环规划</h2>
-        <p>面向 CC 与管理者的销售执行、管理干预、经营指标和分阶段能力规划，提供管理层汇报、规划 PRD 与双角色交互原型。</p>
-        <div class="actions">
-          <a class="button" href="../projects/crm-operating-closure/briefing/">管理层汇报</a>
-          <a class="button secondary" href="prd-crm-operating-closure.html">查看规划 PRD</a>
-          <a class="button secondary" href="../projects/crm-operating-closure/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-TH-001</span>
-        <h2>Referrals &amp; Rewards</h2>
-        <p>泰国好友推荐、试听/购买奖励、社媒审核与会员权益发放。</p>
-        <div class="actions">
-          <a class="button" href="prd-referrals-rewards.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/referrals-rewards/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-GRW-001</span>
-        <h2>拉新裂变mvp</h2>
-        <p>按被推荐人用户 ID 校验业务线、新注册和重复关系，绑定后提示当前归属 CC 并由原 CC 重新分配线索；CC 在前置核验后登记社媒推荐，关系生效后按首课、购买及社媒推荐审核结果自动生成赠送订单并发放权益。</p>
-        <div class="actions">
-          <a class="button" href="prd-referral-growth-mvp.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/referral-growth-mvp/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-LINE-001</span>
-        <h2>CRM 多渠道消息发送（LINE 首发）</h2>
-        <p>在销售中心复用业务线和客户范围完成消息发送，以通用任务、批次和通道适配器支撑后续渠道扩展；一期接入 LINE Multicast。</p>
-        <div class="actions">
-          <a class="button" href="prd-crm-line-messaging.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/crm-line-messaging/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-CC-001</span>
-        <h2>引入首跟节点&amp;首跟看板</h2>
-        <p>跨业务线保留首位 CC，展示首次分配、首次外呼和首次接通，支持按累计外呼/接通次数筛选、下载、团队监控及 RBAC 授权。</p>
-        <div class="actions">
-          <a class="button" href="prd-first-contact.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/first-contact/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-CC-002</span>
-        <h2>引入首跟节点&amp;首跟看板-2</h2>
-        <p>单文件 PRD 设计规范参考样例，覆盖核心流程、字段判断、完整指标口径、RBAC 和数据异常规则。</p>
-        <div class="actions">
-          <a class="button" href="prd-first-contact-concise.html">查看需求文档</a>
-          <a class="button secondary" href="../projects/first-contact-concise/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-DASH-007</span>
-        <h2>管理看板新增跟进漏斗</h2>
-        <p>在销售跟进页增加接通、预约、体验课完成和付费转化指标。</p>
-        <div class="actions">
-          <a class="button" href="prd-follow-up-funnel.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/follow-up-funnel/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-ORG-001</span>
-        <h2>CRM组织架构&amp;数据权限</h2>
-        <p>四级组织树、成员角色与数据授权、线索单归属、历史快照和跨模块权限范围。</p>
-        <div class="actions">
-          <a class="button" href="prd-crm-org-data-permissions.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/crm-org-data-permissions/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-CONSULT-001</span>
-        <h2>用户咨询预约时间</h2>
-        <p>在用户中心与销售中心展示预约状态和预约时间，支持按是否预约筛选和导出。</p>
-        <div class="actions">
-          <a class="button" href="prd-user-consultation-lead.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/user-consultation-lead/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-OB-001</span>
-        <h2>外呼能力一期</h2>
-        <p>维护可用主叫号码、批量导入和北京时间可用时段，并在通话记录中展示实际主叫号码、批量导出录音与逐字稿。</p>
-        <div class="actions">
-          <a class="button" href="prd-outbound-capability.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/outbound-capability/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-LQA-001</span>
-        <h2>CRM 线索质量分析</h2>
-        <p>在用户中心、销售中心和管理看板接入广告渠道、活动、广告组和广告归因，按接通、预约、体验和付费表现分析线索质量。</p>
-        <div class="actions">
-          <a class="button" href="prd-crm-lead-quality-analysis.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/crm-lead-quality-analysis/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-LEARN-001</span>
-        <h2>CRM学习计划与课程进度</h2>
-        <p>在用户列表、销售列表、用户详情和管理看板展示学习计划、当前课程进度、学习活跃度与到期风险。</p>
-        <div class="actions">
-          <a class="button" href="prd-crm-learning-plan-progress.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/crm-learning-plan-progress/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-CONSULT-002</span>
-        <h2>Lark咨询会议与用户详情回写</h2>
-        <p>为已预约用户创建飞书会议、分享链接，依据会议参与事实更新跟进阶段，并保存飞书生成的智能纪要原文。</p>
-        <div class="actions">
-          <a class="button" href="prd-crm-consultation-meeting.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/crm-consultation-meeting/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
-      <article class="card">
-        <span class="tag">REQ-FOLLOW-001</span>
-        <h2>暂停跟进后直接产生跟进结果</h2>
-        <p>暂停线索可直接预约、拒绝或关闭；一次保存写入真实业务结果，不再强制先恢复跟进。</p>
-        <div class="actions">
-          <a class="button" href="prd-paused-follow-up-direct-outcome.html">查看具体需求</a>
-          <a class="button secondary" href="../projects/paused-follow-up-direct-outcome/prototype/index.html">打开交互原型</a>
-        </div>
-      </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">PROG-CRM-001</span>
+            <h3 class="project-title">CRM经营闭环规划</h3>
+          </div>
+          <p class="project-desc">面向 CC 与管理者的销售执行、管理干预、经营指标和分阶段能力规划，包含管理层汇报、规划 PRD 与双角色原型。</p>
+          <div class="project-status"><span class="status plan">规划</span></div>
+          <div class="actions">
+            <a class="action primary" href="../projects/crm-operating-closure/briefing/">管理层汇报</a>
+            <a class="action" href="prd-crm-operating-closure.html">PRD</a>
+            <a class="action" href="../projects/crm-operating-closure/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-CC-002</span>
+            <h3 class="project-title">引入首跟节点&amp;首跟看板-2</h3>
+          </div>
+          <p class="project-desc">单文件 PRD 设计规范参考样例，覆盖核心流程、字段判断、完整指标口径、RBAC 和异常规则。</p>
+          <div class="project-status"><span class="status reference">参考样例</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-first-contact-concise.html">PRD</a>
+            <a class="action" href="../projects/first-contact-concise/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-CC-001</span>
+            <h3 class="project-title">引入首跟节点&amp;首跟看板</h3>
+          </div>
+          <p class="project-desc">跨业务线保留首位 CC，展示首次分配、首次外呼和首次接通，支持筛选、下载与团队监控。</p>
+          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-first-contact.html">PRD</a>
+            <a class="action" href="../projects/first-contact/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-DASH-007</span>
+            <h3 class="project-title">管理看板新增跟进漏斗</h3>
+          </div>
+          <p class="project-desc">在销售跟进页增加接通、预约、体验课完成和付费转化等关键指标。</p>
+          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-follow-up-funnel.html">PRD</a>
+            <a class="action" href="../projects/follow-up-funnel/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-ORG-001</span>
+            <h3 class="project-title">CRM组织架构&amp;数据权限</h3>
+          </div>
+          <p class="project-desc">多级组织树、成员角色、数据授权、线索单归属、历史快照和跨模块权限范围。</p>
+          <div class="project-status"><span class="status updated">评审后修订</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-crm-org-data-permissions.html">PRD</a>
+            <a class="action" href="../projects/crm-org-data-permissions/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-LQA-001</span>
+            <h3 class="project-title">CRM线索质量分析</h3>
+          </div>
+          <p class="project-desc">在用户中心、销售中心和管理看板接入广告渠道、活动、广告组和广告归因，分析线索质量。</p>
+          <div class="project-status"><span class="status updated">评审后修订</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-crm-lead-quality-analysis.html">PRD</a>
+            <a class="action" href="../projects/crm-lead-quality-analysis/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-OB-001</span>
+            <h3 class="project-title">外呼能力一期</h3>
+          </div>
+          <p class="project-desc">维护主叫号码、展示实际外呼号码，并批量导出录音与逐字稿。</p>
+          <div class="project-status"><span class="status updated">评审后修订</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-outbound-capability.html">PRD</a>
+            <a class="action" href="../projects/outbound-capability/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-LINE-001</span>
+            <h3 class="project-title">CRM多渠道消息发送（LINE 首发）</h3>
+          </div>
+          <p class="project-desc">在销售中心复用业务线和客户范围完成消息发送，一期接入 LINE Multicast。</p>
+          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-crm-line-messaging.html">PRD</a>
+            <a class="action" href="../projects/crm-line-messaging/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-CONSULT-001</span>
+            <h3 class="project-title">用户咨询预约时间</h3>
+          </div>
+          <p class="project-desc">在用户中心与销售中心展示预约状态和预约时间，支持筛选、排序判断与导出。</p>
+          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-user-consultation-lead.html">PRD</a>
+            <a class="action" href="../projects/user-consultation-lead/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-LEARN-001</span>
+            <h3 class="project-title">CRM学习计划与课程进度</h3>
+          </div>
+          <p class="project-desc">在用户列表、销售列表、用户详情和管理看板展示学习计划、课程进度、活跃度与到期风险。</p>
+          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-crm-learning-plan-progress.html">PRD</a>
+            <a class="action" href="../projects/crm-learning-plan-progress/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-CONSULT-002</span>
+            <h3 class="project-title">Lark咨询会议与用户详情回写</h3>
+          </div>
+          <p class="project-desc">为已预约用户创建 Lark 会议、分享链接，依据会议参与事实更新跟进阶段并保存纪要。</p>
+          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-crm-consultation-meeting.html">PRD</a>
+            <a class="action" href="../projects/crm-consultation-meeting/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-FOLLOW-001</span>
+            <h3 class="project-title">暂停跟进后直接产生跟进结果</h3>
+          </div>
+          <p class="project-desc">暂停线索可直接预约、拒绝或关闭，一次保存写入真实业务结果，不再强制先恢复跟进。</p>
+          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-paused-follow-up-direct-outcome.html">PRD</a>
+            <a class="action" href="../projects/paused-follow-up-direct-outcome/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-GRW-001</span>
+            <h3 class="project-title">拉新裂变 MVP</h3>
+          </div>
+          <p class="project-desc">推荐关系、首课与购买奖励、社媒推荐审核、赠送订单及会员权益发放。</p>
+          <div class="project-status"><span class="status updated">评审后修订</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-referral-growth-mvp.html">PRD</a>
+            <a class="action" href="../projects/referral-growth-mvp/prototype/index.html">原型</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <div class="project-main">
+            <span class="project-code">REQ-TH-001</span>
+            <h3 class="project-title">Referrals &amp; Rewards</h3>
+          </div>
+          <p class="project-desc">泰国好友推荐、体验与购买奖励、社媒审核及会员权益发放。</p>
+          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="actions">
+            <a class="action primary" href="prd-referrals-rewards.html">PRD</a>
+            <a class="action" href="../projects/referrals-rewards/prototype/index.html">原型</a>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
 </body>
 </html>
-
