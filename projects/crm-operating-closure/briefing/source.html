@@ -1,0 +1,1047 @@
+<style>
+  #crm-executive-briefing {
+    --exec-blue: var(--blue);
+    --exec-orange: var(--orange);
+    --exec-green: var(--green);
+    --exec-purple: var(--purple);
+    color: var(--foreground);
+    font-family: inherit;
+    overflow-wrap: anywhere;
+  }
+
+  #crm-executive-briefing *,
+  #crm-executive-briefing *::before,
+  #crm-executive-briefing *::after {
+    box-sizing: border-box;
+  }
+
+  #crm-executive-briefing .brief-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--font-size-base) * .55);
+  }
+
+  #crm-executive-briefing .brief-kicker {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  #crm-executive-briefing .brief-meta {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .brief-tabs {
+    margin-top: calc(var(--font-size-base) * .8);
+  }
+
+  #crm-executive-briefing [role="tabpanel"] {
+    padding-top: calc(var(--font-size-base) * 1.05);
+  }
+
+  #crm-executive-briefing .slide-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(220px, .6fr);
+    gap: calc(var(--font-size-base) * .9);
+    align-items: end;
+  }
+
+  #crm-executive-briefing .slide-subtitle {
+    color: var(--muted-foreground);
+    max-width: 70ch;
+    margin-top: calc(var(--font-size-base) * .35);
+  }
+
+  #crm-executive-briefing .decision-thesis {
+    padding: calc(var(--font-size-base) * .85);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--exec-orange) 8%, var(--background));
+  }
+
+  #crm-executive-briefing .decision-label {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .thesis-action-copy {
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .executive-outcomes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: calc(var(--font-size-base) * .8);
+    margin-top: calc(var(--font-size-base) * 1);
+  }
+
+  #crm-executive-briefing .outcome {
+    min-width: 0;
+    padding-top: calc(var(--font-size-base) * .65);
+    border-top: 2px solid color-mix(in srgb, var(--outcome-color) 70%, var(--background));
+  }
+
+  #crm-executive-briefing .outcome[data-tone="blue"] {
+    --outcome-color: var(--exec-blue);
+  }
+
+  #crm-executive-briefing .outcome[data-tone="green"] {
+    --outcome-color: var(--exec-green);
+  }
+
+  #crm-executive-briefing .outcome[data-tone="purple"] {
+    --outcome-color: var(--exec-purple);
+  }
+
+  #crm-executive-briefing .outcome-kicker {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .outcome-title {
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .outcome-copy {
+    margin-top: 5px;
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .thesis-line {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    margin-top: calc(var(--font-size-base) * .95);
+    padding: calc(var(--font-size-base) * .75) 0;
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 15%, var(--background));
+    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 15%, var(--background));
+  }
+
+  #crm-executive-briefing .thesis-mark {
+    color: var(--exec-orange);
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .thesis-text {
+    font-size: calc(var(--font-size-base) * 1.08);
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .journey-row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 5px;
+    margin-top: calc(var(--font-size-base) * 1);
+  }
+
+  #crm-executive-briefing .journey-node {
+    position: relative;
+    min-width: 0;
+    padding: calc(var(--font-size-base) * .6);
+    background: color-mix(in srgb, var(--node-color) 7%, var(--background));
+  }
+
+  #crm-executive-briefing .journey-node[data-tone="1"] {
+    --node-color: var(--exec-blue);
+  }
+
+  #crm-executive-briefing .journey-node[data-tone="2"] {
+    --node-color: var(--exec-orange);
+  }
+
+  #crm-executive-briefing .journey-node[data-tone="3"] {
+    --node-color: var(--exec-green);
+  }
+
+  #crm-executive-briefing .journey-node[data-tone="4"] {
+    --node-color: var(--exec-purple);
+  }
+
+  #crm-executive-briefing .journey-node[data-tone="5"] {
+    --node-color: var(--yellow);
+  }
+
+  #crm-executive-briefing .journey-number {
+    color: color-mix(in srgb, var(--node-color) 75%, var(--foreground));
+    font-size: var(--font-size-small);
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .journey-title {
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .journey-copy {
+    margin-top: 4px;
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .breakpoint-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(240px, .55fr);
+    gap: calc(var(--font-size-base) * .9);
+    margin-top: calc(var(--font-size-base) * .95);
+  }
+
+  #crm-executive-briefing .impact-side {
+    padding: calc(var(--font-size-base) * .8);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--exec-purple) 7%, var(--background));
+  }
+
+  #crm-executive-briefing .impact-title {
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .impact-item {
+    display: grid;
+    grid-template-columns: 1.5em minmax(0, 1fr);
+    gap: 6px;
+    margin-top: calc(var(--font-size-base) * .55);
+  }
+
+  #crm-executive-briefing .impact-icon {
+    color: var(--exec-purple);
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .impact-copy {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .evidence-note {
+    margin-top: calc(var(--font-size-base) * .65);
+    padding-top: calc(var(--font-size-base) * .55);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 15%, var(--background));
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .model-loop {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: calc(var(--font-size-base) * 1);
+    overflow: hidden;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--foreground) 12%, var(--background));
+  }
+
+  #crm-executive-briefing .loop-node {
+    position: relative;
+    min-width: 0;
+    padding: calc(var(--font-size-base) * .6);
+    background: var(--background);
+  }
+
+  #crm-executive-briefing .loop-index {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .loop-title {
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .role-model-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(var(--font-size-base) * .85);
+    margin-top: calc(var(--font-size-base) * .85);
+  }
+
+  #crm-executive-briefing .role-model {
+    min-width: 0;
+    padding: calc(var(--font-size-base) * .85);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--role-color) 7%, var(--background));
+  }
+
+  #crm-executive-briefing .role-model.cc {
+    --role-color: var(--exec-blue);
+  }
+
+  #crm-executive-briefing .role-model.manager {
+    --role-color: var(--exec-purple);
+  }
+
+  #crm-executive-briefing .role-model-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  #crm-executive-briefing .role-model-title {
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .role-model-question {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .role-flow {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: calc(var(--font-size-base) * .65);
+  }
+
+  #crm-executive-briefing .role-step {
+    position: relative;
+    min-width: 0;
+    padding-top: 7px;
+    border-top: 2px solid color-mix(in srgb, var(--role-color) 65%, var(--background));
+  }
+
+  #crm-executive-briefing .role-step::after {
+    position: absolute;
+    top: 0;
+    right: -3px;
+    color: color-mix(in srgb, var(--foreground) 40%, var(--background));
+    content: "›";
+  }
+
+  #crm-executive-briefing .role-step:last-child::after {
+    content: "";
+  }
+
+  #crm-executive-briefing .role-step-title {
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .role-step-copy {
+    margin-top: 3px;
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .role-result {
+    margin-top: calc(var(--font-size-base) * .6);
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .data-base {
+    display: grid;
+    grid-template-columns: minmax(150px, .7fr) repeat(4, minmax(0, 1fr));
+    gap: calc(var(--font-size-base) * .75);
+    margin-top: calc(var(--font-size-base) * .85);
+    padding-top: calc(var(--font-size-base) * .75);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 15%, var(--background));
+  }
+
+  #crm-executive-briefing .base-label {
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .base-copy {
+    margin-top: 3px;
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .roadmap {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: calc(var(--font-size-base) * .85);
+    margin-top: calc(var(--font-size-base) * 1);
+  }
+
+  #crm-executive-briefing .roadmap-phase {
+    min-width: 0;
+    padding-top: calc(var(--font-size-base) * .65);
+    border-top: 3px solid color-mix(in srgb, var(--phase-color) 70%, var(--background));
+  }
+
+  #crm-executive-briefing .roadmap-phase.p0 {
+    --phase-color: var(--exec-orange);
+  }
+
+  #crm-executive-briefing .roadmap-phase.p1 {
+    --phase-color: var(--exec-blue);
+  }
+
+  #crm-executive-briefing .roadmap-phase.p2 {
+    --phase-color: var(--exec-green);
+  }
+
+  #crm-executive-briefing .phase-label {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .phase-title {
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .phase-list {
+    margin: 8px 0 0;
+    padding-left: 1.2em;
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .phase-list li + li {
+    margin-top: 4px;
+  }
+
+  #crm-executive-briefing .phase-result {
+    margin-top: calc(var(--font-size-base) * .65);
+    padding-top: calc(var(--font-size-base) * .55);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 12%, var(--background));
+  }
+
+  #crm-executive-briefing .phase-result-label {
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .phase-result-copy {
+    margin-top: 3px;
+  }
+
+  #crm-executive-briefing .roadmap-footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(var(--font-size-base) * .8);
+    margin-top: calc(var(--font-size-base) * .9);
+    padding-top: calc(var(--font-size-base) * .7);
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 15%, var(--background));
+  }
+
+  #crm-executive-briefing .footer-block-title {
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .footer-block-copy {
+    margin-top: 4px;
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .decision-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr);
+    gap: calc(var(--font-size-base) * .9);
+    margin-top: calc(var(--font-size-base) * 1);
+  }
+
+  #crm-executive-briefing .decision-list {
+    display: grid;
+    gap: 0;
+  }
+
+  #crm-executive-briefing .decision-item {
+    display: grid;
+    grid-template-columns: 2em minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: start;
+    padding: calc(var(--font-size-base) * .65) 0;
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 14%, var(--background));
+  }
+
+  #crm-executive-briefing .decision-number {
+    color: var(--exec-orange);
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .decision-title {
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .decision-copy {
+    margin-top: 3px;
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .decision-owner {
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--foreground) 8%, transparent);
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+  }
+
+  #crm-executive-briefing .scorecard {
+    padding: calc(var(--font-size-base) * .8);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--exec-green) 7%, var(--background));
+  }
+
+  #crm-executive-briefing .scorecard-title {
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .scorecard-row {
+    display: grid;
+    grid-template-columns: minmax(82px, .55fr) minmax(0, 1fr);
+    gap: 8px;
+    padding: calc(var(--font-size-base) * .5) 0;
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 12%, var(--background));
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .scorecard-dimension {
+    color: var(--muted-foreground);
+  }
+
+  #crm-executive-briefing .scorecard-note {
+    margin-top: calc(var(--font-size-base) * .55);
+    color: var(--muted-foreground);
+    font-size: var(--font-size-small);
+  }
+
+  #crm-executive-briefing .closing-statement {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+    margin-top: calc(var(--font-size-base) * .9);
+    padding: calc(var(--font-size-base) * .75) 0;
+    border-top: 1px solid color-mix(in srgb, var(--foreground) 15%, var(--background));
+    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 15%, var(--background));
+  }
+
+  #crm-executive-briefing .closing-mark {
+    color: var(--exec-green);
+    font-weight: 500;
+  }
+
+  #crm-executive-briefing .closing-copy {
+    font-weight: 500;
+  }
+
+  @media (max-width: 760px) {
+    #crm-executive-briefing .slide-head,
+    #crm-executive-briefing .breakpoint-layout,
+    #crm-executive-briefing .role-model-grid,
+    #crm-executive-briefing .roadmap-footer,
+    #crm-executive-briefing .decision-layout {
+      grid-template-columns: 1fr;
+    }
+
+    #crm-executive-briefing .executive-outcomes,
+    #crm-executive-briefing .roadmap {
+      grid-template-columns: 1fr;
+    }
+
+    #crm-executive-briefing .journey-row {
+      grid-template-columns: 1fr;
+    }
+
+    #crm-executive-briefing .model-loop {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    #crm-executive-briefing .data-base {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    #crm-executive-briefing .model-loop,
+    #crm-executive-briefing .role-flow,
+    #crm-executive-briefing .data-base {
+      grid-template-columns: 1fr;
+    }
+
+    #crm-executive-briefing .role-step::after {
+      top: auto;
+      right: 50%;
+      bottom: -9px;
+      content: "⌄";
+      transform: translateX(50%);
+    }
+
+    #crm-executive-briefing .role-step:last-child::after {
+      content: "";
+    }
+
+    #crm-executive-briefing .decision-item {
+      grid-template-columns: 2em minmax(0, 1fr);
+    }
+
+    #crm-executive-briefing .decision-owner {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+</style>
+
+<section id="crm-executive-briefing" aria-labelledby="exec-brief-title">
+  <div class="brief-header">
+    <div class="brief-kicker">CRM 经营能力规划｜管理层汇报</div>
+    <div class="brief-meta">先解决销售闭环，再建设管理干预与客户经营</div>
+  </div>
+
+  <nav class="nav nav-pills brief-tabs" role="tablist" aria-label="汇报章节">
+    <button class="nav-link active" id="exec-summary-tab" type="button" role="tab" aria-controls="exec-summary-panel" aria-selected="true">结论</button>
+    <button class="nav-link" id="exec-gap-tab" type="button" role="tab" aria-controls="exec-gap-panel" aria-selected="false">经营断点</button>
+    <button class="nav-link" id="exec-model-tab" type="button" role="tab" aria-controls="exec-model-panel" aria-selected="false">目标模式</button>
+    <button class="nav-link" id="exec-roadmap-tab" type="button" role="tab" aria-controls="exec-roadmap-panel" aria-selected="false">路线图</button>
+    <button class="nav-link" id="exec-decision-tab" type="button" role="tab" aria-controls="exec-decision-panel" aria-selected="false">决策</button>
+  </nav>
+
+  <section id="exec-summary-panel" role="tabpanel" aria-labelledby="exec-summary-tab">
+    <div class="slide-head">
+      <div>
+        <div class="brief-kicker">01｜核心判断</div>
+        <h1 id="exec-brief-title">CRM 的下一步，是让客户始终有一条明确的下一步</h1>
+        <p class="slide-subtitle">业务已经通过线下表管理接通、预约、到课、咨询、PL、定金和收入。CRM 的价值，是把这套经营动作变成自动产生任务、自动回收结果、自动形成管理洞察的闭环。</p>
+      </div>
+      <div class="decision-thesis">
+        <div class="decision-label">建议决策</div>
+        <div class="thesis-action-copy">优先批准 P0 销售执行闭环，以“每个客户有下一步、每个结果可复盘”作为首期成功标准。</div>
+      </div>
+    </div>
+
+    <div class="executive-outcomes">
+      <div class="outcome" data-tone="blue">
+        <div class="outcome-kicker">对 CC</div>
+        <div class="outcome-title">不用先找客户，直接处理今天最重要的事</div>
+        <div class="outcome-copy">系统按新线索、到期回访、预约、到课、PL、回款和学习风险生成行动队列。</div>
+      </div>
+      <div class="outcome" data-tone="purple">
+        <div class="outcome-kicker">对管理者</div>
+        <div class="outcome-title">从“看结果”升级为“发现卡点并采取动作”</div>
+        <div class="outcome-copy">目标差距、异常任务、需帮助人员和重复问题进入同一个经营视图。</div>
+      </div>
+      <div class="outcome" data-tone="green">
+        <div class="outcome-kicker">对业务</div>
+        <div class="outcome-title">减少客户流失、缩短回款周期、提升管理效率</div>
+        <div class="outcome-copy">日报由业务过程自动形成，管理者可以验证动作是否真正改善指标。</div>
+      </div>
+    </div>
+
+    <div class="thesis-line">
+      <div class="thesis-mark">判断</div>
+      <div class="thesis-text">当前主要矛盾不是 CRM 功能数量不足，而是经营动作尚未形成可执行、可追踪、可复盘的闭环。</div>
+    </div>
+
+    <div class="journey-row" aria-label="首期销售闭环">
+      <div class="journey-node" data-tone="1">
+        <div class="journey-number">01</div>
+        <div class="journey-title">线索进入与归属</div>
+        <div class="journey-copy">来源、去重、分配、领取、交接</div>
+      </div>
+      <div class="journey-node" data-tone="2">
+        <div class="journey-number">02</div>
+        <div class="journey-title">外呼与预约</div>
+        <div class="journey-copy">首次联系、确认、会议、提醒</div>
+      </div>
+      <div class="journey-node" data-tone="2">
+        <div class="journey-number">03</div>
+        <div class="journey-title">到课与咨询</div>
+        <div class="journey-copy">到课、No-show、咨询完成、下一步</div>
+      </div>
+      <div class="journey-node" data-tone="3">
+        <div class="journey-number">04</div>
+        <div class="journey-title">PL 与回款</div>
+        <div class="journey-copy">支付意向、定金、尾款、逾期</div>
+      </div>
+      <div class="journey-node" data-tone="4">
+        <div class="journey-number">05</div>
+        <div class="journey-title">履约与复购</div>
+        <div class="journey-copy">首课、学习风险、续费、推荐</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="exec-gap-panel" role="tabpanel" aria-labelledby="exec-gap-tab" hidden>
+    <div class="slide-head">
+      <div>
+        <div class="brief-kicker">02｜经营断点</div>
+        <h2>业务已经有管理链路，但关键结果仍依赖人工拼接</h2>
+        <p class="slide-subtitle">线下表已经覆盖线索、接通、预约、到课、咨询、PL、定金、尾款和收入，说明业务真正管理的是过程，而不是只看最终 GMV。当前问题集中在任务触发、状态回填与跨环节衔接。</p>
+      </div>
+      <div class="decision-thesis">
+        <div class="decision-label">业务当前关注</div>
+        <div class="thesis-action-copy">管理重心已从“有没有线索”推进到“预约是否确认、是否到课、咨询是否完成、是否形成支付意向并回款”。</div>
+      </div>
+    </div>
+
+    <div class="breakpoint-layout">
+      <div class="table-responsive">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">业务环节</th>
+              <th scope="col">当前断点</th>
+              <th scope="col">直接影响</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>线索进入</td>
+              <td>来源分散，归属、去重与离职交接依赖人工确认</td>
+              <td>重复联系、归属争议、客户无人承接</td>
+            </tr>
+            <tr>
+              <td>联系与预约</td>
+              <td>CC 需要自己判断先找谁，预约创建后缺少确认与提醒闭环</td>
+              <td>首跟超时、漏跟、预约后不到课</td>
+            </tr>
+            <tr>
+              <td>到课与咨询</td>
+              <td>到课状态、No-show 原因和咨询完成情况没有形成同一条结果链</td>
+              <td>无法判断客户真正卡在到课还是咨询</td>
+            </tr>
+            <tr>
+              <td>PL 与回款</td>
+              <td>支付意向、顾虑、定金、尾款和下次跟进分散在线下表</td>
+              <td>成交断线、回款延迟、管理者无法及时干预</td>
+            </tr>
+            <tr>
+              <td>履约与复购</td>
+              <td>付款后学习进度没有自然转换成 CC 的关怀、续费和复购动作</td>
+              <td>客户价值未持续兑现，续费机会滞后</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="impact-side">
+        <div class="impact-title">这些断点共同造成四类经营损失</div>
+        <div class="impact-item">
+          <div class="impact-icon">01</div>
+          <div class="impact-copy"><strong>机会流失</strong><br>客户到达某个节点后没有明确的下一动作。</div>
+        </div>
+        <div class="impact-item">
+          <div class="impact-icon">02</div>
+          <div class="impact-copy"><strong>效率损耗</strong><br>人工整理名单、表格、日报和跨系统信息。</div>
+        </div>
+        <div class="impact-item">
+          <div class="impact-icon">03</div>
+          <div class="impact-copy"><strong>收入延迟</strong><br>PL 停滞、定金与尾款缺少到期任务。</div>
+        </div>
+        <div class="impact-item">
+          <div class="impact-icon">04</div>
+          <div class="impact-copy"><strong>管理滞后</strong><br>管理者看到结果偏晚，难以定位原因和采取动作。</div>
+        </div>
+        <div class="evidence-note">业务线下表已有日目标与 Gap 管理，建议在正式汇报前补齐当期实际值、人工维护耗时、No-show 数量及待收金额，形成可量化的投入产出基线。</div>
+      </aside>
+    </div>
+
+    <div class="journey-row" aria-label="业务现有管理链路">
+      <div class="journey-node" data-tone="1">
+        <div class="journey-number">线索</div>
+        <div class="journey-title">是否有人承接</div>
+        <div class="journey-copy">来源、归属、分配</div>
+      </div>
+      <div class="journey-node" data-tone="2">
+        <div class="journey-number">接通</div>
+        <div class="journey-title">是否真正触达</div>
+        <div class="journey-copy">首次联系与回访</div>
+      </div>
+      <div class="journey-node" data-tone="2">
+        <div class="journey-number">预约 / 到课</div>
+        <div class="journey-title">是否进入体验</div>
+        <div class="journey-copy">确认、提醒、改期、No-show</div>
+      </div>
+      <div class="journey-node" data-tone="3">
+        <div class="journey-number">咨询 / PL</div>
+        <div class="journey-title">是否形成支付意向</div>
+        <div class="journey-copy">顾虑、付款承诺与下次行动</div>
+      </div>
+      <div class="journey-node" data-tone="4">
+        <div class="journey-number">收入</div>
+        <div class="journey-title">是否完成真实回款</div>
+        <div class="journey-copy">定金、尾款、订单与归属</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="exec-model-panel" role="tabpanel" aria-labelledby="exec-model-tab" hidden>
+    <div class="slide-head">
+      <div>
+        <div class="brief-kicker">03｜目标运行模式</div>
+        <h2>一套业务事件，服务两个角色的不同决策</h2>
+        <p class="slide-subtitle">CRM 不按角色维护两套数据。所有动作和结果使用同一套客户事件；CC 在个人任务层执行，管理者在团队经营层判断和干预。</p>
+      </div>
+      <div class="decision-thesis">
+        <div class="decision-label">统一原则</div>
+        <div class="thesis-action-copy">每个业务状态都必须回答：对谁产生影响、需要什么动作、动作结果是什么、下一个时间点是什么。</div>
+      </div>
+    </div>
+
+    <div class="model-loop" aria-label="CRM 运行闭环">
+      <div class="loop-node">
+        <div class="loop-index">输入</div>
+        <div class="loop-title">业务事件</div>
+      </div>
+      <div class="loop-node">
+        <div class="loop-index">识别</div>
+        <div class="loop-title">客户信号</div>
+      </div>
+      <div class="loop-node">
+        <div class="loop-index">执行</div>
+        <div class="loop-title">下一步任务</div>
+      </div>
+      <div class="loop-node">
+        <div class="loop-index">回填</div>
+        <div class="loop-title">动作结果</div>
+      </div>
+      <div class="loop-node">
+        <div class="loop-index">复盘</div>
+        <div class="loop-title">指标与日报</div>
+      </div>
+      <div class="loop-node">
+        <div class="loop-index">改进</div>
+        <div class="loop-title">管理干预</div>
+      </div>
+    </div>
+
+    <div class="role-model-grid">
+      <section class="role-model cc">
+        <div class="role-model-head">
+          <div class="role-model-title">CC｜个人执行链</div>
+          <div class="role-model-question">今天处理谁 · 为什么 · 下一步做什么</div>
+        </div>
+        <div class="role-flow">
+          <div class="role-step">
+            <div class="role-step-title">进入行动中心</div>
+            <div class="role-step-copy">按优先级获得客户与原因</div>
+          </div>
+          <div class="role-step">
+            <div class="role-step-title">联系与预约</div>
+            <div class="role-step-copy">电话、消息、会议、确认</div>
+          </div>
+          <div class="role-step">
+            <div class="role-step-title">回填结果</div>
+            <div class="role-step-copy">到课、咨询、No-show、原因</div>
+          </div>
+          <div class="role-step">
+            <div class="role-step-title">推进 PL 与回款</div>
+            <div class="role-step-copy">意向、定金、尾款、下一时间</div>
+          </div>
+          <div class="role-step">
+            <div class="role-step-title">完成下一任务</div>
+            <div class="role-step-copy">系统自动生成新动作</div>
+          </div>
+        </div>
+        <div class="role-result">CC 得到的是明确的个人工作流，而不是先看大盘再自己筛选客户。</div>
+      </section>
+
+      <section class="role-model manager">
+        <div class="role-model-head">
+          <div class="role-model-title">管理者｜团队经营链</div>
+          <div class="role-model-question">团队卡在哪 · 谁需要帮助 · 什么问题在重复</div>
+        </div>
+        <div class="role-flow">
+          <div class="role-step">
+            <div class="role-step-title">进入经营摘要</div>
+            <div class="role-step-copy">目标、实际、Gap 和风险</div>
+          </div>
+          <div class="role-step">
+            <div class="role-step-title">定位卡点</div>
+            <div class="role-step-copy">阶段表现、停留与异常任务</div>
+          </div>
+          <div class="role-step">
+            <div class="role-step-title">钻取到人和客户</div>
+            <div class="role-step-copy">看到问题发生的具体上下文</div>
+          </div>
+          <div class="role-step">
+            <div class="role-step-title">采取干预</div>
+            <div class="role-step-copy">辅导、转派、专项跟进、资源</div>
+          </div>
+          <div class="role-step">
+            <div class="role-step-title">复查结果</div>
+            <div class="role-step-copy">比较干预前后，沉淀管理日报</div>
+          </div>
+        </div>
+        <div class="role-result">管理者得到的是从问题到动作再到结果的完整管理链，而不是单一报表。</div>
+      </section>
+    </div>
+
+    <div class="data-base">
+      <div>
+        <div class="base-label">共同底座</div>
+        <div class="base-copy">数据可信、边界清晰，角色体验才成立。</div>
+      </div>
+      <div>
+        <div class="base-label">统一对象</div>
+        <div class="base-copy">User、Lead、Appointment、Call、Order、Learning</div>
+      </div>
+      <div>
+        <div class="base-label">统一事件</div>
+        <div class="base-copy">接通、预约、到课、咨询、PL、支付、开课</div>
+      </div>
+      <div>
+        <div class="base-label">统一口径</div>
+        <div class="base-copy">时间、去重、业务线、归属、指标定义</div>
+      </div>
+      <div>
+        <div class="base-label">权限与审计</div>
+        <div class="base-copy">功能权限、数据范围、敏感操作、操作日志</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="exec-roadmap-panel" role="tabpanel" aria-labelledby="exec-roadmap-tab" hidden>
+    <div class="slide-head">
+      <div>
+        <div class="brief-kicker">04｜推进路线</div>
+        <h2>先完成经营闭环，再建立干预能力，最后扩展客户价值</h2>
+        <p class="slide-subtitle">每个阶段都应有明确的业务结果，而不是用页面数量定义完成。前一阶段沉淀的任务与事件，成为下一阶段看板、日报和自动化的数据基础。</p>
+      </div>
+      <div class="decision-thesis">
+        <div class="decision-label">推进顺序</div>
+        <div class="thesis-action-copy">先把销售动作搬到系统里，再把管理动作闭环，最后延伸到付费后学习与增长。</div>
+      </div>
+    </div>
+
+    <div class="roadmap">
+      <section class="roadmap-phase p0">
+        <div class="phase-label">P0｜建议立即启动</div>
+        <div class="phase-title">销售执行与回款闭环</div>
+        <ul class="phase-list">
+          <li>统一客户时间线与今日行动中心</li>
+          <li>外呼、预约确认、到课、咨询结果</li>
+          <li>PL、定金、尾款与支付一致性</li>
+          <li>管理者目标 Gap 与异常队列</li>
+        </ul>
+        <div class="phase-result">
+          <div class="phase-result-label">阶段完成信号</div>
+          <div class="phase-result-copy">CC 不再自行找客户；每个客户都有负责人、状态、下一动作和时间；管理者能定位到具体卡点。</div>
+        </div>
+      </section>
+
+      <section class="roadmap-phase p1">
+        <div class="phase-label">P1｜闭环稳定后</div>
+        <div class="phase-title">管理干预与经营效率</div>
+        <ul class="phase-list">
+          <li>CC 分层、异常预警与辅导建议</li>
+          <li>重复问题的原因聚类与责任闭环</li>
+          <li>自动生成 CC 与管理者日报</li>
+          <li>干预动作与效果复查</li>
+        </ul>
+        <div class="phase-result">
+          <div class="phase-result-label">阶段完成信号</div>
+          <div class="phase-result-copy">管理者能回答团队卡在哪、谁需要帮助、哪类问题在重复，并追踪改善结果。</div>
+        </div>
+      </section>
+
+      <section class="roadmap-phase p2">
+        <div class="phase-label">P2｜客户经营扩展</div>
+        <div class="phase-title">学习履约、续费与增长</div>
+        <ul class="phase-list">
+          <li>首课激活、学习风险与续费窗口</li>
+          <li>教学与服务信息进入 CC 上下文</li>
+          <li>转介绍、奖励与归因闭环</li>
+          <li>AI 话术、意图和通话辅助</li>
+        </ul>
+        <div class="phase-result">
+          <div class="phase-result-label">阶段完成信号</div>
+          <div class="phase-result-copy">CC 能基于学习结果推动续费与转介绍，客户价值从一次性成交转为持续经营。</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="roadmap-footer">
+      <div>
+        <div class="footer-block-title">关键依赖</div>
+        <div class="footer-block-copy">业务统一指标口径、组织与数据权限、支付状态同步、外呼与 Lark 会议集成、稳定客户与订单 ID。</div>
+      </div>
+      <div>
+        <div class="footer-block-title">业务配套</div>
+        <div class="footer-block-copy">明确目标值与责任人；建立每日异常处理、每周问题复盘和干预结果复查机制；停止重复维护线下表。</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="exec-decision-panel" role="tabpanel" aria-labelledby="exec-decision-tab" hidden>
+    <div class="slide-head">
+      <div>
+        <div class="brief-kicker">05｜需要领导确认</div>
+        <h2>批准首期范围，并同步建立业务基线与管理机制</h2>
+        <p class="slide-subtitle">CRM 建设的成功率不仅取决于产品交付，也取决于业务是否提供目标、确认口径、参与规则设计和持续使用。</p>
+      </div>
+      <div class="decision-thesis">
+        <div class="decision-label">建议本次会议确认</div>
+        <div class="thesis-action-copy">确认 P0 范围、业务负责人、基线指标、关键系统集成优先级及上线后的经营管理节奏。</div>
+      </div>
+    </div>
+
+    <div class="decision-layout">
+      <div class="decision-list">
+        <div class="decision-item">
+          <div class="decision-number">01</div>
+          <div>
+            <div class="decision-title">确认 P0 的业务边界</div>
+            <div class="decision-copy">首期聚焦线索、外呼、预约、到课、咨询、PL、定金、尾款和管理 Gap。</div>
+          </div>
+          <div class="decision-owner">领导 / 业务负责人</div>
+        </div>
+        <div class="decision-item">
+          <div class="decision-number">02</div>
+          <div>
+            <div class="decision-title">补齐当前基线与目标值</div>
+            <div class="decision-copy">确认线索量、接通、预约、到课、咨询、PL、收入、人工维护耗时与待收金额。</div>
+          </div>
+          <div class="decision-owner">业务负责人</div>
+        </div>
+        <div class="decision-item">
+          <div class="decision-number">03</div>
+          <div>
+            <div class="decision-title">确定跨系统集成优先级</div>
+            <div class="decision-copy">明确外呼、Lark 会议、支付与订单、学习进度的责任团队和接入顺序。</div>
+          </div>
+          <div class="decision-owner">产品 / 技术负责人</div>
+        </div>
+        <div class="decision-item">
+          <div class="decision-number">04</div>
+          <div>
+            <div class="decision-title">建立经营管理节奏</div>
+            <div class="decision-copy">每日处理异常任务，每周复盘重复问题和干预效果，按月评估业务指标改善。</div>
+          </div>
+          <div class="decision-owner">业务负责人</div>
+        </div>
+      </div>
+
+      <aside class="scorecard">
+        <div class="scorecard-title">首期成功记分卡</div>
+        <div class="scorecard-row">
+          <div class="scorecard-dimension">执行效率</div>
+          <div>首跟及时率、任务超时率、人工日报耗时</div>
+        </div>
+        <div class="scorecard-row">
+          <div class="scorecard-dimension">销售转化</div>
+          <div>接通、预约确认、到课、咨询完成、PL 转化</div>
+        </div>
+        <div class="scorecard-row">
+          <div class="scorecard-dimension">收入回款</div>
+          <div>订单、收入、定金、待收余额、回款周期</div>
+        </div>
+        <div class="scorecard-row">
+          <div class="scorecard-dimension">管理有效</div>
+          <div>异常识别、干预闭环、重复问题改善</div>
+        </div>
+        <div class="scorecard-note">以上指标需要在项目启动时补齐当前基线和目标区间；没有基线的指标不作为效果承诺。</div>
+      </aside>
+    </div>
+
+    <div class="closing-statement">
+      <div class="closing-mark">建议</div>
+      <div class="closing-copy">批准一个真正贯穿“客户事件—下一步动作—结果回填—管理干预”的 P0 闭环，而不是继续按单个页面分散立项。</div>
+    </div>
+  </section>
+</section>

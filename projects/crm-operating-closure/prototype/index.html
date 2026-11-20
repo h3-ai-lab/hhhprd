@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CRM 经营工作台</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --ink: #17202a;
+      --muted: #667085;
+      --line: #dfe5ec;
+      --blue: #2563eb;
+      --blue-soft: #edf4ff;
+      --orange: #c86f12;
+      --orange-soft: #fff4e5;
+      --green: #137a5a;
+      --green-soft: #e9f8f2;
+      --red: #b42318;
+      --red-soft: #fff0ee;
+      --purple: #7047b8;
+      --purple-soft: #f3efff;
+      --shadow: 0 18px 50px rgba(28, 43, 65, .18);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font: 14px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { color: inherit; }
+    .app-shell { min-height: 100vh; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      min-height: 64px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(12px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 186px;
+      font-weight: 700;
+    }
+    .brand-mark {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+    .role-switch {
+      display: inline-flex;
+      padding: 3px;
+      border-radius: 10px;
+      background: #edf1f5;
+    }
+    .role-button {
+      padding: 7px 14px;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .role-button.active {
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: 0 1px 4px rgba(20,33,52,.12);
+      font-weight: 600;
+    }
+    .top-spacer { flex: 1; }
+    .user-menu, .language-switch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .avatar {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 700;
+    }
+    .language-button {
+      min-width: 42px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .main {
+      display: grid;
+      grid-template-columns: 210px minmax(0,1fr);
+      min-height: calc(100vh - 64px);
+    }
+    .sidebar {
+      padding: 22px 14px;
+      border-right: 1px solid var(--line);
+      background: #fafbfd;
+    }
+    .nav-label {
+      margin: 0 10px 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      margin-bottom: 4px;
+      padding: 10px 12px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+    }
+    .nav-item.active {
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .sidebar-note {
+      margin: 24px 10px 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .content { min-width: 0; padding: 24px; }
+    .page-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 4px 0 0; font-size: 26px; line-height: 1.25; }
+    .head-meta { color: var(--muted); font-size: 13px; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .metric {
+      position: relative;
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .metric-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .metric-value { margin-top: 7px; font-size: 25px; font-weight: 700; }
+    .metric-context { margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .info-button {
+      display: inline-grid;
+      width: 18px;
+      height: 18px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .search {
+      width: min(320px,100%);
+      min-width: 220px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    .select {
+      padding: 9px 30px 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    .toolbar-spacer { flex: 1; }
+    .toolbar-count { color: var(--muted); font-size: 12px; }
+    .table-wrap { overflow: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+    }
+    th {
+      color: var(--muted);
+      background: var(--surface-2);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #fbfcfe; }
+    .customer-cell { min-width: 160px; }
+    .customer-name { font-weight: 600; }
+    .customer-meta { margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .reason { max-width: 260px; }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 99px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .badge.urgent { background: var(--red-soft); color: var(--red); }
+    .badge.due { background: var(--orange-soft); color: var(--orange); }
+    .badge.normal { background: var(--blue-soft); color: var(--blue); }
+    .badge.done { background: var(--green-soft); color: var(--green); }
+    .stage { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .action-button {
+      padding: 7px 11px;
+      border: 1px solid #cbd7e5;
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--blue);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .action-button.primary {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+    .empty {
+      display: none;
+      padding: 50px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .team-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .team-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .team-card-name { font-weight: 700; }
+    .team-card-copy { margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .team-card-stats {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 8px;
+      margin: 14px 0;
+    }
+    .team-stat {
+      padding: 10px;
+      border-radius: 8px;
+      background: var(--surface-2);
+    }
+    .team-stat strong { display: block; font-size: 18px; }
+    .team-stat span { color: var(--muted); font-size: 11px; }
+    .drawer-backdrop, .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: rgba(14,23,38,.38);
+    }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      width: min(480px,100vw);
+      height: 100vh;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .drawer-head, .modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .close-button {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .drawer-body { flex: 1; overflow: auto; padding: 20px; }
+    .drawer-title { margin: 0; font-size: 20px; }
+    .drawer-sub { margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .detail {
+      padding: 11px;
+      border-radius: 8px;
+      background: var(--surface-2);
+    }
+    .detail span { display: block; color: var(--muted); font-size: 11px; }
+    .detail strong { display: block; margin-top: 3px; font-size: 13px; }
+    .timeline {
+      margin: 0 0 20px;
+      padding-left: 18px;
+      border-left: 1px solid var(--line);
+    }
+    .timeline-item {
+      position: relative;
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .timeline-item::before {
+      position: absolute;
+      top: 6px;
+      left: -22px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--blue);
+      content: "";
+    }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; margin-bottom: 6px; font-weight: 600; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    .field textarea { min-height: 84px; resize: vertical; }
+    .field-error { display: none; margin-top: 5px; color: var(--red); font-size: 12px; }
+    .field.has-error input, .field.has-error select { border-color: var(--red); }
+    .field.has-error .field-error { display: block; }
+    .drawer-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--line);
+    }
+    .modal-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      padding: 24px;
+      place-items: center;
+      pointer-events: none;
+    }
+    .modal {
+      width: min(520px,100%);
+      max-height: 86vh;
+      overflow: auto;
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      pointer-events: auto;
+    }
+    .modal-body { padding: 20px; }
+    .metric-formula {
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--surface-2);
+      color: var(--muted);
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 0 20px 20px;
+    }
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 70;
+      max-width: 360px;
+      padding: 12px 16px;
+      border-radius: 9px;
+      background: #17202a;
+      color: #fff;
+      box-shadow: var(--shadow);
+      transform: translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .hidden { display: none !important; }
+    .intervention-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .intervention-item {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .intervention-item:last-child { border-bottom: 0; }
+    .intervention-copy { color: var(--muted); font-size: 12px; }
+    @media (max-width: 900px) {
+      .topbar { flex-wrap: wrap; padding: 12px 16px; }
+      .brand { min-width: 0; }
+      .main { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .content { padding: 16px; }
+      .metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 620px) {
+      .metrics, .team-grid { grid-template-columns: 1fr; }
+      .user-menu span:not(.avatar) { display: none; }
+      .toolbar { align-items: stretch; }
+      .search { min-width: 0; width: 100%; }
+      .select { width: 100%; }
+      .toolbar-spacer { display: none; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .drawer { width: 100vw; }
+      .modal-wrap { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">CRM</div>
+        <span data-i18n="brand">经营工作台</span>
+      </div>
+      <div class="role-switch" role="group" aria-label="View switch">
+        <button class="role-button active" id="cc-role" type="button" data-role="cc">CC</button>
+        <button class="role-button" id="manager-role" type="button" data-role="manager" data-i18n="managerRole">管理者</button>
+      </div>
+      <div class="top-spacer"></div>
+      <div class="user-menu">
+        <div class="avatar" id="user-avatar">C</div>
+        <span id="user-name">Chloe</span>
+      </div>
+      <button class="language-button" id="language-toggle" type="button" aria-label="Switch language">EN</button>
+    </header>
+
+    <div class="main">
+      <aside class="sidebar">
+        <div class="nav-label" id="workspace-label">工作台</div>
+        <button class="nav-item active" type="button" id="today-nav">
+          <span>●</span><span id="today-nav-label">今日行动</span>
+        </button>
+        <div class="sidebar-note" id="sidebar-note">
+          任务由客户事件和业务规则自动生成。
+        </div>
+      </aside>
+
+      <main class="content">
+        <section id="cc-view">
+          <div class="page-head">
+            <div>
+              <div class="eyebrow" data-i18n="workspaceEyebrow">销售执行</div>
+              <h1 id="cc-page-title">今日行动</h1>
+            </div>
+            <div class="head-meta" id="cc-page-meta">当前账号：Chloe · 业务时间：2026-11-20</div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label"><span id="m-first-label">首跟及时率</span><button class="info-button" type="button" data-metric="firstFollow">i</button></div>
+              <div class="metric-value" id="m-first-value">92.4%</div>
+              <div class="metric-context" id="m-first-context">92 / 100</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span id="m-appt-label">预约确认率</span><button class="info-button" type="button" data-metric="appointment">i</button></div>
+              <div class="metric-value" id="m-appt-value">78.0%</div>
+              <div class="metric-context" id="m-appt-context">78 / 100</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span id="m-show-label">到课率</span><button class="info-button" type="button" data-metric="showRate">i</button></div>
+              <div class="metric-value" id="m-show-value">68.2%</div>
+              <div class="metric-context" id="m-show-context">58 / 85</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span id="m-consult-label">咨询完成率</span><button class="info-button" type="button" data-metric="consultRate">i</button></div>
+              <div class="metric-value" id="m-consult-value">81.0%</div>
+              <div class="metric-context" id="m-consult-context">47 / 58</div>
+            </div>
+          </div>
+
+          <section class="panel" aria-labelledby="task-panel-title">
+            <div class="toolbar">
+              <input class="search" id="task-search" type="search" placeholder="搜索客户姓名或用户 ID" aria-label="搜索客户">
+              <select class="select" id="task-filter" aria-label="任务类型">
+                <option value="all">全部任务</option>
+                <option value="appointment">预约确认</option>
+                <option value="pl">PL 跟进</option>
+                <option value="payment">回款</option>
+                <option value="follow">首次跟进</option>
+                <option value="show">到课回填</option>
+                <option value="learning">学习风险</option>
+              </select>
+              <div class="toolbar-spacer"></div>
+              <div class="toolbar-count" id="task-count">6 条任务</div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th id="th-priority">优先级</th>
+                    <th id="th-customer">客户</th>
+                    <th id="th-reason">为什么处理</th>
+                    <th id="th-stage">阶段</th>
+                    <th id="th-due">截止 / 承诺时间</th>
+                    <th id="th-action">下一步</th>
+                  </tr>
+                </thead>
+                <tbody id="task-list"></tbody>
+              </table>
+            </div>
+            <div class="empty" id="task-empty">没有符合当前筛选条件的任务</div>
+          </section>
+        </section>
+
+        <section id="manager-view" class="hidden">
+          <div class="page-head">
+            <div>
+              <div class="eyebrow" data-i18n="managerEyebrow">团队经营</div>
+              <h1 id="manager-page-title">团队经营摘要</h1>
+            </div>
+            <div class="head-meta" id="manager-page-meta">销售一组 · 当前账号：Alex</div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label"><span id="mg-call-label">接通率</span><button class="info-button" type="button" data-metric="callRate">i</button></div>
+              <div class="metric-value" id="mg-call-value">75.0%</div>
+              <div class="metric-context" id="mg-call-context">240 / 320</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span id="mg-task-label">异常任务按时关闭率</span><button class="info-button" type="button" data-metric="taskClosure">i</button></div>
+              <div class="metric-value" id="mg-task-value">88.0%</div>
+              <div class="metric-context" id="mg-task-context">88 / 100</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span id="mg-pl-label">PL 转化率</span><button class="info-button" type="button" data-metric="plRate">i</button></div>
+              <div class="metric-value" id="mg-pl-value">58.1%</div>
+              <div class="metric-context" id="mg-pl-context">36 / 62</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label"><span id="mg-due-label">待收金额</span><button class="info-button" type="button" data-metric="outstanding">i</button></div>
+              <div class="metric-value" id="mg-due-value">฿126,800</div>
+              <div class="metric-context" id="mg-due-context">当前筛选范围</div>
+            </div>
+          </div>
+
+          <div class="team-grid" id="team-grid"></div>
+
+          <section class="panel" style="margin-top:18px" aria-labelledby="intervention-title">
+            <div class="toolbar">
+              <strong id="intervention-title">已采取的干预</strong>
+              <div class="toolbar-spacer"></div>
+              <div class="toolbar-count" id="intervention-count">0 条</div>
+            </div>
+            <ul class="intervention-list" id="intervention-list"></ul>
+            <div class="empty" id="intervention-empty">暂无干预记录</div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="drawer-backdrop hidden" id="drawer-backdrop"></div>
+  <aside class="drawer hidden" id="task-drawer" aria-labelledby="drawer-title" role="dialog" aria-modal="true">
+    <div class="drawer-head">
+      <div>
+        <h2 class="drawer-title" id="drawer-title">客户任务</h2>
+        <div class="drawer-sub" id="drawer-sub"></div>
+      </div>
+      <button class="close-button" id="drawer-close" type="button" aria-label="关闭">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="detail-grid" id="drawer-details"></div>
+      <h3 id="timeline-title" style="margin:0 0 10px;font-size:15px">客户时间线</h3>
+      <div class="timeline" id="drawer-timeline"></div>
+
+      <h3 id="result-title" style="margin:0 0 12px;font-size:15px">记录本次处理</h3>
+      <div class="field" id="result-field">
+        <label for="result-select">处理结果</label>
+        <select id="result-select">
+          <option value="">请选择</option>
+          <option value="contacted">已联系客户</option>
+          <option value="no_answer">未联系上</option>
+          <option value="confirmed">预约已确认</option>
+          <option value="rescheduled">客户申请改期</option>
+          <option value="pl_updated">已更新 PL</option>
+          <option value="payment_checked">回款已核实</option>
+        </select>
+        <div class="field-error">请选择处理结果</div>
+      </div>
+      <div class="field">
+        <label for="next-time">下次跟进时间</label>
+        <input id="next-time" type="datetime-local">
+      </div>
+      <div class="field">
+        <label for="result-note">处理说明</label>
+        <textarea id="result-note" placeholder="记录客户反馈和下一步"></textarea>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="action-button" id="drawer-cancel" type="button">取消</button>
+      <button class="action-button primary" id="task-submit" type="button">完成并生成下一步</button>
+    </div>
+  </aside>
+
+  <div class="modal-backdrop hidden" id="modal-backdrop"></div>
+  <div class="modal-wrap hidden" id="metric-modal-wrap">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="metric-modal-title">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow" id="metric-modal-kicker">指标口径</div>
+          <h2 class="drawer-title" id="metric-modal-title">指标</h2>
+        </div>
+        <button class="close-button" id="metric-modal-close" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="metric-formula" id="metric-formula"></div>
+      </div>
+      <div class="modal-actions"><button class="action-button primary" id="metric-modal-ok" type="button">知道了</button></div>
+    </section>
+  </div>
+
+  <div class="modal-wrap hidden" id="intervention-modal-wrap">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="intervention-modal-title">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">管理干预</div>
+          <h2 class="drawer-title" id="intervention-modal-title">发起干预</h2>
+        </div>
+        <button class="close-button" id="intervention-close" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="field" id="intervention-field">
+          <label for="intervention-type">干预动作</label>
+          <select id="intervention-type">
+            <option value="">请选择</option>
+            <option value="coaching">安排一对一辅导</option>
+            <option value="review">发起专项跟单复盘</option>
+            <option value="handover">调整工作量或交接客户</option>
+            <option value="support">主管协助关键客户</option>
+          </select>
+          <div class="field-error">请选择干预动作</div>
+        </div>
+        <div class="field">
+          <label for="intervention-note">原因与预期改善</label>
+          <textarea id="intervention-note" placeholder="说明卡点和希望改善的指标"></textarea>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="action-button" id="intervention-cancel" type="button">取消</button>
+        <button class="action-button primary" id="intervention-submit" type="button">提交干预</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const translations = {
+      zh: {
+        brand: "经营工作台", managerRole: "管理者", workspaceLabel: "工作台",
+        todayNav: "今日行动", sidebarNote: "任务由客户事件和业务规则自动生成。",
+        workspaceEyebrow: "销售执行", ccPageTitle: "今日行动",
+        ccPageMeta: "当前账号：Chloe · 业务时间：2026-11-20",
+        managerEyebrow: "团队经营", managerPageTitle: "团队经营摘要",
+        managerPageMeta: "销售一组 · 当前账号：Alex",
+        searchPlaceholder: "搜索客户姓名或用户 ID",
+        taskAll: "全部任务", taskCount: "{n} 条任务", noTasks: "没有符合当前筛选条件的任务",
+        thPriority: "优先级", thCustomer: "客户", thReason: "为什么处理",
+        thStage: "阶段", thDue: "截止 / 承诺时间", thAction: "下一步",
+        open: "处理", dueUrgent: "逾期", dueSoon: "即将到期", normal: "常规",
+        resultTitle: "记录本次处理", resultLabel: "处理结果", nextLabel: "下次跟进时间",
+        noteLabel: "处理说明", notePlaceholder: "记录客户反馈和下一步",
+        choose: "请选择", selectResult: "请选择处理结果",
+        cancel: "取消", submitTask: "完成并生成下一步",
+        taskSaved: "处理结果已保存，系统已生成下一步任务。",
+        metricKicker: "指标口径", know: "知道了",
+        interventionTitle: "已采取的干预", interventionCount: "{n} 条",
+        noIntervention: "暂无干预记录", startIntervention: "发起干预",
+        interventionModal: "发起干预", interventionLabel: "干预动作", interventionReason: "原因与预期改善",
+        interventionPlaceholder: "说明卡点和希望改善的指标", submitIntervention: "提交干预",
+        interventionSaved: "管理干预已记录。",
+        selectIntervention: "请选择干预动作",
+        ccName: "CC", openTasks: "待处理", overdueTasks: "逾期任务", todayAppointments: "今日预约",
+        metricFirst: "首跟及时率", metricAppointment: "预约确认率", metricShow: "到课率", metricConsult: "咨询完成率",
+        metricCall: "接通率", metricTask: "异常任务按时关闭率", metricPl: "PL 转化率", metricDue: "待收金额",
+        currentScope: "当前筛选范围", timelineTitle: "客户时间线", recordTitle: "记录本次处理",
+        filterAppointment: "预约确认", filterPl: "PL 跟进", filterPayment: "回款", filterFollow: "首次跟进", filterShow: "到课回填", filterLearning: "学习风险",
+        resultContacted: "已联系客户", resultNoAnswer: "未联系上", resultConfirmed: "预约已确认",
+        resultRescheduled: "客户申请改期", resultPl: "已更新 PL", resultPayment: "回款已核实",
+        interventionCoaching: "安排一对一辅导", interventionReview: "发起专项跟单复盘",
+        interventionHandover: "调整工作量或交接客户", interventionSupport: "主管协助关键客户",
+        managerTeamNote: "管理者从团队目标、异常任务和重复问题进入经营干预。",
+        reasons: {
+          appointment: "预约尚未确认", pl: "PL 80 跟进到期", payment: "尾款回款已逾期",
+          follow: "新线索首跟即将超时", learning: "首课未激活", show: "体验课到课结果待回填"
+        },
+        stages: { appointment: "预约", pl: "PL", payment: "回款", follow: "首次联系", learning: "学习履约", show: "体验课" },
+        priorities: { urgent: "逾期", due: "即将到期", normal: "常规" }
+      },
+      en: {
+        brand: "Operating Desk", managerRole: "Manager", workspaceLabel: "Workspace",
+        todayNav: "Today", sidebarNote: "Tasks are generated from customer events and business rules.",
+        workspaceEyebrow: "Sales execution", ccPageTitle: "Today's actions",
+        ccPageMeta: "Current user: Chloe · Business date: 20 Nov 2026",
+        managerEyebrow: "Team operations", managerPageTitle: "Team operating summary",
+        managerPageMeta: "Sales Team 1 · Current user: Alex",
+        searchPlaceholder: "Search customer name or user ID",
+        taskAll: "All tasks", taskCount: "{n} tasks", noTasks: "No tasks match the current filters",
+        thPriority: "Priority", thCustomer: "Customer", thReason: "Why now",
+        thStage: "Stage", thDue: "Due / committed", thAction: "Next step",
+        open: "Open", dueUrgent: "Overdue", dueSoon: "Due soon", normal: "Normal",
+        resultTitle: "Record outcome", resultLabel: "Outcome", nextLabel: "Next follow-up",
+        noteLabel: "Notes", notePlaceholder: "Record the customer response and next step",
+        choose: "Select", selectResult: "Select an outcome",
+        cancel: "Cancel", submitTask: "Complete and create next task",
+        taskSaved: "Outcome saved. The next task has been created.",
+        metricKicker: "Metric definition", know: "Got it",
+        interventionTitle: "Manager interventions", interventionCount: "Records: {n}",
+        noIntervention: "No interventions recorded", startIntervention: "Start intervention",
+        interventionModal: "Start intervention", interventionLabel: "Intervention", interventionReason: "Reason and expected improvement",
+        interventionPlaceholder: "Describe the bottleneck and the metric to improve", submitIntervention: "Submit intervention",
+        interventionSaved: "Manager intervention recorded.",
+        selectIntervention: "Select an intervention",
+        ccName: "CC", openTasks: "Open tasks", overdueTasks: "Overdue", todayAppointments: "Appointments",
+        metricFirst: "First follow-up SLA", metricAppointment: "Appointment confirmation", metricShow: "Trial attendance", metricConsult: "Consultation completion",
+        metricCall: "Call answer rate", metricTask: "On-time exception closure", metricPl: "PL conversion", metricDue: "Outstanding",
+        currentScope: "Current scope", timelineTitle: "Customer timeline", recordTitle: "Record outcome",
+        filterAppointment: "Appointment", filterPl: "PL follow-up", filterPayment: "Payment", filterFollow: "First contact", filterShow: "Attendance", filterLearning: "Learning risk",
+        resultContacted: "Customer contacted", resultNoAnswer: "Could not reach", resultConfirmed: "Appointment confirmed",
+        resultRescheduled: "Customer requested reschedule", resultPl: "PL updated", resultPayment: "Payment verified",
+        interventionCoaching: "Schedule 1:1 coaching", interventionReview: "Start pipeline review",
+        interventionHandover: "Adjust workload or handover", interventionSupport: "Manager supports key customer",
+        managerTeamNote: "Managers start from targets, exception tasks and recurring issues.",
+        reasons: {
+          appointment: "Appointment not confirmed", pl: "PL 80 follow-up is due", payment: "Final payment is overdue",
+          follow: "First follow-up is nearing SLA", learning: "First lesson not activated", show: "Trial attendance not recorded"
+        },
+        stages: { appointment: "Appointment", pl: "PL", payment: "Payment", follow: "First contact", learning: "Learning", show: "Trial" },
+        priorities: { urgent: "Overdue", due: "Due soon", normal: "Normal" }
+      }
+    };
+
+    const metricDefinitions = {
+      firstFollow: {
+        zh: ["首跟及时率", "首次有效跟进时间不晚于分配时间加业务线 SLA 的去重 Lead 数 ÷ 统计范围内成功分配的去重 Lead 数。以分配时间进入统计范围，按 Lead ID 去重；分母为 0 时显示“—”。"],
+        en: ["First follow-up SLA rate", "Distinct leads whose first effective follow-up was completed no later than assignment time plus the business-line SLA ÷ distinct leads successfully assigned in the selected period. Scoped by assignment time and deduplicated by Lead ID; show “—” when the denominator is 0."]
+      },
+      appointment: {
+        zh: ["预约确认率", "预约结果为已确认的 Appointment 数 ÷ 统计范围内创建的 Appointment 数。以预约创建时间进入统计范围，按 Appointment ID 去重；分母为 0 时显示“—”。"],
+        en: ["Appointment confirmation rate", "Appointments with a confirmed result ÷ appointments created in the selected period. Scoped by appointment creation time and deduplicated by Appointment ID; show “—” when the denominator is 0."]
+      },
+      showRate: {
+        zh: ["到课率", "到课状态为已到课的 Trial 数 ÷ 预约时间落在统计范围内且状态已结束的 Trial 数。按 Trial ID 去重；分母为 0 时显示“—”。"],
+        en: ["Trial attendance rate", "Trials marked as attended ÷ trials whose scheduled start is in the selected period and whose result is final. Deduplicated by Trial ID; show “—” when the denominator is 0."]
+      },
+      consultRate: {
+        zh: ["咨询完成率", "咨询状态为已完成的 Consultation 数 ÷ 已到课的 Trial 数。以咨询完成时间进入统计范围，按 Consultation ID 去重；分母为 0 时显示“—”。"],
+        en: ["Consultation completion rate", "Consultations marked complete ÷ attended trials. Scoped by consultation completion time and deduplicated by Consultation ID; show “—” when the denominator is 0."]
+      },
+      callRate: {
+        zh: ["接通率", "状态为接通的 Call 数 ÷ 已发起的 Call 数。以呼叫发起时间进入统计范围，按 Call ID 去重；分母为 0 时显示“—”。"],
+        en: ["Call answer rate", "Calls marked connected ÷ calls initiated. Scoped by call initiation time and deduplicated by Call ID; show “—” when the denominator is 0."]
+      },
+      taskClosure: {
+        zh: ["异常任务按时关闭率", "在截止时间前关闭的去重 FollowTask 数 ÷ 在统计时间内到期的去重 FollowTask 数。按 Task ID 去重；分母为 0 时显示“—”。"],
+        en: ["On-time exception closure", "Distinct follow-up tasks closed before their due time ÷ distinct follow-up tasks that became due in the selected period. Deduplicated by Task ID; show “—” when the denominator is 0."]
+      },
+      plRate: {
+        zh: ["PL 转化率", "订单创建前最近有效 PL 为 PL 80 或 PL 100 且已创建支付成功订单的去重 Lead 数 ÷ 订单创建前最近有效 PL 为 PL 80 或 PL 100 的去重 Lead 数。按 Lead ID 去重；分母为 0 时显示“—”。"],
+        en: ["PL conversion rate", "Distinct leads with a successful paid order whose latest effective PL before order creation was PL 80 or PL 100 ÷ distinct leads whose latest effective PL before order creation was PL 80 or PL 100. Deduplicated by Lead ID; show “—” when the denominator is 0."]
+      },
+      outstanding: {
+        zh: ["待收金额", "已确认应收金额减已确认实收金额。按业务线、团队和数据权限筛选，以应收到期时间进入统计范围；按 Payment 计划项去重；无待收金额时为 0。"],
+        en: ["Outstanding amount", "Confirmed receivable amount minus confirmed received amount. Filtered by business line, team and data access, scoped by receivable due time and deduplicated by payment schedule item; show 0 when no amount is outstanding."]
+      }
+    };
+
+    const tasks = [
+      {
+        id: "T-1042", userId: "U-88321", customer: "Mia Nguyen", owner: "Chloe",
+        reasonType: "appointment", priority: "urgent", due: "今天 10:30", dueEn: "Today 10:30",
+        stage: "appointment", businessLine: "泰国",
+        timeline: [
+          ["今天 09:42", "客户通过 LINE 回复“稍后确认”", "Today 09:42", "Customer replied on LINE: “Will confirm later”"],
+          ["昨天 18:20", "已创建预约并发送会议链接", "Yesterday 18:20", "Appointment created and meeting link sent"]
+        ]
+      },
+      {
+        id: "T-1045", userId: "U-77418", customer: "Noah Tran", owner: "Thy",
+        reasonType: "pl", priority: "due", due: "今天 11:00", dueEn: "Today 11:00",
+        stage: "pl", businessLine: "越南",
+        timeline: [
+          ["今天 08:51", "PL 等级更新为 PL 80", "Today 08:51", "PL updated to PL 80"],
+          ["今天 08:50", "客户承诺今日支付定金", "Today 08:50", "Customer promised to pay the deposit today"]
+        ]
+      },
+      {
+        id: "T-1051", userId: "U-61937", customer: "Emma Pham", owner: "Chloe",
+        reasonType: "payment", priority: "urgent", due: "11月19日", dueEn: "19 Nov",
+        stage: "payment", businessLine: "越南",
+        timeline: [
+          ["昨天 16:10", "尾款到期，尚未收到支付成功事件", "Yesterday 16:10", "Final payment became due with no successful payment event"],
+          ["11月16日", "已支付定金", "16 Nov", "Deposit paid"]
+        ]
+      },
+      {
+        id: "T-1056", userId: "U-55402", customer: "Liam Dao", owner: "Minh",
+        reasonType: "show", priority: "urgent", due: "今天 09:00", dueEn: "Today 09:00",
+        stage: "show", businessLine: "越南",
+        timeline: [
+          ["今天 09:02", "体验课已开始，尚未回填到课结果", "Today 09:02", "Trial started; attendance not recorded"],
+          ["昨天 19:05", "预约已确认", "Yesterday 19:05", "Appointment confirmed"]
+        ]
+      },
+      {
+        id: "T-1060", userId: "U-90217", customer: "Ava Chen", owner: "Chloe",
+        reasonType: "follow", priority: "due", due: "今天 12:00", dueEn: "Today 12:00",
+        stage: "follow", businessLine: "泰国",
+        timeline: [
+          ["今天 09:10", "新线索已分配", "Today 09:10", "New lead assigned"],
+          ["今天 09:10", "首次联系 SLA 剩余 2 小时 50 分", "Today 09:10", "First-contact SLA has 2h 50m remaining"]
+        ]
+      },
+      {
+        id: "T-1066", userId: "U-48115", customer: "Leo Nguyen", owner: "Linh",
+        reasonType: "learning", priority: "normal", due: "今天 16:00", dueEn: "Today 16:00",
+        stage: "learning", businessLine: "越南",
+        timeline: [
+          ["今天 08:30", "购买后 72 小时仍未激活首课", "Today 08:30", "First lesson not activated 72 hours after purchase"],
+          ["11月17日", "订单支付成功", "17 Nov", "Order paid"]
+        ]
+      }
+    ];
+
+    const state = {
+      lang: localStorage.getItem("crm-lang") || "zh",
+      role: "cc",
+      selectedTask: null,
+      interventions: []
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+    const t = (key) => translations[state.lang][key] || key;
+
+    function setText(id, value) {
+      const node = document.getElementById(id);
+      if (node) node.textContent = value;
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+      const dict = translations[state.lang];
+      $("#language-toggle").textContent = state.lang === "zh" ? "EN" : "中";
+      $("#language-toggle").setAttribute("aria-label", state.lang === "zh" ? "Switch to English" : "切换到中文");
+      setText("workspace-label", dict.workspaceLabel);
+      setText("today-nav-label", state.role === "cc" ? dict.todayNav : (state.lang === "zh" ? "团队经营摘要" : "Team summary"));
+      setText("sidebar-note", state.role === "cc" ? dict.sidebarNote : dict.managerTeamNote);
+      setText("cc-page-title", dict.ccPageTitle);
+      setText("cc-page-meta", dict.ccPageMeta);
+      setText("manager-page-title", dict.managerPageTitle);
+      setText("manager-page-meta", dict.managerPageMeta);
+      setText("intervention-title", dict.interventionTitle);
+      setText("intervention-empty", dict.noIntervention);
+      setText("task-empty", dict.noTasks);
+      setText("drawer-cancel", dict.cancel);
+      setText("task-submit", dict.submitTask);
+      setText("metric-modal-kicker", dict.metricKicker);
+      setText("metric-modal-ok", dict.know);
+      setText("intervention-modal-title", dict.interventionModal);
+      setText("metric-modal-title", dict.metricKicker);
+      $(".brand span").textContent = dict.brand;
+      $("#manager-role").textContent = dict.managerRole;
+      $("#task-search").placeholder = dict.searchPlaceholder;
+      $("#task-filter option[value='all']").textContent = dict.taskAll;
+      $("#task-filter option[value='appointment']").textContent = dict.filterAppointment;
+      $("#task-filter option[value='pl']").textContent = dict.filterPl;
+      $("#task-filter option[value='payment']").textContent = dict.filterPayment;
+      $("#task-filter option[value='follow']").textContent = dict.filterFollow;
+      $("#task-filter option[value='show']").textContent = dict.filterShow;
+      $("#task-filter option[value='learning']").textContent = dict.filterLearning;
+      $$("th")[0].textContent = dict.thPriority;
+      $$("th")[1].textContent = dict.thCustomer;
+      $$("th")[2].textContent = dict.thReason;
+      $$("th")[3].textContent = dict.thStage;
+      $$("th")[4].textContent = dict.thDue;
+      $$("th")[5].textContent = dict.thAction;
+      $("#drawer-title").textContent = state.selectedTask ? state.selectedTask.customer : dict.thCustomer;
+      const resultLabel = document.querySelector("label[for='result-select']");
+      const nextLabel = document.querySelector("label[for='next-time']");
+      const noteLabel = document.querySelector("label[for='result-note']");
+      resultLabel.textContent = dict.resultLabel;
+      nextLabel.textContent = dict.nextLabel;
+      noteLabel.textContent = dict.noteLabel;
+      $("#result-note").placeholder = dict.notePlaceholder;
+      $("#result-select option[value='']").textContent = dict.choose;
+      $("#result-select option[value='contacted']").textContent = dict.resultContacted;
+      $("#result-select option[value='no_answer']").textContent = dict.resultNoAnswer;
+      $("#result-select option[value='confirmed']").textContent = dict.resultConfirmed;
+      $("#result-select option[value='rescheduled']").textContent = dict.resultRescheduled;
+      $("#result-select option[value='pl_updated']").textContent = dict.resultPl;
+      $("#result-select option[value='payment_checked']").textContent = dict.resultPayment;
+      $("#intervention-type option[value='']").textContent = dict.choose;
+      $("#intervention-type option[value='coaching']").textContent = dict.interventionCoaching;
+      $("#intervention-type option[value='review']").textContent = dict.interventionReview;
+      $("#intervention-type option[value='handover']").textContent = dict.interventionHandover;
+      $("#intervention-type option[value='support']").textContent = dict.interventionSupport;
+      document.querySelector("#result-field .field-error").textContent = dict.selectResult;
+      document.querySelector("#intervention-field .field-error").textContent = dict.selectIntervention;
+      setText("m-first-label", dict.metricFirst);
+      setText("m-appt-label", dict.metricAppointment);
+      setText("m-show-label", dict.metricShow);
+      setText("m-consult-label", dict.metricConsult);
+      setText("mg-call-label", dict.metricCall);
+      setText("mg-task-label", dict.metricTask);
+      setText("mg-pl-label", dict.metricPl);
+      setText("mg-due-label", dict.metricDue);
+      setText("mg-due-context", dict.currentScope);
+      setText("timeline-title", dict.timelineTitle);
+      setText("result-title", dict.recordTitle);
+      $("#drawer-title").textContent = state.selectedTask ? state.selectedTask.customer : dict.thCustomer;
+      $$(".close-button").forEach((button) => button.setAttribute("aria-label", state.lang === "zh" ? "关闭" : "Close"));
+      document.querySelector(".role-switch").setAttribute("aria-label", state.lang === "zh" ? "切换角色" : "Switch role");
+      setText("intervention-close", "×");
+      const kicker = document.querySelector("#manager-view .eyebrow");
+      if (kicker) kicker.textContent = dict.managerEyebrow;
+      document.querySelector("#cc-view .eyebrow").textContent = dict.workspaceEyebrow;
+      document.querySelector("#intervention-modal-wrap .eyebrow").textContent = state.lang === "zh" ? "管理干预" : "Manager intervention";
+      localStorage.setItem("crm-lang", state.lang);
+      renderTasks();
+      renderTeam();
+      renderInterventions();
+    }
+
+    function getVisibleTasks() {
+      const search = $("#task-search").value.trim().toLowerCase();
+      const type = $("#task-filter").value;
+      return tasks.filter((task) => {
+        if (task.done) return false;
+        if (state.role === "cc" && task.owner !== "Chloe") return false;
+        if (type !== "all" && task.reasonType !== type) return false;
+        if (!search) return true;
+        return task.customer.toLowerCase().includes(search) || task.userId.toLowerCase().includes(search);
+      });
+    }
+
+    function renderTasks() {
+      const list = $("#task-list");
+      const visible = getVisibleTasks();
+      const dict = translations[state.lang];
+      list.innerHTML = visible.map((task) => `
+        <tr>
+          <td><span class="badge ${task.priority}">${dict.priorities[task.priority]}</span></td>
+          <td class="customer-cell">
+            <div class="customer-name">${task.customer}</div>
+            <div class="customer-meta">${task.userId} · ${state.lang === "zh" ? task.businessLine : ({ "泰国": "Thailand", "越南": "Vietnam" }[task.businessLine] || task.businessLine)}</div>
+          </td>
+          <td class="reason">${dict.reasons[task.reasonType] || task.reasonType}</td>
+          <td><span class="stage">${dict.stages[task.stage]}</span></td>
+          <td>${state.lang === "zh" ? task.due : task.dueEn}</td>
+          <td><button class="action-button" type="button" data-task-id="${task.id}">${dict.open}</button></td>
+        </tr>
+      `).join("");
+      $("#task-empty").style.display = visible.length ? "none" : "block";
+      setText("task-count", dict.taskCount.replace("{n}", visible.length));
+      list.querySelectorAll("[data-task-id]").forEach((button) => {
+        button.addEventListener("click", () => openDrawer(button.dataset.taskId));
+      });
+    }
+
+    function renderTeam() {
+      const dict = translations[state.lang];
+      const open = tasks.filter((task) => !task.done);
+      const owners = ["Chloe", "Thy", "Minh", "Linh"];
+      const cards = owners.map((owner) => {
+        const ownerTasks = open.filter((task) => task.owner === owner);
+        const overdue = ownerTasks.filter((task) => task.priority === "urgent").length;
+        const appointments = ownerTasks.filter((task) => task.stage === "appointment" || task.stage === "show").length;
+        return `
+          <article class="team-card">
+            <div class="team-card-head">
+              <div>
+                <div class="team-card-name">${owner}</div>
+                <div class="team-card-copy">${owner === "Chloe" ? "Sales Team 1" : "Sales Team 1"}</div>
+              </div>
+              <button class="action-button" type="button" data-intervene="${owner}">${dict.startIntervention}</button>
+            </div>
+            <div class="team-card-stats">
+              <div class="team-stat"><strong>${ownerTasks.length}</strong><span>${dict.openTasks}</span></div>
+              <div class="team-stat"><strong>${overdue}</strong><span>${dict.overdueTasks}</span></div>
+              <div class="team-stat"><strong>${appointments}</strong><span>${dict.todayAppointments}</span></div>
+            </div>
+            <div class="team-card-copy">${ownerTasks.length ? (state.lang === "zh" ? "当前主要卡点：" : "Primary bottleneck: ") + dict.reasons[ownerTasks[0].reasonType] : (state.lang === "zh" ? "当前无异常任务" : "No exception tasks")}</div>
+          </article>
+        `;
+      }).join("");
+      $("#team-grid").innerHTML = cards;
+      $$("[data-intervene]").forEach((button) => {
+        button.addEventListener("click", () => openIntervention(button.dataset.intervene));
+      });
+    }
+
+    function renderInterventions() {
+      const dict = translations[state.lang];
+      const actionLabels = {
+        coaching: dict.interventionCoaching,
+        review: dict.interventionReview,
+        handover: dict.interventionHandover,
+        support: dict.interventionSupport
+      };
+      const list = $("#intervention-list");
+      list.innerHTML = state.interventions.map((item) => `
+        <li class="intervention-item">
+          <div>
+            <strong>${item.owner}</strong>
+            <div class="intervention-copy">${actionLabels[item.actionKey]} · ${item.note || dict.interventionPlaceholder}</div>
+          </div>
+          <div class="badge normal">${state.lang === "zh" ? "进行中" : "In progress"}</div>
+        </li>
+      `).join("");
+      $("#intervention-empty").style.display = state.interventions.length ? "none" : "block";
+      setText("intervention-count", dict.interventionCount.replace("{n}", state.interventions.length));
+    }
+
+    function openDrawer(taskId) {
+      state.selectedTask = tasks.find((task) => task.id === taskId);
+      if (!state.selectedTask) return;
+      const dict = translations[state.lang];
+      $("#drawer-title").textContent = state.selectedTask.customer;
+      $("#drawer-sub").textContent = `${state.selectedTask.id} · ${state.lang === "zh" ? state.selectedTask.businessLine : ({ "泰国": "Thailand", "越南": "Vietnam" }[state.selectedTask.businessLine] || state.selectedTask.businessLine)}`;
+      $("#drawer-details").innerHTML = `
+        <div class="detail"><span>${dict.thReason}</span><strong>${dict.reasons[state.selectedTask.reasonType]}</strong></div>
+        <div class="detail"><span>${dict.thStage}</span><strong>${dict.stages[state.selectedTask.stage]}</strong></div>
+        <div class="detail"><span>${dict.thDue}</span><strong>${state.lang === "zh" ? state.selectedTask.due : state.selectedTask.dueEn}</strong></div>
+        <div class="detail"><span>${state.lang === "zh" ? "负责人" : "Owner"}</span><strong>${state.selectedTask.owner}</strong></div>
+      `;
+      const eventIndex = state.lang === "zh" ? 0 : 2;
+      $("#drawer-timeline").innerHTML = state.selectedTask.timeline.map((event) => `
+        <div class="timeline-item"><strong>${event[eventIndex]}</strong><br>${event[eventIndex + 1]}</div>
+      `).join("");
+      $("#result-select").value = "";
+      $("#next-time").value = "";
+      $("#result-note").value = "";
+      $("#result-field").classList.remove("has-error");
+      $("#drawer-backdrop").classList.remove("hidden");
+      $("#task-drawer").classList.remove("hidden");
+      $("#result-select").focus();
+    }
+
+    function closeDrawer() {
+      $("#drawer-backdrop").classList.add("hidden");
+      $("#task-drawer").classList.add("hidden");
+      state.selectedTask = null;
+    }
+
+    function openMetric(metricKey) {
+      const definition = metricDefinitions[metricKey];
+      if (!definition) return;
+      const [title, formula] = definition[state.lang];
+      setText("metric-modal-title", title);
+      setText("metric-formula", formula);
+      $("#modal-backdrop").classList.remove("hidden");
+      $("#metric-modal-wrap").classList.remove("hidden");
+      $("#metric-modal-ok").focus();
+    }
+
+    function closeMetric() {
+      $("#modal-backdrop").classList.add("hidden");
+      $("#metric-modal-wrap").classList.add("hidden");
+    }
+
+    let interventionOwner = "";
+    function openIntervention(owner) {
+      interventionOwner = owner;
+      setText("intervention-modal-title", `${t("interventionModal")} · ${owner}`);
+      $("#intervention-type").value = "";
+      $("#intervention-note").value = "";
+      $("#intervention-field").classList.remove("has-error");
+      $("#modal-backdrop").classList.remove("hidden");
+      $("#intervention-modal-wrap").classList.remove("hidden");
+      $("#intervention-type").focus();
+    }
+
+    function closeIntervention() {
+      $("#modal-backdrop").classList.add("hidden");
+      $("#intervention-modal-wrap").classList.add("hidden");
+    }
+
+    function switchRole(role) {
+      state.role = role;
+      $("#cc-view").classList.toggle("hidden", role !== "cc");
+      $("#manager-view").classList.toggle("hidden", role !== "manager");
+      $("#cc-role").classList.toggle("active", role === "cc");
+      $("#manager-role").classList.toggle("active", role === "manager");
+      setText("user-avatar", role === "cc" ? "C" : "A");
+      setText("user-name", role === "cc" ? "Chloe" : "Alex");
+      setText("today-nav-label", role === "cc" ? t("todayNav") : (state.lang === "zh" ? "团队经营摘要" : "Team summary"));
+      setText("sidebar-note", role === "cc" ? t("sidebarNote") : t("managerTeamNote"));
+      renderTasks();
+      renderTeam();
+    }
+
+    function showToast(message) {
+      const toast = $("#toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2400);
+    }
+
+    $("#task-search").addEventListener("input", renderTasks);
+    $("#task-filter").addEventListener("change", renderTasks);
+    $("#language-toggle").addEventListener("click", () => {
+      $("#toast").classList.remove("show");
+      $("#toast").textContent = "";
+      state.lang = state.lang === "zh" ? "en" : "zh";
+      applyLanguage();
+      closeMetric();
+      if (state.selectedTask) openDrawer(state.selectedTask.id);
+    });
+    $$(".role-button").forEach((button) => {
+      button.addEventListener("click", () => switchRole(button.dataset.role));
+    });
+    $("#today-nav").addEventListener("click", () => {
+      if (state.role === "manager") switchRole("cc");
+      else renderTasks();
+    });
+    $$("[data-metric]").forEach((button) => {
+      button.addEventListener("click", () => openMetric(button.dataset.metric));
+    });
+    $("#drawer-close").addEventListener("click", closeDrawer);
+    $("#drawer-cancel").addEventListener("click", closeDrawer);
+    $("#drawer-backdrop").addEventListener("click", closeDrawer);
+    $("#task-submit").addEventListener("click", () => {
+      if (!$("#result-select").value) {
+        $("#result-field").classList.add("has-error");
+        $("#result-select").focus();
+        return;
+      }
+      if (!state.selectedTask) return;
+      state.selectedTask.done = true;
+      closeDrawer();
+      renderTasks();
+      renderTeam();
+      showToast(t("taskSaved"));
+    });
+    $("#metric-modal-close").addEventListener("click", closeMetric);
+    $("#metric-modal-ok").addEventListener("click", closeMetric);
+    $("#modal-backdrop").addEventListener("click", () => {
+      if (!$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
+      if (!$("#intervention-modal-wrap").classList.contains("hidden")) closeIntervention();
+    });
+    $("#intervention-close").addEventListener("click", closeIntervention);
+    $("#intervention-cancel").addEventListener("click", closeIntervention);
+    $("#intervention-submit").addEventListener("click", () => {
+      if (!$("#intervention-type").value) {
+        $("#intervention-field").classList.add("has-error");
+        $("#intervention-type").focus();
+        return;
+      }
+      state.interventions.unshift({
+        owner: interventionOwner,
+        actionKey: $("#intervention-type").value,
+        note: $("#intervention-note").value.trim()
+      });
+      closeIntervention();
+      renderInterventions();
+      showToast(t("interventionSaved"));
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      if (!$("#task-drawer").classList.contains("hidden")) closeDrawer();
+      if (!$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
+      if (!$("#intervention-modal-wrap").classList.contains("hidden")) closeIntervention();
+    });
+
+    applyLanguage();
+  </script>
+</body>
+</html>

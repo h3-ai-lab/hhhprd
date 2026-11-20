@@ -1,0 +1,22 @@
+version: 1
+sources:
+  - id: crm-business-offline-base
+    url: https://qjphu5vphyf4.jp.larksuite.com/base/Bi47bGSoOawp8yselZ1jIIhmpIG?table=blkynJ78sW3T8Sen
+    purpose: 业务线下维护的 CC 经营表，覆盖接通、预约、到课、咨询、PL、定金、尾款和收入
+    priority: authoritative
+  - id: crm-product-framework
+    path: ../../../shared/memory/product-framework.md
+    purpose: CRM 的系统边界、主链路和跨模块规则
+    priority: authoritative
+  - id: crm-current-state
+    path: ../../../shared/memory/current-state.md
+    purpose: 当前模块能力、数据风险与系统责任边界
+    priority: authoritative
+  - id: crm-target-architecture
+    path: ../../../shared/architecture/target-system-architecture.md
+    purpose: CRM、营销、交易、学习、联络和数据后台的职责边界
+    priority: authoritative
+  - id: crm-project-inventory
+    path: ../README.md
+    purpose: 当前已形成的需求项目与能力覆盖
+    priority: secondary

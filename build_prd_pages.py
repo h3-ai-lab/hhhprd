@@ -19,6 +19,7 @@ PROJECTS = {
     "crm-lead-quality-analysis": "CRM 线索质量分析",
     "crm-learning-plan-progress": "CRM学习计划与课程进度",
     "crm-consultation-meeting": "Lark咨询会议与用户详情回写",
+    "crm-operating-closure": "CRM经营闭环规划",
 }
 STATIC_ARCHITECTURE_PAGES = {
     "call-center-self-built-roadmap.html",

@@ -1,0 +1,20 @@
+id: PROG-CRM-001
+name: CRM经营闭环规划
+status: 规划
+workflow:
+  base: ../../shared/workflows/prd-2.0.md
+  overrides: workflow/overrides.md
+skills:
+  prd: ../../shared/skills/crm-prd-authoring/SKILL.md
+  prototype: ../../shared/skills/crm-prototype-authoring/SKILL.md
+  validation: ../../shared/skills/crm-artifact-validation/SKILL.md
+rag: rag/sources.yaml
+memory: memory/project-memory.md
+artifacts:
+  prd: prd/PRD.md
+  prototype: prototype/index.html
+  briefing: briefing/index.html
+public:
+  prd: https://h3-ai-lab.github.io/hhhprd/prd-crm-operating-closure.html
+  prototype: https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/
+  briefing: https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/briefing/

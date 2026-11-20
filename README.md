@@ -16,6 +16,7 @@
 | 项目 | 状态 | PRD | 原型 |
 |---|---|---|---|
 | CRM 整体产品体系 | 持续维护 | [整体框架](shared/memory/product-framework.md) | — |
+| CRM经营闭环规划 | 规划 | [规划 PRD](projects/crm-operating-closure/prd/PRD.md) | [管理层汇报](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/briefing/) |
 | Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
 | 拉新裂变mvp | 评审后修订 | [PRD](projects/referral-growth-mvp/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/) |
 | 引入首跟节点&首跟看板 | 待评审 | [PRD](projects/first-contact/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
@@ -33,6 +34,9 @@
 ## GitHub Pages
 
 - 项目入口：<https://h3-ai-lab.github.io/hhhprd/>
+- CRM经营闭环规划管理层汇报：<https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/briefing/>
+- CRM经营闭环规划 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-operating-closure.html>
+- CRM经营闭环规划原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/>
 - 需求文档：<https://h3-ai-lab.github.io/hhhprd/prd-referrals-rewards.html>
 - 交互原型：<https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/>
 - 拉新裂变mvp PRD：<https://h3-ai-lab.github.io/hhhprd/prd-referral-growth-mvp.html>
