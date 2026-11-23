@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>CC活跃度 · 管理看板</title>
+  <title>CC销售连续性与预警 · 管理看板</title>
   <style>
     :root {
       --bg: #f3f6fa;
@@ -16,14 +16,15 @@
       --blue-soft: #edf4ff;
       --green: #137a5a;
       --green-soft: #e9f8f2;
+      --good: #5f8f25;
+      --good-soft: #eef8e5;
+      --yellow: #996400;
+      --yellow-soft: #fff8df;
       --orange: #b45f06;
       --orange-soft: #fff4e5;
       --red: #b42318;
       --red-soft: #fff0ee;
-      --yellow: #a56a00;
-      --yellow-soft: #fff8df;
       --nav: #151c2c;
-      --nav-soft: #222c40;
       --shadow: 0 18px 48px rgba(18, 32, 55, .18);
     }
     * { box-sizing: border-box; }
@@ -35,11 +36,10 @@
     }
     button, input, select { font: inherit; }
     button { color: inherit; }
-    .app { min-height: 100vh; }
     .sidebar {
       position: fixed;
       inset: 0 auto 0 0;
-      z-index: 30;
+      z-index: 20;
       display: flex;
       flex-direction: column;
       width: 210px;
@@ -51,7 +51,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      min-height: 42px;
       padding: 0 8px;
     }
     .brand-mark {
@@ -66,36 +65,25 @@
     }
     .brand-name { font-size: 16px; font-weight: 700; }
     .brand-sub { color: #9ca9bf; font-size: 11px; }
-    .nav-group {
-      margin-top: 28px;
+    .nav-title {
+      margin: 28px 10px 8px;
       color: #8290a8;
       font-size: 11px;
       font-weight: 700;
       letter-spacing: .08em;
-      text-transform: uppercase;
     }
     .nav-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-top: 6px;
       padding: 10px 12px;
       border-radius: 8px;
-      color: #cbd5e4;
+      background: var(--blue);
+      color: #fff;
       text-decoration: none;
     }
-    .nav-item.active { background: var(--blue); color: #fff; }
-    .nav-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: currentColor;
-      opacity: .8;
-    }
-    .shell {
-      min-height: 100vh;
-      margin-left: 210px;
-    }
+    .nav-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .8; }
+    .shell { min-height: 100vh; margin-left: 210px; }
     .topbar {
       display: flex;
       align-items: center;
@@ -106,10 +94,10 @@
       background: rgba(255,255,255,.96);
       backdrop-filter: blur(12px);
     }
-    .breadcrumb { color: var(--muted); font-size: 12px; }
-    .breadcrumb strong { color: var(--ink); font-size: 17px; }
+    .breadcrumb { min-width: 0; color: var(--muted); font-size: 12px; }
+    .breadcrumb strong { display: block; color: var(--ink); font-size: 17px; }
     .top-spacer { flex: 1; }
-    .context-pill {
+    .scope-pill {
       padding: 5px 10px;
       border-radius: 99px;
       background: var(--green-soft);
@@ -119,83 +107,30 @@
       white-space: nowrap;
     }
     .language-button {
-      min-width: 48px;
+      min-width: 46px;
       padding: 7px 10px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #fff;
+      background: var(--surface);
       cursor: pointer;
     }
     .main { padding: 24px 26px 48px; }
-    .page-head {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 14px;
-    }
+    .page-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
     h1 { margin: 0; font-size: 30px; line-height: 1.25; }
-    .page-meta {
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .page-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-    .button {
-      min-height: 36px;
-      padding: 7px 12px;
-      border: 1px solid #cfdae8;
-      border-radius: 8px;
-      background: var(--surface);
-      color: var(--blue);
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .button.primary {
-      border-color: var(--blue);
-      background: var(--blue);
-      color: #fff;
-    }
-    .tabs {
-      display: grid;
-      grid-template-columns: repeat(4,minmax(0,1fr));
-      gap: 10px;
-      margin-top: 18px;
-    }
-    .tab {
-      min-width: 0;
-      padding: 13px 15px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--surface);
-      color: var(--muted);
-      text-align: left;
-      cursor: pointer;
-    }
-    .tab strong { display: block; color: var(--ink); font-size: 15px; }
-    .tab span { display: block; margin-top: 3px; font-size: 11px; }
-    .tab.active {
-      border-color: var(--blue);
-      box-shadow: inset 0 0 0 1px var(--blue);
-      color: var(--muted);
-    }
+    .page-meta { margin-top: 6px; color: var(--muted); font-size: 12px; }
     .filters {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr auto;
+      grid-template-columns: 180px 180px minmax(290px, auto) auto;
       gap: 12px;
-      margin-top: 14px;
+      align-items: end;
+      margin-top: 16px;
       padding: 14px;
       border: 1px solid var(--line);
       border-radius: 10px;
       background: var(--surface);
     }
     .field { min-width: 0; }
-    .field-label {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--muted);
-      font-size: 11px;
-    }
+    .field-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 11px; }
     .control {
       width: 100%;
       min-height: 38px;
@@ -204,39 +139,39 @@
       border-radius: 8px;
       background: var(--surface);
     }
-    .date-range {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 7px;
+    .date-range { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 7px; }
+    .button {
+      min-height: 38px;
+      padding: 7px 13px;
+      border: 1px solid #cfdae8;
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--blue);
+      font-weight: 600;
+      cursor: pointer;
     }
-    .filter-actions {
-      display: flex;
-      align-items: end;
-      gap: 8px;
+    .error-banner {
+      display: none;
+      margin-top: 12px;
+      padding: 11px 13px;
+      border-radius: 8px;
+      background: var(--red-soft);
+      color: var(--red);
+      font-size: 12px;
     }
-    .view-panel { margin-top: 16px; }
     .metric-grid {
       display: grid;
       grid-template-columns: repeat(3,minmax(0,1fr));
       gap: 12px;
+      margin-top: 16px;
     }
     .metric-card, .panel {
       border: 1px solid var(--line);
-      border-radius: 11px;
+      border-radius: 10px;
       background: var(--surface);
     }
-    .metric-card {
-      position: relative;
-      padding: 17px;
-    }
-    .metric-head {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 12px;
-    }
+    .metric-card { padding: 16px 17px; }
+    .metric-head { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
     .info {
       display: inline-grid;
       width: 18px;
@@ -252,7 +187,14 @@
     }
     .metric-value { margin-top: 7px; font-size: 28px; font-weight: 750; }
     .metric-sub { margin-top: 2px; color: var(--muted); font-size: 11px; }
-    .panel { margin-top: 14px; overflow: hidden; }
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: minmax(280px,.78fr) minmax(0,2.22fr);
+      gap: 12px;
+      margin-top: 14px;
+      align-items: start;
+    }
+    .panel { min-width: 0; overflow: hidden; }
     .panel-head {
       display: flex;
       flex-wrap: wrap;
@@ -264,132 +206,100 @@
     }
     .panel-title { font-size: 16px; font-weight: 700; }
     .panel-meta { color: var(--muted); font-size: 11px; }
-    .breakdown {
-      display: grid;
-      grid-template-columns: repeat(4,minmax(0,1fr));
-      gap: 10px;
-      padding: 14px 16px;
+    .breakdown { padding: 14px 16px 16px; }
+    .breakdown-item + .breakdown-item { margin-top: 15px; }
+    .breakdown-line { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; }
+    .breakdown-line strong { font-weight: 700; }
+    .breakdown-copy { margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .bar {
+      height: 10px;
+      margin-top: 7px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: color-mix(in srgb, var(--tone) 14%, var(--surface));
     }
-    .breakdown-item {
-      min-width: 0;
-      padding-top: 9px;
-      border-top: 3px solid var(--tone);
-    }
+    .bar-fill { height: 100%; border-radius: inherit; background: var(--tone); }
     .breakdown-item.high { --tone: var(--green); }
-    .breakdown-item.good { --tone: #77a83b; }
-    .breakdown-item.needs { --tone: var(--yellow); }
-    .breakdown-item.low { --tone: var(--red); }
-    .breakdown-label { color: var(--muted); font-size: 11px; }
-    .breakdown-value { margin-top: 3px; font-size: 19px; font-weight: 700; }
-    .breakdown-copy { margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .breakdown-item.good { --tone: var(--good); }
+    .breakdown-item.needs { --tone: #d49b18; }
+    .breakdown-item.low { --tone: #df6b60; }
     .table-wrap { overflow: auto; }
-    table { width: 100%; min-width: 1040px; border-collapse: collapse; }
+    table { width: 100%; border-collapse: collapse; }
+    .activity-table { min-width: 830px; }
     th, td {
-      padding: 11px 12px;
+      padding: 9px 10px;
       border-bottom: 1px solid var(--line);
       text-align: left;
       white-space: nowrap;
       vertical-align: middle;
     }
     th {
-      background: var(--surface-soft);
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 650;
+      background: #edf1f6;
+      color: #475467;
+      font-size: 10px;
+      font-weight: 700;
     }
     tbody tr:last-child td { border-bottom: 0; }
     tbody tr:hover { background: #fbfcfe; }
-    .cc-name-button {
-      padding: 0;
-      border: 0;
-      background: transparent;
-      color: var(--blue);
-      font-weight: 700;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      cursor: pointer;
-    }
-    .muted-cell { color: var(--muted); }
+    .cc-id { color: var(--muted); }
+    .cc-name { font-weight: 650; }
+    .days-number { text-align: center; font-weight: 650; }
     .status {
       display: inline-flex;
-      padding: 3px 8px;
-      border-radius: 99px;
-      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10px;
       font-weight: 650;
-      white-space: nowrap;
     }
-    .status.high, .status.healthy { background: var(--green-soft); color: var(--green); }
-    .status.good { background: #eef8e5; color: #527d22; }
-    .status.needs, .status.warning { background: var(--yellow-soft); color: var(--yellow); }
-    .status.low, .status.risk { background: var(--orange-soft); color: var(--orange); }
-    .status.critical { background: var(--red-soft); color: var(--red); }
-    .daily-cell { min-width: 45px; text-align: center; }
+    .status.healthy, .status.high { background: var(--green-soft); color: var(--green); }
+    .status.early, .status.good { background: var(--yellow-soft); color: #816300; }
+    .status.atRisk, .status.needs { background: var(--orange-soft); color: var(--orange); }
+    .status.critical, .status.low { background: var(--red-soft); color: var(--red); }
+    .status.rest { background: #eef2f6; color: var(--muted); }
+    .daily-cell { min-width: 39px; text-align: center; color: #a3acb9; }
     .daily-cell.has-sale { color: var(--green); font-weight: 700; }
-    .empty-state {
-      display: none;
-      padding: 52px 20px;
-      color: var(--muted);
-      text-align: center;
+    .daily-cell.not-sale { color: #b7bec9; }
+    .empty-state { display: none; padding: 44px 18px; color: var(--muted); text-align: center; }
+    .risk-panel { margin-top: 14px; }
+    .risk-table { min-width: 620px; }
+    .risk-table td { white-space: normal; }
+    .risk-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 7px;
+      border-radius: 50%;
+      background: var(--dot);
     }
-    .error-banner {
-      display: none;
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: 9px;
-      background: var(--red-soft);
-      color: var(--red);
-      font-size: 13px;
-    }
-    .simple-grid {
-      display: grid;
-      grid-template-columns: repeat(4,minmax(0,1fr));
-      gap: 12px;
-    }
-    .simple-card {
-      padding: 17px;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: var(--surface);
-    }
-    .simple-label { color: var(--muted); font-size: 12px; }
-    .simple-value { margin-top: 5px; font-size: 24px; font-weight: 750; }
-    .simple-note { margin-top: 4px; color: var(--muted); font-size: 11px; }
-    .simple-panel {
-      margin-top: 14px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: var(--surface);
-    }
-    .simple-line {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--line);
-      color: var(--muted);
-    }
-    .simple-line:last-child { border-bottom: 0; }
-    .simple-line strong { color: var(--ink); }
-    .drawer-backdrop, .modal-backdrop {
+    .risk-dot.healthy { --dot: #2aa77a; }
+    .risk-dot.early { --dot: #e5bd3d; }
+    .risk-dot.atRisk { --dot: #e78a2e; }
+    .risk-dot.critical { --dot: #df554d; }
+    .modal-backdrop {
       position: fixed;
       inset: 0;
       z-index: 50;
       background: rgba(14,23,38,.38);
     }
-    .drawer {
+    .modal-wrap {
       position: fixed;
-      top: 0;
-      right: 0;
+      inset: 0;
       z-index: 55;
-      display: flex;
-      flex-direction: column;
-      width: min(520px,100vw);
-      height: 100vh;
+      display: grid;
+      padding: 20px;
+      place-items: center;
+      pointer-events: none;
+    }
+    .modal {
+      width: min(540px,100%);
+      max-height: 88vh;
+      overflow: auto;
+      border-radius: 12px;
       background: var(--surface);
       box-shadow: var(--shadow);
+      pointer-events: auto;
     }
-    .drawer-head, .modal-head {
+    .modal-head {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
@@ -397,8 +307,9 @@
       padding: 18px 20px;
       border-bottom: 1px solid var(--line);
     }
-    .drawer-title { margin: 0; font-size: 20px; }
-    .drawer-sub { margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .modal-title { margin: 0; font-size: 20px; }
+    .modal-body { padding: 18px 20px; color: var(--muted); }
+    .modal-actions { display: flex; justify-content: flex-end; padding: 0 20px 18px; }
     .close {
       display: grid;
       width: 34px;
@@ -410,571 +321,289 @@
       background: var(--surface);
       cursor: pointer;
     }
-    .drawer-body { flex: 1; overflow: auto; padding: 18px 20px; }
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 9px;
-      margin-bottom: 18px;
-    }
-    .detail {
-      padding: 10px;
-      border-radius: 8px;
-      background: var(--surface-soft);
-    }
-    .detail span { display: block; color: var(--muted); font-size: 11px; }
-    .detail strong { display: block; margin-top: 3px; font-size: 13px; }
-    .daily-detail {
-      display: grid;
-      grid-template-columns: repeat(7,minmax(0,1fr));
-      gap: 5px;
-      margin-top: 10px;
-    }
-    .day-box {
-      padding: 8px 3px;
-      border-radius: 7px;
-      background: var(--surface-soft);
-      text-align: center;
-    }
-    .day-box span { display: block; color: var(--muted); font-size: 10px; }
-    .day-box strong { display: block; margin-top: 3px; }
-    .day-box.has-sale { background: var(--green-soft); }
-    .modal-wrap {
-      position: fixed;
-      inset: 0;
-      z-index: 60;
-      display: grid;
-      padding: 20px;
-      place-items: center;
-      pointer-events: none;
-    }
-    .modal {
-      width: min(620px,100%);
-      max-height: 90vh;
-      overflow: auto;
-      border-radius: 12px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      pointer-events: auto;
-    }
-    .modal-body { padding: 18px 20px; }
-    .modal-grid {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 12px;
-    }
-    .modal-form .field { margin-bottom: 13px; }
-    .form-error {
-      display: none;
-      margin-top: 8px;
-      color: var(--red);
-      font-size: 12px;
-    }
-    .modal-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 8px;
-      padding: 0 20px 18px;
-    }
-    .formula {
-      padding: 12px;
-      border-radius: 8px;
-      background: var(--surface-soft);
-      color: var(--muted);
-    }
-    .toast {
-      position: fixed;
-      right: 22px;
-      bottom: 22px;
-      z-index: 80;
-      max-width: 360px;
-      padding: 11px 15px;
-      border-radius: 8px;
-      background: var(--ink);
-      color: #fff;
-      box-shadow: var(--shadow);
-      transform: translateY(16px);
-      opacity: 0;
-      pointer-events: none;
-      transition: .2s ease;
-    }
-    .toast.show { transform: translateY(0); opacity: 1; }
     .hidden { display: none !important; }
-    @media (max-width: 900px) {
+    @media (max-width: 1040px) {
+      .sidebar { width: 180px; }
+      .shell { margin-left: 180px; }
+      .filters { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .analysis-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
       .sidebar { display: none; }
       .shell { margin-left: 0; }
-      .filters { grid-template-columns: repeat(2,minmax(0,1fr)); }
-      .metric-grid, .breakdown, .simple-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-    }
-    @media (max-width: 620px) {
-      .topbar { padding: 11px 14px; flex-wrap: wrap; }
+      .topbar { flex-wrap: wrap; padding: 11px 14px; }
       .main { padding: 18px 14px 36px; }
-      .tabs, .filters, .metric-grid, .breakdown, .simple-grid { grid-template-columns: 1fr; }
-      .filter-actions { align-items: stretch; }
-      .filter-actions .button { flex: 1; min-height: 42px; }
-      .modal-grid, .detail-grid { grid-template-columns: 1fr; }
-      .daily-detail { grid-template-columns: repeat(4,minmax(0,1fr)); }
+      .filters, .metric-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 27px; }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-mark">D</div>
-        <div>
-          <div class="brand-name">Dino CRM</div>
-          <div class="brand-sub" id="sidebar-sub">管理看板 · 销售运营</div>
-        </div>
-      </div>
-      <div class="nav-group" id="nav-group-label">管理看板</div>
-      <a class="nav-item active" href="#" id="nav-dashboard">
-        <span class="nav-dot"></span>
-        <span id="nav-dashboard-label">管理看板</span>
-      </a>
-    </aside>
-
-    <div class="shell">
-      <header class="topbar">
-        <div class="breadcrumb">
-          <div id="breadcrumb-root">Dino CRM / 管理看板</div>
-          <strong id="topbar-page-title">CC活跃度</strong>
-        </div>
-        <div class="top-spacer"></div>
-        <div class="context-pill" id="scope-pill">越南 · 全部团队</div>
-        <button class="language-button" id="language-toggle" type="button" aria-label="Switch language">EN</button>
-      </header>
-
-      <main class="main">
-        <div class="page-head">
-          <div>
-            <h1 id="page-title">管理看板</h1>
-            <div class="page-meta" id="page-meta">数据更新于 2026-11-16 06:00 · 规则版本 v1.0</div>
-          </div>
-          <div class="page-actions">
-            <button class="button" id="config-button" type="button">口径设置</button>
-            <button class="button primary" id="export-button" type="button">导出</button>
-          </div>
-        </div>
-
-        <nav class="tabs" id="dashboard-tabs" aria-label="管理看板页签">
-          <button class="tab" type="button" data-tab="overview">
-            <strong id="tab-overview">转化总览</strong>
-            <span id="tab-overview-desc">注册批次转化与跟进转化</span>
-          </button>
-          <button class="tab" type="button" data-tab="followup">
-            <strong id="tab-followup">销售跟进</strong>
-            <span id="tab-followup-desc">线索库存与跟进情况</span>
-          </button>
-          <button class="tab" type="button" data-tab="payments">
-            <strong id="tab-payments">支付结果</strong>
-            <span id="tab-payments-desc">支付人数、订单与 AOV</span>
-          </button>
-          <button class="tab active" type="button" data-tab="activity">
-            <strong id="tab-activity">CC活跃度</strong>
-            <span id="tab-activity-desc">出单节奏与风险预警</span>
-          </button>
-        </nav>
-
-        <section class="filters" id="filters">
-          <div class="field">
-            <label class="field-label" for="business-line" id="label-business-line">业务线</label>
-            <select class="control" id="business-line"></select>
-          </div>
-          <div class="field">
-            <label class="field-label" for="sales-team" id="label-sales-team">销售团队</label>
-            <select class="control" id="sales-team"></select>
-          </div>
-          <div class="field">
-            <label class="field-label" for="cc-select" id="label-cc">CC</label>
-            <select class="control" id="cc-select"></select>
-          </div>
-          <div class="field">
-            <label class="field-label" id="label-period">统计周期</label>
-            <div class="date-range">
-              <input class="control" id="start-date" type="date" value="2026-11-09" aria-label="开始日期">
-              <span>—</span>
-              <input class="control" id="end-date" type="date" value="2026-11-15" aria-label="结束日期">
-            </div>
-          </div>
-          <div class="filter-actions" style="grid-column:1/-1">
-            <button class="button" id="reset-filters" type="button">重置筛选</button>
-          </div>
-        </section>
-
-        <div class="error-banner" id="date-error"></div>
-
-        <section class="view-panel" data-panel="overview" hidden>
-          <div class="simple-grid">
-            <div class="simple-card"><div class="simple-label" id="ov-leads">线索数</div><div class="simple-value">6,854</div><div class="simple-note">2026-11-09 至 2026-11-15</div></div>
-            <div class="simple-card"><div class="simple-label" id="ov-connected">接通人数</div><div class="simple-value">3,846</div><div class="simple-note">56.1%</div></div>
-            <div class="simple-card"><div class="simple-label" id="ov-appointments">预约人数</div><div class="simple-value">233</div><div class="simple-note">6.1%</div></div>
-            <div class="simple-card"><div class="simple-label" id="ov-paid">已支付人数</div><div class="simple-value">119</div><div class="simple-note">1.7%</div></div>
-          </div>
-          <div class="simple-panel">
-            <div class="simple-line"><span id="ov-follow-label">跟进转化</span><strong>接通 → 预约 → 体验 → 支付</strong></div>
-          </div>
-        </section>
-
-        <section class="view-panel" data-panel="followup" hidden>
-          <div class="simple-grid">
-            <div class="simple-card"><div class="simple-label" id="fu-current">当前线索库存</div><div class="simple-value">4,236</div><div class="simple-note">全部团队</div></div>
-            <div class="simple-card"><div class="simple-label" id="fu-due">今日待跟进</div><div class="simple-value">286</div><div class="simple-note">含逾期任务</div></div>
-            <div class="simple-card"><div class="simple-label" id="fu-appointments">今日预约</div><div class="simple-value">78</div><div class="simple-note">全部团队</div></div>
-            <div class="simple-card"><div class="simple-label" id="fu-overdue">逾期跟进</div><div class="simple-value">41</div><div class="simple-note">需优先处理</div></div>
-          </div>
-        </section>
-
-        <section class="view-panel" data-panel="payments" hidden>
-          <div class="simple-grid">
-            <div class="simple-card"><div class="simple-label" id="pa-users">支付人数</div><div class="simple-value">268</div><div class="simple-note">按用户去重</div></div>
-            <div class="simple-card"><div class="simple-label" id="pa-orders">订单数</div><div class="simple-value">301</div><div class="simple-note">有效订单</div></div>
-            <div class="simple-card"><div class="simple-label" id="pa-revenue">实付金额</div><div class="simple-value">1,568,200,000</div><div class="simple-note">VND</div></div>
-            <div class="simple-card"><div class="simple-label" id="pa-aov">AOV</div><div class="simple-value">5,210,000</div><div class="simple-note">VND</div></div>
-          </div>
-        </section>
-
-        <section class="view-panel" data-panel="activity">
-          <div class="metric-grid">
-            <div class="metric-card">
-              <div class="metric-head"><span id="metric-recent-label">近期销售活跃率</span><button class="info" type="button" data-metric="recent" aria-label="查看近期销售活跃率口径">i</button></div>
-              <div class="metric-value" id="metric-recent-value">—</div>
-              <div class="metric-sub" id="metric-recent-sub">0 / 0</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-head"><span id="metric-consistency-label">销售一致性合格率</span><button class="info" type="button" data-metric="consistency" aria-label="查看销售一致性合格率口径">i</button></div>
-              <div class="metric-value" id="metric-consistency-value">—</div>
-              <div class="metric-sub" id="metric-consistency-sub">0 / 0</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-head"><span id="metric-risk-label">高风险 CC 占比</span><button class="info" type="button" data-metric="risk" aria-label="查看高风险 CC 占比口径">i</button></div>
-              <div class="metric-value" id="metric-risk-value">—</div>
-              <div class="metric-sub" id="metric-risk-sub">0 / 0</div>
-            </div>
-          </div>
-
-          <section class="panel">
-            <div class="panel-head">
-              <div>
-                <div class="panel-title" id="breakdown-title">销售一致性分布</div>
-                <div class="panel-meta" id="breakdown-meta">按平均出单间隔分层，按 CC 人数统计</div>
-              </div>
-              <button class="info" type="button" data-metric="consistency" aria-label="查看销售一致性分层口径">i</button>
-            </div>
-            <div class="breakdown" id="breakdown-list"></div>
-          </section>
-
-          <section class="panel">
-            <div class="panel-head">
-              <div>
-                <div class="panel-title" id="table-title">CC 销售连续性</div>
-                <div class="panel-meta" id="table-meta">当前筛选范围 · 不支持排序</div>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead id="activity-table-head"></thead>
-                <tbody id="activity-table-body"></tbody>
-              </table>
-            </div>
-            <div class="empty-state" id="activity-empty">当前筛选范围内暂无 CC 数据</div>
-          </section>
-        </section>
-      </main>
-    </div>
-  </div>
-
-  <div class="drawer-backdrop hidden" id="drawer-backdrop"></div>
-  <aside class="drawer hidden" id="detail-drawer" role="dialog" aria-modal="true" aria-labelledby="detail-title">
-    <div class="drawer-head">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">D</div>
       <div>
-        <h2 class="drawer-title" id="detail-title">CC详情</h2>
-        <div class="drawer-sub" id="detail-sub"></div>
+        <div class="brand-name">Dino CRM</div>
+        <div class="brand-sub" id="brand-sub">管理看板 · 销售运营</div>
       </div>
-      <button class="close" id="detail-close" type="button" aria-label="关闭">×</button>
     </div>
-    <div class="drawer-body">
-      <div class="detail-grid" id="detail-grid"></div>
-      <h3 id="daily-title" style="margin:0 0 8px;font-size:15px">每日成交单数</h3>
-      <div class="daily-detail" id="daily-detail"></div>
-    </div>
+    <div class="nav-title" id="nav-title">管理看板</div>
+    <a class="nav-item" href="#" id="nav-item">
+      <span class="nav-dot"></span>
+      <span id="nav-item-label">管理看板</span>
+    </a>
   </aside>
 
+  <div class="shell">
+    <header class="topbar">
+      <div class="breadcrumb">
+        <div id="breadcrumb-root">Dino CRM / 管理看板</div>
+        <strong id="topbar-title">CC销售连续性与预警</strong>
+      </div>
+      <div class="top-spacer"></div>
+      <div class="scope-pill" id="scope-pill">越南 · 全部团队</div>
+      <button class="language-button" id="language-toggle" type="button" aria-label="Switch language">EN</button>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <h1 id="page-title">CC销售连续性与预警</h1>
+          <div class="page-meta" id="page-meta">数据更新于 2026-11-16 06:00</div>
+        </div>
+      </div>
+
+      <section class="filters" aria-label="筛选条件">
+        <div class="field">
+          <label class="field-label" for="business-line" id="label-business-line">业务线</label>
+          <select class="control" id="business-line">
+            <option value="ALL">全部业务线</option>
+            <option value="VN" selected>越南</option>
+            <option value="TH">泰国</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="sales-team" id="label-sales-team">销售团队</label>
+          <select class="control" id="sales-team"></select>
+        </div>
+        <div class="field">
+          <span class="field-label" id="label-period">统计周期</span>
+          <div class="date-range">
+            <input class="control" id="start-date" type="date" value="2026-11-09">
+            <span>—</span>
+            <input class="control" id="end-date" type="date" value="2026-11-15">
+          </div>
+        </div>
+        <button class="button" id="reset-filters" type="button">重置</button>
+      </section>
+
+      <div class="error-banner" id="date-error"></div>
+
+      <section class="metric-grid">
+        <article class="metric-card">
+          <div class="metric-head">
+            <span id="metric-recent-label">近期销售活跃率</span>
+            <button class="info" type="button" data-metric="recent" aria-label="查看近期销售活跃率口径">i</button>
+          </div>
+          <div class="metric-value" id="metric-recent-value">88.9%</div>
+          <div class="metric-sub" id="metric-recent-sub">最近 2 个完整日内有成交：16 / 18</div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-head">
+            <span id="metric-consistency-label">销售一致性</span>
+            <button class="info" type="button" data-metric="consistency" aria-label="查看销售一致性口径">i</button>
+          </div>
+          <div class="metric-value" id="metric-consistency-value">50.0%</div>
+          <div class="metric-sub" id="metric-consistency-sub">9 / 18 位 CC 达到良好及以上</div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-head">
+            <span id="metric-risk-label">高风险 CC 占比</span>
+            <button class="info" type="button" data-metric="risk" aria-label="查看高风险 CC 占比口径">i</button>
+          </div>
+          <div class="metric-value" id="metric-risk-value">11.1%</div>
+          <div class="metric-sub" id="metric-risk-sub">连续未成交 ≥ 4 天：2 / 18</div>
+        </article>
+      </section>
+
+      <div class="analysis-grid">
+        <section class="panel" aria-labelledby="breakdown-title">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title" id="breakdown-title">销售一致性分布</div>
+              <div class="panel-meta" id="breakdown-meta">仅统计有效 CC，休息 CC 不进入分母</div>
+            </div>
+          </div>
+          <div class="breakdown" id="breakdown-list"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="activity-title">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title" id="activity-title">CC销售连续性</div>
+              <div class="panel-meta" id="activity-meta">按业务方当前口径展示，不提供排序</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="activity-table">
+              <thead id="activity-head"></thead>
+              <tbody id="activity-body"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="activity-empty">当前筛选范围内暂无 CC 数据</div>
+        </section>
+      </div>
+
+      <section class="panel risk-panel" aria-labelledby="risk-title">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title" id="risk-title">风险状态与建议动作</div>
+            <div class="panel-meta" id="risk-meta">按业务方当前规则展示</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="risk-table">
+            <thead>
+              <tr>
+                <th id="risk-th-status">状态</th>
+                <th id="risk-th-days">连续未成交天数</th>
+                <th id="risk-th-action">建议动作</th>
+              </tr>
+            </thead>
+            <tbody id="risk-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
   <div class="modal-backdrop hidden" id="modal-backdrop"></div>
-
   <div class="modal-wrap hidden" id="metric-modal-wrap">
-    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="metric-modal-title">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="metric-title">
       <div class="modal-head">
         <div>
-          <div class="field-label" id="metric-modal-kicker">指标口径</div>
-          <h2 class="drawer-title" id="metric-modal-title">指标</h2>
+          <div class="panel-meta" id="metric-kicker">指标口径</div>
+          <h2 class="modal-title" id="metric-title">指标</h2>
         </div>
-        <button class="close" id="metric-modal-close" type="button" aria-label="关闭">×</button>
+        <button class="close" id="metric-close" type="button" aria-label="关闭">×</button>
       </div>
-      <div class="modal-body"><div class="formula" id="metric-formula"></div></div>
-      <div class="modal-actions"><button class="button primary" id="metric-modal-ok" type="button">知道了</button></div>
+      <div class="modal-body" id="metric-formula"></div>
+      <div class="modal-actions"><button class="button" id="metric-ok" type="button">知道了</button></div>
     </section>
   </div>
-
-  <div class="modal-wrap hidden" id="config-modal-wrap">
-    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="config-title">
-      <div class="modal-head">
-        <div>
-          <div class="field-label" id="config-kicker">版本化配置</div>
-          <h2 class="drawer-title" id="config-title">CC活跃度口径设置</h2>
-        </div>
-        <button class="close" id="config-close" type="button" aria-label="关闭">×</button>
-      </div>
-      <div class="modal-body modal-form">
-        <div class="modal-grid">
-          <div class="field">
-            <label class="field-label" for="config-recent-days" id="config-recent-label">近期活跃观察窗口（天）</label>
-            <input class="control" id="config-recent-days" type="number" min="1" max="7" value="2">
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-day-basis" id="config-basis-label">天数口径</label>
-            <select class="control" id="config-day-basis">
-              <option value="natural">自然日</option>
-              <option value="workday">工作日</option>
-            </select>
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-high" id="config-high-label">High 上限</label>
-            <input class="control" id="config-high" type="number" step="0.01" min="0.01" value="1.75">
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-good" id="config-good-label">Good 上限</label>
-            <input class="control" id="config-good" type="number" step="0.01" min="0.01" value="2.33">
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-needs" id="config-needs-label">Needs Improvement 上限</label>
-            <input class="control" id="config-needs" type="number" step="0.01" min="0.01" value="3.50">
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-critical" id="config-critical-label">Critical 起始天数</label>
-            <input class="control" id="config-critical" type="number" min="1" value="4">
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-early" id="config-early-label">Early Warning 起始天数</label>
-            <input class="control" id="config-early" type="number" min="1" value="1">
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-at-risk" id="config-at-risk-label">At Risk 起始天数</label>
-            <input class="control" id="config-at-risk" type="number" min="1" value="2">
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-effective" id="config-effective-label">生效日期</label>
-            <input class="control" id="config-effective" type="date" value="2026-11-23">
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-scope-line" id="config-scope-line-label">适用业务线</label>
-            <select class="control" id="config-scope-line">
-              <option value="VN">越南</option>
-              <option value="ALL">全部业务线</option>
-            </select>
-          </div>
-          <div class="field">
-            <label class="field-label" for="config-scope-team" id="config-scope-team-label">适用团队</label>
-            <select class="control" id="config-scope-team">
-              <option value="ALL">全部团队</option>
-              <option value="Macie">Macie</option>
-              <option value="Duy">Duy</option>
-              <option value="Vy">Vy</option>
-            </select>
-          </div>
-        </div>
-        <div class="panel-meta" id="config-impact">预计影响 18 位 CC</div>
-        <div class="form-error" id="config-error"></div>
-      </div>
-      <div class="modal-actions">
-        <button class="button" id="config-reset" type="button">恢复默认</button>
-        <button class="button" id="config-cancel" type="button">取消</button>
-        <button class="button primary" id="config-save" type="button">保存并生效</button>
-      </div>
-    </section>
-  </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const ccData = [
-      { id: "CC-001", name: "Trúc", team: "Macie", businessLine: "VN", saleDates: ["2026-11-09","2026-11-10","2026-11-11","2026-11-12","2026-11-14"], status: "active" },
-      { id: "CC-002", name: "Thy Dung", team: "Duy", businessLine: "VN", saleDates: ["2026-11-10","2026-11-11","2026-11-13","2026-11-14","2026-11-15"], status: "active" },
-      { id: "CC-003", name: "Chloe", team: "Macie", businessLine: "VN", saleDates: ["2026-11-09","2026-11-11","2026-11-12","2026-11-14"], status: "active" },
-      { id: "CC-004", name: "Linh", team: "Macie", businessLine: "VN", saleDates: ["2026-11-10","2026-11-12","2026-11-13","2026-11-15"], status: "active" },
-      { id: "CC-005", name: "Thư Thảo", team: "Macie", businessLine: "VN", saleDates: ["2026-11-09","2026-11-10","2026-11-12","2026-11-14"], status: "active" },
-      { id: "CC-006", name: "Vân Anh", team: "Duy", businessLine: "VN", saleDates: ["2026-11-10","2026-11-12","2026-11-14","2026-11-15"], status: "active" },
-      { id: "CC-007", name: "Thảo Lia", team: "Macie", businessLine: "VN", saleDates: ["2026-11-09","2026-11-12","2026-11-14"], status: "active" },
-      { id: "CC-008", name: "Thy", team: "Macie", businessLine: "VN", saleDates: ["2026-11-11","2026-11-13","2026-11-15"], status: "active" },
-      { id: "CC-009", name: "Vy Nguyễn", team: "Duy", businessLine: "VN", saleDates: ["2026-11-10","2026-11-12","2026-11-14"], status: "active" },
-      { id: "CC-010", name: "Finn", team: "Macie", businessLine: "VN", saleDates: ["2026-11-13","2026-11-15"], status: "active" },
-      { id: "CC-011", name: "Mia", team: "Macie", businessLine: "VN", saleDates: ["2026-11-11","2026-11-14"], status: "active" },
-      { id: "CC-012", name: "Jimmy", team: "Macie", businessLine: "VN", saleDates: ["2026-11-10","2026-11-15"], status: "active" },
-      { id: "CC-013", name: "Clara", team: "Vy", businessLine: "VN", saleDates: ["2026-11-09","2026-11-14"], status: "active" },
-      { id: "CC-014", name: "Amy", team: "Duy", businessLine: "VN", saleDates: ["2026-11-10","2026-11-15"], status: "active" },
-      { id: "CC-015", name: "Stella", team: "Macie", businessLine: "VN", saleDates: ["2026-11-12","2026-11-14"], status: "active" },
-      { id: "CC-016", name: "Thomas Thông", team: "Macie", businessLine: "VN", saleDates: ["2026-11-14"], status: "active" },
-      { id: "CC-017", name: "Vy Phạm", team: "Vy", businessLine: "VN", saleDates: ["2026-11-10"], status: "active" },
-      { id: "CC-018", name: "Thomas Du", team: "Duy", businessLine: "VN", saleDates: ["2026-11-09"], status: "active" }
+    const ccRows = [
+      { id: "CC-001", name: "Trúc", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-09","2026-11-10","2026-11-11","2026-11-12","2026-11-14"] },
+      { id: "CC-002", name: "Thy Dung", team: "Duy", businessLine: "VN", status: "active", saleDates: ["2026-11-10","2026-11-11","2026-11-13","2026-11-14","2026-11-15"] },
+      { id: "CC-003", name: "Chloe", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-09","2026-11-11","2026-11-12","2026-11-14"] },
+      { id: "CC-004", name: "Linh", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-10","2026-11-12","2026-11-13","2026-11-15"] },
+      { id: "CC-005", name: "Thư Thảo", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-09","2026-11-10","2026-11-12","2026-11-14"] },
+      { id: "CC-006", name: "Vân Anh", team: "Duy", businessLine: "VN", status: "active", saleDates: ["2026-11-10","2026-11-12","2026-11-14","2026-11-15"] },
+      { id: "CC-007", name: "Thảo Lia", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-09","2026-11-12","2026-11-14"] },
+      { id: "CC-008", name: "Thy", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-11","2026-11-13","2026-11-15"] },
+      { id: "CC-009", name: "Vy Nguyễn", team: "Duy", businessLine: "VN", status: "active", saleDates: ["2026-11-10","2026-11-12","2026-11-14"] },
+      { id: "CC-010", name: "Finn", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-13","2026-11-15"] },
+      { id: "CC-011", name: "Mia", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-11","2026-11-14"] },
+      { id: "CC-012", name: "Jimmy", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-10","2026-11-15"] },
+      { id: "CC-013", name: "Clara", team: "Vy", businessLine: "VN", status: "active", saleDates: ["2026-11-09","2026-11-14"] },
+      { id: "CC-014", name: "Amy", team: "Duy", businessLine: "VN", status: "active", saleDates: ["2026-11-10","2026-11-15"] },
+      { id: "CC-015", name: "Stella", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-12","2026-11-14"] },
+      { id: "CC-016", name: "Thomas Thông", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-14"] },
+      { id: "CC-017", name: "Vy Phạm", team: "Vy", businessLine: "VN", status: "active", saleDates: ["2026-11-10"] },
+      { id: "CC-018", name: "Thomas Du", team: "Duy", businessLine: "VN", status: "active", saleDates: ["2026-11-09"] },
+      { id: "CC-019", name: "Lucy", team: "Macie", businessLine: "VN", status: "rest", saleDates: [] },
+      { id: "CC-020", name: "Talia", team: "Macie", businessLine: "VN", status: "rest", saleDates: [] },
+      { id: "CC-021", name: "Laika", team: "Duy", businessLine: "VN", status: "rest", saleDates: [] }
     ];
 
-    const defaults = {
-      recentDays: 2,
-      dayBasis: "natural",
-      high: 1.75,
-      good: 2.33,
-      needs: 3.5,
-      early: 1,
-      atRisk: 2,
-      critical: 4,
-      scopeLine: "VN",
-      scopeTeam: "ALL",
-      effectiveDate: "2026-11-23"
-    };
-
     const state = {
-      lang: localStorage.getItem("cc-activity-lang") || "zh",
-      tab: "activity",
-      config: { ...defaults },
-      version: 1,
-      selectedCcId: null
+      lang: localStorage.getItem("cc-activity-lang") || "zh"
     };
 
-    const copy = {
+    const strings = {
       zh: {
-        sidebarSub: "管理看板 · 销售运营",
-        navGroup: "管理看板",
-        navDashboard: "管理看板",
+        brandSub: "管理看板 · 销售运营",
+        navTitle: "管理看板",
+        navItem: "管理看板",
         breadcrumb: "Dino CRM / 管理看板",
-        topbarTitle: "CC活跃度",
-        scope: "越南 · 全部团队",
-        pageTitle: "管理看板",
-        pageMeta: "数据更新于 2026-11-16 06:00 · 规则版本 v{version}",
-        config: "口径设置", export: "导出", reset: "重置筛选",
-        tabs: {
-          overview: ["转化总览", "注册批次转化与跟进转化"],
-          followup: ["销售跟进", "线索库存与跟进情况"],
-          payments: ["支付结果", "支付人数、订单与 AOV"],
-          activity: ["CC活跃度", "出单节奏与风险预警"]
+        topbarTitle: "CC销售连续性与预警",
+        pageTitle: "CC销售连续性与预警",
+        pageMeta: "数据更新于 2026-11-16 06:00",
+        businessLine: "业务线", team: "销售团队", period: "统计周期", reset: "重置",
+        all: "全部", allTeams: "全部团队", allLines: "全部业务线",
+        businessLines: { VN: "越南", TH: "泰国", ALL: "全部业务线" },
+        recent: "近期销售活跃率", consistency: "销售一致性", risk: "高风险 CC 占比",
+        breakdownTitle: "销售一致性分布", breakdownMeta: "仅统计有效 CC，休息 CC 不进入分母",
+        activityTitle: "CC销售连续性", activityMeta: "按业务方当前口径展示，不提供排序",
+        riskTitle: "风险状态与建议动作", riskMeta: "按业务方当前规则展示",
+        riskHeadings: ["状态", "连续未成交天数", "建议动作"],
+        columns: ["CC编号", "CC姓名", "所属团队", "连续未成交天数", "最近有效成交日期", "平均出单间隔", "一致性分层"],
+        groups: { high: "高一致性", good: "良好", needs: "待改善", low: "低一致性" },
+        risks: { healthy: "健康", early: "早期预警", atRisk: "有风险", critical: "高危", rest: "休息" },
+        actions: {
+          healthy: "保持销售节奏", early: "检查重点客户和近期预约",
+          atRisk: "进行商机盘点并安排一对一辅导", critical: "立即干预并制定恢复计划"
         },
-        labels: {
-          businessLine: "业务线", salesTeam: "销售团队", cc: "CC", period: "统计周期",
-          recent: "近期销售活跃率", consistency: "销售一致性合格率", risk: "高风险 CC 占比",
-          breakdownTitle: "销售一致性分布", breakdownMeta: "按平均出单间隔分层，按 CC 人数统计",
-          tableTitle: "CC 销售连续性", tableMeta: "当前筛选范围 · 不支持排序",
-          overview: ["线索数", "接通人数", "预约人数", "已支付人数", "跟进转化"],
-          followup: ["当前线索库存", "今日待跟进", "今日预约", "逾期跟进"],
-          payments: ["支付人数", "订单数", "实付金额", "AOV"],
-          metricKicker: "指标口径", know: "知道了", detail: "CC详情", daily: "每日成交单数",
-          configKicker: "版本化配置", configTitle: "CC活跃度口径设置",
-          recentWindow: "近期活跃观察窗口（天）", dayBasis: "天数口径",
-          natural: "自然日", workday: "工作日",
-          highLimit: "High 上限", goodLimit: "Good 上限", needsLimit: "Needs Improvement 上限",
-          early: "Early Warning 起始天数", atRisk: "At Risk 起始天数", critical: "Critical 起始天数",
-          effective: "生效日期", restoreDefault: "恢复默认", cancel: "取消", save: "保存并生效",
-          scopeLine: "适用业务线", scopeTeam: "适用团队", configImpact: "预计影响 {n} 位 CC",
-          close: "关闭", choose: "全部", noData: "当前筛选范围内暂无 CC 数据",
-          dateError: "结束日期必须晚于或等于开始日期，且统计周期不能超过 31 天。",
-          invalidThreshold: "阈值必须依次递增，且所有数值必须为正数。",
-          saveSuccess: "口径配置 v{version} 已保存，当前视图已按新版本计算。",
-          exportSuccess: "已导出当前筛选结果。",
-          exportEmpty: "当前筛选范围没有可导出的 CC 数据。",
-          active: "在岗", left: "离职", disabled: "停用",
-          latest: "最近有效成交日期", daysWithout: "连续未成交天数", avgDays: "平均出单间隔",
-          consistencyLevel: "一致性分层", riskLevel: "风险状态", dailyOrders: "每日成交单数",
-          ccId: "CC ID", ccName: "CC姓名", team: "销售团队", noSale: "统计周期内无有效成交",
-          consistencyGroups: { high: "高一致性", good: "良好", needs: "待改善", low: "低一致性" },
-          riskGroups: { healthy: "健康", early: "早期预警", atRisk: "有风险", critical: "高危" },
-          riskAdvice: {
-            healthy: "保持销售节奏",
-            early: "检查重点客户和近期预约",
-            atRisk: "商机盘点并进行一对一辅导",
-            critical: "立即干预并制定恢复计划"
-          },
-          metricDefs: {
-            recent: ["近期销售活跃率", "最近观察窗口内至少有一个成交日的有效 CC 数 ÷ 有效 CC 样本数。以业务线时区确定完整日；观察窗口默认最近 2 个自然日，按 CC ID 去重，分母为 0 时显示“—”。"],
-            consistency: ["销售一致性合格率", "平均出单间隔不高于“良好”门槛的有效 CC 数 ÷ 有效 CC 样本数。平均出单间隔 = 统计周期有效日数（自然日或工作日） ÷ 该 CC 成交日数；按 CC ID 去重，分母为 0 时显示“—”。"],
-            risk: ["高风险 CC 占比", "风险状态为“高危”的有效 CC 数 ÷ 有效 CC 样本数。“高危”默认从连续未成交 4 天开始；按 CC ID 去重，分母为 0 时显示“—”。"]
-          }
+        noData: "当前筛选范围内暂无 CC 数据",
+        dateError: "结束日期必须晚于或等于开始日期，且统计周期不能超过 31 天。",
+        metricKicker: "指标口径", know: "知道了", close: "关闭",
+        recentSub: "最近 {n} 个完整日内有成交",
+        consistencySub: "{n} 位 CC 达到良好及以上",
+        riskSub: "连续未成交 ≥ {n} 天",
+        days: "天",
+        definitions: {
+          recent: ["近期销售活跃率", "最近观察窗口内至少有一个成交日的有效 CC 数 ÷ 有效 CC 样本数。默认观察最近 2 个完整自然日，按 CC ID 去重；分母为 0 时显示“—”。"],
+          consistency: ["销售一致性", "平均出单间隔最高不超过 2.33 天的有效 CC 数 ÷ 有效 CC 样本数。平均出单间隔 = 统计周期自然日数 ÷ 该 CC 成交日数，按 CC ID 去重；分母为 0 时显示“—”。"],
+          risk: ["高风险 CC 占比", "连续未成交 4 天及以上、风险状态为高危的有效 CC 数 ÷ 有效 CC 样本数，按 CC ID 去重；分母为 0 时显示“—”。"]
         }
       },
       en: {
-        sidebarSub: "Management · Sales Ops",
-        navGroup: "MANAGEMENT",
-        navDashboard: "Management dashboard",
+        brandSub: "Management · Sales Ops",
+        navTitle: "MANAGEMENT",
+        navItem: "Management dashboard",
         breadcrumb: "Dino CRM / Management",
-        topbarTitle: "CC Activity",
-        scope: "Vietnam · All teams",
-        pageTitle: "Management Dashboard",
-        pageMeta: "Data updated 16 Nov 2026 06:00 · Rule version v{version}",
-        config: "Metric settings", export: "Export", reset: "Reset filters",
-        tabs: {
-          overview: ["Conversion overview", "Registration cohort and follow-up conversion"],
-          followup: ["Sales follow-up", "Lead inventory and follow-up"],
-          payments: ["Payment results", "Payers, orders and AOV"],
-          activity: ["CC activity", "Sales rhythm and early warning"]
+        topbarTitle: "CC Sales Consistency & Early Warning",
+        pageTitle: "CC Sales Consistency & Early Warning",
+        pageMeta: "Data updated 16 Nov 2026 06:00",
+        businessLine: "Business line", team: "Sales team", period: "Reporting period", reset: "Reset",
+        all: "All", allTeams: "All teams", allLines: "All business lines",
+        businessLines: { VN: "Vietnam", TH: "Thailand", ALL: "All business lines" },
+        recent: "Recent sales activity", consistency: "Sales consistency", risk: "High-risk CCs",
+        breakdownTitle: "Sales consistency breakdown", breakdownMeta: "Valid CCs only; resting CCs are excluded",
+        activityTitle: "CC sales consistency", activityMeta: "Current business logic; sorting is unavailable",
+        riskTitle: "Risk status and recommended actions", riskMeta: "Current business rules",
+        riskHeadings: ["Status", "Consecutive days without sales", "Recommended action"],
+        columns: ["CC ID", "CC name", "Team", "Days without a sale", "Latest valid sale", "Avg days to sale", "Consistency"],
+        groups: { high: "High", good: "Good", needs: "Needs Improvement", low: "Low" },
+        risks: { healthy: "Healthy", early: "Early Warning", atRisk: "At Risk", critical: "Critical", rest: "Rest" },
+        actions: {
+          healthy: "Maintain the current sales rhythm",
+          early: "Review hot customers and upcoming appointments",
+          atRisk: "Run a pipeline review and arrange 1:1 coaching",
+          critical: "Intervene immediately and create a recovery plan"
         },
-        labels: {
-          businessLine: "Business line", salesTeam: "Sales team", cc: "CC", period: "Reporting period",
-          recent: "Recent sales activity", consistency: "Sales consistency", risk: "High-risk CCs",
-          breakdownTitle: "Sales consistency breakdown", breakdownMeta: "Grouped by average order interval and CC count",
-          tableTitle: "CC sales consistency", tableMeta: "Current scope · Sorting is not supported",
-          overview: ["Leads", "Connected", "Appointments", "Paid users", "Follow-up conversion"],
-          followup: ["Current lead inventory", "Due today", "Appointments today", "Overdue follow-ups"],
-          payments: ["Payers", "Orders", "Revenue", "AOV"],
-          metricKicker: "Metric definition", know: "Got it", detail: "CC details", daily: "Daily valid orders",
-          configKicker: "Versioned configuration", configTitle: "CC activity metric settings",
-          recentWindow: "Recent activity window (days)", dayBasis: "Day basis",
-          natural: "Calendar days", workday: "Working days",
-          highLimit: "High upper limit", goodLimit: "Good upper limit", needsLimit: "Needs Improvement upper limit",
-          early: "Early Warning starts (days)", atRisk: "At Risk starts (days)", critical: "Critical starts (days)",
-          effective: "Effective date", restoreDefault: "Restore defaults", cancel: "Cancel", save: "Save and apply",
-          scopeLine: "Business line scope", scopeTeam: "Team scope", configImpact: "Estimated impact: {n} CCs",
-          close: "Close", choose: "All", noData: "No CC data matches the current filters.",
-          dateError: "The end date must be on or after the start date, and the period cannot exceed 31 days.",
-          invalidThreshold: "Thresholds must increase in order and all values must be positive.",
-          saveSuccess: "Configuration v{version} saved and applied to the current view.",
-          exportSuccess: "The current filtered result was exported.",
-          exportEmpty: "No CC data is available to export.",
-          active: "Active", left: "Departed", disabled: "Disabled",
-          latest: "Latest valid sale", daysWithout: "Days without a sale", avgDays: "Avg days to sale",
-          consistencyLevel: "Consistency", riskLevel: "Risk", dailyOrders: "Daily orders",
-          ccId: "CC ID", ccName: "CC name", team: "Sales team", noSale: "No valid sale in period",
-          consistencyGroups: { high: "High", good: "Good", needs: "Needs Improvement", low: "Low" },
-          riskGroups: { healthy: "Healthy", early: "Early Warning", atRisk: "At Risk", critical: "Critical" },
-          riskAdvice: {
-            healthy: "Maintain the current sales rhythm",
-            early: "Review hot customers and upcoming appointments",
-            atRisk: "Run a pipeline review and 1:1 coaching",
-            critical: "Intervene immediately and create a recovery plan"
-          },
-          metricDefs: {
-            recent: ["Recent sales activity", "Distinct valid CCs with at least one sale day in the observation window ÷ valid CC sample. Full days use the business-line time zone; the default window is the last 2 calendar days. Deduplicated by CC ID; show “—” when the denominator is 0."],
-            consistency: ["Sales consistency", "Distinct valid CCs whose average days to sale is at or below the Good threshold ÷ valid CC sample. Average days to sale = effective days in the period (calendar or working days) ÷ distinct sale days for the CC. Deduplicated by CC ID; show “—” when the denominator is 0."],
-            risk: ["High-risk CCs", "Distinct valid CCs in Critical risk ÷ valid CC sample. Critical starts at 4 consecutive days without a sale by default. Deduplicated by CC ID; show “—” when the denominator is 0."]
-          }
+        noData: "No CC data matches the current filters.",
+        dateError: "The end date must be on or after the start date, and the period cannot exceed 31 days.",
+        metricKicker: "Metric definition", know: "Got it", close: "Close",
+        recentSub: "Sales in the last {n} complete days",
+        consistencySub: "{n} CCs achieved Good or above",
+        riskSub: "No sales for ≥ {n} days",
+        days: "days",
+        definitions: {
+          recent: ["Recent sales activity", "Distinct valid CCs with at least one sale day in the observation window ÷ valid CC sample. The default window is the latest 2 complete calendar days. Deduplicated by CC ID; show “—” when the denominator is 0."],
+          consistency: ["Sales consistency", "Distinct valid CCs whose average days to sale is no more than 2.33 days ÷ valid CC sample. Average days to sale = calendar days in the period ÷ the CC's distinct sale days. Deduplicated by CC ID; show “—” when the denominator is 0."],
+          risk: ["High-risk CCs", "Distinct valid CCs with 4 or more consecutive days without a sale and Critical status ÷ valid CC sample. Deduplicated by CC ID; show “—” when the denominator is 0."]
         }
       }
     };
 
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => Array.from(document.querySelectorAll(selector));
-    const currentCopy = () => copy[state.lang];
+    const text = () => strings[state.lang];
 
     function parseDate(value) {
       return new Date(`${value}T00:00:00Z`);
-    }
-
-    function formatDate(value) {
-      if (!value) return "—";
-      const [year, month, day] = value.split("-");
-      return state.lang === "zh" ? `${year}/${month}/${day}` : `${day} ${new Intl.DateTimeFormat("en", { month: "short" }).format(new Date(`${value}T00:00:00Z`))} ${year}`;
-    }
-
-    function formatDayLabel(value) {
-      const date = parseDate(value);
-      return state.lang === "zh" ? `${date.getUTCMonth() + 1}/${date.getUTCDate()}` : `${date.getUTCDate()}/${date.getUTCMonth() + 1}`;
     }
 
     function datesBetween(start, end) {
@@ -988,229 +617,202 @@
       return dates;
     }
 
-    function isWeekday(value) {
-      const day = parseDate(value).getUTCDay();
-      return day !== 0 && day !== 6;
-    }
-
-    function inclusiveDayCount(start, end) {
+    function dayCount(start, end) {
       return Math.floor((parseDate(end) - parseDate(start)) / 86400000) + 1;
     }
 
-    function countDaysAfter(latestDate, endDate, basis) {
-      if (!latestDate) return inclusiveDayCount($("#start-date").value, endDate);
-      const all = datesBetween(latestDate, endDate).slice(1);
-      return basis === "workday" ? all.filter(isWeekday).length : all.length;
+    function formatDate(value) {
+      if (!value) return "—";
+      const [year, month, day] = value.split("-");
+      return state.lang === "zh" ? `${year}/${month}/${day}` : `${day}/${month}/${year}`;
+    }
+
+    function dayLabel(value) {
+      const date = parseDate(value);
+      return `${date.getUTCMonth() + 1}/${date.getUTCDate()}`;
     }
 
     function percent(numerator, denominator) {
       return denominator ? `${((numerator / denominator) * 100).toFixed(1)}%` : "—";
     }
 
-    function getFilteredRows() {
-      const businessLine = $("#business-line").value;
+    function rowsForView() {
+      const business = $("#business-line").value;
       const team = $("#sales-team").value;
-      const ccId = $("#cc-select").value;
       const start = $("#start-date").value;
       const end = $("#end-date").value;
-      const dates = datesBetween(start, end);
-      const periodOrderDays = state.config.dayBasis === "workday" ? dates.filter(isWeekday).length : dates.length;
-      return ccData
-        .filter((item) => businessLine === "ALL" || item.businessLine === businessLine)
-        .filter((item) => team === "ALL" || item.team === team)
-        .filter((item) => ccId === "ALL" || item.id === ccId)
-        .map((item) => {
-          const saleDates = item.saleDates.filter((value) => value >= start && value <= end);
-          const latestBeforeEnd = item.saleDates.filter((value) => value <= end).sort().at(-1) || null;
+      const periodDays = dayCount(start, end);
+      return ccRows
+        .filter((row) => business === "ALL" || row.businessLine === business)
+        .filter((row) => team === "ALL" || row.team === team)
+        .map((row) => {
+          const saleDates = row.saleDates.filter((date) => date >= start && date <= end);
           const saleDayCount = saleDates.length;
-          const avgDays = saleDayCount ? Number((periodOrderDays / saleDayCount).toFixed(2)) : null;
-          const consistency = consistencyLevel(avgDays);
-          const daysWithoutSale = countDaysAfter(latestBeforeEnd, end, state.config.dayBasis);
-          return {
-            ...item,
-            saleDates,
-            latestBeforeEnd,
-            saleDayCount,
-            avgDays,
-            consistency,
-            daysWithoutSale,
-            risk: riskLevel(daysWithoutSale)
-          };
+          const avgDays = saleDayCount ? Number((periodDays / saleDayCount).toFixed(2)) : null;
+          const latest = row.saleDates.filter((date) => date <= end).sort().at(-1) || null;
+          const daysWithoutSale = latest
+            ? Math.floor((parseDate(end) - parseDate(latest)) / 86400000)
+            : (row.status === "rest" ? null : periodDays);
+          const consistency = row.status === "rest" ? "rest" : consistencyLevel(avgDays);
+          return { ...row, saleDates, saleDayCount, avgDays, latest, daysWithoutSale, consistency, risk: riskLevel(daysWithoutSale, row.status) };
         });
     }
 
-    function consistencyLevel(value) {
-      if (value == null) return "low";
-      if (value <= state.config.high) return "high";
-      if (value <= state.config.good) return "good";
-      if (value <= state.config.needs) return "needs";
+    function consistencyLevel(avgDays) {
+      if (avgDays == null) return "low";
+      if (avgDays <= 1.75) return "high";
+      if (avgDays <= 2.33) return "good";
+      if (avgDays <= 3.5) return "needs";
       return "low";
     }
 
-    function riskLevel(days) {
-      if (days >= state.config.critical) return "critical";
-      if (days >= state.config.atRisk) return "atRisk";
-      if (days >= state.config.early) return "early";
+    function riskLevel(days, status) {
+      if (status === "rest") return "rest";
+      if (days >= 4) return "critical";
+      if (days >= 2) return "atRisk";
+      if (days >= 1) return "early";
       return "healthy";
     }
 
-    function isRecent(row, endDate) {
-      const end = parseDate(endDate);
-      const start = new Date(end);
-      start.setUTCDate(start.getUTCDate() - state.config.recentDays + 1);
-      const latest = row.latestBeforeEnd;
-      return latest && parseDate(latest) >= start && parseDate(latest) <= end;
+    function updateTeams(keep = true) {
+      const business = $("#business-line").value;
+      const oldValue = keep ? $("#sales-team").value : "ALL";
+      const teams = [...new Set(ccRows.filter((row) => business === "ALL" || row.businessLine === business).map((row) => row.team))].sort();
+      $("#sales-team").innerHTML = `<option value="ALL">${text().allTeams}</option>` + teams.map((team) => `<option value="${team}">${team}</option>`).join("");
+      $("#sales-team").value = ["ALL", ...teams].includes(oldValue) ? oldValue : "ALL";
     }
 
-    function updateFilters() {
-      const c = currentCopy();
-      const selectedBusiness = $("#business-line").value;
-      const selectedTeam = $("#sales-team").value;
-      const selectedCc = $("#cc-select").value;
-      const teams = [...new Set(ccData.filter((item) => selectedBusiness === "ALL" || item.businessLine === selectedBusiness).map((item) => item.team))].sort();
-      const ccs = ccData.filter((item) =>
-        (selectedBusiness === "ALL" || item.businessLine === selectedBusiness) &&
-        (selectedTeam === "ALL" || item.team === selectedTeam)
-      );
-      $("#sales-team").innerHTML = `<option value="ALL">${c.labels.choose}</option>` + teams.map((team) => `<option value="${team}">${team}</option>`).join("");
-      $("#sales-team").value = teams.includes(selectedTeam) ? selectedTeam : "ALL";
-      $("#cc-select").innerHTML = `<option value="ALL">${c.labels.choose}</option>` + ccs.map((item) => `<option value="${item.id}">${item.name}</option>`).join("");
-      $("#cc-select").value = ccs.some((item) => item.id === selectedCc) ? selectedCc : "ALL";
+    function updateScopePill() {
+      const business = text().businessLines[$("#business-line").value] || text().allLines;
+      const team = $("#sales-team").value === "ALL" ? text().allTeams : $("#sales-team").value;
+      $("#scope-pill").textContent = `${business} · ${team}`;
     }
 
-    function renderActivity() {
-      const c = currentCopy();
+    function render() {
+      const c = text();
       const start = $("#start-date").value;
       const end = $("#end-date").value;
-      const error = $("#date-error");
-      if (!start || !end || end < start || inclusiveDayCount(start, end) > 31) {
-        error.textContent = c.labels.dateError;
-        error.style.display = "block";
+      if (!start || !end || end < start || dayCount(start, end) > 31) {
+        $("#date-error").textContent = c.dateError;
+        $("#date-error").style.display = "block";
         return;
       }
-      error.style.display = "none";
-      const rows = getFilteredRows();
-      const denominator = rows.length;
-      const recentCount = rows.filter((row) => isRecent(row, end)).length;
-      const consistencyCount = rows.filter((row) => ["high", "good"].includes(row.consistency)).length;
-      const criticalCount = rows.filter((row) => row.risk === "critical").length;
+      $("#date-error").style.display = "none";
+      updateScopePill();
+      const rows = rowsForView();
+      const active = rows.filter((row) => row.status === "active");
+      const denominator = active.length;
+      const recentStart = new Date(parseDate(end));
+      recentStart.setUTCDate(recentStart.getUTCDate() - 1);
+      const recentCount = active.filter((row) => row.latest && parseDate(row.latest) >= recentStart).length;
+      const consistencyCount = active.filter((row) => ["high", "good"].includes(row.consistency)).length;
+      const riskCount = active.filter((row) => row.risk === "critical").length;
 
       $("#metric-recent-value").textContent = percent(recentCount, denominator);
-      $("#metric-recent-sub").textContent = `${recentCount} / ${denominator}`;
+      $("#metric-recent-sub").textContent = `${c.recentSub.replace("{n}", "2")}：${recentCount} / ${denominator}`;
       $("#metric-consistency-value").textContent = percent(consistencyCount, denominator);
-      $("#metric-consistency-sub").textContent = `${consistencyCount} / ${denominator}`;
-      $("#metric-risk-value").textContent = percent(criticalCount, denominator);
-      $("#metric-risk-sub").textContent = `${criticalCount} / ${denominator}`;
-      $("#config-impact").textContent = c.labels.configImpact.replace("{n}", String(denominator));
-      updateScopePill();
+      $("#metric-consistency-sub").textContent = c.consistencySub.replace("{n}", String(consistencyCount)) + ` · ${consistencyCount} / ${denominator}`;
+      $("#metric-risk-value").textContent = percent(riskCount, denominator);
+      $("#metric-risk-sub").textContent = `${c.riskSub.replace("{n}", "4")}：${riskCount} / ${denominator}`;
 
       const groups = ["high", "good", "needs", "low"];
-      $("#breakdown-list").innerHTML = groups.map((group) => {
-        const groupRows = rows.filter((row) => row.consistency === group);
-        const avgValues = groupRows.map((row) => row.avgDays).filter((value) => value != null);
-        const average = avgValues.length ? `${(avgValues.reduce((sum, value) => sum + value, 0) / avgValues.length).toFixed(2)} ${state.lang === "zh" ? "天" : "days"}` : "—";
+      const groupCounts = groups.map((group) => active.filter((row) => row.consistency === group));
+      const maxCount = Math.max(...groupCounts.map((group) => group.length), 1);
+      $("#breakdown-list").innerHTML = groups.map((group, index) => {
+        const groupRows = groupCounts[index];
+        const averages = groupRows.map((row) => row.avgDays).filter((value) => value != null);
+        const average = averages.length
+          ? `${(averages.reduce((sum, value) => sum + value, 0) / averages.length).toFixed(2)} ${c.days}`
+          : "—";
         return `
           <div class="breakdown-item ${group}">
-            <div class="breakdown-label">${c.labels.consistencyGroups[group]}</div>
-            <div class="breakdown-value">${groupRows.length} · ${percent(groupRows.length, denominator)}</div>
-            <div class="breakdown-copy">${state.lang === "zh" ? "平均出单间隔" : "Average interval"} ${average}</div>
+            <div class="breakdown-line"><strong>${c.groups[group]}</strong><span>${groupRows.length} 位 · ${percent(groupRows.length, denominator)}</span></div>
+            <div class="bar"><div class="bar-fill" style="width:${groupRows.length / maxCount * 100}%"></div></div>
+            <div class="breakdown-copy">${state.lang === "zh" ? "平均出单间隔" : "Average days to sale"} ${average}</div>
           </div>
         `;
       }).join("");
 
       const dates = datesBetween(start, end);
-      $("#activity-table-head").innerHTML = `
-        <tr>
-          <th>${c.labels.ccId}</th>
-          <th>${c.labels.ccName}</th>
-          <th>${c.labels.team}</th>
-          <th>${c.labels.latest}</th>
-          <th>${c.labels.daysWithout}</th>
-          <th>${c.labels.avgDays}</th>
-          <th>${c.labels.consistencyLevel}</th>
-          <th>${c.labels.riskLevel}</th>
-          ${dates.map((date) => `<th class="daily-cell">${formatDayLabel(date)}</th>`).join("")}
-        </tr>
-      `;
-      $("#activity-table-body").innerHTML = rows.map((row) => {
+      $("#activity-head").innerHTML = `<tr>${c.columns.map((name) => `<th>${name}</th>`).join("")}${dates.map((date) => `<th class="daily-cell">${dayLabel(date)}</th>`).join("")}</tr>`;
+      $("#activity-body").innerHTML = rows.map((row) => {
         const daily = dates.map((date) => {
-          const count = row.saleDates.includes(date) ? 1 : 0;
-          return `<td class="daily-cell ${count ? "has-sale" : "muted-cell"}">${count}</td>`;
+          const hasSale = row.saleDates.includes(date);
+          return `<td class="daily-cell ${hasSale ? "has-sale" : "not-sale"}">${hasSale ? 1 : "-"}</td>`;
         }).join("");
-        const avgText = row.avgDays == null ? "—" : row.avgDays.toFixed(2);
+        const avg = row.avgDays == null ? "—" : row.avgDays.toFixed(2);
+        const groupLabel = row.consistency === "rest" ? c.risks.rest : c.groups[row.consistency];
         return `
           <tr>
-            <td class="muted-cell">${row.id}</td>
-            <td><button class="cc-name-button" type="button" data-cc-id="${row.id}">${row.name}</button></td>
+            <td class="cc-id">${row.id}</td>
+            <td class="cc-name">${row.name}</td>
             <td>${row.team}</td>
-            <td>${formatDate(row.latestBeforeEnd)}</td>
-            <td>${row.daysWithoutSale}</td>
-            <td>${avgText}</td>
-            <td><span class="status ${row.consistency}">${c.labels.consistencyGroups[row.consistency]}</span></td>
-            <td><span class="status ${row.risk === "early" ? "warning" : row.risk === "atRisk" ? "risk" : row.risk === "critical" ? "critical" : "healthy"}">${c.labels.riskGroups[row.risk]}</span></td>
+            <td class="days-number">${row.status === "rest" ? "—" : row.daysWithoutSale}</td>
+            <td>${formatDate(row.latest)}</td>
+            <td>${avg}</td>
+            <td><span class="status ${row.consistency}">${groupLabel}</span></td>
             ${daily}
           </tr>
         `;
       }).join("");
       $("#activity-empty").style.display = rows.length ? "none" : "block";
-      $$("[data-cc-id]").forEach((button) => {
-        button.addEventListener("click", () => openDetail(button.dataset.ccId));
-      });
+
+      $("#risk-body").innerHTML = ["healthy", "early", "atRisk", "critical"].map((risk) => `
+        <tr>
+          <td><span class="risk-dot ${risk}"></span>${c.risks[risk]}</td>
+          <td>${risk === "healthy" ? "0" : risk === "early" ? "1" : risk === "atRisk" ? "2–3" : "≥4"} ${state.lang === "zh" ? "天" : "days"}</td>
+          <td>${c.actions[risk]}</td>
+        </tr>
+      `).join("");
     }
 
-    function setTab(tab) {
-      state.tab = tab;
-      $$(".tab").forEach((button) => button.classList.toggle("active", button.dataset.tab === tab));
-      $$(".view-panel").forEach((panel) => { panel.hidden = panel.dataset.panel !== tab; });
-      $("#filters").style.display = tab === "activity" ? "grid" : "none";
-      $("#config-button").style.display = tab === "activity" ? "" : "none";
-      $("#export-button").style.display = tab === "activity" ? "" : "none";
-      $("#topbar-page-title").textContent = currentCopy().tabs[tab][0];
-      if (tab === "activity") renderActivity();
+    function applyLanguage() {
+      const c = text();
+      document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+      $("#language-toggle").textContent = state.lang === "zh" ? "EN" : "中";
+      $("#language-toggle").setAttribute("aria-label", state.lang === "zh" ? "Switch to English" : "切换到中文");
+      $("#brand-sub").textContent = c.brandSub;
+      $("#nav-title").textContent = c.navTitle;
+      $("#nav-item-label").textContent = c.navItem;
+      $("#breadcrumb-root").textContent = c.breadcrumb;
+      $("#topbar-title").textContent = c.topbarTitle;
+      $("#page-title").textContent = c.pageTitle;
+      $("#page-meta").textContent = c.pageMeta;
+      $("#label-business-line").textContent = c.businessLine;
+      $("#label-sales-team").textContent = c.team;
+      $("#label-period").textContent = c.period;
+      $("#reset-filters").textContent = c.reset;
+      const business = $("#business-line").value;
+      $("#business-line").innerHTML = `<option value="ALL">${c.allLines}</option><option value="VN">${c.businessLines.VN}</option><option value="TH">${c.businessLines.TH}</option>`;
+      $("#business-line").value = ["ALL", "VN", "TH"].includes(business) ? business : "VN";
+      updateTeams();
+      $("#metric-recent-label").textContent = c.recent;
+      $("#metric-consistency-label").textContent = c.consistency;
+      $("#metric-risk-label").textContent = c.risk;
+      $("#breakdown-title").textContent = c.breakdownTitle;
+      $("#breakdown-meta").textContent = c.breakdownMeta;
+      $("#activity-title").textContent = c.activityTitle;
+      $("#activity-meta").textContent = c.activityMeta;
+      $("#risk-title").textContent = c.riskTitle;
+      $("#risk-meta").textContent = c.riskMeta;
+      $("#risk-th-status").textContent = c.riskHeadings[0];
+      $("#risk-th-days").textContent = c.riskHeadings[1];
+      $("#risk-th-action").textContent = c.riskHeadings[2];
+      $("#activity-empty").textContent = c.noData;
+      $("#metric-kicker").textContent = c.metricKicker;
+      $("#metric-ok").textContent = c.know;
+      $$(".close").forEach((button) => button.setAttribute("aria-label", c.close));
+      localStorage.setItem("cc-activity-lang", state.lang);
+      render();
     }
 
-    function openDetail(ccId) {
-      const row = getFilteredRows().find((item) => item.id === ccId);
-      if (!row) return;
-      const c = currentCopy();
-      state.selectedCcId = ccId;
-      $("#detail-title").textContent = row.name;
-      $("#detail-sub").textContent = `${row.id} · ${row.team}`;
-      $("#detail-grid").innerHTML = `
-        <div class="detail"><span>${c.labels.latest}</span><strong>${formatDate(row.latestBeforeEnd)}</strong></div>
-        <div class="detail"><span>${c.labels.daysWithout}</span><strong>${row.daysWithoutSale} ${state.lang === "zh" ? "天" : "days"}</strong></div>
-        <div class="detail"><span>${c.labels.avgDays}</span><strong>${row.avgDays == null ? "—" : `${row.avgDays.toFixed(2)} ${state.lang === "zh" ? "天" : "days"}`}</strong></div>
-        <div class="detail"><span>${c.labels.consistencyLevel}</span><strong>${c.labels.consistencyGroups[row.consistency]}</strong></div>
-        <div class="detail"><span>${c.labels.riskLevel}</span><strong>${c.labels.riskGroups[row.risk]}</strong></div>
-        <div class="detail"><span>${state.lang === "zh" ? "建议动作" : "Recommended action"}</span><strong>${c.labels.riskAdvice[row.risk]}</strong></div>
-        <div class="detail"><span>${c.labels.daily}</span><strong>${row.saleDates.length}</strong></div>
-      `;
-      const dates = datesBetween($("#start-date").value, $("#end-date").value);
-      $("#daily-detail").innerHTML = dates.map((date) => {
-        const count = row.saleDates.includes(date) ? 1 : 0;
-        return `<div class="day-box ${count ? "has-sale" : ""}"><span>${formatDayLabel(date)}</span><strong>${count}</strong></div>`;
-      }).join("");
-      $("#drawer-backdrop").classList.remove("hidden");
-      $("#detail-drawer").classList.remove("hidden");
-      $("#detail-close").focus();
-    }
-
-    function closeDetail() {
-      $("#drawer-backdrop").classList.add("hidden");
-      $("#detail-drawer").classList.add("hidden");
-      state.selectedCcId = null;
-    }
-
-    function openMetric(metric) {
-      const c = currentCopy();
-      const [title, formula] = c.labels.metricDefs[metric];
-      $("#metric-modal-title").textContent = title;
-      $("#metric-modal-kicker").textContent = c.labels.metricKicker;
-      $("#metric-formula").textContent = formula;
-      $("#metric-modal-ok").textContent = c.labels.know;
+    function openMetric(key) {
+      const [title, definition] = text().definitions[key];
+      $("#metric-title").textContent = title;
+      $("#metric-formula").textContent = definition;
       $("#modal-backdrop").classList.remove("hidden");
       $("#metric-modal-wrap").classList.remove("hidden");
-      $("#metric-modal-ok").focus();
+      $("#metric-ok").focus();
     }
 
     function closeMetric() {
@@ -1218,252 +820,33 @@
       $("#metric-modal-wrap").classList.add("hidden");
     }
 
-    function fillConfigForm() {
-      $("#config-recent-days").value = state.config.recentDays;
-      $("#config-day-basis").value = state.config.dayBasis;
-      $("#config-high").value = state.config.high;
-      $("#config-good").value = state.config.good;
-      $("#config-needs").value = state.config.needs;
-      $("#config-early").value = state.config.early;
-      $("#config-at-risk").value = state.config.atRisk;
-      $("#config-critical").value = state.config.critical;
-      $("#config-scope-line").value = state.config.scopeLine;
-      $("#config-scope-team").value = state.config.scopeTeam;
-      $("#config-effective").value = state.config.effectiveDate;
-    }
-
-    function openConfig() {
-      fillConfigForm();
-      $("#config-impact").textContent = currentCopy().labels.configImpact.replace("{n}", String(getFilteredRows().length));
-      $("#config-error").style.display = "none";
-      $("#modal-backdrop").classList.remove("hidden");
-      $("#config-modal-wrap").classList.remove("hidden");
-      $("#config-recent-days").focus();
-    }
-
-    function closeConfig() {
-      $("#modal-backdrop").classList.add("hidden");
-      $("#config-modal-wrap").classList.add("hidden");
-    }
-
-    function saveConfig() {
-      const c = currentCopy();
-      const next = {
-        recentDays: Number($("#config-recent-days").value),
-        dayBasis: $("#config-day-basis").value,
-        high: Number($("#config-high").value),
-        good: Number($("#config-good").value),
-        needs: Number($("#config-needs").value),
-        early: Number($("#config-early").value),
-        atRisk: Number($("#config-at-risk").value),
-        critical: Number($("#config-critical").value),
-        scopeLine: $("#config-scope-line").value,
-        scopeTeam: $("#config-scope-team").value,
-        effectiveDate: $("#config-effective").value
-      };
-      const invalid = [next.recentDays,next.high,next.good,next.needs,next.early,next.atRisk,next.critical].some((value) => !Number.isFinite(value) || value <= 0) ||
-        !(next.high < next.good && next.good < next.needs) ||
-        !(next.early < next.atRisk && next.atRisk < next.critical);
-      if (invalid || !$("#config-effective").value) {
-        $("#config-error").textContent = c.labels.invalidThreshold;
-        $("#config-error").style.display = "block";
-        return;
-      }
-      state.config = next;
-      state.version += 1;
-      closeConfig();
-      applyLanguage();
-      renderActivity();
-      showToast(c.labels.saveSuccess.replace("{version}", String(state.version)));
-    }
-
-    function exportXls() {
-      const c = currentCopy();
-      const rows = getFilteredRows();
-      if (!rows.length) {
-        showToast(c.labels.exportEmpty);
-        return;
-      }
-      const dates = datesBetween($("#start-date").value, $("#end-date").value);
-      const header = ["business_line","sales_team","cc_id","cc_name","cc_status","latest_valid_sale_date","days_without_sale","sale_day_count","avg_days_to_sale","consistency_level","risk_level","period_start","period_end","rule_version",...dates.map((date) => `${date}_daily_valid_order_count`)];
-      const values = rows.map((row) => [
-        row.businessLine,row.team,row.id,row.name,row.status,row.latestBeforeEnd || "",
-        row.daysWithoutSale,row.saleDayCount,row.avgDays == null ? "" : row.avgDays.toFixed(2),
-        c.labels.consistencyGroups[row.consistency],c.labels.riskGroups[row.risk],
-        $("#start-date").value,$("#end-date").value,`v${state.version}`,
-        ...dates.map((date) => row.saleDates.includes(date) ? 1 : 0)
-      ]);
-      const content = [header, ...values].map((line) => line.join("\t")).join("\n");
-      const blob = new Blob([`\ufeff${content}`], { type: "application/vnd.ms-excel;charset=utf-8" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `cc-activity-${$("#start-date").value}-${$("#end-date").value}.xls`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(link.href);
-      showToast(c.labels.exportSuccess);
-    }
-
-    function showToast(message) {
-      const node = $("#toast");
-      node.textContent = message;
-      node.classList.add("show");
-      clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(() => node.classList.remove("show"), 2400);
-    }
-
-    function populateSelects() {
-      const selectedBusiness = $("#business-line").value || "ALL";
-      const selectedTeam = $("#sales-team").value || "ALL";
-      const selectedCc = $("#cc-select").value || "ALL";
-      $("#business-line").innerHTML = `<option value="ALL">${currentCopy().labels.choose}</option><option value="VN">${state.lang === "zh" ? "越南" : "Vietnam"}</option><option value="TH">${state.lang === "zh" ? "泰国" : "Thailand"}</option>`;
-      $("#business-line").value = ["ALL", "VN", "TH"].includes(selectedBusiness) ? selectedBusiness : "ALL";
-      updateFilters();
-      $("#sales-team").value = [...$("#sales-team").options].some((option) => option.value === selectedTeam) ? selectedTeam : "ALL";
-      $("#cc-select").value = [...$("#cc-select").options].some((option) => option.value === selectedCc) ? selectedCc : "ALL";
-    }
-
-    function updateScopePill() {
-      const business = $("#business-line").value;
-      const team = $("#sales-team").value;
-      const businessLabel = business === "ALL"
-        ? (state.lang === "zh" ? "全部业务线" : "All business lines")
-        : business === "VN" ? (state.lang === "zh" ? "越南" : "Vietnam") : (state.lang === "zh" ? "泰国" : "Thailand");
-      const teamLabel = team === "ALL" ? (state.lang === "zh" ? "全部团队" : "All teams") : team;
-      $("#scope-pill").textContent = `${businessLabel} · ${teamLabel}`;
-    }
-
-    function applyLanguage() {
-      const c = currentCopy();
-      document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
-      $("#language-toggle").textContent = state.lang === "zh" ? "EN" : "中";
-      $("#language-toggle").setAttribute("aria-label", state.lang === "zh" ? "Switch to English" : "切换到中文");
-      $("#dashboard-tabs").setAttribute("aria-label", state.lang === "zh" ? "管理看板页签" : "Management dashboard tabs");
-      $("#start-date").setAttribute("aria-label", state.lang === "zh" ? "开始日期" : "Start date");
-      $("#end-date").setAttribute("aria-label", state.lang === "zh" ? "结束日期" : "End date");
-      $("#sidebar-sub").textContent = c.sidebarSub;
-      $("#nav-group-label").textContent = c.navGroup;
-      $("#nav-dashboard-label").textContent = c.navDashboard;
-      $("#breadcrumb-root").textContent = c.breadcrumb;
-      $("#topbar-page-title").textContent = c.topbarTitle;
-      $("#page-title").textContent = c.pageTitle;
-      $("#page-meta").textContent = c.pageMeta.replace("{version}", String(state.version));
-      $("#config-button").textContent = c.config;
-      $("#export-button").textContent = c.export;
-      $("#reset-filters").textContent = c.reset;
-      Object.entries(c.tabs).forEach(([key, values]) => {
-        $(`#tab-${key}`).textContent = values[0];
-        $(`#tab-${key}-desc`).textContent = values[1];
-      });
-      $("#label-business-line").textContent = c.labels.businessLine;
-      $("#label-sales-team").textContent = c.labels.salesTeam;
-      $("#label-cc").textContent = c.labels.cc;
-      $("#label-period").textContent = c.labels.period;
-      $("#metric-recent-label").textContent = c.labels.recent;
-      $("#metric-consistency-label").textContent = c.labels.consistency;
-      $("#metric-risk-label").textContent = c.labels.risk;
-      $("#breakdown-title").textContent = c.labels.breakdownTitle;
-      $("#breakdown-meta").textContent = c.labels.breakdownMeta;
-      $("#table-title").textContent = c.labels.tableTitle;
-      $("#table-meta").textContent = c.labels.tableMeta;
-      $("#activity-empty").textContent = c.labels.noData;
-      $("#detail-title").textContent = c.labels.detail;
-      $("#daily-title").textContent = c.labels.daily;
-      $("#config-kicker").textContent = c.labels.configKicker;
-      $("#config-title").textContent = c.labels.configTitle;
-      $("#config-recent-label").textContent = c.labels.recentWindow;
-      $("#config-basis-label").textContent = c.labels.dayBasis;
-      $("#config-high-label").textContent = c.labels.highLimit;
-      $("#config-good-label").textContent = c.labels.goodLimit;
-      $("#config-needs-label").textContent = c.labels.needsLimit;
-      $("#config-early-label").textContent = c.labels.early;
-      $("#config-at-risk-label").textContent = c.labels.atRisk;
-      $("#config-critical-label").textContent = c.labels.critical;
-      $("#config-effective-label").textContent = c.labels.effective;
-      $("#config-scope-line-label").textContent = c.labels.scopeLine;
-      $("#config-scope-team-label").textContent = c.labels.scopeTeam;
-      $("#config-impact").textContent = c.labels.configImpact.replace("{n}", String(getFilteredRows().length));
-      $("#config-day-basis option[value='natural']").textContent = c.labels.natural;
-      $("#config-day-basis option[value='workday']").textContent = c.labels.workday;
-      $("#config-scope-line option[value='VN']").textContent = state.lang === "zh" ? "越南" : "Vietnam";
-      $("#config-scope-line option[value='ALL']").textContent = state.lang === "zh" ? "全部业务线" : "All business lines";
-      $("#config-scope-team option[value='ALL']").textContent = state.lang === "zh" ? "全部团队" : "All teams";
-      $("#config-reset").textContent = c.labels.restoreDefault;
-      $("#config-cancel").textContent = c.labels.cancel;
-      $("#config-save").textContent = c.labels.save;
-      $("#metric-modal-kicker").textContent = c.labels.metricKicker;
-      $("#metric-modal-ok").textContent = c.labels.know;
-      $("#ov-leads").textContent = c.labels.overview[0];
-      $("#ov-connected").textContent = c.labels.overview[1];
-      $("#ov-appointments").textContent = c.labels.overview[2];
-      $("#ov-paid").textContent = c.labels.overview[3];
-      $("#ov-follow-label").textContent = c.labels.overview[4];
-      $("#fu-current").textContent = c.labels.followup[0];
-      $("#fu-due").textContent = c.labels.followup[1];
-      $("#fu-appointments").textContent = c.labels.followup[2];
-      $("#fu-overdue").textContent = c.labels.followup[3];
-      $("#pa-users").textContent = c.labels.payments[0];
-      $("#pa-orders").textContent = c.labels.payments[1];
-      $("#pa-revenue").textContent = c.labels.payments[2];
-      $("#pa-aov").textContent = c.labels.payments[3];
-      $$(".close").forEach((button) => button.setAttribute("aria-label", c.labels.close));
-      $$("[data-metric]").forEach((button) => button.setAttribute("aria-label", state.lang === "zh" ? "查看指标口径" : "View metric definition"));
-      localStorage.setItem("cc-activity-lang", state.lang);
-      populateSelects();
-      renderActivity();
-      setTab(state.tab);
-    }
-
+    $("#business-line").addEventListener("change", () => {
+      updateTeams(false);
+      render();
+    });
+    $("#sales-team").addEventListener("change", render);
+    $("#start-date").addEventListener("change", render);
+    $("#end-date").addEventListener("change", render);
+    $("#reset-filters").addEventListener("click", () => {
+      $("#business-line").value = "VN";
+      $("#start-date").value = "2026-11-09";
+      $("#end-date").value = "2026-11-15";
+      updateTeams(false);
+      render();
+    });
     $("#language-toggle").addEventListener("click", () => {
       state.lang = state.lang === "zh" ? "en" : "zh";
       applyLanguage();
-      if (state.selectedCcId) openDetail(state.selectedCcId);
-    });
-    $$(".tab").forEach((button) => button.addEventListener("click", () => setTab(button.dataset.tab)));
-    ["business-line","sales-team","cc-select","start-date","end-date"].forEach((id) => {
-      $(`#${id}`).addEventListener("change", () => {
-        if (id === "business-line" || id === "sales-team") updateFilters();
-        renderActivity();
-      });
-    });
-    $("#reset-filters").addEventListener("click", () => {
-      $("#business-line").value = "ALL";
-      $("#sales-team").innerHTML = `<option value="ALL">${currentCopy().labels.choose}</option>`;
-      $("#cc-select").innerHTML = `<option value="ALL">${currentCopy().labels.choose}</option>`;
-      $("#start-date").value = "2026-11-09";
-      $("#end-date").value = "2026-11-15";
-      updateFilters();
-      renderActivity();
     });
     $$("[data-metric]").forEach((button) => button.addEventListener("click", () => openMetric(button.dataset.metric)));
-    $("#detail-close").addEventListener("click", closeDetail);
-    $("#drawer-backdrop").addEventListener("click", closeDetail);
-    $("#metric-modal-close").addEventListener("click", closeMetric);
-    $("#metric-modal-ok").addEventListener("click", closeMetric);
-    $("#config-button").addEventListener("click", openConfig);
-    $("#config-close").addEventListener("click", closeConfig);
-    $("#config-cancel").addEventListener("click", closeConfig);
-    $("#config-reset").addEventListener("click", () => {
-      state.config = { ...defaults };
-      fillConfigForm();
-      $("#config-error").style.display = "none";
-    });
-    $("#config-save").addEventListener("click", saveConfig);
-    $("#modal-backdrop").addEventListener("click", () => {
-      if (!$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
-      if (!$("#config-modal-wrap").classList.contains("hidden")) closeConfig();
-    });
-    $("#export-button").addEventListener("click", exportXls);
+    $("#metric-close").addEventListener("click", closeMetric);
+    $("#metric-ok").addEventListener("click", closeMetric);
+    $("#modal-backdrop").addEventListener("click", closeMetric);
     document.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") return;
-      if (!$("#detail-drawer").classList.contains("hidden")) closeDetail();
-      if (!$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
-      if (!$("#config-modal-wrap").classList.contains("hidden")) closeConfig();
+      if (event.key === "Escape" && !$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
     });
 
     applyLanguage();
-    setTab("activity");
   </script>
 </body>
 </html>
