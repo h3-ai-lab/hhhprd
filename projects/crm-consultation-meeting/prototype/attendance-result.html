@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>确认出勤结果</title>
+  <style>
+    :root {
+      --bg: #f3f6fa;
+      --surface: #fff;
+      --ink: #17202a;
+      --muted: #667085;
+      --line: #dfe5ec;
+      --blue: #2563eb;
+      --blue-soft: #edf4ff;
+      --green: #137a5a;
+      --green-soft: #e9f8f2;
+      --orange: #a85b00;
+      --orange-soft: #fff4e5;
+      --red: #b42318;
+      --red-soft: #fff0ee;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font: 15px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    button, textarea { font: inherit; }
+    .page {
+      width: min(680px,100%);
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; font-weight: 700; }
+    .mark {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 12px;
+    }
+    .lang {
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+    .card-head {
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 { margin: 0; font-size: 24px; line-height: 1.3; }
+    .subtitle { margin-top: 6px; color: var(--muted); font-size: 13px; }
+    .body { padding: 20px; }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .summary-item {
+      min-width: 0;
+      padding: 10px;
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+    .label { color: var(--muted); font-size: 11px; }
+    .value { margin-top: 3px; font-weight: 600; overflow-wrap: anywhere; }
+    .status-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 13px 14px;
+      border-radius: 9px;
+      background: var(--blue-soft);
+    }
+    .status-box strong { font-size: 16px; }
+    .status-pill {
+      padding: 3px 8px;
+      border-radius: 99px;
+      background: var(--surface);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    fieldset {
+      margin: 0 0 18px;
+      padding: 0;
+      border: 0;
+    }
+    legend { margin-bottom: 8px; font-weight: 600; }
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 9px;
+    }
+    .choice {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked) {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+    .reason-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 8px;
+    }
+    .reason-option {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .reason-option:has(input:checked) {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+    .field { margin-bottom: 16px; }
+    .field-label { display: block; margin-bottom: 6px; font-weight: 600; }
+    .hint { color: var(--muted); font-size: 12px; }
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      resize: vertical;
+    }
+    .counter { margin-top: 4px; color: var(--muted); font-size: 11px; text-align: right; }
+    .error {
+      display: none;
+      margin-bottom: 12px;
+      padding: 9px 11px;
+      border-radius: 8px;
+      background: var(--red-soft);
+      color: var(--red);
+      font-size: 12px;
+    }
+    .actions { display: flex; justify-content: flex-end; gap: 9px; }
+    .btn {
+      min-height: 40px;
+      padding: 8px 14px;
+      border: 1px solid #cfdae8;
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--blue);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn.primary {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+    .success {
+      display: none;
+      padding: 20px;
+      text-align: center;
+    }
+    .success-icon {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 12px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 24px;
+    }
+    .success h2 { margin: 0; font-size: 21px; }
+    .success p { margin: 7px 0 18px; color: var(--muted); }
+    .invalid { display: none; padding: 34px 20px; text-align: center; }
+    .invalid h2 { margin: 0 0 8px; }
+    .invalid p { color: var(--muted); }
+    .hidden { display: none !important; }
+    @media (max-width: 520px) {
+      .page { padding: 14px 10px 32px; }
+      .summary, .choice-grid, .reason-grid { grid-template-columns: 1fr; }
+      .body, .card-head { padding: 16px; }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <div class="brand">
+        <div class="mark">D</div>
+        <span>Dino CRM</span>
+      </div>
+      <button class="lang" id="language-toggle" type="button">EN</button>
+    </div>
+
+    <section class="card">
+      <div class="card-head">
+        <h1 id="title">确认咨询会议出勤结果</h1>
+        <div class="subtitle" id="subtitle">系统已根据 Lark 参会记录生成默认结果，请确认或修改。</div>
+      </div>
+
+      <div class="body" id="form-body">
+        <div class="summary">
+          <div class="summary-item">
+            <div class="label" id="user-id-label">用户 ID</div>
+            <div class="value" id="user-id-value">—</div>
+          </div>
+          <div class="summary-item">
+            <div class="label" id="meeting-id-label">会议 ID</div>
+            <div class="value" id="meeting-id-value">—</div>
+          </div>
+        </div>
+
+        <div class="status-box">
+          <div>
+            <div class="label" id="system-label">系统判定</div>
+            <strong id="system-status">未出勤</strong>
+          </div>
+          <span class="status-pill" id="system-badge">待确认</span>
+        </div>
+
+        <form id="result-form">
+          <fieldset>
+            <legend id="attendance-label">有效出勤结果</legend>
+            <div class="choice-grid">
+              <label class="choice"><input type="radio" name="attendance" value="attended"><span id="attended-label">已出勤</span></label>
+              <label class="choice"><input type="radio" name="attendance" value="absent"><span id="absent-label">未出勤</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset id="reason-section">
+            <legend id="reason-label">未出勤原因</legend>
+            <div class="reason-grid" id="reason-grid"></div>
+          </fieldset>
+
+          <div class="field">
+            <label class="field-label" for="follow-up-note" id="note-label">跟进说明（选填）</label>
+            <textarea id="follow-up-note" maxlength="500" placeholder="补充本次跟进情况"></textarea>
+            <div class="counter"><span id="note-count">0</span>/500</div>
+          </div>
+
+          <div class="error" id="form-error"></div>
+          <div class="actions">
+            <a class="btn" href="index.html" id="back-link">返回 CRM</a>
+            <button class="btn primary" type="submit" id="submit-button">提交</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="success" id="success-state">
+        <div class="success-icon">✓</div>
+        <h2 id="success-title">提交成功</h2>
+        <p id="success-copy">出勤结果和跟进说明已保存。</p>
+        <a class="btn primary" href="index.html" id="success-back">返回 CRM</a>
+      </div>
+
+      <div class="invalid" id="invalid-state">
+        <h2 id="invalid-title">链接无效</h2>
+        <p id="invalid-copy">用户、会议或签名信息不完整，请返回 CRM 重新打开。</p>
+        <a class="btn primary" href="index.html" id="invalid-back">返回 CRM</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const query = new URLSearchParams(window.location.search);
+    const params = {
+      userId: query.get("user_id"),
+      meetingId: query.get("meeting_id"),
+      systemStatus: query.get("attendance_status"),
+      taskId: query.get("task_id"),
+      token: query.get("token")
+    };
+    const reasonOptions = [
+      { value: "school_exam", zh: "学校考试", en: "School exam" },
+      { value: "academic_busy", zh: "学业忙", en: "Academically busy" },
+      { value: "device", zh: "设备问题", en: "Device issue" },
+      { value: "network", zh: "网络问题", en: "Network issue" },
+      { value: "parent_busy", zh: "家长忙", en: "Parent busy" },
+      { value: "forgot", zh: "忘记预约", en: "Forgot appointment" },
+      { value: "unreachable", zh: "无法联系", en: "Unable to contact" },
+      { value: "not_interested", zh: "学生不喜欢学习", en: "Student does not like studying" }
+    ];
+    const state = {
+      lang: localStorage.getItem("consult-lang") || "zh",
+      result: JSON.parse(localStorage.getItem("consultation-attendance-results") || "{}")[params.meetingId] || null,
+      reasonCode: null
+    };
+    state.reasonCode = state.result?.reasonCode || null;
+    const copy = {
+      zh: {
+        title: "确认咨询会议出勤结果", subtitle: "系统已根据 Lark 参会记录生成默认结果，请确认或修改。",
+        userId: "用户 ID", meetingId: "会议 ID", system: "系统判定", pending: "待确认",
+        attendance: "有效出勤结果", attended: "已出勤", absent: "未出勤", reason: "未出勤原因",
+        note: "跟进说明（选填）", placeholder: "补充本次跟进情况", submit: "提交", update: "更新提交",
+        back: "返回 CRM", successTitle: "提交成功", successCopy: "出勤结果和跟进说明已保存。",
+        invalidTitle: "链接无效", invalidCopy: "用户、会议或签名信息不完整，请返回 CRM 重新打开。",
+        chooseStatus: "请选择出勤结果", chooseReason: "选择未出勤时请选择原因",
+        confirmed: "已确认", modified: "已修改"
+      },
+      en: {
+        title: "Confirm consultation attendance", subtitle: "Lark attendance data has produced a default result. Confirm or change it below.",
+        userId: "User ID", meetingId: "Meeting ID", system: "System result", pending: "Pending confirmation",
+        attendance: "Effective attendance", attended: "Attended", absent: "No-show", reason: "No-show reason",
+        note: "Follow-up note (optional)", placeholder: "Add a follow-up note", submit: "Submit", update: "Update submission",
+        back: "Back to CRM", successTitle: "Submitted", successCopy: "The attendance result and follow-up note have been saved.",
+        invalidTitle: "Invalid link", invalidCopy: "The user, meeting or signature information is missing. Reopen this page from CRM.",
+        chooseStatus: "Select an attendance result", chooseReason: "Select a reason when the result is No-show",
+        confirmed: "Confirmed", modified: "Modified"
+      }
+    };
+    const $ = (selector) => document.querySelector(selector);
+    const current = () => copy[state.lang];
+    const valid = Boolean(params.userId && params.meetingId && ["attended", "absent"].includes(params.systemStatus) && params.token && params.taskId && params.token === `signed-${params.meetingId}`);
+
+    function renderReasonOptions() {
+      const c = current();
+      $("#reason-grid").innerHTML = reasonOptions.map((option) => `
+        <label class="reason-option">
+          <input type="radio" name="reason" value="${option.value}" ${state.reasonCode === option.value ? "checked" : ""}>
+          <span>${option[state.lang]}</span>
+        </label>
+      `).join("");
+      $("#reason-label").textContent = c.reason;
+      document.querySelectorAll("input[name='reason']").forEach((input) => input.addEventListener("change", () => {
+        state.reasonCode = input.value;
+        $("#form-error").style.display = "none";
+      }));
+    }
+
+    function updateReasonVisibility() {
+      const status = document.querySelector("input[name='attendance']:checked")?.value;
+      $("#reason-section").classList.toggle("hidden", status !== "absent");
+    }
+
+    function applyLanguage() {
+      const c = current();
+      document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+      $("#language-toggle").textContent = state.lang === "zh" ? "EN" : "中";
+      $("#title").textContent = c.title;
+      $("#subtitle").textContent = c.subtitle;
+      $("#user-id-label").textContent = c.userId;
+      $("#meeting-id-label").textContent = c.meetingId;
+      $("#system-label").textContent = c.system;
+      $("#attendance-label").textContent = c.attendance;
+      $("#attended-label").textContent = c.attended;
+      $("#absent-label").textContent = c.absent;
+      $("#note-label").textContent = c.note;
+      $("#follow-up-note").placeholder = c.placeholder;
+      $("#submit-button").textContent = state.result ? c.update : c.submit;
+      $("#back-link").textContent = c.back;
+      $("#success-back").textContent = c.back;
+      $("#invalid-back").textContent = c.back;
+      $("#success-title").textContent = c.successTitle;
+      $("#success-copy").textContent = c.successCopy;
+      $("#invalid-title").textContent = c.invalidTitle;
+      $("#invalid-copy").textContent = c.invalidCopy;
+      $("#system-status").textContent = params.systemStatus === "attended" ? c.attended : c.absent;
+      $("#system-badge").textContent = state.result ? (state.result.modified ? c.modified : c.confirmed) : c.pending;
+      renderReasonOptions();
+      localStorage.setItem("consult-lang", state.lang);
+      updateReasonVisibility();
+    }
+
+    function showSuccess() {
+      $("#form-body").classList.add("hidden");
+      $("#success-state").style.display = "block";
+    }
+
+    if (!valid) {
+      $("#form-body").classList.add("hidden");
+      $("#invalid-state").style.display = "block";
+    } else {
+      $("#user-id-value").textContent = params.userId;
+      $("#meeting-id-value").textContent = params.meetingId;
+      document.querySelector(`input[name='attendance'][value='${state.result?.attendanceStatus || params.systemStatus}']`).checked = true;
+      $("#follow-up-note").value = state.result?.followUpNote || "";
+      $("#note-count").textContent = String($("#follow-up-note").value.length);
+    }
+
+    document.querySelectorAll("input[name='attendance']").forEach((input) => input.addEventListener("change", () => {
+      $("#form-error").style.display = "none";
+      updateReasonVisibility();
+    }));
+    $("#follow-up-note").addEventListener("input", () => { $("#note-count").textContent = String($("#follow-up-note").value.length); });
+    $("#language-toggle").addEventListener("click", () => {
+      $("#form-error").style.display = "none";
+      state.lang = state.lang === "zh" ? "en" : "zh";
+      applyLanguage();
+    });
+    $("#result-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const c = current();
+      $("#form-error").style.display = "none";
+      const attendanceStatus = document.querySelector("input[name='attendance']:checked")?.value;
+      const reasonCode = document.querySelector("input[name='reason']:checked")?.value;
+      if (!attendanceStatus) {
+        $("#form-error").textContent = c.chooseStatus;
+        $("#form-error").style.display = "block";
+        return;
+      }
+      if (attendanceStatus === "absent" && !reasonCode) {
+        $("#form-error").textContent = c.chooseReason;
+        $("#form-error").style.display = "block";
+        return;
+      }
+      const selectedReason = reasonOptions.find((option) => option.value === reasonCode);
+      const allResults = JSON.parse(localStorage.getItem("consultation-attendance-results") || "{}");
+      allResults[params.meetingId] = {
+        userId: params.userId,
+        meetingId: params.meetingId,
+        systemStatus: params.systemStatus,
+        attendanceStatus,
+        modified: attendanceStatus !== params.systemStatus,
+        reasonCode: attendanceStatus === "absent" ? reasonCode : null,
+        reason: attendanceStatus === "absent" ? selectedReason?.[state.lang] : null,
+        followUpNote: $("#follow-up-note").value.trim(),
+        submittedAt: new Date().toISOString(),
+        submittedBy: "Linh Nguyen"
+      };
+      localStorage.setItem("consultation-attendance-results", JSON.stringify(allResults));
+      state.result = allResults[params.meetingId];
+      state.reasonCode = reasonCode || null;
+      showSuccess();
+    });
+
+    applyLanguage();
+  </script>
+</body>
+</html>

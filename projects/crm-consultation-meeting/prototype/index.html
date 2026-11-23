@@ -300,7 +300,12 @@
         studentName: "学生姓名", userType: "用户类型", age: "年龄段", courseLevel: "课程等级",
         sourceLanding: "渠道来源-落地页", sourceCode: "渠道 code", sourceApp: "渠道来源-App",
         registration: "注册时间", englishLevel: "英语学习程度", learningPurpose: "学习目的",
-        customerAttendance: "客户在会时长", meetingTopic: "会议主题", attendRule: "非 Owner 参与者累计在会超过 1 分钟视为已出勤"
+        customerAttendance: "客户在会时长", meetingTopic: "会议主题", attendRule: "非 Owner 参与者累计在会超过 1 分钟视为已出勤",
+        noShowReason: "未出勤原因", followUpNote: "跟进说明", reasonPending: "待补充",
+        systemAttendance: "系统判定", effectiveAttendance: "有效出勤结果", attendancePending: "待确认",
+        attendanceConfirmed: "已确认", attendanceModified: "已修改",
+        confirmAttendance: "确认或修改出勤结果", viewAttendance: "查看出勤结果",
+        larkNoticeSent: "Lark 结果提醒已发送", noNote: "—"
       },
       en: {
         brandSub: "Customer Operations", customerOps: "Customer Operations", sales: "Sales Center", users: "User Center",
@@ -340,7 +345,12 @@
         studentName: "Student Name", userType: "User Type", age: "Age Group", courseLevel: "Course Level",
         sourceLanding: "Source - Landing Page", sourceCode: "Source Code", sourceApp: "Source - App",
         registration: "Registration Time", englishLevel: "English Level", learningPurpose: "Learning Goal",
-        customerAttendance: "Customer Attendance", meetingTopic: "Meeting Topic", attendRule: "Attendance requires more than 1 minute of non-owner participation"
+        customerAttendance: "Customer Attendance", meetingTopic: "Meeting Topic", attendRule: "Attendance requires more than 1 minute of non-owner participation",
+        noShowReason: "No-show reason", followUpNote: "Follow-up note", reasonPending: "Pending",
+        systemAttendance: "System result", effectiveAttendance: "Effective attendance", attendancePending: "Pending confirmation",
+        attendanceConfirmed: "Confirmed", attendanceModified: "Modified",
+        confirmAttendance: "Confirm or edit attendance", viewAttendance: "View attendance result",
+        larkNoticeSent: "Lark result reminder sent", noNote: "—"
       }
     };
 
@@ -359,6 +369,16 @@
       absent: { zh: "未出勤", en: "No-show", cls: "pill-amber" },
       cancelled: { zh: "已取消", en: "Cancelled", cls: "pill-red" },
       sync_failed: { zh: "同步失败", en: "Sync failed", cls: "pill-red" }
+    };
+    const NO_SHOW_REASON_META = {
+      school_exam: { zh: "学校考试", en: "School exam" },
+      academic_busy: { zh: "学业忙", en: "Academically busy" },
+      device: { zh: "设备问题", en: "Device issue" },
+      network: { zh: "网络问题", en: "Network issue" },
+      parent_busy: { zh: "家长忙", en: "Parent busy" },
+      forgot: { zh: "忘记预约", en: "Forgot appointment" },
+      unreachable: { zh: "无法联系", en: "Unable to contact" },
+      not_interested: { zh: "学生不喜欢学习", en: "Student does not like studying" }
     };
 
     const state = {
@@ -417,11 +437,33 @@
     const tr = (key) => I18N[state.lang][key] ?? key;
     const fmt = (key, vars) => tr(key).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
     const stageLabel = (stage) => STAGE_META[stage] ? STAGE_META[stage][state.lang] : stage;
+    const reasonLabel = (code) => NO_SHOW_REASON_META[code]?.[state.lang] || code;
     const stagePill = (stage) => `<span class="pill ${STAGE_META[stage]?.cls || "pill-blue"}">${esc(stageLabel(stage))}</span>`;
     const meetingPill = (status) => `<span class="pill ${MEETING_META[status]?.cls || "pill-blue"}">${esc(MEETING_META[status]?.[state.lang] || status)}</span>`;
     const userById = (id) => users.find((item) => item.id === id);
     const meetingsFor = (id) => meetings.filter((item) => item.userId === id).sort((a, b) => b.start.localeCompare(a.start));
     const pendingMeeting = (id) => meetingsFor(id).find((item) => item.status === "scheduled" || item.status === "in_progress");
+    const attendanceResultFor = (meetingId) => {
+      try {
+        return JSON.parse(localStorage.getItem("consultation-attendance-results") || "{}")[meetingId] || null;
+      } catch {
+        return null;
+      }
+    };
+    const effectiveAttendance = (meeting) => meeting.status === "attended" || meeting.status === "absent"
+      ? (attendanceResultFor(meeting.meetingId)?.attendanceStatus || meeting.status)
+      : meeting.status;
+    function applyAttendanceCorrections() {
+      meetings.forEach((meeting) => {
+        if (!["attended", "absent"].includes(meeting.status)) return;
+        const result = attendanceResultFor(meeting.meetingId);
+        const user = userById(meeting.userId);
+        if (!result || !user) return;
+        if (["absent", "completed"].includes(user.stage)) {
+          user.stage = result.attendanceStatus === "attended" ? "completed" : "absent";
+        }
+      });
+    }
     const intentLabel = (intent) => ({ "Interested": state.lang === "zh" ? "有意向" : "Interested", "Not interested": state.lang === "zh" ? "无意向" : "Not interested", "Not filled": state.lang === "zh" ? "未填写" : "Not filled" }[intent] || intent);
     const userStatusLabel = (status) => state.lang === "zh"
       ? status.replace("Unpaid · Trial in progress", "未付费 · 体验中").replace("Unpaid · Trial pending", "未付费 · 未体验").replace("Unpaid · Trial completed", "未付费 · 已体验").replace("Unpaid", "未付费")
@@ -473,6 +515,7 @@
     }
 
     function render() {
+      applyAttendanceCorrections();
       $("#page-title").textContent = shellTitle();
       $("#breadcrumb").textContent = state.route === "users" ? tr("crumbUsers") : state.route === "user-detail" ? tr("crumbUserDetail") : tr("crumbSales");
       document.querySelectorAll(".nav-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.route === (state.route === "user-detail" ? "users" : state.route)));
@@ -586,7 +629,8 @@
             </div>
             ${list.length ? `<div class="meeting-table-wrap"><table class="meeting-table"><thead><tr>
               <th>${esc(tr("meetingTopic"))}</th><th>${esc(tr("attendance"))}</th><th>${esc(tr("meetingTime"))}</th>
-              <th>${esc(tr("actualTime"))}</th><th>${esc(tr("customerAttendance"))}</th><th>${esc(tr("note"))}</th><th>${esc(tr("actions"))}</th>
+              <th>${esc(tr("actualTime"))}</th><th>${esc(tr("customerAttendance"))}</th>
+              <th>${esc(tr("noShowReason"))}</th><th>${esc(tr("followUpNote"))}</th><th>${esc(tr("note"))}</th><th>${esc(tr("actions"))}</th>
             </tr></thead><tbody>${list.map(renderMeetingRow).join("")}</tbody></table></div>` : `<div class="empty">${esc(tr("noMeeting"))}</div>`}
           </section>
         </div>`;
@@ -600,16 +644,30 @@
       const noteClass = meeting.noteStatus === "failed" ? "pill-red" : meeting.noteStatus === "saved" ? "pill-green" : "pill-amber";
       const attendanceTime = attendanceText(meeting);
       const actualTime = meeting.actualStart ? `${meeting.actualStart} – ${meeting.actualEnd}` : "—";
+      const result = attendanceResultFor(meeting.meetingId);
+      const effective = effectiveAttendance(meeting);
+      const needsReason = effective === "absent";
+      const reasonText = needsReason ? (result?.reasonCode ? reasonLabel(result.reasonCode) : tr("reasonPending")) : "—";
+      const followUpText = result?.followUpNote || tr("noNote");
+      const confirmState = result
+        ? tr(result.modified ? "attendanceModified" : "attendanceConfirmed")
+        : tr("attendancePending");
+      const attendanceAction = ["attended", "absent"].includes(meeting.status)
+        ? `<button class="btn btn-small ${result ? "" : "btn-soft"}" data-attendance-result="${meeting.id}">${esc(tr(result ? "viewAttendance" : "confirmAttendance"))}</button>`
+        : "";
       return `<tr>
         <td><span class="subject">${esc(meeting.title)}</span><div class="uid">${esc(meeting.owner)} · ${esc(meeting.meetingNo)}</div></td>
-        <td>${meetingPill(meeting.status)}</td>
+        <td>${meetingPill(effective)}<div class="uid">${esc(tr("systemAttendance"))}: ${esc(MEETING_META[meeting.status]?.[state.lang] || meeting.status)} · ${esc(confirmState)}</div>${["attended", "absent"].includes(meeting.status) ? `<div class="uid">${esc(tr("larkNoticeSent"))}</div>` : ""}</td>
         <td>${esc(meeting.start)} – ${esc(meeting.end.slice(11))}</td>
         <td>${esc(actualTime)}</td>
         <td><span class="attendance-time">${esc(attendanceTime)}</span></td>
+        <td>${esc(reasonText)}</td>
+        <td>${esc(followUpText)}</td>
         <td>${meeting.noteStatus === "saved" ? `<button class="btn btn-soft btn-small" data-note="${meeting.id}">${esc(tr("viewNote"))}</button>` : `<span class="pill ${noteClass}">${esc(noteLabel)}</span>`}</td>
         <td><div class="meeting-actions">
           <button class="btn btn-small" data-open-meeting="${meeting.id}">${esc(tr("viewMeeting"))}</button>
           <button class="btn btn-small" data-copy-link="${meeting.id}">${esc(tr("copyLink"))}</button>
+          ${attendanceAction}
           ${meeting.noteStatus === "failed" || meeting.status === "sync_failed" ? `<button class="btn btn-small" data-resync="${meeting.id}">${esc(tr("resync"))}</button>` : ""}
         </div></td>
       </tr>`;
@@ -626,6 +684,7 @@
       document.querySelectorAll("[data-copy-link]").forEach((btn) => btn.addEventListener("click", () => copyMeetingLink(btn.dataset.copyLink)));
       document.querySelectorAll("[data-note]").forEach((btn) => btn.addEventListener("click", () => openNote(btn.dataset.note)));
       document.querySelectorAll("[data-resync]").forEach((btn) => btn.addEventListener("click", () => resyncMeeting(btn.dataset.resync)));
+      document.querySelectorAll("[data-attendance-result]").forEach((btn) => btn.addEventListener("click", () => openAttendanceResult(btn.dataset.attendanceResult)));
     }
 
     function openOverlay(html) {
@@ -633,6 +692,18 @@
       $("#modal-layer").classList.add("open");
       $("#modal-layer").setAttribute("aria-hidden", "false");
       $("#modal-layer .icon-btn")?.focus();
+    }
+
+    function openAttendanceResult(meetingId) {
+      const meeting = meetings.find((item) => item.id === meetingId);
+      if (!meeting || !["attended", "absent"].includes(meeting.status)) return;
+      const url = new URL("attendance-result.html", window.location.href);
+      url.searchParams.set("user_id", meeting.userId);
+      url.searchParams.set("meeting_id", meeting.meetingId);
+      url.searchParams.set("attendance_status", meeting.status);
+      url.searchParams.set("task_id", `NSR-${meeting.meetingId}-${meeting.userId}`);
+      url.searchParams.set("token", `signed-${meeting.meetingId}`);
+      window.open(url.toString(), "_blank");
     }
 
     function closeOverlay() {
@@ -704,6 +775,9 @@
     function openMeeting(id) {
       const meeting = meetings.find((item) => item.id === id);
       if (!meeting) return;
+      const result = attendanceResultFor(meeting.meetingId);
+      const effective = effectiveAttendance(meeting);
+      const needsReason = effective === "absent";
       openOverlay(`
         <div class="modal-head"><h2 id="modal-title">${esc(meeting.title)}</h2><button class="icon-btn" data-close>×</button></div>
         <div class="modal-body">
@@ -714,7 +788,10 @@
             <div><small>${esc(tr("meetingTime"))}</small><strong>${esc(meeting.start)} – ${esc(meeting.end)}</strong></div>
             <div><small>${esc(tr("actualTime"))}</small><strong>${meeting.actualStart ? `${esc(meeting.actualStart)} – ${esc(meeting.actualEnd)}` : "—"}</strong></div>
             <div><small>${esc(tr("attendance"))}</small><strong>${esc(MEETING_META[meeting.status]?.[state.lang] || meeting.status)}</strong></div>
+            <div><small>${esc(tr("effectiveAttendance"))}</small><strong>${esc(MEETING_META[effective]?.[state.lang] || effective)}</strong></div>
             <div><small>${esc(tr("customerAttendance"))}</small><strong>${esc(attendanceText(meeting))}</strong></div>
+            ${needsReason ? `<div><small>${esc(tr("noShowReason"))}</small><strong>${esc(result?.reasonCode ? reasonLabel(result.reasonCode) : tr("reasonPending"))}</strong></div>` : ""}
+            <div><small>${esc(tr("followUpNote"))}</small><strong>${esc(result?.followUpNote || tr("noNote"))}</strong></div>
             <div><small>${esc(tr("lastSync"))}</small><strong>${esc(meeting.lastSync || "—")}</strong></div>
           </div>
           <div class="field section-gap"><span class="field-label">${esc(tr("meetingLink"))}</span><input class="input" readonly value="${esc(meeting.url)}"></div>
@@ -722,6 +799,7 @@
           <div class="actions section-gap">
             <button class="btn btn-soft" data-copy-link="${meeting.id}">${esc(tr("copyLink"))}</button>
             <button class="btn" id="modal-open-lark">${esc(tr("openLark"))}</button>
+            ${["attended", "absent"].includes(meeting.status) ? `<button class="btn btn-soft" data-attendance-result="${meeting.id}">${esc(tr(result ? "viewAttendance" : "confirmAttendance"))}</button>` : ""}
             ${meeting.noteStatus === "saved" ? `<button class="btn" data-note="${meeting.id}">${esc(tr("viewNote"))}</button>` : ""}
           </div>
         </div>
@@ -796,6 +874,12 @@
     document.querySelectorAll(".lang-btn").forEach((btn) => btn.addEventListener("click", () => updateLanguage(btn.dataset.lang)));
     $("#modal-layer").addEventListener("click", (event) => { if (event.target.id === "modal-layer") closeOverlay(); });
     document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeOverlay(); });
+    window.addEventListener("storage", (event) => {
+      if (event.key === "consultation-attendance-results" && state.route === "user-detail") {
+        applyAttendanceCorrections();
+        renderUserDetail();
+      }
+    });
 
     updateLanguage(state.lang);
   </script>
