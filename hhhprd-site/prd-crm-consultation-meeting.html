@@ -34,7 +34,7 @@
 <p>本期把会议创建、链接分享、参会结果判断和纪要归档串成一条闭环，同时保持 CRM 对业务结果的判断可追溯。</p>
 <h3>范围</h3>
 <p><strong>做</strong></p>
-<ul><li>当前跟进阶段为 <code>已预约</code> 的用户显示 <code>创建 Lark 会议</code>。</li><li>企业公共账号创建带视频会议的日程，销售本人作为会议 Owner。</li><li>创建成功后保存会议链接、日程 ID、会议号和会议状态，并支持复制链接。</li><li>监听飞书会议结束事件，读取参会人快照，判断客户出勤和咨询完成。</li><li>符合条件时自动将当前跟进阶段从 <code>已预约</code> 更新为 <code>咨询已完成</code>。</li><li>监听飞书智能纪要生成事件，保存纪要原文、逐字稿入口和飞书链接。</li><li>用户详情增加 <code>咨询会议</code> 分组；销售可查看会议时间、Owner、参会结果、跟进阶段和纪要。</li><li>支持同步失败重试、出勤待确认和销售人工确认结果。</li></ul>
+<ul><li>当前跟进阶段为 <code>已预约</code> 的用户显示 <code>创建 Lark 会议</code>。</li><li>企业公共账号创建带视频会议的日程，销售本人作为会议 Owner。</li><li>创建成功后保存会议链接、日程 ID、会议号和会议状态，并支持复制链接。</li><li>监听飞书会议结束事件，读取参会人快照，判断客户出勤和咨询完成。</li><li>符合条件时自动将当前跟进阶段从 <code>已预约</code> 更新为 <code>咨询已完成</code>。</li><li>监听飞书智能纪要生成事件，保存纪要原文、逐字稿入口和飞书链接。</li><li>用户详情增加 <code>咨询会议</code> 分组；销售可查看会议时间、Owner、参会结果、跟进阶段和纪要。</li><li>支持同步失败重试和出勤结果自动回写。</li></ul>
 <p><strong>不做</strong></p>
 <ul><li>不修改用户状态、购买意向、销售咨询预约或预约外呼字段。</li><li>不为销售列表新增会议相关默认列、筛选器或排序能力。</li><li>不将 <code>销售咨询预约=已预约</code> 当作会议创建条件。</li><li>不自动总结纪要，不输出试课评价、意向等级、购买概率或下一步建议。</li><li>不自动通过 WhatsApp、LINE、短信或其他渠道发送会议链接。</li><li>不自动回退已经进入付费、关闭或其他后续阶段的用户。</li><li>不保存录制音视频原文件。</li></ul>
 <h3>主流程</h3>
@@ -51,7 +51,6 @@
     H --&gt; I[读取会议参与人快照]
     I --&gt; J{客户是否有效出勤}
     J --&gt;|否| J1[记录未出勤，保留已预约，生成跟进提醒]
-    J --&gt;|无法识别| J2[记录待确认，保留已预约，等待销售确认]
     J --&gt;|是| K{当前阶段是否仍为已预约}
     K --&gt;|是| L[自动更新为咨询已完成]
     K --&gt;|否| L1[保留当前阶段并记录出勤事实]
@@ -72,18 +71,18 @@
 <h4>创建结果</h4>
 <ul><li>创建成功后显示会议主题、开始时间、销售 Owner、会议号和会议链接。</li><li>自动复制会议链接；浏览器禁止复制时展示链接和 <code>再次复制</code> 按钮。</li><li>提供 <code>打开 Lark 会议</code>。该按钮打开飞书官方会议链接，由客户端或浏览器承接。</li><li>CRM 只创建和复制链接，不自动向用户发送。</li><li>创建成功后保存 <code>calendar_event_id</code>、会议号、会议链接和初始会议状态；实际 <code>meeting_id</code> 在会议开始或结束后补全。</li><li>同一用户允许创建多次历史会议，但一次提交只能生成一个日程。</li><li>创建失败时不保存半成品记录、不改变跟进阶段，并向销售展示失败原因。</li></ul>
 <h4>会议状态</h4>
-<table><thead><tr><th>状态</th><th>判定</th></tr></thead><tbody><tr><td>待开始</td><td>日程已创建，未收到会议开始事件</td></tr><tr><td>进行中</td><td>已收到会议开始事件，未收到结束事件</td></tr><tr><td>已结束待判断</td><td>已收到会议结束事件，尚未完成参会人判断</td></tr><tr><td>已出勤</td><td>客户有效参会且会议正常结束</td></tr><tr><td>未出勤</td><td>会议正常结束，但没有识别到客户有效参会</td></tr><tr><td>待确认</td><td>会议产物存在，但无法确认客户身份或参会结果</td></tr><tr><td>已取消</td><td>日程被取消，或会议未开始且已超过计划结束时间</td></tr><tr><td>同步失败</td><td>会议或纪要靠回查失败，等待重试</td></tr></tbody></table>
+<table><thead><tr><th>状态</th><th>判定</th></tr></thead><tbody><tr><td>待开始</td><td>日程已创建，未收到会议开始事件</td></tr><tr><td>进行中</td><td>已收到会议开始事件，未收到结束事件</td></tr><tr><td>已结束待判断</td><td>已收到会议结束事件，尚未完成参会人判断</td></tr><tr><td>已出勤</td><td>客户有效参会且会议正常结束</td></tr><tr><td>未出勤</td><td>会议正常结束，但没有识别到客户有效参会</td></tr><tr><td>已取消</td><td>日程被取消，或会议未开始且已超过计划结束时间</td></tr><tr><td>同步失败</td><td>会议或纪要靠回查失败，等待重试</td></tr></tbody></table>
 <h3>需求二：出勤和咨询完成判断</h3>
 <h4>事件节点</h4>
 <ul><li>飞书 <code>会议结束</code> 事件是参会结果判断的触发节点。</li><li>CRM 收到结束事件后，以 <code>meeting_id</code> 查询会议参与人快照、实际开始时间和实际结束时间。</li><li>飞书 <code>智能纪要已生成</code> 事件只触发纪要同步，不能单独证明用户出勤，也不能触发跟进阶段变更。</li><li>飞书 <code>会议开始</code> 事件只用于把会议状态更新为 <code>进行中</code>，不改变跟进阶段。</li><li>重复事件按飞书事件 ID 去重；乱序到达时按业务发生时间更新，阶段更新只在当前阶段仍为 <code>已预约</code> 时执行。</li></ul>
 <h4>客户出勤判定</h4>
 <p>每条会议链接只对应一个 CRM 用户。会议结束后，按下述顺序判断：</p>
-<ol><li>能从飞书参与人身份稳定对应到 CRM 用户时，以该参与人的累计在会时长判断。</li><li>客户没有飞书身份、以游客加入时，以本次唯一会议链接中的非销售 Owner 参与者判断。</li><li>非 Owner 客户参与者累计在会时间不少于 1 分钟，判定为 <code>已出勤</code>。</li><li>没有任何非 Owner 参与者，或参与者累计在会为 0，判定为 <code>未出勤</code>。</li><li>存在多名无法区分身份的非 Owner 参与者时，判定为 <code>待确认</code>，不自动改变跟进阶段。</li></ol>
-<p><code>待确认</code> 时，当前销售、销售组长、管理员或超级管理员可将会议结果人工确认。人工确认必须选择 <code>已出勤</code> 或 <code>未出勤</code> 并记录原因。</p>
+<ol><li>能从飞书参与人身份稳定对应到 CRM 用户时，以该参与人的累计在会时长判断。</li><li>客户没有飞书身份、以游客加入时，以本次唯一会议链接中的非销售 Owner 参与者判断。</li><li>以本次唯一会议链接关联的全部非 Owner 参与者为统计范围，不因参与者身份无法逐一区分而进入人工确认。</li><li>任一非 Owner 参与者累计在会时长大于 1 分钟，判定为 <code>已出勤</code>。</li><li>没有任何非 Owner 参与者，或所有非 Owner 参与者累计在会时长均不超过 1 分钟，判定为 <code>未出勤</code>。</li></ol>
+<p>出勤仅由上述参会时长判定，不设置人工确认状态，也不由销售手工改写。</p>
 <h4>咨询完成与测试课完成</h4>
-<ul><li>客户 <code>已出勤</code> 且会议正常结束，即满足本期 <code>咨询已完成</code> 判断。</li><li>客户 <code>未出勤</code> 或 <code>待确认</code> 时，不满足 <code>咨询已完成</code>。</li><li>本需求判断的是会议参与和咨询完成，不判断体验课是否完成。体验课完成仍以课程系统记录为准。</li><li>纪要是否生成不影响跟进阶段判断。</li></ul>
+<ul><li>客户 <code>已出勤</code> 且会议正常结束，即满足本期 <code>咨询已完成</code> 判断。</li><li>客户 <code>未出勤</code> 时，不满足 <code>咨询已完成</code>。</li><li>本需求判断的是会议参与和咨询完成，不判断体验课是否完成。体验课完成仍以课程系统记录为准。</li><li>纪要是否生成不影响跟进阶段判断。</li></ul>
 <h4>跟进阶段迁移</h4>
-<table><thead><tr><th>当前阶段</th><th>会议结果</th><th>目标阶段</th><th>其他处理</th></tr></thead><tbody><tr><td>已预约</td><td>已出勤且会议正常结束</td><td>咨询已完成</td><td>保存会议结果；纪要到达后补充纪要</td></tr><tr><td>已预约</td><td>未出勤</td><td>已预约</td><td>保存未出勤结果，生成跟进提醒</td></tr><tr><td>已预约</td><td>待确认</td><td>已预约</td><td>提示人工确认会议结果</td></tr><tr><td>咨询已完成或后续阶段</td><td>任意</td><td>保持当前阶段</td><td>只保存会议事实，不回退阶段</td></tr><tr><td>暂不跟进、已关闭、已付费</td><td>任意</td><td>保持当前阶段</td><td>只保存会议事实，不覆盖人工业务判断</td></tr></tbody></table>
+<table><thead><tr><th>当前阶段</th><th>会议结果</th><th>目标阶段</th><th>其他处理</th></tr></thead><tbody><tr><td>已预约</td><td>已出勤且会议正常结束</td><td>咨询已完成</td><td>保存会议结果；纪要到达后补充纪要</td></tr><tr><td>已预约</td><td>未出勤</td><td>已预约</td><td>保存未出勤结果，生成跟进提醒</td></tr><tr><td>咨询已完成或后续阶段</td><td>任意</td><td>保持当前阶段</td><td>只保存会议事实，不回退阶段</td></tr><tr><td>暂不跟进、已关闭、已付费</td><td>任意</td><td>保持当前阶段</td><td>只保存会议事实，不覆盖人工业务判断</td></tr></tbody></table>
 <p>自动更新只执行一次，不覆盖之后的销售人工流转。阶段更新成功和失败均记录审计。</p>
 <h3>需求三：保存飞书智能纪要</h3>
 <h4>纪要来源</h4>
@@ -95,8 +94,10 @@
 <h4>会议结果与纪要独立</h4>
 <ul><li>没有纪要，仍可依据参会结果完成跟进阶段更新。</li><li>客户未出勤，即使飞书生成了纪要，也不自动进入 <code>咨询已完成</code>。</li><li>纪要内容不参与阶段判断，避免把 AI 文本当作业务事实。</li></ul>
 <h3>需求四：用户详情展示</h3>
-<p>在用户详情基本信息之后增加 <code>咨询会议</code> 分组，按计划开始时间倒序展示：</p>
-<table><thead><tr><th>信息</th><th>展示规则</th></tr></thead><tbody><tr><td>计划时间</td><td>计划开始和结束时间</td></tr><tr><td>实际时间</td><td>实际开始和结束时间；未开始时显示 <code>—</code></td></tr><tr><td>销售 Owner</td><td>显示创建时销售姓名和账号状态，离职后保留快照</td></tr><tr><td>会议状态</td><td>待开始、进行中、已结束待判断、已出勤、未出勤、待确认、已取消、同步失败</td></tr><tr><td>跟进阶段</td><td>展示会议结果造成的当前跟进阶段，不保存阶段历史副本</td></tr><tr><td>时长</td><td>实际会议时长；无实际开始或结束时间显示 <code>—</code></td></tr><tr><td>纪要</td><td>纪要标题和 <code>查看纪要</code>；无纪要时显示 <code>待生成</code> 或 <code>同步失败</code></td></tr><tr><td>操作</td><td><code>查看会议链接</code>、<code>复制链接</code>、<code>重新同步</code>；失败或待确认时按权限显示 <code>确认结果</code></td></tr></tbody></table>
+<p>用户详情沿用现有页面的信息展示方式，不改造用户中心整体导航或基础资料结构：</p>
+<ul><li>页面顶部展示 <code>用户详情 · 用户姓名</code>，右上角保留 <code>返回销售中心</code>。</li><li><code>基本信息</code> 使用现有双列字段表，保留用户 ID、学生姓名、购买意向、用户状态、用户类型、年龄段、课程等级、登录账号、渠道来源-落地页、渠道 code、渠道来源-App、业务线、注册时间、CC、英语学习程度和学习目的。</li><li><code>咨询会议</code> 位于基本信息之后，使用同页表格展示会议主题、参会结果、计划时间、实际时间、客户在会时长、纪要和操作。</li><li>咨询会议按计划开始时间倒序展示；没有会议时展示 <code>暂无会议记录</code>。</li></ul>
+<p>咨询会议字段：</p>
+<table><thead><tr><th>信息</th><th>展示规则</th></tr></thead><tbody><tr><td>计划时间</td><td>计划开始和结束时间</td></tr><tr><td>实际时间</td><td>实际开始和结束时间；未开始时显示 <code>—</code></td></tr><tr><td>销售 Owner</td><td>显示创建时销售姓名和账号状态，离职后保留快照</td></tr><tr><td>会议状态</td><td>待开始、进行中、已结束待判断、已出勤、未出勤、已取消、同步失败</td></tr><tr><td>跟进阶段</td><td>展示会议结果造成的当前跟进阶段，不保存阶段历史副本</td></tr><tr><td>时长</td><td>实际会议时长；无实际开始或结束时间显示 <code>—</code></td></tr><tr><td>纪要</td><td>纪要标题和 <code>查看纪要</code>；无纪要时显示 <code>待生成</code> 或 <code>同步失败</code></td></tr><tr><td>操作</td><td><code>查看会议链接</code>、<code>复制链接</code>、<code>重新同步</code></td></tr></tbody></table>
 <p>不展示对纪要内容的二次分析结果。不将飞书会议链接或纪要正文加入用户列表、销售列表默认列。</p>
 <h3>套餐权限与上线前置条件</h3>
 <p>上线前必须由企业飞书超级管理员、IT 管理员或采购负责人书面确认以下权益，并将确认结果作为项目上线材料归档：</p>
@@ -105,13 +106,13 @@
 <ul><li>套餐能力未确认或额度和权限不满足时，本需求不得上线。</li><li>创建会议因并发、分钟额度或权限失败时，页面提示对应原因，不发送“会议已创建”。</li><li>套餐额度、并发达到上限时，不自动修改用户跟进阶段。</li><li>企业级开通不代表每场会议一定生成纪要；CRM 始终以是否收到纪要生成事件为准。</li></ul>
 <h3>RBAC 权限数据</h3>
 <h4>功能权限</h4>
-<table><thead><tr><th>页面/资源</th><th>操作</th><th>业务含义</th><th>默认角色</th><th>数据范围</th><th>审计</th></tr></thead><tbody><tr><td>销售中心咨询会议</td><td>查看</td><td>查看线索已有会议和会议链接</td><td>销售专员、销售组长、管理员、超级管理员</td><td>沿用销售中心线索数据权限</td><td>否</td></tr><tr><td>销售中心咨询会议</td><td>创建</td><td>为已预约用户创建飞书会议</td><td>销售专员、销售组长、管理员、超级管理员</td><td>仅归属本人；组长含团队；管理员及超级管理员按业务线权限</td><td>是</td></tr><tr><td>销售中心咨询会议</td><td>复制链接</td><td>复制会议链接进行现有渠道触达</td><td>有查看权限且为当前 Owner、组长或管理员</td><td>与查看权限一致</td><td>否</td></tr><tr><td>销售中心咨询会议</td><td>确认结果</td><td>对无法自动识别的出勤结果人工确认</td><td>当前 Owner、销售组长、管理员、超级管理员</td><td>当前 Owner 仅本人；组长含团队；管理员及超级管理员按业务线权限</td><td>是</td></tr><tr><td>销售中心咨询会议</td><td>重新同步</td><td>重新获取会议和纪要</td><td>销售组长、管理员、超级管理员</td><td>与销售中心线索数据权限一致</td><td>是</td></tr><tr><td>用户详情咨询会议</td><td>查看</td><td>查看用户会议记录和飞书纪要原文</td><td>销售专员、销售组长、管理员、超级管理员</td><td>沿用用户详情和用户业务线范围</td><td>否</td></tr><tr><td>用户详情咨询会议</td><td>重新同步</td><td>重新获取会议和纪要</td><td>销售组长、管理员、超级管理员</td><td>与用户详情数据范围一致</td><td>是</td></tr></tbody></table>
+<table><thead><tr><th>页面/资源</th><th>操作</th><th>业务含义</th><th>默认角色</th><th>数据范围</th><th>审计</th></tr></thead><tbody><tr><td>销售中心咨询会议</td><td>查看</td><td>查看线索已有会议和会议链接</td><td>销售专员、销售组长、管理员、超级管理员</td><td>沿用销售中心线索数据权限</td><td>否</td></tr><tr><td>销售中心咨询会议</td><td>创建</td><td>为已预约用户创建飞书会议</td><td>销售专员、销售组长、管理员、超级管理员</td><td>仅归属本人；组长含团队；管理员及超级管理员按业务线权限</td><td>是</td></tr><tr><td>销售中心咨询会议</td><td>复制链接</td><td>复制会议链接进行现有渠道触达</td><td>有查看权限且为当前 Owner、组长或管理员</td><td>与查看权限一致</td><td>否</td></tr><tr><td>销售中心咨询会议</td><td>重新同步</td><td>重新获取会议和纪要</td><td>销售组长、管理员、超级管理员</td><td>与销售中心线索数据权限一致</td><td>是</td></tr><tr><td>用户详情咨询会议</td><td>查看</td><td>查看用户会议记录和飞书纪要原文</td><td>销售专员、销售组长、管理员、超级管理员</td><td>沿用用户详情和用户业务线范围</td><td>否</td></tr><tr><td>用户详情咨询会议</td><td>重新同步</td><td>重新获取会议和纪要</td><td>销售组长、管理员、超级管理员</td><td>与用户详情数据范围一致</td><td>是</td></tr></tbody></table>
 <h4>字段与数据权限</h4>
-<table><thead><tr><th>字段组/列表</th><th>可见角色</th><th>编辑角色</th><th>脱敏/隐藏</th><th>可导出</th><th>候选范围限制</th></tr></thead><tbody><tr><td>会议链接</td><td>有咨询会议查看权限的角色</td><td>不可编辑</td><td>无权时完全隐藏</td><td>本期不导出</td><td>仅当前权限范围内用户</td></tr><tr><td>会议时间、Owner、参会结果</td><td>有咨询会议查看权限的角色</td><td>仅人工确认参会结果字段</td><td>无权时完全隐藏</td><td>本期不导出</td><td>仅当前权限范围内用户</td></tr><tr><td>飞书纪要原文、逐字稿入口</td><td>有用户详情或销售中心数据权限的角色</td><td>不可编辑</td><td>无权时完全隐藏</td><td>本期不导出</td><td>仅当前会议关联用户</td></tr><tr><td>跟进阶段变更结果</td><td>有销售中心查看权限的角色</td><td>系统自动更新或按销售阶段现有规则人工更新</td><td>不适用</td><td>沿用现有销售中心权限</td><td>仅当前权限范围内线索</td></tr></tbody></table>
+<table><thead><tr><th>字段组/列表</th><th>可见角色</th><th>编辑角色</th><th>脱敏/隐藏</th><th>可导出</th><th>候选范围限制</th></tr></thead><tbody><tr><td>会议链接</td><td>有咨询会议查看权限的角色</td><td>不可编辑</td><td>无权时完全隐藏</td><td>本期不导出</td><td>仅当前权限范围内用户</td></tr><tr><td>会议时间、Owner、参会结果</td><td>有咨询会议查看权限的角色</td><td>不可编辑，参会结果由系统判定</td><td>无权时完全隐藏</td><td>本期不导出</td><td>仅当前权限范围内用户</td></tr><tr><td>飞书纪要原文、逐字稿入口</td><td>有用户详情或销售中心数据权限的角色</td><td>不可编辑</td><td>无权时完全隐藏</td><td>本期不导出</td><td>仅当前会议关联用户</td></tr><tr><td>跟进阶段变更结果</td><td>有销售中心查看权限的角色</td><td>系统自动更新或按销售阶段现有规则人工更新</td><td>不适用</td><td>沿用现有销售中心权限</td><td>仅当前权限范围内线索</td></tr></tbody></table>
 <h4>权限数据变更</h4>
-<table><thead><tr><th>变更类型</th><th>权限层级</th><th>权限项</th><th>业务说明</th><th>默认角色/数据范围</th><th>是否新增审计</th></tr></thead><tbody><tr><td>新增</td><td>动作</td><td><code>crm.sales_center.consultation_meeting.view</code></td><td>查看销售中心咨询会议</td><td>销售专员、销售组长、管理员、超级管理员；沿用线索数据权限</td><td>否</td></tr><tr><td>新增</td><td>动作</td><td><code>crm.sales_center.consultation_meeting.create</code></td><td>创建飞书咨询会议</td><td>销售专员、销售组长、管理员、超级管理员；按当前线索权限</td><td>是</td></tr><tr><td>新增</td><td>动作</td><td><code>crm.sales_center.consultation_meeting.confirm_result</code></td><td>人工确认出勤结果</td><td>当前 Owner、销售组长、管理员、超级管理员</td><td>是</td></tr><tr><td>新增</td><td>动作</td><td><code>crm.sales_center.consultation_meeting.resync</code></td><td>重试会议和纪要同步</td><td>销售组长、管理员、超级管理员</td><td>是</td></tr><tr><td>新增</td><td>动作</td><td><code>crm.user_center.consultation_meeting.view</code></td><td>在用户详情查看咨询会议</td><td>销售专员、销售组长、管理员、超级管理员；沿用用户数据权限</td><td>否</td></tr><tr><td>新增</td><td>动作</td><td><code>crm.user_center.consultation_meeting.resync</code></td><td>在用户详情重试同步</td><td>销售组长、管理员、超级管理员</td><td>是</td></tr><tr><td>复用</td><td>字段</td><td>现有 <code>当前跟进阶段</code> 编辑权限</td><td>自动写入 <code>咨询已完成</code> 仍受阶段权限体系约束</td><td>现有销售角色与数据范围</td><td>是，记录系统来源</td></tr></tbody></table>
+<table><thead><tr><th>变更类型</th><th>权限层级</th><th>权限项</th><th>业务说明</th><th>默认角色/数据范围</th><th>是否新增审计</th></tr></thead><tbody><tr><td>新增</td><td>动作</td><td><code>crm.sales_center.consultation_meeting.view</code></td><td>查看销售中心咨询会议</td><td>销售专员、销售组长、管理员、超级管理员；沿用线索数据权限</td><td>否</td></tr><tr><td>新增</td><td>动作</td><td><code>crm.sales_center.consultation_meeting.create</code></td><td>创建飞书咨询会议</td><td>销售专员、销售组长、管理员、超级管理员；按当前线索权限</td><td>是</td></tr><tr><td>新增</td><td>动作</td><td><code>crm.sales_center.consultation_meeting.resync</code></td><td>重试会议和纪要同步</td><td>销售组长、管理员、超级管理员</td><td>是</td></tr><tr><td>新增</td><td>动作</td><td><code>crm.user_center.consultation_meeting.view</code></td><td>在用户详情查看咨询会议</td><td>销售专员、销售组长、管理员、超级管理员；沿用用户数据权限</td><td>否</td></tr><tr><td>新增</td><td>动作</td><td><code>crm.user_center.consultation_meeting.resync</code></td><td>在用户详情重试同步</td><td>销售组长、管理员、超级管理员</td><td>是</td></tr><tr><td>复用</td><td>字段</td><td>现有 <code>当前跟进阶段</code> 编辑权限</td><td>自动写入 <code>咨询已完成</code> 仍受阶段权限体系约束</td><td>现有销售角色与数据范围</td><td>是，记录系统来源</td></tr></tbody></table>
 <h4>审计要求</h4>
-<ul><li>记录会议创建、人工确认参会结果、重新同步和自动阶段变更。</li><li>审计包含操作人或系统来源、时间、用户 ID、线索 ID、会议 ID、变更前后阶段、失败原因和外部事件 ID。</li><li>审计不可由业务人员修改或删除，保留时长沿用 CRM 操作日志策略。</li></ul>
+<ul><li>记录会议创建、重新同步、系统出勤判定和自动阶段变更。</li><li>审计包含操作人或系统来源、时间、用户 ID、线索 ID、会议 ID、变更前后阶段、失败原因和外部事件 ID。</li><li>审计不可由业务人员修改或删除，保留时长沿用 CRM 操作日志策略。</li></ul>
 <h3>数据与依赖</h3>
 <table><thead><tr><th>数据/系统</th><th>来源</th><th>唯一标识</th><th>时效/失败处理</th></tr></thead><tbody><tr><td>CRM 用户与线索</td><td>用户中心、销售中心</td><td><code>user_id</code>、<code>lead_id</code></td><td>关联失败时不创建会议</td></tr><tr><td>飞书日程</td><td>企业公共账号</td><td><code>calendar_id + calendar_event_id</code></td><td>创建失败不保存半成品，不修改阶段</td></tr><tr><td>飞书会议</td><td>会议结束事件及会议详情</td><td><code>meeting_id</code></td><td>结束后实时判断；回查失败进入同步失败并可重试</td></tr><tr><td>飞书会议开始事件</td><td>销售 Owner 的会议事件</td><td>飞书事件 ID</td><td>重复事件去重，只更新进行中状态</td></tr><tr><td>飞书会议结束事件</td><td>销售 Owner 的会议事件</td><td>飞书事件 ID</td><td>触发出勤判断；缺失时显示待判断并进入补偿</td></tr><tr><td>飞书智能纪要</td><td>纪要生成事件及纪要详情</td><td><code>note_id</code></td><td>独立于阶段判断；失败显示待生成或同步失败</td></tr><tr><td>企业套餐权益</td><td>飞书管理后台、合同及客户成功确认</td><td>租户 ID</td><td>上线前确认；未确认不得上线</td></tr></tbody></table>
 <h3>用户操作路径</h3>
@@ -120,11 +121,10 @@
        → 销售作为 Owner 主持 → 会议结束事件到达
        → CRM 判断客户出勤
        ├─ 有效出勤 → 自动进入咨询已完成
-       ├─ 未出勤 → 保留已预约并记录未出勤
-       └─ 待确认 → 有权限人员确认结果
+       └─ 未出勤 → 保留已预约并记录未出勤
        → 飞书智能纪要生成 → 原文保存 → 用户详情查看</code></pre>
 <h3>异常与边界</h3>
-<ul><li><strong>重复点击</strong>：同一创建请求只生成一个日程；待开始会议存在时不重复创建。</li><li><strong>创建并发</strong>：同一用户同时发起两个创建请求时，仅一个成功，另一个提示已有待开始会议。</li><li><strong>套餐或权限失败</strong>：不显示创建成功，不保存会议链接，不修改阶段。</li><li><strong>结束事件重复或乱序</strong>：按飞书事件 ID 去重；阶段只在仍为 <code>已预约</code> 时自动更新。</li><li><strong>会议未实际开始</strong>：计划结束时间后仍无开始和结束事件时，标记 <code>已取消</code> 或 <code>未开始</code>，保留 <code>已预约</code>。</li><li><strong>客户未出勤</strong>：保留 <code>已预约</code>，会议结果记录为 <code>未出勤</code>，生成跟进提醒。</li><li><strong>客户身份无法识别</strong>：记录 <code>待确认</code>，不自动改变阶段，进入人工确认。</li><li><strong>阶段已被人工修改</strong>：不覆盖、不回退当前阶段，只记录会议事实和驳回原因。</li><li><strong>纪要延迟或缺席</strong>：阶段仍按出勤事实更新；纪要显示 <code>待生成</code>，后续事件到达后补齐。</li><li><strong>纪要权限失效</strong>：保留失败状态和失败时间，不展示旧内容为新内容，允许有权限角色重试。</li><li><strong>销售离职或停用</strong>：历史会议保留原销售姓名和 ID 快照；停用账号立即失去操作权限，当前线索按现有流程转派，新 Owner 可继续创建后续会议。</li><li><strong>历史数据</strong>：上线前已存在的线下咨询和飞书会议不回填为自动判断结果，只在人工补录后展示。</li></ul></article>
+<ul><li><strong>重复点击</strong>：同一创建请求只生成一个日程；待开始会议存在时不重复创建。</li><li><strong>创建并发</strong>：同一用户同时发起两个创建请求时，仅一个成功，另一个提示已有待开始会议。</li><li><strong>套餐或权限失败</strong>：不显示创建成功，不保存会议链接，不修改阶段。</li><li><strong>结束事件重复或乱序</strong>：按飞书事件 ID 去重；阶段只在仍为 <code>已预约</code> 时自动更新。</li><li><strong>会议未实际开始</strong>：计划结束时间后仍无开始和结束事件时，标记 <code>已取消</code> 或 <code>未开始</code>，保留 <code>已预约</code>。</li><li><strong>客户未出勤</strong>：保留 <code>已预约</code>，会议结果记录为 <code>未出勤</code>，生成跟进提醒。</li><li><strong>客户身份无法逐一区分</strong>：不阻断自动判定，统一按本次会议链接中的非 Owner 参与者累计在会时长判断。</li><li><strong>阶段已被人工修改</strong>：不覆盖、不回退当前阶段，只记录会议事实和驳回原因。</li><li><strong>纪要延迟或缺席</strong>：阶段仍按出勤事实更新；纪要显示 <code>待生成</code>，后续事件到达后补齐。</li><li><strong>纪要权限失效</strong>：保留失败状态和失败时间，不展示旧内容为新内容，允许有权限角色重试。</li><li><strong>销售离职或停用</strong>：历史会议保留原销售姓名和 ID 快照；停用账号立即失去操作权限，当前线索按现有流程转派，新 Owner 可继续创建后续会议。</li><li><strong>历史数据</strong>：上线前已存在的线下咨询和飞书会议不回填为自动判断结果，只在人工补录后展示。</li></ul></article>
 </main>
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";

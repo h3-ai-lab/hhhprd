@@ -173,6 +173,30 @@
     .side-list { display: grid; gap: 10px; }
     .side-item { padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; }
     .side-item small { display: block; color: var(--muted); margin-bottom: 3px; }
+    .detail-page { display: grid; gap: 16px; }
+    .detail-page-head { min-height: 64px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .detail-page-title { display: flex; align-items: center; gap: 10px; }
+    .detail-page-title::before { content: ""; width: 4px; height: 20px; border-radius: 3px; background: #1677ff; }
+    .detail-page-title h2 { margin: 0; font-size: 17px; }
+    .info-panel, .meeting-panel { padding: 0; overflow: hidden; }
+    .detail-section-head { padding: 18px 18px 12px; }
+    .detail-section-head h2 { margin: 0; font-size: 16px; }
+    .detail-section-head p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+    .info-table { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+    .info-cell { min-width: 0; min-height: 54px; display: grid; grid-template-columns: 160px minmax(0, 1fr); border-bottom: 1px solid var(--line); }
+    .info-cell:nth-child(odd) { border-right: 1px solid var(--line); }
+    .info-cell .info-label { padding: 14px 17px; color: #566476; background: #fbfcff; border-right: 1px solid var(--line); }
+    .info-cell .info-value { padding: 14px 17px; color: #283548; overflow-wrap: anywhere; }
+    .info-sub { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .meeting-toolbar { padding: 0 18px 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .meeting-toolbar span { color: var(--muted); font-size: 12px; }
+    .meeting-table-wrap { border-top: 1px solid var(--line); overflow-x: auto; }
+    .meeting-table { min-width: 1040px; }
+    .meeting-table th, .meeting-table td { white-space: nowrap; }
+    .meeting-table .subject { color: var(--ink); font-weight: 650; }
+    .meeting-table .meeting-actions { display: flex; gap: 6px; }
+    .meeting-table .attendance-time { color: #344054; font-weight: 650; }
+    .meeting-rule { padding: 9px 0 0; color: var(--muted); font-size: 11px; }
     .hidden { display: none !important; }
     @media (max-width: 980px) {
       .app { grid-template-columns: 72px minmax(0, 1fr); }
@@ -188,6 +212,9 @@
       .account-copy { display: none; }
       .filters { grid-template-columns: 1fr; }
       .form-grid, .kv { grid-template-columns: 1fr; }
+      .detail-page-head { align-items: flex-start; flex-direction: column; }
+      .info-table { grid-template-columns: 1fr; }
+      .info-cell:nth-child(odd) { border-right: 0; }
       .field.full { grid-column: auto; }
       .panel-head, .profile-top { align-items: flex-start; flex-direction: column; }
       .modal-layer { padding: 10px; }
@@ -256,23 +283,24 @@
         meetingLink: "会议链接", copyAgain: "再次复制", openLark: "打开 Lark 会议", close: "关闭",
         createdEvent: "日程 ID", meetingNo: "会议号", meetingRecord: "咨询会议", noMeeting: "暂无会议记录",
         scheduled: "待开始", inProgress: "进行中", endedPending: "已结束待判断", attended: "已出勤",
-        absent: "未出勤", pendingConfirm: "待确认", cancelled: "已取消", syncFailed: "同步失败",
+        absent: "未出勤", cancelled: "已取消", syncFailed: "同步失败",
         notePending: "纪要待生成", noteSaved: "纪要已保存", noteFailed: "纪要同步失败",
         meetingTime: "计划时间", actualTime: "实际时间", actualDuration: "实际时长", attendance: "参会结果",
         note: "飞书智能纪要", viewNote: "查看纪要", viewMeeting: "查看会议", copyLink: "复制链接",
-        resync: "重新同步", confirmResult: "确认结果", sourceLark: "来源：飞书智能纪要",
+        resync: "重新同步", sourceLark: "来源：飞书智能纪要",
         noteBody: "本次顾问咨询已完成。家长关注孩子口语表达和学习节奏，希望先了解适合的课程级别与上课安排。",
         noteBody2: "用户完成试课沟通，顾问已介绍课程安排。后续由销售确认报名时间。",
-        backSales: "返回销售中心", basicInfo: "基本信息", contactInfo: "联系与归属", line: "业务线",
-        loginAccount: "登录账号", lastSync: "最近同步", notAvailable: "—", confirmTitle: "确认会议结果",
-        resultLabel: "参会结果", reason: "确认原因", reasonPlaceholder: "说明无法自动识别的原因",
-        submitConfirm: "确认并更新", resultUpdated: "会议结果已更新", synced: "会议和纪要已刷新",
+        backSales: "返回销售中心", basicInfo: "基本信息", userDetail: "用户详情", line: "业务线",
+        loginAccount: "登录账号", lastSync: "最近同步", notAvailable: "—", synced: "会议和纪要已刷新",
         syncError: "同步失败，请稍后重试", closeModal: "关闭",
         quotaTitle: "套餐权益校验", quotaBody: "企业会议并发、高清会议用量和智能纪要额度通过上线前校验。",
         noCreate: "当前阶段不可创建", meetingEndNotice: "会议结束事件用于判断参会结果；纪要生成事件只负责同步纪要。",
         copied: "会议链接已复制", userCount: "{n} 位用户", total: "共 {n} 条",
-        viewOnly: "仅可查看", selectedStage: "已预约", confirmAbsent: "未出勤", confirmAttended: "已出勤",
-        ownerName: "当前销售", minutes: "{n} 分钟", noteSourceId: "纪要 ID"
+        ownerName: "当前销售", minutes: "{n} 分钟", noteSourceId: "纪要 ID",
+        studentName: "学生姓名", userType: "用户类型", age: "年龄段", courseLevel: "课程等级",
+        sourceLanding: "渠道来源-落地页", sourceCode: "渠道 code", sourceApp: "渠道来源-App",
+        registration: "注册时间", englishLevel: "英语学习程度", learningPurpose: "学习目的",
+        customerAttendance: "客户在会时长", meetingTopic: "会议主题", attendRule: "非 Owner 参与者累计在会超过 1 分钟视为已出勤"
       },
       en: {
         brandSub: "Customer Operations", customerOps: "Customer Operations", sales: "Sales Center", users: "User Center",
@@ -294,24 +322,25 @@
         createdEvent: "Calendar Event ID", meetingNo: "Meeting No.", meetingRecord: "Consultation Meetings",
         noMeeting: "No meeting records", scheduled: "Scheduled", inProgress: "In progress",
         endedPending: "Ended · Pending review", attended: "Attended", absent: "No-show",
-        pendingConfirm: "Pending confirmation", cancelled: "Cancelled", syncFailed: "Sync failed",
+        cancelled: "Cancelled", syncFailed: "Sync failed",
         notePending: "Notes pending", noteSaved: "Notes saved", noteFailed: "Note sync failed",
         meetingTime: "Scheduled time", actualTime: "Actual time", actualDuration: "Actual duration",
         attendance: "Attendance", note: "Lark AI Meeting Notes", viewNote: "View notes", viewMeeting: "View meeting",
-        copyLink: "Copy link", resync: "Re-sync", confirmResult: "Confirm result", sourceLark: "Source: Lark AI Meeting Notes",
+        copyLink: "Copy link", resync: "Re-sync", sourceLark: "Source: Lark AI Meeting Notes",
         noteBody: "The consultation has been completed. The parent is focused on speaking confidence and learning pace and would like to understand the right course level and schedule.",
         noteBody2: "The learner completed the trial consultation. The advisor introduced the course schedule. Sales will confirm the enrollment date.",
-        backSales: "Back to Sales Center", basicInfo: "Basic Information", contactInfo: "Contact & Ownership",
+        backSales: "Back to Sales Center", basicInfo: "Basic Information", userDetail: "User Details",
         line: "Business Line", loginAccount: "Login Account", lastSync: "Last synced", notAvailable: "—",
-        confirmTitle: "Confirm Meeting Result", resultLabel: "Attendance result", reason: "Reason",
-        reasonPlaceholder: "Explain why attendance could not be identified", submitConfirm: "Confirm and Update",
-        resultUpdated: "Meeting result updated", synced: "Meeting and notes refreshed",
+        synced: "Meeting and notes refreshed",
         syncError: "Sync failed; try again later", closeModal: "Close",
         quotaTitle: "Plan entitlement check", quotaBody: "Concurrent meetings, HD meeting usage, and AI note quota are verified before launch.",
         noCreate: "Not available at this stage", meetingEndNotice: "Meeting-ended events determine attendance; note-generated events only synchronize notes.",
-        copied: "Meeting link copied", userCount: "{n} users", total: "{n} records", viewOnly: "View only",
-        selectedStage: "Booked", confirmAbsent: "No-show", confirmAttended: "Attended",
-        ownerName: "Current sales", minutes: "{n} minutes", noteSourceId: "Note ID"
+        copied: "Meeting link copied", userCount: "{n} users", total: "{n} records",
+        ownerName: "Current sales", minutes: "{n} minutes", noteSourceId: "Note ID",
+        studentName: "Student Name", userType: "User Type", age: "Age Group", courseLevel: "Course Level",
+        sourceLanding: "Source - Landing Page", sourceCode: "Source Code", sourceApp: "Source - App",
+        registration: "Registration Time", englishLevel: "English Level", learningPurpose: "Learning Goal",
+        customerAttendance: "Customer Attendance", meetingTopic: "Meeting Topic", attendRule: "Attendance requires more than 1 minute of non-owner participation"
       }
     };
 
@@ -328,7 +357,6 @@
       ended_pending: { zh: "已结束待判断", en: "Ended · Pending review", cls: "pill-amber" },
       attended: { zh: "已出勤", en: "Attended", cls: "pill-green" },
       absent: { zh: "未出勤", en: "No-show", cls: "pill-amber" },
-      pending_confirm: { zh: "待确认", en: "Pending confirmation", cls: "pill-amber" },
       cancelled: { zh: "已取消", en: "Cancelled", cls: "pill-red" },
       sync_failed: { zh: "同步失败", en: "Sync failed", cls: "pill-red" }
     };
@@ -365,7 +393,7 @@
         meetingNo: "426 817 905", url: "https://qjphu5vphyf4.jp.larksuite.com/j/426817905",
         title: "Consultation - Le Thu Ha", start: "2026-11-18 14:00", end: "2026-11-18 14:30",
         actualStart: "2026-11-18 14:03", actualEnd: "2026-11-18 14:28", owner: "Linh Nguyen",
-        status: "attended", noteStatus: "saved", noteId: "6943848821689040898",
+        status: "attended", attendanceMinutes: 25, noteStatus: "saved", noteId: "6943848821689040898",
         noteBodyKey: "noteBody", lastSync: "2026-11-18 14:31"
       },
       {
@@ -373,14 +401,14 @@
         meetingNo: "938 502 117", url: "https://qjphu5vphyf4.jp.larksuite.com/j/938502117",
         title: "Consultation - Pham Gia Linh", start: "2026-11-17 16:00", end: "2026-11-17 16:30",
         actualStart: "2026-11-17 16:01", actualEnd: "2026-11-17 16:03", owner: "Linh Nguyen",
-        status: "absent", noteStatus: "none", noteId: null, noteBody: null, lastSync: "2026-11-17 16:04"
+        status: "absent", attendanceMinutes: 1, noteStatus: "none", noteId: null, noteBody: null, lastSync: "2026-11-17 16:04"
       },
       {
         id: "m-2004", userId: "u-1007", eventId: "evt_ac6912d8", meetingId: "7321188411936677811",
         meetingNo: "715 264 890", url: "https://qjphu5vphyf4.jp.larksuite.com/j/715264890",
         title: "Consultation - Bui Anh Tuan", start: "2026-11-18 17:00", end: "2026-11-18 17:30",
         actualStart: "2026-11-18 17:04", actualEnd: "2026-11-18 17:27", owner: "Linh Nguyen",
-        status: "pending_confirm", noteStatus: "failed", noteId: null, noteBody: null, lastSync: "2026-11-18 17:29"
+        status: "attended", attendanceMinutes: 23, noteStatus: "failed", noteId: null, noteBody: null, lastSync: "2026-11-18 17:29"
       }
     ];
 
@@ -398,6 +426,21 @@
     const userStatusLabel = (status) => state.lang === "zh"
       ? status.replace("Unpaid · Trial in progress", "未付费 · 体验中").replace("Unpaid · Trial pending", "未付费 · 未体验").replace("Unpaid · Trial completed", "未付费 · 已体验").replace("Unpaid", "未付费")
       : status;
+    const businessLineLabel = (line) => ({
+      Vietnam: state.lang === "zh" ? "越南业务线" : "Vietnam Business Line",
+      Thailand: state.lang === "zh" ? "泰国业务线" : "Thailand Business Line",
+      Malaysia: state.lang === "zh" ? "马来西亚业务线" : "Malaysia Business Line"
+    }[line] || line);
+    const USER_PROFILE = {
+      "u-1001": { type: "正式用户", age: "6–8", level: "L3", landing: "facebook_LF (Leadform update 260922)", code: "—", app: "—", registeredAt: "2026-11-20 09:44:26", english: "—", purpose: "—" },
+      "u-1002": { type: "正式用户", age: "9–10", level: "L2", landing: "TikTok_TH (Instant Form)", code: "—", app: "TikTok", registeredAt: "2026-11-19 15:18:04", english: "—", purpose: "—" },
+      "u-1003": { type: "正式用户", age: "9–10", level: "L3", landing: "facebook_LF (Leadform update 260922)", code: "—", app: "—", registeredAt: "2026-11-18 09:12:36", english: "L3", purpose: "提升口语表达" },
+      "u-1004": { type: "正式用户", age: "12–14", level: "L4", landing: "Google_MY (Search)", code: "BK-2041", app: "—", registeredAt: "2026-11-17 13:28:11", english: "—", purpose: "—" },
+      "u-1005": { type: "正式用户", age: "6–8", level: "L1", landing: "facebook_VN (Leadform update 261105)", code: "—", app: "—", registeredAt: "2026-11-16 10:06:45", english: "—", purpose: "—" },
+      "u-1006": { type: "正式用户", age: "12–14", level: "L2", landing: "TikTok_TH (Direct Message)", code: "—", app: "TikTok", registeredAt: "2026-11-14 18:42:02", english: "—", purpose: "—" },
+      "u-1007": { type: "正式用户", age: "9–10", level: "L3", landing: "facebook_VN (Leadform update 261105)", code: "—", app: "—", registeredAt: "2026-11-18 08:31:27", english: "L3", purpose: "提升英语兴趣" }
+    };
+    const userProfile = (user) => ({ ...(USER_PROFILE[user.id] || { type: "正式用户", age: "—", level: "—", landing: "—", code: "—", app: "—", registeredAt: "—", english: "—", purpose: "—" }), ...user });
 
     function setRoute(route, userId = null) {
       state.route = route;
@@ -416,7 +459,7 @@
     }
 
     function shellTitle() {
-      if (state.route === "user-detail") return userById(state.userId)?.name || tr("usersTitle");
+      if (state.route === "user-detail") return tr("userDetail");
       return state.route === "users" ? tr("usersTitle") : tr("salesTitle");
     }
 
@@ -477,7 +520,7 @@
           : `<button class="btn btn-small" data-user="${item.id}">${esc(tr("viewUser"))}</button>`;
         return `<tr>
           <td><button class="user-link" data-user="${item.id}">${esc(item.name)}</button><div class="uid">${esc(item.id)} · ${esc(item.phone)}</div></td>
-          <td>${esc(item.line)}</td><td>${esc(intentLabel(item.intent))}</td><td>${esc(userStatusLabel(item.status))}</td>
+          <td>${esc(businessLineLabel(item.line))}</td><td>${esc(intentLabel(item.intent))}</td><td>${esc(userStatusLabel(item.status))}</td>
           <td>${stagePill(item.stage)}</td><td>${esc(item.owner)}</td><td>${action}</td>
         </tr>`;
       }).join("")}</tbody></table></div>`;
@@ -496,7 +539,7 @@
       $("#content").innerHTML = `<section class="panel">
         <div class="panel-head"><div class="panel-title">${esc(tr("usersTitle"))}</div><span class="muted">${fmt("userCount", { n: users.length })}</span></div>
         <div class="table-wrap"><table><thead><tr><th>${esc(tr("user"))}</th><th>${esc(tr("businessLine"))}</th><th>${esc(tr("userStatus"))}</th><th>${esc(tr("followStage"))}</th><th>${esc(tr("actions"))}</th></tr></thead>
-        <tbody>${users.map((item) => `<tr><td><button class="user-link" data-user="${item.id}">${esc(item.name)}</button><div class="uid">${esc(item.id)}</div></td><td>${esc(item.line)}</td><td>${esc(userStatusLabel(item.status))}</td><td>${stagePill(item.stage)}</td><td><button class="btn btn-small" data-user="${item.id}">${esc(tr("viewUser"))}</button></td></tr>`).join("")}</tbody></table></div>
+        <tbody>${users.map((item) => `<tr><td><button class="user-link" data-user="${item.id}">${esc(item.name)}</button><div class="uid">${esc(item.id)}</div></td><td>${esc(businessLineLabel(item.line))}</td><td>${esc(userStatusLabel(item.status))}</td><td>${stagePill(item.stage)}</td><td><button class="btn btn-small" data-user="${item.id}">${esc(tr("viewUser"))}</button></td></tr>`).join("")}</tbody></table></div>
       </section>`;
       document.querySelectorAll("[data-user]").forEach((btn) => btn.addEventListener("click", () => setRoute("user-detail", btn.dataset.user)));
     }
@@ -504,78 +547,84 @@
     function renderUserDetail() {
       const user = userById(state.userId);
       if (!user) { setRoute("users"); return; }
+      const profile = userProfile(user);
       const list = meetingsFor(user.id);
       $("#content").innerHTML = `
-        <button class="btn back-btn" id="back-sales">← ${esc(tr("backSales"))}</button>
-        <div class="detail-layout">
-          <section class="panel">
-            <div class="profile">
-              <div class="profile-top">
-                <div><h2>${esc(user.name)}</h2><div class="muted">${esc(user.id)}</div></div>
-                ${stagePill(user.stage)}
-              </div>
-              <div class="kv">
-                <div><small>${esc(tr("businessLine"))}</small><strong>${esc(user.line)}</strong></div>
-                <div><small>${esc(tr("loginAccount"))}</small><strong>${esc(user.account)}</strong></div>
-                <div><small>${esc(tr("userStatus"))}</small><strong>${esc(userStatusLabel(user.status))}</strong></div>
-                <div><small>${esc(tr("owner"))}</small><strong>${esc(user.owner)}</strong></div>
-              </div>
-            </div>
-            <div class="profile">
-              <div class="section-title"><h2>${esc(tr("meetingRecord"))}</h2>${user.stage === "booked" ? `<button class="btn btn-primary btn-small" id="detail-create">${esc(tr("createMeeting"))}</button>` : ""}</div>
-              ${list.length ? list.map(renderMeetingCard).join("") : `<div class="empty">${esc(tr("noMeeting"))}</div>`}
+        <div class="detail-page">
+          <section class="panel detail-page-head">
+            <div class="detail-page-title"><h2>${esc(tr("userDetail"))} · ${esc(user.name)}</h2></div>
+            <button class="btn" id="back-sales">← ${esc(tr("backSales"))}</button>
+          </section>
+
+          <section class="panel info-panel">
+            <div class="detail-section-head"><h2>${esc(tr("basicInfo"))}</h2></div>
+            <div class="info-table">
+              <div class="info-cell"><div class="info-label">${esc(tr("user"))} ID</div><div class="info-value">${esc(user.id)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("studentName"))}</div><div class="info-value">${esc(user.name)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("intent"))}</div><div class="info-value">${esc(intentLabel(user.intent))}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("userStatus"))}</div><div class="info-value">${esc(userStatusLabel(user.status))}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("userType"))}</div><div class="info-value">${esc(profile.type)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("age"))}</div><div class="info-value">${esc(profile.age)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("courseLevel"))}</div><div class="info-value">${esc(profile.level)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("loginAccount"))}</div><div class="info-value">${esc(user.account)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("sourceLanding"))}</div><div class="info-value">${esc(profile.landing)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("sourceCode"))}</div><div class="info-value">${esc(profile.code)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("sourceApp"))}</div><div class="info-value">${esc(profile.app)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("businessLine"))}</div><div class="info-value">${esc(businessLineLabel(user.line))}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("registration"))}</div><div class="info-value">${esc(profile.registeredAt)}<span class="info-sub">UTC+08:00</span></div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("owner"))}</div><div class="info-value">${esc(user.owner)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("englishLevel"))}</div><div class="info-value">${esc(profile.english)}</div></div>
+              <div class="info-cell"><div class="info-label">${esc(tr("learningPurpose"))}</div><div class="info-value">${esc(profile.purpose)}</div></div>
             </div>
           </section>
-          <aside class="panel profile-side">
-            <div class="side-list">
-              <div class="side-item"><small>${esc(tr("quotaTitle"))}</small><strong>${esc(tr("quotaBody"))}</strong></div>
-              <div class="side-item"><small>${esc(tr("meetingEndNotice"))}</small><strong>${esc(tr("sourceLark"))}</strong></div>
+
+          <section class="panel meeting-panel">
+            <div class="detail-section-head"><h2>${esc(tr("meetingRecord"))}</h2><p>${esc(tr("attendRule"))}</p></div>
+            <div class="meeting-toolbar">
+              <span>${fmt("total", { n: list.length })}</span>
+              ${user.stage === "booked" ? `<button class="btn btn-primary btn-small" id="detail-create">${esc(tr("createMeeting"))}</button>` : ""}
             </div>
-          </aside>
+            ${list.length ? `<div class="meeting-table-wrap"><table class="meeting-table"><thead><tr>
+              <th>${esc(tr("meetingTopic"))}</th><th>${esc(tr("attendance"))}</th><th>${esc(tr("meetingTime"))}</th>
+              <th>${esc(tr("actualTime"))}</th><th>${esc(tr("customerAttendance"))}</th><th>${esc(tr("note"))}</th><th>${esc(tr("actions"))}</th>
+            </tr></thead><tbody>${list.map(renderMeetingRow).join("")}</tbody></table></div>` : `<div class="empty">${esc(tr("noMeeting"))}</div>`}
+          </section>
         </div>`;
       $("#back-sales").addEventListener("click", () => setRoute("sales"));
       $("#detail-create")?.addEventListener("click", () => openCreate(user.id));
       bindMeetingActions();
     }
 
-    function renderMeetingCard(meeting) {
+    function renderMeetingRow(meeting) {
       const noteLabel = meeting.noteStatus === "saved" ? tr("noteSaved") : meeting.noteStatus === "failed" ? tr("noteFailed") : tr("notePending");
       const noteClass = meeting.noteStatus === "failed" ? "pill-red" : meeting.noteStatus === "saved" ? "pill-green" : "pill-amber";
-      return `<article class="meeting-card" data-meeting-id="${meeting.id}">
-        <div class="meeting-card-top">
-          <div><h3>${esc(meeting.title)}</h3><div class="muted">${esc(meeting.owner)} · ${esc(meeting.meetingNo)}</div></div>
-          ${meetingPill(meeting.status)}
-        </div>
-        <div class="meeting-meta">
-          <span>${esc(tr("meetingTime"))}: ${esc(meeting.start)} – ${esc(meeting.end.slice(11))}</span>
-          <span>${esc(tr("actualDuration"))}: ${actualDuration(meeting)}</span>
-          <span>${esc(tr("attendance"))}: ${esc(MEETING_META[meeting.status]?.[state.lang] || meeting.status)}</span>
-          <span>${esc(tr("lastSync"))}: ${esc(meeting.lastSync || "—")}</span>
-        </div>
-        ${meeting.noteStatus === "saved" ? `<div class="note-preview"><strong>${esc(tr("note"))}</strong><br>${esc(tr(meeting.noteBodyKey))}</div>` : ""}
-        <div class="actions section-gap">
+      const attendanceTime = attendanceText(meeting);
+      const actualTime = meeting.actualStart ? `${meeting.actualStart} – ${meeting.actualEnd}` : "—";
+      return `<tr>
+        <td><span class="subject">${esc(meeting.title)}</span><div class="uid">${esc(meeting.owner)} · ${esc(meeting.meetingNo)}</div></td>
+        <td>${meetingPill(meeting.status)}</td>
+        <td>${esc(meeting.start)} – ${esc(meeting.end.slice(11))}</td>
+        <td>${esc(actualTime)}</td>
+        <td><span class="attendance-time">${esc(attendanceTime)}</span></td>
+        <td>${meeting.noteStatus === "saved" ? `<button class="btn btn-soft btn-small" data-note="${meeting.id}">${esc(tr("viewNote"))}</button>` : `<span class="pill ${noteClass}">${esc(noteLabel)}</span>`}</td>
+        <td><div class="meeting-actions">
           <button class="btn btn-small" data-open-meeting="${meeting.id}">${esc(tr("viewMeeting"))}</button>
           <button class="btn btn-small" data-copy-link="${meeting.id}">${esc(tr("copyLink"))}</button>
-          ${meeting.noteStatus === "saved" ? `<button class="btn btn-soft btn-small" data-note="${meeting.id}">${esc(tr("viewNote"))}</button>` : `<span class="pill ${noteClass}">${esc(noteLabel)}</span>`}
-          ${meeting.status === "pending_confirm" ? `<button class="btn btn-small" data-confirm="${meeting.id}">${esc(tr("confirmResult"))}</button>` : ""}
           ${meeting.noteStatus === "failed" || meeting.status === "sync_failed" ? `<button class="btn btn-small" data-resync="${meeting.id}">${esc(tr("resync"))}</button>` : ""}
-        </div>
-      </article>`;
+        </div></td>
+      </tr>`;
     }
 
-    function actualDuration(meeting) {
-      if (!meeting.actualStart || !meeting.actualEnd) return "—";
-      const start = new Date(meeting.actualStart.replace(" ", "T") + ":00");
-      const end = new Date(meeting.actualEnd.replace(" ", "T") + ":00");
-      if (Number.isNaN(start.valueOf()) || Number.isNaN(end.valueOf())) return "—";
-      return `${Math.max(0, Math.round((end - start) / 60000))} ${state.lang === "zh" ? "分钟" : "min"}`;
+    function attendanceText(meeting) {
+      if (meeting.attendanceMinutes == null) return "—";
+      if (state.lang === "zh") return `${meeting.attendanceMinutes} 分钟`;
+      return `${meeting.attendanceMinutes} ${meeting.attendanceMinutes === 1 ? "minute" : "minutes"}`;
     }
 
     function bindMeetingActions() {
       document.querySelectorAll("[data-open-meeting]").forEach((btn) => btn.addEventListener("click", () => openMeeting(btn.dataset.openMeeting)));
       document.querySelectorAll("[data-copy-link]").forEach((btn) => btn.addEventListener("click", () => copyMeetingLink(btn.dataset.copyLink)));
       document.querySelectorAll("[data-note]").forEach((btn) => btn.addEventListener("click", () => openNote(btn.dataset.note)));
-      document.querySelectorAll("[data-confirm]").forEach((btn) => btn.addEventListener("click", () => openConfirm(btn.dataset.confirm)));
       document.querySelectorAll("[data-resync]").forEach((btn) => btn.addEventListener("click", () => resyncMeeting(btn.dataset.resync)));
     }
 
@@ -633,7 +682,7 @@
         id: `m-${Date.now()}`, userId: user.id, eventId: `evt_${suffix.slice(-8)}`,
         meetingId: `73211884119${suffix}`, meetingNo: suffix.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3"),
         url: `https://qjphu5vphyf4.jp.larksuite.com/j/${suffix}`, title, start: `${date} ${time}`,
-        end, actualStart: null, actualEnd: null, owner: user.owner, status: "scheduled",
+        end, actualStart: null, actualEnd: null, attendanceMinutes: null, owner: user.owner, status: "scheduled",
         noteStatus: "none", noteId: null, noteBody: null, lastSync: "2026-11-19 16:42"
       };
       meetings.unshift(meeting);
@@ -665,6 +714,7 @@
             <div><small>${esc(tr("meetingTime"))}</small><strong>${esc(meeting.start)} – ${esc(meeting.end)}</strong></div>
             <div><small>${esc(tr("actualTime"))}</small><strong>${meeting.actualStart ? `${esc(meeting.actualStart)} – ${esc(meeting.actualEnd)}` : "—"}</strong></div>
             <div><small>${esc(tr("attendance"))}</small><strong>${esc(MEETING_META[meeting.status]?.[state.lang] || meeting.status)}</strong></div>
+            <div><small>${esc(tr("customerAttendance"))}</small><strong>${esc(attendanceText(meeting))}</strong></div>
             <div><small>${esc(tr("lastSync"))}</small><strong>${esc(meeting.lastSync || "—")}</strong></div>
           </div>
           <div class="field section-gap"><span class="field-label">${esc(tr("meetingLink"))}</span><input class="input" readonly value="${esc(meeting.url)}"></div>
@@ -692,33 +742,6 @@
         </div>
         <div class="modal-foot"><button class="btn btn-primary" data-close>${esc(tr("close"))}</button></div>`);
       bindOverlayClose();
-    }
-
-    function openConfirm(id) {
-      const meeting = meetings.find((item) => item.id === id);
-      if (!meeting) return;
-      openOverlay(`
-        <div class="modal-head"><h2 id="modal-title">${esc(tr("confirmTitle"))}</h2><button class="icon-btn" data-close>×</button></div>
-        <form id="confirm-form"><div class="modal-body">
-          <div class="form-grid">
-            <label class="field full"><span class="field-label">${esc(tr("resultLabel"))}</span><select class="select" id="confirm-result"><option value="attended">${esc(tr("confirmAttended"))}</option><option value="absent">${esc(tr("confirmAbsent"))}</option></select></label>
-            <label class="field full"><span class="field-label">${esc(tr("reason"))}</span><textarea class="input" id="confirm-reason" rows="4" placeholder="${esc(tr("reasonPlaceholder"))}" required></textarea></label>
-          </div>
-        </div><div class="modal-foot"><button type="button" class="btn" data-close>${esc(tr("cancel"))}</button><button class="btn btn-primary" type="submit">${esc(tr("submitConfirm"))}</button></div></form>`);
-      bindOverlayClose();
-      $("#confirm-form").addEventListener("submit", (event) => {
-        event.preventDefault();
-        const reason = $("#confirm-reason").value.trim();
-        if (!reason) { $("#confirm-reason").focus(); return; }
-        meeting.status = $("#confirm-result").value;
-        const user = userById(meeting.userId);
-        if (meeting.status === "attended" && user.stage === "booked") user.stage = "completed";
-        meeting.actualStart ||= meeting.start;
-        meeting.actualEnd ||= meeting.end;
-        closeOverlay();
-        render();
-        toast(tr("resultUpdated"));
-      });
     }
 
     function resyncMeeting(id) {
