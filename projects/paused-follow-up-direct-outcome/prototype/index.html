@@ -329,6 +329,7 @@
         actions: "操作",
         updateFollow: "更新跟进",
         viewUser: "查看用户",
+        outbound: "外呼",
         more: "更多",
         noResults: "没有符合条件的线索",
         noResultsHint: "请调整搜索或筛选条件后重试",
@@ -356,9 +357,10 @@
         reasonRequired: "请选择原因",
         otherReasonRequired: "请填写其他原因",
         noteRequired: "请填写本次跟进说明",
-        directHint: "保存后将直接进入已预约，不会单独生成恢复跟进记录。",
+        directHint: "保存后将直接进入已预约。",
+        connectedHint: "系统已识别本次外呼为已接通，请提交本次跟进结果。",
+        unreachedNotice: "外呼未接通，系统已自动回写跟进阶段，无需填写跟进表单。",
         pausedLabel: "暂不跟进",
-        resume: "恢复跟进",
         create: "新建预约",
         reject: "标记已拒绝",
         closeLead: "关闭线索",
@@ -372,8 +374,7 @@
         confirmButton: "确认提交",
         back: "返回修改",
         saveSuccess: "跟进结果已保存",
-        directCreateSuccess: "已直接进入已预约，未生成额外的恢复跟进记录",
-        resumeSuccess: "已恢复跟进",
+        directCreateSuccess: "已直接进入已预约",
         rejectSuccess: "已标记为已拒绝",
         closeSuccess: "线索已关闭",
         reactivateSuccess: "线索已重新激活",
@@ -382,12 +383,14 @@
         statusUnpaid: "未付费",
         statusTrial: "未付费 · 体验中",
         statusPaid: "已付费",
-        actionResume: "恢复跟进",
         actionCreate: "新建预约",
         actionReject: "标记已拒绝",
         actionClose: "关闭线索",
         actionReactivate: "重新激活线索",
         actionPause: "暂停跟进",
+        actionKeepPaused: "保持暂不跟进",
+        actionOutboundConnected: "外呼已接通",
+        actionOutboundUnreached: "外呼未接通",
         actionContinue: "记录沟通，继续跟进",
         beforeStage: "原阶段",
         userDetail: "用户信息",
@@ -417,7 +420,18 @@
         reasonNoNeed: "暂无需求",
         reasonInconvenient: "暂不方便",
         reasonBudget: "预算原因",
+        reasonVoicemail: "语音信箱",
         reasonOther: "其他",
+        keepPausedRequired: "请填写本次跟进说明或调整暂停原因",
+        keepPausedSuccess: "已保持暂不跟进并记录本次跟进",
+        actionRequired: "请选择下一步操作",
+        callTitle: "保存外呼结果",
+        callResult: "外呼结果",
+        connected: "已接通",
+        unconnected: "未接通",
+        saveCall: "保存外呼结果",
+        callUnreachedSaved: "未接通已自动回写，无需填写跟进表单",
+        callConnectedSaved: "已接通，请填写本次跟进结果",
         rejectParentDeclined: "家长拒绝接听电话",
         rejectWrongNumber: "号码错误",
         rejectNoDemand: "无需求",
@@ -465,6 +479,7 @@
         actions: "Actions",
         updateFollow: "Update follow-up",
         viewUser: "View user",
+        outbound: "Call",
         more: "More",
         noResults: "No matching leads",
         noResultsHint: "Adjust the search or filters and try again",
@@ -492,9 +507,10 @@
         reasonRequired: "Select a reason",
         otherReasonRequired: "Enter the other reason",
         noteRequired: "Enter a follow-up note",
-        directHint: "Saving moves the lead directly to Booked without creating a separate resume-follow-up record.",
+        directHint: "Saving moves the lead directly to Booked.",
+        connectedHint: "The call is connected. Submit the result of this follow-up.",
+        unreachedNotice: "The call was not reached. The follow-up stage has been updated automatically.",
         pausedLabel: "Paused",
-        resume: "Resume follow-up",
         create: "Create appointment",
         reject: "Mark rejected",
         closeLead: "Close lead",
@@ -508,8 +524,7 @@
         confirmButton: "Confirm",
         back: "Back",
         saveSuccess: "Follow-up result saved",
-        directCreateSuccess: "Moved directly to Booked without a separate resume-follow-up record",
-        resumeSuccess: "Follow-up resumed",
+        directCreateSuccess: "Moved directly to Booked",
         rejectSuccess: "Lead marked as rejected",
         closeSuccess: "Lead closed",
         reactivateSuccess: "Lead reactivated",
@@ -518,12 +533,14 @@
         statusUnpaid: "Unpaid",
         statusTrial: "Unpaid · Trial in progress",
         statusPaid: "Paid",
-        actionResume: "Resume follow-up",
         actionCreate: "Create appointment",
         actionReject: "Mark rejected",
         actionClose: "Close lead",
         actionReactivate: "Reactivate lead",
         actionPause: "Pause follow-up",
+        actionKeepPaused: "Keep paused",
+        actionOutboundConnected: "Outbound call connected",
+        actionOutboundUnreached: "Outbound call not reached",
         actionContinue: "Record contact and continue",
         beforeStage: "Previous stage",
         userDetail: "User information",
@@ -553,7 +570,18 @@
         reasonNoNeed: "No current need",
         reasonInconvenient: "Not convenient now",
         reasonBudget: "Budget",
+        reasonVoicemail: "Voicemail",
         reasonOther: "Other",
+        keepPausedRequired: "Add a follow-up note or change the pause reason",
+        keepPausedSuccess: "Kept paused and recorded this follow-up",
+        actionRequired: "Select the next action",
+        callTitle: "Save outbound result",
+        callResult: "Outbound result",
+        connected: "Connected",
+        unconnected: "Not reached",
+        saveCall: "Save outbound result",
+        callUnreachedSaved: "Not reached was written back automatically; no follow-up form is required",
+        callConnectedSaved: "Connected; submit the result of this follow-up",
         rejectParentDeclined: "Parent declined the call",
         rejectWrongNumber: "Wrong number",
         rejectNoDemand: "No demand",
@@ -607,7 +635,7 @@
     };
     const INTENT_I18N = { interested: "intentInterested", neutral: "intentNeutral", not_interested: "intentNot" };
     const STATUS_I18N = { pending: "statusPending", unpaid: "statusUnpaid", trial: "statusTrial", paid: "statusPaid" };
-    const PAUSE_REASONS = ["reasonNoNeed","reasonInconvenient","reasonBudget","reasonOther"];
+    const PAUSE_REASONS = ["reasonNoNeed","reasonInconvenient","reasonBudget","reasonVoicemail","reasonOther"];
     const REJECT_REASONS = ["rejectParentDeclined","rejectWrongNumber","rejectNoDemand","rejectLater","rejectUnderAge","rejectOverAge"];
     const CLOSE_REASONS = ["closeUnsuitable","closeChildDislike","closeParentDislike","closeHighFee","closeDevice","closePayment","closeBrand","closeBug","closeWaiting","closeTrialOnly","closeOther"];
 
@@ -623,13 +651,24 @@
       confirming: false,
       openMenuId: null,
       modalType: null,
-      viewingId: null
+      viewingId: null,
+      followSource: "manual",
+      initialPauseReason: ""
     };
 
     let leads = [
       {
+        id: "LD-261120-1000", name: "Nguyen Bao Ngoc", line: "Vietnam", intent: "interested",
+        status: "trial", stage: "waiting_call", owner: "Linh Nguyen",
+        account: "ngoc.nguyen@mail.vn", phone: "**** 0088", appointmentHistory: 0,
+        pauseReason: "",
+        history: [
+          { action: "continue", label: "actionContinue", at: "2026-11-20 08:40", note: "新线索已分配，等待首次联系。", before: "waiting_call", after: "waiting_call" }
+        ]
+      },
+      {
         id: "LD-261120-1001", name: "Nguyễn Minh Anh", line: "Vietnam", intent: "interested",
-        status: "trial", stage: "paused", previousStage: "waiting_call", owner: "Linh Nguyen",
+        status: "trial", stage: "paused", owner: "Linh Nguyen",
         account: "anh.nguyen@mail.vn", phone: "**** 0186", appointmentHistory: 0,
         pauseReason: "reasonInconvenient",
         history: [
@@ -639,7 +678,7 @@
       },
       {
         id: "LD-261120-1002", name: "Tran Bao Chau", line: "Thailand", intent: "interested",
-        status: "unpaid", stage: "paused", previousStage: "no_show", owner: "Linh Nguyen",
+        status: "unpaid", stage: "paused", owner: "Linh Nguyen",
         account: "chau.tran@mail.th", phone: "**** 0281", appointmentHistory: 2,
         pauseReason: "reasonBudget",
         history: [
@@ -649,20 +688,11 @@
       },
       {
         id: "LD-261120-1003", name: "Le Thu Ha", line: "Malaysia", intent: "neutral",
-        status: "trial", stage: "paused", previousStage: "unreached", owner: "Linh Nguyen",
+        status: "trial", stage: "paused", owner: "Linh Nguyen",
         account: "ha.le@mail.my", phone: "**** 0366", appointmentHistory: 0,
         pauseReason: "reasonNoNeed",
         history: [
           { action: "pause", label: "actionPause", at: "2026-11-20 08:45", note: "多次未接通，家长暂不需要继续联系。", before: "unreached", after: "paused" }
-        ]
-      },
-      {
-        id: "LD-261120-1004", name: "Pham Gia Linh", line: "Vietnam", intent: "interested",
-        status: "trial", stage: "booked", previousStage: "booked", owner: "Linh Nguyen",
-        account: "linh.pham@mail.vn", phone: "**** 0412", appointmentHistory: 1,
-        pauseReason: "",
-        history: [
-          { action: "create", label: "actionCreate", at: "2026-11-19 15:10", note: "预约 11 月 21 日 10:00。", before: "waiting_booking", after: "booked" }
         ]
       },
       {
@@ -709,7 +739,10 @@
         reason: $("#reason-select")?.value,
         otherReason: $("#other-reason")?.value,
         note: $("#follow-note")?.value,
-        confirming: state.confirming
+        confirming: state.confirming,
+        source: state.followSource
+      } : state.modalType === "outbound" ? {
+        callResult: $("#call-result")?.value
       } : null;
       const editingId = state.editingId;
       const viewingId = state.viewingId;
@@ -725,7 +758,7 @@
       document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = tr(node.dataset.i18n); });
       render();
       if (modalType === "follow" && editingId && leadById(editingId)) {
-        openFollowModal(editingId);
+        openFollowModal(editingId, { source: modalValues?.source || "manual" });
         state.action = modalValues?.action || state.action;
         $("#action-select").value = state.action;
         updateActionFields(leadById(editingId));
@@ -741,6 +774,9 @@
           state.confirming = true;
           updateSaveLabel();
         }
+      } else if (modalType === "outbound" && editingId && leadById(editingId)) {
+        openOutboundModal(editingId);
+        if (modalValues?.callResult) $("#call-result").value = modalValues.callResult;
       } else if (modalType === "user" && viewingId && leadById(viewingId)) {
         openUserModal(viewingId);
       }
@@ -857,6 +893,7 @@
               <div class="row-menu">
                 <button class="btn btn-small" type="button" data-menu="${lead.id}" aria-haspopup="menu" aria-expanded="false">${esc(tr("more"))}</button>
                 <div class="menu-pop hidden" data-menu-pop="${lead.id}" role="menu">
+                  ${["waiting_call","unreached"].includes(lead.stage) ? `<button class="menu-item" type="button" data-outbound="${lead.id}" role="menuitem">${esc(tr("outbound"))}</button>` : ""}
                   <button class="menu-item" type="button" data-edit="${lead.id}" role="menuitem">${esc(tr("updateFollow"))}</button>
                   <button class="menu-item" type="button" data-view="${lead.id}" role="menuitem">${esc(tr("viewUser"))}</button>
                 </div>
@@ -878,6 +915,7 @@
           trigger?.setAttribute("aria-expanded", String(open));
         });
       }));
+      document.querySelectorAll("[data-outbound]").forEach((button) => button.addEventListener("click", () => openOutboundModal(button.dataset.outbound)));
       document.querySelectorAll("[data-edit]").forEach((button) => button.addEventListener("click", () => openFollowModal(button.dataset.edit)));
       document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => openUserModal(button.dataset.view)));
     }
@@ -920,6 +958,8 @@
       state.editingId = null;
       state.viewingId = null;
       state.modalType = null;
+      state.followSource = "manual";
+      state.initialPauseReason = "";
       state.action = "";
       state.confirming = false;
       state.saving = false;
@@ -947,13 +987,72 @@
       bindOverlayClose();
     }
 
+    function openOutboundModal(id) {
+      const lead = leadById(id);
+      if (!lead) return;
+      state.modalType = "outbound";
+      state.editingId = id;
+      state.viewingId = id;
+      openOverlay(`
+        <div class="modal-head"><h2 id="modal-title">${esc(tr("callTitle"))}</h2><div class="modal-tools">${modalLanguageSwitch()}<button class="icon-btn" type="button" data-close aria-label="${esc(tr("close"))}">×</button></div></div>
+        <form id="outbound-form">
+          <div class="modal-body">
+            <div class="stage-line"><strong>${esc(lead.name)}</strong>${stagePill(lead.stage)}</div>
+            <label class="field">
+              <span class="field-label">${esc(tr("callResult"))}</span>
+              <select class="select" id="call-result">
+                <option value="connected">${esc(tr("connected"))}</option>
+                <option value="unconnected">${esc(tr("unconnected"))}</option>
+              </select>
+            </label>
+            <div class="hint section-gap" id="call-result-hint">${esc(tr("connectedHint"))}</div>
+          </div>
+          <div class="modal-foot">
+            <button class="btn" type="button" data-close>${esc(tr("cancel"))}</button>
+            <button class="btn btn-primary" type="submit">${esc(tr("saveCall"))}</button>
+          </div>
+        </form>`);
+      bindOverlayClose();
+      $("#call-result").addEventListener("change", () => {
+        $("#call-result-hint").textContent = $("#call-result").value === "connected" ? tr("connectedHint") : tr("unreachedNotice");
+      });
+      $("#outbound-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        saveOutboundResult(lead);
+      });
+    }
+
+    function saveOutboundResult(lead) {
+      const result = $("#call-result").value;
+      const before = lead.stage;
+      const note = result === "connected" ? tr("actionOutboundConnected") : tr("actionOutboundUnreached");
+      lead.lastCallResult = result;
+      lead.stage = result === "connected" ? "waiting_booking" : "unreached";
+      lead.history.unshift({
+        action: "outbound",
+        label: result === "connected" ? "actionOutboundConnected" : "actionOutboundUnreached",
+        at: "2026-11-20 10:10",
+        note,
+        before,
+        after: lead.stage
+      });
+      closeOverlay();
+      render();
+      if (result === "unconnected") {
+        toast(tr("callUnreachedSaved"));
+        return;
+      }
+      toast(tr("callConnectedSaved"));
+      openFollowModal(lead.id, { source: "outbound" });
+    }
+
     function actionOptions(lead) {
       if (lead.stage === "rejected" || lead.stage === "closed") {
         return [{ value: "reactivate", label: tr("reactivate") }];
       }
       if (lead.stage === "paused") {
         return [
-          { value: "resume", label: tr("resume") },
+          { value: "pause", label: tr("pause") },
           { value: "create", label: tr("create") },
           { value: outcome(lead), label: tr(outcomeLabelKey(lead)) }
         ];
@@ -961,21 +1060,24 @@
       if (lead.stage === "booked") {
         return [{ value: "continue", label: tr("continueFollow") }];
       }
-      const options = [{ value: "continue", label: tr("continueFollow") }];
+      const options = [];
       if (lead.stage !== "payment_pending") options.push({ value: "create", label: tr("create") });
       options.push({ value: "pause", label: tr("pause") });
       options.push({ value: outcome(lead), label: tr(outcomeLabelKey(lead)) });
       return options;
     }
 
-    function openFollowModal(id) {
+    function openFollowModal(id, options = {}) {
       const lead = leadById(id);
       if (!lead) return;
       state.modalType = "follow";
       state.viewingId = id;
       state.editingId = id;
-      const options = actionOptions(lead);
-      state.action = options[0]?.value || "";
+      state.followSource = options.source || "manual";
+      state.initialPauseReason = lead.pauseReason || "";
+      const actions = actionOptions(lead);
+      const defaultAction = lead.stage === "paused" ? "pause" : lead.stage === "booked" ? "continue" : "";
+      state.action = defaultAction;
       openOverlay(`
         <div class="modal-head"><h2 id="modal-title">${esc(tr("modalTitle"))}</h2><div class="modal-tools">${modalLanguageSwitch()}<button class="icon-btn" type="button" data-close aria-label="${esc(tr("close"))}">×</button></div></div>
         <form id="follow-form">
@@ -984,10 +1086,14 @@
               <span class="muted">${esc(tr("currentStage"))}</span>
               ${stagePill(lead.stage)}
             </div>
+            ${state.followSource === "outbound" ? `<div class="hint">${esc(tr("connectedHint"))}</div>` : ""}
             <div class="form-grid">
               <label class="field full">
                 <span class="field-label">${esc(tr("nextAction"))}</span>
-                <select class="select" id="action-select">${options.map((option) => `<option value="${option.value}">${esc(option.label)}</option>`).join("")}</select>
+                <select class="select" id="action-select">
+                  ${defaultAction ? "" : `<option value="">${esc(tr("selectAction"))}</option>`}
+                  ${actions.map((option) => `<option value="${option.value}" ${option.value === defaultAction ? "selected" : ""}>${esc(option.label)}</option>`).join("")}
+                </select>
                 <div class="error" id="action-error"></div>
               </label>
               <div class="field full hidden" id="direct-hint">
@@ -1046,15 +1152,17 @@
     function updateActionFields(lead) {
       const action = state.action;
       const isCreate = action === "create";
+      const isPause = action === "pause";
       const isOutcome = action === "reject" || action === "close";
-      const isResume = action === "resume";
+      const requiresReason = isPause || isOutcome;
       $("#direct-hint").classList.toggle("hidden", !isCreate);
       $("#appointment-time-field").classList.toggle("hidden", !isCreate);
       $("#meeting-link-field").classList.toggle("hidden", !isCreate);
-      $("#reason-field").classList.toggle("hidden", !isOutcome);
+      $("#reason-field").classList.toggle("hidden", !requiresReason);
       $("#other-reason-field").classList.add("hidden");
       $("#note-label").textContent = isCreate ? tr("noteOptional") : tr("note");
 
+      $("#action-error").textContent = "";
       $("#time-error").textContent = "";
       $("#meeting-error").textContent = "";
       $("#reason-error").textContent = "";
@@ -1062,11 +1170,13 @@
       $("#note-error").textContent = "";
       $("#confirmation").innerHTML = "";
       state.confirming = false;
-      if (isOutcome) {
-        const reasons = action === "reject" ? REJECT_REASONS : CLOSE_REASONS;
+      if (requiresReason) {
+        const reasons = isPause ? PAUSE_REASONS : action === "reject" ? REJECT_REASONS : CLOSE_REASONS;
         $("#reason-select").innerHTML = `<option value="">${esc(tr("reasonPlaceholder"))}</option>${reasons.map((key) => `<option value="${key}">${esc(tr(key))}</option>`).join("")}`;
+        if (isPause && lead.stage === "paused" && lead.pauseReason) $("#reason-select").value = lead.pauseReason;
         $("#reason-select").onchange = () => {
-          $("#other-reason-field").classList.toggle("hidden", $("#reason-select").value !== "reasonOther" && $("#reason-select").value !== "closeOther");
+          const other = $("#reason-select").value === "reasonOther" || $("#reason-select").value === "closeOther";
+          $("#other-reason-field").classList.toggle("hidden", !other);
         };
       }
       updateSaveLabel();
@@ -1095,9 +1205,13 @@
       save.textContent = state.saving ? tr("saving") : state.confirming ? tr("confirmButton") : tr("save");
     }
 
-    function validateFollow(action) {
+    function validateFollow(lead, action) {
       let valid = true;
       const note = $("#follow-note").value.trim();
+      if (!action) {
+        $("#action-error").textContent = tr("actionRequired");
+        return false;
+      }
       if (action === "create") {
         if (!$("#appointment-time").value) {
           $("#time-error").textContent = tr("timeRequired");
@@ -1109,7 +1223,7 @@
           valid = false;
         }
       }
-      if (action === "reject" || action === "close") {
+      if (action === "pause" || action === "reject" || action === "close") {
         const reason = $("#reason-select").value;
         if (!reason) {
           $("#reason-error").textContent = tr("reasonRequired");
@@ -1120,7 +1234,13 @@
           valid = false;
         }
       }
-      if (!note && !["create", "reject", "close", "reactivate"].includes(action)) {
+      if (action === "pause" && lead.stage === "paused") {
+        const reason = $("#reason-select").value;
+        if (!note && reason === state.initialPauseReason) {
+          $("#note-error").textContent = tr("keepPausedRequired");
+          valid = false;
+        }
+      } else if (!note && action === "continue") {
         $("#note-error").textContent = tr("noteRequired");
         valid = false;
       }
@@ -1132,7 +1252,7 @@
         toast(tr("duplicateBlocked"));
         return;
       }
-      if (!validateFollow(state.action)) return;
+      if (!validateFollow(lead, state.action)) return;
       if (["reject", "close", "reactivate"].includes(state.action) && !state.confirming) {
         state.confirming = true;
         const actionLabel = state.action === "reject" ? tr("reject") : state.action === "close" ? tr("closeLead") : tr("reactivate");
@@ -1159,7 +1279,6 @@
           start: $("#appointment-time").value,
           link: $("#meeting-link").value.trim()
         };
-        lead.previousStage = "booked";
         lead.stage = "booked";
         lead.appointmentHistory += 1;
         event = {
@@ -1167,14 +1286,10 @@
           label: "actionCreate",
           at: now,
           note: note || `${tr("appointmentTime")}: ${lead.appointment.start.replace("T", " ")}`,
-          before: "paused",
+          before,
           after: "booked"
         };
         successKey = "directCreateSuccess";
-      } else if (action === "resume") {
-        lead.stage = lead.previousStage || "waiting_call";
-        event = { action: "resume", label: "actionResume", at: now, note, before: "paused", after: lead.stage };
-        successKey = "resumeSuccess";
       } else if (action === "reject") {
         lead.stage = "rejected";
         const selected = $("#reason-select").value;
@@ -1192,8 +1307,16 @@
         event = { action: "reactivate", label: "actionReactivate", at: now, note: note || tr("reactivate"), before, after: lead.stage };
         successKey = "reactivateSuccess";
       } else if (action === "pause") {
+        const selected = $("#reason-select").value;
+        const detail = selected === "reasonOther" ? $("#other-reason").value.trim() : tr(selected);
+        lead.pauseReason = selected;
         lead.stage = "paused";
-        event = { action: "pause", label: "actionPause", at: now, note, before, after: "paused" };
+        if (before === "paused") {
+          event = { action: "keep_paused", label: "actionKeepPaused", at: now, note: note || detail, before, after: "paused" };
+          successKey = "keepPausedSuccess";
+        } else {
+          event = { action: "pause", label: "actionPause", at: now, note: note ? `${detail}\n${note}` : detail, before, after: "paused" };
+        }
       } else {
         event = { action: "continue", label: "actionContinue", at: now, note, before, after: before };
       }
