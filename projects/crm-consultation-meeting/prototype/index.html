@@ -347,6 +347,7 @@
     const STAGE_META = {
       booked: { zh: "已预约", en: "Booked", cls: "pill-blue" },
       completed: { zh: "咨询已完成", en: "Consultation completed", cls: "pill-green" },
+      absent: { zh: "未出勤", en: "No-show", cls: "pill-amber" },
       following: { zh: "跟进中", en: "Following up", cls: "pill-violet" },
       paused: { zh: "暂不跟进", en: "Paused", cls: "pill-amber" },
       closed: { zh: "已关闭", en: "Closed", cls: "pill-red" }
@@ -374,10 +375,10 @@
       { id: "u-1001", leadId: "LD-261119-1001", name: "Nguyễn Minh Anh", line: "Vietnam", intent: "Interested", status: "Unpaid · Trial in progress", stage: "booked", owner: "Linh Nguyen", account: "anh.nguyen@mail.vn", phone: "**** 0186" },
       { id: "u-1002", leadId: "LD-261119-1002", name: "Tran Bao Chau", line: "Thailand", intent: "Interested", status: "Unpaid · Trial pending", stage: "booked", owner: "Linh Nguyen", account: "chau.tran@mail.vn", phone: "**** 0281" },
       { id: "u-1003", leadId: "LD-261119-1003", name: "Le Thu Ha", line: "Vietnam", intent: "Interested", status: "Unpaid · Trial completed", stage: "completed", owner: "Linh Nguyen", account: "ha.le@mail.vn", phone: "**** 0366" },
-      { id: "u-1004", leadId: "LD-261119-1004", name: "Pham Gia Linh", line: "Malaysia", intent: "Not filled", status: "Unpaid · Trial pending", stage: "booked", owner: "Linh Nguyen", account: "linh.pham@mail.vn", phone: "**** 0412" },
+      { id: "u-1004", leadId: "LD-261119-1004", name: "Pham Gia Linh", line: "Malaysia", intent: "Not filled", status: "Unpaid · Trial pending", stage: "absent", owner: "Linh Nguyen", account: "linh.pham@mail.vn", phone: "**** 0412" },
       { id: "u-1005", leadId: "LD-261119-1005", name: "Vo Minh Khang", line: "Vietnam", intent: "Interested", status: "Unpaid · Trial pending", stage: "following", owner: "Linh Nguyen", account: "khang.vo@mail.vn", phone: "**** 0573" },
       { id: "u-1006", leadId: "LD-261119-1006", name: "Do Ngoc Mai", line: "Thailand", intent: "Not interested", status: "Unpaid", stage: "paused", owner: "Linh Nguyen", account: "mai.do@mail.vn", phone: "**** 0649" },
-      { id: "u-1007", leadId: "LD-261119-1007", name: "Bui Anh Tuan", line: "Vietnam", intent: "Interested", status: "Unpaid · Trial pending", stage: "booked", owner: "Linh Nguyen", account: "tuan.bui@mail.vn", phone: "**** 0731" }
+      { id: "u-1007", leadId: "LD-261119-1007", name: "Bui Anh Tuan", line: "Vietnam", intent: "Interested", status: "Unpaid · Trial pending", stage: "completed", owner: "Linh Nguyen", account: "tuan.bui@mail.vn", phone: "**** 0731" }
     ];
 
     let meetings = [
@@ -552,7 +553,7 @@
       $("#content").innerHTML = `
         <div class="detail-page">
           <section class="panel detail-page-head">
-            <div class="detail-page-title"><h2>${esc(tr("userDetail"))} · ${esc(user.name)}</h2></div>
+            <div class="detail-page-title"><h2>${esc(tr("userDetail"))} · ${esc(user.name)}</h2>${stagePill(user.stage)}</div>
             <button class="btn" id="back-sales">← ${esc(tr("backSales"))}</button>
           </section>
 
