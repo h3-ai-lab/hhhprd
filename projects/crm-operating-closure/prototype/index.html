@@ -2,1267 +2,1061 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>CRM 经营工作台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dino CRM · 销售中心</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <style>
     :root {
-      --bg: #f4f6f9;
-      --surface: #ffffff;
-      --surface-2: #f8fafc;
-      --ink: #17202a;
+      --navy: #10233f;
+      --blue: #2368d8;
+      --blue-soft: #eaf2ff;
+      --ink: #1d2939;
       --muted: #667085;
-      --line: #dfe5ec;
-      --blue: #2563eb;
-      --blue-soft: #edf4ff;
-      --orange: #c86f12;
-      --orange-soft: #fff4e5;
-      --green: #137a5a;
-      --green-soft: #e9f8f2;
-      --red: #b42318;
-      --red-soft: #fff0ee;
-      --purple: #7047b8;
-      --purple-soft: #f3efff;
-      --shadow: 0 18px 50px rgba(28, 43, 65, .18);
+      --line: #e4e9f1;
+      --bg: #f3f6fa;
+      --white: #fff;
+      --green: #16865b;
+      --green-soft: #e9f8f1;
+      --amber: #a86508;
+      --amber-soft: #fff6df;
+      --red: #c33a3a;
+      --red-soft: #fff0f0;
+      --violet: #6e56b5;
+      --violet-soft: #f1edff;
+      --shadow: 0 18px 50px rgba(16, 35, 63, .18);
     }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; }
     body {
-      background: var(--bg);
       color: var(--ink);
-      font: 14px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
     }
+
     button, input, select, textarea { font: inherit; }
-    button { color: inherit; }
-    .app-shell { min-height: 100vh; }
-    .topbar {
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid rgba(35, 104, 216, .18);
+      outline-offset: 1px;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .sidebar {
       position: sticky;
       top: 0;
-      z-index: 20;
+      height: 100vh;
       display: flex;
-      align-items: center;
-      gap: 18px;
-      min-height: 64px;
-      padding: 0 24px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255,255,255,.96);
-      backdrop-filter: blur(12px);
+      flex-direction: column;
+      gap: 23px;
+      padding: 22px 14px;
+      color: #dce7f7;
+      background: var(--navy);
     }
+
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      min-width: 186px;
-      font-weight: 700;
+      gap: 11px;
+      padding: 0 8px;
     }
+
     .brand-mark {
       display: grid;
-      width: 30px;
-      height: 30px;
+      width: 36px;
+      height: 36px;
       place-items: center;
-      border-radius: 9px;
-      background: var(--ink);
-      color: #fff;
-      font-size: 12px;
-      letter-spacing: .04em;
-    }
-    .role-switch {
-      display: inline-flex;
-      padding: 3px;
       border-radius: 10px;
-      background: #edf1f5;
+      color: #fff;
+      background: #3577e4;
+      font-size: 18px;
+      font-weight: 800;
     }
-    .role-button {
-      padding: 7px 14px;
-      border: 0;
-      border-radius: 7px;
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-    }
-    .role-button.active {
-      background: var(--surface);
-      color: var(--ink);
-      box-shadow: 0 1px 4px rgba(20,33,52,.12);
-      font-weight: 600;
-    }
-    .top-spacer { flex: 1; }
-    .user-menu, .language-switch {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .avatar {
-      display: grid;
-      width: 32px;
-      height: 32px;
-      place-items: center;
-      border-radius: 50%;
-      background: var(--blue-soft);
-      color: var(--blue);
-      font-weight: 700;
-    }
-    .language-button {
-      min-width: 42px;
-      padding: 7px 10px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-      cursor: pointer;
-    }
-    .main {
-      display: grid;
-      grid-template-columns: 210px minmax(0,1fr);
-      min-height: calc(100vh - 64px);
-    }
-    .sidebar {
-      padding: 22px 14px;
-      border-right: 1px solid var(--line);
-      background: #fafbfd;
-    }
+
+    .brand strong { display: block; color: #fff; font-size: 16px; }
+    .brand span { display: block; color: #9fb2cd; font-size: 11px; }
+
     .nav-label {
-      margin: 0 10px 8px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      width: 100%;
-      margin-bottom: 4px;
-      padding: 10px 12px;
-      border: 0;
-      border-radius: 8px;
-      background: transparent;
-      color: var(--muted);
-      text-align: left;
-    }
-    .nav-item.active {
-      background: var(--blue-soft);
-      color: var(--blue);
-      font-weight: 600;
-    }
-    .sidebar-note {
-      margin: 24px 10px 0;
-      padding-top: 16px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .content { min-width: 0; padding: 24px; }
-    .page-head {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-    .eyebrow {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-    h1 { margin: 4px 0 0; font-size: 26px; line-height: 1.25; }
-    .head-meta { color: var(--muted); font-size: 13px; }
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(4,minmax(0,1fr));
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-    .metric {
-      position: relative;
-      min-width: 0;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--surface);
-    }
-    .metric-label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .metric-value { margin-top: 7px; font-size: 25px; font-weight: 700; }
-    .metric-context { margin-top: 2px; color: var(--muted); font-size: 12px; }
-    .info-button {
-      display: inline-grid;
-      width: 18px;
-      height: 18px;
-      place-items: center;
-      border: 1px solid var(--line);
-      border-radius: 50%;
-      background: var(--surface-2);
-      color: var(--muted);
+      margin: 0 10px 7px;
+      color: #8196b4;
       font-size: 11px;
-      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: .08em;
     }
-    .panel {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--surface);
-    }
-    .toolbar {
+
+    .nav-btn {
+      width: 100%;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       gap: 10px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--line);
-    }
-    .search {
-      width: min(320px,100%);
-      min-width: 220px;
-      padding: 9px 11px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-    }
-    .select {
-      padding: 9px 30px 9px 11px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-    }
-    .toolbar-spacer { flex: 1; }
-    .toolbar-count { color: var(--muted); font-size: 12px; }
-    .table-wrap { overflow: auto; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 760px;
-    }
-    th, td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--line);
+      margin-bottom: 5px;
+      padding: 10px 12px;
+      border: 0;
+      border-radius: 9px;
+      color: #dce7f7;
+      background: transparent;
       text-align: left;
-      vertical-align: middle;
     }
-    th {
-      color: var(--muted);
-      background: var(--surface-2);
+
+    .nav-btn:hover { background: rgba(255,255,255,.07); }
+    .nav-btn.active { color: #fff; background: #2d70df; }
+    .nav-icon { width: 18px; text-align: center; }
+
+    .sidebar-foot {
+      margin-top: auto;
+      padding: 12px;
+      color: #9fb2cd;
       font-size: 12px;
-      font-weight: 600;
-      white-space: nowrap;
     }
-    tbody tr:last-child td { border-bottom: 0; }
-    tbody tr:hover { background: #fbfcfe; }
-    .customer-cell { min-width: 160px; }
-    .customer-name { font-weight: 600; }
-    .customer-meta { margin-top: 2px; color: var(--muted); font-size: 12px; }
-    .reason { max-width: 260px; }
-    .badge {
+
+    .status-dot {
       display: inline-block;
-      padding: 3px 8px;
-      border-radius: 99px;
-      font-size: 12px;
-      white-space: nowrap;
+      width: 7px;
+      height: 7px;
+      margin-right: 7px;
+      border-radius: 50%;
+      background: #54d49a;
     }
-    .badge.urgent { background: var(--red-soft); color: var(--red); }
-    .badge.due { background: var(--orange-soft); color: var(--orange); }
-    .badge.normal { background: var(--blue-soft); color: var(--blue); }
-    .badge.done { background: var(--green-soft); color: var(--green); }
-    .stage { color: var(--muted); font-size: 12px; white-space: nowrap; }
-    .action-button {
-      padding: 7px 11px;
-      border: 1px solid #cbd7e5;
-      border-radius: 7px;
-      background: var(--surface);
-      color: var(--blue);
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .action-button.primary {
-      border-color: var(--blue);
-      background: var(--blue);
-      color: #fff;
-    }
-    .empty {
-      display: none;
-      padding: 50px 20px;
-      color: var(--muted);
-      text-align: center;
-    }
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 12px;
-      margin-top: 18px;
-    }
-    .team-card {
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--surface);
-    }
-    .team-card-head {
+
+    .workspace { min-width: 0; overflow: hidden; }
+
+    .topbar {
+      min-height: 78px;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
-      gap: 12px;
-    }
-    .team-card-name { font-weight: 700; }
-    .team-card-copy { margin-top: 4px; color: var(--muted); font-size: 12px; }
-    .team-card-stats {
-      display: grid;
-      grid-template-columns: repeat(3,minmax(0,1fr));
-      gap: 8px;
-      margin: 14px 0;
-    }
-    .team-stat {
-      padding: 10px;
-      border-radius: 8px;
-      background: var(--surface-2);
-    }
-    .team-stat strong { display: block; font-size: 18px; }
-    .team-stat span { color: var(--muted); font-size: 11px; }
-    .drawer-backdrop, .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      z-index: 40;
-      background: rgba(14,23,38,.38);
-    }
-    .drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      z-index: 50;
-      display: flex;
-      flex-direction: column;
-      width: min(480px,100vw);
-      height: 100vh;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-    }
-    .drawer-head, .modal-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 20px;
+      gap: 20px;
+      padding: 16px 24px;
       border-bottom: 1px solid var(--line);
+      background: #fff;
     }
-    .close-button {
+
+    .crumb { margin-bottom: 3px; color: var(--muted); font-size: 12px; }
+    .title { margin: 0; font-size: 22px; line-height: 1.25; letter-spacing: -.01em; }
+    .top-actions { display: flex; align-items: center; gap: 14px; }
+
+    .lang-switch {
+      display: flex;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .lang-btn { padding: 6px 10px; border: 0; color: var(--muted); background: #fff; }
+    .lang-btn.active { color: #fff; background: var(--blue); }
+    .account { display: flex; align-items: center; gap: 9px; }
+    .avatar {
       display: grid;
       width: 34px;
       height: 34px;
       place-items: center;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-      cursor: pointer;
-    }
-    .drawer-body { flex: 1; overflow: auto; padding: 20px; }
-    .drawer-title { margin: 0; font-size: 20px; }
-    .drawer-sub { margin-top: 4px; color: var(--muted); font-size: 12px; }
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-    .detail {
-      padding: 11px;
-      border-radius: 8px;
-      background: var(--surface-2);
-    }
-    .detail span { display: block; color: var(--muted); font-size: 11px; }
-    .detail strong { display: block; margin-top: 3px; font-size: 13px; }
-    .timeline {
-      margin: 0 0 20px;
-      padding-left: 18px;
-      border-left: 1px solid var(--line);
-    }
-    .timeline-item {
-      position: relative;
-      margin: 0 0 12px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .timeline-item::before {
-      position: absolute;
-      top: 6px;
-      left: -22px;
-      width: 7px;
-      height: 7px;
       border-radius: 50%;
-      background: var(--blue);
-      content: "";
+      color: var(--blue);
+      background: var(--blue-soft);
+      font-weight: 800;
     }
-    .field { margin-bottom: 14px; }
-    .field label { display: block; margin-bottom: 6px; font-weight: 600; }
-    .field input, .field select, .field textarea {
-      width: 100%;
-      padding: 10px 11px;
+    .account strong { display: block; font-size: 13px; }
+    .account span { display: block; color: var(--muted); font-size: 11px; }
+
+    .content { padding: 18px 22px 40px; }
+    .panel, .toolbar {
       border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(23, 43, 77, .03);
     }
-    .field textarea { min-height: 84px; resize: vertical; }
-    .field-error { display: none; margin-top: 5px; color: var(--red); font-size: 12px; }
-    .field.has-error input, .field.has-error select { border-color: var(--red); }
-    .field.has-error .field-error { display: block; }
-    .drawer-footer {
-      display: flex;
-      justify-content: flex-end;
+
+    .toolbar { margin-bottom: 14px; padding: 14px 16px; }
+    .filters {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.5fr) minmax(150px, .7fr) minmax(150px, .7fr) auto;
       gap: 10px;
-      padding: 16px 20px;
+      align-items: end;
+    }
+
+    .field-label { display: block; margin-bottom: 5px; color: #475467; font-size: 12px; font-weight: 600; }
+    .input, .select, .textarea {
+      width: 100%;
+      min-height: 36px;
+      padding: 8px 10px;
+      border: 1px solid #d9e0ea;
+      border-radius: 7px;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .textarea { min-height: 92px; resize: vertical; }
+    .input:focus, .select:focus, .textarea:focus { border-color: var(--blue); }
+    .actions { display: flex; align-items: center; gap: 8px; }
+
+    .btn {
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      color: var(--ink);
+      background: #fff;
+      white-space: nowrap;
+    }
+
+    .btn:hover { border-color: #bac7d8; }
+    .btn-primary { color: #fff; border-color: var(--blue); background: var(--blue); font-weight: 650; }
+    .btn-primary:hover { background: #195dc5; }
+    .btn-small { min-height: 29px; padding: 4px 9px; font-size: 12px; }
+    .btn-ghost { color: var(--blue); border-color: #cee0ff; background: #f6f9ff; }
+
+    .queue-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+      padding-top: 13px;
       border-top: 1px solid var(--line);
     }
-    .modal-wrap {
+
+    .queue-heading { font-size: 12px; font-weight: 700; color: #475467; }
+    .queue-hint { color: #8a94a3; font-size: 11px; }
+    .queue-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 9px 0 2px;
+      scrollbar-width: thin;
+    }
+
+    .queue-chip {
+      position: relative;
+      min-width: 154px;
+      padding: 10px 30px 9px 11px;
+      border: 1px solid #dce3ed;
+      border-radius: 9px;
+      color: #344054;
+      background: #fff;
+      text-align: left;
+    }
+
+    .queue-chip:hover { border-color: #a9c5f6; background: #fbfdff; }
+    .queue-chip.active { border-color: #77a6f8; color: #164aab; background: var(--blue-soft); box-shadow: inset 0 0 0 1px #bcd3ff; }
+    .queue-chip.all { min-width: 76px; padding-right: 11px; }
+    .queue-chip.priority { border-left-width: 3px; }
+    .queue-chip.p0 { border-left-color: #d94343; }
+    .queue-chip.p1 { border-left-color: #e58b22; }
+    .queue-chip.p2 { border-left-color: #3478df; }
+    .queue-chip.p3 { border-left-color: #9970d6; }
+    .queue-chip.pending { border-left-color: #6f7d92; }
+    .queue-chip.p5 { border-left-color: #15956d; }
+
+    .queue-name { display: block; overflow: hidden; font-size: 12.5px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    .queue-sub { display: block; overflow: hidden; margin-top: 3px; color: #7f8b9c; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+    .queue-count {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      min-width: 20px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      color: #fff;
+      background: #667085;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .queue-chip.active .queue-count { background: var(--blue); }
+    .subqueue-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 0 1px;
+    }
+    .subqueue-label { color: #7d8999; font-size: 11px; }
+    .subqueue-btn {
+      padding: 4px 9px;
+      border: 1px solid #dce3ed;
+      border-radius: 999px;
+      color: #526071;
+      background: #fff;
+      font-size: 11px;
+    }
+    .subqueue-btn.active { border-color: #b8cff8; color: #195cc9; background: #f0f5ff; }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-title { font-size: 15px; font-weight: 750; }
+    .muted { color: var(--muted); }
+    .table-wrap { overflow: auto; }
+    table { width: 100%; min-width: 1020px; border-collapse: collapse; white-space: nowrap; }
+    th {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      color: #475467;
+      background: #f8fafc;
+      font-size: 12px;
+      text-align: left;
+    }
+    td { padding: 12px; border-bottom: 1px solid #edf1f6; vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover td { background: #fbfdff; }
+    .user-link { padding: 0; border: 0; color: var(--blue); background: none; font-weight: 700; text-align: left; }
+    .user-link:hover { text-decoration: underline; }
+    .uid { margin-top: 2px; color: var(--muted); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .pill-blue { color: var(--blue); background: var(--blue-soft); }
+    .pill-green { color: var(--green); background: var(--green-soft); }
+    .pill-amber { color: var(--amber); background: var(--amber-soft); }
+    .pill-red { color: var(--red); background: var(--red-soft); }
+    .pill-violet { color: var(--violet); background: var(--violet-soft); }
+
+    .empty {
+      display: grid;
+      justify-items: center;
+      gap: 9px;
+      padding: 58px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .empty strong { color: #344054; font-size: 15px; }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 7px;
+      padding: 13px 16px;
+      border-top: 1px solid var(--line);
+    }
+    .page-btn {
+      min-width: 31px;
+      height: 31px;
+      border: 1px solid #dce3ed;
+      border-radius: 7px;
+      color: #536174;
+      background: #fff;
+    }
+    .page-btn.active { color: #fff; border-color: var(--blue); background: var(--blue); }
+
+    .overlay {
       position: fixed;
       inset: 0;
       z-index: 50;
-      display: grid;
-      padding: 24px;
-      place-items: center;
-      pointer-events: none;
-    }
-    .modal {
-      width: min(520px,100%);
-      max-height: 86vh;
-      overflow: auto;
-      border-radius: 12px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      pointer-events: auto;
-    }
-    .modal-body { padding: 20px; }
-    .metric-formula {
-      padding: 12px;
-      border-radius: 8px;
-      background: var(--surface-2);
-      color: var(--muted);
-    }
-    .modal-actions {
-      display: flex;
+      display: none;
       justify-content: flex-end;
-      gap: 10px;
-      padding: 0 20px 20px;
+      background: rgba(11, 25, 47, .38);
     }
+    .overlay.open { display: flex; }
+    .drawer {
+      width: min(530px, 100%);
+      height: 100%;
+      overflow: auto;
+      background: #fff;
+      box-shadow: -18px 0 55px rgba(9, 26, 51, .2);
+    }
+    .drawer-head {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .drawer-head h2 { margin: 0; font-size: 19px; }
+    .drawer-head p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .icon-btn { padding: 3px 8px; border: 0; color: #6b7280; background: transparent; font-size: 24px; }
+    .drawer-body { padding: 20px; }
+    .detail-grid { display: grid; grid-template-columns: 140px minmax(0, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .detail-grid dt, .detail-grid dd { margin: 0; padding: 11px 12px; border-bottom: 1px solid var(--line); }
+    .detail-grid dt { color: #667085; background: #fafbfd; }
+    .detail-grid dd:last-child, .detail-grid dt:nth-last-child(2) { border-bottom: 0; }
+    .form-grid { display: grid; gap: 14px; }
+    .form-field label { display: block; margin-bottom: 6px; color: #475467; font-size: 12px; font-weight: 650; }
+    .error { min-height: 17px; margin-top: 5px; color: var(--red); font-size: 12px; }
+    .drawer-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+
     .toast {
       position: fixed;
-      right: 24px;
-      bottom: 24px;
-      z-index: 70;
-      max-width: 360px;
-      padding: 12px 16px;
-      border-radius: 9px;
-      background: #17202a;
+      left: 50%;
+      bottom: 28px;
+      z-index: 100;
+      padding: 9px 14px;
+      border-radius: 8px;
       color: #fff;
+      background: #15273f;
       box-shadow: var(--shadow);
-      transform: translateY(18px);
       opacity: 0;
       pointer-events: none;
+      transform: translate(-50%, 18px);
       transition: .2s ease;
     }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .hidden { display: none !important; }
-    .intervention-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 1050px) {
+      .app { grid-template-columns: 72px minmax(0, 1fr); }
+      .sidebar { padding: 18px 10px; }
+      .brand-copy, .nav-label, .sidebar-foot, .nav-btn span:last-child { display: none; }
+      .brand, .nav-btn { justify-content: center; padding-inline: 0; }
     }
-    .intervention-item {
-      display: grid;
-      grid-template-columns: minmax(0,1fr) auto;
-      gap: 12px;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--line);
-    }
-    .intervention-item:last-child { border-bottom: 0; }
-    .intervention-copy { color: var(--muted); font-size: 12px; }
-    @media (max-width: 900px) {
-      .topbar { flex-wrap: wrap; padding: 12px 16px; }
-      .brand { min-width: 0; }
-      .main { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
-      .content { padding: 16px; }
-      .metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
-    }
-    @media (max-width: 620px) {
-      .metrics, .team-grid { grid-template-columns: 1fr; }
-      .user-menu span:not(.avatar) { display: none; }
-      .toolbar { align-items: stretch; }
-      .search { min-width: 0; width: 100%; }
-      .select { width: 100%; }
-      .toolbar-spacer { display: none; }
-      .detail-grid { grid-template-columns: 1fr; }
-      .drawer { width: 100vw; }
-      .modal-wrap { padding: 12px; }
+
+    @media (max-width: 720px) {
+      .app { grid-template-columns: 60px minmax(0, 1fr); }
+      .content { padding: 12px; }
+      .topbar { display: block; padding: 12px 14px; }
+      .top-actions { width: auto; justify-content: flex-start; margin-top: 10px; }
+      .account { display: none; }
+      .filters { grid-template-columns: 1fr; }
+      .queue-head { align-items: flex-start; flex-direction: column; }
+      .queue-chip { min-width: 145px; }
+      .panel-head { align-items: flex-start; flex-direction: column; }
+      .drawer { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
+  <div class="app">
+    <aside class="sidebar">
       <div class="brand">
-        <div class="brand-mark">CRM</div>
-        <span data-i18n="brand">经营工作台</span>
-      </div>
-      <div class="role-switch" role="group" aria-label="View switch">
-        <button class="role-button active" id="cc-role" type="button" data-role="cc">CC</button>
-        <button class="role-button" id="manager-role" type="button" data-role="manager" data-i18n="managerRole">管理者</button>
-      </div>
-      <div class="top-spacer"></div>
-      <div class="user-menu">
-        <div class="avatar" id="user-avatar">C</div>
-        <span id="user-name">Chloe</span>
-      </div>
-      <button class="language-button" id="language-toggle" type="button" aria-label="Switch language">EN</button>
-    </header>
-
-    <div class="main">
-      <aside class="sidebar">
-        <div class="nav-label" id="workspace-label">工作台</div>
-        <button class="nav-item active" type="button" id="today-nav">
-          <span>●</span><span id="today-nav-label">今日行动</span>
-        </button>
-        <div class="sidebar-note" id="sidebar-note">
-          任务由客户事件和业务规则自动生成。
+        <div class="brand-mark">D</div>
+        <div class="brand-copy">
+          <strong>Dino CRM</strong>
+          <span data-i18n="brandSub">客户经营工作台</span>
         </div>
-      </aside>
-
-      <main class="content">
-        <section id="cc-view">
-          <div class="page-head">
-            <div>
-              <div class="eyebrow" data-i18n="workspaceEyebrow">销售执行</div>
-              <h1 id="cc-page-title">今日行动</h1>
-            </div>
-            <div class="head-meta" id="cc-page-meta">当前账号：Chloe · 业务时间：2026-11-20</div>
-          </div>
-
-          <div class="metrics">
-            <div class="metric">
-              <div class="metric-label"><span id="m-first-label">首跟及时率</span><button class="info-button" type="button" data-metric="firstFollow">i</button></div>
-              <div class="metric-value" id="m-first-value">92.4%</div>
-              <div class="metric-context" id="m-first-context">92 / 100</div>
-            </div>
-            <div class="metric">
-              <div class="metric-label"><span id="m-appt-label">预约确认率</span><button class="info-button" type="button" data-metric="appointment">i</button></div>
-              <div class="metric-value" id="m-appt-value">78.0%</div>
-              <div class="metric-context" id="m-appt-context">78 / 100</div>
-            </div>
-            <div class="metric">
-              <div class="metric-label"><span id="m-show-label">到课率</span><button class="info-button" type="button" data-metric="showRate">i</button></div>
-              <div class="metric-value" id="m-show-value">68.2%</div>
-              <div class="metric-context" id="m-show-context">58 / 85</div>
-            </div>
-            <div class="metric">
-              <div class="metric-label"><span id="m-consult-label">咨询完成率</span><button class="info-button" type="button" data-metric="consultRate">i</button></div>
-              <div class="metric-value" id="m-consult-value">81.0%</div>
-              <div class="metric-context" id="m-consult-context">47 / 58</div>
-            </div>
-          </div>
-
-          <section class="panel" aria-labelledby="task-panel-title">
-            <div class="toolbar">
-              <input class="search" id="task-search" type="search" placeholder="搜索客户姓名或用户 ID" aria-label="搜索客户">
-              <select class="select" id="task-filter" aria-label="任务类型">
-                <option value="all">全部任务</option>
-                <option value="appointment">预约确认</option>
-                <option value="pl">PL 跟进</option>
-                <option value="payment">回款</option>
-                <option value="follow">首次跟进</option>
-                <option value="show">到课回填</option>
-                <option value="learning">学习风险</option>
-              </select>
-              <div class="toolbar-spacer"></div>
-              <div class="toolbar-count" id="task-count">6 条任务</div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th id="th-priority">优先级</th>
-                    <th id="th-customer">客户</th>
-                    <th id="th-reason">为什么处理</th>
-                    <th id="th-stage">阶段</th>
-                    <th id="th-due">截止 / 承诺时间</th>
-                    <th id="th-action">下一步</th>
-                  </tr>
-                </thead>
-                <tbody id="task-list"></tbody>
-              </table>
-            </div>
-            <div class="empty" id="task-empty">没有符合当前筛选条件的任务</div>
-          </section>
-        </section>
-
-        <section id="manager-view" class="hidden">
-          <div class="page-head">
-            <div>
-              <div class="eyebrow" data-i18n="managerEyebrow">团队经营</div>
-              <h1 id="manager-page-title">团队经营摘要</h1>
-            </div>
-            <div class="head-meta" id="manager-page-meta">销售一组 · 当前账号：Alex</div>
-          </div>
-
-          <div class="metrics">
-            <div class="metric">
-              <div class="metric-label"><span id="mg-call-label">接通率</span><button class="info-button" type="button" data-metric="callRate">i</button></div>
-              <div class="metric-value" id="mg-call-value">75.0%</div>
-              <div class="metric-context" id="mg-call-context">240 / 320</div>
-            </div>
-            <div class="metric">
-              <div class="metric-label"><span id="mg-task-label">异常任务按时关闭率</span><button class="info-button" type="button" data-metric="taskClosure">i</button></div>
-              <div class="metric-value" id="mg-task-value">88.0%</div>
-              <div class="metric-context" id="mg-task-context">88 / 100</div>
-            </div>
-            <div class="metric">
-              <div class="metric-label"><span id="mg-pl-label">PL 转化率</span><button class="info-button" type="button" data-metric="plRate">i</button></div>
-              <div class="metric-value" id="mg-pl-value">58.1%</div>
-              <div class="metric-context" id="mg-pl-context">36 / 62</div>
-            </div>
-            <div class="metric">
-              <div class="metric-label"><span id="mg-due-label">待收金额</span><button class="info-button" type="button" data-metric="outstanding">i</button></div>
-              <div class="metric-value" id="mg-due-value">฿126,800</div>
-              <div class="metric-context" id="mg-due-context">当前筛选范围</div>
-            </div>
-          </div>
-
-          <div class="team-grid" id="team-grid"></div>
-
-          <section class="panel" style="margin-top:18px" aria-labelledby="intervention-title">
-            <div class="toolbar">
-              <strong id="intervention-title">已采取的干预</strong>
-              <div class="toolbar-spacer"></div>
-              <div class="toolbar-count" id="intervention-count">0 条</div>
-            </div>
-            <ul class="intervention-list" id="intervention-list"></ul>
-            <div class="empty" id="intervention-empty">暂无干预记录</div>
-          </section>
-        </section>
-      </main>
-    </div>
-  </div>
-
-  <div class="drawer-backdrop hidden" id="drawer-backdrop"></div>
-  <aside class="drawer hidden" id="task-drawer" aria-labelledby="drawer-title" role="dialog" aria-modal="true">
-    <div class="drawer-head">
-      <div>
-        <h2 class="drawer-title" id="drawer-title">客户任务</h2>
-        <div class="drawer-sub" id="drawer-sub"></div>
       </div>
-      <button class="close-button" id="drawer-close" type="button" aria-label="关闭">×</button>
-    </div>
-    <div class="drawer-body">
-      <div class="detail-grid" id="drawer-details"></div>
-      <h3 id="timeline-title" style="margin:0 0 10px;font-size:15px">客户时间线</h3>
-      <div class="timeline" id="drawer-timeline"></div>
+      <nav>
+        <div class="nav-label" data-i18n="customerOps">客户经营</div>
+        <button class="nav-btn active" type="button"><span class="nav-icon">▦</span><span data-i18n="salesCenter">销售中心</span></button>
+      </nav>
+      <div class="sidebar-foot"><span class="status-dot"></span><span data-i18n="systemOnline">系统运行正常</span></div>
+    </aside>
 
-      <h3 id="result-title" style="margin:0 0 12px;font-size:15px">记录本次处理</h3>
-      <div class="field" id="result-field">
-        <label for="result-select">处理结果</label>
-        <select id="result-select">
-          <option value="">请选择</option>
-          <option value="contacted">已联系客户</option>
-          <option value="no_answer">未联系上</option>
-          <option value="confirmed">预约已确认</option>
-          <option value="rescheduled">客户申请改期</option>
-          <option value="pl_updated">已更新 PL</option>
-          <option value="payment_checked">回款已核实</option>
-        </select>
-        <div class="field-error">请选择处理结果</div>
-      </div>
-      <div class="field">
-        <label for="next-time">下次跟进时间</label>
-        <input id="next-time" type="datetime-local">
-      </div>
-      <div class="field">
-        <label for="result-note">处理说明</label>
-        <textarea id="result-note" placeholder="记录客户反馈和下一步"></textarea>
-      </div>
-    </div>
-    <div class="drawer-footer">
-      <button class="action-button" id="drawer-cancel" type="button">取消</button>
-      <button class="action-button primary" id="task-submit" type="button">完成并生成下一步</button>
-    </div>
-  </aside>
-
-  <div class="modal-backdrop hidden" id="modal-backdrop"></div>
-  <div class="modal-wrap hidden" id="metric-modal-wrap">
-    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="metric-modal-title">
-      <div class="modal-head">
+    <div class="workspace">
+      <header class="topbar">
         <div>
-          <div class="eyebrow" id="metric-modal-kicker">指标口径</div>
-          <h2 class="drawer-title" id="metric-modal-title">指标</h2>
+          <div class="crumb" data-i18n="breadcrumb">销售管理 / 销售中心</div>
+          <h1 class="title" data-i18n="pageTitle">销售中心</h1>
         </div>
-        <button class="close-button" id="metric-modal-close" type="button" aria-label="关闭">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="metric-formula" id="metric-formula"></div>
-      </div>
-      <div class="modal-actions"><button class="action-button primary" id="metric-modal-ok" type="button">知道了</button></div>
-    </section>
+        <div class="top-actions">
+          <div class="lang-switch" aria-label="Language">
+            <button class="lang-btn active" type="button" data-lang="zh">中</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+          <div class="account">
+            <div class="avatar">L</div>
+            <div class="account-copy"><strong>Linh Nguyen</strong><span data-i18n="role">销售专员</span></div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content" id="content"></main>
+    </div>
   </div>
 
-  <div class="modal-wrap hidden" id="intervention-modal-wrap">
-    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="intervention-modal-title">
-      <div class="modal-head">
-        <div>
-          <div class="eyebrow">管理干预</div>
-          <h2 class="drawer-title" id="intervention-modal-title">发起干预</h2>
-        </div>
-        <button class="close-button" id="intervention-close" type="button" aria-label="关闭">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="field" id="intervention-field">
-          <label for="intervention-type">干预动作</label>
-          <select id="intervention-type">
-            <option value="">请选择</option>
-            <option value="coaching">安排一对一辅导</option>
-            <option value="review">发起专项跟单复盘</option>
-            <option value="handover">调整工作量或交接客户</option>
-            <option value="support">主管协助关键客户</option>
-          </select>
-          <div class="field-error">请选择干预动作</div>
-        </div>
-        <div class="field">
-          <label for="intervention-note">原因与预期改善</label>
-          <textarea id="intervention-note" placeholder="说明卡点和希望改善的指标"></textarea>
-        </div>
-      </div>
-      <div class="modal-actions">
-        <button class="action-button" id="intervention-cancel" type="button">取消</button>
-        <button class="action-button primary" id="intervention-submit" type="button">提交干预</button>
-      </div>
-    </section>
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <section class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title"></section>
   </div>
-
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const translations = {
+    const I18N = {
       zh: {
-        brand: "经营工作台", managerRole: "管理者", workspaceLabel: "工作台",
-        todayNav: "今日行动", sidebarNote: "任务由客户事件和业务规则自动生成。",
-        workspaceEyebrow: "销售执行", ccPageTitle: "今日行动",
-        ccPageMeta: "当前账号：Chloe · 业务时间：2026-11-20",
-        managerEyebrow: "团队经营", managerPageTitle: "团队经营摘要",
-        managerPageMeta: "销售一组 · 当前账号：Alex",
-        searchPlaceholder: "搜索客户姓名或用户 ID",
-        taskAll: "全部任务", taskCount: "{n} 条任务", noTasks: "没有符合当前筛选条件的任务",
-        thPriority: "优先级", thCustomer: "客户", thReason: "为什么处理",
-        thStage: "阶段", thDue: "截止 / 承诺时间", thAction: "下一步",
-        open: "处理", dueUrgent: "逾期", dueSoon: "即将到期", normal: "常规",
-        resultTitle: "记录本次处理", resultLabel: "处理结果", nextLabel: "下次跟进时间",
-        noteLabel: "处理说明", notePlaceholder: "记录客户反馈和下一步",
-        choose: "请选择", selectResult: "请选择处理结果",
-        cancel: "取消", submitTask: "完成并生成下一步",
-        taskSaved: "处理结果已保存，系统已生成下一步任务。",
-        metricKicker: "指标口径", know: "知道了",
-        interventionTitle: "已采取的干预", interventionCount: "{n} 条",
-        noIntervention: "暂无干预记录", startIntervention: "发起干预",
-        interventionModal: "发起干预", interventionLabel: "干预动作", interventionReason: "原因与预期改善",
-        interventionPlaceholder: "说明卡点和希望改善的指标", submitIntervention: "提交干预",
-        interventionSaved: "管理干预已记录。",
-        selectIntervention: "请选择干预动作",
-        ccName: "CC", openTasks: "待处理", overdueTasks: "逾期任务", todayAppointments: "今日预约",
-        metricFirst: "首跟及时率", metricAppointment: "预约确认率", metricShow: "到课率", metricConsult: "咨询完成率",
-        metricCall: "接通率", metricTask: "异常任务按时关闭率", metricPl: "PL 转化率", metricDue: "待收金额",
-        currentScope: "当前筛选范围", timelineTitle: "客户时间线", recordTitle: "记录本次处理",
-        filterAppointment: "预约确认", filterPl: "PL 跟进", filterPayment: "回款", filterFollow: "首次跟进", filterShow: "到课回填", filterLearning: "学习风险",
-        resultContacted: "已联系客户", resultNoAnswer: "未联系上", resultConfirmed: "预约已确认",
-        resultRescheduled: "客户申请改期", resultPl: "已更新 PL", resultPayment: "回款已核实",
-        interventionCoaching: "安排一对一辅导", interventionReview: "发起专项跟单复盘",
-        interventionHandover: "调整工作量或交接客户", interventionSupport: "主管协助关键客户",
-        managerTeamNote: "管理者从团队目标、异常任务和重复问题进入经营干预。",
-        reasons: {
-          appointment: "预约尚未确认", pl: "PL 80 跟进到期", payment: "尾款回款已逾期",
-          follow: "新线索首跟即将超时", learning: "首课未激活", show: "体验课到课结果待回填"
-        },
-        stages: { appointment: "预约", pl: "PL", payment: "回款", follow: "首次联系", learning: "学习履约", show: "体验课" },
-        priorities: { urgent: "逾期", due: "即将到期", normal: "常规" }
+        brandSub: "客户经营工作台", customerOps: "客户经营", salesCenter: "销售中心",
+        userCenter: "用户中心", systemOnline: "系统运行正常", breadcrumb: "销售管理 / 销售中心",
+        pageTitle: "销售中心", role: "销售专员", search: "搜索手机号 / 用户 ID / 姓名",
+        searchPlaceholder: "输入手机号、用户 ID 或姓名", businessLine: "业务线", allLines: "全部业务线",
+        followStage: "当前跟进阶段", allStages: "全部阶段", reset: "重置筛选", refresh: "刷新队列",
+        quickQueues: "CC 快捷队列", queueHint: "选择后直接进入对应工作清单，不会重置上方筛选",
+        all: "全部", currentLeads: "当前线索", total: "共 {n} 条", emptyTitle: "当前队列暂无客户",
+        emptyBody: "可切换其他队列，或调整搜索和筛选条件。", noPermission: "无查看权限",
+        user: "用户", intent: "购买意向", userStatus: "用户状态", stage: "跟进阶段",
+        owner: "当前 CC", action: "操作", viewUser: "查看用户", previous: "上一页", next: "下一页",
+        page: "第 {page} / {pages} 页", required: "请选择处理结果",
+        allPending: "全部待接通", todayAssigned: "今日分配", historyUnconnected: "历史未接通",
+        pendingSub: "今日分配 {a} · 历史未接通 {b}", queueRefreshed: "队列已刷新",
+        saveSuccess: "处理结果已保存，队列已更新", saveFailed: "保存失败，请重试",
+        pendingPayment: "体验课已完课 · 待付费", unfinishedTrial: "体验课未完成 · 待跟进",
+        todayAppointment: "今日预约 · 待到课", noShow: "预约未到课 · 待改期",
+        pendingConnect: "待接通", connectedUnbooked: "已接通 · 未预约",
+        p0Sub: "P0 · 推进成交", p1Sub: "P1 · 补齐原因", p2Sub: "P2 · 当日履约",
+        p3Sub: "P3 · 重新预约", p4Sub: "P4 / P6 · 外呼处理", p5Sub: "P5 · 推进预约",
+        detailTitle: "用户详情", processTitle: "处理客户", close: "关闭", cancel: "取消", save: "保存",
+        basicInfo: "基本信息", queueReason: "进入当前队列", nextAction: "建议下一步",
+        result: "处理结果", notes: "跟进说明", nextFollow: "下次跟进时间",
+        appointmentTime: "预约时间", reason: "原因", callResult: "外呼结果",
+        outcomePaid: "已付款", outcomeNotPaid: "仍未付款", outcomeComplete: "已补齐",
+        outcomeAttended: "已到课", outcomeNoShow: "未到课", outcomeReschedule: "已改期",
+        outcomeConnected: "已接通", outcomeUnconnected: "未接通", outcomeBooked: "已预约",
+        outcomeRejected: "明确拒绝", statusUnpaidTrialDone: "未付费 · 已体验",
+        statusUnpaidTrialPending: "未付费 · 未体验", statusTrialIncomplete: "未付费 · 体验未完成",
+        intentInterested: "有意向", intentNeutral: "待确认", intentNotInterested: "无意向",
+        lineVietnam: "越南业务线", lineThailand: "泰国业务线", lineMalaysia: "马来西亚业务线",
+        stageDoneUnpaid: "咨询已完成 · 待支付", stageTrialIncomplete: "咨询未完成",
+        stageBooked: "已预约", stageAbsent: "未出勤", stageCallPending: "待外呼",
+        stageNotConnected: "未接通", stageConnectedUnbooked: "已接通 · 待预约",
+        queueLabel: "队列", ownerName: "负责人", leadStatus: "客户状态", leadId: "用户 ID",
+        lastAction: "最近处理", processed: "本期队列已处理",
+        reasonP0: "体验课已完成，尚未形成有效付款",
+        reasonP1: "已到课，但咨询结果或下一步未完成",
+        reasonP2: "预约日期为今天，尚未产生有效到课结果",
+        reasonP3: "预约时间已过，客户未到课，需要重新预约",
+        reasonP4: "今天新分配，分配后尚未发起外呼",
+        reasonP5: "客户已接通，但还没有有效预约",
+        reasonP6: "分配后多次外呼仍未接通",
+        actionP0: "跟进付费", actionP1: "记录原因", actionP2: "跟到课",
+        actionP3: "去改期", actionP4: "去外呼", actionP5: "推进预约", actionP6: "再次外呼",
+        backendError: "队列服务暂时不可用，请稍后重试", retry: "重试",
+        demoNotice: ""
       },
       en: {
-        brand: "Operating Desk", managerRole: "Manager", workspaceLabel: "Workspace",
-        todayNav: "Today", sidebarNote: "Tasks are generated from customer events and business rules.",
-        workspaceEyebrow: "Sales execution", ccPageTitle: "Today's actions",
-        ccPageMeta: "Current user: Chloe · Business date: 20 Nov 2026",
-        managerEyebrow: "Team operations", managerPageTitle: "Team operating summary",
-        managerPageMeta: "Sales Team 1 · Current user: Alex",
-        searchPlaceholder: "Search customer name or user ID",
-        taskAll: "All tasks", taskCount: "{n} tasks", noTasks: "No tasks match the current filters",
-        thPriority: "Priority", thCustomer: "Customer", thReason: "Why now",
-        thStage: "Stage", thDue: "Due / committed", thAction: "Next step",
-        open: "Open", dueUrgent: "Overdue", dueSoon: "Due soon", normal: "Normal",
-        resultTitle: "Record outcome", resultLabel: "Outcome", nextLabel: "Next follow-up",
-        noteLabel: "Notes", notePlaceholder: "Record the customer response and next step",
-        choose: "Select", selectResult: "Select an outcome",
-        cancel: "Cancel", submitTask: "Complete and create next task",
-        taskSaved: "Outcome saved. The next task has been created.",
-        metricKicker: "Metric definition", know: "Got it",
-        interventionTitle: "Manager interventions", interventionCount: "Records: {n}",
-        noIntervention: "No interventions recorded", startIntervention: "Start intervention",
-        interventionModal: "Start intervention", interventionLabel: "Intervention", interventionReason: "Reason and expected improvement",
-        interventionPlaceholder: "Describe the bottleneck and the metric to improve", submitIntervention: "Submit intervention",
-        interventionSaved: "Manager intervention recorded.",
-        selectIntervention: "Select an intervention",
-        ccName: "CC", openTasks: "Open tasks", overdueTasks: "Overdue", todayAppointments: "Appointments",
-        metricFirst: "First follow-up SLA", metricAppointment: "Appointment confirmation", metricShow: "Trial attendance", metricConsult: "Consultation completion",
-        metricCall: "Call answer rate", metricTask: "On-time exception closure", metricPl: "PL conversion", metricDue: "Outstanding",
-        currentScope: "Current scope", timelineTitle: "Customer timeline", recordTitle: "Record outcome",
-        filterAppointment: "Appointment", filterPl: "PL follow-up", filterPayment: "Payment", filterFollow: "First contact", filterShow: "Attendance", filterLearning: "Learning risk",
-        resultContacted: "Customer contacted", resultNoAnswer: "Could not reach", resultConfirmed: "Appointment confirmed",
-        resultRescheduled: "Customer requested reschedule", resultPl: "PL updated", resultPayment: "Payment verified",
-        interventionCoaching: "Schedule 1:1 coaching", interventionReview: "Start pipeline review",
-        interventionHandover: "Adjust workload or handover", interventionSupport: "Manager supports key customer",
-        managerTeamNote: "Managers start from targets, exception tasks and recurring issues.",
-        reasons: {
-          appointment: "Appointment not confirmed", pl: "PL 80 follow-up is due", payment: "Final payment is overdue",
-          follow: "First follow-up is nearing SLA", learning: "First lesson not activated", show: "Trial attendance not recorded"
-        },
-        stages: { appointment: "Appointment", pl: "PL", payment: "Payment", follow: "First contact", learning: "Learning", show: "Trial" },
-        priorities: { urgent: "Overdue", due: "Due soon", normal: "Normal" }
+        brandSub: "Customer Operations", customerOps: "Customer Operations", salesCenter: "Sales Center",
+        userCenter: "User Center", systemOnline: "System operational", breadcrumb: "Sales Management / Sales Center",
+        pageTitle: "Sales Center", role: "Sales Representative", search: "Search phone / user ID / name",
+        searchPlaceholder: "Enter phone, user ID, or name", businessLine: "Business Line", allLines: "All business lines",
+        followStage: "Current Follow-up Stage", allStages: "All stages", reset: "Reset filters", refresh: "Refresh queues",
+        quickQueues: "CC quick queues", queueHint: "Select a queue to open its worklist; filters above stay active",
+        all: "All", currentLeads: "Current leads", total: "{n} records", emptyTitle: "No customers in this queue",
+        emptyBody: "Switch to another queue or adjust search and filters.", noPermission: "No access",
+        user: "User", intent: "Purchase Intent", userStatus: "User Status", stage: "Follow-up Stage",
+        owner: "Current CC", action: "Actions", viewUser: "View user", previous: "Previous", next: "Next",
+        page: "Page {page} of {pages}", required: "Select an outcome",
+        allPending: "All pending calls", todayAssigned: "Assigned today", historyUnconnected: "Previously unconnected",
+        pendingSub: "Today {a} · Previous {b}", queueRefreshed: "Queues refreshed",
+        saveSuccess: "Result saved and queues updated", saveFailed: "Save failed; try again",
+        pendingPayment: "Trial completed · Follow payment", unfinishedTrial: "Trial incomplete · Follow up",
+        todayAppointment: "Appointment today · Follow attendance", noShow: "No-show · Reschedule",
+        pendingConnect: "Pending connection", connectedUnbooked: "Connected · Not booked",
+        p0Sub: "P0 · Drive payment", p1Sub: "P1 · Complete reason", p2Sub: "P2 · Same-day fulfillment",
+        p3Sub: "P3 · Rebook", p4Sub: "P4 / P6 · Outbound", p5Sub: "P5 · Drive booking",
+        detailTitle: "User details", processTitle: "Process customer", close: "Close", cancel: "Cancel", save: "Save",
+        basicInfo: "Basic information", queueReason: "Why this queue", nextAction: "Recommended next action",
+        result: "Outcome", notes: "Follow-up notes", nextFollow: "Next follow-up time",
+        appointmentTime: "Appointment time", reason: "Reason", callResult: "Call result",
+        outcomePaid: "Paid", outcomeNotPaid: "Still unpaid", outcomeComplete: "Reason completed",
+        outcomeAttended: "Attended", outcomeNoShow: "No-show", outcomeReschedule: "Rescheduled",
+        outcomeConnected: "Connected", outcomeUnconnected: "Not connected", outcomeBooked: "Booked",
+        outcomeRejected: "Rejected", statusUnpaidTrialDone: "Unpaid · Trial completed",
+        statusUnpaidTrialPending: "Unpaid · No trial yet", statusTrialIncomplete: "Unpaid · Trial incomplete",
+        intentInterested: "Interested", intentNeutral: "Pending", intentNotInterested: "Not interested",
+        lineVietnam: "Vietnam Business Line", lineThailand: "Thailand Business Line",
+        lineMalaysia: "Malaysia Business Line", stageDoneUnpaid: "Consultation completed · Unpaid",
+        stageTrialIncomplete: "Consultation incomplete", stageBooked: "Booked", stageAbsent: "No-show",
+        stageCallPending: "Call pending", stageNotConnected: "Not connected",
+        stageConnectedUnbooked: "Connected · Not booked", queueLabel: "Queue", ownerName: "Owner",
+        leadStatus: "Lead status", leadId: "User ID", lastAction: "Last action", processed: "Queue handled in this release",
+        reasonP0: "Trial completed without an effective payment",
+        reasonP1: "Customer attended, but the consultation or next step is incomplete",
+        reasonP2: "Appointment is today and attendance has not been recorded",
+        reasonP3: "Appointment time has passed without attendance; rebooking is needed",
+        reasonP4: "Assigned today without an outbound attempt after assignment",
+        reasonP5: "Customer has connected, but no active appointment exists",
+        reasonP6: "Assigned previously and has never connected",
+        actionP0: "Follow payment", actionP1: "Record reason", actionP2: "Follow attendance",
+        actionP3: "Reschedule", actionP4: "Call now", actionP5: "Drive booking", actionP6: "Call again",
+        backendError: "Queue service is unavailable; try again later", retry: "Retry",
+        demoNotice: ""
       }
     };
 
-    const metricDefinitions = {
-      firstFollow: {
-        zh: ["首跟及时率", "首次有效跟进时间不晚于分配时间加业务线 SLA 的去重 Lead 数 ÷ 统计范围内成功分配的去重 Lead 数。以分配时间进入统计范围，按 Lead ID 去重；分母为 0 时显示“—”。"],
-        en: ["First follow-up SLA rate", "Distinct leads whose first effective follow-up was completed no later than assignment time plus the business-line SLA ÷ distinct leads successfully assigned in the selected period. Scoped by assignment time and deduplicated by Lead ID; show “—” when the denominator is 0."]
-      },
-      appointment: {
-        zh: ["预约确认率", "预约结果为已确认的 Appointment 数 ÷ 统计范围内创建的 Appointment 数。以预约创建时间进入统计范围，按 Appointment ID 去重；分母为 0 时显示“—”。"],
-        en: ["Appointment confirmation rate", "Appointments with a confirmed result ÷ appointments created in the selected period. Scoped by appointment creation time and deduplicated by Appointment ID; show “—” when the denominator is 0."]
-      },
-      showRate: {
-        zh: ["到课率", "到课状态为已到课的 Trial 数 ÷ 预约时间落在统计范围内且状态已结束的 Trial 数。按 Trial ID 去重；分母为 0 时显示“—”。"],
-        en: ["Trial attendance rate", "Trials marked as attended ÷ trials whose scheduled start is in the selected period and whose result is final. Deduplicated by Trial ID; show “—” when the denominator is 0."]
-      },
-      consultRate: {
-        zh: ["咨询完成率", "咨询状态为已完成的 Consultation 数 ÷ 已到课的 Trial 数。以咨询完成时间进入统计范围，按 Consultation ID 去重；分母为 0 时显示“—”。"],
-        en: ["Consultation completion rate", "Consultations marked complete ÷ attended trials. Scoped by consultation completion time and deduplicated by Consultation ID; show “—” when the denominator is 0."]
-      },
-      callRate: {
-        zh: ["接通率", "状态为接通的 Call 数 ÷ 已发起的 Call 数。以呼叫发起时间进入统计范围，按 Call ID 去重；分母为 0 时显示“—”。"],
-        en: ["Call answer rate", "Calls marked connected ÷ calls initiated. Scoped by call initiation time and deduplicated by Call ID; show “—” when the denominator is 0."]
-      },
-      taskClosure: {
-        zh: ["异常任务按时关闭率", "在截止时间前关闭的去重 FollowTask 数 ÷ 在统计时间内到期的去重 FollowTask 数。按 Task ID 去重；分母为 0 时显示“—”。"],
-        en: ["On-time exception closure", "Distinct follow-up tasks closed before their due time ÷ distinct follow-up tasks that became due in the selected period. Deduplicated by Task ID; show “—” when the denominator is 0."]
-      },
-      plRate: {
-        zh: ["PL 转化率", "订单创建前最近有效 PL 为 PL 80 或 PL 100 且已创建支付成功订单的去重 Lead 数 ÷ 订单创建前最近有效 PL 为 PL 80 或 PL 100 的去重 Lead 数。按 Lead ID 去重；分母为 0 时显示“—”。"],
-        en: ["PL conversion rate", "Distinct leads with a successful paid order whose latest effective PL before order creation was PL 80 or PL 100 ÷ distinct leads whose latest effective PL before order creation was PL 80 or PL 100. Deduplicated by Lead ID; show “—” when the denominator is 0."]
-      },
-      outstanding: {
-        zh: ["待收金额", "已确认应收金额减已确认实收金额。按业务线、团队和数据权限筛选，以应收到期时间进入统计范围；按 Payment 计划项去重；无待收金额时为 0。"],
-        en: ["Outstanding amount", "Confirmed receivable amount minus confirmed received amount. Filtered by business line, team and data access, scoped by receivable due time and deduplicated by payment schedule item; show 0 when no amount is outstanding."]
-      }
+    const QUEUE_META = {
+      p0: { main: "p0", title: "pendingPayment", sub: "p0Sub", reason: "reasonP0", action: "actionP0", cls: "p0" },
+      p1: { main: "p1", title: "unfinishedTrial", sub: "p1Sub", reason: "reasonP1", action: "actionP1", cls: "p1" },
+      p2: { main: "p2", title: "todayAppointment", sub: "p2Sub", reason: "reasonP2", action: "actionP2", cls: "p2" },
+      p3: { main: "p3", title: "noShow", sub: "p3Sub", reason: "reasonP3", action: "actionP3", cls: "p3" },
+      p4: { main: "pending", title: "todayAssigned", sub: "p4Sub", reason: "reasonP4", action: "actionP4", cls: "pending" },
+      p6: { main: "pending", title: "historyUnconnected", sub: "p4Sub", reason: "reasonP6", action: "actionP6", cls: "pending" },
+      p5: { main: "p5", title: "connectedUnbooked", sub: "p5Sub", reason: "reasonP5", action: "actionP5", cls: "p5" }
     };
 
-    const tasks = [
-      {
-        id: "T-1042", userId: "U-88321", customer: "Mia Nguyen", owner: "Chloe",
-        reasonType: "appointment", priority: "urgent", due: "今天 10:30", dueEn: "Today 10:30",
-        stage: "appointment", businessLine: "泰国",
-        timeline: [
-          ["今天 09:42", "客户通过 LINE 回复“稍后确认”", "Today 09:42", "Customer replied on LINE: “Will confirm later”"],
-          ["昨天 18:20", "已创建预约并发送会议链接", "Yesterday 18:20", "Appointment created and meeting link sent"]
-        ]
-      },
-      {
-        id: "T-1045", userId: "U-77418", customer: "Noah Tran", owner: "Thy",
-        reasonType: "pl", priority: "due", due: "今天 11:00", dueEn: "Today 11:00",
-        stage: "pl", businessLine: "越南",
-        timeline: [
-          ["今天 08:51", "PL 等级更新为 PL 80", "Today 08:51", "PL updated to PL 80"],
-          ["今天 08:50", "客户承诺今日支付定金", "Today 08:50", "Customer promised to pay the deposit today"]
-        ]
-      },
-      {
-        id: "T-1051", userId: "U-61937", customer: "Emma Pham", owner: "Chloe",
-        reasonType: "payment", priority: "urgent", due: "11月19日", dueEn: "19 Nov",
-        stage: "payment", businessLine: "越南",
-        timeline: [
-          ["昨天 16:10", "尾款到期，尚未收到支付成功事件", "Yesterday 16:10", "Final payment became due with no successful payment event"],
-          ["11月16日", "已支付定金", "16 Nov", "Deposit paid"]
-        ]
-      },
-      {
-        id: "T-1056", userId: "U-55402", customer: "Liam Dao", owner: "Minh",
-        reasonType: "show", priority: "urgent", due: "今天 09:00", dueEn: "Today 09:00",
-        stage: "show", businessLine: "越南",
-        timeline: [
-          ["今天 09:02", "体验课已开始，尚未回填到课结果", "Today 09:02", "Trial started; attendance not recorded"],
-          ["昨天 19:05", "预约已确认", "Yesterday 19:05", "Appointment confirmed"]
-        ]
-      },
-      {
-        id: "T-1060", userId: "U-90217", customer: "Ava Chen", owner: "Chloe",
-        reasonType: "follow", priority: "due", due: "今天 12:00", dueEn: "Today 12:00",
-        stage: "follow", businessLine: "泰国",
-        timeline: [
-          ["今天 09:10", "新线索已分配", "Today 09:10", "New lead assigned"],
-          ["今天 09:10", "首次联系 SLA 剩余 2 小时 50 分", "Today 09:10", "First-contact SLA has 2h 50m remaining"]
-        ]
-      },
-      {
-        id: "T-1066", userId: "U-48115", customer: "Leo Nguyen", owner: "Linh",
-        reasonType: "learning", priority: "normal", due: "今天 16:00", dueEn: "Today 16:00",
-        stage: "learning", businessLine: "越南",
-        timeline: [
-          ["今天 08:30", "购买后 72 小时仍未激活首课", "Today 08:30", "First lesson not activated 72 hours after purchase"],
-          ["11月17日", "订单支付成功", "17 Nov", "Order paid"]
-        ]
-      }
-    ];
+    const STAGE_META = {
+      done_unpaid: { key: "stageDoneUnpaid", cls: "pill-green" },
+      trial_incomplete: { key: "stageTrialIncomplete", cls: "pill-amber" },
+      booked: { key: "stageBooked", cls: "pill-blue" },
+      absent: { key: "stageAbsent", cls: "pill-violet" },
+      call_pending: { key: "stageCallPending", cls: "pill-amber" },
+      not_connected: { key: "stageNotConnected", cls: "pill-red" },
+      connected_unbooked: { key: "stageConnectedUnbooked", cls: "pill-blue" }
+    };
+
+    const BL_META = {
+      vietnam: "lineVietnam",
+      thailand: "lineThailand",
+      malaysia: "lineMalaysia"
+    };
+
+    let leads = [
+      ["L-261123-01", "Nguyễn Minh Anh", "vietnam", "interested", "statusUnpaidTrialDone", "done_unpaid", "p0", "2026-11-23 09:20"],
+      ["L-261123-02", "Tran Bao Chau", "thailand", "interested", "statusUnpaidTrialDone", "done_unpaid", "p0", "2026-11-23 10:10"],
+      ["L-261123-03", "Le Thu Ha", "vietnam", "neutral", "statusUnpaidTrialDone", "done_unpaid", "p0", "2026-11-22 17:40"],
+      ["L-261123-04", "Pham Gia Linh", "malaysia", "interested", "statusUnpaidTrialDone", "done_unpaid", "p0", "2026-11-22 16:12"],
+      ["L-261123-05", "Vo Minh Khang", "vietnam", "interested", "statusTrialIncomplete", "trial_incomplete", "p1", "2026-11-23 08:50"],
+      ["L-261123-06", "Do Ngoc Mai", "thailand", "neutral", "statusTrialIncomplete", "trial_incomplete", "p1", "2026-11-23 09:35"],
+      ["L-261123-07", "Bui Anh Tuan", "vietnam", "interested", "statusTrialIncomplete", "trial_incomplete", "p1", "2026-11-22 18:20"],
+      ["L-261123-08", "Trần Khánh Vy", "malaysia", "neutral", "statusTrialIncomplete", "trial_incomplete", "p1", "2026-11-22 14:50"],
+      ["L-261123-09", "Nguyen Mai Chi", "vietnam", "interested", "statusUnpaidTrialPending", "booked", "p2", "2026-11-23 13:30"],
+      ["L-261123-10", "Phan Minh Quan", "vietnam", "neutral", "statusUnpaidTrialPending", "booked", "p2", "2026-11-23 16:00"],
+      ["L-261123-11", "Kanya S.", "thailand", "interested", "statusUnpaidTrialPending", "booked", "p2", "2026-11-23 19:00"],
+      ["L-261123-12", "Nur Aisyah", "malaysia", "interested", "statusUnpaidTrialPending", "booked", "p2", "2026-11-23 20:30"],
+      ["L-261123-13", "Hoang Bao Ngan", "vietnam", "neutral", "statusUnpaidTrialPending", "booked", "p2", "2026-11-23 21:00"],
+      ["L-261123-14", "Nguyen Thu Phuong", "vietnam", "neutral", "statusUnpaidTrialPending", "absent", "p3", "2026-11-22 15:00"],
+      ["L-261123-15", "Siriporn P.", "thailand", "interested", "statusUnpaidTrialPending", "absent", "p3", "2026-11-22 18:00"],
+      ["L-261123-16", "Ahmad Hakim", "malaysia", "neutral", "statusUnpaidTrialPending", "absent", "p3", "2026-11-21 16:00"],
+      ["L-261123-17", "Dang Hoai An", "vietnam", "notInterested", "statusUnpaidTrialPending", "absent", "p3", "2026-11-20 14:00"],
+      ["L-261123-18", "Le Gia Huy", "vietnam", "neutral", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 07:40"],
+      ["L-261123-19", "Naphat K.", "thailand", "neutral", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 08:10"],
+      ["L-261123-20", "Tan Wei Ming", "malaysia", "interested", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 09:00"],
+      ["L-261123-21", "Nguyen Quynh Nhu", "vietnam", "neutral", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 10:25"],
+      ["L-261123-22", "Pham Duc Anh", "vietnam", "neutral", "statusUnpaidTrialPending", "not_connected", "p6", "2026-11-20 11:30"],
+      ["L-261123-23", "Wanida S.", "thailand", "neutral", "statusUnpaidTrialPending", "not_connected", "p6", "2026-11-19 15:45"],
+      ["L-261123-24", "Lim Jia Hui", "malaysia", "notInterested", "statusUnpaidTrialPending", "not_connected", "p6", "2026-11-18 13:10"],
+      ["L-261123-25", "Truong My Linh", "vietnam", "interested", "statusUnpaidTrialPending", "not_connected", "p6", "2026-11-17 17:55"],
+      ["L-261123-26", "Nguyen Hoai Nam", "vietnam", "interested", "statusUnpaidTrialPending", "connected_unbooked", "p5", "2026-11-23 08:10"],
+      ["L-261123-27", "Pornpan A.", "thailand", "neutral", "statusUnpaidTrialPending", "connected_unbooked", "p5", "2026-11-22 19:20"],
+      ["L-261123-28", "Chong Mei Ling", "malaysia", "interested", "statusUnpaidTrialPending", "connected_unbooked", "p5", "2026-11-22 15:10"],
+      ["L-261123-29", "Tran Nhat Minh", "vietnam", "neutral", "statusUnpaidTrialPending", "connected_unbooked", "p5", "2026-11-21 11:20"],
+      ["L-261123-30", "Nguyen Thanh Truc", "vietnam", "interested", "statusUnpaidTrialPending", "connected_unbooked", "p5", "2026-11-20 16:35"]
+    ].map(([id, name, line, intent, status, stage, queue, lastAction]) => ({
+      id, name, line, intent, status, stage, queue, lastAction,
+      owner: "Linh Nguyen",
+      phone: "**** " + id.slice(-2),
+      appointment: queue === "p2" ? "今天" : queue === "p3" ? "昨天" : "—",
+      lastResult: queue === "p0" ? "体验课已完成" : queue === "p1" ? "咨询未完成" :
+        queue === "p2" ? "等待到课" : queue === "p3" ? "客户未到课" :
+        queue === "p4" ? "今天新分配" : queue === "p6" ? "多次未接通" : "已接通，未预约"
+    }));
 
     const state = {
-      lang: localStorage.getItem("crm-lang") || "zh",
-      role: "cc",
-      selectedTask: null,
-      interventions: []
+      lang: localStorage.getItem("crm-quick-filter-lang") || "zh",
+      queue: "all",
+      subQueue: "all",
+      search: "",
+      line: "all",
+      stage: "all",
+      page: 1,
+      pageSize: 8,
+      selectedLeadId: null,
+      processing: false
     };
 
-    const $ = (selector) => document.querySelector(selector);
-    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
-    const t = (key) => translations[state.lang][key] || key;
-
-    function setText(id, value) {
-      const node = document.getElementById(id);
-      if (node) node.textContent = value;
-    }
-
-    function applyLanguage() {
-      document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
-      const dict = translations[state.lang];
-      $("#language-toggle").textContent = state.lang === "zh" ? "EN" : "中";
-      $("#language-toggle").setAttribute("aria-label", state.lang === "zh" ? "Switch to English" : "切换到中文");
-      setText("workspace-label", dict.workspaceLabel);
-      setText("today-nav-label", state.role === "cc" ? dict.todayNav : (state.lang === "zh" ? "团队经营摘要" : "Team summary"));
-      setText("sidebar-note", state.role === "cc" ? dict.sidebarNote : dict.managerTeamNote);
-      setText("cc-page-title", dict.ccPageTitle);
-      setText("cc-page-meta", dict.ccPageMeta);
-      setText("manager-page-title", dict.managerPageTitle);
-      setText("manager-page-meta", dict.managerPageMeta);
-      setText("intervention-title", dict.interventionTitle);
-      setText("intervention-empty", dict.noIntervention);
-      setText("task-empty", dict.noTasks);
-      setText("drawer-cancel", dict.cancel);
-      setText("task-submit", dict.submitTask);
-      setText("metric-modal-kicker", dict.metricKicker);
-      setText("metric-modal-ok", dict.know);
-      setText("intervention-modal-title", dict.interventionModal);
-      setText("metric-modal-title", dict.metricKicker);
-      $(".brand span").textContent = dict.brand;
-      $("#manager-role").textContent = dict.managerRole;
-      $("#task-search").placeholder = dict.searchPlaceholder;
-      $("#task-filter option[value='all']").textContent = dict.taskAll;
-      $("#task-filter option[value='appointment']").textContent = dict.filterAppointment;
-      $("#task-filter option[value='pl']").textContent = dict.filterPl;
-      $("#task-filter option[value='payment']").textContent = dict.filterPayment;
-      $("#task-filter option[value='follow']").textContent = dict.filterFollow;
-      $("#task-filter option[value='show']").textContent = dict.filterShow;
-      $("#task-filter option[value='learning']").textContent = dict.filterLearning;
-      $$("th")[0].textContent = dict.thPriority;
-      $$("th")[1].textContent = dict.thCustomer;
-      $$("th")[2].textContent = dict.thReason;
-      $$("th")[3].textContent = dict.thStage;
-      $$("th")[4].textContent = dict.thDue;
-      $$("th")[5].textContent = dict.thAction;
-      $("#drawer-title").textContent = state.selectedTask ? state.selectedTask.customer : dict.thCustomer;
-      const resultLabel = document.querySelector("label[for='result-select']");
-      const nextLabel = document.querySelector("label[for='next-time']");
-      const noteLabel = document.querySelector("label[for='result-note']");
-      resultLabel.textContent = dict.resultLabel;
-      nextLabel.textContent = dict.nextLabel;
-      noteLabel.textContent = dict.noteLabel;
-      $("#result-note").placeholder = dict.notePlaceholder;
-      $("#result-select option[value='']").textContent = dict.choose;
-      $("#result-select option[value='contacted']").textContent = dict.resultContacted;
-      $("#result-select option[value='no_answer']").textContent = dict.resultNoAnswer;
-      $("#result-select option[value='confirmed']").textContent = dict.resultConfirmed;
-      $("#result-select option[value='rescheduled']").textContent = dict.resultRescheduled;
-      $("#result-select option[value='pl_updated']").textContent = dict.resultPl;
-      $("#result-select option[value='payment_checked']").textContent = dict.resultPayment;
-      $("#intervention-type option[value='']").textContent = dict.choose;
-      $("#intervention-type option[value='coaching']").textContent = dict.interventionCoaching;
-      $("#intervention-type option[value='review']").textContent = dict.interventionReview;
-      $("#intervention-type option[value='handover']").textContent = dict.interventionHandover;
-      $("#intervention-type option[value='support']").textContent = dict.interventionSupport;
-      document.querySelector("#result-field .field-error").textContent = dict.selectResult;
-      document.querySelector("#intervention-field .field-error").textContent = dict.selectIntervention;
-      setText("m-first-label", dict.metricFirst);
-      setText("m-appt-label", dict.metricAppointment);
-      setText("m-show-label", dict.metricShow);
-      setText("m-consult-label", dict.metricConsult);
-      setText("mg-call-label", dict.metricCall);
-      setText("mg-task-label", dict.metricTask);
-      setText("mg-pl-label", dict.metricPl);
-      setText("mg-due-label", dict.metricDue);
-      setText("mg-due-context", dict.currentScope);
-      setText("timeline-title", dict.timelineTitle);
-      setText("result-title", dict.recordTitle);
-      $("#drawer-title").textContent = state.selectedTask ? state.selectedTask.customer : dict.thCustomer;
-      $$(".close-button").forEach((button) => button.setAttribute("aria-label", state.lang === "zh" ? "关闭" : "Close"));
-      document.querySelector(".role-switch").setAttribute("aria-label", state.lang === "zh" ? "切换角色" : "Switch role");
-      setText("intervention-close", "×");
-      const kicker = document.querySelector("#manager-view .eyebrow");
-      if (kicker) kicker.textContent = dict.managerEyebrow;
-      document.querySelector("#cc-view .eyebrow").textContent = dict.workspaceEyebrow;
-      document.querySelector("#intervention-modal-wrap .eyebrow").textContent = state.lang === "zh" ? "管理干预" : "Manager intervention";
-      localStorage.setItem("crm-lang", state.lang);
-      renderTasks();
-      renderTeam();
-      renderInterventions();
-    }
-
-    function getVisibleTasks() {
-      const search = $("#task-search").value.trim().toLowerCase();
-      const type = $("#task-filter").value;
-      return tasks.filter((task) => {
-        if (task.done) return false;
-        if (state.role === "cc" && task.owner !== "Chloe") return false;
-        if (type !== "all" && task.reasonType !== type) return false;
-        if (!search) return true;
-        return task.customer.toLowerCase().includes(search) || task.userId.toLowerCase().includes(search);
-      });
-    }
-
-    function renderTasks() {
-      const list = $("#task-list");
-      const visible = getVisibleTasks();
-      const dict = translations[state.lang];
-      list.innerHTML = visible.map((task) => `
-        <tr>
-          <td><span class="badge ${task.priority}">${dict.priorities[task.priority]}</span></td>
-          <td class="customer-cell">
-            <div class="customer-name">${task.customer}</div>
-            <div class="customer-meta">${task.userId} · ${state.lang === "zh" ? task.businessLine : ({ "泰国": "Thailand", "越南": "Vietnam" }[task.businessLine] || task.businessLine)}</div>
-          </td>
-          <td class="reason">${dict.reasons[task.reasonType] || task.reasonType}</td>
-          <td><span class="stage">${dict.stages[task.stage]}</span></td>
-          <td>${state.lang === "zh" ? task.due : task.dueEn}</td>
-          <td><button class="action-button" type="button" data-task-id="${task.id}">${dict.open}</button></td>
-        </tr>
-      `).join("");
-      $("#task-empty").style.display = visible.length ? "none" : "block";
-      setText("task-count", dict.taskCount.replace("{n}", visible.length));
-      list.querySelectorAll("[data-task-id]").forEach((button) => {
-        button.addEventListener("click", () => openDrawer(button.dataset.taskId));
-      });
-    }
-
-    function renderTeam() {
-      const dict = translations[state.lang];
-      const open = tasks.filter((task) => !task.done);
-      const owners = ["Chloe", "Thy", "Minh", "Linh"];
-      const cards = owners.map((owner) => {
-        const ownerTasks = open.filter((task) => task.owner === owner);
-        const overdue = ownerTasks.filter((task) => task.priority === "urgent").length;
-        const appointments = ownerTasks.filter((task) => task.stage === "appointment" || task.stage === "show").length;
-        return `
-          <article class="team-card">
-            <div class="team-card-head">
-              <div>
-                <div class="team-card-name">${owner}</div>
-                <div class="team-card-copy">${owner === "Chloe" ? "Sales Team 1" : "Sales Team 1"}</div>
-              </div>
-              <button class="action-button" type="button" data-intervene="${owner}">${dict.startIntervention}</button>
-            </div>
-            <div class="team-card-stats">
-              <div class="team-stat"><strong>${ownerTasks.length}</strong><span>${dict.openTasks}</span></div>
-              <div class="team-stat"><strong>${overdue}</strong><span>${dict.overdueTasks}</span></div>
-              <div class="team-stat"><strong>${appointments}</strong><span>${dict.todayAppointments}</span></div>
-            </div>
-            <div class="team-card-copy">${ownerTasks.length ? (state.lang === "zh" ? "当前主要卡点：" : "Primary bottleneck: ") + dict.reasons[ownerTasks[0].reasonType] : (state.lang === "zh" ? "当前无异常任务" : "No exception tasks")}</div>
-          </article>
-        `;
-      }).join("");
-      $("#team-grid").innerHTML = cards;
-      $$("[data-intervene]").forEach((button) => {
-        button.addEventListener("click", () => openIntervention(button.dataset.intervene));
-      });
-    }
-
-    function renderInterventions() {
-      const dict = translations[state.lang];
-      const actionLabels = {
-        coaching: dict.interventionCoaching,
-        review: dict.interventionReview,
-        handover: dict.interventionHandover,
-        support: dict.interventionSupport
-      };
-      const list = $("#intervention-list");
-      list.innerHTML = state.interventions.map((item) => `
-        <li class="intervention-item">
-          <div>
-            <strong>${item.owner}</strong>
-            <div class="intervention-copy">${actionLabels[item.actionKey]} · ${item.note || dict.interventionPlaceholder}</div>
-          </div>
-          <div class="badge normal">${state.lang === "zh" ? "进行中" : "In progress"}</div>
-        </li>
-      `).join("");
-      $("#intervention-empty").style.display = state.interventions.length ? "none" : "block";
-      setText("intervention-count", dict.interventionCount.replace("{n}", state.interventions.length));
-    }
-
-    function openDrawer(taskId) {
-      state.selectedTask = tasks.find((task) => task.id === taskId);
-      if (!state.selectedTask) return;
-      const dict = translations[state.lang];
-      $("#drawer-title").textContent = state.selectedTask.customer;
-      $("#drawer-sub").textContent = `${state.selectedTask.id} · ${state.lang === "zh" ? state.selectedTask.businessLine : ({ "泰国": "Thailand", "越南": "Vietnam" }[state.selectedTask.businessLine] || state.selectedTask.businessLine)}`;
-      $("#drawer-details").innerHTML = `
-        <div class="detail"><span>${dict.thReason}</span><strong>${dict.reasons[state.selectedTask.reasonType]}</strong></div>
-        <div class="detail"><span>${dict.thStage}</span><strong>${dict.stages[state.selectedTask.stage]}</strong></div>
-        <div class="detail"><span>${dict.thDue}</span><strong>${state.lang === "zh" ? state.selectedTask.due : state.selectedTask.dueEn}</strong></div>
-        <div class="detail"><span>${state.lang === "zh" ? "负责人" : "Owner"}</span><strong>${state.selectedTask.owner}</strong></div>
-      `;
-      const eventIndex = state.lang === "zh" ? 0 : 2;
-      $("#drawer-timeline").innerHTML = state.selectedTask.timeline.map((event) => `
-        <div class="timeline-item"><strong>${event[eventIndex]}</strong><br>${event[eventIndex + 1]}</div>
-      `).join("");
-      $("#result-select").value = "";
-      $("#next-time").value = "";
-      $("#result-note").value = "";
-      $("#result-field").classList.remove("has-error");
-      $("#drawer-backdrop").classList.remove("hidden");
-      $("#task-drawer").classList.remove("hidden");
-      $("#result-select").focus();
-    }
-
-    function closeDrawer() {
-      $("#drawer-backdrop").classList.add("hidden");
-      $("#task-drawer").classList.add("hidden");
-      state.selectedTask = null;
-    }
-
-    function openMetric(metricKey) {
-      const definition = metricDefinitions[metricKey];
-      if (!definition) return;
-      const [title, formula] = definition[state.lang];
-      setText("metric-modal-title", title);
-      setText("metric-formula", formula);
-      $("#modal-backdrop").classList.remove("hidden");
-      $("#metric-modal-wrap").classList.remove("hidden");
-      $("#metric-modal-ok").focus();
-    }
-
-    function closeMetric() {
-      $("#modal-backdrop").classList.add("hidden");
-      $("#metric-modal-wrap").classList.add("hidden");
-    }
-
-    let interventionOwner = "";
-    function openIntervention(owner) {
-      interventionOwner = owner;
-      setText("intervention-modal-title", `${t("interventionModal")} · ${owner}`);
-      $("#intervention-type").value = "";
-      $("#intervention-note").value = "";
-      $("#intervention-field").classList.remove("has-error");
-      $("#modal-backdrop").classList.remove("hidden");
-      $("#intervention-modal-wrap").classList.remove("hidden");
-      $("#intervention-type").focus();
-    }
-
-    function closeIntervention() {
-      $("#modal-backdrop").classList.add("hidden");
-      $("#intervention-modal-wrap").classList.add("hidden");
-    }
-
-    function switchRole(role) {
-      state.role = role;
-      $("#cc-view").classList.toggle("hidden", role !== "cc");
-      $("#manager-view").classList.toggle("hidden", role !== "manager");
-      $("#cc-role").classList.toggle("active", role === "cc");
-      $("#manager-role").classList.toggle("active", role === "manager");
-      setText("user-avatar", role === "cc" ? "C" : "A");
-      setText("user-name", role === "cc" ? "Chloe" : "Alex");
-      setText("today-nav-label", role === "cc" ? t("todayNav") : (state.lang === "zh" ? "团队经营摘要" : "Team summary"));
-      setText("sidebar-note", role === "cc" ? t("sidebarNote") : t("managerTeamNote"));
-      renderTasks();
-      renderTeam();
-    }
-
-    function showToast(message) {
+    const $ = (selector, parent = document) => parent.querySelector(selector);
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[ch]));
+    const t = (key) => I18N[state.lang][key] ?? key;
+    const fmt = (key, vars) => t(key).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
+    const mainOf = (queue) => QUEUE_META[queue]?.main || queue;
+    const intentLabel = (key) => {
+      const map = { interested: "intentInterested", neutral: "intentNeutral", notInterested: "intentNotInterested" };
+      return t(map[key] || key);
+    };
+    const stageLabel = (key) => t(STAGE_META[key]?.key || key);
+    const lineLabel = (key) => t(BL_META[key] || key);
+    const queueMainLabel = (queue) => {
+      const main = mainOf(queue);
+      if (!queue) return t("processed");
+      if (main === "pending") return t("pendingConnect");
+      return t(QUEUE_META[main]?.title || main);
+    };
+    const actionLabel = (queue) => t(QUEUE_META[queue]?.action || "viewUser");
+    const showToast = (message) => {
       const toast = $("#toast");
       toast.textContent = message;
       toast.classList.add("show");
       clearTimeout(showToast.timer);
       showToast.timer = setTimeout(() => toast.classList.remove("show"), 2400);
+    };
+
+    function baseRows() {
+      const q = state.search.trim().toLowerCase();
+      return leads.filter((lead) => {
+        const searchOk = !q || lead.name.toLowerCase().includes(q) || lead.id.toLowerCase().includes(q);
+        const lineOk = state.line === "all" || lead.line === state.line;
+        const stageOk = state.stage === "all" || lead.stage === state.stage;
+        return searchOk && lineOk && stageOk;
+      });
     }
 
-    $("#task-search").addEventListener("input", renderTasks);
-    $("#task-filter").addEventListener("change", renderTasks);
-    $("#language-toggle").addEventListener("click", () => {
-      $("#toast").classList.remove("show");
-      $("#toast").textContent = "";
-      state.lang = state.lang === "zh" ? "en" : "zh";
-      applyLanguage();
-      closeMetric();
-      if (state.selectedTask) openDrawer(state.selectedTask.id);
-    });
-    $$(".role-button").forEach((button) => {
-      button.addEventListener("click", () => switchRole(button.dataset.role));
-    });
-    $("#today-nav").addEventListener("click", () => {
-      if (state.role === "manager") switchRole("cc");
-      else renderTasks();
-    });
-    $$("[data-metric]").forEach((button) => {
-      button.addEventListener("click", () => openMetric(button.dataset.metric));
-    });
-    $("#drawer-close").addEventListener("click", closeDrawer);
-    $("#drawer-cancel").addEventListener("click", closeDrawer);
-    $("#drawer-backdrop").addEventListener("click", closeDrawer);
-    $("#task-submit").addEventListener("click", () => {
-      if (!$("#result-select").value) {
-        $("#result-field").classList.add("has-error");
-        $("#result-select").focus();
-        return;
+    function queueMatches(lead, queue, subQueue = "all") {
+      if (queue === "all") return true;
+      if (queue === "pending") {
+        if (!["p4", "p6"].includes(lead.queue)) return false;
+        return subQueue === "all" || lead.queue === subQueue;
       }
-      if (!state.selectedTask) return;
-      state.selectedTask.done = true;
-      closeDrawer();
-      renderTasks();
-      renderTeam();
-      showToast(t("taskSaved"));
-    });
-    $("#metric-modal-close").addEventListener("click", closeMetric);
-    $("#metric-modal-ok").addEventListener("click", closeMetric);
-    $("#modal-backdrop").addEventListener("click", () => {
-      if (!$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
-      if (!$("#intervention-modal-wrap").classList.contains("hidden")) closeIntervention();
-    });
-    $("#intervention-close").addEventListener("click", closeIntervention);
-    $("#intervention-cancel").addEventListener("click", closeIntervention);
-    $("#intervention-submit").addEventListener("click", () => {
-      if (!$("#intervention-type").value) {
-        $("#intervention-field").classList.add("has-error");
-        $("#intervention-type").focus();
-        return;
-      }
-      state.interventions.unshift({
-        owner: interventionOwner,
-        actionKey: $("#intervention-type").value,
-        note: $("#intervention-note").value.trim()
+      return lead.queue === queue;
+    }
+
+    function visibleRows() {
+      return baseRows().filter((lead) => queueMatches(lead, state.queue, state.subQueue));
+    }
+
+    function queueCount(queue, subQueue = "all") {
+      return baseRows().filter((lead) => queueMatches(lead, queue, subQueue)).length;
+    }
+
+    function renderQueueChip(key, title, sub, cls) {
+      const count = key === "all" ? queueCount("all") : queueCount(key, "all");
+      return `<button class="queue-chip ${key === "all" ? "all" : "priority " + cls} ${state.queue === key ? "active" : ""}" type="button" data-queue="${key}">
+        <span class="queue-name">${esc(title)}</span>
+        ${sub ? `<span class="queue-sub">${esc(sub)}</span>` : ""}
+        <span class="queue-count">${count}</span>
+      </button>`;
+    }
+
+    function renderQueueArea() {
+      const todayCount = queueCount("p4");
+      const historyCount = queueCount("p6");
+      return `<div class="queue-head">
+          <div>
+            <div class="queue-heading">${esc(t("quickQueues"))}</div>
+            <div class="queue-hint">${esc(t("queueHint"))}</div>
+          </div>
+          <button class="btn btn-small" id="refresh-queues" type="button">↻ ${esc(t("refresh"))}</button>
+        </div>
+        <div class="queue-strip">
+          ${renderQueueChip("all", t("all"), "", "")}
+          ${renderQueueChip("p0", t("pendingPayment"), t("p0Sub"), "p0")}
+          ${renderQueueChip("p1", t("unfinishedTrial"), t("p1Sub"), "p1")}
+          ${renderQueueChip("p2", t("todayAppointment"), t("p2Sub"), "p2")}
+          ${renderQueueChip("p3", t("noShow"), t("p3Sub"), "p3")}
+          ${renderQueueChip("pending", t("pendingConnect"), fmt("pendingSub", { a: todayCount, b: historyCount }), "pending")}
+          ${renderQueueChip("p5", t("connectedUnbooked"), t("p5Sub"), "p5")}
+        </div>
+        ${state.queue === "pending" ? `<div class="subqueue-row">
+          <span class="subqueue-label">${esc(t("pendingConnect"))}</span>
+          <button class="subqueue-btn ${state.subQueue === "all" ? "active" : ""}" type="button" data-subqueue="all">${esc(t("allPending"))} ${queueCount("pending", "all")}</button>
+          <button class="subqueue-btn ${state.subQueue === "p4" ? "active" : ""}" type="button" data-subqueue="p4">${esc(t("todayAssigned"))} ${todayCount}</button>
+          <button class="subqueue-btn ${state.subQueue === "p6" ? "active" : ""}" type="button" data-subqueue="p6">${esc(t("historyUnconnected"))} ${historyCount}</button>
+        </div>` : ""}`;
+    }
+
+    function render() {
+      document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        node.textContent = t(node.dataset.i18n);
       });
-      closeIntervention();
-      renderInterventions();
-      showToast(t("interventionSaved"));
+      document.querySelectorAll(".lang-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.lang === state.lang);
+      });
+
+      const rows = visibleRows();
+      const pages = Math.max(1, Math.ceil(rows.length / state.pageSize));
+      if (state.page > pages) state.page = pages;
+      const pageRows = rows.slice((state.page - 1) * state.pageSize, state.page * state.pageSize);
+      const activeLabel = state.queue === "all" ? t("all") : queueMainLabel(state.queue);
+
+      $("#content").innerHTML = `
+        <section class="toolbar">
+          <div class="filters">
+            <label>
+              <span class="field-label">${esc(t("search"))}</span>
+              <input class="input" id="search-input" value="${esc(state.search)}" placeholder="${esc(t("searchPlaceholder"))}">
+            </label>
+            <label>
+              <span class="field-label">${esc(t("businessLine"))}</span>
+              <select class="select" id="line-filter">
+                <option value="all">${esc(t("allLines"))}</option>
+                ${Object.keys(BL_META).map((key) => `<option value="${key}" ${state.line === key ? "selected" : ""}>${esc(lineLabel(key))}</option>`).join("")}
+              </select>
+            </label>
+            <label>
+              <span class="field-label">${esc(t("followStage"))}</span>
+              <select class="select" id="stage-filter">
+                <option value="all">${esc(t("allStages"))}</option>
+                ${Object.keys(STAGE_META).map((key) => `<option value="${key}" ${state.stage === key ? "selected" : ""}>${esc(stageLabel(key))}</option>`).join("")}
+              </select>
+            </label>
+            <div class="actions">
+              <button class="btn" id="reset-filters" type="button">${esc(t("reset"))}</button>
+            </div>
+          </div>
+          ${renderQueueArea()}
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">${esc(t("currentLeads"))} · ${esc(activeLabel)}</div>
+            <span class="muted">${esc(fmt("total", { n: rows.length }))}</span>
+          </div>
+          ${pageRows.length ? `<div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>${esc(t("user"))}</th><th>${esc(t("businessLine"))}</th><th>${esc(t("intent"))}</th>
+                <th>${esc(t("userStatus"))}</th><th>${esc(t("stage"))}</th><th>${esc(t("owner"))}</th><th>${esc(t("action"))}</th>
+              </tr></thead>
+              <tbody>
+                ${pageRows.map((lead) => `<tr>
+                  <td>
+                    <button class="user-link" type="button" data-detail="${lead.id}">${esc(lead.name)}</button>
+                    <div class="uid">${esc(lead.id)} · ${esc(lead.phone)}</div>
+                  </td>
+                  <td>${esc(lineLabel(lead.line))}</td>
+                  <td>${esc(intentLabel(lead.intent))}</td>
+                  <td>${esc(t(lead.status))}</td>
+                  <td><span class="pill ${STAGE_META[lead.stage]?.cls || "pill-blue"}">${esc(stageLabel(lead.stage))}</span></td>
+                  <td>${esc(lead.owner)}</td>
+                  <td>
+                    ${state.queue === "all"
+                      ? `<button class="btn btn-small" type="button" data-detail="${lead.id}">${esc(t("viewUser"))}</button>`
+                      : `<button class="btn btn-primary btn-small" type="button" data-process="${lead.id}">${esc(actionLabel(lead.queue))}</button>`}
+                  </td>
+                </tr>`).join("")}
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button class="page-btn" id="prev-page" type="button" ${state.page <= 1 ? "disabled" : ""}>‹</button>
+            <span class="muted">${esc(fmt("page", { page: state.page, pages }))}</span>
+            <button class="page-btn" id="next-page" type="button" ${state.page >= pages ? "disabled" : ""}>›</button>
+          </div>` : `<div class="empty">
+            <strong>${esc(t("emptyTitle"))}</strong>
+            <span>${esc(t("emptyBody"))}</span>
+            <button class="btn btn-ghost" id="empty-reset" type="button">${esc(t("reset"))}</button>
+          </div>`}
+        </section>`;
+
+      $("#search-input").addEventListener("input", (event) => {
+        state.search = event.target.value;
+        state.page = 1;
+        render();
+        requestAnimationFrame(() => {
+          const input = $("#search-input");
+          input.focus();
+          input.setSelectionRange(input.value.length, input.value.length);
+        });
+      });
+      $("#line-filter").addEventListener("change", (event) => {
+        state.line = event.target.value;
+        state.page = 1;
+        render();
+      });
+      $("#stage-filter").addEventListener("change", (event) => {
+        state.stage = event.target.value;
+        state.page = 1;
+        render();
+      });
+      $("#reset-filters").addEventListener("click", resetFilters);
+      $("#empty-reset")?.addEventListener("click", resetFilters);
+      $("#refresh-queues").addEventListener("click", () => showToast(t("queueRefreshed")));
+      $("#prev-page").addEventListener("click", () => {
+        state.page = Math.max(1, state.page - 1);
+        render();
+      });
+      $("#next-page").addEventListener("click", () => {
+        state.page += 1;
+        render();
+      });
+      document.querySelectorAll("[data-queue]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const next = btn.dataset.queue;
+          state.queue = state.queue === next ? "all" : next;
+          state.subQueue = "all";
+          state.page = 1;
+          render();
+        });
+      });
+      document.querySelectorAll("[data-subqueue]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          state.subQueue = btn.dataset.subqueue;
+          state.page = 1;
+          render();
+        });
+      });
+      document.querySelectorAll("[data-detail]").forEach((btn) => {
+        btn.addEventListener("click", () => openDrawer("detail", btn.dataset.detail));
+      });
+      document.querySelectorAll("[data-process]").forEach((btn) => {
+        btn.addEventListener("click", () => openDrawer("process", btn.dataset.process));
+      });
+    }
+
+    function resetFilters() {
+      state.queue = "all";
+      state.subQueue = "all";
+      state.search = "";
+      state.line = "all";
+      state.stage = "all";
+      state.page = 1;
+      render();
+    }
+
+    function detailRows(lead) {
+      return [
+        [t("leadId"), lead.id],
+        [t("businessLine"), lineLabel(lead.line)],
+        [t("intent"), intentLabel(lead.intent)],
+        [t("leadStatus"), t(lead.status)],
+        [t("stage"), stageLabel(lead.stage)],
+        [t("queueLabel"), queueMainLabel(lead.queue)],
+        [t("queueReason"), lead.queue ? t(QUEUE_META[lead.queue].reason) : t("processed")],
+        [t("nextAction"), lead.queue ? actionLabel(lead.queue) : t("viewUser")],
+        [t("ownerName"), lead.owner],
+        [t("lastAction"), lead.lastAction]
+      ];
+    }
+
+    function outcomeOptions(queue) {
+      const map = {
+        p0: ["outcomePaid", "outcomeNotPaid"],
+        p1: ["outcomeComplete"],
+        p2: ["outcomeAttended", "outcomeNoShow", "outcomeReschedule"],
+        p3: ["outcomeReschedule"],
+        p4: ["outcomeConnected", "outcomeUnconnected"],
+        p6: ["outcomeConnected", "outcomeUnconnected"],
+        p5: ["outcomeBooked", "outcomeRejected"]
+      };
+      return (map[queue] || []).map((key) => `<option value="${key}">${esc(t(key))}</option>`).join("");
+    }
+
+    function openDrawer(mode, leadId) {
+      const lead = leads.find((item) => item.id === leadId);
+      if (!lead) return;
+      state.selectedLeadId = leadId;
+      state.processing = false;
+      const drawer = $("#drawer");
+      if (mode === "detail") {
+        drawer.innerHTML = `
+          <div class="drawer-head">
+            <div><h2 id="drawer-title">${esc(t("detailTitle"))}</h2><p>${esc(lead.name)} · ${esc(lead.id)}</p></div>
+            <button class="icon-btn" type="button" data-close aria-label="${esc(t("close"))}">×</button>
+          </div>
+          <div class="drawer-body">
+            <h3>${esc(t("basicInfo"))}</h3>
+            <dl class="detail-grid">
+              ${detailRows(lead).map(([label, value]) => `<dt>${esc(label)}</dt><dd>${esc(value)}</dd>`).join("")}
+            </dl>
+            <div class="drawer-foot">
+              <button class="btn" type="button" data-close>${esc(t("close"))}</button>
+              ${lead.queue ? `<button class="btn btn-primary" type="button" data-switch-process>${esc(actionLabel(lead.queue))}</button>` : ""}
+            </div>
+          </div>`;
+      } else {
+        drawer.innerHTML = `
+          <div class="drawer-head">
+            <div><h2 id="drawer-title">${esc(t("processTitle"))}</h2><p>${esc(lead.name)} · ${esc(queueMainLabel(lead.queue))}</p></div>
+            <button class="icon-btn" type="button" data-close aria-label="${esc(t("close"))}">×</button>
+          </div>
+          <form class="drawer-body" id="process-form">
+            <div class="detail-grid" style="margin-bottom:18px">
+              <dt>${esc(t("queueReason"))}</dt><dd>${esc(t(QUEUE_META[lead.queue].reason))}</dd>
+              <dt>${esc(t("nextAction"))}</dt><dd>${esc(actionLabel(lead.queue))}</dd>
+            </div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="outcome">${esc(t("result"))}</label>
+                <select class="select" id="outcome" required><option value="">${esc(t("result"))}</option>${outcomeOptions(lead.queue)}</select>
+                <div class="error" id="outcome-error"></div>
+              </div>
+              ${["p3", "p5"].includes(lead.queue) ? `<div class="form-field"><label for="next-time">${esc(t("appointmentTime"))}</label><input class="input" id="next-time" type="datetime-local"></div>` : ""}
+              <div class="form-field">
+                <label for="notes">${esc(t("notes"))}</label>
+                <textarea class="textarea" id="notes" maxlength="500" placeholder="${esc(t("notes"))}"></textarea>
+              </div>
+            </div>
+            <div class="drawer-foot">
+              <button class="btn" type="button" data-close>${esc(t("cancel"))}</button>
+              <button class="btn btn-primary" type="submit">${esc(t("save"))}</button>
+            </div>
+          </form>`;
+      }
+      $("#overlay").classList.add("open");
+      $("#overlay").setAttribute("aria-hidden", "false");
+      bindDrawer(lead, mode);
+    }
+
+    function bindDrawer(lead, mode) {
+      $("#drawer").querySelectorAll("[data-close]").forEach((btn) => btn.addEventListener("click", closeDrawer));
+      if (mode === "detail") {
+        $("#drawer [data-switch-process]")?.addEventListener("click", () => openDrawer("process", lead.id));
+        return;
+      }
+      $("#process-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (state.processing) return;
+        const outcome = $("#outcome").value;
+        if (!outcome) {
+          $("#outcome-error").textContent = t("required");
+          return;
+        }
+        state.processing = true;
+        applyOutcome(lead, outcome);
+        closeDrawer();
+        render();
+        showToast(t("saveSuccess"));
+      });
+    }
+
+    function applyOutcome(lead, outcome) {
+      const nextQueue = {
+        outcomePaid: null,
+        outcomeNotPaid: "p0",
+        outcomeComplete: null,
+        outcomeAttended: "p0",
+        outcomeNoShow: "p3",
+        outcomeReschedule: "p2",
+        outcomeConnected: "p5",
+        outcomeUnconnected: lead.queue === "p4" ? "p6" : "p6",
+        outcomeBooked: "p2",
+        outcomeRejected: null
+      }[outcome];
+      lead.queue = nextQueue;
+      lead.lastAction = new Date().toLocaleString(state.lang === "zh" ? "zh-CN" : "en-US");
+      if (outcome === "outcomeAttended") {
+        lead.stage = "done_unpaid";
+        lead.status = "statusUnpaidTrialDone";
+      } else if (outcome === "outcomeNoShow") {
+        lead.stage = "absent";
+      } else if (outcome === "outcomeReschedule" || outcome === "outcomeBooked") {
+        lead.stage = "booked";
+      } else if (outcome === "outcomeConnected") {
+        lead.stage = "connected_unbooked";
+      } else if (outcome === "outcomeUnconnected") {
+        lead.stage = "not_connected";
+      }
+    }
+
+    function closeDrawer() {
+      $("#overlay").classList.remove("open");
+      $("#overlay").setAttribute("aria-hidden", "true");
+      state.selectedLeadId = null;
+      state.processing = false;
+    }
+
+    $("#overlay").addEventListener("click", (event) => {
+      if (event.target === $("#overlay")) closeDrawer();
     });
     document.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") return;
-      if (!$("#task-drawer").classList.contains("hidden")) closeDrawer();
-      if (!$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
-      if (!$("#intervention-modal-wrap").classList.contains("hidden")) closeIntervention();
+      if (event.key === "Escape" && $("#overlay").classList.contains("open")) closeDrawer();
+    });
+    document.querySelectorAll(".lang-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.lang = btn.dataset.lang;
+        localStorage.setItem("crm-quick-filter-lang", state.lang);
+        render();
+      });
     });
 
-    applyLanguage();
+    render();
   </script>
 </body>
 </html>

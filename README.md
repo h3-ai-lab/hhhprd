@@ -1,7 +1,7 @@
 # Dino 产品需求与原型库
 
 > 本地主稿、飞书归档。按“公共能力 + 项目空间”组织需求、原型与知识资料。
-> 更新时间：2026-11-17
+> 更新时间：2026-11-23
 
 ## 先看这里
 
@@ -17,7 +17,7 @@
 | 项目 | 状态 | PRD | 原型 |
 |---|---|---|---|
 | CRM 整体产品体系 | 持续维护 | [整体框架](shared/memory/product-framework.md) | — |
-| CC日待办leads列表 | 待上传 | [PRD](projects/crm-operating-closure/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) |
+| CC 快捷工作队列 | 待上传 | [PRD](projects/crm-operating-closure/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) |
 | CC活跃度看板 | 待评审 | [PRD](projects/cc-activity-dashboard/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/cc-activity-dashboard/prototype/) |
 | Referrals & Rewards | 已废弃 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
 | 拉新裂变mvp | 评审后修订 | [PRD](projects/referral-growth-mvp/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/) |
@@ -57,8 +57,8 @@
 
 - 项目入口：<https://h3-ai-lab.github.io/hhhprd/>
 - CRM经营闭环规划管理层汇报：<https://h3-ai-lab.github.io/hhhprd/crm-operating-closure.html>
-- CC日待办leads列表 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-operating-closure.html>
-- CC日待办leads列表原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/>
+- CC 快捷工作队列 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-operating-closure.html>
+- CC 快捷工作队列原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/>
 - CC活跃度看板 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-cc-activity-dashboard.html>
 - CC活跃度看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/cc-activity-dashboard/prototype/>
 - 需求文档：<https://h3-ai-lab.github.io/hhhprd/prd-referrals-rewards.html>

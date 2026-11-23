@@ -1,5 +1,5 @@
 id: PROG-CRM-001
-name: CC日待办leads列表
+name: CC 快捷工作队列
 status: 待上传
 workflow:
   base: ../../shared/workflows/prd-2.0.md

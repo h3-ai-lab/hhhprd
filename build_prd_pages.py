@@ -20,7 +20,7 @@ PROJECTS = {
     "crm-learning-plan-progress": "CRM学习计划与课程进度",
     "crm-consultation-meeting": "Lark咨询会议与用户详情回写",
     "paused-follow-up-direct-outcome": "移除冗余跟进流程",
-    "crm-operating-closure": "CC日待办leads列表",
+    "crm-operating-closure": "CC 快捷工作队列",
     "cc-activity-dashboard": "CC活跃度看板",
 }
 STATIC_ARCHITECTURE_PAGES = {

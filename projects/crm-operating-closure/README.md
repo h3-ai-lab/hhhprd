@@ -1,6 +1,6 @@
-# CC日待办leads列表
+# CC 快捷工作队列
 
-> 将首跟、预约、到课、咨询、PL、回款和学习风险等任务按优先级汇总到 CC 日待办列表，让 CC 明确今天处理谁、为什么处理、下一步做什么。
+> 在现有销售中心列表增加 6 个面向 CC 的快捷工作队列，一次点击进入当天应处理的客户集合，不新增页面或独立任务系统。
 
 | 项目编号 | 状态 |
 |---|---|
@@ -8,13 +8,13 @@
 
 | 入口 | 用途 |
 |---|---|
-| [PRD](https://h3-ai-lab.github.io/hhhprd/prd-crm-operating-closure.html) | 任务来源、优先级、状态、权限和数据规则 |
-| [交互原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) | 查看 CC 今日行动与管理经营摘要的产品形态 |
+| [PRD](https://h3-ai-lab.github.io/hhhprd/prd-crm-operating-closure.html) | 快捷队列条件、优先级、权限和数据规则 |
+| [交互原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) | 在现有销售中心内体验快捷筛选和队列处理 |
 | [CRM经营闭环规划](https://h3-ai-lab.github.io/hhhprd/crm-operating-closure.html) | 独立规划文档，包含管理层汇报、阶段路线和经营闭环说明 |
 
 ## 项目定位
 
-本项目聚焦 CC 每日待办列表：系统根据客户事件、任务到期、阶段和风险生成优先级队列，CC 从任务进入客户上下文并完成结果回填。
+本项目聚焦 CC 在销售中心内的快捷筛选：系统根据现有跟进、外呼、预约、体验课、咨询、PL 和订单数据，计算每个线索的唯一主工作队列。本期不新增页面、菜单、持久化队列字段或独立任务中心。
 
 更高层的 CRM 经营闭环规划已拆分为独立规划项目，不再作为本项目下的附属汇报入口。
 
@@ -22,8 +22,8 @@
 
 | 目录 | 内容 |
 |---|---|
-| `prd/` | 单文件规划 PRD |
-| `prototype/` | CC 与管理者双角色工作台原型 |
+| `prd/` | 单文件功能 PRD |
+| `prototype/` | 销售中心快捷队列原型 |
 | `briefing/` | 旧汇报地址兼容文件；正式入口见独立“CRM经营闭环规划” |
 | `memory/` | 已确认事实、决策和术语 |
 | `rag/` | 资料来源 |
