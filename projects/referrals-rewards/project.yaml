@@ -1,6 +1,6 @@
 id: REQ-TH-001
 name: Referrals & Rewards
-status: 待评审
+status: 待上传
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

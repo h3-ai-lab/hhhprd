@@ -6,6 +6,7 @@
 ## 先看这里
 
 - 找执行流程：`shared/workflows/`；评审后修订已有 PRD 先读 `shared/workflows/document-change.md`
+- 查项目状态规则：`shared/workflows/project-status.md`
 - 找专业能力：`shared/skills/`
 - 找原始资料来源：`shared/rag/` 或项目 `rag/`
 - 找已确认事实和决策：`shared/memory/` 或项目 `memory/`
@@ -16,22 +17,38 @@
 | 项目 | 状态 | PRD | 原型 |
 |---|---|---|---|
 | CRM 整体产品体系 | 持续维护 | [整体框架](shared/memory/product-framework.md) | — |
-| CC日待办leads列表 | 规划 | [PRD](projects/crm-operating-closure/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) |
+| CC日待办leads列表 | 待上传 | [PRD](projects/crm-operating-closure/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) |
 | CC活跃度看板 | 待评审 | [PRD](projects/cc-activity-dashboard/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/cc-activity-dashboard/prototype/) |
-| Referrals & Rewards | 待评审 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
+| Referrals & Rewards | 待上传 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
 | 拉新裂变mvp | 评审后修订 | [PRD](projects/referral-growth-mvp/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/) |
-| 引入首跟节点&首跟看板 | 待评审 | [PRD](projects/first-contact/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
-| 引入首跟节点&首跟看板-2 | 单文件参考样例｜评审后修订 | [PRD](projects/first-contact-concise/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
+| 引入首跟节点&首跟看板 | 待上传 | [PRD](projects/first-contact/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
+| 引入首跟节点&首跟看板-2 | 评审后修订 | [PRD](projects/first-contact-concise/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
 | 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 | CRM组织架构&数据权限 | 评审后修订 | [PRD](projects/crm-org-data-permissions/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
 | CRM 多渠道消息发送（LINE 首发） | 待评审 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
 | 用户咨询预约时间 | 待评审 | [PRD](projects/user-consultation-lead/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/) |
 | 外呼能力一期 | 评审后修订 | [PRD](projects/outbound-capability/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/outbound-capability/prototype/) |
 | CRM 线索质量分析 | 评审后修订 | [PRD](projects/crm-lead-quality-analysis/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/) |
-| CRM学习计划与课程进度 | 待评审 | [PRD](projects/crm-learning-plan-progress/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-learning-plan-progress/prototype/) |
+| CRM学习计划与课程进度 | 待上传 | [PRD](projects/crm-learning-plan-progress/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-learning-plan-progress/prototype/) |
 | Lark咨询会议与用户详情回写 | 待评审 | [PRD](projects/crm-consultation-meeting/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-consultation-meeting/prototype/) |
-| 移除冗余跟进流程 | 待评审 | [PRD](projects/paused-follow-up-direct-outcome/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/paused-follow-up-direct-outcome/prototype/) |
+| 暂停跟进后直接产生跟进结果 | 待评审 | [PRD](projects/paused-follow-up-direct-outcome/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/paused-follow-up-direct-outcome/prototype/) |
 | 多级业务线调研 | 归档于 REQ-ORG-001 | [调研资料](projects/crm-org-data-permissions/research/README.md) | — |
+
+## 项目状态规则
+
+项目状态以 Lark 文档事实为准，不以本地完成或 GitHub 发布代替。
+
+| 状态 | 适用情况 |
+|---|---|
+| 待上传 | 本地项目已形成，但 Lark 中没有对应有效文档，或原 Lark 文档已删除 |
+| 待评审 | PRD 已上传到 Lark，尚未进入评审后修订 |
+| 评审后修订 | 已评审并明确进入评审后修改流程 |
+
+- 上传后继续编辑、覆盖、移动或修复格式，状态保持不变。
+- 删除 Lark 文档后恢复为“待上传”。
+- 评审完成且没有修订时，等待用户明确指定最终状态。
+- Lark 上传继续由“添加项目PRD到Lark目录”对话按原方式执行。
+- 集中状态和 Lark 文档链接记录在 [`projects/status.yaml`](projects/status.yaml)。
 
 ## GitHub Pages
 
@@ -57,8 +74,8 @@
 - CRM学习计划与课程进度原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-learning-plan-progress/prototype/>
 - Lark咨询会议与用户详情回写 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-consultation-meeting.html>
 - Lark咨询会议与用户详情回写原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-consultation-meeting/prototype/>
-- 移除冗余跟进流程 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-paused-follow-up-direct-outcome.html>
-- 移除冗余跟进流程原型：<https://h3-ai-lab.github.io/hhhprd/projects/paused-follow-up-direct-outcome/prototype/>
+- 暂停跟进后直接产生跟进结果 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-paused-follow-up-direct-outcome.html>
+- 暂停跟进后直接产生跟进结果原型：<https://h3-ai-lab.github.io/hhhprd/projects/paused-follow-up-direct-outcome/prototype/>
 - 引入首跟节点&首跟看板 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact.html>
 - 引入首跟节点&首跟看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/>
 - 引入首跟节点&首跟看板-2 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html>

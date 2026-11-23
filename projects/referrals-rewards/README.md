@@ -4,7 +4,7 @@
 
 | 项 | 内容 |
 |---|---|
-| 状态 | PRD 待评审 |
+| 状态 | 待上传 |
 | 需求编号 | REQ-TH-001 |
 | 正式 PRD | [PRD](prd/PRD.md) |
 | 线上原型 | [打开线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |

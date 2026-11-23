@@ -175,6 +175,10 @@
       background: var(--blue-soft);
       color: var(--blue);
     }
+    .status.pending {
+      background: #eef2f6;
+      color: #475467;
+    }
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -313,21 +317,21 @@
           <span>交付物</span>
         </div>
 
-        <article class="project-row" data-updated="2026-11-23T13:19:00+08:00">
+        <article class="project-row" data-updated="2026-11-23T14:50:00+08:00">
           <div class="project-main">
             <span class="project-code">PROG-CRM-001</span>
             <h3 class="project-title">CC日待办leads列表</h3>
           </div>
           <p class="project-desc">按优先级汇总首跟、预约、到课、咨询、PL、回款和学习风险任务，让 CC 明确今天处理谁、为什么处理和下一步做什么。</p>
           <div class="project-updated">2026-11-23</div>
-          <div class="project-status"><span class="status plan">规划</span></div>
+          <div class="project-status"><span class="status pending">待上传</span></div>
           <div class="actions">
             <a class="action primary" href="prd-crm-operating-closure.html">PRD</a>
             <a class="action" href="../projects/crm-operating-closure/prototype/index.html">原型</a>
           </div>
         </article>
 
-        <article class="project-row" data-updated="2026-11-23T12:41:00+08:00">
+        <article class="project-row" data-updated="2026-11-23T14:51:00+08:00">
           <div class="project-main">
             <span class="project-code">REQ-DASH-008</span>
             <h3 class="project-title">CC活跃度看板</h3>
@@ -348,21 +352,21 @@
           </div>
           <p class="project-desc">单文件 PRD 设计规范参考样例，覆盖核心流程、字段判断、完整指标口径、RBAC 和异常规则。</p>
           <div class="project-updated">2026-11-17</div>
-          <div class="project-status"><span class="status reference">参考样例</span></div>
+          <div class="project-status"><span class="status updated">评审后修订</span></div>
           <div class="actions">
             <a class="action primary" href="prd-first-contact-concise.html">PRD</a>
             <a class="action" href="../projects/first-contact-concise/prototype/index.html">原型</a>
           </div>
         </article>
 
-        <article class="project-row" data-updated="2026-11-12T10:29:31+08:00">
+        <article class="project-row" data-updated="2026-11-23T14:52:00+08:00">
           <div class="project-main">
             <span class="project-code">REQ-CC-001</span>
             <h3 class="project-title">引入首跟节点&amp;首跟看板</h3>
           </div>
           <p class="project-desc">跨业务线保留首位 CC，展示首次分配、首次外呼和首次接通，支持筛选、下载与团队监控。</p>
-          <div class="project-updated">2026-11-12</div>
-          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="project-updated">2026-11-23</div>
+          <div class="project-status"><span class="status pending">待上传</span></div>
           <div class="actions">
             <a class="action primary" href="prd-first-contact.html">PRD</a>
             <a class="action" href="../projects/first-contact/prototype/index.html">原型</a>
@@ -453,14 +457,14 @@
           </div>
         </article>
 
-        <article class="project-row" data-updated="2026-11-17T16:06:01+08:00">
+        <article class="project-row" data-updated="2026-11-23T14:53:00+08:00">
           <div class="project-main">
             <span class="project-code">REQ-LEARN-001</span>
             <h3 class="project-title">CRM学习计划与课程进度</h3>
           </div>
           <p class="project-desc">在用户列表、销售列表、用户详情和管理看板展示学习计划、课程进度、活跃度与到期风险。</p>
-          <div class="project-updated">2026-11-17</div>
-          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="project-updated">2026-11-23</div>
+          <div class="project-status"><span class="status pending">待上传</span></div>
           <div class="actions">
             <a class="action primary" href="prd-crm-learning-plan-progress.html">PRD</a>
             <a class="action" href="../projects/crm-learning-plan-progress/prototype/index.html">原型</a>
@@ -481,13 +485,13 @@
           </div>
         </article>
 
-        <article class="project-row" data-updated="2026-11-23T14:20:00+08:00">
+        <article class="project-row" data-updated="2026-11-20T17:07:33+08:00">
           <div class="project-main">
             <span class="project-code">REQ-FOLLOW-001</span>
-            <h3 class="project-title">移除冗余跟进流程</h3>
+            <h3 class="project-title">暂停跟进后直接产生跟进结果</h3>
           </div>
-          <p class="project-desc">区分外呼操作、跟进内容和跟进状态；未接通自动回写，暂不跟进无需恢复即可新增预约。</p>
-          <div class="project-updated">2026-11-23</div>
+          <p class="project-desc">暂停线索可直接预约、拒绝或关闭，一次保存写入真实业务结果，不再强制先恢复跟进。</p>
+          <div class="project-updated">2026-11-20</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-paused-follow-up-direct-outcome.html">PRD</a>
@@ -509,14 +513,14 @@
           </div>
         </article>
 
-        <article class="project-row" data-updated="2026-11-12T10:29:31+08:00">
+        <article class="project-row" data-updated="2026-11-23T14:54:00+08:00">
           <div class="project-main">
             <span class="project-code">REQ-TH-001</span>
             <h3 class="project-title">Referrals &amp; Rewards</h3>
           </div>
           <p class="project-desc">泰国好友推荐、体验与购买奖励、社媒审核及会员权益发放。</p>
-          <div class="project-updated">2026-11-12</div>
-          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="project-updated">2026-11-23</div>
+          <div class="project-status"><span class="status pending">待上传</span></div>
           <div class="actions">
             <a class="action primary" href="prd-referrals-rewards.html">PRD</a>
             <a class="action" href="../projects/referrals-rewards/prototype/index.html">原型</a>

@@ -1,6 +1,6 @@
 id: REQ-LEARN-001
 name: CRM学习计划与课程进度
-status: 待评审
+status: 待上传
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

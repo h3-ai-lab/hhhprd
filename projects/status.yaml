@@ -1,0 +1,79 @@
+version: 1
+updated_at: 2026-11-23
+source: "添加项目PRD到Lark目录"
+projects:
+  - id: PROG-CRM-001
+    slug: crm-operating-closure
+    name: CC日待办leads列表
+    status: 待上传
+    lark_url: null
+  - id: REQ-DASH-008
+    slug: cc-activity-dashboard
+    name: CC活跃度看板
+    status: 待评审
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/HEy1dgRdkovkkBx5M4tjWlfTpPd
+  - id: REQ-CONSULT-002
+    slug: crm-consultation-meeting
+    name: Lark咨询会议与用户详情回写
+    status: 待评审
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/OEb9drWKioFcoGxpsJTjEAtqpDg
+  - id: REQ-LQA-001
+    slug: crm-lead-quality-analysis
+    name: CRM 线索质量分析
+    status: 评审后修订
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/EBysdMrMJocBSLxHWdTjB4SzpYb
+  - id: REQ-LEARN-001
+    slug: crm-learning-plan-progress
+    name: CRM学习计划与课程进度
+    status: 待上传
+    lark_url: null
+  - id: REQ-LINE-001
+    slug: crm-line-messaging
+    name: CRM 多渠道消息发送（LINE 首发）
+    status: 待评审
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/Iu4HdEalPoVef0xDdZnjslctpAb
+  - id: REQ-ORG-001
+    slug: crm-org-data-permissions
+    name: CRM组织架构&数据权限
+    status: 评审后修订
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/I2PAdOAm6ojd3UxzpxSjJZoNppA
+  - id: REQ-CC-001
+    slug: first-contact
+    name: 引入首跟节点&首跟看板
+    status: 待上传
+    lark_url: null
+  - id: REQ-CC-002
+    slug: first-contact-concise
+    name: 引入首跟节点&首跟看板-2
+    status: 评审后修订
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/K7FvdTinxoksucxW6vsju5YupYh
+  - id: REQ-DASH-007
+    slug: follow-up-funnel
+    name: 管理看板新增跟进漏斗
+    status: 待评审
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/S1zEdYWs3oB4qsxhac0jKKdMpuw
+  - id: REQ-OB-001
+    slug: outbound-capability
+    name: 外呼能力一期
+    status: 评审后修订
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/C0bzdPeVcoQ8lqxDueqjzsjtpgb
+  - id: REQ-FOLLOW-001
+    slug: paused-follow-up-direct-outcome
+    name: 暂停跟进后直接产生跟进结果
+    status: 待评审
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/NfY3dZd2Sox1znxF0FpjteVAp0d
+  - id: REQ-GRW-001
+    slug: referral-growth-mvp
+    name: 拉新裂变mvp
+    status: 评审后修订
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/Cib8d0WGdo3Mt7xzFxkjYTL5pNf
+  - id: REQ-TH-001
+    slug: referrals-rewards
+    name: Referrals & Rewards
+    status: 待上传
+    lark_url: null
+  - id: REQ-CONSULT-001
+    slug: user-consultation-lead
+    name: 用户咨询预约时间
+    status: 待评审
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/DTfQdxpPDonX3GxDiE3jsF7SpMx
