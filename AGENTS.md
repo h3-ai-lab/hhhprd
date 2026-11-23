@@ -21,9 +21,11 @@
 - Unless the user explicitly specifies another format or the scenario requires special packaging, all data export functions default to `.xls`. Do not use `.csv` as the default. Multi-file media exports may use another format, such as a ZIP package containing recordings and transcripts.
 - For requirements involving reports, lead assignment or recycling, ownership transfer, follow-up tasks, or staff lifecycle changes, assess the impact of departed, disabled, or reassigned employees. Define what active data is handed over or reclaimed, how historical ownership is retained, how pending work and downstream tasks change, and when access is revoked.
 - For every metric, define the exact numerator, denominator, unit, population, time field, deduplication key, and zero-denominator behavior. Differentiate lead/person counts from event/call counts. Prototype metric names, formulas, filters, and deduplication must match the PRD item by item.
-- Write PRDs, prototype navigation, page copy, state labels, and explanatory text in Simplified Chinese by default.
+- Write PRDs in Simplified Chinese. When a requirement source contains English business definitions, translate the meaning into clear Chinese in the PRD; do not paste English definitions into the Chinese PRD body.
+- Prototype Chinese labels, fields, states, metrics, and help text must use the Chinese definitions in the PRD. Prototype English labels must use the English definitions from the requirement source when available; when no source English exists, use a faithful English translation that preserves the same business meaning.
+- Official product names, field identifiers, permission keys, codes, and external system names may remain in their official language when translating them would make them inaccurate.
 - Use "业务线" consistently for market and data dimensions in PRDs and prototypes. Do not describe those dimensions as "国家", even when source documents or stored values use a country-based label.
-- Do not ask the user to choose a language. Preserve official product names, field identifiers, codes, and external system names when translation would make them inaccurate.
+- Do not ask the user to choose a language.
 - Any new feature, page, action, field group, or data list must use `shared/skills/crm-prd-authoring/references/04-permission-audit.md` and output complete RBAC permission data.
 - Keep exactly one complete interactive prototype URL per PRD.
 - For post-review edits, mark PRD revisions in place with `<del>[原/删除] …</del>` and `<ins>[新增/现行] …</ins>` and maintain a versioned revision record.
