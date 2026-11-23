@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dino CRM 暂停跟进后直接产生跟进结果">
+  <meta name="description" content="Dino CRM 跟进流程简化">
   <title>Dino CRM · 销售中心</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232368d8'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' fill='white' font-family='Arial'%3ED%3C/text%3E%3C/svg%3E">
   <style>
@@ -357,16 +357,21 @@
         reasonRequired: "请选择原因",
         otherReasonRequired: "请填写其他原因",
         noteRequired: "请填写本次跟进说明",
-        directHint: "保存后将直接进入已预约。",
+        directHint: "保存为一条跟进记录；填写预约时间后进入已预约。",
         connectedHint: "系统已识别本次外呼为已接通，请提交本次跟进结果。",
         unreachedNotice: "外呼未接通，系统已自动回写跟进阶段，无需填写跟进表单。",
         pausedLabel: "暂不跟进",
-        create: "新建预约",
+        create: "新建跟进",
         reject: "标记已拒绝",
         closeLead: "关闭线索",
         reactivate: "重新激活线索",
         continueFollow: "记录沟通，继续跟进",
         pause: "暂停跟进",
+        reschedule: "改期创建新预约",
+        cancelAppointment: "取消当前预约",
+        noShow: "未出勤",
+        attendedComplete: "已出勤且咨询完成",
+        attendedIncomplete: "已出勤且咨询未完成",
         confirmTitle: "确认提交“{action}”？",
         confirmReject: "线索将进入已拒绝，并保留现有跟进历史。",
         confirmClose: "线索将进入已关闭，并停止后续跟进。",
@@ -374,6 +379,9 @@
         confirmButton: "确认提交",
         back: "返回修改",
         saveSuccess: "跟进结果已保存",
+        newFollowupSuccess: "跟进记录已保存",
+        followupContentRequired: "请填写本次跟进说明或预约时间",
+        appointmentOptional: "预约时间（选填）",
         directCreateSuccess: "已直接进入已预约",
         rejectSuccess: "已标记为已拒绝",
         closeSuccess: "线索已关闭",
@@ -383,12 +391,17 @@
         statusUnpaid: "未付费",
         statusTrial: "未付费 · 体验中",
         statusPaid: "已付费",
-        actionCreate: "新建预约",
+        actionCreate: "新建跟进",
         actionReject: "标记已拒绝",
         actionClose: "关闭线索",
         actionReactivate: "重新激活线索",
         actionPause: "暂停跟进",
         actionKeepPaused: "保持暂不跟进",
+        actionReschedule: "改期创建新预约",
+        actionCancelAppointment: "取消当前预约",
+        actionNoShow: "标记未出勤",
+        actionAttendedComplete: "标记咨询完成",
+        actionAttendedIncomplete: "标记咨询未完成",
         actionOutboundConnected: "外呼已接通",
         actionOutboundUnreached: "外呼未接通",
         actionContinue: "记录沟通，继续跟进",
@@ -422,6 +435,15 @@
         reasonBudget: "预算原因",
         reasonVoicemail: "语音信箱",
         reasonOther: "其他",
+        reasonCustomerRequested: "客户要求改期",
+        reasonScheduleConflict: "时间冲突",
+        reasonCustomerCancelled: "客户主动取消",
+        reasonDuplicateAppointment: "重复预约",
+        reasonCustomerAbsent: "客户未到会",
+        reasonUnableToContact: "无法联系",
+        reasonMeetingIssue: "会议异常",
+        consultationCompleteSuccess: "咨询完成，当前阶段已更新",
+        consultationIncompleteSuccess: "咨询未完成，当前阶段已更新",
         keepPausedRequired: "请填写本次跟进说明或调整暂停原因",
         keepPausedSuccess: "已保持暂不跟进并记录本次跟进",
         actionRequired: "请选择下一步操作",
@@ -507,16 +529,21 @@
         reasonRequired: "Select a reason",
         otherReasonRequired: "Enter the other reason",
         noteRequired: "Enter a follow-up note",
-        directHint: "Saving moves the lead directly to Booked.",
+        directHint: "Saves a follow-up record; entering an appointment time moves the lead to Booked.",
         connectedHint: "The call is connected. Submit the result of this follow-up.",
         unreachedNotice: "The call was not reached. The follow-up stage has been updated automatically.",
         pausedLabel: "Paused",
-        create: "Create appointment",
+        create: "New follow-up",
         reject: "Mark rejected",
         closeLead: "Close lead",
         reactivate: "Reactivate lead",
         continueFollow: "Record contact and continue",
         pause: "Pause follow-up",
+        reschedule: "Reschedule with a new appointment",
+        cancelAppointment: "Cancel current appointment",
+        noShow: "No-show",
+        attendedComplete: "Attended and consultation completed",
+        attendedIncomplete: "Attended and consultation incomplete",
         confirmTitle: "Confirm “{action}”?",
         confirmReject: "The lead will move to Rejected and its history will be retained.",
         confirmClose: "The lead will move to Closed and follow-up will stop.",
@@ -524,6 +551,9 @@
         confirmButton: "Confirm",
         back: "Back",
         saveSuccess: "Follow-up result saved",
+        newFollowupSuccess: "Follow-up record saved",
+        followupContentRequired: "Enter a follow-up note or appointment time",
+        appointmentOptional: "Appointment time (optional)",
         directCreateSuccess: "Moved directly to Booked",
         rejectSuccess: "Lead marked as rejected",
         closeSuccess: "Lead closed",
@@ -533,12 +563,17 @@
         statusUnpaid: "Unpaid",
         statusTrial: "Unpaid · Trial in progress",
         statusPaid: "Paid",
-        actionCreate: "Create appointment",
+        actionCreate: "New follow-up",
         actionReject: "Mark rejected",
         actionClose: "Close lead",
         actionReactivate: "Reactivate lead",
         actionPause: "Pause follow-up",
         actionKeepPaused: "Keep paused",
+        actionReschedule: "Reschedule with a new appointment",
+        actionCancelAppointment: "Cancel current appointment",
+        actionNoShow: "Mark no-show",
+        actionAttendedComplete: "Mark consultation completed",
+        actionAttendedIncomplete: "Mark consultation incomplete",
         actionOutboundConnected: "Outbound call connected",
         actionOutboundUnreached: "Outbound call not reached",
         actionContinue: "Record contact and continue",
@@ -572,6 +607,15 @@
         reasonBudget: "Budget",
         reasonVoicemail: "Voicemail",
         reasonOther: "Other",
+        reasonCustomerRequested: "Customer requested reschedule",
+        reasonScheduleConflict: "Schedule conflict",
+        reasonCustomerCancelled: "Customer cancelled",
+        reasonDuplicateAppointment: "Duplicate appointment",
+        reasonCustomerAbsent: "Customer did not attend",
+        reasonUnableToContact: "Unable to contact",
+        reasonMeetingIssue: "Meeting issue",
+        consultationCompleteSuccess: "Consultation completed; stage updated",
+        consultationIncompleteSuccess: "Consultation incomplete; stage updated",
         keepPausedRequired: "Add a follow-up note or change the pause reason",
         keepPausedSuccess: "Kept paused and recorded this follow-up",
         actionRequired: "Select the next action",
@@ -723,7 +767,7 @@
     const stagePill = (stage) => `<span class="pill ${STAGE_META[stage]?.cls || "pill-neutral"}">${esc(stageLabel(stage))}</span>`;
     const lineLabel = (line) => tr(LINE_I18N[line] || line);
     const leadById = (id) => leads.find((lead) => lead.id === id);
-    const outcome = (lead) => lead.appointmentHistory > 0 ? "close" : "reject";
+    const outcome = (lead) => ["booked","no_show","incomplete","payment_pending"].includes(lead.stage) ? "close" : "reject";
     const outcomeLabelKey = (lead) => outcome(lead) === "close" ? "closeLead" : "reject";
 
     function readLang() {
@@ -893,7 +937,7 @@
               <div class="row-menu">
                 <button class="btn btn-small" type="button" data-menu="${lead.id}" aria-haspopup="menu" aria-expanded="false">${esc(tr("more"))}</button>
                 <div class="menu-pop hidden" data-menu-pop="${lead.id}" role="menu">
-                  ${["waiting_call","unreached"].includes(lead.stage) ? `<button class="menu-item" type="button" data-outbound="${lead.id}" role="menuitem">${esc(tr("outbound"))}</button>` : ""}
+                  <button class="menu-item" type="button" data-outbound="${lead.id}" role="menuitem">${esc(tr("outbound"))}</button>
                   <button class="menu-item" type="button" data-edit="${lead.id}" role="menuitem">${esc(tr("updateFollow"))}</button>
                   <button class="menu-item" type="button" data-view="${lead.id}" role="menuitem">${esc(tr("viewUser"))}</button>
                 </div>
@@ -1027,7 +1071,10 @@
       const before = lead.stage;
       const note = result === "connected" ? tr("actionOutboundConnected") : tr("actionOutboundUnreached");
       lead.lastCallResult = result;
-      lead.stage = result === "connected" ? "waiting_booking" : "unreached";
+      const canAdvanceToPendingBooking = result === "connected" && ["waiting_call","unreached","waiting_booking","paused"].includes(before);
+      const canWriteUnreached = result === "unconnected" && ["waiting_call","unreached","paused"].includes(before);
+      if (canAdvanceToPendingBooking) lead.stage = "waiting_booking";
+      if (canWriteUnreached) lead.stage = "unreached";
       lead.history.unshift({
         action: "outbound",
         label: result === "connected" ? "actionOutboundConnected" : "actionOutboundUnreached",
@@ -1039,7 +1086,7 @@
       closeOverlay();
       render();
       if (result === "unconnected") {
-        toast(tr("callUnreachedSaved"));
+        toast(canWriteUnreached ? tr("callUnreachedSaved") : tr("saveSuccess"));
         return;
       }
       toast(tr("callConnectedSaved"));
@@ -1058,7 +1105,22 @@
         ];
       }
       if (lead.stage === "booked") {
-        return [{ value: "continue", label: tr("continueFollow") }];
+        return [
+          { value: "continue", label: tr("continueFollow") },
+          { value: "reschedule", label: tr("reschedule") },
+          { value: "cancel", label: tr("cancelAppointment") },
+          { value: "no_show", label: tr("noShow") },
+          { value: "completed", label: tr("attendedComplete") },
+          { value: "incomplete", label: tr("attendedIncomplete") },
+          { value: "close", label: tr("closeLead") }
+        ];
+      }
+      if (lead.stage === "payment_pending") {
+        return [
+          { value: "continue", label: tr("continueFollow") },
+          { value: "pause", label: tr("pause") },
+          { value: "close", label: tr("closeLead") }
+        ];
       }
       const options = [];
       if (lead.stage !== "payment_pending") options.push({ value: "create", label: tr("create") });
@@ -1076,7 +1138,13 @@
       state.followSource = options.source || "manual";
       state.initialPauseReason = lead.pauseReason || "";
       const actions = actionOptions(lead);
-      const defaultAction = lead.stage === "paused" ? "pause" : lead.stage === "booked" ? "continue" : "";
+      const defaultAction = lead.stage === "paused"
+        ? "pause"
+        : lead.stage === "booked"
+          ? "continue"
+          : ["rejected","closed"].includes(lead.stage)
+            ? "reactivate"
+            : "";
       state.action = defaultAction;
       openOverlay(`
         <div class="modal-head"><h2 id="modal-title">${esc(tr("modalTitle"))}</h2><div class="modal-tools">${modalLanguageSwitch()}<button class="icon-btn" type="button" data-close aria-label="${esc(tr("close"))}">×</button></div></div>
@@ -1100,8 +1168,8 @@
                 <div class="hint">${esc(tr("directHint"))}</div>
               </div>
               <label class="field hidden" id="appointment-time-field">
-                <span class="field-label">${esc(tr("appointmentTime"))} · ${esc(tr("appointmentTimezone"))}</span>
-                <input class="input" type="datetime-local" id="appointment-time" value="2026-11-21T10:00">
+                <span class="field-label" id="appointment-label">${esc(tr("appointmentTime"))} · ${esc(tr("appointmentTimezone"))}</span>
+                <input class="input" type="datetime-local" id="appointment-time">
                 <div class="error" id="time-error"></div>
               </label>
               <label class="field hidden" id="meeting-link-field">
@@ -1152,12 +1220,15 @@
     function updateActionFields(lead) {
       const action = state.action;
       const isCreate = action === "create";
+      const isReschedule = action === "reschedule";
       const isPause = action === "pause";
       const isOutcome = action === "reject" || action === "close";
-      const requiresReason = isPause || isOutcome;
+      const hasAppointmentFields = isCreate || isReschedule;
+      const requiresReason = isPause || isOutcome || ["cancel","no_show","incomplete"].includes(action);
       $("#direct-hint").classList.toggle("hidden", !isCreate);
-      $("#appointment-time-field").classList.toggle("hidden", !isCreate);
-      $("#meeting-link-field").classList.toggle("hidden", !isCreate);
+      $("#appointment-time-field").classList.toggle("hidden", !hasAppointmentFields);
+      $("#meeting-link-field").classList.toggle("hidden", !hasAppointmentFields);
+      $("#appointment-label").textContent = `${isCreate ? tr("appointmentOptional") : tr("appointmentTime")} · ${tr("appointmentTimezone")}`;
       $("#reason-field").classList.toggle("hidden", !requiresReason);
       $("#other-reason-field").classList.add("hidden");
       $("#note-label").textContent = isCreate ? tr("noteOptional") : tr("note");
@@ -1171,7 +1242,17 @@
       $("#confirmation").innerHTML = "";
       state.confirming = false;
       if (requiresReason) {
-        const reasons = isPause ? PAUSE_REASONS : action === "reject" ? REJECT_REASONS : CLOSE_REASONS;
+        const reasons = isPause
+          ? PAUSE_REASONS
+          : action === "reject"
+            ? REJECT_REASONS
+            : action === "cancel"
+              ? ["reasonCustomerCancelled","reasonScheduleConflict","reasonDuplicateAppointment","reasonOther"]
+              : action === "no_show"
+                ? ["reasonCustomerAbsent","reasonUnableToContact","reasonMeetingIssue","reasonOther"]
+                : action === "incomplete"
+                  ? ["reasonMeetingIssue","reasonScheduleConflict","reasonOther"]
+                  : CLOSE_REASONS;
         $("#reason-select").innerHTML = `<option value="">${esc(tr("reasonPlaceholder"))}</option>${reasons.map((key) => `<option value="${key}">${esc(tr(key))}</option>`).join("")}`;
         if (isPause && lead.stage === "paused" && lead.pauseReason) $("#reason-select").value = lead.pauseReason;
         $("#reason-select").onchange = () => {
@@ -1212,18 +1293,30 @@
         $("#action-error").textContent = tr("actionRequired");
         return false;
       }
-      if (action === "create") {
+      if (action === "reschedule") {
         if (!$("#appointment-time").value) {
           $("#time-error").textContent = tr("timeRequired");
           valid = false;
         }
+      }
+      if (action === "create") {
+        if (!$("#appointment-time").value && !note) {
+          $("#time-error").textContent = tr("followupContentRequired");
+          valid = false;
+        }
+        if ($("#meeting-link").value.trim() && !$("#appointment-time").value) {
+          $("#time-error").textContent = tr("timeRequired");
+          valid = false;
+        }
+      }
+      if (action === "create" || action === "reschedule") {
         const link = $("#meeting-link").value.trim();
         if (link && !link.startsWith("https://")) {
           $("#meeting-error").textContent = tr("httpsOnly");
           valid = false;
         }
       }
-      if (action === "pause" || action === "reject" || action === "close") {
+      if (action === "pause" || action === "reject" || action === "close" || ["cancel","no_show","incomplete"].includes(action)) {
         const reason = $("#reason-select").value;
         if (!reason) {
           $("#reason-error").textContent = tr("reasonRequired");
@@ -1240,7 +1333,7 @@
           $("#note-error").textContent = tr("keepPausedRequired");
           valid = false;
         }
-      } else if (!note && action === "continue") {
+      } else if (!note && ["continue","completed","reschedule"].includes(action)) {
         $("#note-error").textContent = tr("noteRequired");
         valid = false;
       }
@@ -1275,6 +1368,25 @@
       let event = null;
 
       if (action === "create") {
+        const appointmentStart = $("#appointment-time").value;
+        if (appointmentStart) {
+          lead.appointment = {
+            start: appointmentStart,
+            link: $("#meeting-link").value.trim()
+          };
+          lead.stage = "booked";
+          lead.appointmentHistory += 1;
+        }
+        event = {
+          action,
+          label: "actionCreate",
+          at: now,
+          note: note || `${tr("appointmentTime")}: ${appointmentStart.replace("T", " ")}`,
+          before,
+          after: lead.stage
+        };
+        successKey = appointmentStart ? "directCreateSuccess" : "newFollowupSuccess";
+      } else if (action === "reschedule") {
         lead.appointment = {
           start: $("#appointment-time").value,
           link: $("#meeting-link").value.trim()
@@ -1282,14 +1394,14 @@
         lead.stage = "booked";
         lead.appointmentHistory += 1;
         event = {
-          action: "create",
-          label: "actionCreate",
+          action,
+          label: "actionReschedule",
           at: now,
           note: note || `${tr("appointmentTime")}: ${lead.appointment.start.replace("T", " ")}`,
           before,
           after: "booked"
         };
-        successKey = "directCreateSuccess";
+        successKey = "saveSuccess";
       } else if (action === "reject") {
         lead.stage = "rejected";
         const selected = $("#reason-select").value;
@@ -1302,6 +1414,26 @@
         const detail = selected === "closeOther" ? $("#other-reason").value.trim() : tr(selected);
         event = { action: "close", label: "actionClose", at: now, note: note ? `${detail}\n${note}` : detail, before, after: "closed" };
         successKey = "closeSuccess";
+      } else if (action === "cancel") {
+        lead.stage = "waiting_booking";
+        const selected = $("#reason-select").value;
+        const detail = selected === "reasonOther" ? $("#other-reason").value.trim() : tr(selected);
+        event = { action: "cancel", label: "actionCancelAppointment", at: now, note: note ? `${detail}\n${note}` : detail, before, after: "waiting_booking" };
+      } else if (action === "no_show") {
+        lead.stage = "no_show";
+        const selected = $("#reason-select").value;
+        const detail = selected === "reasonOther" ? $("#other-reason").value.trim() : tr(selected);
+        event = { action: "no_show", label: "actionNoShow", at: now, note: note ? `${detail}\n${note}` : detail, before, after: "no_show" };
+      } else if (action === "completed") {
+        lead.stage = "payment_pending";
+        event = { action: "completed", label: "actionAttendedComplete", at: now, note, before, after: "payment_pending" };
+        successKey = "consultationCompleteSuccess";
+      } else if (action === "incomplete") {
+        lead.stage = "incomplete";
+        const selected = $("#reason-select").value;
+        const detail = selected === "reasonOther" ? $("#other-reason").value.trim() : tr(selected);
+        event = { action: "incomplete", label: "actionAttendedIncomplete", at: now, note: note ? `${detail}\n${note}` : detail, before, after: "incomplete" };
+        successKey = "consultationIncompleteSuccess";
       } else if (action === "reactivate") {
         lead.stage = lead.previousStage || "waiting_call";
         event = { action: "reactivate", label: "actionReactivate", at: now, note: note || tr("reactivate"), before, after: lead.stage };
