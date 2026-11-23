@@ -118,6 +118,7 @@
     .page-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
     h1 { margin: 0; font-size: 30px; line-height: 1.25; }
     .page-meta { margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .page-actions { display: flex; flex-wrap: wrap; gap: 8px; }
     .filters {
       display: grid;
       grid-template-columns: 180px 180px minmax(290px, auto) auto;
@@ -150,6 +151,7 @@
       font-weight: 600;
       cursor: pointer;
     }
+    .button.primary { border-color: var(--blue); background: var(--blue); color: #fff; }
     .error-banner {
       display: none;
       margin-top: 12px;
@@ -310,6 +312,26 @@
     .modal-title { margin: 0; font-size: 20px; }
     .modal-body { padding: 18px 20px; color: var(--muted); }
     .modal-actions { display: flex; justify-content: flex-end; padding: 0 20px 18px; }
+    .modal-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+    .modal-form .field { margin-bottom: 12px; }
+    .form-error { display: none; margin-top: 8px; color: var(--red); font-size: 12px; }
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 80;
+      max-width: 360px;
+      padding: 11px 15px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      box-shadow: var(--shadow);
+      transform: translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
     .close {
       display: grid;
       width: 34px;
@@ -334,6 +356,7 @@
       .topbar { flex-wrap: wrap; padding: 11px 14px; }
       .main { padding: 18px 14px 36px; }
       .filters, .metric-grid { grid-template-columns: 1fr; }
+      .modal-grid { grid-template-columns: 1fr; }
       h1 { font-size: 27px; }
     }
   </style>
@@ -370,6 +393,10 @@
         <div>
           <h1 id="page-title">CC销售连续性与预警</h1>
           <div class="page-meta" id="page-meta">数据更新于 2026-11-16 06:00</div>
+        </div>
+        <div class="page-actions">
+          <button class="button" id="config-button" type="button">口径设置</button>
+          <button class="button primary" id="export-button" type="button">导出</button>
         </div>
       </div>
 
@@ -492,6 +519,69 @@
     </section>
   </div>
 
+  <div class="modal-wrap hidden" id="config-modal-wrap">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="config-title">
+      <div class="modal-head">
+        <div>
+          <div class="panel-meta" id="config-kicker">版本化配置</div>
+          <h2 class="modal-title" id="config-title">CC活跃度口径设置</h2>
+        </div>
+        <button class="close" id="config-close" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body modal-form">
+        <div class="modal-grid">
+          <div class="field">
+            <label class="field-label" for="config-recent-days" id="config-recent-label">近期活跃观察窗口（天）</label>
+            <input class="control" id="config-recent-days" type="number" min="1" max="7" value="2">
+          </div>
+          <div class="field">
+            <label class="field-label" for="config-day-basis" id="config-basis-label">天数口径</label>
+            <select class="control" id="config-day-basis">
+              <option value="natural">自然日</option>
+              <option value="workday">工作日</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label" for="config-high" id="config-high-label">高一致性上限</label>
+            <input class="control" id="config-high" type="number" min="0.01" step="0.01" value="1.75">
+          </div>
+          <div class="field">
+            <label class="field-label" for="config-good" id="config-good-label">良好上限</label>
+            <input class="control" id="config-good" type="number" min="0.01" step="0.01" value="2.33">
+          </div>
+          <div class="field">
+            <label class="field-label" for="config-needs" id="config-needs-label">待改善上限</label>
+            <input class="control" id="config-needs" type="number" min="0.01" step="0.01" value="3.50">
+          </div>
+          <div class="field">
+            <label class="field-label" for="config-critical" id="config-critical-label">高危起始天数</label>
+            <input class="control" id="config-critical" type="number" min="1" value="4">
+          </div>
+          <div class="field">
+            <label class="field-label" for="config-early" id="config-early-label">早期预警起始天数</label>
+            <input class="control" id="config-early" type="number" min="1" value="1">
+          </div>
+          <div class="field">
+            <label class="field-label" for="config-at-risk" id="config-at-risk-label">有风险起始天数</label>
+            <input class="control" id="config-at-risk" type="number" min="1" value="2">
+          </div>
+          <div class="field">
+            <label class="field-label" for="config-effective" id="config-effective-label">生效日期</label>
+            <input class="control" id="config-effective" type="date" value="2026-11-23">
+          </div>
+        </div>
+        <div class="form-error" id="config-error"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="button" id="config-reset" type="button">恢复默认</button>
+        <button class="button" id="config-cancel" type="button">取消</button>
+        <button class="button primary" id="config-save" type="button">保存并生效</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script>
     const ccRows = [
       { id: "CC-001", name: "Trúc", team: "Macie", businessLine: "VN", status: "active", saleDates: ["2026-11-09","2026-11-10","2026-11-11","2026-11-12","2026-11-14"] },
@@ -517,8 +607,22 @@
       { id: "CC-021", name: "Laika", team: "Duy", businessLine: "VN", status: "rest", saleDates: [] }
     ];
 
+    const defaultConfig = {
+      recentDays: 2,
+      dayBasis: "natural",
+      high: 1.75,
+      good: 2.33,
+      needs: 3.5,
+      early: 1,
+      atRisk: 2,
+      critical: 4,
+      effectiveDate: "2026-11-23"
+    };
+
     const state = {
-      lang: localStorage.getItem("cc-activity-lang") || "zh"
+      lang: localStorage.getItem("cc-activity-lang") || "zh",
+      config: { ...defaultConfig },
+      version: 1
     };
 
     const strings = {
@@ -529,8 +633,9 @@
         breadcrumb: "Dino CRM / 管理看板",
         topbarTitle: "CC销售连续性与预警",
         pageTitle: "CC销售连续性与预警",
-        pageMeta: "数据更新于 2026-11-16 06:00",
+        pageMeta: "数据更新于 2026-11-16 06:00 · 规则版本 v{version}",
         businessLine: "业务线", team: "销售团队", period: "统计周期", reset: "重置",
+        config: "口径设置", export: "导出",
         all: "全部", allTeams: "全部团队", allLines: "全部业务线",
         businessLines: { VN: "越南", TH: "泰国", ALL: "全部业务线" },
         recent: "近期销售活跃率", consistency: "销售一致性", risk: "高风险 CC 占比",
@@ -541,6 +646,7 @@
         columns: ["CC编号", "CC姓名", "所属团队", "连续未成交天数", "最近有效成交日期", "平均出单间隔", "一致性分层"],
         groups: { high: "高一致性", good: "良好", needs: "待改善", low: "低一致性" },
         risks: { healthy: "健康", early: "早期预警", atRisk: "有风险", critical: "高危", rest: "休息" },
+        activeStatus: "在岗",
         actions: {
           healthy: "保持销售节奏", early: "检查重点客户和近期预约",
           atRisk: "进行商机盘点并安排一对一辅导", critical: "立即干预并制定恢复计划"
@@ -548,14 +654,23 @@
         noData: "当前筛选范围内暂无 CC 数据",
         dateError: "结束日期必须晚于或等于开始日期，且统计周期不能超过 31 天。",
         metricKicker: "指标口径", know: "知道了", close: "关闭",
+        configKicker: "版本化配置", configTitle: "CC活跃度口径设置",
+        recentWindow: "近期活跃观察窗口（天）", dayBasis: "天数口径",
+        naturalDay: "自然日", workday: "工作日",
+        highLimit: "高一致性上限", goodLimit: "良好上限", needsLimit: "待改善上限",
+        earlyStart: "早期预警起始天数", atRiskStart: "有风险起始天数", criticalStart: "高危起始天数",
+        effectiveDate: "生效日期", restoreDefault: "恢复默认", cancel: "取消", save: "保存并生效",
+        invalidConfig: "阈值必须依次递增，且所有数值必须为正数。",
+        saveSuccess: "口径配置 v{version} 已保存，当前视图已按新版本计算。",
+        exportSuccess: "已导出当前筛选结果。", exportEmpty: "当前筛选范围没有可导出的 CC 数据。",
         recentSub: "最近 {n} 个完整日内有成交",
         consistencySub: "{n} 位 CC 达到良好及以上",
         riskSub: "连续未成交 ≥ {n} 天",
         days: "天",
         definitions: {
-          recent: ["近期销售活跃率", "最近观察窗口内至少有一个成交日的有效 CC 数 ÷ 有效 CC 样本数。默认观察最近 2 个完整自然日，按 CC ID 去重；分母为 0 时显示“—”。"],
-          consistency: ["销售一致性", "平均出单间隔最高不超过 2.33 天的有效 CC 数 ÷ 有效 CC 样本数。平均出单间隔 = 统计周期自然日数 ÷ 该 CC 成交日数，按 CC ID 去重；分母为 0 时显示“—”。"],
-          risk: ["高风险 CC 占比", "连续未成交 4 天及以上、风险状态为高危的有效 CC 数 ÷ 有效 CC 样本数，按 CC ID 去重；分母为 0 时显示“—”。"]
+          recent: ["近期销售活跃率", "最近观察窗口内至少有一个成交日的有效 CC 数 ÷ 有效 CC 样本数。默认观察最近 {recent} 个完整自然日，按 CC ID 去重；分母为 0 时显示“—”。"],
+          consistency: ["销售一致性", "平均出单间隔最高不超过 {good} 天的有效 CC 数 ÷ 有效 CC 样本数。平均出单间隔 = 统计周期有效天数 ÷ 该 CC 成交日数，按 CC ID 去重；分母为 0 时显示“—”。"],
+          risk: ["高风险 CC 占比", "连续未成交 {critical} 天及以上、风险状态为高危的有效 CC 数 ÷ 有效 CC 样本数，按 CC ID 去重；分母为 0 时显示“—”。"]
         }
       },
       en: {
@@ -565,8 +680,9 @@
         breadcrumb: "Dino CRM / Management",
         topbarTitle: "CC Sales Consistency & Early Warning",
         pageTitle: "CC Sales Consistency & Early Warning",
-        pageMeta: "Data updated 16 Nov 2026 06:00",
+        pageMeta: "Data updated 16 Nov 2026 06:00 · Rule version v{version}",
         businessLine: "Business line", team: "Sales team", period: "Reporting period", reset: "Reset",
+        config: "Metric settings", export: "Export",
         all: "All", allTeams: "All teams", allLines: "All business lines",
         businessLines: { VN: "Vietnam", TH: "Thailand", ALL: "All business lines" },
         recent: "Recent sales activity", consistency: "Sales consistency", risk: "High-risk CCs",
@@ -577,6 +693,7 @@
         columns: ["CC ID", "CC name", "Team", "Days without a sale", "Latest valid sale", "Avg days to sale", "Consistency"],
         groups: { high: "High", good: "Good", needs: "Needs Improvement", low: "Low" },
         risks: { healthy: "Healthy", early: "Early Warning", atRisk: "At Risk", critical: "Critical", rest: "Rest" },
+        activeStatus: "Active",
         actions: {
           healthy: "Maintain the current sales rhythm",
           early: "Review hot customers and upcoming appointments",
@@ -586,14 +703,23 @@
         noData: "No CC data matches the current filters.",
         dateError: "The end date must be on or after the start date, and the period cannot exceed 31 days.",
         metricKicker: "Metric definition", know: "Got it", close: "Close",
-        recentSub: "Sales in the last {n} complete days",
+        configKicker: "Versioned configuration", configTitle: "CC activity metric settings",
+        recentWindow: "Recent activity window (days)", dayBasis: "Day basis",
+        naturalDay: "Calendar days", workday: "Working days",
+        highLimit: "High upper limit", goodLimit: "Good upper limit", needsLimit: "Needs Improvement upper limit",
+        earlyStart: "Early Warning starts", atRiskStart: "At Risk starts", criticalStart: "Critical starts",
+        effectiveDate: "Effective date", restoreDefault: "Restore defaults", cancel: "Cancel", save: "Save and apply",
+        invalidConfig: "Thresholds must increase in order and all values must be positive.",
+        saveSuccess: "Configuration v{version} saved and applied to the current view.",
+        exportSuccess: "The current filtered result was exported.", exportEmpty: "No CC data is available to export.",
+        recentSub: "Sales in the last {n} day(s)",
         consistencySub: "{n} CCs achieved Good or above",
         riskSub: "No sales for ≥ {n} days",
         days: "days",
         definitions: {
-          recent: ["Recent sales activity", "Distinct valid CCs with at least one sale day in the observation window ÷ valid CC sample. The default window is the latest 2 complete calendar days. Deduplicated by CC ID; show “—” when the denominator is 0."],
-          consistency: ["Sales consistency", "Distinct valid CCs whose average days to sale is no more than 2.33 days ÷ valid CC sample. Average days to sale = calendar days in the period ÷ the CC's distinct sale days. Deduplicated by CC ID; show “—” when the denominator is 0."],
-          risk: ["High-risk CCs", "Distinct valid CCs with 4 or more consecutive days without a sale and Critical status ÷ valid CC sample. Deduplicated by CC ID; show “—” when the denominator is 0."]
+          recent: ["Recent sales activity", "Distinct valid CCs with at least one sale day in the observation window ÷ valid CC sample. The default window is the latest {recent} complete calendar days. Deduplicated by CC ID; show “—” when the denominator is 0."],
+          consistency: ["Sales consistency", "Distinct valid CCs whose average days to sale is no more than {good} days ÷ valid CC sample. Average days to sale = effective days in the period ÷ the CC's distinct sale days. Deduplicated by CC ID; show “—” when the denominator is 0."],
+          risk: ["High-risk CCs", "Distinct valid CCs with {critical} or more consecutive days without a sale and Critical status ÷ valid CC sample. Deduplicated by CC ID; show “—” when the denominator is 0."]
         }
       }
     };
@@ -621,6 +747,17 @@
       return Math.floor((parseDate(end) - parseDate(start)) / 86400000) + 1;
     }
 
+    function isWeekday(value) {
+      const day = parseDate(value).getUTCDay();
+      return day !== 0 && day !== 6;
+    }
+
+    function elapsedDays(latest, end, basis) {
+      if (!latest) return 0;
+      const dates = datesBetween(latest, end).slice(1);
+      return basis === "workday" ? dates.filter(isWeekday).length : dates.length;
+    }
+
     function formatDate(value) {
       if (!value) return "—";
       const [year, month, day] = value.split("-");
@@ -641,7 +778,8 @@
       const team = $("#sales-team").value;
       const start = $("#start-date").value;
       const end = $("#end-date").value;
-      const periodDays = dayCount(start, end);
+      const periodDates = datesBetween(start, end);
+      const periodDays = state.config.dayBasis === "workday" ? periodDates.filter(isWeekday).length : periodDates.length;
       return ccRows
         .filter((row) => business === "ALL" || row.businessLine === business)
         .filter((row) => team === "ALL" || row.team === team)
@@ -651,7 +789,7 @@
           const avgDays = saleDayCount ? Number((periodDays / saleDayCount).toFixed(2)) : null;
           const latest = row.saleDates.filter((date) => date <= end).sort().at(-1) || null;
           const daysWithoutSale = latest
-            ? Math.floor((parseDate(end) - parseDate(latest)) / 86400000)
+            ? elapsedDays(latest, end, state.config.dayBasis)
             : (row.status === "rest" ? null : periodDays);
           const consistency = row.status === "rest" ? "rest" : consistencyLevel(avgDays);
           return { ...row, saleDates, saleDayCount, avgDays, latest, daysWithoutSale, consistency, risk: riskLevel(daysWithoutSale, row.status) };
@@ -660,17 +798,17 @@
 
     function consistencyLevel(avgDays) {
       if (avgDays == null) return "low";
-      if (avgDays <= 1.75) return "high";
-      if (avgDays <= 2.33) return "good";
-      if (avgDays <= 3.5) return "needs";
+      if (avgDays <= state.config.high) return "high";
+      if (avgDays <= state.config.good) return "good";
+      if (avgDays <= state.config.needs) return "needs";
       return "low";
     }
 
     function riskLevel(days, status) {
       if (status === "rest") return "rest";
-      if (days >= 4) return "critical";
-      if (days >= 2) return "atRisk";
-      if (days >= 1) return "early";
+      if (days >= state.config.critical) return "critical";
+      if (days >= state.config.atRisk) return "atRisk";
+      if (days >= state.config.early) return "early";
       return "healthy";
     }
 
@@ -703,17 +841,18 @@
       const active = rows.filter((row) => row.status === "active");
       const denominator = active.length;
       const recentStart = new Date(parseDate(end));
-      recentStart.setUTCDate(recentStart.getUTCDate() - 1);
+      recentStart.setUTCDate(recentStart.getUTCDate() - state.config.recentDays + 1);
       const recentCount = active.filter((row) => row.latest && parseDate(row.latest) >= recentStart).length;
       const consistencyCount = active.filter((row) => ["high", "good"].includes(row.consistency)).length;
       const riskCount = active.filter((row) => row.risk === "critical").length;
+      const separator = state.lang === "zh" ? "：" : ": ";
 
       $("#metric-recent-value").textContent = percent(recentCount, denominator);
-      $("#metric-recent-sub").textContent = `${c.recentSub.replace("{n}", "2")}：${recentCount} / ${denominator}`;
+      $("#metric-recent-sub").textContent = `${c.recentSub.replace("{n}", String(state.config.recentDays))}${separator}${recentCount} / ${denominator}`;
       $("#metric-consistency-value").textContent = percent(consistencyCount, denominator);
       $("#metric-consistency-sub").textContent = c.consistencySub.replace("{n}", String(consistencyCount)) + ` · ${consistencyCount} / ${denominator}`;
       $("#metric-risk-value").textContent = percent(riskCount, denominator);
-      $("#metric-risk-sub").textContent = `${c.riskSub.replace("{n}", "4")}：${riskCount} / ${denominator}`;
+      $("#metric-risk-sub").textContent = `${c.riskSub.replace("{n}", String(state.config.critical))}${separator}${riskCount} / ${denominator}`;
 
       const groups = ["high", "good", "needs", "low"];
       const groupCounts = groups.map((group) => active.filter((row) => row.consistency === group));
@@ -757,13 +896,22 @@
       }).join("");
       $("#activity-empty").style.display = rows.length ? "none" : "block";
 
-      $("#risk-body").innerHTML = ["healthy", "early", "atRisk", "critical"].map((risk) => `
-        <tr>
-          <td><span class="risk-dot ${risk}"></span>${c.risks[risk]}</td>
-          <td>${risk === "healthy" ? "0" : risk === "early" ? "1" : risk === "atRisk" ? "2–3" : "≥4"} ${state.lang === "zh" ? "天" : "days"}</td>
-          <td>${c.actions[risk]}</td>
-        </tr>
-      `).join("");
+      $("#risk-body").innerHTML = ["healthy", "early", "atRisk", "critical"].map((risk) => {
+        const range = risk === "healthy"
+          ? `0${state.config.early > 1 ? `–${state.config.early - 1}` : ""}`
+          : risk === "early"
+            ? `${state.config.early}–${state.config.atRisk - 1}`
+            : risk === "atRisk"
+              ? `${state.config.atRisk}–${state.config.critical - 1}`
+              : `≥${state.config.critical}`;
+        return `
+          <tr>
+            <td><span class="risk-dot ${risk}"></span>${c.risks[risk]}</td>
+            <td>${range} ${state.lang === "zh" ? "天" : "days"}</td>
+            <td>${c.actions[risk]}</td>
+          </tr>
+        `;
+      }).join("");
     }
 
     function applyLanguage() {
@@ -777,11 +925,13 @@
       $("#breadcrumb-root").textContent = c.breadcrumb;
       $("#topbar-title").textContent = c.topbarTitle;
       $("#page-title").textContent = c.pageTitle;
-      $("#page-meta").textContent = c.pageMeta;
+      $("#page-meta").textContent = c.pageMeta.replace("{version}", String(state.version));
       $("#label-business-line").textContent = c.businessLine;
       $("#label-sales-team").textContent = c.team;
       $("#label-period").textContent = c.period;
       $("#reset-filters").textContent = c.reset;
+      $("#config-button").textContent = c.config;
+      $("#export-button").textContent = c.export;
       const business = $("#business-line").value;
       $("#business-line").innerHTML = `<option value="ALL">${c.allLines}</option><option value="VN">${c.businessLines.VN}</option><option value="TH">${c.businessLines.TH}</option>`;
       $("#business-line").value = ["ALL", "VN", "TH"].includes(business) ? business : "VN";
@@ -801,6 +951,22 @@
       $("#activity-empty").textContent = c.noData;
       $("#metric-kicker").textContent = c.metricKicker;
       $("#metric-ok").textContent = c.know;
+      $("#config-kicker").textContent = c.configKicker;
+      $("#config-title").textContent = c.configTitle;
+      $("#config-recent-label").textContent = c.recentWindow;
+      $("#config-basis-label").textContent = c.dayBasis;
+      $("#config-day-basis option[value='natural']").textContent = c.naturalDay;
+      $("#config-day-basis option[value='workday']").textContent = c.workday;
+      $("#config-high-label").textContent = c.highLimit;
+      $("#config-good-label").textContent = c.goodLimit;
+      $("#config-needs-label").textContent = c.needsLimit;
+      $("#config-early-label").textContent = c.earlyStart;
+      $("#config-at-risk-label").textContent = c.atRiskStart;
+      $("#config-critical-label").textContent = c.criticalStart;
+      $("#config-effective-label").textContent = c.effectiveDate;
+      $("#config-reset").textContent = c.restoreDefault;
+      $("#config-cancel").textContent = c.cancel;
+      $("#config-save").textContent = c.save;
       $$(".close").forEach((button) => button.setAttribute("aria-label", c.close));
       localStorage.setItem("cc-activity-lang", state.lang);
       render();
@@ -809,7 +975,10 @@
     function openMetric(key) {
       const [title, definition] = text().definitions[key];
       $("#metric-title").textContent = title;
-      $("#metric-formula").textContent = definition;
+      $("#metric-formula").textContent = definition
+        .replace("{recent}", String(state.config.recentDays))
+        .replace("{good}", String(state.config.good))
+        .replace("{critical}", String(state.config.critical));
       $("#modal-backdrop").classList.remove("hidden");
       $("#metric-modal-wrap").classList.remove("hidden");
       $("#metric-ok").focus();
@@ -818,6 +987,97 @@
     function closeMetric() {
       $("#modal-backdrop").classList.add("hidden");
       $("#metric-modal-wrap").classList.add("hidden");
+    }
+
+    function fillConfigForm(config = state.config) {
+      $("#config-recent-days").value = config.recentDays;
+      $("#config-day-basis").value = config.dayBasis;
+      $("#config-high").value = config.high;
+      $("#config-good").value = config.good;
+      $("#config-needs").value = config.needs;
+      $("#config-early").value = config.early;
+      $("#config-at-risk").value = config.atRisk;
+      $("#config-critical").value = config.critical;
+      $("#config-effective").value = config.effectiveDate;
+    }
+
+    function openConfig() {
+      fillConfigForm();
+      $("#config-error").style.display = "none";
+      $("#modal-backdrop").classList.remove("hidden");
+      $("#config-modal-wrap").classList.remove("hidden");
+      $("#config-recent-days").focus();
+    }
+
+    function closeConfig() {
+      $("#modal-backdrop").classList.add("hidden");
+      $("#config-modal-wrap").classList.add("hidden");
+    }
+
+    function showToast(message) {
+      const toast = $("#toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2400);
+    }
+
+    function saveConfig() {
+      const c = text();
+      const next = {
+        recentDays: Number($("#config-recent-days").value),
+        dayBasis: $("#config-day-basis").value,
+        high: Number($("#config-high").value),
+        good: Number($("#config-good").value),
+        needs: Number($("#config-needs").value),
+        early: Number($("#config-early").value),
+        atRisk: Number($("#config-at-risk").value),
+        critical: Number($("#config-critical").value),
+        effectiveDate: $("#config-effective").value
+      };
+      const positive = [next.recentDays,next.high,next.good,next.needs,next.early,next.atRisk,next.critical]
+        .every((value) => Number.isFinite(value) && value > 0);
+      const valid = positive && next.high < next.good && next.good < next.needs &&
+        next.early < next.atRisk && next.atRisk < next.critical && Boolean(next.effectiveDate);
+      if (!valid) {
+        $("#config-error").textContent = c.invalidConfig;
+        $("#config-error").style.display = "block";
+        return;
+      }
+      state.config = next;
+      state.version += 1;
+      closeConfig();
+      applyLanguage();
+      showToast(c.saveSuccess.replace("{version}", String(state.version)));
+    }
+
+    function exportXls() {
+      const c = text();
+      const rows = rowsForView();
+      if (!rows.length) {
+        showToast(c.exportEmpty);
+        return;
+      }
+      const dates = datesBetween($("#start-date").value, $("#end-date").value);
+      const header = ["业务线","销售团队","CC编号","CC姓名","CC状态","最近有效成交日期","连续未成交天数","成交日数","平均出单间隔","一致性分层","规则版本",...dates.map((date) => `${date}_成交标记`)];
+      const values = rows.map((row) => [
+        c.businessLines[row.businessLine] || row.businessLine,
+        row.team,row.id,row.name,row.status === "rest" ? c.risks.rest : c.activeStatus,row.latest || "",
+        row.daysWithoutSale == null ? "" : row.daysWithoutSale,
+        row.saleDayCount,row.avgDays == null ? "" : row.avgDays.toFixed(2),
+        c.groups[row.consistency] || c.risks.rest,`v${state.version}`,
+        ...dates.map((date) => row.saleDates.includes(date) ? 1 : 0)
+      ]);
+      const content = [header, ...values].map((line) => line.join("\t")).join("\n");
+      const blob = new Blob([`\ufeff${content}`], { type: "application/vnd.ms-excel;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `cc-activity-${$("#start-date").value}-${$("#end-date").value}.xls`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(link.href);
+      showToast(c.exportSuccess);
     }
 
     $("#business-line").addEventListener("change", () => {
@@ -835,15 +1095,31 @@
       render();
     });
     $("#language-toggle").addEventListener("click", () => {
+      $("#toast").classList.remove("show");
+      $("#toast").textContent = "";
       state.lang = state.lang === "zh" ? "en" : "zh";
       applyLanguage();
     });
+    $("#config-button").addEventListener("click", openConfig);
+    $("#export-button").addEventListener("click", exportXls);
     $$("[data-metric]").forEach((button) => button.addEventListener("click", () => openMetric(button.dataset.metric)));
     $("#metric-close").addEventListener("click", closeMetric);
     $("#metric-ok").addEventListener("click", closeMetric);
-    $("#modal-backdrop").addEventListener("click", closeMetric);
+    $("#config-close").addEventListener("click", closeConfig);
+    $("#config-cancel").addEventListener("click", closeConfig);
+    $("#config-reset").addEventListener("click", () => {
+      fillConfigForm(defaultConfig);
+      $("#config-error").style.display = "none";
+    });
+    $("#config-save").addEventListener("click", saveConfig);
+    $("#modal-backdrop").addEventListener("click", () => {
+      if (!$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
+      if (!$("#config-modal-wrap").classList.contains("hidden")) closeConfig();
+    });
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
+      if (event.key !== "Escape") return;
+      if (!$("#metric-modal-wrap").classList.contains("hidden")) closeMetric();
+      if (!$("#config-modal-wrap").classList.contains("hidden")) closeConfig();
     });
 
     applyLanguage();
