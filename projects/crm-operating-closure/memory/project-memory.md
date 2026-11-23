@@ -1,4 +1,9 @@
-# CRM经营闭环规划 Memory
+# CC日待办leads列表 Memory
+
+## Scope Update
+
+- 原“CRM经营闭环规划”管理层汇报已拆分为独立规划项目，公开入口为 `crm-operating-closure.html`。
+- 本项目名称调整为“CC日待办leads列表”，继续承载 CC 个人行动队列及其管理视图。
 
 ## Confirmed Facts
 

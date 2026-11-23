@@ -20,11 +20,12 @@ PROJECTS = {
     "crm-learning-plan-progress": "CRM学习计划与课程进度",
     "crm-consultation-meeting": "Lark咨询会议与用户详情回写",
     "paused-follow-up-direct-outcome": "暂停跟进后直接产生跟进结果",
-    "crm-operating-closure": "CRM经营闭环规划",
+    "crm-operating-closure": "CC日待办leads列表",
     "cc-activity-dashboard": "CC活跃度看板",
 }
 STATIC_ARCHITECTURE_PAGES = {
     "call-center-self-built-roadmap.html",
+    "crm-operating-closure.html",
 }
 
 BOLD_RE = re.compile(r"\*\*([^*]+)\*\*")
