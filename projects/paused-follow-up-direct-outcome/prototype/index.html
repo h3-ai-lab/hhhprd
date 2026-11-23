@@ -357,11 +357,11 @@
         reasonRequired: "请选择原因",
         otherReasonRequired: "请填写其他原因",
         noteRequired: "请填写本次跟进说明",
-        directHint: "保存为一条跟进记录；填写预约时间后进入已预约。",
+        directHint: "保存后创建有效预约，并将当前阶段更新为已预约。",
         connectedHint: "系统已识别本次外呼为已接通，请提交本次跟进结果。",
         unreachedNotice: "外呼未接通，系统已自动回写跟进阶段，无需填写跟进表单。",
         pausedLabel: "暂不跟进",
-        create: "新建跟进",
+        create: "新增预约",
         reject: "标记已拒绝",
         closeLead: "关闭线索",
         reactivate: "重新激活线索",
@@ -379,9 +379,6 @@
         confirmButton: "确认提交",
         back: "返回修改",
         saveSuccess: "跟进结果已保存",
-        newFollowupSuccess: "跟进记录已保存",
-        followupContentRequired: "请填写本次跟进说明或预约时间",
-        appointmentOptional: "预约时间（选填）",
         directCreateSuccess: "已直接进入已预约",
         rejectSuccess: "已标记为已拒绝",
         closeSuccess: "线索已关闭",
@@ -391,7 +388,7 @@
         statusUnpaid: "未付费",
         statusTrial: "未付费 · 体验中",
         statusPaid: "已付费",
-        actionCreate: "新建跟进",
+        actionCreate: "新增预约",
         actionReject: "标记已拒绝",
         actionClose: "关闭线索",
         actionReactivate: "重新激活线索",
@@ -529,11 +526,11 @@
         reasonRequired: "Select a reason",
         otherReasonRequired: "Enter the other reason",
         noteRequired: "Enter a follow-up note",
-        directHint: "Saves a follow-up record; entering an appointment time moves the lead to Booked.",
+        directHint: "Creates a valid appointment and moves the lead to Booked.",
         connectedHint: "The call is connected. Submit the result of this follow-up.",
         unreachedNotice: "The call was not reached. The follow-up stage has been updated automatically.",
         pausedLabel: "Paused",
-        create: "New follow-up",
+        create: "New appointment",
         reject: "Mark rejected",
         closeLead: "Close lead",
         reactivate: "Reactivate lead",
@@ -551,9 +548,6 @@
         confirmButton: "Confirm",
         back: "Back",
         saveSuccess: "Follow-up result saved",
-        newFollowupSuccess: "Follow-up record saved",
-        followupContentRequired: "Enter a follow-up note or appointment time",
-        appointmentOptional: "Appointment time (optional)",
         directCreateSuccess: "Moved directly to Booked",
         rejectSuccess: "Lead marked as rejected",
         closeSuccess: "Lead closed",
@@ -563,7 +557,7 @@
         statusUnpaid: "Unpaid",
         statusTrial: "Unpaid · Trial in progress",
         statusPaid: "Paid",
-        actionCreate: "New follow-up",
+        actionCreate: "New appointment",
         actionReject: "Mark rejected",
         actionClose: "Close lead",
         actionReactivate: "Reactivate lead",
@@ -1282,7 +1276,7 @@
       $("#direct-hint").classList.toggle("hidden", !isCreate);
       $("#appointment-time-field").classList.toggle("hidden", !hasAppointmentFields);
       $("#meeting-link-field").classList.toggle("hidden", !hasAppointmentFields);
-      $("#appointment-label").textContent = `${isCreate ? tr("appointmentOptional") : tr("appointmentTime")} · ${tr("appointmentTimezone")}`;
+      $("#appointment-label").textContent = `${tr("appointmentTime")} · ${tr("appointmentTimezone")}`;
       $("#reason-field").classList.toggle("hidden", !requiresReason);
       $("#other-reason-field").classList.add("hidden");
       $("#note-label").textContent = isCreate ? tr("noteOptional") : tr("note");
@@ -1347,18 +1341,8 @@
         $("#action-error").textContent = tr("actionRequired");
         return false;
       }
-      if (action === "reschedule") {
+      if (action === "create" || action === "reschedule") {
         if (!$("#appointment-time").value) {
-          $("#time-error").textContent = tr("timeRequired");
-          valid = false;
-        }
-      }
-      if (action === "create") {
-        if (!$("#appointment-time").value && !note) {
-          $("#time-error").textContent = tr("followupContentRequired");
-          valid = false;
-        }
-        if ($("#meeting-link").value.trim() && !$("#appointment-time").value) {
           $("#time-error").textContent = tr("timeRequired");
           valid = false;
         }
@@ -1423,23 +1407,21 @@
 
       if (action === "create") {
         const appointmentStart = $("#appointment-time").value;
-        if (appointmentStart) {
-          lead.appointment = {
-            start: appointmentStart,
-            link: $("#meeting-link").value.trim()
-          };
-          lead.stage = "booked";
-          lead.appointmentHistory += 1;
-        }
+        lead.appointment = {
+          start: appointmentStart,
+          link: $("#meeting-link").value.trim()
+        };
+        lead.stage = "booked";
+        lead.appointmentHistory += 1;
         event = {
           action,
           label: "actionCreate",
           at: now,
           note: note || `${tr("appointmentTime")}: ${appointmentStart.replace("T", " ")}`,
           before,
-          after: lead.stage
+          after: "booked"
         };
-        successKey = appointmentStart ? "directCreateSuccess" : "newFollowupSuccess";
+        successKey = "directCreateSuccess";
       } else if (action === "reschedule") {
         lead.appointment = {
           start: $("#appointment-time").value,
