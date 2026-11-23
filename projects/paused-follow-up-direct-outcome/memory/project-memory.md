@@ -1,4 +1,4 @@
-# 跟进流程简化项目 Memory
+# 移除冗余跟进流程项目 Memory
 
 ## Confirmed Facts
 

@@ -19,7 +19,7 @@ PROJECTS = {
     "crm-lead-quality-analysis": "CRM 线索质量分析",
     "crm-learning-plan-progress": "CRM学习计划与课程进度",
     "crm-consultation-meeting": "Lark咨询会议与用户详情回写",
-    "paused-follow-up-direct-outcome": "跟进流程简化",
+    "paused-follow-up-direct-outcome": "移除冗余跟进流程",
     "crm-operating-closure": "CC日待办leads列表",
     "cc-activity-dashboard": "CC活跃度看板",
 }

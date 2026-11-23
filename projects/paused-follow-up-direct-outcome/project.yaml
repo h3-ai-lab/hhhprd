@@ -1,5 +1,5 @@
 id: REQ-FOLLOW-001
-name: 跟进流程简化
+name: 移除冗余跟进流程
 status: 待评审
 workflow:
   base: ../../shared/workflows/prd-2.0.md
