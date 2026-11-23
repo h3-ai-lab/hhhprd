@@ -172,6 +172,42 @@
       box-shadow: 0 1px 3px rgba(23, 43, 77, .03);
     }
 
+    .primary-tabs {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 0;
+      padding: 0 2px;
+      border-bottom: 1px solid #dfe3eb;
+      background: transparent;
+    }
+
+    .primary-tab {
+      position: relative;
+      min-height: 43px;
+      padding: 0 0 12px;
+      border: 0;
+      color: #5e6979;
+      background: transparent;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .primary-tab.active { color: #1f2329; font-weight: 700; }
+    .primary-tab.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      border-radius: 2px;
+      background: #1677ff;
+    }
+
+    .primary-tab .tab-count { color: #7d8795; font-weight: 400; }
+    .primary-tab.active .tab-count { color: #475467; }
+
     .toolbar { margin-bottom: 14px; padding: 14px 16px; }
     .filters {
       display: grid;
@@ -216,64 +252,72 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-top: 14px;
-      padding-top: 13px;
-      border-top: 1px solid var(--line);
+      min-height: 44px;
+      border-bottom: 1px solid #e7eaf0;
     }
 
-    .queue-heading { font-size: 12px; font-weight: 700; color: #475467; }
-    .queue-hint { color: #8a94a3; font-size: 11px; }
     .queue-strip {
       display: flex;
-      gap: 8px;
+      min-width: 0;
+      gap: 22px;
       overflow-x: auto;
-      padding: 9px 0 2px;
+      padding: 0;
       scrollbar-width: thin;
     }
 
     .queue-chip {
       position: relative;
-      min-width: 154px;
-      padding: 10px 30px 9px 11px;
-      border: 1px solid #dce3ed;
-      border-radius: 9px;
-      color: #344054;
-      background: #fff;
-      text-align: left;
-    }
-
-    .queue-chip:hover { border-color: #a9c5f6; background: #fbfdff; }
-    .queue-chip.active { border-color: #77a6f8; color: #164aab; background: var(--blue-soft); box-shadow: inset 0 0 0 1px #bcd3ff; }
-    .queue-chip.all { min-width: 76px; padding-right: 11px; }
-    .queue-chip.priority { border-left-width: 3px; }
-    .queue-chip.p0 { border-left-color: #d94343; }
-    .queue-chip.p1 { border-left-color: #e58b22; }
-    .queue-chip.p2 { border-left-color: #3478df; }
-    .queue-chip.p3 { border-left-color: #9970d6; }
-    .queue-chip.pending { border-left-color: #6f7d92; }
-    .queue-chip.p5 { border-left-color: #15956d; }
-
-    .queue-name { display: block; overflow: hidden; font-size: 12.5px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-    .queue-sub { display: block; overflow: hidden; margin-top: 3px; color: #7f8b9c; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
-    .queue-count {
-      position: absolute;
-      top: 9px;
-      right: 9px;
-      min-width: 20px;
-      padding: 1px 6px;
-      border-radius: 999px;
-      color: #fff;
-      background: #667085;
-      font-size: 10px;
+      flex: 0 0 auto;
+      min-height: 43px;
+      padding: 0 0 11px;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      color: #667085;
+      background: transparent;
+      font-size: 12px;
       text-align: center;
+      white-space: nowrap;
     }
 
-    .queue-chip.active .queue-count { background: var(--blue); }
+    .queue-chip:hover { color: #255fc4; }
+    .queue-chip.active { color: #1666d8; border-bottom-color: #1677ff; font-weight: 700; }
+    .queue-chip.all { min-width: 48px; }
+
+    .queue-name { display: inline; }
+    .queue-priority { margin-left: 3px; color: #9aa3af; font-size: 9px; font-weight: 500; }
+    .queue-count {
+      display: inline-flex;
+      min-width: 18px;
+      min-height: 18px;
+      align-items: center;
+      justify-content: center;
+      margin-left: 4px;
+      padding: 0 5px;
+      border-radius: 999px;
+      color: #596678;
+      background: #f0f2f5;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .queue-chip.active .queue-count { color: #fff; background: #1677ff; }
+    .queue-refresh {
+      flex: 0 0 auto;
+      padding: 5px 7px;
+      border: 0;
+      border-radius: 6px;
+      color: #7f8997;
+      background: transparent;
+      font-size: 13px;
+    }
+    .queue-refresh:hover { color: #245fc7; background: #f2f5fa; }
     .subqueue-row {
       display: flex;
       align-items: center;
       gap: 7px;
-      padding: 7px 0 1px;
+      min-height: 31px;
+      padding: 4px 2px;
+      border-bottom: 1px solid #eef1f5;
     }
     .subqueue-label { color: #7d8999; font-size: 11px; }
     .subqueue-btn {
@@ -429,7 +473,8 @@
       .account { display: none; }
       .filters { grid-template-columns: 1fr; }
       .queue-head { align-items: flex-start; flex-direction: column; }
-      .queue-chip { min-width: 145px; }
+      .queue-strip { width: 100%; gap: 16px; }
+      .queue-chip { min-height: 37px; padding-bottom: 8px; }
       .panel-head { align-items: flex-start; flex-direction: column; }
       .drawer { width: 100%; }
     }
@@ -487,6 +532,7 @@
         pageTitle: "销售中心", role: "销售专员", search: "搜索手机号 / 用户 ID / 姓名",
         searchPlaceholder: "输入手机号、用户 ID 或姓名", businessLine: "业务线", allLines: "全部业务线",
         followStage: "当前跟进阶段", allStages: "全部阶段", reset: "重置筛选", refresh: "刷新队列",
+        publicPool: "公海", myFollowUp: "我的跟进", paidTab: "已付费", callRecords: "通话记录",
         quickQueues: "CC 快捷队列", queueHint: "选择后直接进入对应工作清单，不会重置上方筛选",
         all: "全部", currentLeads: "当前线索", total: "共 {n} 条", emptyTitle: "当前队列暂无客户",
         emptyBody: "可切换其他队列，或调整搜索和筛选条件。", noPermission: "无查看权限",
@@ -535,6 +581,7 @@
         pageTitle: "Sales Center", role: "Sales Representative", search: "Search phone / user ID / name",
         searchPlaceholder: "Enter phone, user ID, or name", businessLine: "Business Line", allLines: "All business lines",
         followStage: "Current Follow-up Stage", allStages: "All stages", reset: "Reset filters", refresh: "Refresh queues",
+        publicPool: "Public pool", myFollowUp: "My follow-ups", paidTab: "Paid", callRecords: "Call records",
         quickQueues: "CC quick queues", queueHint: "Select a queue to open its worklist; filters above stay active",
         all: "All", currentLeads: "Current leads", total: "{n} records", emptyTitle: "No customers in this queue",
         emptyBody: "Switch to another queue or adjust search and filters.", noPermission: "No access",
@@ -648,6 +695,7 @@
 
     const state = {
       lang: localStorage.getItem("crm-quick-filter-lang") || "zh",
+      primaryTab: "myFollowUp",
       queue: "all",
       subQueue: "all",
       search: "",
@@ -711,36 +759,52 @@
     }
 
     function queueCount(queue, subQueue = "all") {
+      if (state.primaryTab !== "myFollowUp") return 0;
       return baseRows().filter((lead) => queueMatches(lead, queue, subQueue)).length;
     }
 
-    function renderQueueChip(key, title, sub, cls) {
+    function queuePriority(key) {
+      return ({ p0: "P0", p1: "P1", p2: "P2", p3: "P3", pending: "P4/P6", p5: "P5" })[key] || "";
+    }
+
+    function renderQueueChip(key, title) {
       const count = key === "all" ? queueCount("all") : queueCount(key, "all");
-      return `<button class="queue-chip ${key === "all" ? "all" : "priority " + cls} ${state.queue === key ? "active" : ""}" type="button" data-queue="${key}">
+      const priority = queuePriority(key);
+      return `<button class="queue-chip ${key === "all" ? "all" : ""} ${state.queue === key ? "active" : ""}" type="button" data-queue="${key}">
         <span class="queue-name">${esc(title)}</span>
-        ${sub ? `<span class="queue-sub">${esc(sub)}</span>` : ""}
+        ${priority ? `<span class="queue-priority">${priority}</span>` : ""}
         <span class="queue-count">${count}</span>
       </button>`;
+    }
+
+    function renderPrimaryTabs() {
+      const tabs = [
+        ["publicPool", "12,760"],
+        ["myFollowUp", String(leads.length)],
+        ["paidTab", "15"],
+        ["callRecords", "428"]
+      ];
+      return `<div class="primary-tabs" role="tablist">
+        ${tabs.map(([key, count]) => `<button class="primary-tab ${state.primaryTab === key ? "active" : ""}" type="button" data-primary="${key}" role="tab" aria-selected="${state.primaryTab === key}">
+          ${esc(t(key))} <span class="tab-count">(${count})</span>
+        </button>`).join("")}
+      </div>`;
     }
 
     function renderQueueArea() {
       const todayCount = queueCount("p4");
       const historyCount = queueCount("p6");
       return `<div class="queue-head">
-          <div>
-            <div class="queue-heading">${esc(t("quickQueues"))}</div>
-            <div class="queue-hint">${esc(t("queueHint"))}</div>
+          <div class="queue-strip" role="tablist" aria-label="${esc(t("quickQueues"))}">
+            ${renderQueueChip("all", t("all"))}
+            ${renderQueueChip("p0", t("pendingPayment"))}
+            ${renderQueueChip("p1", t("unfinishedTrial"))}
+            ${renderQueueChip("p2", t("todayAppointment"))}
+            ${renderQueueChip("p3", t("noShow"))}
+            ${renderQueueChip("pending", t("pendingConnect"))}
+            ${renderQueueChip("p5", t("connectedUnbooked"))}
           </div>
-          <button class="btn btn-small" id="refresh-queues" type="button">↻ ${esc(t("refresh"))}</button>
-        </div>
-        <div class="queue-strip">
-          ${renderQueueChip("all", t("all"), "", "")}
-          ${renderQueueChip("p0", t("pendingPayment"), t("p0Sub"), "p0")}
-          ${renderQueueChip("p1", t("unfinishedTrial"), t("p1Sub"), "p1")}
-          ${renderQueueChip("p2", t("todayAppointment"), t("p2Sub"), "p2")}
-          ${renderQueueChip("p3", t("noShow"), t("p3Sub"), "p3")}
-          ${renderQueueChip("pending", t("pendingConnect"), fmt("pendingSub", { a: todayCount, b: historyCount }), "pending")}
-          ${renderQueueChip("p5", t("connectedUnbooked"), t("p5Sub"), "p5")}
+          <button class="queue-refresh" id="refresh-queues" type="button" title="${esc(t("refresh"))}" aria-label="${esc(t("refresh"))}">↻</button>
         </div>
         ${state.queue === "pending" ? `<div class="subqueue-row">
           <span class="subqueue-label">${esc(t("pendingConnect"))}</span>
@@ -759,13 +823,15 @@
         btn.classList.toggle("active", btn.dataset.lang === state.lang);
       });
 
-      const rows = visibleRows();
+      const rows = state.primaryTab === "myFollowUp" ? visibleRows() : [];
       const pages = Math.max(1, Math.ceil(rows.length / state.pageSize));
       if (state.page > pages) state.page = pages;
       const pageRows = rows.slice((state.page - 1) * state.pageSize, state.page * state.pageSize);
       const activeLabel = state.queue === "all" ? t("all") : queueMainLabel(state.queue);
 
       $("#content").innerHTML = `
+        ${renderPrimaryTabs()}
+        ${state.primaryTab === "myFollowUp" ? renderQueueArea() : ""}
         <section class="toolbar">
           <div class="filters">
             <label>
@@ -790,12 +856,11 @@
               <button class="btn" id="reset-filters" type="button">${esc(t("reset"))}</button>
             </div>
           </div>
-          ${renderQueueArea()}
         </section>
 
         <section class="panel">
           <div class="panel-head">
-            <div class="panel-title">${esc(t("currentLeads"))} · ${esc(activeLabel)}</div>
+            <div class="panel-title">${esc(t("currentLeads"))}${state.primaryTab === "myFollowUp" ? ` · ${esc(activeLabel)}` : ""}</div>
             <span class="muted">${esc(fmt("total", { n: rows.length }))}</span>
           </div>
           ${pageRows.length ? `<div class="table-wrap">
@@ -857,12 +922,12 @@
       });
       $("#reset-filters").addEventListener("click", resetFilters);
       $("#empty-reset")?.addEventListener("click", resetFilters);
-      $("#refresh-queues").addEventListener("click", () => showToast(t("queueRefreshed")));
-      $("#prev-page").addEventListener("click", () => {
+      $("#refresh-queues")?.addEventListener("click", () => showToast(t("queueRefreshed")));
+      $("#prev-page")?.addEventListener("click", () => {
         state.page = Math.max(1, state.page - 1);
         render();
       });
-      $("#next-page").addEventListener("click", () => {
+      $("#next-page")?.addEventListener("click", () => {
         state.page += 1;
         render();
       });
@@ -870,6 +935,15 @@
         btn.addEventListener("click", () => {
           const next = btn.dataset.queue;
           state.queue = state.queue === next ? "all" : next;
+          state.subQueue = "all";
+          state.page = 1;
+          render();
+        });
+      });
+      document.querySelectorAll("[data-primary]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          state.primaryTab = btn.dataset.primary;
+          state.queue = "all";
           state.subQueue = "all";
           state.page = 1;
           render();
