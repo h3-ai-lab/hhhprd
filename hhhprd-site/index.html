@@ -104,7 +104,7 @@
     .list-head,
     .project-row {
       display: grid;
-      grid-template-columns: minmax(230px, .95fr) minmax(280px, 1.8fr) 110px minmax(190px, auto);
+      grid-template-columns: minmax(230px, .95fr) minmax(260px, 1.65fr) 120px 105px minmax(190px, auto);
       gap: 18px;
       align-items: center;
     }
@@ -144,6 +144,11 @@
       margin: 0;
       color: var(--muted);
       font-size: 13px;
+    }
+    .project-updated {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
     }
     .status {
       display: inline-flex;
@@ -215,6 +220,7 @@
       .project-main { grid-column: 1; }
       .project-desc { grid-column: 1 / -1; }
       .project-status { grid-column: 2; grid-row: 1; justify-self: end; }
+      .project-updated { grid-column: 1 / -1; }
       .actions { grid-column: 1 / -1; justify-content: flex-start; }
     }
     @media (max-width: 560px) {
@@ -250,26 +256,29 @@
         <div class="list-head" aria-hidden="true">
           <span>项目</span>
           <span>内容</span>
+          <span>更新时间</span>
           <span>类型</span>
           <span>入口</span>
         </div>
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-18T10:50:51+08:00">
           <div class="project-main">
             <span class="project-code">ARCH-001</span>
             <h3 class="project-title">Dino 业务系统整体架构</h3>
           </div>
           <p class="project-desc">统一门户、领域后台、数据主责边界及 CRM 模块迁移方向。</p>
+          <div class="project-updated">2026-11-18</div>
           <div class="project-status"><span class="status reference">架构文档</span></div>
           <div class="actions">
             <a class="action primary" href="system-architecture.html">查看架构</a>
           </div>
         </article>
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-18T17:37:15+08:00">
           <div class="project-main">
             <span class="project-code">ARCH-002</span>
             <h3 class="project-title">自研软电话功能架构</h3>
           </div>
           <p class="project-desc">供应商对比、外呼工作原理、自研边界、坐席用户收益及 V0–V3 分阶段路线。</p>
+          <div class="project-updated">2026-11-18</div>
           <div class="project-status"><span class="status reference">规划文档</span></div>
           <div class="actions">
             <a class="action primary" href="call-center-self-built-roadmap.html">查看规划</a>
@@ -287,16 +296,18 @@
         <div class="list-head" aria-hidden="true">
           <span>项目</span>
           <span>内容</span>
+          <span>更新时间</span>
           <span>状态</span>
           <span>交付物</span>
         </div>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-20T15:19:47+08:00">
           <div class="project-main">
             <span class="project-code">PROG-CRM-001</span>
             <h3 class="project-title">CRM经营闭环规划</h3>
           </div>
           <p class="project-desc">面向 CC 与管理者的销售执行、管理干预、经营指标和分阶段能力规划，包含管理层汇报、规划 PRD 与双角色原型。</p>
+          <div class="project-updated">2026-11-20</div>
           <div class="project-status"><span class="status plan">规划</span></div>
           <div class="actions">
             <a class="action primary" href="../projects/crm-operating-closure/briefing/">管理层汇报</a>
@@ -305,12 +316,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-23T12:41:00+08:00">
           <div class="project-main">
             <span class="project-code">REQ-DASH-008</span>
             <h3 class="project-title">CC活跃度看板</h3>
           </div>
           <p class="project-desc">在管理看板展示 CC 的近期销售活跃率、销售一致性、连续未成交天数、个人出单节奏和风险状态。</p>
+          <div class="project-updated">2026-11-23</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-cc-activity-dashboard.html">PRD</a>
@@ -318,12 +330,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-17T15:09:24+08:00">
           <div class="project-main">
             <span class="project-code">REQ-CC-002</span>
             <h3 class="project-title">引入首跟节点&amp;首跟看板-2</h3>
           </div>
           <p class="project-desc">单文件 PRD 设计规范参考样例，覆盖核心流程、字段判断、完整指标口径、RBAC 和异常规则。</p>
+          <div class="project-updated">2026-11-17</div>
           <div class="project-status"><span class="status reference">参考样例</span></div>
           <div class="actions">
             <a class="action primary" href="prd-first-contact-concise.html">PRD</a>
@@ -331,12 +344,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-12T10:29:31+08:00">
           <div class="project-main">
             <span class="project-code">REQ-CC-001</span>
             <h3 class="project-title">引入首跟节点&amp;首跟看板</h3>
           </div>
           <p class="project-desc">跨业务线保留首位 CC，展示首次分配、首次外呼和首次接通，支持筛选、下载与团队监控。</p>
+          <div class="project-updated">2026-11-12</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-first-contact.html">PRD</a>
@@ -344,12 +358,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-12T10:29:31+08:00">
           <div class="project-main">
             <span class="project-code">REQ-DASH-007</span>
             <h3 class="project-title">管理看板新增跟进漏斗</h3>
           </div>
           <p class="project-desc">在销售跟进页增加接通、预约、体验课完成和付费转化等关键指标。</p>
+          <div class="project-updated">2026-11-12</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-follow-up-funnel.html">PRD</a>
@@ -357,12 +372,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-17T19:30:36+08:00">
           <div class="project-main">
             <span class="project-code">REQ-ORG-001</span>
             <h3 class="project-title">CRM组织架构&amp;数据权限</h3>
           </div>
           <p class="project-desc">多级组织树、成员角色、数据授权、线索单归属、历史快照和跨模块权限范围。</p>
+          <div class="project-updated">2026-11-17</div>
           <div class="project-status"><span class="status updated">评审后修订</span></div>
           <div class="actions">
             <a class="action primary" href="prd-crm-org-data-permissions.html">PRD</a>
@@ -370,12 +386,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-17T20:14:59+08:00">
           <div class="project-main">
             <span class="project-code">REQ-LQA-001</span>
             <h3 class="project-title">CRM线索质量分析</h3>
           </div>
           <p class="project-desc">在用户中心、销售中心和管理看板接入广告渠道、活动、广告组和广告归因，分析线索质量。</p>
+          <div class="project-updated">2026-11-17</div>
           <div class="project-status"><span class="status updated">评审后修订</span></div>
           <div class="actions">
             <a class="action primary" href="prd-crm-lead-quality-analysis.html">PRD</a>
@@ -383,12 +400,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-17T19:15:28+08:00">
           <div class="project-main">
             <span class="project-code">REQ-OB-001</span>
             <h3 class="project-title">外呼能力一期</h3>
           </div>
           <p class="project-desc">维护主叫号码、展示实际外呼号码，并批量导出录音与逐字稿。</p>
+          <div class="project-updated">2026-11-17</div>
           <div class="project-status"><span class="status updated">评审后修订</span></div>
           <div class="actions">
             <a class="action primary" href="prd-outbound-capability.html">PRD</a>
@@ -396,12 +414,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-19T19:39:56+08:00">
           <div class="project-main">
             <span class="project-code">REQ-LINE-001</span>
             <h3 class="project-title">CRM多渠道消息发送（LINE 首发）</h3>
           </div>
           <p class="project-desc">在销售中心复用业务线和客户范围完成消息发送，一期接入 LINE Multicast。</p>
+          <div class="project-updated">2026-11-19</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-crm-line-messaging.html">PRD</a>
@@ -409,12 +428,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-16T13:06:55+08:00">
           <div class="project-main">
             <span class="project-code">REQ-CONSULT-001</span>
             <h3 class="project-title">用户咨询预约时间</h3>
           </div>
           <p class="project-desc">在用户中心与销售中心展示预约状态和预约时间，支持筛选、排序判断与导出。</p>
+          <div class="project-updated">2026-11-16</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-user-consultation-lead.html">PRD</a>
@@ -422,12 +442,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-17T16:06:01+08:00">
           <div class="project-main">
             <span class="project-code">REQ-LEARN-001</span>
             <h3 class="project-title">CRM学习计划与课程进度</h3>
           </div>
           <p class="project-desc">在用户列表、销售列表、用户详情和管理看板展示学习计划、课程进度、活跃度与到期风险。</p>
+          <div class="project-updated">2026-11-17</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-crm-learning-plan-progress.html">PRD</a>
@@ -435,12 +456,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-23T11:31:56+08:00">
           <div class="project-main">
             <span class="project-code">REQ-CONSULT-002</span>
             <h3 class="project-title">Lark咨询会议与用户详情回写</h3>
           </div>
           <p class="project-desc">为已预约用户创建 Lark 会议、分享链接，依据会议参与事实更新跟进阶段并保存纪要。</p>
+          <div class="project-updated">2026-11-23</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-crm-consultation-meeting.html">PRD</a>
@@ -448,12 +470,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-20T17:07:33+08:00">
           <div class="project-main">
             <span class="project-code">REQ-FOLLOW-001</span>
             <h3 class="project-title">暂停跟进后直接产生跟进结果</h3>
           </div>
           <p class="project-desc">暂停线索可直接预约、拒绝或关闭，一次保存写入真实业务结果，不再强制先恢复跟进。</p>
+          <div class="project-updated">2026-11-20</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-paused-follow-up-direct-outcome.html">PRD</a>
@@ -461,12 +484,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-20T11:54:43+08:00">
           <div class="project-main">
             <span class="project-code">REQ-GRW-001</span>
             <h3 class="project-title">拉新裂变 MVP</h3>
           </div>
           <p class="project-desc">推荐关系、首课与购买奖励、社媒推荐审核、赠送订单及会员权益发放。</p>
+          <div class="project-updated">2026-11-20</div>
           <div class="project-status"><span class="status updated">评审后修订</span></div>
           <div class="actions">
             <a class="action primary" href="prd-referral-growth-mvp.html">PRD</a>
@@ -474,12 +498,13 @@
           </div>
         </article>
 
-        <article class="project-row">
+        <article class="project-row" data-updated="2026-11-12T10:29:31+08:00">
           <div class="project-main">
             <span class="project-code">REQ-TH-001</span>
             <h3 class="project-title">Referrals &amp; Rewards</h3>
           </div>
           <p class="project-desc">泰国好友推荐、体验与购买奖励、社媒审核及会员权益发放。</p>
+          <div class="project-updated">2026-11-12</div>
           <div class="project-status"><span class="status review">待评审</span></div>
           <div class="actions">
             <a class="action primary" href="prd-referrals-rewards.html">PRD</a>
@@ -489,5 +514,13 @@
       </div>
     </section>
   </main>
+  <script>
+    document.querySelectorAll(".project-list").forEach((list) => {
+      const rows = Array.from(list.querySelectorAll(":scope > .project-row"));
+      rows
+        .sort((left, right) => right.dataset.updated.localeCompare(left.dataset.updated))
+        .forEach((row) => list.appendChild(row));
+    });
+  </script>
 </body>
 </html>
