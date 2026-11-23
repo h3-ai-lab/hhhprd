@@ -19,14 +19,14 @@
 | CRM 整体产品体系 | 持续维护 | [整体框架](shared/memory/product-framework.md) | — |
 | CC日待办leads列表 | 待上传 | [PRD](projects/crm-operating-closure/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) |
 | CC活跃度看板 | 待评审 | [PRD](projects/cc-activity-dashboard/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/cc-activity-dashboard/prototype/) |
-| Referrals & Rewards | 待上传 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
+| Referrals & Rewards | 已废弃 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
 | 拉新裂变mvp | 评审后修订 | [PRD](projects/referral-growth-mvp/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/) |
-| 引入首跟节点&首跟看板 | 待上传 | [PRD](projects/first-contact/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
+| 引入首跟节点&首跟看板 | 已废弃 | [PRD](projects/first-contact/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/) |
 | 引入首跟节点&首跟看板-2 | 评审后修订 | [PRD](projects/first-contact-concise/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
-| 管理看板新增跟进漏斗 | 待评审 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
+| 管理看板新增跟进漏斗 | 评审后修订 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 | CRM组织架构&数据权限 | 评审后修订 | [PRD](projects/crm-org-data-permissions/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
 | CRM 多渠道消息发送（LINE 首发） | 待评审 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
-| 用户咨询预约时间 | 待评审 | [PRD](projects/user-consultation-lead/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/) |
+| 用户咨询预约时间 | 评审后修订 | [PRD](projects/user-consultation-lead/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/) |
 | 外呼能力一期 | 评审后修订 | [PRD](projects/outbound-capability/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/outbound-capability/prototype/) |
 | CRM 线索质量分析 | 评审后修订 | [PRD](projects/crm-lead-quality-analysis/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/) |
 | CRM学习计划与课程进度 | 待上传 | [PRD](projects/crm-learning-plan-progress/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-learning-plan-progress/prototype/) |
@@ -43,12 +43,15 @@
 | 待上传 | 本地项目已形成，但 Lark 中没有对应有效文档，或原 Lark 文档已删除 |
 | 待评审 | PRD 已上传到 Lark，尚未进入评审后修订 |
 | 评审后修订 | 已评审并明确进入评审后修改流程 |
+| 已废弃 | 用户明确决定停止推进，项目资料保留但不再继续上传或评审 |
 
 - 上传后继续编辑、覆盖、移动或修复格式，状态保持不变。
 - 删除 Lark 文档后恢复为“待上传”。
 - 评审完成且没有修订时，等待用户明确指定最终状态。
+- 用户要求恢复已废弃项目时，先回到“待上传”。
 - Lark 上传继续由“添加项目PRD到Lark目录”对话按原方式执行。
 - 集中状态和 Lark 文档链接记录在 [`projects/status.yaml`](projects/status.yaml)。
+- 列表排序为“待上传 → 待评审 → 评审后修订 → 已废弃”，同状态按更新时间倒序。
 
 ## GitHub Pages
 

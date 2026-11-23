@@ -4,7 +4,7 @@
 
 | 项 | 内容 |
 |---|---|
-| 状态 | 待评审 |
+| 状态 | 评审后修订 |
 | 需求编号 | REQ-DASH-007 |
 | 正式 PRD | [PRD](prd/PRD.md) |
 | 交互原型 | [打开完整交互原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |

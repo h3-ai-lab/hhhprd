@@ -1,6 +1,6 @@
 id: REQ-DASH-007
 name: 管理看板新增跟进漏斗
-status: 待评审
+status: 评审后修订
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

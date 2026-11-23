@@ -1,6 +1,6 @@
 id: REQ-CC-001
 name: 引入首跟节点&首跟看板
-status: 待上传
+status: 已废弃
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

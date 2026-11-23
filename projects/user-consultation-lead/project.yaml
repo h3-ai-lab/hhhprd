@@ -1,6 +1,6 @@
 id: REQ-CONSULT-001
 name: 用户咨询预约时间
-status: 待评审
+status: 评审后修订
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

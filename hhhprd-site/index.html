@@ -179,6 +179,11 @@
       background: #eef2f6;
       color: #475467;
     }
+    .status.deprecated {
+      background: #f1f3f5;
+      color: #98a2b3;
+      text-decoration: line-through;
+    }
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -366,21 +371,21 @@
           </div>
           <p class="project-desc">跨业务线保留首位 CC，展示首次分配、首次外呼和首次接通，支持筛选、下载与团队监控。</p>
           <div class="project-updated">2026-11-23</div>
-          <div class="project-status"><span class="status pending">待上传</span></div>
+          <div class="project-status"><span class="status deprecated">已废弃</span></div>
           <div class="actions">
             <a class="action primary" href="prd-first-contact.html">PRD</a>
             <a class="action" href="../projects/first-contact/prototype/index.html">原型</a>
           </div>
         </article>
 
-        <article class="project-row" data-updated="2026-11-12T10:29:31+08:00">
+        <article class="project-row" data-updated="2026-11-23T15:00:00+08:00">
           <div class="project-main">
             <span class="project-code">REQ-DASH-007</span>
             <h3 class="project-title">管理看板新增跟进漏斗</h3>
           </div>
           <p class="project-desc">在销售跟进页增加接通、预约、体验课完成和付费转化等关键指标。</p>
-          <div class="project-updated">2026-11-12</div>
-          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="project-updated">2026-11-23</div>
+          <div class="project-status"><span class="status updated">评审后修订</span></div>
           <div class="actions">
             <a class="action primary" href="prd-follow-up-funnel.html">PRD</a>
             <a class="action" href="../projects/follow-up-funnel/prototype/index.html">原型</a>
@@ -443,14 +448,14 @@
           </div>
         </article>
 
-        <article class="project-row" data-updated="2026-11-16T13:06:55+08:00">
+        <article class="project-row" data-updated="2026-11-23T15:01:00+08:00">
           <div class="project-main">
             <span class="project-code">REQ-CONSULT-001</span>
             <h3 class="project-title">用户咨询预约时间</h3>
           </div>
           <p class="project-desc">在用户中心与销售中心展示预约状态和预约时间，支持筛选、排序判断与导出。</p>
-          <div class="project-updated">2026-11-16</div>
-          <div class="project-status"><span class="status review">待评审</span></div>
+          <div class="project-updated">2026-11-23</div>
+          <div class="project-status"><span class="status updated">评审后修订</span></div>
           <div class="actions">
             <a class="action primary" href="prd-user-consultation-lead.html">PRD</a>
             <a class="action" href="../projects/user-consultation-lead/prototype/index.html">原型</a>
@@ -520,7 +525,7 @@
           </div>
           <p class="project-desc">泰国好友推荐、体验与购买奖励、社媒审核及会员权益发放。</p>
           <div class="project-updated">2026-11-23</div>
-          <div class="project-status"><span class="status pending">待上传</span></div>
+          <div class="project-status"><span class="status deprecated">已废弃</span></div>
           <div class="actions">
             <a class="action primary" href="prd-referrals-rewards.html">PRD</a>
             <a class="action" href="../projects/referrals-rewards/prototype/index.html">原型</a>
@@ -530,10 +535,22 @@
     </section>
   </main>
   <script>
+    const statusPriority = {
+      "待上传": 0,
+      "待评审": 1,
+      "评审后修订": 2,
+      "已废弃": 3
+    };
     document.querySelectorAll(".project-list").forEach((list) => {
       const rows = Array.from(list.querySelectorAll(":scope > .project-row"));
       rows
-        .sort((left, right) => right.dataset.updated.localeCompare(left.dataset.updated))
+        .sort((left, right) => {
+          const leftStatus = left.querySelector(".project-status")?.textContent.trim() || "";
+          const rightStatus = right.querySelector(".project-status")?.textContent.trim() || "";
+          const leftRank = statusPriority[leftStatus] ?? 99;
+          const rightRank = statusPriority[rightStatus] ?? 99;
+          return leftRank - rightRank || right.dataset.updated.localeCompare(left.dataset.updated);
+        })
         .forEach((row) => list.appendChild(row));
     });
   </script>

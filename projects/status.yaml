@@ -40,7 +40,7 @@ projects:
   - id: REQ-CC-001
     slug: first-contact
     name: 引入首跟节点&首跟看板
-    status: 待上传
+    status: 已废弃
     lark_url: null
   - id: REQ-CC-002
     slug: first-contact-concise
@@ -50,7 +50,7 @@ projects:
   - id: REQ-DASH-007
     slug: follow-up-funnel
     name: 管理看板新增跟进漏斗
-    status: 待评审
+    status: 评审后修订
     lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/S1zEdYWs3oB4qsxhac0jKKdMpuw
   - id: REQ-OB-001
     slug: outbound-capability
@@ -70,10 +70,10 @@ projects:
   - id: REQ-TH-001
     slug: referrals-rewards
     name: Referrals & Rewards
-    status: 待上传
+    status: 已废弃
     lark_url: null
   - id: REQ-CONSULT-001
     slug: user-consultation-lead
     name: 用户咨询预约时间
-    status: 待评审
+    status: 评审后修订
     lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/DTfQdxpPDonX3GxDiE3jsF7SpMx
