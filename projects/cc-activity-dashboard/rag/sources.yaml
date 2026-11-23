@@ -1,0 +1,23 @@
+version: 1
+sources:
+  - id: sales-consistency-dashboard-image
+    type: user-provided-image
+    path: /var/folders/r7/dsk___6j3vxbrc9zwd53rr180000gn/T/codex-clipboard-d1267824-e334-456c-8860-c24c8895447f.png
+    purpose: 现有 Sales Tracking 指标、风险分级、CC 明细与 Rebecca 的 CRM 落地诉求
+    priority: authoritative
+  - id: product-milestone-meeting-minutes
+    url: https://qjphu5vphyf4.jp.larksuite.com/docx/EPMidbJS9oR8pXxJvOfjkRx4pJe
+    purpose: CC 转化路径验证、业务数据和产品里程碑背景
+    priority: high
+  - id: product-milestone-meeting-transcript
+    url: https://qjphu5vphyf4.jp.larksuite.com/docx/QB3AdsXrcoRcuqxHT14jDKoQpFf
+    purpose: CC journey、AI-CC 和 CRM 边界的原始讨论
+    priority: high
+  - id: crm-dashboard-manual
+    path: ../../../../crm-manual/docs/dashboard/D-01.md
+    purpose: CRM 管理看板现有页面、筛选和权限的二手资料
+    priority: secondary
+  - id: crm-dashboard-snapshot
+    path: ../../../../crm-manual/docs/images/D-01-dashboard.png
+    purpose: CRM 管理看板页面现状快照
+    priority: secondary
