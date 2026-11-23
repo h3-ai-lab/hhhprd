@@ -711,6 +711,60 @@
         ]
       },
       {
+        id: "LD-261120-1004", name: "Pham Gia Linh", line: "Vietnam", intent: "neutral",
+        status: "unpaid", stage: "unreached", owner: "Linh Nguyen",
+        account: "linh.pham@mail.vn", phone: "**** 0412", appointmentHistory: 0,
+        pauseReason: "",
+        history: [
+          { action: "outbound", label: "actionOutboundUnreached", at: "2026-11-20 09:00", note: "系统自动记录未接通。", before: "waiting_call", after: "unreached" }
+        ]
+      },
+      {
+        id: "LD-261120-1007", name: "Ahmad Faiz", line: "Malaysia", intent: "interested",
+        status: "trial", stage: "waiting_booking", owner: "Linh Nguyen",
+        account: "faiz@mail.my", phone: "**** 0731", appointmentHistory: 0,
+        pauseReason: "",
+        history: [
+          { action: "outbound", label: "actionOutboundConnected", at: "2026-11-20 09:20", note: "已接通，等待确认预约。", before: "waiting_call", after: "waiting_booking" }
+        ]
+      },
+      {
+        id: "LD-261120-1008", name: "Somchai Chan", line: "Thailand", intent: "interested",
+        status: "unpaid", stage: "booked", owner: "Linh Nguyen",
+        account: "somchai@mail.th", phone: "**** 0812", appointmentHistory: 1,
+        pauseReason: "",
+        history: [
+          { action: "create", label: "actionCreate", at: "2026-11-20 10:00", note: "已预约 11 月 25 日 14:00 咨询。", before: "waiting_booking", after: "booked" }
+        ]
+      },
+      {
+        id: "LD-261120-1009", name: "Lim Wei Jie", line: "Singapore", intent: "neutral",
+        status: "unpaid", stage: "no_show", owner: "Linh Nguyen",
+        account: "weijie@mail.sg", phone: "**** 0914", appointmentHistory: 1,
+        pauseReason: "",
+        history: [
+          { action: "no_show", label: "actionNoShow", at: "2026-11-19 15:30", note: "客户未出席本次咨询。", before: "booked", after: "no_show" }
+        ]
+      },
+      {
+        id: "LD-261120-1010", name: "Nguyen Thu Trang", line: "Vietnam", intent: "interested",
+        status: "unpaid", stage: "incomplete", owner: "Linh Nguyen",
+        account: "trang.nguyen@mail.vn", phone: "**** 1025", appointmentHistory: 1,
+        pauseReason: "",
+        history: [
+          { action: "incomplete", label: "actionAttendedIncomplete", at: "2026-11-19 16:20", note: "客户出勤，咨询中途离开。", before: "booked", after: "incomplete" }
+        ]
+      },
+      {
+        id: "LD-261120-1011", name: "Kanya P.", line: "Thailand", intent: "interested",
+        status: "unpaid", stage: "payment_pending", owner: "Linh Nguyen",
+        account: "kanya@mail.th", phone: "**** 1136", appointmentHistory: 1,
+        pauseReason: "",
+        history: [
+          { action: "completed", label: "actionAttendedComplete", at: "2026-11-19 17:00", note: "咨询完成，等待支付。", before: "booked", after: "payment_pending" }
+        ]
+      },
+      {
         id: "LD-261120-1001", name: "Nguyễn Minh Anh", line: "Vietnam", intent: "interested",
         status: "trial", stage: "paused", owner: "Linh Nguyen",
         account: "anh.nguyen@mail.vn", phone: "**** 0186", appointmentHistory: 0,

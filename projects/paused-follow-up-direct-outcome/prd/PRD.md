@@ -16,7 +16,7 @@
 
 [打开完整交互原型](https://h3-ai-lab.github.io/hhhprd/projects/paused-follow-up-direct-outcome/prototype/)
 
-原型可验证所有 Lead 外呼、未接通自动回写、已接通跟进、暂不跟进直接新建跟进、保持暂停、终态动作、语音信箱和双语切换。
+原型初始数据覆盖全部当前跟进阶段；可验证所有 Lead 外呼、未接通自动回写、已接通跟进、暂不跟进直接新建跟进、保持暂停、终态动作、语音信箱和双语切换。
 
 ## 要解决什么
 
