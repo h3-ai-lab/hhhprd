@@ -15,8 +15,8 @@ projects:
   - id: PROG-CRM-001
     slug: crm-operating-closure
     name: CC 快捷工作队列
-    status: 待上传
-    lark_url: null
+    status: 待评审
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/wiki/CK3NwSQh0i5bugkFcnqj0Blpp5w
   - id: REQ-DASH-008
     slug: cc-activity-dashboard
     name: CC活跃度看板

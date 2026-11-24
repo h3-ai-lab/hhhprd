@@ -19,7 +19,7 @@
 | CRM 整体产品体系 | 持续维护 | [整体框架](shared/memory/product-framework.md) | — |
 | CRM渠道线索自动分配到小组 | 待上传 | [PRD](projects/crm-channel-lead-routing/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-channel-lead-routing/prototype/) |
 | 已付费列表调整正式课等级 | 待上传 | [PRD](projects/formal-course-level/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/formal-course-level/prototype/) |
-| CC 快捷工作队列 | 待上传 | [PRD](projects/crm-operating-closure/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) |
+| CC 快捷工作队列 | 待评审 | [PRD](projects/crm-operating-closure/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) |
 | CC活跃度看板 | 待评审 | [PRD](projects/cc-activity-dashboard/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/cc-activity-dashboard/prototype/) |
 | Referrals & Rewards | 已废弃 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
 | 拉新裂变mvp | 评审后修订 | [PRD](projects/referral-growth-mvp/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referral-growth-mvp/prototype/) |
