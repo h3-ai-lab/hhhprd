@@ -82,6 +82,7 @@ const leads = [
   { id: "LD-20261111-0181", name: "Nguyen Minh Anh", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L3", account: "anh.nguyen@mail.vn", source: "TikTok · 越南英语提升", orgId: "a1", ownerId: "m_s1", firstOwnerId: "m_s2", stage: "跟进中", calls: 3, connected: 2, paid: false, phone: "**** 0186", register: "2026-11-11 09:32" },
   { id: "LD-20261111-0122", name: "Nguyen Thu Trang", intent: "已预约", status: "已注册", type: "正式用户", age: "成人", course: "L2", account: "trang.nguyen@mail.vn", source: "A1组 · 回访", orgId: "a1", ownerId: "m_s2", firstOwnerId: "m_s2", stage: "已预约", calls: 2, connected: 1, paid: false, phone: "**** 0274", register: "2026-11-11 10:04" },
   { id: "LD-20261111-0179", name: "Tran Bao Chau", intent: "有意向", status: "已注册", type: "正式用户", age: "青少年", course: "L2", account: "chau.tran@mail.vn", source: "Meta · 体验课", orgId: "a1", ownerId: "", firstOwnerId: "m_s1", stage: "待领取", calls: 0, connected: 0, paid: false, phone: "**** 0281", register: "2026-11-11 09:18" },
+  { id: "LD-20261111-0131", name: "Pham Bao Chau", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L2", account: "bao.chau@mail.vn", source: "Google · Search", orgId: "b1", ownerId: "", firstOwnerId: "m_s3", stage: "待领取", calls: 0, connected: 0, paid: false, phone: "**** 0319", register: "2026-11-11 09:06" },
   { id: "LD-20261111-0173", name: "Le Thu Ha", intent: "未填写", status: "已注册", type: "正式用户", age: "成人", course: "L1", account: "ha.le@mail.vn", source: "Messenger · 在线咨询", orgId: "a2", ownerId: "m_s2", firstOwnerId: "m_s1", stage: "已预约", calls: 4, connected: 3, paid: true, phone: "**** 0366", register: "2026-11-11 08:56" },
   { id: "LD-20261111-0168", name: "Pham Gia Linh", intent: "有意向", status: "已注册", type: "正式用户", age: "成人", course: "L4", account: "linh.pham@mail.vn", source: "离屏 · A部活动", orgId: "a1", ownerId: "", firstOwnerId: "m_s2", stage: "待领取", calls: 0, connected: 0, paid: false, phone: "**** 0412", register: "2026-11-11 08:21" },
   { id: "LD-20261111-0154", name: "Vo Minh Khang", intent: "有意向", status: "已付费", type: "正式用户", age: "成人", course: "L3", account: "khang.vo@mail.vn", source: "Google · Search", orgId: "b1", ownerId: "m_s3", firstOwnerId: "m_s3", stage: "已付费", calls: 2, connected: 2, paid: true, phone: "**** 0573", register: "2026-11-10 21:08" },
@@ -466,17 +467,19 @@ function hasOrganizationScope() {
   return user.roleId === "role_super" || memberGrants(user).some((grant) => grant.scope === "line" || grant.scope === "nodes");
 }
 
+function grantedBusinessLineRoots() {
+  const user = currentUser();
+  if (user.roleId === "role_super") return orgs.filter((org) => org.level === 1);
+  const lines = new Set(memberGrants(user).map((grant) => grant.line));
+  return orgs.filter((org) => org.level === 1 && lines.has(org.line));
+}
+
 function publicPoolLeadsForCurrentUser() {
   const user = currentUser();
   return leads.filter((lead) => {
     if (lead.ownerId) return false;
     if (user.roleId === "role_super") return true;
-    return memberGrants(user).some((grant) => {
-      if (grant.line !== orgById(lead.orgId)?.line) return false;
-      if (grant.scope === "line") return true;
-      if (grant.scope === "nodes") return (grant.orgIds || []).some((orgId) => subtreeIds(orgId).includes(lead.orgId));
-      return lead.orgId === grant.primaryOrgId;
-    });
+    return memberGrants(user).some((grant) => grant.line === orgById(lead.orgId)?.line);
   });
 }
 
@@ -494,7 +497,7 @@ function actionScopeOrgIds() {
 
 function renderSales() {
   const allowed = allowedOperatorOrgs();
-  const scopeFilterOrgs = hasOrganizationScope() ? allowed : visibleBusinessLineRoots();
+  const scopeFilterOrgs = hasOrganizationScope() ? allowed : grantedBusinessLineRoots();
   const scopeFilterIds = new Set(scopeFilterOrgs.map((org) => org.id));
   if (!scopeFilterIds.has(state.salesOrg)) {
     const preferred = currentUser().primaryOrgId;
@@ -1183,7 +1186,7 @@ function memberGrantCardsHtml() {
           <select class="select" data-grant-primary="${escapeHtml(line)}"><option value="">请选择主组织</option>${orgOptions(line, draft.primaryOrgId || "")}</select>
         </div>
         ${draft.scope === "nodes" ? `<div class="form-item full"><label>授权组织 <em>*</em></label><div>${memberOrgSelectorHtml(line)}</div></div>` : ""}
-        ${draft.scope === "self" ? '<div class="form-item full"><div class="scope-note">本人包含本人账号过去和当前产生的全部数据，调岗或组织变化后仍可查看；不含其他成员线索和公共池。</div></div>' : ""}
+        ${draft.scope === "self" ? '<div class="form-item full"><div class="scope-note">本人仅包含当前归属为本人的线索及其全部关联记录；线索转派后原归属人不再可见。</div></div>' : ""}
       </div>
     </section>`;
   }).join("");
