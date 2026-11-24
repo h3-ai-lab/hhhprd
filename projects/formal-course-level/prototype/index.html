@@ -74,7 +74,8 @@
     .row-actions { display: flex; align-items: center; gap: 7px; }
     .call-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border: 0; border-radius: 6px; color: #fff; background: #3c85ee; }
     .more-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 0; border-radius: 6px; color: #fff; background: #57a8f7; }
-    .more-menu { position: absolute; right: 8px; top: 44px; z-index: 20; width: 150px; padding: 6px 0; border: 1px solid #e3e7ec; border-radius: 4px; background: #fff; box-shadow: var(--shadow); text-align: left; }
+    .more-menu { width: 158px; padding: 6px 0; border: 1px solid #e3e7ec; border-radius: 4px; background: #fff; box-shadow: var(--shadow); text-align: left; }
+    .more-menu.floating { position: fixed; z-index: 120; }
     .more-menu button { width: 100%; padding: 8px 14px; border: 0; color: #4b5563; background: #fff; text-align: left; }
     .more-menu button:hover { color: var(--blue); background: #f5f9ff; }
     .empty { padding: 60px 20px; text-align: center; color: var(--muted); }
@@ -284,9 +285,8 @@
       return `<input class="filter-control" data-filter="${key}" value="${esc(state.filters[key])}" placeholder="${esc(placeholder)}">`;
     }
 
-    function renderMenu(lead) {
-      if (state.menuId !== lead.id) return "";
-      return `<div class="more-menu" data-menu>
+    function menuMarkup(lead) {
+      return `<div class="more-menu floating" data-menu>
         <button type="button" data-existing="report">${esc(t("trialReport"))}</button>
         <button type="button" data-existing="follow">${esc(t("updateFollow"))}</button>
         <button type="button" data-level-action="${lead.id}">${esc(t("adjustLevel"))}</button>
@@ -318,7 +318,7 @@
             <div class="row-actions">
               <button class="call-btn" type="button" data-call="${lead.id}">☎ ${esc(t("call"))}</button>
               <button class="more-btn" type="button" data-more="${lead.id}">${esc(t("more"))}⌄</button>
-            </div>${renderMenu(lead)}
+            </div>
           </td>
         </tr>`).join("")}</tbody>
       </table></div>`;
@@ -336,6 +336,7 @@
         <section class="filters">${renderFilters()}</section>
         <section class="panel">${renderRows()}</section>`;
       bind();
+      renderFloatingMenu();
     }
 
     function bind() {
@@ -373,17 +374,31 @@
       document.querySelectorAll("[data-more]").forEach((btn) => btn.addEventListener("click", (event) => {
         event.stopPropagation(); state.menuId = state.menuId === btn.dataset.more ? null : btn.dataset.more; render();
       }));
-      document.querySelectorAll("[data-level-action]").forEach((btn) => btn.addEventListener("click", (event) => {
-        event.stopPropagation(); state.menuId = null; openLevelModal(btn.dataset.levelAction);
-      }));
-      document.querySelectorAll("[data-existing]").forEach((btn) => btn.addEventListener("click", (event) => {
-        event.stopPropagation(); state.menuId = null; openExistingModal(btn.dataset.existing, findLeadFromMenu(btn));
-      }));
     }
 
-    function findLeadFromMenu(btn) {
-      const row = btn.closest("tr");
-      return leads.find((lead) => row?.textContent.includes(lead.id));
+    function renderFloatingMenu() {
+      document.querySelector("[data-menu]")?.remove();
+      if (!state.menuId) return;
+      const anchor = [...document.querySelectorAll("[data-more]")].find((btn) => btn.dataset.more === state.menuId);
+      const lead = leads.find((item) => item.id === state.menuId);
+      if (!anchor || !lead) return;
+      const rect = anchor.getBoundingClientRect();
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = menuMarkup(lead);
+      const menu = wrapper.firstElementChild;
+      menu.style.left = `${Math.max(8, Math.min(window.innerWidth - 166, rect.right - 158))}px`;
+      menu.style.top = `${rect.bottom + 4}px`;
+      document.body.appendChild(menu);
+      menu.querySelector("[data-level-action]")?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        state.menuId = null;
+        openLevelModal(lead.id);
+      });
+      menu.querySelectorAll("[data-existing]").forEach((btn) => btn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        state.menuId = null;
+        openExistingModal(btn.dataset.existing, lead);
+      }));
     }
 
     function openLevelModal(id) {
@@ -481,8 +496,10 @@
     $("#overlay").addEventListener("click", (event) => { if (event.target === $("#overlay")) closeModal(); });
     document.addEventListener("keydown", (event) => { if (event.key === "Escape") { if (state.modal) closeModal(); else if (state.menuId) { state.menuId = null; render(); } } });
     document.addEventListener("click", (event) => {
-      if (state.menuId && !event.target.closest(".action-cell")) { state.menuId = null; render(); }
+      if (state.menuId && !event.target.closest("[data-more]") && !event.target.closest("[data-menu]")) { state.menuId = null; render(); }
     });
+    window.addEventListener("resize", () => { if (state.menuId) { state.menuId = null; render(); } });
+    window.addEventListener("scroll", () => { if (state.menuId) { state.menuId = null; render(); } }, true);
     document.querySelectorAll(".lang-btn").forEach((btn) => btn.addEventListener("click", () => {
       state.lang = btn.dataset.lang;
       localStorage.setItem("formal-level-lang", state.lang);
