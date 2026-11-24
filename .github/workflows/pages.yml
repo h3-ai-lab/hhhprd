@@ -47,6 +47,7 @@ jobs:
           test -f hhhprd-site/prd-crm-consultation-meeting.html
           test -f hhhprd-site/prd-paused-follow-up-direct-outcome.html
           test -f hhhprd-site/prd-crm-operating-closure.html
+          test -f hhhprd-site/prd-formal-course-level.html
           test -f hhhprd-site/prd-cc-activity-dashboard.html
           for project in projects/*/; do
             test -f "$project/project.yaml"
@@ -81,6 +82,7 @@ jobs:
           cp hhhprd-site/prd-crm-consultation-meeting.html public/prd-crm-consultation-meeting.html
           cp hhhprd-site/prd-paused-follow-up-direct-outcome.html public/prd-paused-follow-up-direct-outcome.html
           cp hhhprd-site/prd-crm-operating-closure.html public/prd-crm-operating-closure.html
+          cp hhhprd-site/prd-formal-course-level.html public/prd-formal-course-level.html
           cp hhhprd-site/prd-cc-activity-dashboard.html public/prd-cc-activity-dashboard.html
           cp -R projects/. public/projects/
           for project in projects/*/; do
