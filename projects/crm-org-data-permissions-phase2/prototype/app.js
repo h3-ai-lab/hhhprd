@@ -14,6 +14,10 @@ const state = {
   salesCurrentCc: "",
   salesStage: "",
   salesStatus: "",
+  userSearch: "",
+  orderSearch: "",
+  teamMonitorOrg: "r1",
+  teamMonitorFirstCc: "",
   dashboardOrg: "r1",
   dashboardMode: "team",
   logModule: "",
@@ -240,7 +244,11 @@ function setChrome() {
   const configs = {
     system: ["系统管理 / 系统配置", "系统配置"],
     sales: ["销售管理 / 销售中心", "销售中心"],
-    dashboard: ["系统管理 / 数据权限", "数据权限"]
+    dashboard: ["管理看板 / 数据概览", "管理看板"],
+    users: ["用户管理 / 用户列表", "用户管理"],
+    orders: ["订单管理 / 订单列表", "订单管理"],
+    "team-monitor": ["销售管理 / 团队监控", "团队监控"],
+    marketing: ["营销中心 / 渠道与落地页", "营销中心"]
   };
   const [crumb, title] = configs[state.route];
   el.breadcrumb.innerHTML = `Dino CRM <span>/</span> ${crumb.replace(" / ", " <span>/</span> ")}`;
@@ -250,6 +258,9 @@ function setChrome() {
   document.querySelectorAll(".phase-option").forEach((item) => item.classList.toggle("is-active", Number(item.dataset.phase) === state.phase));
   document.querySelectorAll("[data-phase-only]").forEach((item) => {
     item.hidden = Number(item.dataset.phaseOnly) > state.phase;
+  });
+  document.querySelectorAll("[data-manager-only]").forEach((item) => {
+    item.hidden = !hasOrganizationScope();
   });
   const user = currentUser();
   document.getElementById("identity-switch").value = user.id;
@@ -549,6 +560,93 @@ function renderSales() {
   </section>`;
 }
 
+function renderUsers() {
+  const rows = accessibleLeadsForCurrentUser().filter((lead) =>
+    !state.userSearch || `${lead.id}${lead.name}${lead.account}${lead.phone}`.toLowerCase().includes(state.userSearch.toLowerCase())
+  );
+  el.content.innerHTML = `<section class="page-card">
+    <div class="page-heading"><div class="section-title">用户列表</div></div>
+    <div class="filters"><input class="field search-field" id="user-search" placeholder="搜索用户 ID / 姓名 / 登录账号 / 手机号" value="${escapeHtml(state.userSearch)}"></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>用户 ID</th><th>学生姓名</th><th>手机号</th><th>登录账号</th><th>业务线</th><th>当前 CC</th><th>用户状态</th><th>操作</th></tr></thead>
+      <tbody>${rows.map((lead) => `<tr><td>${lead.id}</td><td>${escapeHtml(lead.name)}</td><td>${lead.phone}</td><td>${escapeHtml(lead.account)}</td><td>${escapeHtml(orgById(lead.orgId)?.line)}</td><td>${escapeHtml(memberName(lead.ownerId))}</td><td><span class="tag ${lead.paid ? "green" : "blue"}">${lead.status}</span></td><td><button class="btn ghost" data-lead-view="${lead.id}">查看线索</button></td></tr>`).join("") || '<tr><td colspan="8" class="secondary-text">当前范围暂无用户</td></tr>'}</tbody>
+    </table></div>
+  </section>`;
+}
+
+function renderOrders() {
+  const rows = accessibleLeadsForCurrentUser()
+    .filter((lead) => lead.paid)
+    .filter((lead) => !state.orderSearch || `${lead.id}${lead.name}${lead.account}`.toLowerCase().includes(state.orderSearch.toLowerCase()));
+  el.content.innerHTML = `<section class="page-card">
+    <div class="page-heading"><div class="section-title">订单列表</div></div>
+    <div class="filters"><input class="field search-field" id="order-search" placeholder="搜索订单 / 用户 ID / 姓名" value="${escapeHtml(state.orderSearch)}"></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>订单 ID</th><th>用户 ID</th><th>学生姓名</th><th>业务线</th><th>归属组织</th><th>当前 CC</th><th>订单状态</th><th>操作</th></tr></thead>
+      <tbody>${rows.map((lead) => `<tr><td>ORD-${lead.id.slice(-6)}</td><td>${lead.id}</td><td>${escapeHtml(lead.name)}</td><td>${escapeHtml(orgById(lead.orgId)?.line)}</td><td>${escapeHtml(orgPath(lead.orgId))}</td><td>${escapeHtml(memberName(lead.ownerId))}</td><td><span class="tag green">已支付</span></td><td><button class="btn ghost" data-lead-view="${lead.id}">查看线索</button></td></tr>`).join("") || '<tr><td colspan="8" class="secondary-text">当前范围暂无订单</td></tr>'}</tbody>
+    </table></div>
+  </section>`;
+}
+
+function renderTeamMonitor() {
+  if (!hasOrganizationScope()) {
+    el.content.innerHTML = `<section class="page-card"><div class="page-heading"><div class="section-title">团队监控</div></div><div class="org-select-empty">当前账号没有团队监控权限</div></section>`;
+    return;
+  }
+  const allowed = allowedOperatorOrgs();
+  const allowedIds = new Set(allowed.map((org) => org.id));
+  if (!allowedIds.has(state.teamMonitorOrg)) state.teamMonitorOrg = currentUser().primaryOrgId;
+  const ids = new Set(subtreeIds(state.teamMonitorOrg));
+  const scoped = leads.filter((lead) => ids.has(lead.orgId));
+  const firstCcIds = [...new Set(scoped.map((lead) => lead.firstOwnerId).filter(Boolean))];
+  const filtered = scoped.filter((lead) => !state.teamMonitorFirstCc || lead.firstOwnerId === state.teamMonitorFirstCc);
+  const filteredIds = new Set(filtered.map((lead) => lead.id));
+  const calls = callRecords.filter((call) => filteredIds.has(call.leadId));
+  const firstActualCount = filtered.filter((lead) => lead.firstOwnerId).length;
+  const connectedCalls = calls.filter((call) => call.result === "已接通").length;
+  const firstOwners = [...new Set(filtered.map((lead) => lead.firstOwnerId).filter(Boolean))];
+  el.content.innerHTML = `<section class="page-card">
+    <div class="page-heading"><div class="section-title">团队监控</div><button class="btn" data-action="team-monitor-export">${icon("download")}导出当前视图</button></div>
+    <div class="filters">
+      <select class="select" id="team-monitor-org-filter">${allowed.map((org) => `<option value="${org.id}" ${state.teamMonitorOrg === org.id ? "selected" : ""}>${"　".repeat(Math.max(0, org.level - 1))}${escapeHtml(org.name)} · ${levelName(org.level)}</option>`).join("")}</select>
+      <select class="select" id="team-monitor-first-filter"><option value="">全部首跟 CC</option>${firstCcIds.map((id) => `<option value="${id}" ${state.teamMonitorFirstCc === id ? "selected" : ""}>${escapeHtml(memberName(id))}</option>`).join("")}</select>
+      <div class="actions"><button class="btn" data-action="reset-team-monitor">重置筛选</button><button class="btn primary" data-action="apply-team-monitor">${icon("search")}应用筛选</button></div>
+    </div>
+    <div class="metric-grid">
+      <article class="metric-card"><div class="metric-label">首跟承接量</div><div class="metric-value">${firstActualCount}</div><div class="metric-foot">按 Lead ID 去重</div></article>
+      <article class="metric-card"><div class="metric-label">首跟覆盖率</div><div class="metric-value">${filtered.length ? (firstActualCount / filtered.length * 100).toFixed(1) : "0.0"}%</div><div class="metric-foot">${firstActualCount} / ${filtered.length}</div></article>
+      <article class="metric-card"><div class="metric-label">外呼次数</div><div class="metric-value">${calls.length}</div><div class="metric-foot">按 Call ID 去重</div></article>
+      <article class="metric-card"><div class="metric-label">接通次数</div><div class="metric-value">${connectedCalls}</div><div class="metric-foot">${calls.length ? (connectedCalls / calls.length * 100).toFixed(1) : "0.0"}% 外呼接通率</div></article>
+    </div>
+    <div class="dashboard-panel"><div class="panel-title"><h2>首跟 CC 生产力</h2><p>承接、外呼和接通按线索归属范围统计</p></div>
+      <div class="table-wrap"><table><thead><tr><th>首跟 CC</th><th>首跟承接量</th><th>外呼次数</th><th>接通次数</th></tr></thead><tbody>
+        ${firstOwners.map((ownerId) => {
+          const ownerLeads = filtered.filter((lead) => lead.firstOwnerId === ownerId);
+          const ownerLeadIds = new Set(ownerLeads.map((lead) => lead.id));
+          const ownerCalls = callRecords.filter((call) => ownerLeadIds.has(call.leadId));
+          return `<tr><td>${escapeHtml(memberName(ownerId))}</td><td>${ownerLeads.length}</td><td>${ownerCalls.length}</td><td>${ownerCalls.filter((call) => call.result === "已接通").length}</td></tr>`;
+        }).join("") || '<tr><td colspan="4" class="secondary-text">当前范围暂无数据</td></tr>'}
+      </tbody></table></div>
+    </div>
+  </section>`;
+}
+
+function renderMarketing() {
+  const channels = [
+    ["TikTok", "越南英语提升", "启用"],
+    ["Meta", "体验课", "启用"],
+    ["WhatsApp", "销售跟进", "启用"],
+    ["KOL Saudi", "KOL 落地页", "启用"]
+  ];
+  el.content.innerHTML = `<section class="page-card">
+    <div class="page-heading"><div class="section-title">营销中心</div><button class="btn primary" data-action="marketing-config">${icon("plus")}新增渠道</button></div>
+    <div class="permission-hint">渠道、落地页和营销配置按业务线配置权限控制，组织数据授权不会自动扩大整线配置权。</div>
+    <div class="table-wrap"><table><thead><tr><th>渠道</th><th>落地页 / 活动</th><th>状态</th><th>操作</th></tr></thead><tbody>
+      ${channels.map(([channel, landing, status]) => `<tr><td>${channel}</td><td>${landing}</td><td><span class="tag green">${status}</span></td><td><button class="btn ghost" data-action="marketing-config">配置</button></td></tr>`).join("")}
+    </tbody></table></div>
+  </section>`;
+}
+
 function aggregateFor(orgId) {
   const ids = new Set(subtreeIds(orgId));
   const scoped = leads.filter((lead) => ids.has(lead.orgId));
@@ -652,6 +750,10 @@ function render() {
   if (state.route === "system") renderSystem();
   if (state.route === "sales") renderSales();
   if (state.route === "dashboard") renderDashboard();
+  if (state.route === "users") renderUsers();
+  if (state.route === "orders") renderOrders();
+  if (state.route === "team-monitor") renderTeamMonitor();
+  if (state.route === "marketing") renderMarketing();
 }
 
 function setRoute(route, tab) {
@@ -682,7 +784,7 @@ function routeFromHash() {
   if (path.startsWith("system/")) {
     state.route = "system";
     state.systemTab = path.split("/")[1] || "organization";
-  } else if (path === "sales" || path === "dashboard") {
+  } else if (["sales", "dashboard", "users", "orders", "team-monitor", "marketing"].includes(path)) {
     state.route = path;
   } else {
     state.route = "system";
@@ -1440,6 +1542,14 @@ el.content.addEventListener("click", (event) => {
   }
   if (action === "sales-settings") return showToast("分配与掉库设置");
   if (action === "reassign-workbench") return openReassignWorkbench();
+  if (action === "reset-team-monitor") {
+    state.teamMonitorOrg = currentUser().primaryOrgId;
+    state.teamMonitorFirstCc = "";
+    return render();
+  }
+  if (action === "apply-team-monitor") return render();
+  if (action === "team-monitor-export") return showToast("已按当前组织与首跟 CC 范围生成导出");
+  if (action === "marketing-config") return showToast("营销配置权限按业务线和功能角色校验");
   if (action === "add-role" || action === "edit-role") return showToast("角色权限编辑");
 });
 
@@ -1450,6 +1560,14 @@ el.content.addEventListener("input", (event) => {
     panel.querySelector(".org-tree").innerHTML = treeHtml();
   }
   if (event.target.id === "member-search") state.memberSearchDraft = event.target.value;
+  if (event.target.id === "user-search") {
+    state.userSearch = event.target.value;
+    render();
+  }
+  if (event.target.id === "order-search") {
+    state.orderSearch = event.target.value;
+    render();
+  }
   if (event.target.id === "sales-search") {
     state.salesSearch = event.target.value;
     clearTimeout(window.__salesSearchTimer);
@@ -1490,6 +1608,15 @@ el.content.addEventListener("change", (event) => {
   }
   if (event.target.id === "dashboard-org-filter") {
     state.dashboardOrg = event.target.value;
+    render();
+  }
+  if (event.target.id === "team-monitor-org-filter") {
+    state.teamMonitorOrg = event.target.value;
+    state.teamMonitorFirstCc = "";
+    render();
+  }
+  if (event.target.id === "team-monitor-first-filter") {
+    state.teamMonitorFirstCc = event.target.value;
     render();
   }
   if (event.target.id === "log-module-filter") {
