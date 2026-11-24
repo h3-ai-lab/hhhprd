@@ -28,6 +28,7 @@
 - Use "业务线" consistently for market and data dimensions in PRDs and prototypes. Do not describe those dimensions as "国家", even when source documents or stored values use a country-based label.
 - Do not ask the user to choose a language.
 - Any new feature, page, action, field group, or data list must use `shared/skills/crm-prd-authoring/references/04-permission-audit.md` and output complete RBAC permission data.
+- Every new or changed filter, field, list/table, dashboard, metric, drill-down, export, or bulk action must apply `shared/skills/crm-prd-authoring/references/08-data-scope-and-attribution.md` and explicitly specify personal scope, organization-architecture scope, and full-authorized-node scope, including data visibility, actionable operations, candidate range, and post-operation ownership. "Full-authorized-node scope" means all nodes authorized to the current account, never all-company scope by default.
 - Keep exactly one complete interactive prototype URL per PRD.
 - For post-review edits, mark PRD revisions in place with `<del>[原/删除] …</del>` and `<ins>[新增/现行] …</ins>` and maintain a versioned revision record.
 - Apply the revision markers only when the user explicitly describes the change as post-review. For pre-review changes, update the current PRD content directly without revision colors, strikethrough, change labels, or a revision record; always synchronize the prototype without markers.
