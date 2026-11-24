@@ -26,6 +26,7 @@
 | 引入首跟节点&首跟看板-2 | 评审后修订 | [PRD](projects/first-contact-concise/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/first-contact-concise/prototype/) |
 | 管理看板新增跟进漏斗 | 评审后修订 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 | CRM组织架构&数据权限 | 评审后修订 | [PRD](projects/crm-org-data-permissions/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
+| CRM组织数据权限二期 | 待评审 | [PRD](projects/crm-org-data-permissions-phase2/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions-phase2/prototype/) |
 | CRM 多渠道消息发送（LINE 首发） | 待评审 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
 | 用户咨询预约时间 | 评审后修订 | [PRD](projects/user-consultation-lead/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/) |
 | 外呼能力一期 | 评审后修订 | [PRD](projects/outbound-capability/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/outbound-capability/prototype/) |
@@ -86,6 +87,8 @@
 - 引入首跟节点&首跟看板原型：<https://h3-ai-lab.github.io/hhhprd/projects/first-contact/prototype/>
 - 引入首跟节点&首跟看板-2 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-first-contact-concise.html>
 - CRM组织架构&数据权限 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-org-data-permissions.html>
+- CRM组织数据权限二期 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-org-data-permissions-phase2.html>
+- CRM组织数据权限二期原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions-phase2/prototype/>
 
 ## 目录结构
 

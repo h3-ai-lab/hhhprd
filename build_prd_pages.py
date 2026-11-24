@@ -12,6 +12,7 @@ PROJECTS = {
     "first-contact-concise": "引入首跟节点&首跟看板-2",
     "follow-up-funnel": "管理看板新增跟进漏斗",
     "crm-org-data-permissions": "CRM组织架构&数据权限",
+    "crm-org-data-permissions-phase2": "CRM组织数据权限二期",
     "referral-growth-mvp": "拉新裂变mvp",
     "crm-line-messaging": "CRM 多渠道消息发送（LINE 首发）",
     "user-consultation-lead": "用户咨询预约时间",
