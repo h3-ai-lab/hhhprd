@@ -1501,7 +1501,7 @@ function openReassignWorkbench() {
   if (!sourceLeads.length) return showToast("当前可见范围内暂无可重新分配的线索");
   openModal(`<form id="reassign-form">
     <div class="modal-head"><h2 id="modal-title">重新分配线索</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
-    <div class="permission-hint">只能选择当前数据范围内可见的线索。CC 只能批量选择本人线索；目标 CC 可来自业务线动作范围内，但不会扩大源线索范围。</div>
+    <div class="permission-hint">只能选择当前数据范围内可见的线索。CC 只能批量选择本人线索；目标 CC 可选择同业务线下所有启用且具备有效主组织的 CC，但不会扩大源线索范围。</div>
     <div class="table-wrap" style="margin-bottom:14px"><table>
       <thead><tr><th>选择</th><th>线索</th><th>当前 CC</th><th>当前归属组织</th></tr></thead>
       <tbody>${sourceLeads.map((lead) => `<tr><td><input type="checkbox" name="leadIds" value="${lead.id}" data-reassign-lead="${lead.id}"></td><td><span class="primary-text">${lead.id}</span> · ${escapeHtml(lead.name)}</td><td>${escapeHtml(memberName(lead.ownerId))}</td><td>${escapeHtml(orgPath(lead.orgId))}</td></tr>`).join("")}</tbody>
