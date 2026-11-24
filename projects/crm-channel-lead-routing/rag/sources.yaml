@@ -1,0 +1,18 @@
+version: 1
+sources:
+  - id: crm-org-permissions-phase2
+    path: ../../../projects/crm-org-data-permissions-phase2/prd/PRD.md
+    purpose: 当前业务归属、组织范围、分配事件和人员组织关系
+    priority: authoritative
+  - id: crm-assignment-manual
+    path: ../../../../crm-manual/docs/system/A-02.md
+    purpose: 现有按业务线配置分配权重和掉库规则
+    priority: authoritative
+  - id: crm-live-check
+    path: ../../../projects/crm-org-data-permissions-phase2/research/LIVE-CRM-CHECK.md
+    purpose: 销售中心入口、现有设置入口和字段现状
+    priority: high
+  - id: crm-current-state
+    path: ../../../shared/memory/current-state.md
+    purpose: 当前用户、线索、分配与权限边界
+    priority: high

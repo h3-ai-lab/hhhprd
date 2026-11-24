@@ -24,6 +24,7 @@ PROJECTS = {
     "crm-operating-closure": "CC 快捷工作队列",
     "formal-course-level": "已付费列表调整正式课等级",
     "cc-activity-dashboard": "CC活跃度看板",
+    "crm-channel-lead-routing": "CRM渠道线索自动分配到小组",
 }
 STATIC_ARCHITECTURE_PAGES = {
     "call-center-self-built-roadmap.html",

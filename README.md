@@ -17,6 +17,7 @@
 | 项目 | 状态 | PRD | 原型 |
 |---|---|---|---|
 | CRM 整体产品体系 | 持续维护 | [整体框架](shared/memory/product-framework.md) | — |
+| CRM渠道线索自动分配到小组 | 待上传 | [PRD](projects/crm-channel-lead-routing/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-channel-lead-routing/prototype/) |
 | 已付费列表调整正式课等级 | 待上传 | [PRD](projects/formal-course-level/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/formal-course-level/prototype/) |
 | CC 快捷工作队列 | 待上传 | [PRD](projects/crm-operating-closure/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) |
 | CC活跃度看板 | 待评审 | [PRD](projects/cc-activity-dashboard/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/cc-activity-dashboard/prototype/) |
@@ -58,6 +59,8 @@
 ## GitHub Pages
 
 - 项目入口：<https://h3-ai-lab.github.io/hhhprd/>
+- CRM渠道线索自动分配到小组 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-channel-lead-routing.html>
+- CRM渠道线索自动分配到小组原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-channel-lead-routing/prototype/>
 - 已付费列表调整正式课等级 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-formal-course-level.html>
 - 已付费列表调整正式课等级原型：<https://h3-ai-lab.github.io/hhhprd/projects/formal-course-level/prototype/>
 - CRM经营闭环规划管理层汇报：<https://h3-ai-lab.github.io/hhhprd/crm-operating-closure.html>
