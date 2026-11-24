@@ -1,17 +1,17 @@
 version: 1
 updated_at: 2026-11-24
-source: "添加项目PRD到Lark目录"
+source: "更新 REQ-ASSIGN-001 Lark 上传状态"
 projects:
-  - id: REQ-ASSIGN-001
-    slug: crm-channel-lead-routing
-    name: CRM渠道线索自动分配到小组
-    status: 待上传
-    lark_url: null
   - id: REQ-LEVEL-001
     slug: formal-course-level
     name: 已付费列表调整正式课等级
     status: 待上传
     lark_url: null
+  - id: REQ-ASSIGN-001
+    slug: crm-channel-lead-routing
+    name: CRM渠道线索自动分配到小组
+    status: 待评审
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/GuVTdekPQoZCy0xv3PCj1yf8pEd
   - id: PROG-CRM-001
     slug: crm-operating-closure
     name: CC 快捷工作队列

@@ -1,6 +1,6 @@
 id: REQ-ASSIGN-001
 name: CRM渠道线索自动分配到小组
-status: 待上传
+status: 待评审
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md
