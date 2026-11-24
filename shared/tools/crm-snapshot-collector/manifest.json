@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Dino CRM Read-only Snapshot Collector",
+  "version": "1.0.0",
+  "description": "Capture CRM page structure from the user's authenticated browser without cookies, tokens, network responses, or table rows.",
+  "minimum_chrome_version": "110",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://crm.dinoai.ai/*",
+    "https://sa-manager.lionabc.com/*"
+  ],
+  "action": {
+    "default_title": "Dino CRM Snapshot",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dino CRM Snapshot</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202d;
+      --muted: #667085;
+      --line: #dde4ed;
+      --blue: #1f63d6;
+      --blue-soft: #edf4ff;
+      --green: #147a52;
+      --red: #b42318;
+      --amber: #a15c00;
+      --bg: #f5f7fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      width: 380px;
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font: 13px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    main { padding: 16px; }
+    h1 { margin: 0; font-size: 17px; }
+    .subtitle { margin: 4px 0 14px; color: var(--muted); }
+    .card {
+      margin-bottom: 12px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+    }
+    .field { display: grid; grid-template-columns: 1fr 92px; align-items: center; gap: 10px; margin-top: 9px; }
+    .field:first-child { margin-top: 0; }
+    input {
+      width: 100%;
+      min-height: 32px;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--ink);
+      background: #fff;
+    }
+    .actions { display: grid; gap: 8px; }
+    button {
+      min-height: 36px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    button.primary { color: #fff; border-color: var(--blue); background: var(--blue); }
+    button:disabled { cursor: not-allowed; opacity: .48; }
+    .status {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      min-height: 42px;
+    }
+    .dot { width: 8px; height: 8px; flex: 0 0 auto; margin-top: 6px; border-radius: 50%; background: var(--muted); }
+    .dot.running { background: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+    .dot.done { background: var(--green); }
+    .dot.error { background: var(--red); }
+    .status strong { display: block; font-size: 12px; }
+    .status span { color: var(--muted); word-break: break-word; }
+    .meta { margin-top: 8px; color: var(--muted); font-size: 11px; }
+    .notice {
+      margin: 0;
+      padding: 9px 10px;
+      border-radius: 8px;
+      color: #6d4b00;
+      background: #fff8e8;
+      font-size: 11px;
+    }
+    .secondary-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>CRM 只读页面快照</h1>
+    <p class="subtitle">使用当前登录状态采集页面结构，不读取业务行数据。</p>
+
+    <section class="card">
+      <div class="field">
+        <label for="max-pages">最多采集页面</label>
+        <input id="max-pages" type="number" min="1" max="200" value="80">
+      </div>
+      <div class="field">
+        <label for="wait-ms">每页等待毫秒</label>
+        <input id="wait-ms" type="number" min="600" max="10000" step="100" value="1600">
+      </div>
+    </section>
+
+    <section class="actions card">
+      <button id="capture-current" class="primary" type="button">采集当前页面</button>
+      <button id="capture-discovered" type="button">采集当前页及导航发现的页面</button>
+      <button id="stop-capture" type="button" disabled>停止采集</button>
+    </section>
+
+    <section class="card">
+      <div class="status">
+        <span id="status-dot" class="dot"></span>
+        <div>
+          <strong id="status-title">等待开始</strong>
+          <span id="status-detail">请先登录 CRM，并停留在允许访问的页面。</span>
+        </div>
+      </div>
+      <div id="status-meta" class="meta"></div>
+    </section>
+
+    <section class="secondary-actions">
+      <button id="download" type="button" disabled>下载快照 JSON</button>
+      <button id="clear" type="button">清除上次结果</button>
+    </section>
+
+    <p class="notice">
+      不采集 Cookie、Token、接口响应、表格行、输入值和下载文件。请勿把含敏感信息的截图放入公开仓库。
+    </p>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

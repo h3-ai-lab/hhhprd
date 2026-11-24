@@ -8,6 +8,10 @@ sources:
     path: source-register.md
     purpose: 全局结论来源索引
     priority: high
+  - id: crm-snapshot-collector
+    path: ../tools/crm-snapshot-collector
+    purpose: 在用户已登录浏览器中采集可供现状核对的只读 CRM 页面结构
+    priority: high
   - id: project-memory
     path: ../memory
     purpose: 已确认的业务事实、术语和跨项目决策
