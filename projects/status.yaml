@@ -47,6 +47,11 @@ projects:
     name: CRM组织架构&数据权限
     status: 评审后修订
     lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/I2PAdOAm6ojd3UxzpxSjJZoNppA
+  - id: REQ-ORG-002
+    slug: crm-org-data-permissions-phase2
+    name: CRM组织数据权限二期
+    status: 待评审
+    lark_url: https://qjphu5vphyf4.jp.larksuite.com/wiki/N3JTwPEk0ikpZ9kLhdzjVjibpDf
   - id: REQ-CC-001
     slug: first-contact
     name: 引入首跟节点&首跟看板
