@@ -63,6 +63,13 @@ const COPY = {
     keepRule: "保留",
     weightsTitle: "线索分配比例",
     recipient: "领取人",
+    primaryOrg: "主组织",
+    allOrgs: "全部主组织",
+    filterOrg: "筛选主组织",
+    selectedOrgs: "已选 {count} 个主组织",
+    selectedOrgOne: "已选 1 个主组织",
+    noSalesInOrg: "当前主组织下没有销售",
+    unassignedOrg: "未配置主组织",
     weight: "分配权重",
     email: "Email",
     weightHint: "权重为 0 表示不参与自动分配。",
@@ -151,6 +158,13 @@ const COPY = {
     keepRule: "Keep",
     weightsTitle: "Lead Allocation Ratio",
     recipient: "Assignee",
+    primaryOrg: "Primary Organization",
+    allOrgs: "All Primary Organizations",
+    filterOrg: "Filter Primary Organizations",
+    selectedOrgs: "{count} organizations selected",
+    selectedOrgOne: "1 organization selected",
+    noSalesInOrg: "No sales users in the selected organizations",
+    unassignedOrg: "No primary organization",
     weight: "Weight",
     email: "Email",
     weightHint: "A weight of 0 excludes the person from automatic assignment.",
@@ -213,17 +227,17 @@ const CHANNELS = {
 
 const WEIGHTS = {
   TH: [
-    { name: "sinhoong.tan", email: "sinhoong.tan@dinoai.ai", weight: 4 },
-    { name: "tracy.tam", email: "tracy.tam@dinoai.ai", weight: 4 },
-    { name: "pimnara", email: "pimnara@dinoai.ai", weight: 3 },
-    { name: "pimmada", email: "pimmada@dinoai.ai", weight: 3 },
-    { name: "prasong.boonmak", email: "prasong.boonmak@dinoai.ai", weight: 0 }
+    { name: "sinhoong.tan", email: "sinhoong.tan@dinoai.ai", orgId: "th_g1", weight: 4 },
+    { name: "tracy.tam", email: "tracy.tam@dinoai.ai", orgId: "th_g1", weight: 4 },
+    { name: "pimnara", email: "pimnara@dinoai.ai", orgId: "th_g2", weight: 3 },
+    { name: "pimmada", email: "pimmada@dinoai.ai", orgId: "th_g2", weight: 3 },
+    { name: "prasong.boonmak", email: "prasong.boonmak@dinoai.ai", orgId: "th_g3", weight: 0 }
   ],
   MY: [
-    { name: "carmens.sam", email: "carmens.sam@dinoai.ai", weight: 4 },
-    { name: "jiawei.loh", email: "jiawei.loh@dinoai.ai", weight: 3 },
-    { name: "xiaoqian.tan", email: "xiaoqian.tan@dinoai.ai", weight: 3 },
-    { name: "joanna.loh", email: "joanna.loh@dinoai.ai", weight: 0 }
+    { name: "carmens.sam", email: "carmens.sam@dinoai.ai", orgId: "my_g1", weight: 4 },
+    { name: "jiawei.loh", email: "jiawei.loh@dinoai.ai", orgId: "my_g1", weight: 3 },
+    { name: "xiaoqian.tan", email: "xiaoqian.tan@dinoai.ai", orgId: "my_g2", weight: 3 },
+    { name: "joanna.loh", email: "joanna.loh@dinoai.ai", orgId: "my_g2", weight: 0 }
   ]
 };
 
@@ -257,6 +271,7 @@ let deleteConfirmId = null;
 let pickerType = null;
 let channelSearch = "";
 let groupSearch = "";
+let weightOrgFilter = [];
 let toastTimer = null;
 
 function clone(value) {
@@ -289,6 +304,11 @@ function groupPath(group) {
   if (lang === "zh") return group.zh;
   const line = LINES.find((item) => item.id === lineId);
   return `${lineName(line)} / ${group.nameEn}`;
+}
+
+function memberOrgPath(orgId) {
+  const group = GROUPS[lineId].find((item) => item.id === orgId);
+  return group ? groupPath(group) : copy().unassignedOrg;
 }
 
 function channel(id) {
@@ -339,6 +359,7 @@ function openSettings() {
   pickerType = null;
   channelSearch = "";
   groupSearch = "";
+  weightOrgFilter = [];
   modalOpen = true;
   activeTab = "rules";
   render();
@@ -351,6 +372,7 @@ function closeSettings(showDiscard = true) {
   pickerType = null;
   channelSearch = "";
   groupSearch = "";
+  weightOrgFilter = [];
   modalOpen = false;
   render();
   if (showDiscard) showToast(copy().discarded);
@@ -365,6 +387,7 @@ function saveSettings() {
   pickerType = null;
   channelSearch = "";
   groupSearch = "";
+  weightOrgFilter = [];
   render();
   showToast(copy().saved);
 }
@@ -382,6 +405,7 @@ function setLine(value) {
   pickerType = null;
   channelSearch = "";
   groupSearch = "";
+  weightOrgFilter = [];
   render();
 }
 
@@ -418,11 +442,23 @@ function toggleFormSelection(field, value) {
 function togglePicker(type) {
   pickerType = pickerType === type ? null : type;
   if (pickerType === "channels") channelSearch = "";
-  if (pickerType === "groups") groupSearch = "";
+  if (pickerType === "groups" || pickerType === "weightGroups") groupSearch = "";
+  render();
+}
+
+function toggleWeightOrg(value) {
+  const index = weightOrgFilter.indexOf(value);
+  if (index >= 0) weightOrgFilter.splice(index, 1);
+  else weightOrgFilter.push(value);
   render();
 }
 
 function clearPickerSelection() {
+  if (pickerType === "weightGroups") {
+    weightOrgFilter = [];
+    render();
+    return;
+  }
   const form = forms[lineId];
   if (!form || !pickerType) return;
   form[pickerType === "channels" ? "channelIds" : "groupIds"] = [];
@@ -646,7 +682,8 @@ function renderChannelOptions(form) {
 
 function renderGroupTreeOptions() {
   const t = copy();
-  const form = forms[lineId];
+  const selectedIds = pickerType === "weightGroups" ? weightOrgFilter : forms[lineId].groupIds;
+  const optionType = pickerType === "weightGroups" ? "weightGroups" : "groups";
   const query = groupSearch.trim().toLowerCase();
   const groups = GROUPS[lineId].filter((group) => {
     const text = `${group.nameZh} ${group.nameEn} ${groupPath(group)}`.toLowerCase();
@@ -663,8 +700,8 @@ function renderGroupTreeOptions() {
         <div class="tree-branch">
           <div class="tree-ancestor">${department}</div>
           ${departmentGroups.map((group) => {
-            const selected = form.groupIds.includes(group.id);
-            return `<button class="tree-option ${selected ? "selected" : ""}" data-picker-option="groups" data-value="${group.id}" role="option" aria-selected="${selected}">
+            const selected = selectedIds.includes(group.id);
+            return `<button class="tree-option ${selected ? "selected" : ""}" data-picker-option="${optionType}" data-value="${group.id}" role="option" aria-selected="${selected}">
               <span class="option-check">${selected ? "✓" : ""}</span>
               <span>${groupName(group)}</span>
             </button>`;
@@ -768,19 +805,59 @@ function renderRules() {
       </div>`}`;
 }
 
+function renderWeightOrgFilter() {
+  const t = copy();
+  const open = pickerType === "weightGroups";
+  const summary = weightOrgFilter.length === 0
+    ? t.allOrgs
+    : weightOrgFilter.length === 1
+      ? t.selectedOrgOne
+      : t.selectedOrgs.replace("{count}", weightOrgFilter.length);
+  const selectedLabels = weightOrgFilter.map((id) => {
+    const group = GROUPS[lineId].find((item) => item.id === id);
+    return group ? groupName(group) : "";
+  }).filter(Boolean);
+  return `
+    <div class="weight-org-filter">
+      <button type="button" class="filter-trigger" data-picker-toggle="weightGroups" aria-expanded="${open}">
+        <span>${t.primaryOrg}：${summary}</span><b>⌄</b>
+      </button>
+      ${selectedLabels.length ? `<div class="selected-chips">${selectedLabels.map((item) => `<span>${item}</span>`).join("")}</div>` : ""}
+      ${open ? `
+        <div class="multi-popover weight-filter-popover">
+          <div class="picker-head">
+            <strong>${t.filterOrg}</strong>
+            <button class="link-btn" data-clear-picker>${t.clear}</button>
+          </div>
+          <input class="picker-search" data-group-search value="${escapeHtml(groupSearch)}" placeholder="${t.searchGroup}">
+          <div class="picker-options" id="group-tree-options">${renderGroupTreeOptions()}</div>
+          <div class="picker-foot"><button class="btn primary small" data-picker-done>${t.done}</button></div>
+        </div>` : ""}
+    </div>`;
+}
+
 function renderWeights() {
   const t = copy();
+  const rows = draft[lineId].weights
+    .map((item, index) => ({ item, index }))
+    .filter(({ item }) => !weightOrgFilter.length || weightOrgFilter.includes(item.orgId));
   return `
     <div class="section-toolbar">
       <h3>${t.weightsTitle}</h3>
+      ${renderWeightOrgFilter()}
     </div>
-    <div class="config-table">
+    ${rows.length ? `<div class="config-table">
       <table>
-        <thead><tr><th>${t.recipient}</th><th>${t.weight}</th><th>${t.email}</th></tr></thead>
+        <thead><tr><th>${t.recipient}</th><th>${t.primaryOrg}</th><th>${t.weight}</th><th>${t.email}</th></tr></thead>
         <tbody>
-          ${draft[lineId].weights.map((item, index) => `
-            <tr>
+          ${rows.map(({ item, index }) => {
+            const org = GROUPS[lineId].find((group) => group.id === item.orgId);
+            return `<tr>
               <td>${item.name}</td>
+              <td>
+                <span class="org-cell-name">${org ? groupName(org) : t.unassignedOrg}</span>
+                ${org ? `<small class="org-cell-path">${groupPath(org)}</small>` : ""}
+              </td>
               <td>
                 <span class="weight-stepper">
                   <button data-weight-minus="${index}" aria-label="Decrease">−</button>
@@ -789,10 +866,11 @@ function renderWeights() {
                 </span>
               </td>
               <td class="muted">${item.email}</td>
-            </tr>`).join("")}
+            </tr>`;
+          }).join("")}
         </tbody>
       </table>
-    </div>
+    </div>` : `<div class="empty-state"><span>${t.noSalesInOrg}</span></div>`}
     <p class="muted">${t.weightHint}</p>`;
 }
 
@@ -879,7 +957,10 @@ document.addEventListener("click", (event) => {
   if (target.dataset.action === "cancel-rule") cancelRule();
   if (target.dataset.action === "save-rule") saveRule();
   if (target.dataset.pickerToggle) togglePicker(target.dataset.pickerToggle);
-  if (target.dataset.pickerOption) toggleFormSelection(target.dataset.pickerOption, target.dataset.value);
+  if (target.dataset.pickerOption === "weightGroups") toggleWeightOrg(target.dataset.value);
+  if (target.dataset.pickerOption && target.dataset.pickerOption !== "weightGroups") {
+    toggleFormSelection(target.dataset.pickerOption, target.dataset.value);
+  }
   if (target.dataset.clearPicker !== undefined) clearPickerSelection();
   if (target.dataset.pickerDone !== undefined) {
     pickerType = null;
