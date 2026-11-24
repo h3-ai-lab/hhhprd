@@ -392,11 +392,13 @@
       menu.querySelector("[data-level-action]")?.addEventListener("click", (event) => {
         event.stopPropagation();
         state.menuId = null;
+        menu.remove();
         openLevelModal(lead.id);
       });
       menu.querySelectorAll("[data-existing]").forEach((btn) => btn.addEventListener("click", (event) => {
         event.stopPropagation();
         state.menuId = null;
+        menu.remove();
         openExistingModal(btn.dataset.existing, lead);
       }));
     }
