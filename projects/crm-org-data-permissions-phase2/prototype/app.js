@@ -20,10 +20,14 @@ const state = {
   salesStatus: "",
   userSearch: "",
   orderSearch: "",
-  teamMonitorOrg: "r1",
   teamMonitorFirstCc: "",
-  dashboardOrg: "r1",
   dashboardMode: "team",
+  pageOrgFilters: {
+    dashboard: { ids: [], panelOpen: false, expanded: [], search: "", scopeKey: "" },
+    teamMonitor: { ids: [], panelOpen: false, expanded: [], search: "", scopeKey: "" },
+    users: { ids: [], panelOpen: false, expanded: [], search: "", scopeKey: "" },
+    orders: { ids: [], panelOpen: false, expanded: [], search: "", scopeKey: "" }
+  },
   logModule: "",
   logs: [
     { time: "2026-11-11 16:24:08", module: "组织架构", action: "新增", target: "越南业务线 / 1区 / A部 / A1组", actor: "lin.yue@dinoai.ai" },
@@ -541,6 +545,81 @@ function clearDependentSalesFilters() {
   state.salesCurrentCc = "";
 }
 
+function pageOrgFilterScope(key) {
+  const user = currentUser();
+  const managerScope = hasOrganizationScope();
+  const personalOnly = !managerScope || (key === "dashboard" && state.dashboardMode === "personal");
+  const selectableOrgs = personalOnly ? grantedBusinessLineRoots() : allowedOperatorOrgs();
+  const selectableIds = new Set(selectableOrgs.map((org) => org.id));
+  const visibleIds = personalOnly ? selectableIds : operatorVisibleIds();
+  const visibleOrgs = orgs.filter((org) => visibleIds.has(org.id));
+  const filterState = state.pageOrgFilters[key];
+  const scopeKey = `${key}:${user.id}:${personalOnly}:${selectableOrgs.map((org) => org.id).join(",")}:${visibleOrgs.map((org) => org.id).join(",")}`;
+  if (filterState.scopeKey !== scopeKey) {
+    filterState.scopeKey = scopeKey;
+    filterState.ids = [];
+    const primary = orgById(user.primaryOrgId);
+    const lineRoot = primary
+      ? orgs.find((org) => org.level === 1 && org.line === primary.line)
+      : null;
+    filterState.expanded = [...new Set([lineRoot?.id, ...ancestorIdsOf(primary?.id)].filter((id) => id && visibleIds.has(id)))];
+  }
+  filterState.ids = filterState.ids.filter((id) => selectableIds.has(id));
+  const selectedIds = new Set(filterState.ids);
+  const selectedFilterIds = selectedIds.size
+    ? new Set([...selectedIds].flatMap((id) => subtreeIds(id)))
+    : null;
+  const effectiveIds = selectedFilterIds || new Set(selectableOrgs.flatMap((org) => subtreeIds(org.id)));
+  return { filterState, selectableIds, visibleOrgs, selectedIds, selectedFilterIds, effectiveIds };
+}
+
+function pageOrgFilterTreeHtml(key, scope) {
+  const keyword = scope.filterState.search.trim().toLowerCase();
+  const renderNode = (org, depth) => {
+    const hasChildren = scope.visibleOrgs.some((child) => child.parentId === org.id);
+    const expanded = scope.filterState.expanded.includes(org.id) || !!keyword;
+    const covered = selectedAncestorOf(org.id, scope.selectedIds);
+    const checked = scope.selectedIds.has(org.id) || covered;
+    const selectable = scope.selectableIds.has(org.id);
+    const matches = !keyword || orgPath(org.id).toLowerCase().includes(keyword);
+    const childHtml = hasChildren && expanded
+      ? scope.visibleOrgs.filter((child) => child.parentId === org.id).map((child) => renderNode(child, depth + 1)).join("")
+      : "";
+    if (!matches && !childHtml) return "";
+    return `<div class="filter-tree-row ${covered ? "is-covered" : ""}" style="--tree-indent:${depth * 18}px">
+      <button class="tree-expander ${hasChildren ? "" : "is-empty"}" type="button" data-page-org-expand="${org.id}" aria-label="${expanded ? "收起" : "展开"}">${hasChildren ? (expanded ? "▾" : "▸") : ""}</button>
+      <label><input type="checkbox" data-page-org-check="${org.id}" ${checked ? "checked" : ""} ${!selectable || covered ? "disabled" : ""}><span>${escapeHtml(org.name)}</span><small>${levelName(org.level)}${selectable ? "" : " · 仅路径"}</small></label>
+    </div>${childHtml}`;
+  };
+  return scope.visibleOrgs
+    .filter((org) => !org.parentId)
+    .map((org) => renderNode(org, 0))
+    .join("") || '<div class="org-select-empty">未找到匹配组织</div>';
+}
+
+function pageOrgFilterHtml(key, placeholder = "全部可访问组织") {
+  const scope = pageOrgFilterScope(key);
+  const filterState = scope.filterState;
+  const selectedOrgs = [...scope.selectedIds].map(orgById).filter(Boolean);
+  return `<div class="org-multiselect sales-org-filter" data-page-org-key="${key}">
+    <div class="org-select-trigger ${filterState.panelOpen ? "is-open" : ""}" role="button" tabindex="0" aria-expanded="${filterState.panelOpen}" data-page-org-toggle>
+      <span class="org-chip-list">${selectedOrgs.length
+        ? selectedOrgs.map((org) => `<span class="org-chip">${escapeHtml(org.name)}<button type="button" data-page-org-remove="${org.id}" aria-label="移除${escapeHtml(org.name)}">×</button></span>`).join("")
+        : `<span class="secondary-text">${escapeHtml(placeholder)}</span>`}</span><span class="select-caret">⌄</span>
+    </div>
+    ${filterState.panelOpen ? `<div class="org-select-panel sales-org-panel">
+      <div class="org-select-panel-head"><span>可多选，父节点包含全部下级</span><span>祖先仅用于定位</span></div>
+      <input class="field org-filter-search" id="page-${key}-org-search" value="${escapeHtml(filterState.search)}" placeholder="搜索组织">
+      <div class="filter-tree">${pageOrgFilterTreeHtml(key, scope)}</div>
+      <div class="org-filter-actions"><button class="btn ghost" type="button" data-page-org-clear>清空选择</button><button class="btn primary" type="button" data-page-org-toggle>完成</button></div>
+    </div>` : ""}
+  </div>`;
+}
+
+function clearDependentPageOrgFilters(key) {
+  if (key === "teamMonitor") state.teamMonitorFirstCc = "";
+}
+
 function publicPoolLeadsForCurrentUser() {
   const user = currentUser();
   return leads.filter((lead) => {
@@ -635,12 +714,17 @@ function renderSales() {
 }
 
 function renderUsers() {
+  const orgScope = pageOrgFilterScope("users");
   const rows = accessibleLeadsForCurrentUser().filter((lead) =>
-    !state.userSearch || `${lead.id}${lead.name}${lead.account}${lead.phone}`.toLowerCase().includes(state.userSearch.toLowerCase())
+    orgScope.effectiveIds.has(lead.orgId)
+    && (!state.userSearch || `${lead.id}${lead.name}${lead.account}${lead.phone}`.toLowerCase().includes(state.userSearch.toLowerCase()))
   );
   el.content.innerHTML = `<section class="page-card">
     <div class="page-heading"><div class="section-title">用户列表</div></div>
-    <div class="filters"><input class="field search-field" id="user-search" placeholder="搜索用户 ID / 姓名 / 登录账号 / 手机号" value="${escapeHtml(state.userSearch)}"></div>
+    <div class="filters">
+      <input class="field search-field" id="user-search" placeholder="搜索用户 ID / 姓名 / 登录账号 / 手机号" value="${escapeHtml(state.userSearch)}">
+      ${pageOrgFilterHtml("users")}
+    </div>
     <div class="table-wrap"><table>
       <thead><tr><th>用户 ID</th><th>学生姓名</th><th>手机号</th><th>登录账号</th><th>业务线</th><th>当前 CC</th><th>用户状态</th><th>操作</th></tr></thead>
       <tbody>${rows.map((lead) => `<tr><td>${lead.id}</td><td>${escapeHtml(lead.name)}</td><td>${lead.phone}</td><td>${escapeHtml(lead.account)}</td><td>${escapeHtml(orgById(lead.orgId)?.line)}</td><td>${escapeHtml(memberName(lead.ownerId))}</td><td><span class="tag ${lead.paid ? "green" : "blue"}">${lead.status}</span></td><td><button class="btn ghost" data-lead-view="${lead.id}">查看线索</button></td></tr>`).join("") || '<tr><td colspan="8" class="secondary-text">当前范围暂无用户</td></tr>'}</tbody>
@@ -649,12 +733,17 @@ function renderUsers() {
 }
 
 function renderOrders() {
+  const orgScope = pageOrgFilterScope("orders");
   const rows = accessibleLeadsForCurrentUser()
+    .filter((lead) => orgScope.effectiveIds.has(lead.orgId))
     .filter((lead) => lead.paid)
     .filter((lead) => !state.orderSearch || `${lead.id}${lead.name}${lead.account}`.toLowerCase().includes(state.orderSearch.toLowerCase()));
   el.content.innerHTML = `<section class="page-card">
     <div class="page-heading"><div class="section-title">订单列表</div></div>
-    <div class="filters"><input class="field search-field" id="order-search" placeholder="搜索订单 / 用户 ID / 姓名" value="${escapeHtml(state.orderSearch)}"></div>
+    <div class="filters">
+      <input class="field search-field" id="order-search" placeholder="搜索订单 / 用户 ID / 姓名" value="${escapeHtml(state.orderSearch)}">
+      ${pageOrgFilterHtml("orders")}
+    </div>
     <div class="table-wrap"><table>
       <thead><tr><th>订单 ID</th><th>用户 ID</th><th>学生姓名</th><th>业务线</th><th>归属组织</th><th>当前 CC</th><th>订单状态</th><th>操作</th></tr></thead>
       <tbody>${rows.map((lead) => `<tr><td>ORD-${lead.id.slice(-6)}</td><td>${lead.id}</td><td>${escapeHtml(lead.name)}</td><td>${escapeHtml(orgById(lead.orgId)?.line)}</td><td>${escapeHtml(orgPath(lead.orgId))}</td><td>${escapeHtml(memberName(lead.ownerId))}</td><td><span class="tag green">已支付</span></td><td><button class="btn ghost" data-lead-view="${lead.id}">查看线索</button></td></tr>`).join("") || '<tr><td colspan="8" class="secondary-text">当前范围暂无订单</td></tr>'}</tbody>
@@ -667,11 +756,8 @@ function renderTeamMonitor() {
     el.content.innerHTML = `<section class="page-card"><div class="page-heading"><div class="section-title">团队监控</div></div><div class="org-select-empty">当前账号没有团队监控权限</div></section>`;
     return;
   }
-  const allowed = allowedOperatorOrgs();
-  const allowedIds = new Set(allowed.map((org) => org.id));
-  if (!allowedIds.has(state.teamMonitorOrg)) state.teamMonitorOrg = currentUser().primaryOrgId;
-  const ids = new Set(subtreeIds(state.teamMonitorOrg));
-  const scoped = leads.filter((lead) => ids.has(lead.orgId));
+  const orgScope = pageOrgFilterScope("teamMonitor");
+  const scoped = leads.filter((lead) => orgScope.effectiveIds.has(lead.orgId));
   const firstCcIds = [...new Set(scoped.map((lead) => lead.firstOwnerId).filter(Boolean))];
   const filtered = scoped.filter((lead) => !state.teamMonitorFirstCc || lead.firstOwnerId === state.teamMonitorFirstCc);
   const filteredIds = new Set(filtered.map((lead) => lead.id));
@@ -682,7 +768,7 @@ function renderTeamMonitor() {
   el.content.innerHTML = `<section class="page-card">
     <div class="page-heading"><div class="section-title">团队监控</div><button class="btn" data-action="team-monitor-export">${icon("download")}导出当前视图</button></div>
     <div class="filters">
-      <select class="select" id="team-monitor-org-filter">${allowed.map((org) => `<option value="${org.id}" ${state.teamMonitorOrg === org.id ? "selected" : ""}>${"　".repeat(Math.max(0, org.level - 1))}${escapeHtml(org.name)} · ${levelName(org.level)}</option>`).join("")}</select>
+      ${pageOrgFilterHtml("teamMonitor")}
       <select class="select" id="team-monitor-first-filter"><option value="">全部首跟 CC</option>${firstCcIds.map((id) => `<option value="${id}" ${state.teamMonitorFirstCc === id ? "selected" : ""}>${escapeHtml(memberName(id))}</option>`).join("")}</select>
       <div class="actions"><button class="btn" data-action="reset-team-monitor">重置筛选</button><button class="btn primary" data-action="apply-team-monitor">${icon("search")}应用筛选</button></div>
     </div>
@@ -721,12 +807,13 @@ function renderMarketing() {
   </section>`;
 }
 
-function aggregateFor(orgId) {
-  const ids = new Set(subtreeIds(orgId));
+function aggregateForOrgScope(scope) {
+  const ids = scope.effectiveIds;
   const scoped = leads.filter((lead) => ids.has(lead.orgId));
+  const directIds = scope.selectedIds.size ? scope.selectedIds : scope.selectableIds;
   return {
     leads: scoped.length,
-    directLeads: leads.filter((lead) => lead.orgId === orgId).length,
+    directLeads: leads.filter((lead) => directIds.has(lead.orgId)).length,
     members: members.filter((member) => member.status === "启用" && memberGrants(member).some((grant) => ids.has(grant.primaryOrgId))).length,
     organizations: ids.size
   };
@@ -745,18 +832,12 @@ function metricHelp(key) {
 }
 
 function renderDashboard() {
-  const allowed = allowedOperatorOrgs();
+  const orgScope = pageOrgFilterScope("dashboard");
   const personalScope = currentUser().roleId !== "role_super"
     ? !hasOrganizationScope() || state.dashboardMode === "personal"
     : false;
-  if (!operatorAllowedIds().has(state.dashboardOrg)) state.dashboardOrg = currentUser().primaryOrgId;
   if (personalScope) {
-    const personalRoots = visibleBusinessLineRoots();
-    const activeRoot = personalRoots.find((org) => org.id === state.dashboardOrg)
-      || personalRoots.find((org) => org.line === orgById(currentUser().primaryOrgId)?.line)
-      || personalRoots[0];
-    if (activeRoot) state.dashboardOrg = activeRoot.id;
-    const personalLeads = leads.filter((lead) => lead.ownerId === currentUser().id && orgById(lead.orgId)?.line === activeRoot?.line);
+    const personalLeads = leads.filter((lead) => lead.ownerId === currentUser().id && orgScope.effectiveIds.has(lead.orgId));
     const personalLeadIds = new Set(personalLeads.map((lead) => lead.id));
     const personalFollowCount = followUps.filter((item) => personalLeadIds.has(item.leadId)).length;
     const personalCallCount = callRecords.filter((item) => personalLeadIds.has(item.leadId)).length;
@@ -769,7 +850,7 @@ function renderDashboard() {
     ];
     el.content.innerHTML = `<section class="page-card">
       <div class="page-heading"><div class="section-title">个人数据</div></div>
-      <div class="filters"><select class="select" id="dashboard-org-filter" aria-label="组织架构">${personalRoots.map((org) => `<option value="${org.id}" ${state.dashboardOrg === org.id ? "selected" : ""}>${escapeHtml(org.name)} · 业务线</option>`).join("")}</select></div>
+      <div class="filters">${pageOrgFilterHtml("dashboard", "全部已授权业务线")}</div>
       <div class="org-summary"><div><h2>${escapeHtml(currentUser().name)}</h2><p>本人线索及其全部关联记录</p></div><span class="tag blue">仅本人</span></div>
       <div class="metric-grid">
         ${cards.map(([label, value, foot, help]) => `<article class="metric-card"><div class="metric-label">${label}</div><div class="metric-value">${value}</div><div class="metric-foot">${foot}</div><button class="metric-help" type="button" data-metric-help="${escapeHtml(help)}" title="${escapeHtml(help)}">口径</button></article>`).join("")}
@@ -786,24 +867,25 @@ function renderDashboard() {
     </section>`;
     return;
   }
-  const data = aggregateFor(state.dashboardOrg);
-  const org = orgById(state.dashboardOrg) || orgById("r1");
+  const data = aggregateForOrgScope(orgScope);
+  const selectedOrgs = [...orgScope.selectedIds].map(orgById).filter(Boolean);
+  const scopeTitle = selectedOrgs.length ? selectedOrgs.map((org) => org.name).join("、") : "全部可访问组织";
   const metrics = [
-    ["visible-orgs", "可见组织", data.organizations, "当前组织及全部下级"],
+    ["visible-orgs", "可见组织", data.organizations, "所选组织及全部下级"],
     ["visible-members", "可见成员", data.members, "有效主组织落在范围内"],
     ["scope-leads", "所属范围线索", data.leads, "按 Lead ID 去重"],
-    ["direct-leads", "直属线索", data.directLeads, "仅当前所选组织"]
+    ["direct-leads", "直属线索", data.directLeads, "仅所选组织直属数据"]
   ];
   el.content.innerHTML = `<section class="page-card">
     <div class="page-heading"><div class="section-title">数据权限</div></div>
     <div class="filters">
-      <select class="select" id="dashboard-org-filter" aria-label="组织架构">${allowed.map((item) => `<option value="${item.id}" ${state.dashboardOrg === item.id ? "selected" : ""}>${"　".repeat(Math.max(0, item.level - 1))}${escapeHtml(item.name)} · ${levelName(item.level)}</option>`).join("")}</select>
+      ${pageOrgFilterHtml("dashboard")}
       <div class="phase-switch" role="group" aria-label="看板数据范围">
         <button class="phase-option ${state.dashboardMode === "team" ? "is-active" : ""}" type="button" data-dashboard-mode="team">团队数据</button>
         <button class="phase-option ${state.dashboardMode === "personal" ? "is-active" : ""}" type="button" data-dashboard-mode="personal">本人数据</button>
       </div>
     </div>
-    <div class="org-summary"><div><h2>${escapeHtml(org.name)}</h2><p>${escapeHtml(orgPath(org.id))}</p></div><span class="tag blue">包含全部下级</span></div>
+    <div class="org-summary"><div><h2>${escapeHtml(scopeTitle)}</h2><p>所选组织及全部下级</p></div><span class="tag blue">按组织树汇总</span></div>
     <div class="metric-grid">
       ${metrics.map(([key, label, value, foot]) => `<article class="metric-card"><div class="metric-label">${label}</div><div class="metric-value">${value}</div><div class="metric-foot">${foot}</div>${metricHelp(key)}</article>`).join("")}
     </div>
@@ -1551,6 +1633,35 @@ function openReassignWorkbench() {
 el.content.addEventListener("click", (event) => {
   const metric = event.target.closest("[data-metric-help]");
   if (metric) return showToast(metric.dataset.metricHelp || "暂无口径说明");
+  const pageOrgContainer = event.target.closest("[data-page-org-key]");
+  const pageOrgKey = pageOrgContainer?.dataset.pageOrgKey;
+  const pageOrgState = pageOrgKey ? state.pageOrgFilters[pageOrgKey] : null;
+  const pageOrgRemove = event.target.closest("[data-page-org-remove]");
+  if (pageOrgRemove && pageOrgState) {
+    event.stopPropagation();
+    pageOrgState.ids = pageOrgState.ids.filter((id) => id !== pageOrgRemove.dataset.pageOrgRemove);
+    clearDependentPageOrgFilters(pageOrgKey);
+    return render();
+  }
+  const pageOrgExpand = event.target.closest("[data-page-org-expand]");
+  if (pageOrgExpand && pageOrgState) {
+    const orgId = pageOrgExpand.dataset.pageOrgExpand;
+    pageOrgState.expanded = pageOrgState.expanded.includes(orgId)
+      ? pageOrgState.expanded.filter((id) => id !== orgId)
+      : [...pageOrgState.expanded, orgId];
+    return render();
+  }
+  const pageOrgClear = event.target.closest("[data-page-org-clear]");
+  if (pageOrgClear && pageOrgState) {
+    pageOrgState.ids = [];
+    clearDependentPageOrgFilters(pageOrgKey);
+    return render();
+  }
+  const pageOrgToggle = event.target.closest("[data-page-org-toggle]");
+  if (pageOrgToggle && pageOrgState) {
+    pageOrgState.panelOpen = !pageOrgState.panelOpen;
+    return render();
+  }
   const salesOrgRemove = event.target.closest("[data-sales-org-remove]");
   if (salesOrgRemove) {
     event.stopPropagation();
@@ -1650,7 +1761,7 @@ el.content.addEventListener("click", (event) => {
   if (action === "sales-settings") return showToast("分配与掉库设置");
   if (action === "reassign-workbench") return openReassignWorkbench();
   if (action === "reset-team-monitor") {
-    state.teamMonitorOrg = currentUser().primaryOrgId;
+    state.pageOrgFilters.teamMonitor = { ids: [], panelOpen: false, expanded: [], search: "", scopeKey: "" };
     state.teamMonitorFirstCc = "";
     return render();
   }
@@ -1672,6 +1783,16 @@ el.content.addEventListener("input", (event) => {
     const tree = panel?.querySelector(".filter-tree");
     if (tree) tree.innerHTML = salesOrgFilterTreeHtml(salesOrgFilterScope());
   }
+  const pageOrgSearchMatch = event.target.id.match(/^page-(.+)-org-search$/);
+  if (pageOrgSearchMatch) {
+    const key = pageOrgSearchMatch[1];
+    const filterState = state.pageOrgFilters[key];
+    if (filterState) {
+      filterState.search = event.target.value;
+      const tree = event.target.closest(".sales-org-panel")?.querySelector(".filter-tree");
+      if (tree) tree.innerHTML = pageOrgFilterTreeHtml(key, pageOrgFilterScope(key));
+    }
+  }
   if (event.target.id === "member-search") state.memberSearchDraft = event.target.value;
   if (event.target.id === "user-search") {
     state.userSearch = event.target.value;
@@ -1689,6 +1810,16 @@ el.content.addEventListener("input", (event) => {
 });
 
 el.content.addEventListener("keydown", (event) => {
+  const pageTrigger = event.target.closest("[data-page-org-toggle]");
+  if (pageTrigger && ["Enter", " "].includes(event.key)) {
+    const key = pageTrigger.closest("[data-page-org-key]")?.dataset.pageOrgKey;
+    if (key && state.pageOrgFilters[key]) {
+      event.preventDefault();
+      state.pageOrgFilters[key].panelOpen = !state.pageOrgFilters[key].panelOpen;
+      render();
+    }
+    return;
+  }
   const trigger = event.target.closest("[data-sales-org-toggle]");
   if (!trigger || !["Enter", " "].includes(event.key)) return;
   event.preventDefault();
@@ -1697,6 +1828,22 @@ el.content.addEventListener("keydown", (event) => {
 });
 
 el.content.addEventListener("change", (event) => {
+  const pageOrgCheckbox = event.target.closest("[data-page-org-check]");
+  if (pageOrgCheckbox) {
+    const key = pageOrgCheckbox.closest("[data-page-org-key]")?.dataset.pageOrgKey;
+    const filterState = state.pageOrgFilters[key];
+    if (filterState) {
+      const orgId = pageOrgCheckbox.dataset.pageOrgCheck;
+      if (pageOrgCheckbox.checked) {
+        filterState.ids = filterState.ids.filter((id) => !descendantsOf(orgId).some((org) => org.id === id));
+        if (!filterState.ids.includes(orgId)) filterState.ids.push(orgId);
+      } else {
+        filterState.ids = filterState.ids.filter((id) => id !== orgId);
+      }
+      clearDependentPageOrgFilters(key);
+      return render();
+    }
+  }
   const salesOrgCheckbox = event.target.closest("[data-sales-org-check]");
   if (salesOrgCheckbox) {
     const orgId = salesOrgCheckbox.dataset.salesOrgCheck;
@@ -1731,15 +1878,6 @@ el.content.addEventListener("change", (event) => {
   }
   if (event.target.id === "sales-status-filter") {
     state.salesStatus = event.target.value;
-    render();
-  }
-  if (event.target.id === "dashboard-org-filter") {
-    state.dashboardOrg = event.target.value;
-    render();
-  }
-  if (event.target.id === "team-monitor-org-filter") {
-    state.teamMonitorOrg = event.target.value;
-    state.teamMonitorFirstCc = "";
     render();
   }
   if (event.target.id === "team-monitor-first-filter") {
