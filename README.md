@@ -1,7 +1,7 @@
 # Dino 产品需求与原型库
 
 > 本地主稿、飞书归档。按“公共能力 + 项目空间”组织需求、原型与知识资料。
-> 更新时间：2026-11-23
+> 更新时间：2026-11-24
 
 ## 先看这里
 
@@ -17,6 +17,7 @@
 | 项目 | 状态 | PRD | 原型 |
 |---|---|---|---|
 | CRM 整体产品体系 | 持续维护 | [整体框架](shared/memory/product-framework.md) | — |
+| 已付费列表调整正式课等级 | 待上传 | [PRD](projects/formal-course-level/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/formal-course-level/prototype/) |
 | CC 快捷工作队列 | 待上传 | [PRD](projects/crm-operating-closure/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) |
 | CC活跃度看板 | 待评审 | [PRD](projects/cc-activity-dashboard/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/cc-activity-dashboard/prototype/) |
 | Referrals & Rewards | 已废弃 | [PRD](projects/referrals-rewards/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/referrals-rewards/prototype/) |
@@ -56,6 +57,8 @@
 ## GitHub Pages
 
 - 项目入口：<https://h3-ai-lab.github.io/hhhprd/>
+- 已付费列表调整正式课等级 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-formal-course-level.html>
+- 已付费列表调整正式课等级原型：<https://h3-ai-lab.github.io/hhhprd/projects/formal-course-level/prototype/>
 - CRM经营闭环规划管理层汇报：<https://h3-ai-lab.github.io/hhhprd/crm-operating-closure.html>
 - CC 快捷工作队列 PRD：<https://h3-ai-lab.github.io/hhhprd/prd-crm-operating-closure.html>
 - CC 快捷工作队列原型：<https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/>

@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>销售中心</title>
+  <style>
+    :root {
+      --blue: #2677e8;
+      --blue-dark: #155dc4;
+      --blue-soft: #eef5ff;
+      --ink: #1d2939;
+      --muted: #667085;
+      --line: #e2e7ee;
+      --line-strong: #d7dee8;
+      --bg: #f5f6f8;
+      --green: #36a15c;
+      --green-soft: #e9f7ee;
+      --red: #d92d20;
+      --shadow: 0 16px 42px rgba(16, 24, 40, .16);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--bg); font: 14px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 66px minmax(0, 1fr); }
+    .sidebar { display: flex; flex-direction: column; align-items: center; padding: 18px 8px; color: #fff; background: #14263d; }
+    .brand { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: #2b7cf0; font-size: 20px; font-weight: 800; }
+    .nav-item { width: 48px; margin-top: 20px; padding: 8px 3px; border: 0; border-radius: 8px; color: #c5d1df; background: transparent; font-size: 10px; }
+    .nav-item.active { color: #fff; background: #203b5d; }
+    .workspace { min-width: 0; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--line); background: #fff; }
+    .title-wrap { display: flex; align-items: center; gap: 10px; }
+    .title-bar { width: 4px; height: 22px; border-radius: 2px; background: #2f73c9; }
+    h1 { margin: 0; font-size: 20px; }
+    .top-actions { display: flex; align-items: center; gap: 12px; }
+    .lang-switch { display: inline-flex; padding: 2px; border: 1px solid var(--line); border-radius: 7px; background: #f8fafc; }
+    .lang-btn { min-width: 34px; padding: 4px 8px; border: 0; border-radius: 5px; color: var(--muted); background: transparent; }
+    .lang-btn.active { color: #fff; background: var(--blue); }
+    .account { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+    .avatar { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: #4778bd; font-weight: 700; }
+    .content { padding: 16px 20px 40px; }
+    .settings { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 7px 12px; border: 1px solid var(--line-strong); border-radius: 7px; color: #344054; background: #fff; }
+    .flow { display: flex; align-items: center; gap: 8px; margin: 12px 0; padding: 10px 12px; border: 1px solid #cde2ff; border-radius: 7px; color: #2e5f9f; background: #f4f9ff; }
+    .flow button { margin-left: auto; padding: 5px 12px; border: 0; border-radius: 5px; color: #fff; background: var(--blue); }
+    .tabs { display: flex; gap: 26px; margin-top: 12px; border-bottom: 1px solid var(--line); background: #fff; padding: 0 10px; }
+    .tab { position: relative; padding: 13px 4px 11px; border: 0; color: #344054; background: transparent; font-weight: 600; }
+    .tab.active { color: var(--blue); }
+    .tab.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--blue); }
+    .tab span { margin-left: 4px; font-weight: 400; }
+    .filters { padding: 14px 12px 12px; border: 1px solid var(--line); border-top: 0; background: #fff; }
+    .filter-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px 14px; }
+    .filter-control, .select, .input { width: 100%; height: 34px; padding: 5px 10px; border: 1px solid var(--line-strong); border-radius: 5px; color: #344054; background: #fff; }
+    .filter-control::placeholder, .input::placeholder { color: #a2acb8; }
+    .date-range { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 5px; color: var(--muted); }
+    .filter-actions { display: flex; align-items: center; gap: 8px; margin-top: 12px; grid-column: 1 / -1; }
+    .btn { min-height: 32px; padding: 5px 12px; border: 1px solid var(--line-strong); border-radius: 5px; color: #344054; background: #fff; }
+    .btn.primary { color: #fff; border-color: var(--blue); background: var(--blue); }
+    .btn:hover { border-color: #aeb9c8; }
+    .btn.primary:hover { background: var(--blue-dark); }
+    .panel { margin-top: 0; border: 1px solid var(--line); border-top: 0; background: #fff; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; min-width: 1280px; border-collapse: collapse; white-space: nowrap; }
+    th { padding: 14px 12px; border-bottom: 1px solid var(--line); color: #344054; background: #fbfcfd; font-size: 13px; text-align: left; }
+    td { height: 59px; padding: 10px 12px; border-bottom: 1px solid #edf1f5; color: #344054; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .check { width: 16px; height: 16px; }
+    .uid { color: #3986e9; font-size: 13px; }
+    .pill { display: inline-flex; padding: 2px 7px; border-radius: 3px; font-size: 12px; }
+    .pill.green { color: var(--green); background: var(--green-soft); }
+    .pill.blue { color: #1d69d1; background: #edf4ff; }
+    .level { color: #4ca55d; font-weight: 650; }
+    .action-cell { position: relative; }
+    .row-actions { display: flex; align-items: center; gap: 7px; }
+    .call-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border: 0; border-radius: 6px; color: #fff; background: #3c85ee; }
+    .more-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 0; border-radius: 6px; color: #fff; background: #57a8f7; }
+    .more-menu { position: absolute; right: 8px; top: 44px; z-index: 20; width: 150px; padding: 6px 0; border: 1px solid #e3e7ec; border-radius: 4px; background: #fff; box-shadow: var(--shadow); text-align: left; }
+    .more-menu button { width: 100%; padding: 8px 14px; border: 0; color: #4b5563; background: #fff; text-align: left; }
+    .more-menu button:hover { color: var(--blue); background: #f5f9ff; }
+    .empty { padding: 60px 20px; text-align: center; color: var(--muted); }
+    .empty strong { display: block; margin-bottom: 6px; color: #344054; }
+    .overlay { position: fixed; inset: 0; z-index: 80; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(17, 24, 39, .42); }
+    .overlay.open { display: flex; }
+    .modal { width: min(480px, 100%); border-radius: 7px; background: #fff; box-shadow: var(--shadow); }
+    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 22px 24px 16px; }
+    .modal-header h2 { margin: 0; font-size: 20px; font-weight: 500; }
+    .modal-header p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .icon-btn { padding: 0 4px; border: 0; color: #9aa3af; background: transparent; font-size: 25px; line-height: 1; }
+    .modal-body { padding: 10px 40px 22px; }
+    .field-row { display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: center; gap: 10px; }
+    .field-row label { color: #4b5563; font-weight: 550; }
+    .required::before { content: "*"; margin-right: 6px; color: var(--red); }
+    .error { min-height: 20px; margin: 5px 0 0 122px; color: var(--red); font-size: 12px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 0 24px 24px; }
+    .modal-footer .btn { min-height: 36px; min-width: 72px; }
+    .readonly { padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: #fafbfc; color: #475467; }
+    .toast { position: fixed; left: 50%; bottom: 28px; z-index: 100; padding: 9px 14px; border-radius: 7px; color: #fff; background: #172a44; opacity: 0; pointer-events: none; transform: translate(-50%, 16px); transition: .2s ease; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 56px minmax(0, 1fr); }
+      .content { padding: 12px; }
+      .filter-grid { grid-template-columns: 1fr 1fr; }
+      .account { display: none; }
+    }
+    @media (max-width: 620px) {
+      .filter-grid { grid-template-columns: 1fr; }
+      .top-actions { width: auto; }
+      .flow { align-items: flex-start; flex-direction: column; }
+      .flow button { margin-left: 0; }
+      .field-row { grid-template-columns: 1fr; }
+      .error { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">D</div>
+      <button class="nav-item active" type="button" data-nav="salesCenter"><span>▦</span><br><span data-i18n="salesCenter">销售中心</span></button>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div class="title-wrap"><span class="title-bar"></span><h1 data-i18n="salesCenter">销售中心</h1></div>
+        <div class="top-actions">
+          <div class="lang-switch" aria-label="Language">
+            <button class="lang-btn active" type="button" data-lang="zh">中</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+          <div class="account"><div class="avatar">L</div><span>Linh Nguyen</span></div>
+        </div>
+      </header>
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"></section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const I18N = {
+      zh: {
+        salesCenter: "销售中心", settings: "分配与掉库设置", flow: "流程：注册（有手机号）→ 自动分配 / 待领取 → 跟进中 → 付费回流用户中心", viewDetail: "查看详情",
+        publicPool: "公海", mine: "我的跟进", paid: "已付费", calls: "通话记录", search: "搜索手机号 / 用户ID / 姓名",
+        line: "业务线", allLine: "全部业务线", intent: "购买意向", allIntent: "购买意向", firstCc: "首跟 CC", cc: "CC", stage: "当前跟进阶段",
+        age: "年龄段", level: "课程等级", landing: "渠道来源-落地页", app: "渠道来源-App", consultAppointment: "销售咨询预约",
+        reservedCall: "预约外呼", registerTime: "注册时间", startDate: "开始日期", endDate: "结束日期", firstOutbound: "首次外呼状态",
+        firstConnected: "首次接通状态", outboundMin: "外呼次数最小值", outboundMax: "外呼次数最大值", connectedMin: "外呼接通次数最小值",
+        connectedMax: "外呼接通次数最大值", query: "查询", reset: "重置筛选", download: "下载数据",
+        user: "用户 ID", name: "学生姓名", status: "用户状态", userType: "用户类型", login: "登录账号", action: "操作",
+        call: "拨号", more: "更多", trialReport: "试听课报告", updateFollow: "更新跟进", adjustLevel: "调整正式课等级",
+        reassign: "重新分配线索", addDuration: "添加会员时长", emptyTitle: "当前页签暂无数据", emptyBody: "请返回已付费页签继续处理。",
+        modalTitle: "调整正式课等级", close: "关闭", cancel: "取消", save: "保存", formalLevel: "正式课等级",
+        selectLevel: "请选择正式课等级", selectRequired: "请选择正式课等级", levelUpdated: "正式课等级已更新",
+        reportTitle: "试听课报告", reportText: "课程状态", reportDone: "体验课已完成", followTitle: "更新跟进", notes: "跟进说明",
+        followUpdated: "跟进信息已更新", reassignTitle: "重新分配线索", newCc: "新 CC", reassigned: "线索已重新分配",
+        durationTitle: "添加会员时长", durationDays: "增加天数", durationAdded: "会员时长已添加", settingsTitle: "分配与掉库设置",
+        settingText: "沿用销售中心现有分配与掉库规则。", detailTitle: "业务流程", detailText: "注册后自动分配或领取，进入跟进；付费后回流至用户中心，并在已付费列表继续服务。",
+        callStarted: "正在呼叫", currentPage: "已付费", paidStatus: "付费", formalUser: "正式用户", noData: "暂无数据"
+      },
+      en: {
+        salesCenter: "Sales Center", settings: "Assignment Settings", flow: "Registration (with phone) → Auto assignment / Claim → Follow-up → Paid and returned to User Center", viewDetail: "View details",
+        publicPool: "Public pool", mine: "My follow-ups", paid: "Paid", calls: "Call records", search: "Search phone / user ID / name",
+        line: "Business Line", allLine: "All business lines", intent: "Purchase Intent", allIntent: "Purchase Intent", firstCc: "First CC", cc: "CC", stage: "Current Follow-up Stage",
+        age: "Age Range", level: "Course Level", landing: "Channel Source - Landing Page", app: "Channel Source - App", consultAppointment: "Consultation Appointment",
+        reservedCall: "Reserved Call", registerTime: "Registration Time", startDate: "Start date", endDate: "End date", firstOutbound: "First Outbound Status",
+        firstConnected: "First Connection Status", outboundMin: "Min Outbound Count", outboundMax: "Max Outbound Count", connectedMin: "Min Connected Count",
+        connectedMax: "Max Connected Count", query: "Search", reset: "Reset filters", download: "Download",
+        user: "User ID", name: "Student Name", status: "User Status", userType: "User Type", login: "Login Account", action: "Actions",
+        call: "Call", more: "More", trialReport: "Trial Report", updateFollow: "Update Follow-up", adjustLevel: "Adjust Formal Course Level",
+        reassign: "Reassign Lead", addDuration: "Add Membership Duration", emptyTitle: "No data in this tab", emptyBody: "Return to the Paid tab to continue.",
+        modalTitle: "Adjust Formal Course Level", close: "Close", cancel: "Cancel", save: "Save", formalLevel: "Formal Course Level",
+        selectLevel: "Select a formal course level", selectRequired: "Select a formal course level", levelUpdated: "Formal course level updated",
+        reportTitle: "Trial Report", reportText: "Course status", reportDone: "Trial completed", followTitle: "Update Follow-up", notes: "Follow-up notes",
+        followUpdated: "Follow-up updated", reassignTitle: "Reassign Lead", newCc: "New CC", reassigned: "Lead reassigned",
+        durationTitle: "Add Membership Duration", durationDays: "Additional days", durationAdded: "Membership duration added", settingsTitle: "Assignment Settings",
+        settingText: "The existing Sales Center assignment and release rules remain unchanged.", detailTitle: "Business Process", detailText: "After registration, leads are assigned or claimed, then enter follow-up. Paid users return to User Center and remain available in the Paid list.",
+        callStarted: "Calling", currentPage: "Paid", paidStatus: "Paid", formalUser: "Formal User", noData: "No data"
+      }
+    };
+
+    let leads = [
+      { id: "2122540258512179202", name: "王峻希", intent: "未填写", status: "paid", userType: "formal", age: "6-8", level: "L4", login: "+60 167613395", landing: "KOL Malaysia", app: "—", cc: "Linh Nguyen", firstCc: "Linh Nguyen", stage: "已付款", line: "Malaysia", consult: "是", reserve: "否", registerDate: "2026-11-18", firstOutbound: "已接通", firstConnected: "已接通", outboundCount: 3, connectedCount: 1 },
+      { id: "2123944734544408578", name: "Jayna", intent: "未填写", status: "paid", userType: "formal", age: "3-5", level: "L3", login: "+60 162589038", landing: "—", app: "TikTok", cc: "Linh Nguyen", firstCc: "Linh Nguyen", stage: "已付款", line: "Malaysia", consult: "是", reserve: "是", registerDate: "2026-11-17", firstOutbound: "已接通", firstConnected: "已接通", outboundCount: 2, connectedCount: 2 },
+      { id: "2123037990997823490", name: "Yau Yik Kai", intent: "未填写", status: "paid", userType: "formal", age: "6-8", level: "L3", login: "+60 126378917", landing: "—", app: "—", cc: "Linh Nguyen", firstCc: "Linh Nguyen", stage: "已付款", line: "Malaysia", consult: "是", reserve: "否", registerDate: "2026-11-16", firstOutbound: "已接通", firstConnected: "已接通", outboundCount: 4, connectedCount: 1 },
+      { id: "2125071176405700610", name: "Nur Aisyah", intent: "有意向", status: "paid", userType: "formal", age: "9-10", level: "L2", login: "+60 173028661", landing: "Google MY", app: "Facebook", cc: "Linh Nguyen", firstCc: "Linh Nguyen", stage: "已付款", line: "Malaysia", consult: "是", reserve: "是", registerDate: "2026-11-15", firstOutbound: "已接通", firstConnected: "已接通", outboundCount: 1, connectedCount: 1 },
+      { id: "2126810432015784421", name: "Kanya P.", intent: "有意向", status: "paid", userType: "formal", age: "6-8", level: "L5", login: "+66 842057116", landing: "TikTok TH", app: "TikTok", cc: "Linh Nguyen", firstCc: "Linh Nguyen", stage: "已付款", line: "Thailand", consult: "是", reserve: "是", registerDate: "2026-11-14", firstOutbound: "已接通", firstConnected: "已接通", outboundCount: 5, connectedCount: 2 },
+      { id: "2127101486421772903", name: "Minh Anh", intent: "未填写", status: "paid", userType: "formal", age: "12-14", level: "L1", login: "+84 908442651", landing: "Facebook VN", app: "Facebook", cc: "Linh Nguyen", firstCc: "Linh Nguyen", stage: "已付款", line: "Vietnam", consult: "否", reserve: "否", registerDate: "2026-11-13", firstOutbound: "未接通", firstConnected: "未接通", outboundCount: 2, connectedCount: 0 }
+    ];
+
+    const state = {
+      lang: localStorage.getItem("formal-level-lang") || "zh",
+      tab: "paid",
+      menuId: null,
+      selected: new Set(),
+      filters: { search: "", line: "all", intent: "all", firstCc: "all", cc: "all", stage: "all", age: "all", level: "all", landing: "all", app: "all", consult: "all", reserve: "all", registerStart: "", registerEnd: "", firstOutbound: "", firstConnected: "", outboundMin: "", outboundMax: "", connectedMin: "", connectedMax: "" },
+      modal: null
+    };
+
+    const t = (key) => I18N[state.lang][key] || key;
+    const $ = (selector) => document.querySelector(selector);
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    const showToast = (message) => {
+      const toast = $("#toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
+    };
+    const valueLabel = (value) => {
+      if (state.lang === "zh") return value;
+      return ({ "未填写": "Not set", "有意向": "Interested", "无意向": "Not interested", "跟进中": "Following up", "已付款": "Paid", "是": "Yes", "否": "No", "已接通": "Connected", "未接通": "Not connected" })[value] || value;
+    };
+
+    function optionList(values, selected, placeholder) {
+      return `<option value="all">${esc(placeholder)}</option>${values.map((value) => `<option value="${esc(value)}" ${selected === value ? "selected" : ""}>${esc(value)}</option>`).join("")}`;
+    }
+
+    function filteredLeads() {
+      const f = state.filters;
+      const q = f.search.trim().toLowerCase();
+      return leads.filter((lead) => {
+        if (state.tab !== "paid") return false;
+        return (!q || lead.id.includes(q) || lead.name.toLowerCase().includes(q) || lead.login.toLowerCase().includes(q))
+          && (f.line === "all" || lead.line === f.line)
+          && (f.intent === "all" || lead.intent === f.intent)
+          && (f.firstCc === "all" || lead.firstCc === f.firstCc)
+          && (f.cc === "all" || lead.cc === f.cc)
+          && (f.stage === "all" || lead.stage === f.stage)
+          && (f.age === "all" || lead.age === f.age)
+          && (f.level === "all" || lead.level === f.level)
+          && (f.landing === "all" || lead.landing === f.landing)
+          && (f.app === "all" || lead.app === f.app)
+          && (f.consult === "all" || lead.consult === f.consult)
+          && (f.reserve === "all" || lead.reserve === f.reserve)
+          && (!f.registerStart || lead.registerDate >= f.registerStart)
+          && (!f.registerEnd || lead.registerDate <= f.registerEnd)
+          && (!f.firstOutbound || lead.firstOutbound === f.firstOutbound)
+          && (!f.firstConnected || lead.firstConnected === f.firstConnected)
+          && (!f.outboundMin || lead.outboundCount >= Number(f.outboundMin))
+          && (!f.outboundMax || lead.outboundCount <= Number(f.outboundMax))
+          && (!f.connectedMin || lead.connectedCount >= Number(f.connectedMin))
+          && (!f.connectedMax || lead.connectedCount <= Number(f.connectedMax));
+      });
+    }
+
+    function renderFilters() {
+      const f = state.filters;
+      return `
+        <div class="filter-grid">
+          <input class="filter-control" id="search" value="${esc(f.search)}" placeholder="${esc(t("search"))}">
+          ${select("line", ["Malaysia", "Thailand", "Vietnam"], t("allLine"))}
+          ${select("intent", ["未填写", "有意向", "无意向"], t("allIntent"))}
+          ${select("firstCc", ["Linh Nguyen"], t("firstCc"))}
+          ${select("cc", ["Linh Nguyen"], t("cc"))}
+          ${select("stage", ["跟进中", "已付款"], t("stage"))}
+          ${select("age", ["3-5", "6-8", "9-10", "12-14"], t("age"))}
+          ${select("level", ["L1", "L2", "L3", "L4", "L5", "L6"], t("level"))}
+          ${select("landing", ["KOL Malaysia", "Google MY", "TikTok TH", "Facebook VN", "—"], t("landing"))}
+          ${select("app", ["—", "TikTok", "Facebook"], t("app"))}
+          ${select("consult", ["是", "否"], t("consultAppointment"))}
+          ${select("reserve", ["是", "否"], t("reservedCall"))}
+          <div class="date-range"><input class="filter-control" data-filter="registerStart" type="date" value="${esc(f.registerStart)}" aria-label="${esc(t("startDate"))}"><span>—</span><input class="filter-control" data-filter="registerEnd" type="date" value="${esc(f.registerEnd)}" aria-label="${esc(t("endDate"))}"></div>
+          ${input("firstOutbound", t("firstOutbound"))}
+          ${input("firstConnected", t("firstConnected"))}
+          ${input("outboundMin", t("outboundMin"))}
+          ${input("outboundMax", t("outboundMax"))}
+          ${input("connectedMin", t("connectedMin"))}
+          <div class="filter-actions">
+            ${input("connectedMax", t("connectedMax"))}
+            <button class="btn primary" id="query" type="button">${esc(t("query"))}</button>
+            <button class="btn" id="reset" type="button">${esc(t("reset"))}</button>
+            <button class="btn" id="download" type="button">↓ ${esc(t("download"))}</button>
+          </div>
+        </div>`;
+    }
+
+    function select(key, values, placeholder) {
+      return `<select class="select" data-filter="${key}"><option value="all">${esc(placeholder)}</option>${values.map((value) => `<option value="${esc(value)}" ${state.filters[key] === value ? "selected" : ""}>${esc(valueLabel(value))}</option>`).join("")}</select>`;
+    }
+
+    function input(key, placeholder) {
+      return `<input class="filter-control" data-filter="${key}" value="${esc(state.filters[key])}" placeholder="${esc(placeholder)}">`;
+    }
+
+    function renderMenu(lead) {
+      if (state.menuId !== lead.id) return "";
+      return `<div class="more-menu" data-menu>
+        <button type="button" data-existing="report">${esc(t("trialReport"))}</button>
+        <button type="button" data-existing="follow">${esc(t("updateFollow"))}</button>
+        <button type="button" data-level-action="${lead.id}">${esc(t("adjustLevel"))}</button>
+        <button type="button" data-existing="reassign">${esc(t("reassign"))}</button>
+        <button type="button" data-existing="duration">${esc(t("addDuration"))}</button>
+      </div>`;
+    }
+
+    function renderRows() {
+      const rows = filteredLeads();
+      if (!rows.length) return `<div class="empty"><strong>${esc(t("emptyTitle"))}</strong><span>${esc(t("emptyBody"))}</span></div>`;
+      return `<div class="table-wrap"><table>
+        <thead><tr>
+          <th><input class="check" id="select-all" type="checkbox" ${rows.every((lead) => state.selected.has(lead.id)) ? "checked" : ""}></th>
+          <th>${esc(t("user"))}</th><th>${esc(t("name"))}</th><th>${esc(t("intent"))}</th><th>${esc(t("status"))}</th>
+          <th>${esc(t("userType"))}</th><th>${esc(t("age"))}</th><th>${esc(t("level"))}</th><th>${esc(t("login"))}</th>
+          <th>${esc(t("landing"))}</th><th>${esc(t("action"))}</th>
+        </tr></thead>
+        <tbody>${rows.map((lead) => `<tr>
+          <td><input class="check" type="checkbox" data-select="${lead.id}" ${state.selected.has(lead.id) ? "checked" : ""}></td>
+          <td class="uid">${esc(lead.id)}</td>
+          <td>${esc(lead.name)}</td>
+          <td>${esc(valueLabel(lead.intent))}</td>
+          <td><span class="pill green">${esc(t("paidStatus"))}</span></td>
+          <td><span class="pill blue">${esc(t("formalUser"))}</span></td>
+          <td>${esc(lead.age)}</td><td class="level">${esc(lead.level)}</td>
+          <td>${esc(lead.login)}</td><td>${esc(lead.landing)}</td>
+          <td class="action-cell">
+            <div class="row-actions">
+              <button class="call-btn" type="button" data-call="${lead.id}">☎ ${esc(t("call"))}</button>
+              <button class="more-btn" type="button" data-more="${lead.id}">${esc(t("more"))}⌄</button>
+            </div>${renderMenu(lead)}
+          </td>
+        </tr>`).join("")}</tbody>
+      </table></div>`;
+    }
+
+    function render() {
+      document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+      document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = t(node.dataset.i18n); });
+      document.querySelectorAll(".lang-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.lang === state.lang));
+      const tabs = [["public", t("publicPool"), "3307"], ["mine", t("mine"), "6109"], ["paid", t("paid"), "182"], ["calls", t("calls"), "27762"]];
+      $("#content").innerHTML = `
+        <div class="settings-row"><button class="settings" id="open-settings" type="button">⚙ ${esc(t("settings"))}</button></div>
+        <div class="flow"><strong>${esc(t("flow"))}</strong><button id="open-detail" type="button">${esc(t("viewDetail"))}</button></div>
+        <nav class="tabs">${tabs.map(([key, label, count]) => `<button class="tab ${state.tab === key ? "active" : ""}" type="button" data-tab="${key}">${esc(label)}<span>(${count})</span></button>`).join("")}</nav>
+        <section class="filters">${renderFilters()}</section>
+        <section class="panel">${renderRows()}</section>`;
+      bind();
+    }
+
+    function bind() {
+      $("#open-settings")?.addEventListener("click", () => openSimple("settings"));
+      $("#open-detail")?.addEventListener("click", () => openSimple("detail"));
+      document.querySelectorAll("[data-tab]").forEach((btn) => btn.addEventListener("click", () => {
+        state.tab = btn.dataset.tab; state.menuId = null; render();
+      }));
+      document.querySelectorAll("[data-filter]").forEach((control) => control.addEventListener("change", () => {
+        state.filters[control.dataset.filter] = control.value;
+        render();
+      }));
+      document.querySelectorAll("input[data-filter]:not(#search)").forEach((control) => control.addEventListener("input", () => {
+        state.filters[control.dataset.filter] = control.value;
+      }));
+      $("#search")?.addEventListener("input", (event) => {
+        state.filters.search = event.target.value;
+        render();
+        requestAnimationFrame(() => { const input = $("#search"); if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); } });
+      });
+      $("#query")?.addEventListener("click", () => { render(); showToast(t("query")); });
+      $("#reset")?.addEventListener("click", () => { state.filters = { search: "", line: "all", intent: "all", firstCc: "all", cc: "all", stage: "all", age: "all", level: "all", landing: "all", app: "all", consult: "all", reserve: "all", registerStart: "", registerEnd: "", firstOutbound: "", firstConnected: "", outboundMin: "", outboundMax: "", connectedMin: "", connectedMax: "" }; state.menuId = null; render(); });
+      $("#download")?.addEventListener("click", downloadXls);
+      $("#select-all")?.addEventListener("change", (event) => {
+        const rows = filteredLeads();
+        if (event.target.checked) rows.forEach((lead) => state.selected.add(lead.id));
+        else rows.forEach((lead) => state.selected.delete(lead.id));
+        render();
+      });
+      document.querySelectorAll("[data-select]").forEach((box) => box.addEventListener("change", () => {
+        if (box.checked) state.selected.add(box.dataset.select); else state.selected.delete(box.dataset.select);
+        render();
+      }));
+      document.querySelectorAll("[data-call]").forEach((btn) => btn.addEventListener("click", () => showToast(`${t("callStarted")} ${btn.dataset.call}`)));
+      document.querySelectorAll("[data-more]").forEach((btn) => btn.addEventListener("click", (event) => {
+        event.stopPropagation(); state.menuId = state.menuId === btn.dataset.more ? null : btn.dataset.more; render();
+      }));
+      document.querySelectorAll("[data-level-action]").forEach((btn) => btn.addEventListener("click", (event) => {
+        event.stopPropagation(); state.menuId = null; openLevelModal(btn.dataset.levelAction);
+      }));
+      document.querySelectorAll("[data-existing]").forEach((btn) => btn.addEventListener("click", (event) => {
+        event.stopPropagation(); state.menuId = null; openExistingModal(btn.dataset.existing, findLeadFromMenu(btn));
+      }));
+    }
+
+    function findLeadFromMenu(btn) {
+      const row = btn.closest("tr");
+      return leads.find((lead) => row?.textContent.includes(lead.id));
+    }
+
+    function openLevelModal(id) {
+      const lead = leads.find((item) => item.id === id);
+      if (!lead) return;
+      state.modal = { type: "level", id, selectedLevel: "", error: "", saving: false };
+      renderModal();
+      $("#overlay").classList.add("open");
+      $("#overlay").setAttribute("aria-hidden", "false");
+    }
+
+    function openExistingModal(type, lead) {
+      if (!lead) return;
+      state.modal = { type, leadId: lead.id, draftIntent: lead.intent, draftCc: lead.cc, notes: "", days: "30" };
+      renderModal();
+      $("#overlay").classList.add("open");
+      $("#overlay").setAttribute("aria-hidden", "false");
+    }
+
+    function openSimple(type) {
+      state.modal = { type };
+      renderModal();
+      $("#overlay").classList.add("open");
+      $("#overlay").setAttribute("aria-hidden", "false");
+    }
+
+    function modalHeader(title, subtitle = "") {
+      return `<div class="modal-header"><div><h2 id="modal-title">${esc(title)}</h2><p>${esc(subtitle)}</p></div><button class="icon-btn" type="button" data-close aria-label="${esc(t("close"))}">×</button></div>`;
+    }
+
+    function renderModal() {
+      const modal = $("#modal");
+      if (!state.modal) { modal.innerHTML = ""; return; }
+      const type = state.modal.type;
+      const lead = leads.find((item) => item.id === (state.modal.id || state.modal.leadId));
+      if (type === "level") {
+        modal.innerHTML = `${modalHeader(`${t("modalTitle")} · ${state.modal.id}`)}
+          <div class="modal-body">
+            <div class="field-row"><label class="required" for="formal-level">${esc(t("formalLevel"))}</label><select class="select" id="formal-level" data-modal-select><option value="">${esc(t("selectLevel"))}</option>${["L1","L2","L3","L4","L5","L6"].map((level) => `<option value="${level}" ${state.modal.selectedLevel === level ? "selected" : ""}>${level}</option>`).join("")}</select></div>
+            <div class="error" id="level-error">${esc(state.modal.error)}</div>
+          </div>
+          <div class="modal-footer"><button class="btn" type="button" data-close>${esc(t("cancel"))}</button><button class="btn primary" id="save-level" type="button" ${state.modal.saving ? "disabled" : ""}>${esc(t("save"))}</button></div>`;
+      } else if (type === "report") {
+        modal.innerHTML = `${modalHeader(`${t("reportTitle")} · ${lead.id}`)}<div class="modal-body"><div class="readonly"><strong>${esc(t("reportText"))}</strong><div>${esc(t("reportDone"))}</div></div><div class="modal-footer"><button class="btn" type="button" data-close>${esc(t("close"))}</button></div></div>`;
+      } else if (type === "follow") {
+        modal.innerHTML = `${modalHeader(`${t("followTitle")} · ${lead.id}`)}<div class="modal-body"><div class="field-row"><label>${esc(t("intent"))}</label><select class="select" id="modal-intent"><option value="未填写" ${state.modal.draftIntent === "未填写" ? "selected" : ""}>${esc(valueLabel("未填写"))}</option><option value="有意向" ${state.modal.draftIntent === "有意向" ? "selected" : ""}>${esc(valueLabel("有意向"))}</option><option value="无意向" ${state.modal.draftIntent === "无意向" ? "selected" : ""}>${esc(valueLabel("无意向"))}</option></select></div><div class="field-row" style="margin-top:14px"><label>${esc(t("notes"))}</label><textarea class="select" id="modal-notes" style="height:82px">${esc(state.modal.notes)}</textarea></div><div class="modal-footer"><button class="btn" type="button" data-close>${esc(t("cancel"))}</button><button class="btn primary" id="save-follow" type="button">${esc(t("save"))}</button></div></div>`;
+      } else if (type === "reassign") {
+        modal.innerHTML = `${modalHeader(`${t("reassignTitle")} · ${lead.id}`)}<div class="modal-body"><div class="field-row"><label>${esc(t("newCc"))}</label><select class="select" id="modal-cc"><option>Linh Nguyen</option><option>Mali Tan</option><option>Porn K.</option></select></div><div class="modal-footer"><button class="btn" type="button" data-close>${esc(t("cancel"))}</button><button class="btn primary" id="save-reassign" type="button">${esc(t("save"))}</button></div></div>`;
+      } else if (type === "duration") {
+        modal.innerHTML = `${modalHeader(`${t("durationTitle")} · ${lead.id}`)}<div class="modal-body"><div class="field-row"><label>${esc(t("durationDays"))}</label><input class="input" id="modal-days" type="number" min="1" value="${esc(state.modal.days)}"></div><div class="modal-footer"><button class="btn" type="button" data-close>${esc(t("cancel"))}</button><button class="btn primary" id="save-duration" type="button">${esc(t("save"))}</button></div></div>`;
+      } else {
+        const title = type === "settings" ? t("settingsTitle") : t("detailTitle");
+        const body = type === "settings" ? t("settingText") : t("detailText");
+        modal.innerHTML = `${modalHeader(title)}<div class="modal-body"><div class="readonly">${esc(body)}</div><div class="modal-footer"><button class="btn" type="button" data-close>${esc(t("close"))}</button></div></div>`;
+      }
+      bindModal(lead);
+    }
+
+    function bindModal(lead) {
+      $("#modal").querySelectorAll("[data-close]").forEach((btn) => btn.addEventListener("click", closeModal));
+      $("#formal-level")?.addEventListener("change", (event) => { state.modal.selectedLevel = event.target.value; state.modal.error = ""; });
+      $("#save-level")?.addEventListener("click", () => {
+        if (!state.modal.selectedLevel) {
+          state.modal.error = t("selectRequired"); renderModal(); return;
+        }
+        state.modal.saving = true; renderModal();
+        lead.level = state.modal.selectedLevel;
+        setTimeout(() => { closeModal(); render(); showToast(t("levelUpdated")); }, 220);
+      });
+      $("#save-follow")?.addEventListener("click", () => { lead.intent = $("#modal-intent").value; closeModal(); render(); showToast(t("followUpdated")); });
+      $("#save-reassign")?.addEventListener("click", () => { lead.cc = $("#modal-cc").value; closeModal(); render(); showToast(t("reassigned")); });
+      $("#save-duration")?.addEventListener("click", () => { closeModal(); showToast(t("durationAdded")); });
+    }
+
+    function closeModal() {
+      state.modal = null;
+      $("#overlay").classList.remove("open");
+      $("#overlay").setAttribute("aria-hidden", "true");
+    }
+
+    function downloadXls() {
+      const rows = filteredLeads();
+      const headers = [t("user"), t("name"), t("status"), t("userType"), t("age"), t("level"), t("login"), t("landing")];
+      const content = [headers, ...rows.map((lead) => [lead.id, lead.name, t("paidStatus"), t("formalUser"), lead.age, lead.level, lead.login, lead.landing])]
+        .map((row) => row.map((cell) => String(cell).replace(/\t/g, " ")).join("\t")).join("\n");
+      const blob = new Blob(["\ufeff" + content], { type: "application/vnd.ms-excel;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "paid-users.xls";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 800);
+    }
+
+    $("#overlay").addEventListener("click", (event) => { if (event.target === $("#overlay")) closeModal(); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape") { if (state.modal) closeModal(); else if (state.menuId) { state.menuId = null; render(); } } });
+    document.addEventListener("click", (event) => {
+      if (state.menuId && !event.target.closest(".action-cell")) { state.menuId = null; render(); }
+    });
+    document.querySelectorAll(".lang-btn").forEach((btn) => btn.addEventListener("click", () => {
+      state.lang = btn.dataset.lang;
+      localStorage.setItem("formal-level-lang", state.lang);
+      render();
+      if (state.modal) renderModal();
+    }));
+    document.querySelectorAll("[data-nav]").forEach((btn) => btn.addEventListener("click", () => showToast(t("salesCenter"))));
+
+    render();
+  </script>
+</body>
+</html>

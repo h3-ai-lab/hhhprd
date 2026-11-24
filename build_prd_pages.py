@@ -21,6 +21,7 @@ PROJECTS = {
     "crm-consultation-meeting": "Lark咨询会议与用户详情回写",
     "paused-follow-up-direct-outcome": "移除冗余跟进流程",
     "crm-operating-closure": "CC 快捷工作队列",
+    "formal-course-level": "已付费列表调整正式课等级",
     "cc-activity-dashboard": "CC活跃度看板",
 }
 STATIC_ARCHITECTURE_PAGES = {

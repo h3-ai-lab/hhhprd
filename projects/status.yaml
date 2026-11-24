@@ -1,7 +1,12 @@
 version: 1
-updated_at: 2026-11-23
+updated_at: 2026-11-24
 source: "添加项目PRD到Lark目录"
 projects:
+  - id: REQ-LEVEL-001
+    slug: formal-course-level
+    name: 已付费列表调整正式课等级
+    status: 待上传
+    lark_url: null
   - id: PROG-CRM-001
     slug: crm-operating-closure
     name: CC 快捷工作队列

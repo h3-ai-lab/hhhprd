@@ -1,0 +1,20 @@
+version: 1
+sources:
+  - id: current-paid-list-screenshot
+    type: user-screenshot
+    captured_at: 2026-11-24
+    purpose: 当前已付费列表页签、筛选项、列顺序、行操作和“更多”菜单
+    priority: authoritative
+  - id: current-trial-level-modal-screenshot
+    type: user-screenshot
+    captured_at: 2026-11-24
+    purpose: 现有“修改试听课等级”弹窗的标题、必填选择器、取消和保存交互
+    priority: authoritative
+  - id: learning-level-definition
+    path: ../../crm-learning-plan-progress/prd/PRD.md
+    purpose: 正式课程 Level 共 L1–L6
+    priority: authoritative
+  - id: crm-user-manual
+    path: ../../../../crm-manual/docs/user/U-01.md
+    purpose: 现有修改试听课等级和用户敏感操作说明
+    priority: secondary

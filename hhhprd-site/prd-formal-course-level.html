@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>已付费列表调整正式课等级 · PRD</title>
+  <style>
+    :root{--bg:#f4f6f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#dfe5ec;--blue:#2563eb}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    main{max-width:1040px;margin:0 auto;padding:42px 24px 80px}article{background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:34px}h2,h3,h4{line-height:1.35}
+    h2{font-size:28px;margin:0 0 20px}h3{font-size:21px;margin:30px 0 10px}h4{font-size:17px;margin:22px 0 8px}
+    p{margin:10px 0}a{color:var(--blue)}table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+    th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f7f9fc}
+    blockquote{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}
+    code{background:#f1f4f8;padding:1px 5px;border-radius:4px}pre code{background:transparent;padding:0;border-radius:0;color:inherit}pre{overflow:auto;background:#101828;
+    color:#eef2f7;padding:16px;border-radius:8px}.mermaid{background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:16px;overflow:auto}.top{display:flex;gap:14px;margin-bottom:18px}
+    .top a{text-decoration:none;font-weight:600}
+    @media(max-width:700px){main{padding:16px 10px}article{padding:20px 16px}}
+  </style>
+</head>
+<body><main>
+  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/formal-course-level/prd/PRD.md">查看 Markdown 源文件</a></div>
+  <article><h2>已付费列表调整正式课等级</h2>
+<blockquote>在销售中心“已付费”列表的行操作中增加“调整正式课等级”，沿用现有“修改试听课等级”的单字段弹窗交互。<br>项目编号：REQ-LEVEL-001｜状态：待上传｜更新时间：2026-11-24<br>需求类型：表单、字段与列表｜补充类型：权限与审计</blockquote>
+<blockquote>📌<br>- <strong>入口</strong>：销售中心 → 已付费 → 更多 → 调整正式课等级。<br>- <strong>范围</strong>：只调整用户当前正式课等级，不改列表列、筛选项、下载入口和其他行操作。<br>- <strong>数据隔离</strong>：正式课等级与试听课等级分别保存，互不覆盖。<br>- <strong>历史保留</strong>：不改写历史学习记录、订单、会员有效期和付款信息。</blockquote>
+<h3>交互原型</h3>
+<p><a href="https://h3-ai-lab.github.io/hhhprd/projects/formal-course-level/prototype/" target="_blank" rel="noopener">打开完整交互原型</a></p>
+<h3>目标与范围</h3>
+<p><strong>目标</strong></p>
+<p>让有权限的一线销售在已付费列表中直接完成正式课等级调整，不需要离开当前列表或进入用户中心。</p>
+<p><strong>做</strong></p>
+<ul><li>在“已付费”列表“更多”菜单中增加“调整正式课等级”。</li><li>打开正式课等级弹窗，选择 L1–L6 中一个等级并保存。</li><li>保存成功后关闭弹窗、刷新当前行课程等级并显示成功提示。</li><li>为动作配置独立 RBAC 权限，并记录操作审计。</li></ul>
+<p><strong>不做</strong></p>
+<ul><li>不新增页面、列、筛选项、批量操作或导出入口。</li><li>不修改试听课等级、订单、会员权益、会员有效期、付款信息或历史学习记录。</li><li>不新增列表排序能力。</li><li>不使用正式课等级调整修改线索分配、归属或跟进阶段。</li></ul>
+<h3>现有页面与目标差异</h3>
+<p>当前页面依据 2026-11-24 用户提供的已付费列表截图和试听课等级弹窗截图；只对截图中可见的字段、菜单和交互作出现状结论。</p>
+<p>当前列表：</p>
+<p><code>勾选 → 用户 ID → 学生姓名 → 购买意向 → 用户状态 → 用户类型 → 年龄段 → 课程等级 → 登录账号 → 渠道来源-落地页 → 操作</code></p>
+<p>目标列表保持完全相同的列顺序，不新增列。</p>
+<p>当前“更多”菜单：</p>
+<p><code>试听课报告 → 更新跟进 → 重新分配线索 → 添加会员时长</code></p>
+<p>目标“更多”菜单：</p>
+<p><code>试听课报告 → 更新跟进 → 调整正式课等级 → 重新分配线索 → 添加会员时长</code></p>
+<table><thead><tr><th>现状顺序</th><th>内容</th><th>现状位置</th><th>比对结果</th><th>目标位置</th><th>变更原因</th></tr></thead><tbody><tr><td>1–10</td><td>勾选、用户 ID、学生姓名、购买意向、用户状态、用户类型、年龄段、课程等级、登录账号、渠道来源-落地页</td><td>列表列</td><td>保留</td><td>原顺序不变</td><td>本需求不调整列表结构</td></tr><tr><td>11</td><td>拨号、更多</td><td>操作列</td><td>保留</td><td>原位置不变</td><td>保留现有行操作</td></tr><tr><td>菜单 1</td><td>试听课报告</td><td>更多菜单第 1 项</td><td>保留</td><td>原位置</td><td>与正式课等级无关</td></tr><tr><td>菜单 2</td><td>更新跟进</td><td>更多菜单第 2 项</td><td>保留</td><td>原位置</td><td>保留现有跟进入口</td></tr><tr><td>菜单 3</td><td>调整正式课等级</td><td>无</td><td>新增</td><td>更新跟进之后</td><td>课程定级属于用户资料调整，放在重新分配线索之前</td></tr><tr><td>菜单 4</td><td>重新分配线索</td><td>更多菜单第 3 项</td><td>保留</td><td>调整正式课等级之后</td><td>保持现有操作</td></tr><tr><td>菜单 5</td><td>添加会员时长</td><td>更多菜单第 4 项</td><td>保留</td><td>原位置</td><td>与正式课等级无关</td></tr></tbody></table>
+<h3>业务流程</h3>
+<div class="mermaid">flowchart TD
+    A[进入已付费列表] --&gt; B[点击行操作：更多]
+    B --&gt; C[选择调整正式课等级]
+    C --&gt; D[弹窗显示用户 ID 和正式课等级选择器]
+    D --&gt; E{选择等级}
+    E --&gt;|取消或关闭| F[关闭弹窗 保持原等级]
+    E --&gt;|保存| G{校验是否已选择}
+    G --&gt;|未选择| H[显示请选择正式课等级]
+    G --&gt;|已选择| I[写入当前正式课等级]
+    I --&gt;|成功| J[关闭弹窗 更新当前行 显示成功提示]
+    I --&gt;|失败| K[保留弹窗和已选等级 显示失败原因]</div>
+<h3>字段定义</h3>
+<table><thead><tr><th>字段</th><th>业务含义</th><th>类型与枚举</th><th>必填</th><th>默认值</th><th>可编辑规则</th><th>异常展示</th><th>排序要求</th></tr></thead><tbody><tr><td>正式课等级</td><td>用户当前使用的正式课程能力级别</td><td>单选；L1、L2、L3、L4、L5、L6</td><td>是</td><td>不预选，显示“请选择正式课等级”</td><td>有调整权限的用户可在已付费列表弹窗中修改</td><td>未选择时提示“请选择正式课等级”；课级目录加载失败时禁止保存并允许重试</td><td>不支持；当前列表没有排序入口</td></tr></tbody></table>
+<p>规则：</p>
+<ul><li>下拉选项只返回当前有效且可分配的正式课等级。</li><li>正式课等级与试听课等级分别保存。</li><li>已付费列表“课程等级”列展示当前正式课等级。</li><li>等级目录不可用时，弹窗保留，选择器禁用，保存按钮不可提交，并提供重试。</li></ul>
+<h3>页面与交互</h3>
+<h4>已付费列表</h4>
+<ul><li>默认打开“已付费”页签，保持现有筛选项、列、下载入口和行操作顺序。</li><li>每一行“更多”菜单增加“调整正式课等级”。</li><li>没有调整权限的角色不显示该菜单项。</li><li>点击菜单项时关闭“更多”菜单并打开正式课等级弹窗。</li></ul>
+<h4>正式课等级弹窗</h4>
+<ul><li>标题：<code>调整正式课等级 · {用户 ID}</code>。</li><li>内容只包含必填字段“正式课等级”。</li><li>选择器初始显示占位文案“请选择正式课等级”。</li><li>底部操作固定为“取消”和“保存”。</li><li>点击取消、右上角关闭或点击遮罩关闭弹窗，不保存修改。</li><li>点击保存且未选择等级时，在选择器下方显示“请选择正式课等级”，弹窗保持打开。</li><li>保存成功后关闭弹窗，当前行“课程等级”立即更新，并提示“正式课等级已更新”。</li><li>保存失败时保留弹窗、已选等级和当前页面状态，展示失败原因并允许重试。</li><li>保存过程中防止重复提交。</li></ul>
+<h4>数据影响</h4>
+<ul><li>更新成功后，当前用户的正式课等级立即成为新值。</li><li>已完成课程、课次、学习记录和历史定级快照保持在原等级，不随本次调整重写。</li><li>后续正式课程内容按新的当前正式课等级使用。</li><li>试听课等级、订单、支付记录、会员有效期、线索归属和跟进阶段不变。</li></ul>
+<h3>搜索、筛选与导出</h3>
+<ul><li>搜索、筛选、日期、下载按钮和结果范围保持现状。</li><li>本需求不新增筛选器，也不调整筛选项位置。</li><li>下载范围与当前筛选一致；如现有导出包含“课程等级”，导出更新后的正式课等级。</li><li>当前列表没有排序入口，本需求所有字段均不支持排序，不新增表头排序。</li></ul>
+<h3>RBAC 权限数据</h3>
+<h4>功能权限</h4>
+<table><thead><tr><th>页面/资源</th><th>操作</th><th>业务含义</th><th>默认角色</th><th>数据范围</th><th>审计</th></tr></thead><tbody><tr><td>销售中心 → 已付费</td><td>查看和搜索列表</td><td>查看正式课等级及现有已付费信息</td><td>销售专员、销售组长、系统管理员、超级管理员及已有销售中心查看权限的自定义角色</td><td>复用现有销售中心数据范围</td><td>否</td></tr><tr><td>销售中心 → 已付费 → 更多</td><td>调整正式课等级</td><td>修改用户当前正式课等级</td><td>销售专员、销售组长、系统管理员、超级管理员</td><td>仅可操作当前可见且属于现有权限范围的用户</td><td>是</td></tr><tr><td>销售中心 → 已付费</td><td>下载数据</td><td>下载当前筛选范围</td><td>沿用现有下载权限</td><td>与列表查看范围取交集</td><td>沿用现有下载审计</td></tr></tbody></table>
+<h4>字段与数据权限</h4>
+<table><thead><tr><th>字段组/列表</th><th>可见角色</th><th>编辑角色</th><th>脱敏/隐藏</th><th>可导出</th><th>候选范围限制</th></tr></thead><tbody><tr><td>课程等级</td><td>有已付费列表查看权限的角色</td><td>无；只通过独立动作修改</td><td>无权限时不展示菜单项</td><td>沿用现有导出权限</td><td>—</td></tr><tr><td>正式课等级选项</td><td>有调整动作权限的角色</td><td>不允许编辑选项目录</td><td>无权限时不返回选项</td><td>不作为独立字段导出</td><td>只返回当前有效正式课等级 L1–L6</td></tr><tr><td>已付费列表其他字段</td><td>不因本需求扩大可见范围</td><td>沿用现有规则</td><td>沿用现有手机号等敏感字段规则</td><td>沿用现有导出权限</td><td>沿用现有业务线和组织范围</td></tr></tbody></table>
+<h4>权限数据变更</h4>
+<table><thead><tr><th>变更类型</th><th>权限层级</th><th>权限项</th><th>业务说明</th><th>默认角色/数据范围</th><th>是否新增审计</th></tr></thead><tbody><tr><td>新增</td><td>动作</td><td><code>crm.sales.paid_list.formal_course_level.update</code></td><td>在已付费列表中调整正式课等级</td><td>销售专员、销售组长、系统管理员、超级管理员；继承现有数据范围</td><td>是</td></tr><tr><td>复用</td><td>页面</td><td>销售中心已付费列表查看</td><td>可进入列表并看到课程等级</td><td>现有销售中心角色</td><td>否</td></tr><tr><td>复用</td><td>数据</td><td>销售中心线索和用户数据范围</td><td>菜单可见、写入对象和保存校验使用同一范围</td><td>本人、团队或授权组织范围</td><td>否</td></tr><tr><td>复用</td><td>导出</td><td>销售中心现有下载权限</td><td>不因调整等级自动获得导出能力</td><td>现有导出角色</td><td>沿用现有审计</td></tr></tbody></table>
+<p>审计至少记录：操作人、操作时间、用户 ID、业务线、调整前后的正式课等级、操作结果和失败原因。审计记录只追加，不因用户停用或离职删除。</p>
+<h3>数据与异常</h3>
+<table><thead><tr><th>数据/场景</th><th>处理</th></tr></thead><tbody><tr><td>未选择等级</td><td>阻止保存，显示“请选择正式课等级”</td></tr><tr><td>选择等级与当前等级相同</td><td>允许保存，返回成功，记录一次无差异的操作结果</td></tr><tr><td>等级目录加载中</td><td>选择器显示加载状态，禁止保存</td></tr><tr><td>等级目录加载失败</td><td>保留弹窗，选择器禁用，提供重试</td></tr><tr><td>保存失败</td><td>保留弹窗和已选值，显示失败原因，允许重试</td></tr><tr><td>重复提交</td><td>保存处理中禁用保存按钮，不产生重复记录</td></tr><tr><td>用户状态在弹窗打开后变化</td><td>保存时重新校验已付费状态和操作权限；不满足时阻止保存并提示刷新列表</td></tr><tr><td>权限被撤销</td><td>菜单、弹窗和保存动作在下次请求同时失效</td></tr><tr><td>用户离职或账号停用</td><td>不影响用户正式课等级调整；执行人权限按账号生命周期规则失效</td></tr><tr><td>数据并发生效</td><td>以最后一次成功保存为准；后保存者提示等级已变化并刷新当前值</td></tr></tbody></table></article>
+</main>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+</script>
+</body></html>
