@@ -41,12 +41,23 @@ const COPY = {
     available: "可分配",
     noReceiver: "无接收人",
     noRules: "暂无分组规则",
-    noRulesHint: "配置后，新线索会先进入目标小组。",
+    noRulesHint: "配置后，新线索会先进入所选小组范围。",
     selectChannel: "请选择渠道",
     selectGroup: "请选择目标小组",
-    duplicateChannel: "该渠道已配置目标小组",
+    duplicateChannel: "所选渠道中有渠道已配置目标小组",
     requiredError: "请选择渠道和目标小组",
-    noReceiverHint: "该组暂无接收人，线索将进入小组待分配池。",
+    noReceiverHint: "所选小组均无接收人，线索将进入业务线待分配池。",
+    selectedChannels: "已选 {count} 个渠道",
+    selectedGroups: "已选 {count} 个小组",
+    selectedChannelOne: "已选 1 个渠道",
+    selectedGroupOne: "已选 1 个小组",
+    searchChannel: "搜索渠道名称或 Code",
+    searchGroup: "搜索小组名称或路径",
+    noMatches: "无匹配小组",
+    done: "完成",
+    clear: "清空",
+    channelPicker: "选择渠道",
+    groupPicker: "选择目标小组",
     deleteConfirm: "确认删除这条规则？",
     confirmDelete: "删除",
     keepRule: "保留",
@@ -118,12 +129,23 @@ const COPY = {
     available: "Available",
     noReceiver: "No receivers",
     noRules: "No group rules",
-    noRulesHint: "New leads will first route to the selected group after setup.",
+    noRulesHint: "New leads will first route to the selected group scope after setup.",
     selectChannel: "Select channel",
     selectGroup: "Select target group",
-    duplicateChannel: "This channel already has a target group.",
+    duplicateChannel: "One or more selected channels already have a target group.",
     requiredError: "Select a channel and target group.",
-    noReceiverHint: "This group has no receiver. New leads will enter its group pool.",
+    noReceiverHint: "None of the selected groups has a receiver. New leads will enter the Business Line pool.",
+    selectedChannels: "{count} channels selected",
+    selectedGroups: "{count} groups selected",
+    selectedChannelOne: "1 channel selected",
+    selectedGroupOne: "1 group selected",
+    searchChannel: "Search channel name or code",
+    searchGroup: "Search group name or path",
+    noMatches: "No matching groups",
+    done: "Done",
+    clear: "Clear",
+    channelPicker: "Select channels",
+    groupPicker: "Select target groups",
     deleteConfirm: "Delete this rule?",
     confirmDelete: "Delete",
     keepRule: "Keep",
@@ -162,13 +184,13 @@ const LINES = [
 
 const GROUPS = {
   TH: [
-    { id: "th_g1", zh: "泰国业务线 / 泰国一组", nameZh: "泰国一组", nameEn: "Thailand Group 1", members: ["sinhoong.tan", "tracy.tam"] },
-    { id: "th_g2", zh: "泰国业务线 / 泰国二组", nameZh: "泰国二组", nameEn: "Thailand Group 2", members: ["pimnara", "pimmada"] },
-    { id: "th_g3", zh: "泰国业务线 / 泰国三组", nameZh: "泰国三组", nameEn: "Thailand Group 3", members: [] }
+    { id: "th_g1", zh: "泰国业务线 / 泰国一部 / 泰国一组", nameZh: "泰国一组", nameEn: "Thailand Group 1", deptZh: "泰国一部", deptEn: "Thailand Department 1", members: ["sinhoong.tan", "tracy.tam"] },
+    { id: "th_g2", zh: "泰国业务线 / 泰国一部 / 泰国二组", nameZh: "泰国二组", nameEn: "Thailand Group 2", deptZh: "泰国一部", deptEn: "Thailand Department 1", members: ["pimnara", "pimmada"] },
+    { id: "th_g3", zh: "泰国业务线 / 泰国二部 / 泰国三组", nameZh: "泰国三组", nameEn: "Thailand Group 3", deptZh: "泰国二部", deptEn: "Thailand Department 2", members: [] }
   ],
   MY: [
-    { id: "my_g1", zh: "马来西亚业务线 / 马来西亚一组", nameZh: "马来西亚一组", nameEn: "Malaysia Group 1", members: ["carmens.sam", "jiawei.loh"] },
-    { id: "my_g2", zh: "马来西亚业务线 / 马来西亚二组", nameZh: "马来西亚二组", nameEn: "Malaysia Group 2", members: ["xiaoqian.tan", "joanna.loh"] }
+    { id: "my_g1", zh: "马来西亚业务线 / 马来西亚一部 / 马来西亚一组", nameZh: "马来西亚一组", nameEn: "Malaysia Group 1", deptZh: "马来西亚一部", deptEn: "Malaysia Department 1", members: ["carmens.sam", "jiawei.loh"] },
+    { id: "my_g2", zh: "马来西亚业务线 / 马来西亚一部 / 马来西亚二组", nameZh: "马来西亚二组", nameEn: "Malaysia Group 2", deptZh: "马来西亚一部", deptEn: "Malaysia Department 1", members: ["xiaoqian.tan", "joanna.loh"] }
   ]
 };
 
@@ -208,17 +230,16 @@ const WEIGHTS = {
 const persisted = {
   TH: {
     rules: [
-      { id: "rule_th_tt", channelId: "th_tt", groupId: "th_g1", enabled: true },
-      { id: "rule_th_fb", channelId: "th_fb", groupId: "th_g2", enabled: true },
-      { id: "rule_th_app", channelId: "th_app", groupId: "th_g3", enabled: true }
+      { id: "rule_th_tt", channelIds: ["th_tt", "th_google"], groupIds: ["th_g1", "th_g2"], enabled: true },
+      { id: "rule_th_fb", channelIds: ["th_fb"], groupIds: ["th_g2"], enabled: true },
+      { id: "rule_th_app", channelIds: ["th_app"], groupIds: ["th_g3"], enabled: true }
     ],
     weights: clone(WEIGHTS.TH),
     drop: { enabled: true, minutes: 7200 }
   },
   MY: {
     rules: [
-      { id: "rule_my_fb", channelId: "my_fb", groupId: "my_g2", enabled: true },
-      { id: "rule_my_tt", channelId: "my_tt", groupId: "my_g1", enabled: false }
+      { id: "rule_my_fb", channelIds: ["my_fb", "my_tt"], groupIds: ["my_g1", "my_g2"], enabled: true }
     ],
     weights: clone(WEIGHTS.MY),
     drop: { enabled: false, minutes: 7200 }
@@ -233,10 +254,23 @@ let activeTab = "rules";
 let lineId = "TH";
 let forms = { TH: null, MY: null };
 let deleteConfirmId = null;
+let pickerType = null;
+let channelSearch = "";
+let groupSearch = "";
 let toastTimer = null;
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
 }
 
 function copy() {
@@ -265,15 +299,19 @@ function channelName(item) {
   return item ? item[lang] || item.zh : "";
 }
 
-function activeMembers(group) {
-  return group.members.filter((name) => {
+function activeMembers(groupIds) {
+  const selectedGroups = GROUPS[lineId].filter((group) => groupIds.includes(group.id));
+  const memberNames = [...new Set(selectedGroups.flatMap((group) => group.members))];
+  return memberNames.filter((name) => {
     const member = draft[lineId].weights.find((item) => item.name === name);
     return member && member.weight > 0;
   });
 }
 
-function hasDuplicate(channelId, ruleId, targetLine = lineId) {
-  return draft[targetLine].rules.some((rule) => rule.channelId === channelId && rule.id !== ruleId);
+function hasDuplicate(channelIds, ruleId, targetLine = lineId) {
+  return draft[targetLine].rules.some((rule) =>
+    rule.id !== ruleId && rule.channelIds.some((id) => channelIds.includes(id))
+  );
 }
 
 function showToast(message, isError = false) {
@@ -298,6 +336,9 @@ function openSettings() {
   draft = clone(current);
   forms = { TH: null, MY: null };
   deleteConfirmId = null;
+  pickerType = null;
+  channelSearch = "";
+  groupSearch = "";
   modalOpen = true;
   activeTab = "rules";
   render();
@@ -307,6 +348,9 @@ function closeSettings(showDiscard = true) {
   draft = clone(current);
   forms = { TH: null, MY: null };
   deleteConfirmId = null;
+  pickerType = null;
+  channelSearch = "";
+  groupSearch = "";
   modalOpen = false;
   render();
   if (showDiscard) showToast(copy().discarded);
@@ -318,6 +362,9 @@ function saveSettings() {
   modalOpen = false;
   forms = { TH: null, MY: null };
   deleteConfirmId = null;
+  pickerType = null;
+  channelSearch = "";
+  groupSearch = "";
   render();
   showToast(copy().saved);
 }
@@ -325,40 +372,80 @@ function saveSettings() {
 function setTab(tab) {
   activeTab = tab;
   deleteConfirmId = null;
+  pickerType = null;
   render();
 }
 
 function setLine(value) {
   lineId = value;
   deleteConfirmId = null;
+  pickerType = null;
+  channelSearch = "";
+  groupSearch = "";
   render();
 }
 
 function startRule(rule = null) {
   forms[lineId] = rule
-    ? { mode: "edit", id: rule.id, channelId: rule.channelId, groupId: rule.groupId, error: "" }
-    : { mode: "add", id: null, channelId: "", groupId: "", error: "" };
+    ? { mode: "edit", id: rule.id, channelIds: [...rule.channelIds], groupIds: [...rule.groupIds], error: "" }
+    : { mode: "add", id: null, channelIds: [], groupIds: [], error: "" };
   deleteConfirmId = null;
+  pickerType = null;
+  channelSearch = "";
+  groupSearch = "";
   render();
 }
 
 function cancelRule() {
   forms[lineId] = null;
+  pickerType = null;
+  channelSearch = "";
+  groupSearch = "";
   render();
 }
 
-function updateFormField(field, value) {
+function toggleFormSelection(field, value) {
   const form = forms[lineId];
   if (!form) return;
-  form[field] = value;
+  const selected = form[field === "channels" ? "channelIds" : "groupIds"];
+  const index = selected.indexOf(value);
+  if (index >= 0) selected.splice(index, 1);
+  else selected.push(value);
   form.error = "";
   render();
+}
+
+function togglePicker(type) {
+  pickerType = pickerType === type ? null : type;
+  if (pickerType === "channels") channelSearch = "";
+  if (pickerType === "groups") groupSearch = "";
+  render();
+}
+
+function clearPickerSelection() {
+  const form = forms[lineId];
+  if (!form || !pickerType) return;
+  form[pickerType === "channels" ? "channelIds" : "groupIds"] = [];
+  form.error = "";
+  render();
+}
+
+function setGroupSearch(value) {
+  groupSearch = value;
+  const list = document.getElementById("group-tree-options");
+  if (list) list.innerHTML = renderGroupTreeOptions();
+}
+
+function setChannelSearch(value) {
+  channelSearch = value;
+  const list = document.getElementById("channel-options");
+  if (list) list.innerHTML = renderChannelOptions(forms[lineId]);
 }
 
 function commitRuleForm(targetLine, focusError = false) {
   const form = forms[targetLine];
   if (!form) return true;
-  if (!form.channelId || !form.groupId) {
+  if (!form.channelIds.length || !form.groupIds.length) {
     form.error = copy().requiredError;
     if (focusError) {
       modalOpen = true;
@@ -368,7 +455,7 @@ function commitRuleForm(targetLine, focusError = false) {
     }
     return false;
   }
-  if (hasDuplicate(form.channelId, form.id, targetLine)) {
+  if (hasDuplicate(form.channelIds, form.id, targetLine)) {
     form.error = copy().duplicateChannel;
     if (focusError) {
       modalOpen = true;
@@ -380,13 +467,13 @@ function commitRuleForm(targetLine, focusError = false) {
   }
   if (form.mode === "edit") {
     const row = draft[targetLine].rules.find((rule) => rule.id === form.id);
-    row.channelId = form.channelId;
-    row.groupId = form.groupId;
+    row.channelIds = [...form.channelIds];
+    row.groupIds = [...form.groupIds];
   } else {
     draft[targetLine].rules.push({
       id: `rule_${targetLine}_${Date.now()}_${draft[targetLine].rules.length}`,
-      channelId: form.channelId,
-      groupId: form.groupId,
+      channelIds: [...form.channelIds],
+      groupIds: [...form.groupIds],
       enabled: true
     });
   }
@@ -400,6 +487,9 @@ function commitAllRuleForms() {
 
 function saveRule() {
   if (!commitRuleForm(lineId, true)) return;
+  pickerType = null;
+  channelSearch = "";
+  groupSearch = "";
   render();
   showToast(copy().savedRule);
 }
@@ -522,14 +612,104 @@ function renderShell() {
     </div>`;
 }
 
+function isChannelUsedByOther(channelId, ruleId) {
+  return draft[lineId].rules.some((rule) =>
+    rule.id !== ruleId && rule.channelIds.includes(channelId)
+  );
+}
+
+function selectionSummary(type, ids) {
+  const t = copy();
+  if (ids.length === 1) return type === "channels" ? t.selectedChannelOne : t.selectedGroupOne;
+  const template = type === "channels" ? t.selectedChannels : t.selectedGroups;
+  return ids.length ? template.replace("{count}", ids.length) : (type === "channels" ? t.selectChannel : t.selectGroup);
+}
+
+function renderChannelOptions(form) {
+  const t = copy();
+  const query = channelSearch.trim().toLowerCase();
+  const channels = CHANNELS[lineId].filter((item) => {
+    const text = `${item.code} ${item.zh} ${item.en}`.toLowerCase();
+    return !query || text.includes(query);
+  });
+  if (!channels.length) return `<div class="tree-empty">${t.noMatches}</div>`;
+  return channels.map((item) => {
+    const selected = form.channelIds.includes(item.id);
+    const blocked = !selected && isChannelUsedByOther(item.id, form.id);
+    return `
+      <button class="picker-option ${selected ? "selected" : ""}" data-picker-option="channels" data-value="${item.id}" ${blocked ? "disabled" : ""} role="option" aria-selected="${selected}">
+        <span class="option-check">${selected ? "✓" : ""}</span>
+        <span class="option-copy"><strong>${channelName(item)}</strong><small>${item.code}</small></span>
+      </button>`;
+  }).join("");
+}
+
+function renderGroupTreeOptions() {
+  const t = copy();
+  const form = forms[lineId];
+  const query = groupSearch.trim().toLowerCase();
+  const groups = GROUPS[lineId].filter((group) => {
+    const text = `${group.nameZh} ${group.nameEn} ${groupPath(group)}`.toLowerCase();
+    return !query || text.includes(query);
+  });
+  if (!groups.length) return `<div class="tree-empty">${t.noMatches}</div>`;
+  const line = LINES.find((item) => item.id === lineId);
+  const departments = [...new Set(groups.map((group) => lang === "zh" ? group.deptZh : group.deptEn))];
+  return `
+    <div class="tree-root">${lineName(line)}</div>
+    ${departments.map((department) => {
+      const departmentGroups = groups.filter((group) => (lang === "zh" ? group.deptZh : group.deptEn) === department);
+      return `
+        <div class="tree-branch">
+          <div class="tree-ancestor">${department}</div>
+          ${departmentGroups.map((group) => {
+            const selected = form.groupIds.includes(group.id);
+            return `<button class="tree-option ${selected ? "selected" : ""}" data-picker-option="groups" data-value="${group.id}" role="option" aria-selected="${selected}">
+              <span class="option-check">${selected ? "✓" : ""}</span>
+              <span>${groupName(group)}</span>
+            </button>`;
+          }).join("")}
+        </div>`;
+    }).join("")}`;
+}
+
+function renderMultiPicker(type, label, form) {
+  const t = copy();
+  const selectedIds = form[type === "channels" ? "channelIds" : "groupIds"];
+  const open = pickerType === type;
+  const selectedLabels = type === "channels"
+    ? selectedIds.map((id) => CHANNELS[lineId].find((item) => item.id === id)?.code).filter(Boolean)
+    : selectedIds.map((id) => {
+      const group = GROUPS[lineId].find((groupItem) => groupItem.id === id);
+      return group ? groupName(group) : "";
+    }).filter(Boolean);
+  return `
+    <div class="field-control multi-field">
+      <label>${label}</label>
+      <button type="button" class="multi-trigger" data-picker-toggle="${type}" aria-expanded="${open}">
+        <span>${selectionSummary(type, selectedIds)}</span><b>⌄</b>
+      </button>
+      ${selectedLabels.length ? `<div class="selected-chips">${selectedLabels.map((item) => `<span>${item}</span>`).join("")}</div>` : ""}
+      ${open ? `
+        <div class="multi-popover">
+          <div class="picker-head">
+            <strong>${type === "channels" ? t.channelPicker : t.groupPicker}</strong>
+            <button class="link-btn" data-clear-picker>${t.clear}</button>
+          </div>
+          <input class="picker-search" ${type === "groups" ? `data-group-search value="${escapeHtml(groupSearch)}" placeholder="${t.searchGroup}"` : `data-channel-search value="${escapeHtml(channelSearch)}" placeholder="${t.searchChannel}"`}>
+          <div class="picker-options" id="${type === "groups" ? "group-tree-options" : "channel-options"}">
+            ${type === "channels" ? renderChannelOptions(form) : renderGroupTreeOptions()}
+          </div>
+          <div class="picker-foot"><button class="btn primary small" data-picker-done>${t.done}</button></div>
+        </div>` : ""}
+    </div>`;
+}
+
 function renderRules() {
   const t = copy();
   const form = forms[lineId];
   const rules = draft[lineId].rules;
-  const channels = CHANNELS[lineId];
-  const groups = GROUPS[lineId];
-  const selectedGroup = form ? groups.find((group) => group.id === form.groupId) : null;
-  const showNoReceiverHint = selectedGroup && activeMembers(selectedGroup).length === 0;
+  const showNoReceiverHint = form && form.groupIds.length && activeMembers(form.groupIds).length === 0;
   return `
     <div class="section-toolbar">
       <h3>${t.groupRules}</h3>
@@ -537,20 +717,8 @@ function renderRules() {
     </div>
     ${form ? `
       <div class="rule-form">
-        <div class="field-control">
-          <label for="channel-select">${t.channel}</label>
-          <select class="select" id="channel-select" data-field="channelId">
-            <option value="">${t.selectChannel}</option>
-            ${channels.map((item) => `<option value="${item.id}" ${form.channelId === item.id ? "selected" : ""}>${channelName(item)} · ${item.code}</option>`).join("")}
-          </select>
-        </div>
-        <div class="field-control">
-          <label for="group-select">${t.targetGroup}</label>
-          <select class="select" id="group-select" data-field="groupId" ${groups.length ? "" : "disabled"}>
-            <option value="">${groups.length ? t.selectGroup : t.noGroups}</option>
-            ${groups.map((group) => `<option value="${group.id}" ${form.groupId === group.id ? "selected" : ""}>${groupPath(group)}</option>`).join("")}
-          </select>
-        </div>
+        ${renderMultiPicker("channels", t.channel, form)}
+        ${renderMultiPicker("groups", t.targetGroup, form)}
         <div class="form-actions">
           <button class="btn primary small" data-action="save-rule">${t.saveRule}</button>
           <button class="btn small" data-action="cancel-rule">${t.cancelRule}</button>
@@ -564,13 +732,17 @@ function renderRules() {
           <thead><tr><th>${t.channel}</th><th>${t.targetGroup}</th><th>${t.receiverStatus}</th><th>${t.status}</th><th>${t.actions}</th></tr></thead>
           <tbody>
             ${rules.map((rule) => {
-              const ch = channels.find((item) => item.id === rule.channelId);
-              const group = groups.find((item) => item.id === rule.groupId);
-              const receiverCount = group ? activeMembers(group).length : 0;
+              const receiverCount = activeMembers(rule.groupIds).length;
               const deleting = deleteConfirmId === rule.id;
               return `<tr>
-                <td><span class="channel-name">${channelName(ch)}</span><span class="channel-code">${ch ? ch.code : ""}</span></td>
-                <td>${group ? groupPath(group) : "—"}</td>
+                <td><div class="selected-chips table-chips">${rule.channelIds.map((id) => {
+                  const item = CHANNELS[lineId].find((channelItem) => channelItem.id === id);
+                  return item ? `<span title="${channelName(item)}">${item.code}</span>` : "";
+                }).join("")}</div></td>
+                <td><div class="selected-chips table-chips">${rule.groupIds.map((id) => {
+                  const group = GROUPS[lineId].find((groupItem) => groupItem.id === id);
+                  return group ? `<span title="${groupPath(group)}">${groupName(group)}</span>` : "";
+                }).join("")}</div></td>
                 <td><span class="receiver-state ${receiverCount ? "" : "warning"}">${receiverCount ? t.available : t.noReceiver}</span></td>
                 <td><button class="toggle ${rule.enabled ? "on" : ""}" role="switch" aria-checked="${rule.enabled}" aria-label="${t.status}" data-rule-toggle="${rule.id}"></button></td>
                 <td>
@@ -706,6 +878,15 @@ document.addEventListener("click", (event) => {
   if (target.dataset.action === "add-rule") startRule();
   if (target.dataset.action === "cancel-rule") cancelRule();
   if (target.dataset.action === "save-rule") saveRule();
+  if (target.dataset.pickerToggle) togglePicker(target.dataset.pickerToggle);
+  if (target.dataset.pickerOption) toggleFormSelection(target.dataset.pickerOption, target.dataset.value);
+  if (target.dataset.clearPicker !== undefined) clearPickerSelection();
+  if (target.dataset.pickerDone !== undefined) {
+    pickerType = null;
+    channelSearch = "";
+    groupSearch = "";
+    render();
+  }
   if (target.dataset.ruleToggle) toggleRule(target.dataset.ruleToggle);
   if (target.dataset.editRule) startRule(draft[lineId].rules.find((rule) => rule.id === target.dataset.editRule));
   if (target.dataset.deleteRule) askDelete(target.dataset.deleteRule);
@@ -721,9 +902,13 @@ document.addEventListener("click", (event) => {
 document.addEventListener("change", (event) => {
   const target = event.target;
   if (target.matches("[data-line-select]")) setLine(target.value);
-  if (target.matches("[data-field]")) updateFormField(target.dataset.field, target.value);
   if (target.matches("[data-weight-input]")) setWeight(Number(target.dataset.weightInput), target.value);
   if (target.matches("[data-drop-input]")) setDropMinutes(target.value);
+});
+
+document.addEventListener("input", (event) => {
+  if (event.target.matches("[data-group-search]")) setGroupSearch(event.target.value);
+  if (event.target.matches("[data-channel-search]")) setChannelSearch(event.target.value);
 });
 
 document.addEventListener("keydown", (event) => {
