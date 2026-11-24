@@ -1,0 +1,26 @@
+version: 1
+sources:
+  - id: phase-one-project
+    path: ../../crm-org-data-permissions/README.md
+    purpose: 一期组织架构、人员主组织和已交付能力
+    priority: authoritative
+  - id: phase-one-prd
+    path: ../../crm-org-data-permissions/prd/PRD.md
+    purpose: 一期基线及二期前置条件
+    priority: authoritative
+  - id: phase-one-impact
+    path: ../../crm-org-data-permissions/research/IMPACT-ASSESSMENT.md
+    purpose: 各页面影响和存量迁移背景
+    priority: high
+  - id: phase-one-configuration
+    path: ../../crm-org-data-permissions/research/CONFIGURATION-SIMULATION.md
+    purpose: 角色、组织和数据范围模拟
+    priority: high
+  - id: system-account-manual
+    path: ../../../../crm-manual/docs/system/A-01.md
+    purpose: 现有成员、角色和权限页面
+    priority: authoritative
+  - id: live-crm-check
+    path: ../research/LIVE-CRM-CHECK.md
+    purpose: 2026-11-24 测试环境页面、筛选器和动作核对
+    priority: authoritative
