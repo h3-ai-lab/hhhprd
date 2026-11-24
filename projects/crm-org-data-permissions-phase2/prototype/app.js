@@ -8,7 +8,11 @@ const state = {
   memberFilters: { search: "", line: "", orgId: "", roleId: "", status: "" },
   memberSearchDraft: "",
   salesTab: "pool",
-  salesOrg: "r1",
+  salesOrgIds: [],
+  salesOrgPanelOpen: false,
+  salesOrgExpanded: [],
+  salesOrgSearch: "",
+  salesOrgScopeKey: "",
   salesSearch: "",
   salesFirstCc: "",
   salesCurrentCc: "",
@@ -474,6 +478,69 @@ function grantedBusinessLineRoots() {
   return orgs.filter((org) => org.level === 1 && lines.has(org.line));
 }
 
+function salesOrgFilterScope() {
+  const user = currentUser();
+  const organizationScope = hasOrganizationScope();
+  const selectableOrgs = organizationScope ? allowedOperatorOrgs() : grantedBusinessLineRoots();
+  const selectableIds = new Set(selectableOrgs.map((org) => org.id));
+  const visibleIds = organizationScope ? operatorVisibleIds() : selectableIds;
+  const visibleOrgs = orgs.filter((org) => visibleIds.has(org.id));
+  const scopeKey = `${user.id}:${selectableOrgs.map((org) => org.id).join(",")}:${visibleOrgs.map((org) => org.id).join(",")}`;
+  if (state.salesOrgScopeKey !== scopeKey) {
+    state.salesOrgScopeKey = scopeKey;
+    state.salesOrgIds = [];
+    const primary = orgById(user.primaryOrgId);
+    const lineRoot = primary
+      ? orgs.find((org) => org.level === 1 && org.line === primary.line)
+      : null;
+    state.salesOrgExpanded = [...new Set([lineRoot?.id, ...ancestorIdsOf(primary?.id)].filter((id) => id && visibleIds.has(id)))];
+  }
+  state.salesOrgIds = state.salesOrgIds.filter((id) => selectableIds.has(id));
+  const selectedIds = new Set(state.salesOrgIds);
+  const filterIds = selectedIds.size
+    ? new Set([...selectedIds].flatMap((id) => subtreeIds(id)))
+    : null;
+  return { selectableOrgs, selectableIds, visibleOrgs, selectedIds, filterIds };
+}
+
+function selectedAncestorOf(orgId, selectedIds) {
+  let current = orgById(orgId);
+  while (current?.parentId) {
+    current = orgById(current.parentId);
+    if (current && selectedIds.has(current.id)) return true;
+  }
+  return false;
+}
+
+function salesOrgFilterTreeHtml(scope) {
+  const keyword = state.salesOrgSearch.trim().toLowerCase();
+  const renderNode = (org, depth) => {
+    const hasChildren = scope.visibleOrgs.some((child) => child.parentId === org.id);
+    const expanded = state.salesOrgExpanded.includes(org.id) || !!keyword;
+    const covered = selectedAncestorOf(org.id, scope.selectedIds);
+    const checked = scope.selectedIds.has(org.id) || covered;
+    const selectable = scope.selectableIds.has(org.id);
+    const matches = !keyword || orgPath(org.id).toLowerCase().includes(keyword);
+    const childHtml = hasChildren && expanded
+      ? scope.visibleOrgs.filter((child) => child.parentId === org.id).map((child) => renderNode(child, depth + 1)).join("")
+      : "";
+    if (!matches && !childHtml) return "";
+    return `<div class="filter-tree-row ${covered ? "is-covered" : ""}" style="--tree-indent:${depth * 18}px">
+      <button class="tree-expander ${hasChildren ? "" : "is-empty"}" type="button" data-sales-org-expand="${org.id}" aria-label="${expanded ? "收起" : "展开"}">${hasChildren ? (expanded ? "▾" : "▸") : ""}</button>
+      <label><input type="checkbox" data-sales-org-check="${org.id}" ${checked ? "checked" : ""} ${!selectable || covered ? "disabled" : ""}><span>${escapeHtml(org.name)}</span><small>${levelName(org.level)}${selectable ? "" : " · 仅路径"}</small></label>
+    </div>${childHtml}`;
+  };
+  return scope.visibleOrgs
+    .filter((org) => !org.parentId)
+    .map((org) => renderNode(org, 0))
+    .join("") || '<div class="org-select-empty">未找到匹配组织</div>';
+}
+
+function clearDependentSalesFilters() {
+  state.salesFirstCc = "";
+  state.salesCurrentCc = "";
+}
+
 function publicPoolLeadsForCurrentUser() {
   const user = currentUser();
   return leads.filter((lead) => {
@@ -483,48 +550,39 @@ function publicPoolLeadsForCurrentUser() {
   });
 }
 
-function actionScopeOrgIds() {
-  const user = currentUser();
-  if (user.roleId === "role_super") return new Set(orgs.map((org) => org.id));
-  return new Set(memberGrants(user).flatMap((grant) => {
-    if (grant.scope === "line") {
-      return orgs.filter((org) => org.level === 1 && org.line === grant.line).flatMap((org) => subtreeIds(org.id));
-    }
-    if (grant.scope === "nodes") return (grant.orgIds || []).flatMap((orgId) => subtreeIds(orgId));
-    return grant.primaryOrgId ? subtreeIds(grant.primaryOrgId) : [];
-  }));
-}
-
 function renderSales() {
-  const allowed = allowedOperatorOrgs();
-  const scopeFilterOrgs = hasOrganizationScope() ? allowed : grantedBusinessLineRoots();
-  const scopeFilterIds = new Set(scopeFilterOrgs.map((org) => org.id));
-  if (!scopeFilterIds.has(state.salesOrg)) {
-    const preferred = currentUser().primaryOrgId;
-    state.salesOrg = scopeFilterIds.has(preferred)
-      ? preferred
-      : orgs.find((org) => org.level === 1 && org.id === preferred)?.id || scopeFilterOrgs[0]?.id || preferred;
-  }
-  const selectedIds = new Set(subtreeIds(state.salesOrg));
-  const scopedLeads = accessibleLeadsForCurrentUser().filter((lead) => selectedIds.has(lead.orgId));
-  const poolLeads = publicPoolLeadsForCurrentUser().filter((lead) => selectedIds.has(lead.orgId));
-  const filterCandidates = [...new Map([...scopedLeads, ...poolLeads].map((lead) => [lead.id, lead])).values()];
-  const firstCcIds = [...new Set(filterCandidates.map((lead) => lead.firstOwnerId).filter(Boolean))];
-  const currentCcIds = [...new Set(filterCandidates.map((lead) => lead.ownerId).filter(Boolean))];
-  const filteredLeads = scopedLeads.filter((lead) =>
+  const orgScope = salesOrgFilterScope();
+  const selectedIds = orgScope.filterIds;
+  const scopedLeads = accessibleLeadsForCurrentUser().filter((lead) => !selectedIds || selectedIds.has(lead.orgId));
+  const poolLeads = publicPoolLeadsForCurrentUser().filter((lead) => !selectedIds || selectedIds.has(lead.orgId));
+  const tabLeads = state.salesTab === "pool"
+    ? poolLeads
+    : scopedLeads.filter((lead) => lead.ownerId && (state.salesTab !== "paid" || lead.paid));
+  const preCcLeads = tabLeads.filter((lead) =>
     (!state.salesSearch || `${lead.name}${lead.account}${lead.id}`.toLowerCase().includes(state.salesSearch.toLowerCase()))
-    && (!state.salesFirstCc || lead.firstOwnerId === state.salesFirstCc)
+    && (!state.salesStage || lead.stage === state.salesStage)
+    && (!state.salesStatus || lead.status === state.salesStatus));
+  const firstCcIds = [...new Set(preCcLeads
+    .filter((lead) => !state.salesCurrentCc || lead.ownerId === state.salesCurrentCc)
+    .map((lead) => lead.firstOwnerId)
+    .filter(Boolean))];
+  const currentCcIds = [...new Set(preCcLeads
+    .filter((lead) => !state.salesFirstCc || lead.firstOwnerId === state.salesFirstCc)
+    .map((lead) => lead.ownerId)
+    .filter(Boolean))];
+  if (state.salesFirstCc && !firstCcIds.includes(state.salesFirstCc)) state.salesFirstCc = "";
+  if (state.salesCurrentCc && !currentCcIds.includes(state.salesCurrentCc)) state.salesCurrentCc = "";
+  const filteredLeads = preCcLeads.filter((lead) =>
+    (!state.salesFirstCc || lead.firstOwnerId === state.salesFirstCc)
     && (!state.salesCurrentCc || lead.ownerId === state.salesCurrentCc)
-    && (!state.salesStage || lead.stage === state.salesStage)
-    && (!state.salesStatus || lead.status === state.salesStatus));
-  const filteredPoolLeads = poolLeads.filter((lead) =>
-    (!state.salesSearch || `${lead.name}${lead.account}${lead.id}`.toLowerCase().includes(state.salesSearch.toLowerCase()))
-    && (!state.salesFirstCc || lead.firstOwnerId === state.salesFirstCc)
-    && (!state.salesStage || lead.stage === state.salesStage)
-    && (!state.salesStatus || lead.status === state.salesStatus));
-  const rows = state.salesTab === "pool" ? filteredPoolLeads : filteredLeads.filter((lead) => !!lead.ownerId);
+  );
+  const rows = filteredLeads;
   const filteredLeadIds = new Set(filteredLeads.map((lead) => lead.id));
   const callRows = callRecords.filter((call) => filteredLeadIds.has(call.leadId));
+  const selectedFilterOrgs = [...orgScope.selectedIds].map(orgById).filter(Boolean);
+  const orgFilterText = selectedFilterOrgs.length
+    ? selectedFilterOrgs.map((org) => org.name).join("、")
+    : "全部可访问组织";
   el.content.innerHTML = `<section class="page-card">
     <div class="page-heading"><div class="section-title">销售线索</div><div class="toolbar-group">
       ${roleCan("lead.reassign") ? `<button class="btn" data-action="reassign-workbench">${icon("edit")}重新分配</button>` : ""}
@@ -533,11 +591,24 @@ function renderSales() {
     <div class="table-tabs">
       <button class="${state.salesTab === "pool" ? "is-active" : ""}" data-sales-tab="pool">公海 (${poolLeads.length})</button>
       <button class="${state.salesTab === "follow" ? "is-active" : ""}" data-sales-tab="follow">${hasOrganizationScope() ? "跟进线索" : "我的跟进"} (${scopedLeads.filter((lead) => lead.ownerId).length})</button>
+      <button class="${state.salesTab === "paid" ? "is-active" : ""}" data-sales-tab="paid">已付费 (${scopedLeads.filter((lead) => lead.ownerId && lead.paid).length})</button>
       <button class="${state.salesTab === "calls" ? "is-active" : ""}" data-sales-tab="calls">通话记录</button>
     </div>
     <div class="filters">
       <input class="field search-field" id="sales-search" placeholder="搜索用户 ID / 姓名 / 登录账号" value="${escapeHtml(state.salesSearch)}">
-      <select class="select" id="sales-org-filter" aria-label="组织架构">${scopeFilterOrgs.map((org) => `<option value="${org.id}" ${state.salesOrg === org.id ? "selected" : ""}>${"　".repeat(Math.max(0, org.level - 1))}${escapeHtml(org.name)} · ${levelName(org.level)}</option>`).join("")}</select>
+      <div class="org-multiselect sales-org-filter">
+        <div class="org-select-trigger ${state.salesOrgPanelOpen ? "is-open" : ""}" role="button" tabindex="0" aria-expanded="${state.salesOrgPanelOpen}" data-sales-org-toggle>
+          <span class="org-chip-list">${selectedFilterOrgs.length
+            ? selectedFilterOrgs.map((org) => `<span class="org-chip">${escapeHtml(org.name)}<button type="button" data-sales-org-remove="${org.id}" aria-label="移除${escapeHtml(org.name)}">×</button></span>`).join("")
+            : `<span class="secondary-text">${orgFilterText}</span>`}</span><span class="select-caret">⌄</span>
+        </div>
+        ${state.salesOrgPanelOpen ? `<div class="org-select-panel sales-org-panel">
+          <div class="org-select-panel-head"><span>可多选，父节点包含全部下级</span><span>祖先仅用于定位</span></div>
+          <input class="field org-filter-search" id="sales-org-search" value="${escapeHtml(state.salesOrgSearch)}" placeholder="搜索组织">
+          <div class="filter-tree">${salesOrgFilterTreeHtml(orgScope)}</div>
+          <div class="org-filter-actions"><button class="btn ghost" type="button" data-sales-org-clear>清空选择</button><button class="btn primary" type="button" data-sales-org-toggle>完成</button></div>
+        </div>` : ""}
+      </div>
       <select class="select" id="sales-first-cc-filter"><option value="">全部首位 CC</option>${firstCcIds.map((id) => `<option value="${id}" ${state.salesFirstCc === id ? "selected" : ""}>${escapeHtml(memberName(id))}</option>`).join("")}</select>
       <select class="select" id="sales-current-cc-filter"><option value="">全部当前 CC</option>${currentCcIds.map((id) => `<option value="${id}" ${state.salesCurrentCc === id ? "selected" : ""}>${escapeHtml(memberName(id))}</option>`).join("")}</select>
       <select class="select" id="sales-stage-filter"><option value="">全部跟进阶段</option>${["跟进中","已预约","已付费","暂不跟进","待领取"].map((stage) => `<option ${state.salesStage === stage ? "selected" : ""}>${stage}</option>`).join("")}</select>
@@ -1408,74 +1479,104 @@ function openLeadDetailModal(leadId) {
     <div class="modal-actions"><button class="btn" type="button" data-action="close-modal">关闭</button></div>`);
 }
 
-function reassignTargetMembers(lead) {
-  const scope = actionScopeOrgIds();
-  const line = orgById(lead.orgId)?.line;
+function reassignTargetMembers(leadsToReassign) {
+  const lines = [...new Set(leadsToReassign.map((lead) => orgById(lead.orgId)?.line).filter(Boolean))];
   return members.filter((member) => member.status === "启用" && member.userType === "CC"
     && member.id !== currentUser().id
-    && memberGrants(member).some((grant) => grant.line === line && grant.primaryOrgId && scope.has(grant.primaryOrgId)));
+    && lines.every((line) => memberGrants(member).some((grant) => grant.line === line && grant.primaryOrgId)));
 }
 
-function reassignTargetOptions(lead) {
-  return reassignTargetMembers(lead).map((member) => {
-    const grant = memberGrants(member).find((item) => item.line === orgById(lead.orgId)?.line);
+function reassignTargetOptions(leadsToReassign) {
+  return reassignTargetMembers(leadsToReassign).map((member) => {
+    const lines = [...new Set(leadsToReassign.map((lead) => orgById(lead.orgId)?.line).filter(Boolean))];
+    const grant = memberGrants(member).find((item) => item.line === lines[0]);
     return `<option value="${member.id}">${escapeHtml(member.name)} · ${escapeHtml(orgPath(grant?.primaryOrgId))}</option>`;
   }).join("");
 }
 
 function openReassignWorkbench() {
   if (!roleCan("lead.reassign")) return showToast("当前角色未开通重新分配权限");
-  const scope = actionScopeOrgIds();
-  const sourceLeads = leads.filter((lead) => scope.has(lead.orgId));
-  if (!sourceLeads.length) return showToast("动作范围内暂无可重新分配的线索");
-  const firstLead = sourceLeads[0];
+  const filterIds = salesOrgFilterScope().filterIds;
+  const sourceLeads = accessibleLeadsForCurrentUser().filter((lead) => !filterIds || filterIds.has(lead.orgId));
+  if (!sourceLeads.length) return showToast("当前可见范围内暂无可重新分配的线索");
   openModal(`<form id="reassign-form">
     <div class="modal-head"><h2 id="modal-title">重新分配线索</h2><button class="icon-btn" type="button" data-action="close-modal">${icon("close")}</button></div>
-    <div class="permission-hint">仅在本功能中选择动作范围内的线索；该范围不会扩大普通列表、用户中心、Dashboard 或导出权限。</div>
+    <div class="permission-hint">只能选择当前数据范围内可见的线索。CC 只能批量选择本人线索；目标 CC 可来自业务线动作范围内，但不会扩大源线索范围。</div>
+    <div class="table-wrap" style="margin-bottom:14px"><table>
+      <thead><tr><th>选择</th><th>线索</th><th>当前 CC</th><th>当前归属组织</th></tr></thead>
+      <tbody>${sourceLeads.map((lead) => `<tr><td><input type="checkbox" name="leadIds" value="${lead.id}" data-reassign-lead="${lead.id}"></td><td><span class="primary-text">${lead.id}</span> · ${escapeHtml(lead.name)}</td><td>${escapeHtml(memberName(lead.ownerId))}</td><td>${escapeHtml(orgPath(lead.orgId))}</td></tr>`).join("")}</tbody>
+    </table></div>
     <div class="form-grid">
-      <div class="form-item full"><label>选择线索 <em>*</em></label><select class="select" name="leadId">${sourceLeads.map((lead) => `<option value="${lead.id}">${escapeHtml(lead.id)} · ${escapeHtml(lead.name)} · ${escapeHtml(memberName(lead.ownerId))} · ${escapeHtml(orgPath(lead.orgId))}</option>`).join("")}</select></div>
-      <div class="form-item full"><label>目标 CC <em>*</em></label><select class="select" id="reassign-target" name="ownerId"><option value="">请选择目标 CC</option>${reassignTargetOptions(firstLead)}</select></div>
+      <div class="form-item full"><label>目标 CC <em>*</em></label><select class="select" id="reassign-target" name="ownerId"><option value="">请选择目标 CC</option></select></div>
       <div class="form-item full"><label>分配原因</label><textarea class="field" name="reason" style="height:76px;padding-top:9px" placeholder="选填"></textarea></div>
     </div>
     <div class="form-error" id="reassign-error"></div>
     <div class="modal-actions"><button class="btn" type="button" data-action="close-modal">取消</button><button class="btn primary" type="submit">确认重新分配</button></div>
   </form>`);
   const form = document.getElementById("reassign-form");
-  form.querySelector('[name="leadId"]').addEventListener("change", (event) => {
-    const lead = leads.find((item) => item.id === event.target.value);
-    document.getElementById("reassign-target").innerHTML = `<option value="">请选择目标 CC</option>${lead ? reassignTargetOptions(lead) : ""}`;
+  const selectedReassignLeads = () => sourceLeads.filter((lead) => form.querySelector(`[data-reassign-lead="${lead.id}"]`)?.checked);
+  form.addEventListener("change", (event) => {
+    if (!event.target.matches("[data-reassign-lead]")) return;
+    const selectedLeads = selectedReassignLeads();
+    document.getElementById("reassign-target").innerHTML = `<option value="">请选择目标 CC</option>${selectedLeads.length ? reassignTargetOptions(selectedLeads) : ""}`;
   });
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const data = new FormData(form);
-    const lead = leads.find((item) => item.id === data.get("leadId"));
+    const selectedLeads = sourceLeads.filter((lead) => data.getAll("leadIds").includes(lead.id));
     const target = members.find((item) => item.id === data.get("ownerId"));
-    if (!lead) return setError("reassign-error", "请选择有效线索");
+    if (!selectedLeads.length) return setError("reassign-error", "请至少选择一条线索");
     if (!target) return setError("reassign-error", "请选择目标 CC");
-    const grant = memberGrants(target).find((item) => item.line === orgById(lead.orgId)?.line);
-    if (!grant?.primaryOrgId) return setError("reassign-error", "目标 CC 没有该业务线主组织");
-    const previousOwner = memberName(lead.ownerId);
-    const previousOrg = orgPath(lead.orgId);
-    lead.ownerId = target.id;
-    lead.orgId = grant.primaryOrgId;
-    lead.stage = "跟进中";
+    const targetGrants = selectedLeads.map((lead) => memberGrants(target).find((item) => item.line === orgById(lead.orgId)?.line));
+    if (targetGrants.some((grant) => !grant?.primaryOrgId)) return setError("reassign-error", "目标 CC 缺少所选线索对应业务线的主组织");
+    selectedLeads.forEach((lead, index) => {
+      lead.ownerId = target.id;
+      lead.orgId = targetGrants[index].primaryOrgId;
+      lead.stage = "跟进中";
+    });
     state.logs.unshift({
       time: "2026-11-24 14:20:00",
       module: "销售中心",
       action: "重新分配",
-      target: `${lead.id} · ${previousOwner} → ${target.name}`,
-      detail: `${previousOrg} → ${orgPath(grant.primaryOrgId)}`,
+      target: `${selectedLeads.length} 条线索 → ${target.name}`,
+      detail: selectedLeads.map((lead) => lead.id).join("、"),
       actor: currentUser().email
     });
     closeModal();
     render();
-    showToast("线索已重新分配");
+    showToast(`${selectedLeads.length} 条线索已重新分配`);
   });
 }
 
 el.content.addEventListener("click", (event) => {
   const metric = event.target.closest("[data-metric-help]");
   if (metric) return showToast(metric.dataset.metricHelp || "暂无口径说明");
+  const salesOrgRemove = event.target.closest("[data-sales-org-remove]");
+  if (salesOrgRemove) {
+    event.stopPropagation();
+    state.salesOrgIds = state.salesOrgIds.filter((id) => id !== salesOrgRemove.dataset.salesOrgRemove);
+    clearDependentSalesFilters();
+    return render();
+  }
+  const salesOrgExpand = event.target.closest("[data-sales-org-expand]");
+  if (salesOrgExpand) {
+    const orgId = salesOrgExpand.dataset.salesOrgExpand;
+    state.salesOrgExpanded = state.salesOrgExpanded.includes(orgId)
+      ? state.salesOrgExpanded.filter((id) => id !== orgId)
+      : [...state.salesOrgExpanded, orgId];
+    return render();
+  }
+  const salesOrgClear = event.target.closest("[data-sales-org-clear]");
+  if (salesOrgClear) {
+    state.salesOrgIds = [];
+    clearDependentSalesFilters();
+    return render();
+  }
+  const salesOrgToggle = event.target.closest("[data-sales-org-toggle]");
+  if (salesOrgToggle) {
+    state.salesOrgPanelOpen = !state.salesOrgPanelOpen;
+    return render();
+  }
   const systemTab = event.target.closest("[data-system-tab]");
   if (systemTab) return setRoute("system", systemTab.dataset.systemTab);
   const treeNode = event.target.closest("[data-org-select]");
@@ -1540,7 +1641,10 @@ el.content.addEventListener("click", (event) => {
     state.salesCurrentCc = "";
     state.salesStage = "";
     state.salesStatus = "";
-    state.salesOrg = "r1";
+    state.salesOrgIds = [];
+    state.salesOrgSearch = "";
+    state.salesOrgPanelOpen = false;
+    state.salesOrgScopeKey = "";
     return render();
   }
   if (action === "sales-settings") return showToast("分配与掉库设置");
@@ -1562,6 +1666,12 @@ el.content.addEventListener("input", (event) => {
     const panel = event.target.closest(".side-panel");
     panel.querySelector(".org-tree").innerHTML = treeHtml();
   }
+  if (event.target.id === "sales-org-search") {
+    state.salesOrgSearch = event.target.value;
+    const panel = event.target.closest(".sales-org-panel");
+    const tree = panel?.querySelector(".filter-tree");
+    if (tree) tree.innerHTML = salesOrgFilterTreeHtml(salesOrgFilterScope());
+  }
   if (event.target.id === "member-search") state.memberSearchDraft = event.target.value;
   if (event.target.id === "user-search") {
     state.userSearch = event.target.value;
@@ -1578,7 +1688,27 @@ el.content.addEventListener("input", (event) => {
   }
 });
 
+el.content.addEventListener("keydown", (event) => {
+  const trigger = event.target.closest("[data-sales-org-toggle]");
+  if (!trigger || !["Enter", " "].includes(event.key)) return;
+  event.preventDefault();
+  state.salesOrgPanelOpen = !state.salesOrgPanelOpen;
+  render();
+});
+
 el.content.addEventListener("change", (event) => {
+  const salesOrgCheckbox = event.target.closest("[data-sales-org-check]");
+  if (salesOrgCheckbox) {
+    const orgId = salesOrgCheckbox.dataset.salesOrgCheck;
+    if (salesOrgCheckbox.checked) {
+      state.salesOrgIds = state.salesOrgIds.filter((id) => !descendantsOf(orgId).some((org) => org.id === id));
+      if (!state.salesOrgIds.includes(orgId)) state.salesOrgIds.push(orgId);
+    } else {
+      state.salesOrgIds = state.salesOrgIds.filter((id) => id !== orgId);
+    }
+    clearDependentSalesFilters();
+    return render();
+  }
   if (event.target.id === "member-line-filter") {
     state.memberFilters.line = event.target.value;
     state.memberFilters.orgId = "";
@@ -1587,12 +1717,6 @@ el.content.addEventListener("change", (event) => {
   if (event.target.id === "member-org-filter") state.memberFilters.orgId = event.target.value;
   if (event.target.id === "member-role-filter") state.memberFilters.roleId = event.target.value;
   if (event.target.id === "member-status-filter") state.memberFilters.status = event.target.value;
-  if (event.target.id === "sales-org-filter") {
-    state.salesOrg = event.target.value;
-    state.salesFirstCc = "";
-    state.salesCurrentCc = "";
-    render();
-  }
   if (event.target.id === "sales-first-cc-filter") {
     state.salesFirstCc = event.target.value;
     render();
