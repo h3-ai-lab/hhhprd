@@ -311,25 +311,6 @@
       font-size: 13px;
     }
     .queue-refresh:hover { color: #245fc7; background: #f2f5fa; }
-    .subqueue-row {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      min-height: 31px;
-      padding: 4px 2px;
-      border-bottom: 1px solid #eef1f5;
-    }
-    .subqueue-label { color: #7d8999; font-size: 11px; }
-    .subqueue-btn {
-      padding: 4px 9px;
-      border: 1px solid #dce3ed;
-      border-radius: 999px;
-      color: #526071;
-      background: #fff;
-      font-size: 11px;
-    }
-    .subqueue-btn.active { border-color: #b8cff8; color: #195cc9; background: #f0f5ff; }
-
     .panel-head {
       display: flex;
       align-items: center;
@@ -539,39 +520,41 @@
         user: "用户", intent: "购买意向", userStatus: "用户状态", stage: "跟进阶段",
         owner: "当前 CC", action: "操作", viewUser: "查看用户", previous: "上一页", next: "下一页",
         page: "第 {page} / {pages} 页", required: "请选择处理结果",
-        allPending: "全部待接通", todayAssigned: "今日分配", historyUnconnected: "历史未接通",
-        pendingSub: "今日分配 {a} · 历史未接通 {b}", queueRefreshed: "队列已刷新",
+        queueRefreshed: "队列已刷新",
         saveSuccess: "处理结果已保存，队列已更新", saveFailed: "保存失败，请重试",
         pendingPayment: "体验课已完课 · 待付费", unfinishedTrial: "体验课未完成 · 待跟进",
         todayAppointment: "今日预约 · 待到课", noShow: "预约未到课 · 待改期",
-        pendingConnect: "待接通", connectedUnbooked: "已接通 · 未预约",
+        todayHighIntentPending: "今日新注册高意向 · 待到接通",
+        historyUncontactedPending: "历史未联系线索 · 待到接通",
+        connectedUnbooked: "已接通 · 未预约",
         p0Sub: "P0 · 推进成交", p1Sub: "P1 · 补齐原因", p2Sub: "P2 · 当日履约",
-        p3Sub: "P3 · 重新预约", p4Sub: "P4 / P6 · 外呼处理", p5Sub: "P5 · 推进预约",
+        p3Sub: "P3 · 重新预约", p4Sub: "P4 · 首次触达", p6Sub: "P6 · 历史唤回",
+        p5Sub: "P5 · 推进预约",
         detailTitle: "用户详情", processTitle: "处理客户", close: "关闭", cancel: "取消", save: "保存",
         basicInfo: "基本信息", queueReason: "进入当前队列", nextAction: "建议下一步",
         result: "处理结果", notes: "跟进说明", nextFollow: "下次跟进时间",
         appointmentTime: "预约时间", reason: "原因", callResult: "外呼结果",
-        outcomePaid: "已付款", outcomeNotPaid: "仍未付款", outcomeComplete: "已补齐",
+        outcomePaid: "已付款", outcomeNotPaid: "仍未付款", outcomeTrialCompleted: "已完成体验课",
         outcomeAttended: "已到课", outcomeNoShow: "未到课", outcomeReschedule: "已改期",
         outcomeConnected: "已接通", outcomeUnconnected: "未接通", outcomeBooked: "已预约",
         outcomeRejected: "明确拒绝", statusUnpaidTrialDone: "未付费 · 已体验",
-        statusUnpaidTrialPending: "未付费 · 未体验", statusTrialIncomplete: "未付费 · 体验未完成",
-        intentInterested: "有意向", intentNeutral: "待确认", intentNotInterested: "无意向",
+        statusUnpaidTrialPending: "未付费 · 未体验", statusTrialIncomplete: "未付费 · 体验课未完成",
+        intentInterested: "高意向", intentNeutral: "待确认", intentNotInterested: "无意向",
         lineVietnam: "越南业务线", lineThailand: "泰国业务线", lineMalaysia: "马来西亚业务线",
-        stageDoneUnpaid: "咨询已完成 · 待支付", stageTrialIncomplete: "咨询未完成",
+        stageDoneUnpaid: "咨询已完成 · 待支付", stageTrialIncomplete: "体验课未完成",
         stageBooked: "已预约", stageAbsent: "未出勤", stageCallPending: "待外呼",
         stageNotConnected: "未接通", stageConnectedUnbooked: "已接通 · 待预约",
         queueLabel: "队列", ownerName: "负责人", leadStatus: "客户状态", leadId: "用户 ID",
         lastAction: "最近处理", processed: "本期队列已处理",
         reasonP0: "体验课已完成，尚未形成有效付款",
-        reasonP1: "已到课，但咨询结果或下一步未完成",
+        reasonP1: "已到课，但体验课程尚未完成",
         reasonP2: "预约日期为今天，尚未产生有效到课结果",
         reasonP3: "预约时间已过，客户未到课，需要重新预约",
-        reasonP4: "今天新分配，分配后尚未发起外呼",
+        reasonP4: "今天首次注册、购买意向高，注册后尚未有效外呼",
         reasonP5: "客户已接通，但还没有有效预约",
-        reasonP6: "分配后多次外呼仍未接通",
-        actionP0: "跟进付费", actionP1: "记录原因", actionP2: "跟到课",
-        actionP3: "去改期", actionP4: "去外呼", actionP5: "推进预约", actionP6: "再次外呼",
+        reasonP6: "此前已注册，历史上尚未建立有效联系",
+        actionP0: "跟进付费", actionP1: "跟进完课", actionP2: "跟到课",
+        actionP3: "去改期", actionP4: "首次外呼", actionP5: "推进预约", actionP6: "联系客户",
         backendError: "队列服务暂时不可用，请稍后重试", retry: "重试",
         demoNotice: ""
       },
@@ -588,39 +571,41 @@
         user: "User", intent: "Purchase Intent", userStatus: "User Status", stage: "Follow-up Stage",
         owner: "Current CC", action: "Actions", viewUser: "View user", previous: "Previous", next: "Next",
         page: "Page {page} of {pages}", required: "Select an outcome",
-        allPending: "All pending calls", todayAssigned: "Assigned today", historyUnconnected: "Previously unconnected",
-        pendingSub: "Today {a} · Previous {b}", queueRefreshed: "Queues refreshed",
+        queueRefreshed: "Queues refreshed",
         saveSuccess: "Result saved and queues updated", saveFailed: "Save failed; try again",
         pendingPayment: "Trial completed · Follow payment", unfinishedTrial: "Trial incomplete · Follow up",
         todayAppointment: "Appointment today · Follow attendance", noShow: "No-show · Reschedule",
-        pendingConnect: "Pending connection", connectedUnbooked: "Connected · Not booked",
+        todayHighIntentPending: "New high-intent today · Pending connection",
+        historyUncontactedPending: "Previously uncontacted · Pending connection",
+        connectedUnbooked: "Connected · Not booked",
         p0Sub: "P0 · Drive payment", p1Sub: "P1 · Complete reason", p2Sub: "P2 · Same-day fulfillment",
-        p3Sub: "P3 · Rebook", p4Sub: "P4 / P6 · Outbound", p5Sub: "P5 · Drive booking",
+        p3Sub: "P3 · Rebook", p4Sub: "P4 · First contact", p6Sub: "P6 · Re-engage",
+        p5Sub: "P5 · Drive booking",
         detailTitle: "User details", processTitle: "Process customer", close: "Close", cancel: "Cancel", save: "Save",
         basicInfo: "Basic information", queueReason: "Why this queue", nextAction: "Recommended next action",
         result: "Outcome", notes: "Follow-up notes", nextFollow: "Next follow-up time",
         appointmentTime: "Appointment time", reason: "Reason", callResult: "Call result",
-        outcomePaid: "Paid", outcomeNotPaid: "Still unpaid", outcomeComplete: "Reason completed",
+        outcomePaid: "Paid", outcomeNotPaid: "Still unpaid", outcomeTrialCompleted: "Trial completed",
         outcomeAttended: "Attended", outcomeNoShow: "No-show", outcomeReschedule: "Rescheduled",
         outcomeConnected: "Connected", outcomeUnconnected: "Not connected", outcomeBooked: "Booked",
         outcomeRejected: "Rejected", statusUnpaidTrialDone: "Unpaid · Trial completed",
-        statusUnpaidTrialPending: "Unpaid · No trial yet", statusTrialIncomplete: "Unpaid · Trial incomplete",
-        intentInterested: "Interested", intentNeutral: "Pending", intentNotInterested: "Not interested",
+        statusUnpaidTrialPending: "Unpaid · No trial yet", statusTrialIncomplete: "Unpaid · Trial course incomplete",
+        intentInterested: "High intent", intentNeutral: "Pending", intentNotInterested: "Not interested",
         lineVietnam: "Vietnam Business Line", lineThailand: "Thailand Business Line",
         lineMalaysia: "Malaysia Business Line", stageDoneUnpaid: "Consultation completed · Unpaid",
-        stageTrialIncomplete: "Consultation incomplete", stageBooked: "Booked", stageAbsent: "No-show",
+        stageTrialIncomplete: "Trial course incomplete", stageBooked: "Booked", stageAbsent: "No-show",
         stageCallPending: "Call pending", stageNotConnected: "Not connected",
         stageConnectedUnbooked: "Connected · Not booked", queueLabel: "Queue", ownerName: "Owner",
         leadStatus: "Lead status", leadId: "User ID", lastAction: "Last action", processed: "Queue handled in this release",
         reasonP0: "Trial completed without an effective payment",
-        reasonP1: "Customer attended, but the consultation or next step is incomplete",
+        reasonP1: "Customer attended, but has not completed the trial course",
         reasonP2: "Appointment is today and attendance has not been recorded",
         reasonP3: "Appointment time has passed without attendance; rebooking is needed",
-        reasonP4: "Assigned today without an outbound attempt after assignment",
+        reasonP4: "Newly registered today with high intent; no effective outbound after registration",
         reasonP5: "Customer has connected, but no active appointment exists",
-        reasonP6: "Assigned previously and has never connected",
-        actionP0: "Follow payment", actionP1: "Record reason", actionP2: "Follow attendance",
-        actionP3: "Reschedule", actionP4: "Call now", actionP5: "Drive booking", actionP6: "Call again",
+        reasonP6: "Previously registered without any effective contact",
+        actionP0: "Follow payment", actionP1: "Complete trial", actionP2: "Follow attendance",
+        actionP3: "Reschedule", actionP4: "First outbound", actionP5: "Drive booking", actionP6: "Contact lead",
         backendError: "Queue service is unavailable; try again later", retry: "Retry",
         demoNotice: ""
       }
@@ -631,8 +616,8 @@
       p1: { main: "p1", title: "unfinishedTrial", sub: "p1Sub", reason: "reasonP1", action: "actionP1", cls: "p1" },
       p2: { main: "p2", title: "todayAppointment", sub: "p2Sub", reason: "reasonP2", action: "actionP2", cls: "p2" },
       p3: { main: "p3", title: "noShow", sub: "p3Sub", reason: "reasonP3", action: "actionP3", cls: "p3" },
-      p4: { main: "pending", title: "todayAssigned", sub: "p4Sub", reason: "reasonP4", action: "actionP4", cls: "pending" },
-      p6: { main: "pending", title: "historyUnconnected", sub: "p4Sub", reason: "reasonP6", action: "actionP6", cls: "pending" },
+      p4: { main: "p4", title: "todayHighIntentPending", sub: "p4Sub", reason: "reasonP4", action: "actionP4", cls: "p4" },
+      p6: { main: "p6", title: "historyUncontactedPending", sub: "p6Sub", reason: "reasonP6", action: "actionP6", cls: "p6" },
       p5: { main: "p5", title: "connectedUnbooked", sub: "p5Sub", reason: "reasonP5", action: "actionP5", cls: "p5" }
     };
 
@@ -670,10 +655,10 @@
       ["L-261123-15", "Siriporn P.", "thailand", "interested", "statusUnpaidTrialPending", "absent", "p3", "2026-11-22 18:00"],
       ["L-261123-16", "Ahmad Hakim", "malaysia", "neutral", "statusUnpaidTrialPending", "absent", "p3", "2026-11-21 16:00"],
       ["L-261123-17", "Dang Hoai An", "vietnam", "notInterested", "statusUnpaidTrialPending", "absent", "p3", "2026-11-20 14:00"],
-      ["L-261123-18", "Le Gia Huy", "vietnam", "neutral", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 07:40"],
-      ["L-261123-19", "Naphat K.", "thailand", "neutral", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 08:10"],
+      ["L-261123-18", "Le Gia Huy", "vietnam", "interested", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 07:40"],
+      ["L-261123-19", "Naphat K.", "thailand", "interested", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 08:10"],
       ["L-261123-20", "Tan Wei Ming", "malaysia", "interested", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 09:00"],
-      ["L-261123-21", "Nguyen Quynh Nhu", "vietnam", "neutral", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 10:25"],
+      ["L-261123-21", "Nguyen Quynh Nhu", "vietnam", "interested", "statusUnpaidTrialPending", "call_pending", "p4", "2026-11-23 10:25"],
       ["L-261123-22", "Pham Duc Anh", "vietnam", "neutral", "statusUnpaidTrialPending", "not_connected", "p6", "2026-11-20 11:30"],
       ["L-261123-23", "Wanida S.", "thailand", "neutral", "statusUnpaidTrialPending", "not_connected", "p6", "2026-11-19 15:45"],
       ["L-261123-24", "Lim Jia Hui", "malaysia", "notInterested", "statusUnpaidTrialPending", "not_connected", "p6", "2026-11-18 13:10"],
@@ -688,16 +673,15 @@
       owner: "Linh Nguyen",
       phone: "**** " + id.slice(-2),
       appointment: queue === "p2" ? "今天" : queue === "p3" ? "昨天" : "—",
-      lastResult: queue === "p0" ? "体验课已完成" : queue === "p1" ? "咨询未完成" :
+      lastResult: queue === "p0" ? "体验课已完成" : queue === "p1" ? "体验课未完成" :
         queue === "p2" ? "等待到课" : queue === "p3" ? "客户未到课" :
-        queue === "p4" ? "今天新分配" : queue === "p6" ? "多次未接通" : "已接通，未预约"
+        queue === "p4" ? "今日新注册 · 高意向" : queue === "p6" ? "历史注册 · 尚未联系" : "已接通，未预约"
     }));
 
     const state = {
       lang: localStorage.getItem("crm-quick-filter-lang") || "zh",
       primaryTab: "myFollowUp",
       queue: "all",
-      subQueue: "all",
       search: "",
       line: "all",
       stage: "all",
@@ -713,7 +697,6 @@
     }[ch]));
     const t = (key) => I18N[state.lang][key] ?? key;
     const fmt = (key, vars) => t(key).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
-    const mainOf = (queue) => QUEUE_META[queue]?.main || queue;
     const intentLabel = (key) => {
       const map = { interested: "intentInterested", neutral: "intentNeutral", notInterested: "intentNotInterested" };
       return t(map[key] || key);
@@ -721,10 +704,8 @@
     const stageLabel = (key) => t(STAGE_META[key]?.key || key);
     const lineLabel = (key) => t(BL_META[key] || key);
     const queueMainLabel = (queue) => {
-      const main = mainOf(queue);
       if (!queue) return t("processed");
-      if (main === "pending") return t("pendingConnect");
-      return t(QUEUE_META[main]?.title || main);
+      return t(QUEUE_META[queue]?.title || queue);
     };
     const actionLabel = (queue) => t(QUEUE_META[queue]?.action || "viewUser");
     const showToast = (message) => {
@@ -745,30 +726,26 @@
       });
     }
 
-    function queueMatches(lead, queue, subQueue = "all") {
+    function queueMatches(lead, queue) {
       if (queue === "all") return true;
-      if (queue === "pending") {
-        if (!["p4", "p6"].includes(lead.queue)) return false;
-        return subQueue === "all" || lead.queue === subQueue;
-      }
       return lead.queue === queue;
     }
 
     function visibleRows() {
-      return baseRows().filter((lead) => queueMatches(lead, state.queue, state.subQueue));
+      return baseRows().filter((lead) => queueMatches(lead, state.queue));
     }
 
-    function queueCount(queue, subQueue = "all") {
+    function queueCount(queue) {
       if (state.primaryTab !== "myFollowUp") return 0;
-      return baseRows().filter((lead) => queueMatches(lead, queue, subQueue)).length;
+      return baseRows().filter((lead) => queueMatches(lead, queue)).length;
     }
 
     function queuePriority(key) {
-      return ({ p0: "P0", p1: "P1", p2: "P2", p3: "P3", pending: "P4/P6", p5: "P5" })[key] || "";
+      return ({ p0: "P0", p1: "P1", p2: "P2", p3: "P3", p4: "P4", p6: "P6", p5: "P5" })[key] || "";
     }
 
     function renderQueueChip(key, title) {
-      const count = key === "all" ? queueCount("all") : queueCount(key, "all");
+      const count = queueCount(key);
       const priority = queuePriority(key);
       return `<button class="queue-chip ${key === "all" ? "all" : ""} ${state.queue === key ? "active" : ""}" type="button" data-queue="${key}">
         <span class="queue-name">${esc(title)}</span>
@@ -792,8 +769,6 @@
     }
 
     function renderQueueArea() {
-      const todayCount = queueCount("p4");
-      const historyCount = queueCount("p6");
       return `<div class="queue-head">
           <div class="queue-strip" role="tablist" aria-label="${esc(t("quickQueues"))}">
             ${renderQueueChip("all", t("all"))}
@@ -801,17 +776,12 @@
             ${renderQueueChip("p1", t("unfinishedTrial"))}
             ${renderQueueChip("p2", t("todayAppointment"))}
             ${renderQueueChip("p3", t("noShow"))}
-            ${renderQueueChip("pending", t("pendingConnect"))}
+            ${renderQueueChip("p4", t("todayHighIntentPending"))}
+            ${renderQueueChip("p6", t("historyUncontactedPending"))}
             ${renderQueueChip("p5", t("connectedUnbooked"))}
           </div>
           <button class="queue-refresh" id="refresh-queues" type="button" title="${esc(t("refresh"))}" aria-label="${esc(t("refresh"))}">↻</button>
-        </div>
-        ${state.queue === "pending" ? `<div class="subqueue-row">
-          <span class="subqueue-label">${esc(t("pendingConnect"))}</span>
-          <button class="subqueue-btn ${state.subQueue === "all" ? "active" : ""}" type="button" data-subqueue="all">${esc(t("allPending"))} ${queueCount("pending", "all")}</button>
-          <button class="subqueue-btn ${state.subQueue === "p4" ? "active" : ""}" type="button" data-subqueue="p4">${esc(t("todayAssigned"))} ${todayCount}</button>
-          <button class="subqueue-btn ${state.subQueue === "p6" ? "active" : ""}" type="button" data-subqueue="p6">${esc(t("historyUnconnected"))} ${historyCount}</button>
-        </div>` : ""}`;
+        </div>`;
     }
 
     function render() {
@@ -935,7 +905,6 @@
         btn.addEventListener("click", () => {
           const next = btn.dataset.queue;
           state.queue = state.queue === next ? "all" : next;
-          state.subQueue = "all";
           state.page = 1;
           render();
         });
@@ -944,14 +913,6 @@
         btn.addEventListener("click", () => {
           state.primaryTab = btn.dataset.primary;
           state.queue = "all";
-          state.subQueue = "all";
-          state.page = 1;
-          render();
-        });
-      });
-      document.querySelectorAll("[data-subqueue]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          state.subQueue = btn.dataset.subqueue;
           state.page = 1;
           render();
         });
@@ -966,7 +927,6 @@
 
     function resetFilters() {
       state.queue = "all";
-      state.subQueue = "all";
       state.search = "";
       state.line = "all";
       state.stage = "all";
@@ -992,7 +952,7 @@
     function outcomeOptions(queue) {
       const map = {
         p0: ["outcomePaid", "outcomeNotPaid"],
-        p1: ["outcomeComplete"],
+        p1: ["outcomeTrialCompleted"],
         p2: ["outcomeAttended", "outcomeNoShow", "outcomeReschedule"],
         p3: ["outcomeReschedule"],
         p4: ["outcomeConnected", "outcomeUnconnected"],
@@ -1084,20 +1044,23 @@
       const nextQueue = {
         outcomePaid: null,
         outcomeNotPaid: "p0",
-        outcomeComplete: null,
-        outcomeAttended: "p0",
+        outcomeTrialCompleted: "p0",
+        outcomeAttended: "p1",
         outcomeNoShow: "p3",
         outcomeReschedule: "p2",
         outcomeConnected: "p5",
-        outcomeUnconnected: lead.queue === "p4" ? "p6" : "p6",
+        outcomeUnconnected: lead.queue === "p4" ? "p4" : "p6",
         outcomeBooked: "p2",
         outcomeRejected: null
       }[outcome];
       lead.queue = nextQueue;
       lead.lastAction = new Date().toLocaleString(state.lang === "zh" ? "zh-CN" : "en-US");
-      if (outcome === "outcomeAttended") {
+      if (outcome === "outcomeTrialCompleted") {
         lead.stage = "done_unpaid";
         lead.status = "statusUnpaidTrialDone";
+      } else if (outcome === "outcomeAttended") {
+        lead.stage = "trial_incomplete";
+        lead.status = "statusTrialIncomplete";
       } else if (outcome === "outcomeNoShow") {
         lead.stage = "absent";
       } else if (outcome === "outcomeReschedule" || outcome === "outcomeBooked") {
