@@ -11,7 +11,7 @@
 | [PRD](https://h3-ai-lab.github.io/hhhprd/prd-crm-operating-closure.html) | 快捷队列条件、优先级、权限和数据规则 |
 | [交互原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/) | 在现有销售中心内体验快捷筛选和队列处理 |
 | [CRM经营闭环规划](https://h3-ai-lab.github.io/hhhprd/crm-operating-closure.html) | 独立规划文档，包含管理层汇报、阶段路线和经营闭环说明 |
-| [经营看板](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/dashboard/) | 按售前、售中、售后拆解管理指标、销售功能、字段缺口与智能能力 |
+| [CRM能力现状及规划](https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/dashboard/) | 按售前、售中、售后拆解管理指标、销售功能、字段缺口与智能能力 |
 
 ## 项目定位
 
@@ -26,6 +26,6 @@
 | `prd/` | 单文件功能 PRD |
 | `prototype/` | 销售中心快捷队列原型 |
 | `briefing/` | 旧汇报地址兼容文件；正式入口见独立“CRM经营闭环规划” |
-| `dashboard/` | 分阶段经营看板与字段口径说明 |
+| `dashboard/` | 面向领导与业务的 CRM 能力现状及规划手册 |
 | `memory/` | 已确认事实、决策和术语 |
 | `rag/` | 资料来源 |

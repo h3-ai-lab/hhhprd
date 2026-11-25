@@ -49,15 +49,6 @@
     .zd-mark svg { width: 16px; height: 16px; }
     .zd-title { font-size: 14px; font-weight: 600; }
     .zd-sub { color: var(--z-muted); font-size: 10px; margin-top: 2px; }
-    .zd-meta { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-    .zd-chip {
-      border: 1px solid var(--z-line);
-      border-radius: 999px;
-      padding: 4px 7px;
-      color: var(--z-muted);
-      background: var(--z-soft);
-      font-size: 10px;
-    }
     .zd-body { padding: 10px 12px 12px; display: grid; gap: 8px; }
     .zd-stage-board {
       display: grid;
@@ -199,7 +190,6 @@
       font-weight: 600;
     }
     .zd-panel-title svg { width: 13px; height: 13px; color: var(--z-blue); }
-    .zd-source { color: var(--z-muted); font-size: 9px; }
     .zd-canvas { padding: 8px; display: grid; gap: 7px; }
     .zd-kpis {
       display: grid;
@@ -674,7 +664,6 @@
     }
     @media (max-width: 520px) {
       .zd-head { align-items: flex-start; }
-      .zd-meta { justify-content: flex-start; }
       .zd-body { padding: 9px; }
       .zd-query { grid-template-columns: 1fr; }
       .zd-generate { min-height: 38px; }
@@ -712,8 +701,6 @@
     }
     .zd-title { font-size: 16px; }
     .zd-sub,
-    .zd-chip,
-    .zd-source,
     .zd-intelligence-note { font-size: 12px; }
     .zd-phase-head { font-size: 13px; }
     .zd-stage { font-size: 12px; min-height: 32px; }
@@ -768,14 +755,9 @@
       <div class="zd-brand">
         <span class="zd-mark"><i data-lucide="layout-dashboard" aria-hidden="true"></i></span>
         <div>
-          <div class="zd-title">管理经营看板</div>
+          <div class="zd-title">CRM能力现状及规划</div>
           <div class="zd-sub">业务阶段 · 指标定义 · 功能覆盖 · 智能能力</div>
         </div>
-      </div>
-      <div class="zd-meta">
-        <span class="zd-chip">11月业务表</span>
-        <span class="zd-chip">11月16日至22日经营看板</span>
-        <span class="zd-chip">客户管理系统快照</span>
       </div>
     </header>
 
@@ -793,7 +775,6 @@
               <i data-lucide="panel-top" aria-hidden="true"></i>
               <span id="zd-dashboard-name">看板预览</span>
             </div>
-            <div class="zd-source" id="zd-source"></div>
           </div>
           <div class="zd-canvas">
             <div class="zd-kpis" id="zd-kpis"></div>
@@ -984,7 +965,7 @@
         {
           id: "call", phase: "presale", name: "外呼", icon: "phone", priority: "高优先级",
           prompt: "看本周外呼接通率、通话时长和最佳拨打时段，按销售顾问排行",
-          source: "越南11月16日至22日经营看板",
+          source: "越南11月16日至22日经营数据",
           kpis: [["外呼次数", "11,000", "环比增加7.45%"], ["接通次数", "4,215", "接通率38.32%"], ["总通时", "99小时25分", "单次1分25秒"]],
           chartTitle: "各时段接通率", chartUnit: "百分比",
           bars: [["13:30至14:30", 40.40, "40.4%"], ["14:30至15:30", 35.51, "35.5%"], ["17:00至19:00", 35.41, "35.4%"], ["12:30至13:30", 34.90, "34.9%"]],
@@ -1020,7 +1001,7 @@
         {
           id: "appointment", phase: "presale", name: "预约", icon: "calendar-check", priority: "高优先级",
           prompt: "看本周线索到预约、接通到预约和预约确认率，按销售顾问排行",
-          source: "越南11月16日至22日经营看板",
+          source: "越南11月16日至22日经营数据",
           kpis: [["预约人数", "673", "线索到预约20.78%"], ["预约确认", "419", "确认率62.26%"], ["接通到预约", "33.40%", "目标至少35%"]],
           chartTitle: "预约漏斗", chartUnit: "人数",
           bars: [["接通", 2015, "2,015"], ["预约", 673, "673"], ["已确认", 419, "419"], ["到场", 338, "338"]],
@@ -1478,7 +1459,6 @@
         const periodData = isDeal ? dealTargets[state.period].total : null;
         const periodRange = { 月: "11月1日至23日", 周: "11月16日至22日", 日: "11月23日" };
         document.getElementById("zd-dashboard-name").textContent = `管理需求 · ${item.name} · ${item.priority}`;
-        document.getElementById("zd-source").textContent = item.source;
         document.getElementById("zd-deal-panel").hidden = !isDeal;
         document.getElementById("zd-intent-scale").hidden = item.id !== "pl";
         if (isDeal) {
