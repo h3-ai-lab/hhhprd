@@ -2325,7 +2325,59 @@ html&gt;body{padding:0}&lt;/style&gt;
       font-weight: 500;
     }
     .zd-mini-head span { color: var(--z-muted); font-size: 9px; font-weight: 400; }
+    .zd-chart-tools { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .zd-chart-switch {
+      display: flex;
+      gap: 2px;
+      padding: 2px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+    }
+    .zd-chart-tab {
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--z-muted);
+      padding: 2px 6px;
+      font: inherit;
+      font-size: 9px;
+      cursor: pointer;
+    }
+    .zd-chart-tab[aria-pressed=&quot;true&quot;] {
+      background: var(--z-blue-soft);
+      color: var(--z-blue);
+      font-weight: 500;
+    }
     .zd-bars { display: grid; gap: 5px; }
+    .zd-line-chart {
+      display: block;
+      width: 100%;
+      min-height: 150px;
+      overflow: visible;
+    }
+    .zd-line-grid { stroke: color-mix(in srgb, var(--z-line) 78%, transparent); stroke-width: 1; }
+    .zd-line-axis { stroke: var(--z-line-strong); stroke-width: 1; }
+    .zd-line-area { fill: color-mix(in srgb, var(--z-blue) 11%, transparent); }
+    .zd-line-path { fill: none; stroke: var(--z-blue); stroke-width: 2; }
+    .zd-line-point { fill: var(--z-blue); stroke: var(--z-panel); stroke-width: 2; }
+    .zd-line-label { fill: var(--z-muted); font-size: 10px; }
+    .zd-line-value { fill: var(--z-text); font-size: 10px; font-weight: 500; }
+    .zd-detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+      line-height: 1.35;
+    }
+    .zd-detail-table th,
+    .zd-detail-table td {
+      padding: 5px 7px;
+      border-bottom: 1px solid var(--z-line);
+      text-align: left;
+    }
+    .zd-detail-table th { color: var(--z-muted); font-weight: 500; }
+    .zd-detail-table td:last-child,
+    .zd-detail-table th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
     .zd-funnel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
     .zd-funnel-step {
       min-width: 0;
@@ -2653,6 +2705,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     .zd-intent-note { font-size: 11px; }
     .zd-mini-head { font-size: 13px; }
     .zd-mini-head span { font-size: 11px; }
+    .zd-chart-tab,
+    .zd-detail-table { font-size: 11px; }
     .zd-bar-row,
     .zd-list-item { font-size: 12px; }
     .zd-cc-head { font-size: 13px; }
@@ -2778,7 +2832,17 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;/section&gt;
             &lt;div class=&quot;zd-chart-row&quot;&gt;
               &lt;div class=&quot;zd-mini&quot;&gt;
-                &lt;div class=&quot;zd-mini-head&quot;&gt;&lt;strong id=&quot;zd-chart-title&quot;&gt;&lt;/strong&gt;&lt;span id=&quot;zd-chart-unit&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;zd-mini-head&quot;&gt;
+                  &lt;strong id=&quot;zd-chart-title&quot;&gt;&lt;/strong&gt;
+                  &lt;div class=&quot;zd-chart-tools&quot;&gt;
+                    &lt;span id=&quot;zd-chart-unit&quot;&gt;&lt;/span&gt;
+                    &lt;div class=&quot;zd-chart-switch&quot; role=&quot;group&quot; aria-label=&quot;图表视图&quot;&gt;
+                      &lt;button type=&quot;button&quot; class=&quot;zd-chart-tab&quot; data-chart-view=&quot;分布&quot; aria-pressed=&quot;true&quot;&gt;分布&lt;/button&gt;
+                      &lt;button type=&quot;button&quot; class=&quot;zd-chart-tab&quot; data-chart-view=&quot;趋势&quot; aria-pressed=&quot;false&quot;&gt;趋势&lt;/button&gt;
+                      &lt;button type=&quot;button&quot; class=&quot;zd-chart-tab&quot; data-chart-view=&quot;明细&quot; aria-pressed=&quot;false&quot;&gt;明细&lt;/button&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
                 &lt;div class=&quot;zd-bars&quot; id=&quot;zd-bars&quot;&gt;&lt;/div&gt;
               &lt;/div&gt;
               &lt;div class=&quot;zd-mini&quot;&gt;
@@ -3318,7 +3382,8 @@ html&gt;body{padding:0}&lt;/style&gt;
         entity: &quot;麦西团队&quot;,
         period: &quot;月&quot;,
         startDate: &quot;2026-11-16&quot;,
-        endDate: &quot;2026-11-22&quot;
+        endDate: &quot;2026-11-22&quot;,
+        chartView: &quot;分布&quot;
       };
       try {
         const saved = window.openai?.widgetState;
@@ -3330,6 +3395,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (saved?.period === &quot;自定义&quot; || dealTargets[saved?.period]) state.period = saved.period;
         if (/^\d{4}-\d{2}-\d{2}$/.test(saved?.startDate || &quot;&quot;)) state.startDate = saved.startDate;
         if (/^\d{4}-\d{2}-\d{2}$/.test(saved?.endDate || &quot;&quot;)) state.endDate = saved.endDate;
+        if ([&quot;分布&quot;, &quot;趋势&quot;, &quot;明细&quot;].includes(saved?.chartView)) state.chartView = saved.chartView;
       } catch (_) {}
 
       const selected = () =&gt; stages.find(item =&gt; item.id === state.stage);
@@ -3356,7 +3422,8 @@ html&gt;body{padding:0}&lt;/style&gt;
               entity: state.entity,
               period: state.period,
               startDate: state.startDate,
-              endDate: state.endDate
+              endDate: state.endDate,
+              chartView: state.chartView
             },
             privateContent: state
           })?.catch?.(() =&gt; {});
@@ -3414,6 +3481,102 @@ html&gt;body{padding:0}&lt;/style&gt;
           return `${scaled.toLocaleString(&quot;zh-CN&quot;, { maximumFractionDigits: decimals, minimumFractionDigits: decimals })}${suffix || &quot;&quot;}`;
         });
       };
+
+      function trendLabels() {
+        if (state.period === &quot;周&quot;) return [&quot;11/16&quot;, &quot;11/17&quot;, &quot;11/18&quot;, &quot;11/19&quot;, &quot;11/20&quot;, &quot;11/21&quot;, &quot;11/22&quot;];
+        if (state.period === &quot;日&quot;) return [&quot;08:00&quot;, &quot;10:00&quot;, &quot;12:00&quot;, &quot;14:00&quot;, &quot;16:00&quot;, &quot;18:00&quot;, &quot;20:00&quot;];
+        if (state.period === &quot;月&quot;) return [&quot;11/1&quot;, &quot;11/5&quot;, &quot;11/9&quot;, &quot;11/13&quot;, &quot;11/17&quot;, &quot;11/21&quot;, &quot;11/23&quot;];
+        const start = new Date(`${state.startDate}T00:00:00Z`);
+        const end = new Date(`${state.endDate}T00:00:00Z`);
+        if (start.getTime() === end.getTime()) {
+          return [&quot;08:00&quot;, &quot;10:00&quot;, &quot;12:00&quot;, &quot;14:00&quot;, &quot;16:00&quot;, &quot;18:00&quot;, &quot;20:00&quot;];
+        }
+        const days = Math.max(1, Math.floor((end - start) / 86400000));
+        return Array.from({ length: 7 }, (_, index) =&gt; {
+          const date = new Date(start.getTime() + Math.round(days * index / 6) * 86400000);
+          return `${date.getUTCMonth() + 1}/${date.getUTCDate()}`;
+        });
+      }
+
+      function trendValues(item, filteredBars, periodData, isDeal) {
+        const labels = trendLabels();
+        const rates = item.chartUnit.includes(&quot;百分比&quot;) || filteredBars.some(row =&gt; String(row[2]).includes(&quot;%&quot;));
+        if (isDeal) {
+          if (rates) return [];
+          const total = periodData.actual;
+          const raw = labels.map((_, index) =&gt; 0.65 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 71) / 100);
+          const sum = raw.reduce((value, current) =&gt; value + current, 0);
+          return { labels, values: raw.map(value =&gt; total * value / sum), rates: false };
+        }
+        if (!filteredBars.length) return { labels: [], values: [], rates };
+        const base = rates
+          ? filteredBars.reduce((sum, row) =&gt; sum + row[1], 0) / filteredBars.length
+          : filteredBars.reduce((sum, row) =&gt; sum + row[1], 0);
+        const raw = labels.map((_, index) =&gt; 0.72 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 57) / 100);
+        const sum = raw.reduce((value, current) =&gt; value + current, 0);
+        return {
+          labels,
+          values: raw.map(value =&gt; rates ? Math.min(100, base * value / (sum / labels.length)) : base * value / sum),
+          rates
+        };
+      }
+
+      function lineChartSvg(item, labels, values, rates) {
+        if (!values.length) {
+          return `&lt;div class=&quot;zd-empty&quot;&gt;当前口径暂无可生成的趋势数据&lt;/div&gt;`;
+        }
+        const width = 620;
+        const height = 170;
+        const left = 38;
+        const right = 14;
+        const top = 22;
+        const bottom = 30;
+        const plotWidth = width - left - right;
+        const plotHeight = height - top - bottom;
+        const max = Math.max(...values, 1);
+        const points = values.map((value, index) =&gt; ({
+          x: left + (labels.length === 1 ? plotWidth / 2 : plotWidth * index / (labels.length - 1)),
+          y: top + plotHeight - value / max * plotHeight,
+          value
+        }));
+        const line = points.map((point, index) =&gt; `${index ? &quot;L&quot; : &quot;M&quot;}${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(&quot; &quot;);
+        const area = `${line} L${points[points.length - 1].x.toFixed(1)},${(top + plotHeight).toFixed(1)} L${points[0].x.toFixed(1)},${(top + plotHeight).toFixed(1)} Z`;
+        const format = value =&gt; rates
+          ? `${value.toFixed(1)}%`
+          : Math.round(value).toLocaleString(&quot;zh-CN&quot;);
+        return `
+          &lt;svg class=&quot;zd-line-chart&quot; viewBox=&quot;0 0 ${width} ${height}&quot; role=&quot;img&quot; aria-label=&quot;${item.name}按时间趋势&quot;&gt;
+            &lt;title&gt;${item.name}按时间趋势&lt;/title&gt;
+            &lt;desc&gt;${labels.map((label, index) =&gt; `${label} ${format(values[index])}`).join(&quot;，&quot;)}&lt;/desc&gt;
+            ${[0, 0.5, 1].map(ratio =&gt; {
+              const y = top + plotHeight * ratio;
+              return `&lt;line class=&quot;zd-line-grid&quot; x1=&quot;${left}&quot; y1=&quot;${y.toFixed(1)}&quot; x2=&quot;${width - right}&quot; y2=&quot;${y.toFixed(1)}&quot;&gt;&lt;/line&gt;
+                &lt;text class=&quot;zd-line-label&quot; x=&quot;${left - 7}&quot; y=&quot;${(y + 3).toFixed(1)}&quot; text-anchor=&quot;end&quot;&gt;${format(max * (1 - ratio))}&lt;/text&gt;`;
+            }).join(&quot;&quot;)}
+            &lt;line class=&quot;zd-line-axis&quot; x1=&quot;${left}&quot; y1=&quot;${top}&quot; x2=&quot;${left}&quot; y2=&quot;${top + plotHeight}&quot;&gt;&lt;/line&gt;
+            &lt;line class=&quot;zd-line-axis&quot; x1=&quot;${left}&quot; y1=&quot;${top + plotHeight}&quot; x2=&quot;${width - right}&quot; y2=&quot;${top + plotHeight}&quot;&gt;&lt;/line&gt;
+            &lt;path class=&quot;zd-line-area&quot; d=&quot;${area}&quot;&gt;&lt;/path&gt;
+            &lt;path class=&quot;zd-line-path&quot; d=&quot;${line}&quot;&gt;&lt;/path&gt;
+            ${points.map((point, index) =&gt; `
+              &lt;circle class=&quot;zd-line-point&quot; cx=&quot;${point.x.toFixed(1)}&quot; cy=&quot;${point.y.toFixed(1)}&quot; r=&quot;3.5&quot;&gt;&lt;/circle&gt;
+              &lt;text class=&quot;zd-line-value&quot; x=&quot;${point.x.toFixed(1)}&quot; y=&quot;${(point.y - 8).toFixed(1)}&quot; text-anchor=&quot;middle&quot;&gt;${format(point.value)}&lt;/text&gt;
+              &lt;text class=&quot;zd-line-label&quot; x=&quot;${point.x.toFixed(1)}&quot; y=&quot;${height - 9}&quot; text-anchor=&quot;middle&quot;&gt;${labels[index]}&lt;/text&gt;
+            `).join(&quot;&quot;)}
+          &lt;/svg&gt;`;
+      }
+
+      function detailTable(rows, isDeal, total) {
+        const body = isDeal
+          ? [
+              [&quot;成交金额&quot;, money(total.actual)],
+              [&quot;成交订单&quot;, numberFormat.format(total.orders)],
+              [&quot;目标金额&quot;, money(total.target)],
+              [&quot;距目标&quot;, total.target &gt;= total.actual ? `差 ${money(total.target - total.actual)}` : `超 ${money(total.actual - total.target)}`]
+            ]
+          : rows.map(row =&gt; [row[0], row[2]]);
+        if (!body.length) return `&lt;div class=&quot;zd-empty&quot;&gt;当前口径暂无可展示的明细&lt;/div&gt;`;
+        return `&lt;table class=&quot;zd-detail-table&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;对象&lt;/th&gt;&lt;th&gt;数值&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${body.map(row =&gt; `&lt;tr&gt;&lt;td&gt;${row[0]}&lt;/td&gt;&lt;td&gt;${row[1]}&lt;/td&gt;&lt;/tr&gt;`).join(&quot;&quot;)}&lt;/tbody&gt;&lt;/table&gt;`;
+      }
 
       function renderFilterControls() {
         const levelSelect = document.getElementById(&quot;zd-level-select&quot;);
@@ -3548,9 +3711,23 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;div class=&quot;zd-kpi-note&quot;&gt;${scaleText(note, filterFactor)}&lt;/div&gt;
           &lt;/div&gt;`).join(&quot;&quot;);
         }
-        document.getElementById(&quot;zd-chart-title&quot;).textContent = item.chartTitle;
-        document.getElementById(&quot;zd-chart-unit&quot;).textContent = item.chartUnit;
-        if (isDeal) {
+        document.querySelectorAll(&quot;[data-chart-view]&quot;).forEach(button =&gt; {
+          button.setAttribute(&quot;aria-pressed&quot;, String(button.dataset.chartView === state.chartView));
+        });
+        document.getElementById(&quot;zd-chart-title&quot;).textContent = state.chartView === &quot;趋势&quot;
+          ? `${item.name}趋势`
+          : state.chartView === &quot;明细&quot;
+            ? `${item.name}明细`
+            : item.chartTitle;
+        document.getElementById(&quot;zd-chart-unit&quot;).textContent = state.chartView === &quot;分布&quot;
+          ? item.chartUnit
+          : state.chartView === &quot;趋势&quot; ? `${periodRangeLabel()} · 趋势` : &quot;按当前筛选口径&quot;;
+        if (state.chartView === &quot;趋势&quot;) {
+          const trend = trendValues(item, filteredBars, periodData, isDeal);
+          document.getElementById(&quot;zd-bars&quot;).innerHTML = lineChartSvg(item, trend.labels, trend.values, trend.rates);
+        } else if (state.chartView === &quot;明细&quot;) {
+          document.getElementById(&quot;zd-bars&quot;).innerHTML = detailTable(filteredBars, isDeal, periodData);
+        } else if (isDeal) {
           const funnelFactor = Math.max(0.02, periodData.actual / dealTargets.月.total.actual);
           document.getElementById(&quot;zd-bars&quot;).innerHTML = `
             &lt;div class=&quot;zd-funnel&quot; aria-label=&quot;成交与回款漏斗&quot;&gt;
@@ -3559,7 +3736,7 @@ html&gt;body{padding:0}&lt;/style&gt;
               &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;支付入账&lt;/span&gt;&lt;strong&gt;${periodData.orders} 单&lt;/strong&gt;&lt;small&gt;成交 ${money(periodData.actual)}&lt;/small&gt;&lt;/div&gt;
               &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;剩余应付清收&lt;/span&gt;&lt;strong&gt;${scaleText(&quot;13,332万&quot;, funnelFactor)} VND&lt;/strong&gt;&lt;small&gt;所选范围待收余额&lt;/small&gt;&lt;/div&gt;
             &lt;/div&gt;`;
-        } else if (!item.bars.length) {
+        } else if (!filteredBars.length) {
           document.getElementById(&quot;zd-bars&quot;).innerHTML = `&lt;div class=&quot;zd-empty&quot;&gt;❌ 当前缺少可生成图表的数据字段&lt;br&gt;接入后可自动生成趋势与分布&lt;/div&gt;`;
         } else {
           const max = Math.max(...filteredBars.map(row =&gt; row[1]), 1);
@@ -3658,6 +3835,13 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (state.endDate &lt; state.startDate) state.startDate = state.endDate;
         renderDashboard();
         save();
+      });
+      document.querySelectorAll(&quot;[data-chart-view]&quot;).forEach(button =&gt; {
+        button.addEventListener(&quot;click&quot;, () =&gt; {
+          state.chartView = button.dataset.chartView;
+          renderDashboard();
+          save();
+        });
       });
 
       renderAll();

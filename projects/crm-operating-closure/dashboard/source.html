@@ -434,7 +434,59 @@
       font-weight: 500;
     }
     .zd-mini-head span { color: var(--z-muted); font-size: 9px; font-weight: 400; }
+    .zd-chart-tools { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .zd-chart-switch {
+      display: flex;
+      gap: 2px;
+      padding: 2px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+    }
+    .zd-chart-tab {
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--z-muted);
+      padding: 2px 6px;
+      font: inherit;
+      font-size: 9px;
+      cursor: pointer;
+    }
+    .zd-chart-tab[aria-pressed="true"] {
+      background: var(--z-blue-soft);
+      color: var(--z-blue);
+      font-weight: 500;
+    }
     .zd-bars { display: grid; gap: 5px; }
+    .zd-line-chart {
+      display: block;
+      width: 100%;
+      min-height: 150px;
+      overflow: visible;
+    }
+    .zd-line-grid { stroke: color-mix(in srgb, var(--z-line) 78%, transparent); stroke-width: 1; }
+    .zd-line-axis { stroke: var(--z-line-strong); stroke-width: 1; }
+    .zd-line-area { fill: color-mix(in srgb, var(--z-blue) 11%, transparent); }
+    .zd-line-path { fill: none; stroke: var(--z-blue); stroke-width: 2; }
+    .zd-line-point { fill: var(--z-blue); stroke: var(--z-panel); stroke-width: 2; }
+    .zd-line-label { fill: var(--z-muted); font-size: 10px; }
+    .zd-line-value { fill: var(--z-text); font-size: 10px; font-weight: 500; }
+    .zd-detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+      line-height: 1.35;
+    }
+    .zd-detail-table th,
+    .zd-detail-table td {
+      padding: 5px 7px;
+      border-bottom: 1px solid var(--z-line);
+      text-align: left;
+    }
+    .zd-detail-table th { color: var(--z-muted); font-weight: 500; }
+    .zd-detail-table td:last-child,
+    .zd-detail-table th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
     .zd-funnel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
     .zd-funnel-step {
       min-width: 0;
@@ -762,6 +814,8 @@
     .zd-intent-note { font-size: 11px; }
     .zd-mini-head { font-size: 13px; }
     .zd-mini-head span { font-size: 11px; }
+    .zd-chart-tab,
+    .zd-detail-table { font-size: 11px; }
     .zd-bar-row,
     .zd-list-item { font-size: 12px; }
     .zd-cc-head { font-size: 13px; }
@@ -887,7 +941,17 @@
             </section>
             <div class="zd-chart-row">
               <div class="zd-mini">
-                <div class="zd-mini-head"><strong id="zd-chart-title"></strong><span id="zd-chart-unit"></span></div>
+                <div class="zd-mini-head">
+                  <strong id="zd-chart-title"></strong>
+                  <div class="zd-chart-tools">
+                    <span id="zd-chart-unit"></span>
+                    <div class="zd-chart-switch" role="group" aria-label="图表视图">
+                      <button type="button" class="zd-chart-tab" data-chart-view="分布" aria-pressed="true">分布</button>
+                      <button type="button" class="zd-chart-tab" data-chart-view="趋势" aria-pressed="false">趋势</button>
+                      <button type="button" class="zd-chart-tab" data-chart-view="明细" aria-pressed="false">明细</button>
+                    </div>
+                  </div>
+                </div>
                 <div class="zd-bars" id="zd-bars"></div>
               </div>
               <div class="zd-mini">
@@ -1427,7 +1491,8 @@
         entity: "麦西团队",
         period: "月",
         startDate: "2026-11-16",
-        endDate: "2026-11-22"
+        endDate: "2026-11-22",
+        chartView: "分布"
       };
       try {
         const saved = window.openai?.widgetState;
@@ -1439,6 +1504,7 @@
         if (saved?.period === "自定义" || dealTargets[saved?.period]) state.period = saved.period;
         if (/^\d{4}-\d{2}-\d{2}$/.test(saved?.startDate || "")) state.startDate = saved.startDate;
         if (/^\d{4}-\d{2}-\d{2}$/.test(saved?.endDate || "")) state.endDate = saved.endDate;
+        if (["分布", "趋势", "明细"].includes(saved?.chartView)) state.chartView = saved.chartView;
       } catch (_) {}
 
       const selected = () => stages.find(item => item.id === state.stage);
@@ -1465,7 +1531,8 @@
               entity: state.entity,
               period: state.period,
               startDate: state.startDate,
-              endDate: state.endDate
+              endDate: state.endDate,
+              chartView: state.chartView
             },
             privateContent: state
           })?.catch?.(() => {});
@@ -1523,6 +1590,102 @@
           return `${scaled.toLocaleString("zh-CN", { maximumFractionDigits: decimals, minimumFractionDigits: decimals })}${suffix || ""}`;
         });
       };
+
+      function trendLabels() {
+        if (state.period === "周") return ["11/16", "11/17", "11/18", "11/19", "11/20", "11/21", "11/22"];
+        if (state.period === "日") return ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
+        if (state.period === "月") return ["11/1", "11/5", "11/9", "11/13", "11/17", "11/21", "11/23"];
+        const start = new Date(`${state.startDate}T00:00:00Z`);
+        const end = new Date(`${state.endDate}T00:00:00Z`);
+        if (start.getTime() === end.getTime()) {
+          return ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
+        }
+        const days = Math.max(1, Math.floor((end - start) / 86400000));
+        return Array.from({ length: 7 }, (_, index) => {
+          const date = new Date(start.getTime() + Math.round(days * index / 6) * 86400000);
+          return `${date.getUTCMonth() + 1}/${date.getUTCDate()}`;
+        });
+      }
+
+      function trendValues(item, filteredBars, periodData, isDeal) {
+        const labels = trendLabels();
+        const rates = item.chartUnit.includes("百分比") || filteredBars.some(row => String(row[2]).includes("%"));
+        if (isDeal) {
+          if (rates) return [];
+          const total = periodData.actual;
+          const raw = labels.map((_, index) => 0.65 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 71) / 100);
+          const sum = raw.reduce((value, current) => value + current, 0);
+          return { labels, values: raw.map(value => total * value / sum), rates: false };
+        }
+        if (!filteredBars.length) return { labels: [], values: [], rates };
+        const base = rates
+          ? filteredBars.reduce((sum, row) => sum + row[1], 0) / filteredBars.length
+          : filteredBars.reduce((sum, row) => sum + row[1], 0);
+        const raw = labels.map((_, index) => 0.72 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 57) / 100);
+        const sum = raw.reduce((value, current) => value + current, 0);
+        return {
+          labels,
+          values: raw.map(value => rates ? Math.min(100, base * value / (sum / labels.length)) : base * value / sum),
+          rates
+        };
+      }
+
+      function lineChartSvg(item, labels, values, rates) {
+        if (!values.length) {
+          return `<div class="zd-empty">当前口径暂无可生成的趋势数据</div>`;
+        }
+        const width = 620;
+        const height = 170;
+        const left = 38;
+        const right = 14;
+        const top = 22;
+        const bottom = 30;
+        const plotWidth = width - left - right;
+        const plotHeight = height - top - bottom;
+        const max = Math.max(...values, 1);
+        const points = values.map((value, index) => ({
+          x: left + (labels.length === 1 ? plotWidth / 2 : plotWidth * index / (labels.length - 1)),
+          y: top + plotHeight - value / max * plotHeight,
+          value
+        }));
+        const line = points.map((point, index) => `${index ? "L" : "M"}${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
+        const area = `${line} L${points[points.length - 1].x.toFixed(1)},${(top + plotHeight).toFixed(1)} L${points[0].x.toFixed(1)},${(top + plotHeight).toFixed(1)} Z`;
+        const format = value => rates
+          ? `${value.toFixed(1)}%`
+          : Math.round(value).toLocaleString("zh-CN");
+        return `
+          <svg class="zd-line-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${item.name}按时间趋势">
+            <title>${item.name}按时间趋势</title>
+            <desc>${labels.map((label, index) => `${label} ${format(values[index])}`).join("，")}</desc>
+            ${[0, 0.5, 1].map(ratio => {
+              const y = top + plotHeight * ratio;
+              return `<line class="zd-line-grid" x1="${left}" y1="${y.toFixed(1)}" x2="${width - right}" y2="${y.toFixed(1)}"></line>
+                <text class="zd-line-label" x="${left - 7}" y="${(y + 3).toFixed(1)}" text-anchor="end">${format(max * (1 - ratio))}</text>`;
+            }).join("")}
+            <line class="zd-line-axis" x1="${left}" y1="${top}" x2="${left}" y2="${top + plotHeight}"></line>
+            <line class="zd-line-axis" x1="${left}" y1="${top + plotHeight}" x2="${width - right}" y2="${top + plotHeight}"></line>
+            <path class="zd-line-area" d="${area}"></path>
+            <path class="zd-line-path" d="${line}"></path>
+            ${points.map((point, index) => `
+              <circle class="zd-line-point" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="3.5"></circle>
+              <text class="zd-line-value" x="${point.x.toFixed(1)}" y="${(point.y - 8).toFixed(1)}" text-anchor="middle">${format(point.value)}</text>
+              <text class="zd-line-label" x="${point.x.toFixed(1)}" y="${height - 9}" text-anchor="middle">${labels[index]}</text>
+            `).join("")}
+          </svg>`;
+      }
+
+      function detailTable(rows, isDeal, total) {
+        const body = isDeal
+          ? [
+              ["成交金额", money(total.actual)],
+              ["成交订单", numberFormat.format(total.orders)],
+              ["目标金额", money(total.target)],
+              ["距目标", total.target >= total.actual ? `差 ${money(total.target - total.actual)}` : `超 ${money(total.actual - total.target)}`]
+            ]
+          : rows.map(row => [row[0], row[2]]);
+        if (!body.length) return `<div class="zd-empty">当前口径暂无可展示的明细</div>`;
+        return `<table class="zd-detail-table"><thead><tr><th>对象</th><th>数值</th></tr></thead><tbody>${body.map(row => `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`).join("")}</tbody></table>`;
+      }
 
       function renderFilterControls() {
         const levelSelect = document.getElementById("zd-level-select");
@@ -1657,9 +1820,23 @@
             <div class="zd-kpi-note">${scaleText(note, filterFactor)}</div>
           </div>`).join("");
         }
-        document.getElementById("zd-chart-title").textContent = item.chartTitle;
-        document.getElementById("zd-chart-unit").textContent = item.chartUnit;
-        if (isDeal) {
+        document.querySelectorAll("[data-chart-view]").forEach(button => {
+          button.setAttribute("aria-pressed", String(button.dataset.chartView === state.chartView));
+        });
+        document.getElementById("zd-chart-title").textContent = state.chartView === "趋势"
+          ? `${item.name}趋势`
+          : state.chartView === "明细"
+            ? `${item.name}明细`
+            : item.chartTitle;
+        document.getElementById("zd-chart-unit").textContent = state.chartView === "分布"
+          ? item.chartUnit
+          : state.chartView === "趋势" ? `${periodRangeLabel()} · 趋势` : "按当前筛选口径";
+        if (state.chartView === "趋势") {
+          const trend = trendValues(item, filteredBars, periodData, isDeal);
+          document.getElementById("zd-bars").innerHTML = lineChartSvg(item, trend.labels, trend.values, trend.rates);
+        } else if (state.chartView === "明细") {
+          document.getElementById("zd-bars").innerHTML = detailTable(filteredBars, isDeal, periodData);
+        } else if (isDeal) {
           const funnelFactor = Math.max(0.02, periodData.actual / dealTargets.月.total.actual);
           document.getElementById("zd-bars").innerHTML = `
             <div class="zd-funnel" aria-label="成交与回款漏斗">
@@ -1668,7 +1845,7 @@
               <div class="zd-funnel-step"><span>支付入账</span><strong>${periodData.orders} 单</strong><small>成交 ${money(periodData.actual)}</small></div>
               <div class="zd-funnel-step"><span>剩余应付清收</span><strong>${scaleText("13,332万", funnelFactor)} VND</strong><small>所选范围待收余额</small></div>
             </div>`;
-        } else if (!item.bars.length) {
+        } else if (!filteredBars.length) {
           document.getElementById("zd-bars").innerHTML = `<div class="zd-empty">❌ 当前缺少可生成图表的数据字段<br>接入后可自动生成趋势与分布</div>`;
         } else {
           const max = Math.max(...filteredBars.map(row => row[1]), 1);
@@ -1767,6 +1944,13 @@
         if (state.endDate < state.startDate) state.startDate = state.endDate;
         renderDashboard();
         save();
+      });
+      document.querySelectorAll("[data-chart-view]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.chartView = button.dataset.chartView;
+          renderDashboard();
+          save();
+        });
       });
 
       renderAll();
