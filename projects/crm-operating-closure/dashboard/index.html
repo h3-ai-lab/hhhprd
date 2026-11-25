@@ -2154,6 +2154,18 @@ html&gt;body{padding:0}&lt;/style&gt;
       font-size: 9px;
       line-height: 1.45;
     }
+    .zd-intent-evidence {
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px solid color-mix(in srgb, var(--z-line) 72%, transparent);
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+    .zd-intent-evidence b {
+      color: var(--z-text);
+      font-weight: 500;
+    }
     .zd-intent-note {
       grid-column: 1 / -1;
       padding: 5px 7px;
@@ -2607,6 +2619,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     .zd-intent-label { font-size: 12px; }
     .zd-intent-count,
     .zd-intent-rule,
+    .zd-intent-evidence,
     .zd-intent-note { font-size: 11px; }
     .zd-mini-head { font-size: 13px; }
     .zd-mini-head span { font-size: 11px; }
@@ -2699,20 +2712,23 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;section class=&quot;zd-intent-scale&quot; id=&quot;zd-intent-scale&quot; aria-label=&quot;支付意向分级口径&quot; hidden&gt;
               &lt;div class=&quot;zd-intent-step level-100&quot;&gt;
                 &lt;div class=&quot;zd-intent-head&quot;&gt;&lt;span class=&quot;zd-intent-level level-100&quot;&gt;100%&lt;/span&gt;&lt;span class=&quot;zd-intent-count&quot;&gt;业务表 14 条&lt;/span&gt;&lt;/div&gt;
-                &lt;div class=&quot;zd-intent-label&quot;&gt;已决定购买 · 定金级&lt;/div&gt;
-                &lt;div class=&quot;zd-intent-rule&quot;&gt;已明确决定购买，套餐、价格、付款方式和付款日期已确认，关键决策人同意，无未解决实质异议；对应“PL 100% (Deposit)”。&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-label&quot;&gt;客户已支付定金&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-rule&quot;&gt;客户已经实际支付定金，不是仅口头确认购买；对应业务表“PL 100% (Deposit)”。&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-evidence&quot;&gt;&lt;b&gt;业务表&lt;/b&gt; 定金金额 ✅ · 定金日期 ✅　&lt;b&gt;CRM补充&lt;/b&gt; 定金支付状态 ❌ · 支付时间 ❌ · 关联定金单 ❌&lt;/div&gt;
               &lt;/div&gt;
               &lt;div class=&quot;zd-intent-step level-80&quot;&gt;
                 &lt;div class=&quot;zd-intent-head&quot;&gt;&lt;span class=&quot;zd-intent-level level-80&quot;&gt;80%&lt;/span&gt;&lt;span class=&quot;zd-intent-count&quot;&gt;业务表 10 条&lt;/span&gt;&lt;/div&gt;
-                &lt;div class=&quot;zd-intent-label&quot;&gt;购买方向已定 · 强意向&lt;/div&gt;
-                &lt;div class=&quot;zd-intent-rule&quot;&gt;套餐与价格基本认可，仅剩一个关键条件待确认，如家庭成员同意、具体班次或付款日；已有明确下一步动作和时间。&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-label&quot;&gt;客户已承诺付款 · 三要素齐全&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-rule&quot;&gt;客户明确承诺付款；销售必须同步记录何时付款、购买哪个套餐、采用什么付款方式（如 Visa），任一项缺失不能评为 80%。&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-evidence&quot;&gt;&lt;b&gt;业务表&lt;/b&gt; 付款日期 ✅ · 付款套餐 ✅ · 付款方式 ❌　&lt;b&gt;CRM补充&lt;/b&gt; 承诺付款时间 ❌ · 承诺付款套餐 ❌ · 承诺付款方式 ❌&lt;/div&gt;
               &lt;/div&gt;
               &lt;div class=&quot;zd-intent-step level-50&quot;&gt;
                 &lt;div class=&quot;zd-intent-head&quot;&gt;&lt;span class=&quot;zd-intent-level level-50&quot;&gt;50%&lt;/span&gt;&lt;span class=&quot;zd-intent-count&quot;&gt;业务表 65 条&lt;/span&gt;&lt;/div&gt;
-                &lt;div class=&quot;zd-intent-label&quot;&gt;需求匹配 · 待解决异议&lt;/div&gt;
-                &lt;div class=&quot;zd-intent-rule&quot;&gt;需求与产品匹配且愿意继续沟通，但价格、套餐选择、决策人或付款方式至少一项未解决，尚未形成购买或付款承诺。&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-label&quot;&gt;客户仍有顾虑 · 未拒绝 · 继续处理&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-rule&quot;&gt;客户仍有未解决顾虑，但没有明确拒绝，销售仍在继续处理和跟进；需记录主要顾虑及下一次跟进安排。&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-evidence&quot;&gt;&lt;b&gt;业务表&lt;/b&gt; 意向状态 ✅ · 拒绝原因 ✅　&lt;b&gt;CRM补充&lt;/b&gt; 顾虑分类 ❌ · 顾虑备注 ❌ · 下一次跟进 ❌&lt;/div&gt;
               &lt;/div&gt;
-              &lt;div class=&quot;zd-intent-note&quot;&gt;判定取每条线索最新一条有效意向记录：成交后统一归为“已支付”，拒绝后不再保留原高意向；无明确客户证据时归为“待定”，不能仅凭跟进次数或销售主观判断升级。持续跟进是独立状态，不等同于 50%。&lt;/div&gt;
+              &lt;div class=&quot;zd-intent-note&quot;&gt;判定取每条线索最新一条有效意向记录：Pending 表示多次外呼始终无人接听，单独统计且不归入 50%；明确拒绝归为拒绝；完成成交后归为已支付。100% 以实际支付定金为准，80% 未补齐付款时间、套餐和付款方式时不得晋级。&lt;/div&gt;
             &lt;/section&gt;
             &lt;div class=&quot;zd-chart-row&quot;&gt;
               &lt;div class=&quot;zd-mini&quot;&gt;
@@ -2953,16 +2969,18 @@ html&gt;body{padding:0}&lt;/style&gt;
           bars: [[&quot;持续跟进&quot;, 455, &quot;455&quot;], [&quot;已拒绝&quot;, 272, &quot;272&quot;], [&quot;已支付&quot;, 172, &quot;172&quot;], [&quot;50%意向&quot;, 65, &quot;65&quot;], [&quot;80%或100%&quot;, 24, &quot;24&quot;]],
           attention: [[&quot;预算过高&quot;, &quot;80&quot;, &quot;warn&quot;], [&quot;无法联系&quot;, &quot;60&quot;, &quot;bad&quot;], [&quot;需家庭决策&quot;, &quot;42&quot;, &quot;warn&quot;]],
           metrics: [
-            { name: &quot;支付意向层级分布&quot;, definition: &quot;按每条线索最新有效状态统计：100%已决定购买且套餐、价格、付款方式与日期明确；80%购买方向确认但仅剩一项关键条件；50%需求匹配但仍有多项成交异议，尚未形成购买或付款承诺。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;支付意向状态 ✅&quot;], crm: [&quot;结构化支付意向 ❌&quot;], design: [&quot;支付意向等级&quot;, &quot;意向变更时间&quot;, &quot;意向变更人&quot;] },
+            { name: &quot;支付意向层级分布&quot;, definition: &quot;按每条线索最新有效状态统计：100%为客户已实际支付定金；80%为客户已承诺付款，且付款时间、付款套餐、付款方式三项信息齐全；50%为客户仍有顾虑但未拒绝、仍在继续处理；Pending为多次联系始终无人接听。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;支付意向状态 ✅&quot;, &quot;定金金额 ✅&quot;, &quot;定金日期 ✅&quot;, &quot;付款日期 ✅&quot;, &quot;付款套餐 ✅&quot;, &quot;付款方式 ❌&quot;], crm: [&quot;结构化支付意向 ❌&quot;], design: [&quot;支付意向等级&quot;, &quot;状态变更时间&quot;, &quot;状态变更人&quot;, &quot;定金支付状态&quot;, &quot;定金支付时间&quot;, &quot;关联定金单&quot;, &quot;承诺付款时间&quot;, &quot;承诺付款套餐&quot;, &quot;承诺付款方式&quot;, &quot;顾虑分类&quot;, &quot;顾虑备注&quot;, &quot;下一次跟进时间&quot;] },
             { name: &quot;高意向转支付率&quot;, definition: &quot;意向等级为80%或100%且最终支付的去重线索数 ÷ 同期高意向去重线索数。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;支付意向 ✅&quot;, &quot;订单 ✅&quot;], crm: [&quot;支付意向 ❌&quot;, &quot;订单 ✅&quot;], design: [&quot;支付意向等级&quot;, &quot;意向变更时间&quot;, &quot;支付成功时间&quot;] },
-            { name: &quot;高意向停滞数&quot;, definition: &quot;意向等级为80%或100%、超过承诺付款日期仍未预约、定金或支付的线索数。&quot;, unit: &quot;线索；取最新承诺日期&quot;, business: [&quot;支付意向 ✅&quot;, &quot;承诺日期 ❌&quot;], crm: [&quot;支付意向 ❌&quot;, &quot;下次跟进 ✅&quot;], design: [&quot;支付意向等级&quot;, &quot;承诺付款日期&quot;, &quot;承诺付款方式&quot;, &quot;下一次跟进时间&quot;] },
+            { name: &quot;高意向停滞数&quot;, definition: &quot;意向等级为80%、超过已记录的承诺付款时间仍未支付定金或形成有效成交订单的线索数；100%已支付定金，后续尾款风险归入成交与回款阶段。&quot;, unit: &quot;线索；取最新承诺付款时间&quot;, business: [&quot;支付意向 ✅&quot;, &quot;付款日期 ✅&quot;, &quot;付款方式 ❌&quot;], crm: [&quot;支付意向 ❌&quot;, &quot;承诺付款时间 ❌&quot;, &quot;下次跟进 ✅&quot;], design: [&quot;支付意向等级&quot;, &quot;承诺付款时间&quot;, &quot;承诺付款套餐&quot;, &quot;承诺付款方式&quot;, &quot;下一次跟进时间&quot;] },
             { name: &quot;拒绝原因分布&quot;, definition: &quot;按最新拒绝或犹豫原因对线索分组计数，每条线索只归入一个主原因。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;拒绝原因 ✅&quot;], crm: [&quot;原因枚举 ❌&quot;], design: [&quot;异议原因分类&quot;, &quot;异议记录时间&quot;, &quot;下一次跟进时间&quot;] }
           ],
           functions: [
             [&quot;基础购买意向标记&quot;, true, &quot;销售中心已有购买意向&quot;, &quot;一期&quot;],
-            [&quot;支付意向100%、80%、50%分级&quot;, false, &quot;需新增支付意向历史&quot;, &quot;一期&quot;],
-            [&quot;价格、产品、家庭决策等异议标签&quot;, false, &quot;需新增异议原因枚举&quot;, &quot;一期&quot;],
-            [&quot;承诺付款日期和下一次跟进任务&quot;, false, &quot;需新增承诺与时限&quot;, &quot;一期&quot;],
+            [&quot;支付意向100%、80%、50%分级与历史&quot;, false, &quot;需新增状态变更历史&quot;, &quot;一期&quot;],
+            [&quot;价格、产品、家庭决策等顾虑标签&quot;, false, &quot;需新增顾虑分类与备注&quot;, &quot;一期&quot;],
+            [&quot;承诺付款时间、套餐、方式三要素校验&quot;, false, &quot;缺任一项不得升级为80%&quot;, &quot;一期&quot;],
+            [&quot;定金支付后自动更新为100%&quot;, false, &quot;需联动定金支付事件&quot;, &quot;一期&quot;],
+            [&quot;顾虑客户的下一次跟进任务&quot;, false, &quot;需新增时限任务&quot;, &quot;一期&quot;],
             [&quot;高意向停滞队列与主管升级&quot;, false, &quot;需新增停滞规则&quot;, &quot;二期&quot;]
           ],
           smartSales: [
@@ -2975,9 +2993,9 @@ html&gt;body{padding:0}&lt;/style&gt;
             [&quot;停滞客户解释&quot;, &quot;解释高意向客户停滞主要卡在价格、信任还是付款方式。&quot;, &quot;四期&quot;],
             [&quot;自定义支付意向报表&quot;, &quot;按国家、团队、销售顾问和原因组合意向转化指标。&quot;, &quot;五期&quot;]
           ],
-          business: &quot;支付意向和拒绝原因字段成熟。&quot;,
-          crm: &quot;尚未结构化沉淀支付意向和异议。&quot;,
-          build: &quot;支付意向历史、异议标签、承诺付款日、停滞队列与升级。&quot;
+          business: &quot;支付意向状态、定金金额、定金日期和付款套餐可用；缺少结构化付款方式与顾虑明细。&quot;,
+          crm: &quot;尚未结构化沉淀支付意向历史、承诺付款信息和顾虑。&quot;,
+          build: &quot;支付意向历史、定金支付联动、承诺付款三要素、顾虑标签、停滞队列与升级。&quot;
         },
         {
           id: &quot;deposit&quot;, phase: &quot;sale&quot;, name: &quot;成交与回款&quot;, icon: &quot;badge-check&quot;, priority: &quot;高优先级&quot;,
