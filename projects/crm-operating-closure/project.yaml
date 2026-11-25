@@ -14,6 +14,8 @@ artifacts:
   prd: prd/PRD.md
   prototype: prototype/index.html
   briefing_compat: briefing/index.html
+  dashboard: dashboard/index.html
 public:
   prd: https://h3-ai-lab.github.io/hhhprd/prd-crm-operating-closure.html
   prototype: https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/prototype/
+  dashboard: https://h3-ai-lab.github.io/hhhprd/projects/crm-operating-closure/dashboard/

@@ -1,0 +1,1603 @@
+<div id="crm-management-dashboard-cn">
+  <style>
+    #crm-management-dashboard-cn {
+      color-scheme: light dark;
+      --z-bg: light-dark(#f0f4fa, #0c1118);
+      --z-panel: light-dark(#ffffff, #161d27);
+      --z-soft: light-dark(#f6f8fc, #101720);
+      --z-line: light-dark(#dbe4ef, #293544);
+      --z-line-strong: light-dark(#c4d1e2, #3b4b5f);
+      --z-text: light-dark(#172235, #eef3fa);
+      --z-muted: light-dark(#66768b, #9aa9bd);
+      --z-blue: light-dark(#245ee8, #7ea5ff);
+      --z-blue-soft: light-dark(#edf3ff, #172440);
+      --z-green: light-dark(#117d56, #58d2a5);
+      --z-green-soft: light-dark(#eaf8f1, #10281f);
+      --z-red: light-dark(#ba344b, #ff8f9f);
+      --z-red-soft: light-dark(#fff0f2, #35171d);
+      --z-amber: light-dark(#8e5e00, #f2c765);
+      --z-amber-soft: light-dark(#fff5db, #302410);
+      --z-purple: light-dark(#7048b8, #c3a2ff);
+      --z-purple-soft: light-dark(#f4efff, #271b3d);
+      background: var(--z-bg);
+      color: var(--z-text);
+      border-radius: 16px;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      overflow: hidden;
+      width: 100%;
+    }
+    #crm-management-dashboard-cn * { box-sizing: border-box; }
+    .zd-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 14px;
+      background: var(--z-panel);
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-brand { display: flex; align-items: center; gap: 9px; }
+    .zd-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: var(--z-blue);
+      color: #fff;
+    }
+    .zd-mark svg { width: 16px; height: 16px; }
+    .zd-title { font-size: 14px; font-weight: 600; }
+    .zd-sub { color: var(--z-muted); font-size: 10px; margin-top: 2px; }
+    .zd-meta { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .zd-chip {
+      border: 1px solid var(--z-line);
+      border-radius: 999px;
+      padding: 4px 7px;
+      color: var(--z-muted);
+      background: var(--z-soft);
+      font-size: 10px;
+    }
+    .zd-body { padding: 10px 12px 12px; display: grid; gap: 8px; }
+    .zd-stage-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .zd-phase {
+      min-width: 0;
+      border: 1px solid var(--z-line);
+      border-radius: 10px;
+      background: var(--z-panel);
+      padding: 7px 8px 8px;
+    }
+    .zd-phase.active {
+      border-color: color-mix(in srgb, var(--z-blue) 50%, var(--z-line));
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--z-blue) 13%, transparent);
+    }
+    .zd-phase-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .zd-phase-head span { color: var(--z-muted); font-weight: 400; }
+    .zd-stages { display: flex; gap: 4px; flex-wrap: wrap; }
+    .zd-stage {
+      min-height: 28px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-soft);
+      color: var(--z-muted);
+      padding: 4px 7px;
+      font-size: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .zd-stage:hover { color: var(--z-text); border-color: var(--z-line-strong); }
+    .zd-stage:focus-visible,
+    .zd-generate:focus-visible,
+    .zd-prompt:focus-visible {
+      outline: 2px solid var(--z-blue);
+      outline-offset: 2px;
+    }
+    .zd-stage[aria-pressed="true"] {
+      background: var(--z-blue-soft);
+      color: var(--z-blue);
+      border-color: color-mix(in srgb, var(--z-blue) 45%, var(--z-line));
+      font-weight: 500;
+    }
+    .zd-stage svg { width: 11px; height: 11px; }
+    .zd-stage-priority {
+      font-size: 8px;
+      line-height: 1;
+      border-radius: 999px;
+      padding: 2px 4px;
+      white-space: nowrap;
+    }
+    .zd-stage-priority.high { color: var(--z-red); background: var(--z-red-soft); }
+    .zd-stage-priority.medium { color: var(--z-amber); background: var(--z-amber-soft); }
+    .zd-stage-priority.later { color: var(--z-blue); background: var(--z-blue-soft); }
+    .zd-query {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 7px;
+      align-items: stretch;
+      padding: 7px;
+      border-radius: 10px;
+      border: 1px solid var(--z-line);
+      background: var(--z-panel);
+    }
+    .zd-prompt {
+      width: 100%;
+      min-height: 38px;
+      max-height: 54px;
+      resize: vertical;
+      border: 1px solid var(--z-line);
+      border-radius: 7px;
+      background: var(--z-soft);
+      color: var(--z-text);
+      padding: 9px 10px;
+      font: inherit;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .zd-generate {
+      min-width: 98px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--z-blue);
+      color: #fff;
+      cursor: pointer;
+      padding: 0 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .zd-generate svg { width: 14px; height: 14px; }
+    .zd-status {
+      min-height: 15px;
+      color: var(--z-muted);
+      font-size: 9px;
+      padding-left: 2px;
+    }
+    .zd-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.62fr) minmax(330px, .98fr);
+      gap: 8px;
+      min-width: 0;
+    }
+    .zd-panel {
+      background: var(--z-panel);
+      border: 1px solid var(--z-line);
+      border-radius: 10px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .zd-panel-head {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .zd-panel-title svg { width: 13px; height: 13px; color: var(--z-blue); }
+    .zd-source { color: var(--z-muted); font-size: 9px; }
+    .zd-canvas { padding: 8px; display: grid; gap: 7px; }
+    .zd-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .zd-kpi {
+      min-width: 0;
+      padding: 7px 8px;
+      border-radius: 7px;
+      background: var(--z-soft);
+      border: 1px solid var(--z-line);
+    }
+    .zd-kpi-name { color: var(--z-muted); font-size: 9px; line-height: 1.25; }
+    .zd-kpi-value {
+      margin-top: 4px;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+      overflow-wrap: anywhere;
+    }
+    .zd-kpi-note { margin-top: 2px; color: var(--z-muted); font-size: 9px; line-height: 1.3; }
+    .zd-deal-panel {
+      display: grid;
+      gap: 0;
+      border: 1px solid var(--z-line);
+      border-radius: 8px;
+      background: var(--z-soft);
+      overflow: hidden;
+    }
+    .zd-deal-panel[hidden] { display: none; }
+    .zd-intent-scale {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .zd-intent-scale[hidden] { display: none; }
+    .zd-intent-step {
+      min-width: 0;
+      border: 1px solid var(--z-line);
+      border-radius: 7px;
+      background: var(--z-soft);
+      padding: 7px 8px;
+    }
+    .zd-intent-step.level-100 { background: var(--z-green-soft); }
+    .zd-intent-step.level-80 { background: var(--z-amber-soft); }
+    .zd-intent-step.level-50 { background: var(--z-blue-soft); }
+    .zd-intent-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .zd-intent-level { font-size: 15px; font-weight: 600; }
+    .zd-intent-level.level-100 { color: var(--z-green); }
+    .zd-intent-level.level-80 { color: var(--z-amber); }
+    .zd-intent-level.level-50 { color: var(--z-blue); }
+    .zd-intent-count {
+      border-radius: 999px;
+      background: var(--z-panel);
+      padding: 2px 6px;
+      color: var(--z-muted);
+      font-size: 9px;
+      white-space: nowrap;
+    }
+    .zd-intent-label { font-size: 11px; font-weight: 500; }
+    .zd-intent-rule {
+      margin-top: 3px;
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+    .zd-intent-note {
+      grid-column: 1 / -1;
+      padding: 5px 7px;
+      border-radius: 6px;
+      background: var(--z-panel);
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+    .zd-deal-toolbar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 8px;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-deal-controls { display: flex; align-items: flex-end; gap: 7px; flex-wrap: wrap; }
+    .zd-deal-control { display: grid; gap: 3px; }
+    .zd-deal-control label { color: var(--z-muted); font-size: 9px; }
+    .zd-deal-select {
+      height: 28px;
+      min-width: 112px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+      color: var(--z-text);
+      padding: 0 7px;
+      font: inherit;
+      font-size: 11px;
+    }
+    .zd-periods { display: flex; gap: 3px; }
+    .zd-period {
+      height: 28px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+      color: var(--z-muted);
+      padding: 0 9px;
+      font: inherit;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .zd-period[aria-pressed="true"] {
+      border-color: var(--z-blue);
+      background: var(--z-blue-soft);
+      color: var(--z-blue);
+      font-weight: 500;
+    }
+    .zd-deal-basis {
+      max-width: 330px;
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.4;
+      text-align: right;
+    }
+    .zd-target-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-target-metric {
+      min-width: 0;
+      padding: 7px 8px;
+      border-right: 1px solid var(--z-line);
+    }
+    .zd-target-metric:last-child { border-right: 0; }
+    .zd-target-label { color: var(--z-muted); font-size: 9px; }
+    .zd-target-value { margin-top: 3px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .zd-target-value.gap { color: var(--z-red); }
+    .zd-target-progress {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-target-progress .zd-track { flex: 1; height: 6px; }
+    .zd-target-progress span { color: var(--z-muted); font-size: 9px; white-space: nowrap; }
+    .zd-target-table-wrap { width: 100%; overflow-x: auto; }
+    .zd-target-table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+      font-size: 10px;
+      line-height: 1.35;
+    }
+    .zd-target-table th,
+    .zd-target-table td {
+      padding: 5px 7px;
+      border-bottom: 1px solid var(--z-line);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .zd-target-table th {
+      color: var(--z-muted);
+      background: var(--z-panel);
+      font-weight: 500;
+    }
+    .zd-target-table tr:last-child td { border-bottom: 0; }
+    .zd-target-table td:not(:first-child),
+    .zd-target-table th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+    .zd-target-table .total-row td { font-weight: 600; background: var(--z-blue-soft); }
+    .zd-target-table .over-target { color: var(--z-green); }
+    .zd-target-footer {
+      padding: 5px 8px;
+      border-top: 1px solid var(--z-line);
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.4;
+    }
+    .zd-chart-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.22fr) minmax(165px, .78fr);
+      gap: 7px;
+    }
+    .zd-mini {
+      border: 1px solid var(--z-line);
+      border-radius: 7px;
+      padding: 7px 8px;
+      background: var(--z-soft);
+      min-width: 0;
+    }
+    .zd-mini-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .zd-mini-head span { color: var(--z-muted); font-size: 9px; font-weight: 400; }
+    .zd-bars { display: grid; gap: 5px; }
+    .zd-funnel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+    .zd-funnel-step {
+      min-width: 0;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+      padding: 6px;
+    }
+    .zd-funnel-step span { display: block; color: var(--z-muted); font-size: 9px; line-height: 1.3; }
+    .zd-funnel-step strong { display: block; margin-top: 3px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .zd-funnel-step small { display: block; margin-top: 2px; color: var(--z-muted); font-size: 8px; line-height: 1.3; }
+    .zd-bar-row {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr) 56px;
+      align-items: center;
+      gap: 6px;
+      font-size: 9px;
+    }
+    .zd-bar-label { color: var(--z-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .zd-track { height: 5px; background: color-mix(in srgb, var(--z-muted) 16%, transparent); border-radius: 99px; overflow: hidden; }
+    .zd-fill { height: 100%; background: var(--z-blue); border-radius: 99px; }
+    .zd-bar-value { text-align: right; color: var(--z-text); font-variant-numeric: tabular-nums; }
+    .zd-list { display: grid; gap: 4px; }
+    .zd-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 5px 6px;
+      border-bottom: 1px solid var(--z-line);
+      font-size: 9px;
+      line-height: 1.35;
+    }
+    .zd-list-item:last-child { border-bottom: 0; }
+    .zd-list-item strong { font-weight: 500; }
+    .zd-cc-space {
+      border: 1px solid var(--z-line);
+      border-radius: 7px;
+      background: var(--z-soft);
+      overflow: hidden;
+    }
+    .zd-cc-head {
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid var(--z-line);
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .zd-cc-head span { color: var(--z-muted); font-size: 9px; font-weight: 400; }
+    .zd-functions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 8px;
+      padding: 2px 8px;
+    }
+    .zd-function {
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1fr) auto;
+      gap: 5px;
+      align-items: start;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--z-line);
+      font-size: 9px;
+      line-height: 1.35;
+    }
+    .zd-function:nth-last-child(-n+2) { border-bottom: 0; }
+    .zd-function-symbol { color: var(--z-green); }
+    .zd-function.missing .zd-function-symbol { color: var(--z-red); }
+    .zd-function-name { min-width: 0; }
+    .zd-function-note { display: block; color: var(--z-muted); font-size: 8px; margin-top: 1px; }
+    .zd-function-priority {
+      border-radius: 999px;
+      padding: 1px 4px;
+      font-size: 8px;
+      white-space: nowrap;
+    }
+    .zd-function-priority.phase-one { color: var(--z-blue); background: var(--z-blue-soft); }
+    .zd-function-priority.phase-two { color: var(--z-purple); background: var(--z-purple-soft); }
+    .zd-function-priority.phase-three { color: var(--z-green); background: var(--z-green-soft); }
+    .zd-function-priority.phase-four { color: var(--z-blue); background: var(--z-blue-soft); }
+    .zd-function-priority.phase-five { color: var(--z-purple); background: var(--z-purple-soft); }
+    .zd-function-priority.phase-six { color: var(--z-green); background: var(--z-green-soft); }
+    .zd-empty {
+      min-height: 128px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 14px;
+      border-radius: 7px;
+      background: var(--z-red-soft);
+      color: var(--z-red);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .zd-catalog { padding: 0 9px 7px; display: grid; }
+    .zd-rule {
+      margin: 7px 0 2px;
+      padding: 6px 7px;
+      border-radius: 6px;
+      background: var(--z-blue-soft);
+      color: var(--z-blue);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+    .zd-metric {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.42fr);
+      gap: 7px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-metric:last-child { border-bottom: 0; }
+    .zd-metric-name { font-size: 10px; font-weight: 500; line-height: 1.35; }
+    .zd-definition { color: var(--z-muted); font-size: 9px; margin-top: 3px; line-height: 1.45; }
+    .zd-unit { color: var(--z-muted); font-size: 8px; margin-top: 2px; }
+    .zd-field-groups { display: grid; gap: 4px; }
+    .zd-field-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      font-size: 9px;
+      line-height: 1.35;
+      color: var(--z-muted);
+    }
+    .zd-field-line em {
+      flex: 0 0 auto;
+      color: var(--z-text);
+      font-style: normal;
+      font-weight: 500;
+    }
+    .zd-field-line.design {
+      padding: 4px 5px;
+      border-radius: 5px;
+      background: var(--z-red-soft);
+    }
+    .zd-field-line.design em { color: var(--z-red); }
+    .zd-fields { display: flex; flex-wrap: wrap; gap: 3px; }
+    .zd-field {
+      border-radius: 5px;
+      padding: 2px 4px;
+      background: var(--z-soft);
+      border: 1px solid var(--z-line);
+      white-space: nowrap;
+    }
+    .zd-field.yes { color: var(--z-green); }
+    .zd-field.no { color: var(--z-red); }
+    .zd-foot {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--z-line);
+      border-radius: 9px;
+      background: var(--z-panel);
+      overflow: hidden;
+    }
+    .zd-foot-cell {
+      padding: 7px 8px;
+      border-right: 1px solid var(--z-line);
+      min-width: 0;
+      font-size: 9px;
+      line-height: 1.4;
+    }
+    .zd-foot-cell:last-child { border-right: 0; }
+    .zd-foot-label { color: var(--z-muted); margin-bottom: 2px; }
+    .zd-intelligence {
+      background: var(--z-panel);
+      border: 1px solid var(--z-line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .zd-intelligence-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-intelligence-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .zd-intelligence-title svg { width: 14px; height: 14px; color: var(--z-blue); }
+    .zd-intelligence-note { color: var(--z-muted); font-size: 9px; }
+    .zd-intelligence-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .zd-ai-role {
+      padding: 9px 10px;
+      min-width: 0;
+    }
+    .zd-ai-role + .zd-ai-role { border-left: 1px solid var(--z-line); }
+    .zd-ai-role-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .zd-ai-role-head span { color: var(--z-muted); font-size: 9px; font-weight: 400; }
+    .zd-ai-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px 8px;
+    }
+    .zd-ai-capability {
+      padding: 6px 7px;
+      border-radius: 7px;
+      background: var(--z-soft);
+      border: 1px solid var(--z-line);
+      min-width: 0;
+      font-size: 9px;
+      line-height: 1.35;
+    }
+    .zd-ai-capability strong {
+      display: flex;
+      justify-content: space-between;
+      gap: 5px;
+      font-size: 9px;
+      font-weight: 500;
+    }
+    .zd-ai-capability p { margin: 3px 0 0; color: var(--z-muted); }
+    .zd-ai-flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border-top: 1px solid var(--z-line);
+    }
+    .zd-ai-step {
+      min-width: 0;
+      padding: 6px 8px;
+      border-right: 1px solid var(--z-line);
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.35;
+    }
+    .zd-ai-step:last-child { border-right: 0; }
+    .zd-ai-step b { display: block; color: var(--z-text); font-weight: 500; margin-bottom: 1px; }
+    @media (max-width: 900px) {
+      .zd-stage-board,
+      .zd-workspace,
+      .zd-chart-row,
+      .zd-foot,
+      .zd-intelligence-grid,
+      .zd-ai-flow { grid-template-columns: 1fr; }
+      .zd-foot-cell { border-right: 0; border-bottom: 1px solid var(--z-line); }
+      .zd-foot-cell:last-child { border-bottom: 0; }
+      .zd-ai-role + .zd-ai-role { border-left: 0; border-top: 1px solid var(--z-line); }
+      .zd-ai-step { border-right: 0; border-bottom: 1px solid var(--z-line); }
+      .zd-ai-step:last-child { border-bottom: 0; }
+      .zd-deal-toolbar { align-items: stretch; flex-direction: column; }
+      .zd-deal-basis { max-width: none; text-align: left; }
+      .zd-target-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .zd-target-metric:nth-child(2) { border-right: 0; }
+      .zd-funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .zd-intent-scale { grid-template-columns: 1fr; }
+      .zd-intent-note { grid-column: auto; }
+    }
+    @media (max-width: 520px) {
+      .zd-head { align-items: flex-start; }
+      .zd-meta { justify-content: flex-start; }
+      .zd-body { padding: 9px; }
+      .zd-query { grid-template-columns: 1fr; }
+      .zd-generate { min-height: 38px; }
+      .zd-kpis { grid-template-columns: 1fr; }
+      .zd-metric { grid-template-columns: 1fr; }
+      .zd-deal-controls { align-items: stretch; flex-direction: column; }
+      .zd-deal-select { width: 100%; }
+      .zd-periods { display: grid; grid-template-columns: repeat(3, 1fr); }
+      .zd-target-summary { grid-template-columns: 1fr; }
+      .zd-target-metric { border-right: 0; border-bottom: 1px solid var(--z-line); }
+      .zd-target-metric:last-child { border-bottom: 0; }
+      .zd-funnel { grid-template-columns: 1fr; }
+    }
+
+    /* Fixed light presentation for readability. */
+    #crm-management-dashboard-cn {
+      color-scheme: light;
+      --z-bg: #eef3f9;
+      --z-panel: #ffffff;
+      --z-soft: #f5f8fc;
+      --z-line: #d6e0eb;
+      --z-line-strong: #b8c7d9;
+      --z-text: #172235;
+      --z-muted: #5c697b;
+      --z-blue: #245ee8;
+      --z-blue-soft: #eaf1ff;
+      --z-green: #087a50;
+      --z-green-soft: #e8f7ef;
+      --z-red: #b4233c;
+      --z-red-soft: #fff0f2;
+      --z-amber: #8b5900;
+      --z-amber-soft: #fff4da;
+      --z-purple: #6941b8;
+      --z-purple-soft: #f3edff;
+    }
+    .zd-title { font-size: 16px; }
+    .zd-sub,
+    .zd-chip,
+    .zd-source,
+    .zd-intelligence-note { font-size: 12px; }
+    .zd-phase-head { font-size: 13px; }
+    .zd-stage { font-size: 12px; min-height: 32px; }
+    .zd-stage-priority { font-size: 10px; padding: 3px 5px; }
+    .zd-panel-title,
+    .zd-intelligence-title { font-size: 13px; }
+    .zd-kpi-name { font-size: 12px; }
+    .zd-kpi-value { font-size: 22px; }
+    .zd-kpi-note { font-size: 12px; }
+    .zd-deal-control label,
+    .zd-deal-basis,
+    .zd-target-label,
+    .zd-target-progress span,
+    .zd-target-footer { font-size: 11px; }
+    .zd-deal-select,
+    .zd-period { font-size: 12px; }
+    .zd-target-value { font-size: 16px; }
+    .zd-target-table { font-size: 11px; }
+    .zd-funnel-step span { font-size: 11px; }
+    .zd-funnel-step strong { font-size: 14px; }
+    .zd-funnel-step small { font-size: 10px; }
+    .zd-intent-label { font-size: 12px; }
+    .zd-intent-count,
+    .zd-intent-rule,
+    .zd-intent-note { font-size: 11px; }
+    .zd-mini-head { font-size: 13px; }
+    .zd-mini-head span { font-size: 11px; }
+    .zd-bar-row,
+    .zd-list-item { font-size: 12px; }
+    .zd-cc-head { font-size: 13px; }
+    .zd-cc-head span { font-size: 11px; }
+    .zd-function { font-size: 12px; }
+    .zd-function-note,
+    .zd-function-priority { font-size: 10px; }
+    .zd-metric-name { font-size: 13px; }
+    .zd-definition,
+    .zd-unit,
+    .zd-field-line,
+    .zd-foot-cell { font-size: 12px; }
+    .zd-rule { font-size: 12px; }
+    .zd-ai-role-head { font-size: 12px; }
+    .zd-ai-role-head span,
+    .zd-ai-capability strong,
+    .zd-ai-capability p,
+    .zd-ai-step { font-size: 12px; }
+    .zd-ai-capability { padding: 8px 9px; }
+    .zd-ai-step { padding: 8px 9px; }
+  </style>
+
+  <div class="zd-shell">
+    <header class="zd-head">
+      <div class="zd-brand">
+        <span class="zd-mark"><i data-lucide="layout-dashboard" aria-hidden="true"></i></span>
+        <div>
+          <div class="zd-title">管理经营看板</div>
+          <div class="zd-sub">业务阶段 · 指标定义 · 功能覆盖 · 智能能力</div>
+        </div>
+      </div>
+      <div class="zd-meta">
+        <span class="zd-chip">11月业务表</span>
+        <span class="zd-chip">11月16日至22日经营看板</span>
+        <span class="zd-chip">客户管理系统快照</span>
+      </div>
+    </header>
+
+    <main class="zd-body">
+      <section class="zd-stage-board" aria-label="业务阶段">
+        <div class="zd-phase" id="zd-phase-presale"></div>
+        <div class="zd-phase" id="zd-phase-sale"></div>
+        <div class="zd-phase" id="zd-phase-aftersale"></div>
+      </section>
+
+      <section class="zd-workspace">
+        <article class="zd-panel" aria-labelledby="zd-dashboard-title">
+          <div class="zd-panel-head">
+            <div class="zd-panel-title" id="zd-dashboard-title">
+              <i data-lucide="panel-top" aria-hidden="true"></i>
+              <span id="zd-dashboard-name">看板预览</span>
+            </div>
+            <div class="zd-source" id="zd-source"></div>
+          </div>
+          <div class="zd-canvas">
+            <div class="zd-kpis" id="zd-kpis"></div>
+            <section class="zd-deal-panel" id="zd-deal-panel" aria-label="成交目标与差距" hidden>
+              <div class="zd-deal-toolbar">
+                <div class="zd-deal-controls">
+                  <div class="zd-deal-control">
+                    <label for="zd-scope-select">查看范围</label>
+                    <select class="zd-deal-select" id="zd-scope-select">
+                      <option value="团队">团队</option>
+                      <option value="销售顾问">销售顾问</option>
+                    </select>
+                  </div>
+                  <div class="zd-deal-control">
+                    <label>目标周期</label>
+                    <div class="zd-periods" role="group" aria-label="目标周期">
+                      <button type="button" class="zd-period" data-period="月" aria-pressed="true">月</button>
+                      <button type="button" class="zd-period" data-period="周" aria-pressed="false">周</button>
+                      <button type="button" class="zd-period" data-period="日" aria-pressed="false">日</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="zd-deal-basis">成交为一级经营结果，剩余应付只作为回款漏斗。团队月目标沿用经营目标；周目标按冲刺计划；组与个人拆分目标为试算，待正式目标对象上线后替换。</div>
+              </div>
+              <div class="zd-target-summary" id="zd-target-summary" aria-live="polite"></div>
+              <div class="zd-target-progress">
+                <span>0</span>
+                <div class="zd-track" role="progressbar" aria-label="目标完成进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="zd-target-progress"><span class="zd-fill" id="zd-target-progress-fill" style="width:0%"></span></div>
+                <span id="zd-target-progress-label">目标完成率 0%</span>
+              </div>
+              <div class="zd-target-table-wrap">
+                <table class="zd-target-table">
+                  <thead>
+                    <tr><th>对象</th><th>目标金额</th><th>成交金额</th><th>订单</th><th>距目标</th><th>完成率</th></tr>
+                  </thead>
+                  <tbody id="zd-target-rows" aria-live="polite"></tbody>
+                </table>
+              </div>
+              <div class="zd-target-footer" id="zd-target-footer"></div>
+            </section>
+            <section class="zd-intent-scale" id="zd-intent-scale" aria-label="支付意向分级口径" hidden>
+              <div class="zd-intent-step level-100">
+                <div class="zd-intent-head"><span class="zd-intent-level level-100">100%</span><span class="zd-intent-count">业务表 14 条</span></div>
+                <div class="zd-intent-label">已决定购买 · 定金级</div>
+                <div class="zd-intent-rule">已明确决定购买，套餐、价格、付款方式和付款日期已确认，关键决策人同意，无未解决实质异议；对应“PL 100% (Deposit)”。</div>
+              </div>
+              <div class="zd-intent-step level-80">
+                <div class="zd-intent-head"><span class="zd-intent-level level-80">80%</span><span class="zd-intent-count">业务表 10 条</span></div>
+                <div class="zd-intent-label">购买方向已定 · 强意向</div>
+                <div class="zd-intent-rule">套餐与价格基本认可，仅剩一个关键条件待确认，如家庭成员同意、具体班次或付款日；已有明确下一步动作和时间。</div>
+              </div>
+              <div class="zd-intent-step level-50">
+                <div class="zd-intent-head"><span class="zd-intent-level level-50">50%</span><span class="zd-intent-count">业务表 65 条</span></div>
+                <div class="zd-intent-label">需求匹配 · 待解决异议</div>
+                <div class="zd-intent-rule">需求与产品匹配且愿意继续沟通，但价格、套餐选择、决策人或付款方式至少一项未解决，尚未形成购买或付款承诺。</div>
+              </div>
+              <div class="zd-intent-note">判定取每条线索最新一条有效意向记录：成交后统一归为“已支付”，拒绝后不再保留原高意向；无明确客户证据时归为“待定”，不能仅凭跟进次数或销售主观判断升级。持续跟进是独立状态，不等同于 50%。</div>
+            </section>
+            <div class="zd-chart-row">
+              <div class="zd-mini">
+                <div class="zd-mini-head"><strong id="zd-chart-title"></strong><span id="zd-chart-unit"></span></div>
+                <div class="zd-bars" id="zd-bars"></div>
+              </div>
+              <div class="zd-mini">
+                <div class="zd-mini-head"><strong>需要关注</strong><span id="zd-attention-count"></span></div>
+                <div class="zd-list" id="zd-attention"></div>
+              </div>
+            </div>
+            <div class="zd-cc-space">
+              <div class="zd-cc-head">
+                <strong>销售需求 · 可用功能与建设项</strong>
+                <span id="zd-function-count"></span>
+              </div>
+              <div class="zd-functions" id="zd-functions"></div>
+            </div>
+            <section class="zd-intelligence" aria-labelledby="zd-intelligence-title">
+              <div class="zd-intelligence-head">
+                <div class="zd-intelligence-title" id="zd-intelligence-title">
+                  <i data-lucide="wand-sparkles" aria-hidden="true"></i>
+                  <span id="zd-intelligence-name">本阶段智能能力</span>
+                </div>
+                <div class="zd-intelligence-note" id="zd-intelligence-note">建设优先级从四期开始</div>
+              </div>
+              <div class="zd-intelligence-grid">
+                <section class="zd-ai-role">
+                  <div class="zd-ai-role-head">
+                    <strong>面向销售顾问</strong>
+                    <span>告诉销售：先做谁、怎么做、结果如何回填</span>
+                  </div>
+                  <div class="zd-ai-list" id="zd-ai-sales"></div>
+                </section>
+                <section class="zd-ai-role">
+                  <div class="zd-ai-role-head">
+                    <strong>面向管理者</strong>
+                    <span>让管理者直接描述问题，不必为每个报表重复提需求</span>
+                  </div>
+                  <div class="zd-ai-list" id="zd-ai-manager"></div>
+                </section>
+              </div>
+              <div class="zd-ai-flow" aria-label="管理者自定义报表流程">
+                <div class="zd-ai-step"><b>描述问题</b>业务语言即可</div>
+                <div class="zd-ai-step"><b>匹配指标</b>调用统一指标字典</div>
+                <div class="zd-ai-step"><b>检查数据</b>字段、权限、时效</div>
+                <div class="zd-ai-step"><b>生成视图</b>卡片、趋势、排行、明细</div>
+                <div class="zd-ai-step"><b>保存与订阅</b>个人看板、共享、推送</div>
+              </div>
+            </section>
+          </div>
+        </article>
+
+        <aside class="zd-panel" aria-labelledby="zd-catalog-title">
+          <div class="zd-panel-head">
+            <div class="zd-panel-title" id="zd-catalog-title">
+              <i data-lucide="list-checks" aria-hidden="true"></i>
+              <span>指标定义与字段</span>
+            </div>
+            <div class="zd-source">✅ 已有 · ❌ 缺失</div>
+          </div>
+          <div class="zd-catalog">
+            <div class="zd-rule">迁移原则：业务表仅作为现状字段来源；新增字段、派生字段和后续数据维护统一落入客户管理系统，不继续扩展业务表。公共口径按业务线当地自然日统计，线索与订单分别按业务编号去重。</div>
+            <div id="zd-metrics"></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="zd-foot" aria-label="现状与功能建设">
+        <div class="zd-foot-cell">
+          <div class="zd-foot-label">业务表现状</div>
+          <div id="zd-business"></div>
+        </div>
+        <div class="zd-foot-cell">
+          <div class="zd-foot-label">客户管理系统现状</div>
+          <div id="zd-crm"></div>
+        </div>
+        <div class="zd-foot-cell">
+          <div class="zd-foot-label">指标可用性</div>
+          <div id="zd-readiness"></div>
+        </div>
+        <div class="zd-foot-cell">
+          <div class="zd-foot-label">客户管理系统功能建设</div>
+          <div id="zd-build"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const phases = [
+        { id: "presale", name: "售前", note: "线索 → 预约" },
+        { id: "sale", name: "售中", note: "到课 → 成交回款" },
+        { id: "aftersale", name: "售后", note: "首课 → 推荐" }
+      ];
+      const stages = [
+        {
+          id: "assign", phase: "presale", name: "线索分配", icon: "users", priority: "高优先级",
+          prompt: "看今日新增线索的分配情况、未分配数量和五分钟内首次联系情况，按销售顾问排列",
+          source: "客户管理系统当前快照",
+          kpis: [["当前线索", "90", "含已付费"], ["已分配", "46", "51.1%"], ["未分配", "43", "需优先处理"]],
+          chartTitle: "当前线索状态", chartUnit: "线索数",
+          bars: [["已分配", 46, "46"], ["未分配", 43, "43"], ["暂不跟进", 32, "32"], ["已拒绝", 3, "3"]],
+          attention: [["未分配", "43 条", "bad"], ["待外呼", "29 条", "warn"], ["未接通待跟进", "16 条", "warn"]],
+          metrics: [
+            { name: "线索分配率", definition: "统计期内成功分配给销售顾问的去重线索数 ÷ 同期新增有效线索数。", unit: "线索；按线索编号去重", business: ["线索注册日期 ✅", "销售顾问 ✅", "首次分配时间 ❌"], crm: ["首次分配时间 ✅", "首跟销售顾问编号 ✅", "分配事件编号 ✅"] },
+            { name: "五分钟首次联系达标率", definition: "首次分配至首次外呼尝试间隔不超过五分钟的线索数 ÷ 已分配线索数。", unit: "线索；按线索编号去重", business: ["分配时间 ❌", "首次外呼时间 ❌"], crm: ["首次分配时间 ✅", "首次外呼时间 ✅", "达标规则 ❌"], design: ["首次分配时间", "首次外呼时间", "首次联系时限", "达标状态"] },
+            { name: "三次三小时触达达成率", definition: "三小时内完成至少三次有效外呼尝试的线索数 ÷ 已分配线索数。", unit: "线索；外呼尝试按通话编号去重", business: ["通话记录 ❌", "接通状态 ❌"], crm: ["通话记录 ✅", "触达计时 ❌"], design: ["触达任务开始时间", "累计触达次数", "第三次触达时间", "达标状态"] },
+            { name: "无效或重复线索率", definition: "被标记无效、重复或合并的线索数 ÷ 同期新增线索数。", unit: "线索；按线索编号去重", business: ["去重编号 ✅", "无效原因 ❌"], crm: ["去重能力 ✅", "无效原因 ❌"], design: ["无效原因", "重复主线索编号", "合并时间"] }
+          ],
+          functions: [
+            ["自动分配、公海领取和转派", true, "首跟销售顾问与当前销售顾问已上线", "一期"],
+            ["线索来源、国家与用户编号筛选", true, "销售中心已有", "一期"],
+            ["五分钟首次联系时限和超时提醒", false, "需新增时限任务", "一期"],
+            ["线索容量与值班负载分配", false, "需新增负载路由", "二期"]
+          ],
+          smartSales: [
+            ["线索优先级副驾", "结合来源、意向、进入时段和历史转化，解释今天先联系谁。", "四期"],
+            ["首次联系建议", "推荐最优联系时段、触达渠道和第一段开场话术。", "五期"]
+          ],
+          smartManager: [
+            ["分配策略问答", "直接询问哪类线索在哪个团队转化最好，并解释分配偏差。", "四期"],
+            ["自定义线索质量报表", "按国家、渠道、团队和销售顾问自动组合指标与图表。", "五期"]
+          ],
+          business: "登记日期、来源、团队和销售顾问可用；分配与时效字段缺失。",
+          crm: "公海、领取、转派、首跟销售顾问、首次分配可用；缺时效任务。",
+          build: "首次联系时限、未分配老化、容量分配、超时升级。"
+        },
+        {
+          id: "call", phase: "presale", name: "外呼", icon: "phone", priority: "高优先级",
+          prompt: "看本周外呼接通率、通话时长和最佳拨打时段，按销售顾问排行",
+          source: "越南11月16日至22日经营看板",
+          kpis: [["外呼次数", "11,000", "环比增加7.45%"], ["接通次数", "4,215", "接通率38.32%"], ["总通时", "99小时25分", "单次1分25秒"]],
+          chartTitle: "各时段接通率", chartUnit: "百分比",
+          bars: [["13:30至14:30", 40.40, "40.4%"], ["14:30至15:30", 35.51, "35.5%"], ["17:00至19:00", 35.41, "35.4%"], ["12:30至13:30", 34.90, "34.9%"]],
+          attention: [["最佳时段", "1,056 次接通", "good"], ["最低接通时段", "32.79%", "warn"], ["平均通话", "1分25秒", "warn"]],
+          metrics: [
+            { name: "外呼覆盖率", definition: "统计期内至少有一次外呼记录的线索数 ÷ 应跟进线索数。", unit: "线索；按线索编号去重", business: ["通话日期 ✅", "线索级电话 ❌"], crm: ["首次外呼 ✅", "外呼次数 ✅"], design: ["线索编号", "首次外呼时间"] },
+            { name: "外呼接通率", definition: "接通状态为真的通话次数 ÷ 全部外呼次数。", unit: "通话；按通话编号去重", business: ["通话状态 ❌", "通话编号 ❌"], crm: ["接通次数 ✅", "外呼次数 ✅"] },
+            { name: "三次三小时触达达成率", definition: "三小时内完成至少三次外呼尝试的线索数 ÷ 已分配线索数。", unit: "线索；尝试次数按通话编号去重", business: ["通话时间序列 ❌"], crm: ["通话记录 ✅", "触达计时 ❌"], design: ["触达任务编号", "触达开始时间", "累计触达次数", "第三次触达时间"] },
+            { name: "平均通话时长", definition: "全部接通通话的总时长 ÷ 接通通话次数。", unit: "秒；按通话编号去重", business: ["通话时长 ❌"], crm: ["通话时长 ✅"] }
+          ],
+          functions: [
+            ["一键拨号", true, "销售中心已上线", "一期"],
+            ["通话录音、文字稿与通话小结", true, "录音和文字稿可用", "一期"],
+            ["外呼次数、接通次数和通话时长", true, "销售中心与团队监控可用", "一期"],
+            ["三次三小时触达任务", false, "需新增触达计时", "一期"],
+            ["时段接通效率看板", false, "需新增时段聚合", "二期"]
+          ],
+          smartSales: [
+            ["通话前客户摘要", "汇总来源、历史联系、意向、顾虑和本次通话目标。", "四期"],
+            ["智能语音预约确认", "自动完成预约时间、到场方式和确认结果核验，低置信度转人工。", "五期"],
+            ["通话后自动小结", "自动生成通话结论、客户反馈、下一步和回访时间。", "五期"],
+            ["实时话术提示", "识别异议和关键节点，提供简明提示，不替代销售判断。", "六期"]
+          ],
+          smartManager: [
+            ["外呼效率追问", "追问接通下降的原因，自动拆分时段、线路和销售顾问。", "四期"],
+            ["自定义通话分析", "用一句话生成通话量、接通、通时和结果等组合报表。", "五期"],
+            ["智能线路调控与呼损压降", "按接通率、线路质量、并发和地域动态分配外呼线路，自动降载并回收失败任务。", "五期"]
+          ],
+          business: "通话日期可用；通话状态、次数、时长分散在外部数据。",
+          crm: "拨号、录音、接通次数与通话时长可用；缺多轮触达任务。",
+          build: "三次三小时任务、未接通回拨、通话结果、时段分析。"
+        },
+        {
+          id: "appointment", phase: "presale", name: "预约", icon: "calendar-check", priority: "高优先级",
+          prompt: "看本周线索到预约、接通到预约和预约确认率，按销售顾问排行",
+          source: "越南11月16日至22日经营看板",
+          kpis: [["预约人数", "673", "线索到预约20.78%"], ["预约确认", "419", "确认率62.26%"], ["接通到预约", "33.40%", "目标至少35%"]],
+          chartTitle: "预约漏斗", chartUnit: "人数",
+          bars: [["接通", 2015, "2,015"], ["预约", 673, "673"], ["已确认", 419, "419"], ["到场", 338, "338"]],
+          attention: [["未确认预约", "254 人", "bad"], ["预约到场", "50.22%", "warn"], ["接通到预约", "33.40%", "warn"]],
+          metrics: [
+            { name: "线索到预约转化率", definition: "产生至少一条有效预约的去重线索数 ÷ 同期新增有效线索数。", unit: "线索；按线索编号去重", business: ["线索注册日期 ✅", "预约日期时间 ✅"], crm: ["线索 ✅", "预约 ✅"] },
+            { name: "接通到预约转化率", definition: "产生有效预约的去重线索数 ÷ 已接通去重线索数。", unit: "线索；按线索编号去重", business: ["接通状态 ❌", "预约 ✅"], crm: ["接通 ✅", "预约 ✅"] },
+            { name: "预约确认率", definition: "确认状态为“是”的有效预约数 ÷ 全部有效预约数。", unit: "预约；按预约编号或线索编号去重", business: ["预约确认 ✅"], crm: ["预约确认字段 ❌"], design: ["预约确认状态", "确认时间", "确认渠道", "确认人"] },
+            { name: "预约改期率", definition: "至少发生一次改期的有效预约数 ÷ 全部有效预约数。", unit: "预约；按预约编号去重", business: ["改期状态 ✅"], crm: ["改期事件 ❌"], design: ["改期前预约时间", "改期后预约时间", "改期原因", "改期次数"] }
+          ],
+          functions: [
+            ["销售预约与用户预约时间", true, "销售中心已有", "一期"],
+            ["已预约、未到课状态", true, "管理看板与销售中心可用", "一期"],
+            ["实时可预约时段", false, "需新增日历与时段库存", "一期"],
+            ["预约确认、自动提醒", false, "需新增提醒任务", "一期"],
+            ["飞书会议与一键改期", false, "会议回写仍在规划", "二期"]
+          ],
+          smartSales: [
+            ["预约时段建议", "结合客户历史联系时段和销售空档推荐预约时间。", "四期"],
+            ["预约跟进话术", "根据客户年龄、级别、顾虑和可约时间生成确认话术。", "五期"]
+          ],
+          smartManager: [
+            ["预约异常解释", "解释预约确认和到场下降主要发生在哪些人群与时段。", "四期"],
+            ["自定义预约报表", "按国家、渠道、团队、时段自由组合预约转化指标。", "五期"]
+          ],
+          business: "预约时间、确认状态和改期状态可用。",
+          crm: "预约与未到课状态可用；确认、提醒、改期未闭环。",
+          build: "可用时段、预约确认、自动提醒、飞书会议、一键改期。"
+        },
+        {
+          id: "attendance", phase: "sale", name: "到课", icon: "presentation", priority: "高优先级",
+          prompt: "看到课率、未到课原因和改期回收情况，按销售团队拆分",
+          source: "第三周指标与11月业务表",
+          kpis: [["预约到场", "338", "到场率50.22%"], ["体验课完课", "300", "完课率88.76%"], ["未到课首因", "无法联系", "417 条"]],
+          chartTitle: "到课状态分布", chartUnit: "记录数",
+          bars: [["到场且完课", 886, "886"], ["取消", 244, "244"], ["到场未完成", 123, "123"], ["改期", 117, "117"]],
+          attention: [["无法联系", "417", "bad"], ["家长忙碌", "218", "warn"], ["设备问题", "40", "warn"]],
+          metrics: [
+            { name: "预约到场率", definition: "实际参加体验课的预约人数 ÷ 同期有效预约人数。", unit: "预约；按预约编号或线索编号去重", business: ["预约时间 ✅", "体验课状态 ✅"], crm: ["预约 ✅", "未到课 ✅"] },
+            { name: "未到课率", definition: "到期未到课且未取消的预约数 ÷ 同期到期预约数。", unit: "预约；按预约编号去重", business: ["体验课状态 ✅"], crm: ["未到课 ✅"] },
+            { name: "未到课原因覆盖率", definition: "填写了有效未到课原因的预约数 ÷ 全部未到课预约数。", unit: "预约；按预约编号去重", business: ["未到课原因 ✅"], crm: ["原因字段 ❌"], design: ["未到课原因", "原因备注", "现场记录时间"] },
+            { name: "改期回收率", definition: "发生改期后最终到课的预约数 ÷ 发生改期的预约数。", unit: "预约；按预约编号去重", business: ["改期状态 ✅", "到场状态 ✅", "事件串联 ❌"], crm: ["改期事件 ❌"], design: ["改期事件编号", "改期前预约编号", "改期后预约编号", "改期后到场状态"] }
+          ],
+          functions: [
+            ["到课与未到课结果", true, "销售跟进状态可用", "一期"],
+            ["咨询完成状态", true, "销售中心已有", "一期"],
+            ["课前确认提醒", false, "需新增自动提醒", "一期"],
+            ["结构化未到课原因", false, "需新增原因字段", "一期"],
+            ["一键改期和召回任务", false, "需新增改期任务", "一期"]
+          ],
+          smartSales: [
+            ["到课风险提醒", "根据确认状态、历史失约和设备信息提示高风险预约。", "四期"],
+            ["未到课挽回话术", "按未到课原因生成改期或线上排查沟通草稿。", "五期"]
+          ],
+          smartManager: [
+            ["失约原因聚类", "自动归纳主要未到课原因及其影响的团队和时段。", "四期"],
+            ["自定义到课看板", "自由组合预约、到场、改期和原因分布。", "五期"]
+          ],
+          business: "体验课状态、未到课原因和备注完整。",
+          crm: "未到课与咨询状态可用；原因与改期任务缺失。",
+          build: "课前确认、未到课原因、自动改期、召回任务。"
+        },
+        {
+          id: "pl", phase: "sale", name: "支付意向", icon: "badge-dollar-sign", priority: "高优先级",
+          prompt: "看支付意向分层、高意向停滞和主要拒绝原因，按团队拆分",
+          source: "越南11月业务表，截至11月24日",
+          kpis: [["已填写意向", "1,000", "全部2,275条线索"], ["持续跟进", "455", "45.5%"], ["高意向", "24", "80%与100%"]],
+          chartTitle: "支付意向分层", chartUnit: "线索数",
+          bars: [["持续跟进", 455, "455"], ["已拒绝", 272, "272"], ["已支付", 172, "172"], ["50%意向", 65, "65"], ["80%或100%", 24, "24"]],
+          attention: [["预算过高", "80", "warn"], ["无法联系", "60", "bad"], ["需家庭决策", "42", "warn"]],
+          metrics: [
+            { name: "支付意向层级分布", definition: "按每条线索最新有效状态统计：100%已决定购买且套餐、价格、付款方式与日期明确；80%购买方向确认但仅剩一项关键条件；50%需求匹配但仍有多项成交异议，尚未形成购买或付款承诺。", unit: "线索；按线索编号去重", business: ["支付意向状态 ✅"], crm: ["结构化支付意向 ❌"], design: ["支付意向等级", "意向变更时间", "意向变更人"] },
+            { name: "高意向转支付率", definition: "意向等级为80%或100%且最终支付的去重线索数 ÷ 同期高意向去重线索数。", unit: "线索；按线索编号去重", business: ["支付意向 ✅", "订单 ✅"], crm: ["支付意向 ❌", "订单 ✅"], design: ["支付意向等级", "意向变更时间", "支付成功时间"] },
+            { name: "高意向停滞数", definition: "意向等级为80%或100%、超过承诺付款日期仍未预约、定金或支付的线索数。", unit: "线索；取最新承诺日期", business: ["支付意向 ✅", "承诺日期 ❌"], crm: ["支付意向 ❌", "下次跟进 ✅"], design: ["支付意向等级", "承诺付款日期", "承诺付款方式", "下一次跟进时间"] },
+            { name: "拒绝原因分布", definition: "按最新拒绝或犹豫原因对线索分组计数，每条线索只归入一个主原因。", unit: "线索；按线索编号去重", business: ["拒绝原因 ✅"], crm: ["原因枚举 ❌"], design: ["异议原因分类", "异议记录时间", "下一次跟进时间"] }
+          ],
+          functions: [
+            ["基础购买意向标记", true, "销售中心已有购买意向", "一期"],
+            ["支付意向100%、80%、50%分级", false, "需新增支付意向历史", "一期"],
+            ["价格、产品、家庭决策等异议标签", false, "需新增异议原因枚举", "一期"],
+            ["承诺付款日期和下一次跟进任务", false, "需新增承诺与时限", "一期"],
+            ["高意向停滞队列与主管升级", false, "需新增停滞规则", "二期"]
+          ],
+          smartSales: [
+            ["智能语音意向确认", "按统一问题确认购买意愿、预算、决策人、付款时间与关键异议，结果回写支付意向等级；低置信度转人工复核。", "五期"],
+            ["意向与异议提取", "从通话和跟进记录中提取意向等级、顾虑与承诺信息。", "四期"],
+            ["成交路径建议", "根据顾虑和套餐适合度推荐下一次沟通重点。", "五期"],
+            ["关单风险预警", "识别长期停滞但仍有高意向的客户并提示优先处理。", "六期"]
+          ],
+          smartManager: [
+            ["停滞客户解释", "解释高意向客户停滞主要卡在价格、信任还是付款方式。", "四期"],
+            ["自定义支付意向报表", "按国家、团队、销售顾问和原因组合意向转化指标。", "五期"]
+          ],
+          business: "支付意向和拒绝原因字段成熟。",
+          crm: "尚未结构化沉淀支付意向和异议。",
+          build: "支付意向历史、异议标签、承诺付款日、停滞队列与升级。"
+        },
+        {
+          id: "deposit", phase: "sale", name: "成交与回款", icon: "badge-check", priority: "高优先级",
+          prompt: "看成交金额、订单、目标完成率、差距和回款漏斗，按团队或销售顾问及月周日出数",
+          source: "越南11月收入表；成交截至11月23日",
+          kpis: [["成交金额", "$33,270", "181 单成交"], ["成交订单", "181", "客单价 $184"], ["目标完成率", "55.5%", "月目标差 $26,730"]],
+          chartTitle: "成交与回款漏斗", chartUnit: "人数、订单与金额分层",
+          bars: [],
+          attention: [["剩余应付", "13,332万 VND", "bad"], ["高意向未成交", "24 人", "warn"], ["已收定金", "5,233.5万 VND", "good"]],
+          metrics: [
+            { name: "成交金额与成交订单", definition: "统计期内收入表有效成交记录的实收金额之和与去重订单数；退款、撤销和重复记录剔除。", unit: "金额与订单；按订单编号去重", business: ["支付日期 ✅", "收入金额 ✅", "订单编号 ❌"], crm: ["订单编号 ✅", "订单金额 ✅", "支付日期 ✅"] },
+            { name: "成交率", definition: "统计期内形成有效成交订单的去重线索数 ÷ 同期新增有效线索数。", unit: "线索；按线索编号去重", business: ["线索注册日期 ✅", "支付日期 ✅", "线索与订单关联 ❌"], crm: ["线索编号 ✅", "订单编号 ✅", "线索与订单关联 ❌"], design: ["线索编号", "首购订单编号", "成交归因时间"] },
+            { name: "客单价", definition: "统计期内有效成交金额 ÷ 有效成交订单数。", unit: "金额；按订单编号去重", business: ["收入金额 ✅", "订单编号 ❌"], crm: ["订单金额 ✅", "订单编号 ✅"] },
+            { name: "目标完成率与目标差额", definition: "成交金额 ÷ 同范围、同周期有效收入目标；目标差额为 max(目标金额减成交金额, 0)，超额时单列显示。", unit: "金额；按目标版本与周期唯一确定", business: ["收入金额 ✅", "收入目标 ❌", "销售个人目标 ❌"], crm: ["成交金额 ✅", "目标对象 ❌", "目标周期 ❌"], design: ["目标对象编号", "目标范围类型", "团队编号", "销售顾问编号", "目标周期类型", "周期开始日", "周期结束日", "成交金额目标", "成交订单目标", "目标币种", "目标版本与状态"] },
+            { name: "成交与回款漏斗", definition: "按高意向、有效定金成交、支付入账、剩余应付清收四个阶段观察数量与金额，阶段按订单及时间串联。", unit: "线索、订单或金额；各阶段按业务编号去重", business: ["支付意向 ✅", "已收定金 ✅", "收入金额 ✅", "剩余定金 ✅", "订单串联 ❌"], crm: ["支付意向 ❌", "定金对象 ❌", "订单 ✅", "应付计划 ❌"], design: ["支付意向等级", "定金单编号", "订单编号", "应付计划编号", "阶段进入时间", "阶段退出时间"] },
+            { name: "剩余应付与逾期", definition: "有效成交订单的应付总额减已收金额；逾期金额为应收日期早于当前业务日且余额大于零的部分。", unit: "金额与订单；按订单编号去重", business: ["剩余定金 ✅", "尾款应日 ✅", "剩余余额 ✅"], crm: ["应付计划 ❌", "尾款任务 ❌"], design: ["应付总额", "已收金额", "剩余应付", "尾款到期日", "逾期天数", "催收状态"] }
+          ],
+          functions: [
+            ["订单、支付日期与成交金额", true, "订单中心和支付结果可用", "一期"],
+            ["已付费用户继续跟进", true, "销售中心已付费列表可用", "一期"],
+            ["团队及销售月、周、日目标配置", false, "需新增目标对象与版本", "一期"],
+            ["目标完成率、差额与超额计算", false, "依赖目标和订单口径", "一期"],
+            ["成交、定金、尾款与剩余应付漏斗", false, "需串联意向、订单与支付计划", "一期"],
+            ["独立定金单及报价关联", false, "需在订单管理中扩展", "一期"],
+            ["剩余应付、到期与逾期队列", false, "需新增应收和催收任务", "二期"],
+            ["支付对账、退款与审批审计", false, "需新增财务闭环", "二期"]
+          ],
+          smartSales: [
+            ["成交推进建议", "结合高意向等级、承诺日期和最近沟通，告诉销售今天优先关谁、怎么推进。", "四期"],
+            ["目标缺口行动清单", "按销售个人目标和剩余时间拆出今日需完成的成交金额与订单数。", "五期"],
+            ["回款与逾期沟通草稿", "按应付余额、到期日和付款方式生成提醒与催收草稿。", "五期"]
+          ],
+          smartManager: [
+            ["目标缺口追问", "直接追问哪个团队或销售在月、周、日目标上掉队，并拆出金额与订单缺口。", "四期"],
+            ["成交与回款归因", "解释成交下降或剩余应付集中是卡在人群、产品、销售还是付款方式。", "五期"],
+            ["支付异常识别", "识别重复支付、退款、金额差异和长期未对账记录。", "六期"]
+          ],
+          business: "收入金额、支付日期和课包可用，可统计成交；没有团队或销售月周目标，也没有可串联全流程的订单编号。",
+          crm: "订单金额与支付结果可用；缺正式目标对象、定金单、应付计划与催收闭环。",
+          build: "目标对象、团队与销售目标、周期版本、成交差距、定金单、支付计划、剩余应付、逾期跟进与对账。"
+        },
+        {
+          id: "first_lesson", phase: "aftersale", name: "首课", icon: "book-open-check", priority: "中优先级",
+          prompt: "看新增付费用户首课激活率、未激活人数和课包差异",
+          source: "越南11月收入表；首课数据缺失",
+          kpis: [["已填课包订单", "181", "11月收入表"], ["首课激活", "—", "❌ 无数据"], ["未激活", "—", "❌ 无数据"]],
+          chartTitle: "课包结构", chartUnit: "订单数",
+          bars: [["年包", 104, "104"], ["半年包", 75, "75"], ["季度包", 2, "2"]],
+          attention: [["首课激活事件", "缺失", "bad"], ["课包到首课", "缺失", "bad"], ["未激活名单", "无法生成", "bad"]],
+          metrics: [
+            { name: "首课激活率", definition: "完成首课的付费用户数 ÷ 同期新增付费用户数。", unit: "用户；按用户编号去重", business: ["首课事件 ❌"], crm: ["首课事件 ❌"], design: ["新增付费标识", "首课状态", "首课开始时间", "首课完成时间"] },
+            { name: "付费到首课时长", definition: "首课实际开始时间减首次支付成功时间，按用户取首次值。", unit: "小时；按用户编号去重", business: ["支付日期 ✅", "首课 ❌"], crm: ["支付日期 ✅", "首课 ❌"], design: ["首次支付成功时间", "首课实际开始时间"] },
+            { name: "未激活人数", definition: "已产生有效付费、但在统计截止时仍无首课开始事件的用户数。", unit: "用户；按用户编号去重", business: ["首课 ❌"], crm: ["首课 ❌"], design: ["付费状态", "首课开始时间", "未激活原因"] },
+            { name: "首课完成率", definition: "完成首课的用户数 ÷ 已开始首课的用户数。", unit: "用户；按用户编号去重", business: ["学习事件 ❌"], crm: ["学习事件 ❌"], design: ["首课开始时间", "首课完成时间", "上课时长"] }
+          ],
+          functions: [
+            ["用户会员与课包权益", true, "会员和订单能力可用", "一期"],
+            ["首课状态与首课课次", false, "需接入学习事件", "二期"],
+            ["首课预约和自动提醒", false, "需新增首课任务", "二期"],
+            ["未激活名单与责任销售", false, "需新增激活队列", "二期"]
+          ],
+          smartSales: [
+            ["语音与短信到课通知", "自动发送首课提醒、设备检查、上课入口和改期入口，并回收送达与确认状态。", "四期"],
+            ["首课激活优先级", "按付费时长、课包和家长可用时间给未激活用户排序。", "四期"],
+            ["首课沟通建议", "生成首次使用说明、课程安排和家长提醒话术。", "五期"]
+          ],
+          smartManager: [
+            ["包型激活差异分析", "解释不同课包的激活速度与未激活集中原因。", "四期"],
+            ["自助学习启动报表", "按国家、课包、团队和销售顾问生成首课报表。", "五期"]
+          ],
+          business: "仅支付与课包可用，首课不在当前业务表。",
+          crm: "会员权益可用，首课激活尚未接入。",
+          build: "首课事件、课包权益、首课预约、未激活队列。"
+        },
+        {
+          id: "follow_lesson", phase: "aftersale", name: "跟课", icon: "monitor-play", priority: "中优先级",
+          prompt: "看每周课次完成率、活跃学习和连续未学习用户，按销售顾问拆分",
+          source: "暂无可生成数据源",
+          kpis: [["学习活跃率", "—", "❌"], ["周课次完成率", "—", "❌"], ["连续缺课", "—", "❌"]],
+          chartTitle: "周学习趋势", chartUnit: "课次",
+          bars: [],
+          attention: [["正式课学习计划", "缺失", "bad"], ["周课次", "缺失", "bad"], ["学习报告", "缺失", "bad"]],
+          metrics: [
+            { name: "学习活跃率", definition: "统计周内至少有一条有效学习记录的用户数 ÷ 有效付费用户数。", unit: "用户；按用户编号去重", business: ["学习记录 ❌"], crm: ["学习记录 ❌"], design: ["学习记录编号", "学习开始时间", "有效学习时长"] },
+            { name: "周课次完成率", definition: "实际完成的主课次数 ÷ 周学习计划安排的主课次数。", unit: "课次；按课次编号去重", business: ["课表 ❌"], crm: ["学习计划 ❌"], design: ["学习计划编号", "周编号", "计划课次", "完成课次"] },
+            { name: "最近学习时间", definition: "用户在统计截止时最近一次有效学习事件的开始时间。", unit: "用户；取最近事件", business: ["学习事件 ❌"], crm: ["学习事件 ❌"], design: ["用户编号", "学习事件编号", "最近学习时间"] },
+            { name: "连续缺课数", definition: "从最近一次已安排主课起，连续未完成的主课次数。", unit: "课次；按课次编号去重", business: ["周计划 ❌"], crm: ["周计划 ❌"], design: ["计划课次", "实际完成状态", "课次日期"] }
+          ],
+          functions: [
+            ["已付费用户与课包信息", true, "销售中心可查看", "一期"],
+            ["学习计划与每周课次", false, "需接入正式课学习计划", "二期"],
+            ["课程完成与最近学习", false, "需接入学习事件", "二期"],
+            ["学习报告与低活跃提醒", false, "需接入报告和提醒", "二期"]
+          ],
+          smartSales: [
+            ["学习周报摘要", "将课程进度、完成率和学习表现压缩成一段家长沟通摘要。", "四期"],
+            ["个性化跟进建议", "根据最近学习、完课和兴趣推荐提醒主题与下一次联系时间。", "五期"]
+          ],
+          smartManager: [
+            ["学习趋势解释", "追问完课下降来自用户、课程、团队还是产品故障。", "四期"],
+            ["自定义学习报表", "按国家、级别、课包、团队和销售顾问生成学习看板。", "五期"]
+          ],
+          business: "销售业务表不覆盖正式学习进度。",
+          crm: "学习计划与课程进度仍在规划。",
+          build: "学习计划、周安排、课次、完课、学习报告、低活跃提醒。"
+        },
+        {
+          id: "risk", phase: "aftersale", name: "学习风险", icon: "triangle-alert", priority: "中优先级",
+          prompt: "列出连续七天未学习且完课率下降的风险用户，按风险原因和销售顾问排列",
+          source: "暂无可生成数据源",
+          kpis: [["风险用户", "—", "❌"], ["连续未学习", "—", "❌"], ["干预触达", "—", "❌"]],
+          chartTitle: "风险原因分布", chartUnit: "用户数",
+          bars: [],
+          attention: [["风险规则", "缺失", "bad"], ["责任转交", "缺失", "bad"], ["干预结果", "缺失", "bad"]],
+          metrics: [
+            { name: "风险用户占比", definition: "命中任一学习风险规则的用户数 ÷ 同期有效付费活跃用户数。", unit: "用户；按用户编号去重", business: ["学习事件 ❌"], crm: ["风险规则 ❌"], design: ["风险规则编号", "风险等级", "风险首次命中时间"] },
+            { name: "连续未学习天数", definition: "当前业务日与最近一次有效学习日期之间的自然日数。", unit: "天；按用户编号去重", business: ["学习事件 ❌"], crm: ["学习事件 ❌"], design: ["最近学习时间", "当前业务日", "连续未学习天数"] },
+            { name: "风险原因分布", definition: "按时间、课程、设备、兴趣和教学问题对风险用户进行唯一主原因分类。", unit: "用户；按用户编号去重", business: ["原因字段 ❌"], crm: ["原因字段 ❌"], design: ["风险原因分类", "原因备注", "风险责任人"] },
+            { name: "干预触达率", definition: "至少完成一次有效联系的风险用户数 ÷ 全部风险用户数。", unit: "用户；按用户编号去重", business: ["学习事件 ❌", "触达 ❌"], crm: ["风险队列 ❌", "跟进记录 ✅"], design: ["干预负责人", "干预动作", "干预时间", "干预结果", "风险解除时间"] }
+          ],
+          functions: [
+            ["销售跟进记录", true, "可用于记录干预", "一期"],
+            ["学习风险规则与风险队列", false, "需新增规则引擎", "二期"],
+            ["跨团队责任转交", false, "需新增转交和提醒", "二期"],
+            ["干预结果与风险解除", false, "需新增结果回写", "二期"]
+          ],
+          smartSales: [
+            ["风险原因与行动建议", "根据最近学习、完课和跟进记录建议先查什么、说什么。", "四期"],
+            ["家长沟通草稿", "按风险原因生成关怀、沟通或课程调整草稿。", "五期"]
+          ],
+          smartManager: [
+            ["风险人群归因", "自动拆解风险集中在哪些国家、课包、团队和课程级别。", "四期"],
+            ["干预效果追踪", "比较干预前后活跃和完课变化，识别有效动作。", "五期"],
+            ["跨团队干预编排", "把销售、教学、客服和产品问题分派到对应责任人。", "六期"]
+          ],
+          business: "当前没有学习风险数据。",
+          crm: "无风险规则、队列和责任闭环。",
+          build: "风险规则、风险队列、原因标签、跨团队转交、干预结果。"
+        },
+        {
+          id: "renewal", phase: "aftersale", name: "续费", icon: "refresh-cw", priority: "后续优先级",
+          prompt: "看未来三十、六十和九十天到期用户、续费率和续费收入，按销售顾问排列",
+          source: "越南11月收入表；到期日可推导",
+          kpis: [["已填课包", "181", "可按到期日"], ["61至90天", "2", "待续费"], ["90天以上", "179", "持续观察"]],
+          chartTitle: "预计到期分布", chartUnit: "订单数",
+          bars: [["0至30天", 0, "0"], ["31至60天", 0, "0"], ["61至90天", 2, "2"], ["90天以上", 179, "179"]],
+          attention: [["未填课包", "22 单", "warn"], ["续费率", "❌ 无事件", "bad"], ["续费收入", "❌ 无归因", "bad"]],
+          metrics: [
+            { name: "三十、六十、九十天到期数", definition: "按支付日期加课包有效期计算预计到期日，并统计未来对应时间桶内的用户数。", unit: "用户；按用户编号去重", business: ["支付日期 ✅", "付费课包 ✅"], crm: ["支付日期 ✅", "付费课包 ✅", "到期日 ❌"], design: ["课包生效时间", "课包到期时间", "续费窗口开始日"] },
+            { name: "续费率", definition: "在到期前形成续费订单的用户数 ÷ 同期到期用户数。", unit: "用户；按用户编号去重", business: ["续费事件 ❌"], crm: ["续费事件 ❌"], design: ["原订单编号", "续费订单编号", "续费结果", "续费支付时间"] },
+            { name: "续费收入", definition: "标识为续费的订单实付金额之和，退款订单剔除。", unit: "金额；按订单编号去重", business: ["订单金额 ✅", "续费标识 ❌"], crm: ["订单金额 ✅", "续费标识 ❌"], design: ["续费标识", "续费金额", "退款状态"] },
+            { name: "提前续费率", definition: "在原课包到期日前完成续费的用户数 ÷ 同期到期用户数。", unit: "用户；按用户编号去重", business: ["续费事件 ❌"], crm: ["续费事件 ❌"], design: ["原课包到期日", "续费支付时间", "续费结果"] }
+          ],
+          functions: [
+            ["已付费用户列表", true, "销售中心可查看", "一期"],
+            ["订单金额与支付日期", true, "订单中心和管理看板可用", "一期"],
+            ["课包到期日与到期分桶", false, "需新增到期计算和看板", "三期"],
+            ["续费任务、报价与流失原因", false, "需新增续费流程", "三期"],
+            ["学习表现驱动的续费建议", false, "依赖学习事件接入", "三期"]
+          ],
+          smartSales: [
+            ["续费优先名单", "结合到期时间、完课表现和近期活跃度推荐优先联系顺序。", "四期"],
+            ["续费方案与话术", "根据学习成果、课包和家庭情况生成续费方案与沟通草稿。", "五期"]
+          ],
+          smartManager: [
+            ["到期池预测", "预测未来各周期的到期规模、续费机会和风险集中点。", "四期"],
+            ["自定义续费报表", "自由组合到期、续费、收入、团队和流失原因。", "五期"],
+            ["流失原因预测", "识别续费流失前的主要行为信号与高风险人群。", "六期"]
+          ],
+          business: "支付日期与课包可推导到期，续费事件缺失。",
+          crm: "订单可查，缺续费任务、学习依据和结果归因。",
+          build: "到期用户分桶、续费任务、学习表现依据、续费报价、流失原因。"
+        },
+        {
+          id: "referral", phase: "aftersale", name: "推荐", icon: "share-2", priority: "后续优先级",
+          prompt: "看推荐关系、有效推荐、付费转化和奖励成本，按销售顾问排行",
+          source: "越南11月业务表，仅来源标签",
+          kpis: [["推荐线索", "12", "业务表"], ["推荐收入单", "2", "收入表"], ["有效推荐关系", "—", "❌"]],
+          chartTitle: "推荐来源规模", chartUnit: "记录数",
+          bars: [["推荐线索", 12, "12"], ["推荐收入单", 2, "2"], ["推荐关系", 0, "❌"], ["奖励事件", 0, "❌"]],
+          attention: [["推荐人与被推荐人", "缺失", "bad"], ["奖励发放", "缺失", "bad"], ["异常审核", "缺失", "bad"]],
+          metrics: [
+            { name: "推荐关系数", definition: "完成绑定且通过唯一性校验的推荐人与被推荐人关系数。", unit: "关系；按被推荐人用户编号去重", business: ["推荐来源 ✅", "关系 ❌"], crm: ["推荐关系 ❌"], design: ["推荐关系编号", "推荐人用户编号", "被推荐人用户编号", "关系绑定时间", "关系状态"] },
+            { name: "推荐转化率", definition: "形成有效付费的被推荐用户数 ÷ 已绑定推荐关系数。", unit: "用户；按被推荐人用户编号去重", business: ["推荐来源 ✅", "关系 ❌"], crm: ["推荐关系 ❌", "订单 ✅"], design: ["推荐关系编号", "被推荐人用户编号", "首购订单编号"] },
+            { name: "推荐获客成本", definition: "已发放推荐奖励成本 ÷ 推荐带来的有效付费用户数。", unit: "金额；按奖励事件去重", business: ["奖励记录 ❌"], crm: ["奖励事件 ❌"], design: ["奖励规则编号", "奖励事件编号", "奖励成本", "发放状态"] },
+            { name: "有效推荐占比", definition: "通过审核且满足活动规则的推荐关系数 ÷ 全部推荐关系数。", unit: "关系；按被推荐人用户编号去重", business: ["关系 ❌"], crm: ["审核规则 ❌"], design: ["审核状态", "审核人", "审核时间", "失效原因"] }
+          ],
+          functions: [
+            ["线索来源标记为推荐", true, "来源字段可用", "一期"],
+            ["唯一推荐关系与归属", false, "需新增推荐关系对象", "三期"],
+            ["首课、首购与社媒推荐奖励", false, "需新增奖励事件", "三期"],
+            ["风控审核与权益发放日志", false, "需新增审核和日志", "三期"]
+          ],
+          smartSales: [
+            ["推荐候选人识别", "从高满意度、高完课和高互动用户中推荐可邀请对象。", "四期"],
+            ["推荐话术生成", "按用户画像生成活动说明、邀请文案和奖励解释。", "五期"]
+          ],
+          smartManager: [
+            ["推荐质量分析", "解释推荐用户与非推荐用户的转化和学习表现差异。", "四期"],
+            ["自定义增长报表", "按推荐人、国家、团队和奖励规则组合增长指标。", "五期"],
+            ["异常与作弊识别", "提示自荐、重复关系、异常奖励和低质量推荐。", "六期"]
+          ],
+          business: "只有推荐来源标签，缺推荐关系与奖励。",
+          crm: "推荐关系、奖励、审核仍处于规划阶段。",
+          build: "推荐关系、奖励事件、权益发放、社媒审核、推荐归因。"
+        }
+      ];
+
+      const dealTargets = {
+        月: {
+          total: { name: "团队合计", target: 60000, actual: 33270, orders: 181 },
+          teams: [
+            { name: "麦西团队", target: 34000, actual: 18935, orders: 102 },
+            { name: "杜伊团队", target: 22000, actual: 13298, orders: 73 },
+            { name: "专案组", target: 4000, actual: 1037, orders: 6 }
+          ],
+          sales: [
+            { name: "Vy Nguyễn", target: 5000, actual: 3910, orders: 19 },
+            { name: "Thùy Dung", target: 4300, actual: 3174, orders: 16 },
+            { name: "Mia", target: 3500, actual: 2205, orders: 11 },
+            { name: "Trúc", target: 3200, actual: 2126, orders: 12 },
+            { name: "Thảo (Lia)", target: 3000, actual: 2038, orders: 10 }
+          ],
+          scopeNote: "销售表仅列本月成交金额前五名；个人目标为试算口径，不代表已下发目标。"
+        },
+        周: {
+          total: { name: "团队合计", target: 30000, actual: 10339, orders: 52 },
+          teams: [
+            { name: "麦西团队", target: 17000, actual: 5579, orders: 27 },
+            { name: "杜伊团队", target: 11500, actual: 4431, orders: 23 },
+            { name: "专案组", target: 1500, actual: 329, orders: 2 }
+          ],
+          sales: [
+            { name: "Vy Nguyễn", target: 2200, actual: 1605, orders: 7 },
+            { name: "Finn", target: 1300, actual: 895, orders: 4 },
+            { name: "Vy Phạm", target: 1200, actual: 790, orders: 4 },
+            { name: "Linh", target: 1100, actual: 727, orders: 4 },
+            { name: "Mia", target: 1000, actual: 667, orders: 3 }
+          ],
+          scopeNote: "统计区间为11月16日至22日；团队周目标按当前冲刺计划展示，销售个人目标为试算口径。"
+        },
+        日: {
+          total: { name: "团队合计", target: 3750, actual: 2719, orders: 14 },
+          teams: [
+            { name: "麦西团队", target: 2100, actual: 1322, orders: 7 },
+            { name: "杜伊团队", target: 1450, actual: 1036, orders: 5 },
+            { name: "专案组", target: 200, actual: 361, orders: 2 }
+          ],
+          sales: [
+            { name: "Mia", target: 800, actual: 677, orders: 3 },
+            { name: "Anna", target: 350, actual: 238, orders: 1 },
+            { name: "Thùy Dung", target: 350, actual: 238, orders: 1 },
+            { name: "Lucy", target: 350, actual: 238, orders: 1 },
+            { name: "Vy Phạm", target: 350, actual: 215, orders: 1 }
+          ],
+          scopeNote: "统计日为11月23日；团队日目标由当前冲刺计划折算，销售个人目标为试算口径。"
+        }
+      };
+
+      let state = { stage: "assign", scope: "团队", period: "月" };
+      try {
+        const saved = window.openai?.widgetState;
+        if (saved && stages.some(item => item.id === saved.stage)) {
+          state.stage = saved.stage;
+        }
+        if (saved?.scope === "团队" || saved?.scope === "销售顾问") state.scope = saved.scope;
+        if (saved?.period && dealTargets[saved.period]) state.period = saved.period;
+      } catch (_) {}
+
+      const selected = () => stages.find(item => item.id === state.stage);
+      const fieldState = text => text.includes("❌") ? "no" : "yes";
+      const priorityClass = value => value === "高优先级" ? "high" : value === "中优先级" ? "medium" : "later";
+      const iterationClass = value => (
+        value === "一期" ? "phase-one" :
+        value === "二期" ? "phase-two" :
+        value === "三期" ? "phase-three" :
+        value === "四期" ? "phase-four" :
+        value === "五期" ? "phase-five" : "phase-six"
+      );
+
+      function icon(name) {
+        return `<i data-lucide="${name}" aria-hidden="true"></i>`;
+      }
+
+      function save() {
+        try {
+          window.openai?.setWidgetState?.({
+            modelContent: { stage: state.stage, scope: state.scope, period: state.period },
+            privateContent: state
+          })?.catch?.(() => {});
+        } catch (_) {}
+      }
+
+      const numberFormat = new Intl.NumberFormat("zh-CN");
+      const money = value => `$${numberFormat.format(Math.round(value))}`;
+      const percent = value => `${value.toFixed(1)}%`;
+
+      function renderDealTargets() {
+        const data = dealTargets[state.period];
+        const total = data.total;
+        const gap = total.target - total.actual;
+        const attainment = total.target ? total.actual / total.target * 100 : 0;
+        const detailRows = state.scope === "团队" ? [total, ...data.teams] : data.sales;
+        const periodNames = { 月: "月", 周: "周", 日: "日" };
+        document.getElementById("zd-scope-select").value = state.scope;
+        document.querySelectorAll("[data-period]").forEach(button => {
+          button.setAttribute("aria-pressed", String(button.dataset.period === state.period));
+        });
+        document.getElementById("zd-target-summary").innerHTML = `
+          <div class="zd-target-metric"><div class="zd-target-label">${periodNames[state.period]}目标</div><div class="zd-target-value">${money(total.target)}</div></div>
+          <div class="zd-target-metric"><div class="zd-target-label">实际成交</div><div class="zd-target-value">${money(total.actual)}</div></div>
+          <div class="zd-target-metric"><div class="zd-target-label">距目标</div><div class="zd-target-value ${gap > 0 ? "gap" : ""}">${gap > 0 ? `差 ${money(gap)}` : `超 ${money(Math.abs(gap))}`}</div></div>
+          <div class="zd-target-metric"><div class="zd-target-label">目标完成率</div><div class="zd-target-value">${percent(attainment)}</div></div>`;
+        const progress = document.getElementById("zd-target-progress");
+        progress.setAttribute("aria-valuenow", String(Math.min(100, Math.round(attainment))));
+        progress.setAttribute("aria-valuetext", `目标完成率 ${percent(attainment)}`);
+        document.getElementById("zd-target-progress-fill").style.width = `${Math.min(100, attainment)}%`;
+        document.getElementById("zd-target-progress-label").textContent = `目标完成率 ${percent(attainment)}`;
+        document.getElementById("zd-target-rows").innerHTML = detailRows.map(row => {
+          const rowGap = row.target - row.actual;
+          const rowRate = row.target ? row.actual / row.target * 100 : 0;
+          return `
+            <tr class="${row === total ? "total-row" : ""}">
+              <td>${row.name}</td>
+              <td>${money(row.target)}</td>
+              <td>${money(row.actual)}</td>
+              <td>${row.orders}</td>
+              <td class="${rowGap < 0 ? "over-target" : ""}">${rowGap >= 0 ? `差 ${money(rowGap)}` : `超 ${money(Math.abs(rowGap))}`}</td>
+              <td>${percent(rowRate)}</td>
+            </tr>`;
+        }).join("");
+        document.getElementById("zd-target-footer").textContent = `${data.scopeNote} 明细范围：${state.scope}；月目标为团队合计口径，团队日目标按当前冲刺计划折算。`;
+      }
+
+      function renderStages() {
+        phases.forEach(phase => {
+          const host = document.getElementById(`zd-phase-${phase.id}`);
+          const items = stages.filter(item => item.phase === phase.id);
+          host.classList.toggle("active", items.some(item => item.id === state.stage));
+          host.innerHTML = `
+            <div class="zd-phase-head"><strong>${phase.name}</strong><span>${phase.note}</span></div>
+            <div class="zd-stages">${items.map(item => `
+              <button type="button" class="zd-stage" data-stage="${item.id}" aria-pressed="${item.id === state.stage}">
+                ${icon(item.icon)}<span>${item.name}</span><span class="zd-stage-priority ${priorityClass(item.priority)}">${item.priority}</span>
+              </button>`).join("")}</div>`;
+          host.querySelectorAll("[data-stage]").forEach(button => {
+            button.addEventListener("click", () => {
+              state.stage = button.dataset.stage;
+              renderAll();
+              save();
+            });
+          });
+        });
+      }
+
+      function renderDashboard() {
+        const item = selected();
+        const isDeal = item.id === "deposit";
+        const periodData = isDeal ? dealTargets[state.period].total : null;
+        const periodRange = { 月: "11月1日至23日", 周: "11月16日至22日", 日: "11月23日" };
+        document.getElementById("zd-dashboard-name").textContent = `管理需求 · ${item.name} · ${item.priority}`;
+        document.getElementById("zd-source").textContent = item.source;
+        document.getElementById("zd-deal-panel").hidden = !isDeal;
+        document.getElementById("zd-intent-scale").hidden = item.id !== "pl";
+        if (isDeal) {
+          const gap = periodData.target - periodData.actual;
+          const attainment = periodData.actual / periodData.target * 100;
+          const averageOrder = periodData.actual / periodData.orders;
+          document.getElementById("zd-kpis").innerHTML = [
+            ["成交金额", money(periodData.actual), `${periodData.orders} 单 · ${periodRange[state.period]}`],
+            ["成交订单", numberFormat.format(periodData.orders), `客单价 ${money(averageOrder)}`],
+            ["目标完成率", percent(attainment), `${state.period}目标差 ${money(gap)}`]
+          ].map(([label, value, note]) => `
+            <div class="zd-kpi">
+              <div class="zd-kpi-name">${label}</div>
+              <div class="zd-kpi-value">${value}</div>
+              <div class="zd-kpi-note">${note}</div>
+            </div>`).join("");
+          renderDealTargets();
+        } else {
+          document.getElementById("zd-kpis").innerHTML = item.kpis.map(([label, value, note]) => `
+          <div class="zd-kpi">
+            <div class="zd-kpi-name">${label}</div>
+            <div class="zd-kpi-value">${value}</div>
+            <div class="zd-kpi-note">${note}</div>
+          </div>`).join("");
+        }
+        document.getElementById("zd-chart-title").textContent = item.chartTitle;
+        document.getElementById("zd-chart-unit").textContent = item.chartUnit;
+        if (isDeal) {
+          document.getElementById("zd-bars").innerHTML = `
+            <div class="zd-funnel" aria-label="成交与回款漏斗">
+              <div class="zd-funnel-step"><span>高意向</span><strong>24 人</strong><small>80% 或 100% 意向</small></div>
+              <div class="zd-funnel-step"><span>定金成交</span><strong>41 单</strong><small>已收 5,233.5万 VND</small></div>
+              <div class="zd-funnel-step"><span>支付入账</span><strong>181 单</strong><small>成交 $33,270</small></div>
+              <div class="zd-funnel-step"><span>剩余应付清收</span><strong>13,332万 VND</strong><small>全部成交待收余额</small></div>
+            </div>`;
+        } else if (!item.bars.length) {
+          document.getElementById("zd-bars").innerHTML = `<div class="zd-empty">❌ 当前缺少可生成图表的数据字段<br>接入后可自动生成趋势与分布</div>`;
+        } else {
+          const max = Math.max(...item.bars.map(row => row[1]), 1);
+          document.getElementById("zd-bars").innerHTML = item.bars.map(([label, value, display]) => `
+            <div class="zd-bar-row" aria-label="${label} ${display}">
+              <span class="zd-bar-label">${label}</span>
+              <span class="zd-track"><span class="zd-fill" style="width:${value === 0 ? 0 : Math.max(2, value / max * 100)}%"></span></span>
+              <span class="zd-bar-value">${display}</span>
+            </div>`).join("");
+        }
+        document.getElementById("zd-attention-count").textContent = `${item.attention.length} 项`;
+        document.getElementById("zd-attention").innerHTML = item.attention.map(([label, value, tone]) => `
+          <div class="zd-list-item">
+            <strong>${tone === "bad" ? "❌" : tone === "good" ? "✅" : "!"} ${label}</strong>
+            <span>${value}</span>
+          </div>`).join("");
+        const available = item.functions.filter(fn => fn[1]).length;
+        document.getElementById("zd-function-count").textContent = `已具备 ${available} 项 / 共 ${item.functions.length} 项`;
+        document.getElementById("zd-functions").innerHTML = item.functions.map(([name, implemented, note, priority]) => `
+          <div class="zd-function ${implemented ? "has" : "missing"}">
+            <span class="zd-function-symbol">${implemented ? "✅" : "❌"}</span>
+            <span class="zd-function-name">${name}<span class="zd-function-note">${note}</span></span>
+            <span class="zd-function-priority ${iterationClass(priority)}">${priority}</span>
+          </div>`).join("");
+        document.getElementById("zd-intelligence-name").textContent = `智能能力 · ${item.name}`;
+        document.getElementById("zd-intelligence-note").textContent = "建设节奏从四期开始，前三期先完成业务数据与流程闭环";
+        const renderAi = list => list.map(([name, note, phase]) => `
+          <div class="zd-ai-capability">
+            <strong><span>${name}</span><span class="zd-function-priority ${iterationClass(phase)}">${phase}</span></strong>
+            <p>${note}</p>
+          </div>`).join("");
+        document.getElementById("zd-ai-sales").innerHTML = renderAi(item.smartSales);
+        document.getElementById("zd-ai-manager").innerHTML = renderAi(item.smartManager);
+      }
+
+      function renderMetrics() {
+        const item = selected();
+        document.getElementById("zd-metrics").innerHTML = item.metrics.map(metric => {
+          const businessReady = metric.business.every(field => fieldState(field) === "yes");
+          const crmReady = metric.crm.every(field => fieldState(field) === "yes");
+          return `
+            <div class="zd-metric">
+              <div>
+                <div class="zd-metric-name">${metric.name}</div>
+                <div class="zd-definition">定义：${metric.definition}</div>
+                <div class="zd-unit">${metric.unit}</div>
+              </div>
+              <div class="zd-field-groups">
+                <div class="zd-field-line"><em>业务表</em><div class="zd-fields">${metric.business.map(field => `<span class="zd-field ${fieldState(field)}">${field}</span>`).join("")}</div></div>
+                <div class="zd-field-line"><em>客户管理系统</em><div class="zd-fields">${metric.crm.map(field => `<span class="zd-field ${fieldState(field)}">${field}</span>`).join("")}</div></div>
+                ${metric.design?.length ? `<div class="zd-field-line design"><em>补入客户管理系统</em><div class="zd-fields">${metric.design.map(field => `<span class="zd-field no">${field} ❌</span>`).join("")}</div></div>` : ""}
+                <div class="zd-unit">${businessReady || crmReady ? "✅ 可直接生成" : "❌ 字段未补齐"}</div>
+              </div>
+            </div>`;
+        }).join("");
+        const ready = item.metrics.filter(metric => metric.business.every(field => fieldState(field) === "yes") || metric.crm.every(field => fieldState(field) === "yes")).length;
+        document.getElementById("zd-readiness").textContent = `${ready}/${item.metrics.length} 项指标可生成；其余需先补字段。`;
+        document.getElementById("zd-business").textContent = item.business;
+        document.getElementById("zd-crm").textContent = item.crm;
+        document.getElementById("zd-build").textContent = item.build;
+      }
+
+      function renderAll() {
+        renderStages();
+        renderDashboard();
+        renderMetrics();
+        if (globalThis.lucide) lucide.createIcons({ attrs: { width: 13, height: 13 } });
+      }
+
+      document.getElementById("zd-scope-select").addEventListener("change", event => {
+        state.scope = event.target.value;
+        renderDashboard();
+        save();
+      });
+      document.querySelectorAll("[data-period]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.period = button.dataset.period;
+          renderDashboard();
+          save();
+        });
+      });
+
+      renderAll();
+    })();
+  </script>
+</div>

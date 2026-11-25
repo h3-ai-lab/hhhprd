@@ -1,0 +1,4397 @@
+<!doctype html>
+<html lang="en" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://persistent.oaistatic.com/plugins/visualize/; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://persistent.oaistatic.com/plugins/visualize/charts/; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>CRM经营看板</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+
+</head>
+<body>
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="CRM经营看板" data-srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://persistent.oaistatic.com/plugins/visualize/; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://persistent.oaistatic.com/plugins/visualize/charts/; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;CRM经营看板&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 16px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans:
+    -apple-system-body, ui-sans-serif, -apple-system, system-ui, &quot;Segoe UI&quot;,
+    Helvetica, &quot;Apple Color Emoji&quot;, Arial, sans-serif, &quot;Segoe UI Emoji&quot;,
+    &quot;Segoe UI Symbol&quot;;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 8px);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-weight: var(--font-weight-normal);
+}
+
+.cursor-interaction {
+  cursor: var(--cursor-interaction, pointer);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+  text-underline-offset: 2px;
+  font-weight: inherit;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+.table {
+  font-family: var(--font-sans);
+}
+
+h1 {
+  font-size: calc(var(--font-size-base) * 1.5);
+  line-height: 1.3333333333;
+}
+
+h2 {
+  font-size: calc(var(--font-size-base) * 1.25);
+  line-height: 1.4;
+}
+h3 {
+  font-size: calc(var(--font-size-base) * 1.125);
+  line-height: 1.5555555556;
+}
+h4 {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+h5,
+h6 {
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong,
+th {
+  font-weight: 600;
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+pre,
+pre code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: calc(var(--font-size-base) * 0.875);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-family: var(--font-sans);
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+.table :is(th, td):not(:last-child) {
+  padding-inline-end: calc(var(--font-size-base) * 1.5);
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead :is(th, td) {
+  border-bottom-color: var(--border-strong, var(--input));
+  padding-block: calc(var(--font-size-base) / 2);
+  line-height: var(--font-size-base);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+.table tbody :is(th, td) {
+  padding-block: calc(var(--font-size-base) * 0.625);
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 8px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+.widget {
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  box-shadow: 0 0 0 0.5px var(--border-strong, var(--border));
+  color: var(--foreground);
+  background: var(--background);
+}
+
+#widget &gt; :not(.card, .widget, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  border: 1px solid var(--border);
+  corner-shape: var(--corner-shape);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--font-sans);
+  padding: 5px 12px;
+  border-color: color-mix(
+    in oklab,
+    light-dark(var(--primary-foreground), var(--foreground)) 5%,
+    transparent
+  );
+  border-radius: var(--radius-2xl);
+  color: light-dark(var(--primary-foreground), var(--foreground));
+  background: light-dark(var(--foreground), var(--popover));
+  box-shadow: 0 8px 18px rgb(15 23 42 / 20%);
+  letter-spacing: -0.15px;
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: color-mix(in srgb, var(--foreground) 40%, var(--muted-foreground));
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-family: var(--font-sans);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+}
+
+small,
+.text-small {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+/* Match inline alignment without overriding a containing flex or grid layout. */
+.btn,
+.nav-link,
+.form-control,
+.form-select,
+.form-range,
+.form-check {
+  vertical-align: middle;
+}
+
+.btn,
+.nav-link {
+  --btn-size: calc(12px + 2 * var(--control-spacing, 12px));
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: inherit;
+  font-family: var(--font-sans);
+  height: fit-content;
+  min-height: var(--btn-size);
+  padding-inline: var(--control-spacing, 12px);
+  border-color: transparent;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.btn {
+  border-color: var(--border);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+}
+
+/* Codex Button size=&quot;compact&quot;; appearance stays with the button variant. */
+.btn-sm {
+  --btn-size: 24px;
+  padding-inline: 8px;
+  font-size: calc(var(--font-size-base) * 12 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 12 / 16), 1px);
+  line-height: 16px;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+.btn-primary {
+  border-color: var(--border);
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: border-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: border-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--muted-foreground);
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+/* Shared preview chrome; product styles stay inside each variant. */
+.viz-dotted-background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 14%, transparent) 0.8px,
+    transparent 0.8px
+  );
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.viz-carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-carousel:has(&gt; .viz-carousel-controls) {
+  min-height: calc(60px + var(--viz-carousel-picker-height, 0px));
+  padding-bottom: 60px;
+}
+
+.viz-carousel &gt; [data-variant][hidden] {
+  display: none !important;
+}
+
+.viz-carousel &gt; [data-variant] {
+  isolation: isolate;
+}
+
+.viz-carousel-controls {
+  --viz-carousel-hover: light-dark(
+    color-mix(in srgb, var(--foreground) 5.4%, transparent),
+    color-mix(in srgb, var(--foreground) 7.8%, transparent)
+  );
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  /* Leave room for the host&#x27;s design-controls launcher at the trailing edge. */
+  max-width: calc(100% - 96px);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  /* Match the settings dropdown chrome independently of the content font size. */
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+/* Keep authored mockup button styles out of the shared carousel chrome. */
+.viz-carousel-controls button,
+.viz-carousel-picker &gt; summary {
+  display: flex !important;
+  height: auto !important;
+  min-height: 30px;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  padding: 0 6px !important;
+  -webkit-app-region: no-drag;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-picker &gt; summary {
+  position: relative;
+  isolation: isolate;
+}
+
+.viz-carousel-controls &gt; button {
+  --icon-size: 16px;
+  width: 30px !important;
+  padding: 0 !important;
+}
+
+.viz-carousel-picker &gt; summary {
+  padding-inline: 12px !important;
+}
+
+.viz-carousel-controls .viz-carousel-caret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0;
+  color: inherit;
+  transform: rotate(180deg);
+}
+
+.viz-carousel-controls &gt; button &gt; svg,
+.viz-carousel-controls .viz-carousel-caret,
+.viz-carousel-count {
+  opacity: 0.5;
+}
+
+.viz-carousel-controls &gt; button::before,
+.viz-carousel-picker &gt; summary::before {
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: 12px;
+  content: &quot;&quot;;
+  pointer-events: none;
+}
+
+.viz-carousel-controls &gt; button:hover::before,
+.viz-carousel-picker &gt; summary:hover::before {
+  background: var(--viz-carousel-hover);
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-controls [data-lucide],
+.viz-carousel-controls .lucide {
+  flex-shrink: 0;
+}
+
+.viz-carousel-picker {
+  min-width: 0;
+}
+
+.viz-carousel-picker &gt; summary {
+  min-width: 0;
+  list-style: none;
+}
+
+.viz-carousel-picker &gt; summary::-webkit-details-marker {
+  display: none;
+}
+
+.viz-carousel-count {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.viz-carousel-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-carousel-options {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: 0 4px 12px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 25%));
+}
+
+.viz-carousel-options &gt; button {
+  border-radius: max(0px, calc(var(--radius-lg) - 5px)) !important;
+  width: 100% !important;
+  min-height: 28px;
+  justify-content: flex-start !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-small) !important;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.viz-carousel-options &gt; [aria-current=&quot;true&quot;],
+.viz-carousel-options &gt; button:hover {
+  background: var(--viz-carousel-hover) !important;
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled=&quot;true&quot;] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: calc(4px + var(--control-spacing, 12px) / 2);
+  border-color: var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--popover) 96%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4285714286;
+}
+.form-control:is(
+  [type=&quot;file&quot;],
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;],
+  [type=&quot;color&quot;]
+) {
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  line-height: 18px;
+}
+.form-control:is(
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;]
+) {
+  padding-inline: var(--control-spacing, 12px);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+  padding: 0;
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+  min-height: calc(10px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  margin-inline-end: var(--control-spacing, 12px);
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  resize: vertical;
+  min-height: 96px;
+  padding: 8px 10px;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: none;
+}
+.form-control:disabled {
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  opacity: 1;
+}
+.form-control[aria-invalid=&quot;true&quot;] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 20%, transparent);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  margin: 0;
+  /* The secondary icon role is 14px at compact density and 16px at web density. */
+  --icon-size: calc(10px + var(--control-spacing, 12px) / 2);
+  /* Settings dropdowns retain a 12px inset and a 4px text-to-chevron gap. */
+  padding: 0 calc(16px + var(--icon-size)) 0 12px;
+  outline: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    ),
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    );
+  background-position:
+    calc(100% - 12px - var(--icon-size) / 2) 50%,
+    calc(100% - 12px - var(--icon-size) * 0.18) 50%;
+  background-repeat: no-repeat;
+  background-size: calc(var(--icon-size) * 0.32) calc(var(--icon-size) * 0.32);
+  cursor: var(--cursor-interaction, default);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.form-select :is(option, optgroup) {
+  color: var(--popover-foreground);
+  background-color: var(--popover);
+}
+
+.form-select :is(option, optgroup):disabled {
+  color: var(--muted-foreground);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.form-select:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.form-select:disabled {
+  opacity: 0.4;
+}
+
+.form-check {
+  display: flex;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  corner-shape: round;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  width: calc(10px + var(--control-spacing, 12px) / 2);
+  height: calc(10px + var(--control-spacing, 12px) / 2);
+  border-color: var(--border-strong, var(--input));
+  border-radius: calc(var(--radius-sm) / 2);
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:is(:checked, :indeterminate) {
+  border-color: var(--border-strong, var(--input));
+  background-color: color-mix(in srgb, var(--popover) 96%, transparent);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+  background-color: var(--foreground);
+}
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:indeterminate::before {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 65%;
+  height: 6.65%;
+  margin: auto;
+  border-radius: var(--radius-full);
+  background: var(--foreground);
+  mask: none;
+  content: &quot;&quot;;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  border-radius: var(--radius-full);
+  width: 16px;
+  height: 16px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--input);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 0;
+  background: radial-gradient(
+    circle,
+    var(--primary-foreground) 0 3px,
+    var(--foreground) 3px
+  );
+  box-shadow: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:focus-visible {
+  border-color: var(--ring);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;radio&quot;]:disabled,
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;radio&quot;]:disabled
+  + .form-check-label {
+  opacity: 0.5;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  border-color: #fff;
+  background: #fff;
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--blue);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+  outline: none;
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  accent-color: var(--primary);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  outline: none;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: transparent;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  margin-top: -9px;
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Outline the native track and thumb, preserving the larger input hit area. */
+.form-range:focus-visible::-webkit-slider-runnable-track {
+  outline: 2px auto Highlight;
+  outline-color: -webkit-focus-ring-color;
+}
+
+.form-range::-moz-range-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
+}
+
+.form-range:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed=&quot;true&quot;],
+  [aria-selected=&quot;true&quot;],
+  .is-selected
+) {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--blue);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 2px !important;
+}
+
+/* Web recipes are the default, including on renderers without inline style queries. */
+@supports (border-radius: if(style(--corner-shape: round): 1px; else: 2px)) {
+  /* Match the host&#x27;s proportional text-sm scale at every text preference. */
+  .tooltip,
+  .viz-badge,
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 14 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 13 / 14), 1px)
+    );
+  }
+
+  .btn-sm {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 12 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 12 / 14), 1px)
+    );
+  }
+
+  .btn,
+  .nav-link,
+  .form-select {
+    border-radius: if(
+      style(--corner-shape: round): var(--radius-full); else: var(--radius-lg)
+    );
+  }
+
+  .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+    border-radius: if(
+      style(--corner-shape: round): calc(var(--radius-sm) / 2);
+        else: calc(var(--radius-lg) * 0.4)
+    );
+  }
+
+  .tooltip {
+    font-weight: if(
+      style(--corner-shape: round): 600; else: var(--font-weight-normal)
+    );
+  }
+}
+
+@media (pointer: coarse) {
+  .viz-carousel:has(&gt; .viz-carousel-controls) {
+    min-height: calc(76px + var(--viz-carousel-picker-height, 0px));
+    padding-bottom: 76px;
+  }
+
+  .btn,
+  .nav-link,
+  .viz-carousel-controls button,
+  .viz-carousel-picker &gt; summary,
+  .form-control,
+  .form-select {
+    --btn-size: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+  .form-control:is(
+    [type=&quot;file&quot;],
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;week&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;color&quot;]
+  ) {
+    height: 44px;
+    min-height: 44px;
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+
+  .form-control[type=&quot;file&quot;]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type=&quot;color&quot;] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;week&quot;]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: &quot;&quot;;
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
+&lt;script&gt;(() =&gt; {
+  const root = document.documentElement;
+  const mediaQuery = globalThis.matchMedia(&quot;(prefers-color-scheme: dark)&quot;);
+  const apply = Reflect.apply;
+  const isArray = Array.isArray;
+  const hasOwn = Object.hasOwn;
+  const parentWindow = globalThis.parent;
+  const stringify = JSON.stringify;
+  const parse = JSON.parse;
+  const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
+  const initialStateElement = document.getElementById(
+    &quot;codex-visualization-widget-state&quot;,
+  );
+  const initialGlobals = parse(initialStateElement?.textContent ?? &quot;{}&quot;);
+  initialStateElement?.remove();
+  /** @type {Record&lt;string, unknown&gt; | null} */
+  let state = initialGlobals.widgetState ?? null;
+  const statePersistence = initialGlobals.statePersistence ?? &quot;none&quot;;
+  let nextStateRequestId = 0;
+  /** @type {Map&lt;number, { resolve: () =&gt; void; reject: (error: Error) =&gt; void; timeout: ReturnType&lt;typeof globalThis.setTimeout&gt;; serializedState: string }&gt;} */
+  const pendingStateWrites = new Map();
+  const persistenceError = () =&gt;
+    Object.assign(
+      new Error(&quot;The host could not persist the widget state update&quot;),
+      {
+        code: -32000,
+        data: { code: &quot;widget_state_persistence_failed&quot;, retryable: false },
+      },
+    );
+  /**
+   * @param {object} prototype
+   * @param {string} property
+   */
+  const getPrototypeGetter = (prototype, property) =&gt; {
+    // oxlint-disable-next-line typescript/unbound-method -- invoked through captured Reflect.apply
+    const getter = Object.getOwnPropertyDescriptor(prototype, property)?.get;
+    if (getter == null) {
+      throw new Error(`Missing ${property} getter`);
+    }
+    return getter;
+  };
+  const getMessageData = getPrototypeGetter(MessageEvent.prototype, &quot;data&quot;);
+  const getMessagePorts = getPrototypeGetter(MessageEvent.prototype, &quot;ports&quot;);
+  const getMessageSource = getPrototypeGetter(MessageEvent.prototype, &quot;source&quot;);
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const addHostMessageListener = MessagePort.prototype.addEventListener;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const postHostMessage = MessagePort.prototype.postMessage;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const startHostPort = MessagePort.prototype.start;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const stopMessagePropagation = Event.prototype.stopImmediatePropagation;
+  /** @type {MessagePort | null} */
+  let hostPort = null;
+  const postToHost = (type, payload) =&gt; {
+    if (hostPort != null) {
+      apply(postHostMessage, hostPort, [{ type, ...payload }]);
+    }
+  };
+  const openExternal = ({ href }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;open-external&quot;, { href });
+    }
+  };
+  const sendFollowUpMessage = ({ context, prompt, title }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;follow-up&quot;, { context, prompt, title });
+    }
+    return Promise.resolve();
+  };
+  /**
+   * @param {Record&lt;string, unknown&gt; | ((previous: Record&lt;string, unknown&gt; | null) =&gt; Record&lt;string, unknown&gt;)} next
+   * @returns {Promise&lt;void&gt;}
+   */
+  const setWidgetState = async (next) =&gt; {
+    const nextState = typeof next === &quot;function&quot; ? next(state) : next;
+    if (
+      nextState == null ||
+      typeof nextState !== &quot;object&quot; ||
+      isArray(nextState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const inputState = stringify(
+      nextState,
+      (_key, /** @type {unknown} */ value) =&gt; {
+        if (
+          typeof value === &quot;undefined&quot; ||
+          typeof value === &quot;function&quot; ||
+          typeof value === &quot;symbol&quot; ||
+          (typeof value === &quot;number&quot; &amp;&amp; !Number.isFinite(value))
+        ) {
+          throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+        }
+        return value;
+      },
+    );
+    const parsedState = parse(inputState);
+    if (
+      parsedState == null ||
+      typeof parsedState !== &quot;object&quot; ||
+      isArray(parsedState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const storedState = {
+      modelContent: null,
+      privateContent: null,
+      ...parsedState,
+    };
+    const serializedState = stringify(storedState);
+    if (encode(serializedState).length &gt; 16 * 1024) {
+      throw new TypeError(
+        &quot;Widget state must be a JSON object of at most 16 KiB&quot;,
+      );
+    }
+    if (
+      hasOwn(storedState, &quot;imageIds&quot;) &amp;&amp;
+      (!isArray(storedState.imageIds) ||
+        storedState.imageIds.some(
+          (/** @type {unknown} */ id) =&gt; typeof id !== &quot;string&quot;,
+        ))
+    ) {
+      throw new TypeError(&quot;Widget state imageIds must be an array of strings&quot;);
+    }
+    if (storedState.imageIds?.length &gt; 0) {
+      throw Object.assign(
+        new TypeError(&quot;Visualization state does not support image attachments&quot;),
+        { code: -32602, data: { code: &quot;images_unsupported&quot; } },
+      );
+    }
+    state = storedState;
+    globalThis.openai.widgetState = state;
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: { widgetState: state } },
+      }),
+    );
+    if (statePersistence === &quot;none&quot;) {
+      throw persistenceError();
+    }
+    const id = ++nextStateRequestId;
+    return new Promise((resolve, reject) =&gt; {
+      const timeout = globalThis.setTimeout(() =&gt; {
+        pendingStateWrites.delete(id);
+        reject(persistenceError());
+      }, 30_000);
+      pendingStateWrites.set(id, { resolve, reject, timeout, serializedState });
+      postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+    });
+  };
+  const bindingElement = document.getElementById(&quot;codex-visualization-bindings&quot;);
+  const mockElement = document.getElementById(&quot;codex-connector-mocks&quot;);
+  const fileElement = document.getElementById(&quot;codex-preview-files&quot;);
+  const connectorGlobals = {};
+  if (bindingElement != null || mockElement != null || fileElement != null) {
+    const bindings = parse(bindingElement?.textContent ?? &quot;{}&quot;);
+    bindingElement?.remove();
+    const values = new Map();
+    for (const [name, binding] of Object.entries(bindings)) {
+      if (binding.type === &quot;json&quot;) values.set(name, structuredClone(binding.value));
+    }
+    const pending = [bindings];
+    while (pending.length) {
+      const object = pending.pop();
+      Object.freeze(object);
+      for (const child of Object.values(object)) {
+        if (child !== null &amp;&amp; typeof child === &quot;object&quot;) pending.push(child);
+      }
+    }
+    const updates = [];
+    if (mockElement != null) {
+      const mocks = Object.entries(parse(mockElement.textContent));
+      mockElement.remove();
+      for (const [name, value] of mocks) {
+        values.set(name, value);
+        updates.push({ name, revision: 1, state: &quot;ready&quot;, value: { type: &quot;json&quot;, value } });
+      }
+    }
+    if (fileElement != null) {
+      const files = parse(fileElement.textContent);
+      fileElement.remove();
+      const blobs = new Map();
+      const urls = [];
+      for (const [name, binding] of Object.entries(bindings)) {
+        if (binding.type !== &quot;file&quot; || !hasOwn(files, binding.path)) continue;
+        const file = files[binding.path];
+        let blob = blobs.get(binding.path);
+        if (blob == null) {
+          const bytes = Uint8Array.fromBase64?.(file.base64) ??
+            Uint8Array.from(atob(file.base64), (char) =&gt; char.charCodeAt(0));
+          blob = new Blob([bytes], { type: file.mimeType });
+          blobs.set(binding.path, blob);
+        }
+        const url = URL.createObjectURL(blob);
+        urls.push(url);
+        values.set(name, { name: file.name, blob, url });
+        updates.push({ name, revision: 1, state: &quot;ready&quot;, value: { type: &quot;file&quot;, ...file } });
+      }
+      globalThis.addEventListener(&quot;pagehide&quot;, (event) =&gt; {
+        // A persisted pagehide can restore this same document and its subscriptions.
+        if (event.persisted) return;
+        for (const url of urls) URL.revokeObjectURL(url);
+        urls.length = 0;
+      });
+    }
+    if (mockElement != null || fileElement != null) connectorGlobals.visualizationData = { updates };
+    connectorGlobals.visualization = {
+      get bindings() {
+        return bindings;
+      },
+      /** @param {string} name @param {(value: unknown) =&gt; void} callback */
+      onData(name, callback) {
+        if (typeof callback !== &quot;function&quot;) {
+          throw new TypeError(&quot;onData requires a callback&quot;);
+        }
+        try {
+          callback(values.get(name));
+        } catch (error) {
+          // oxlint-disable-next-line no-console -- Keep authored callback failures local.
+          console.error(&quot;Live visualization data callback failed&quot;, error);
+        }
+        // A static preview delivers the current value once per subscription.
+        return () =&gt; {};
+      },
+    };
+  }
+  const syncTheme = () =&gt; {
+    const theme = mediaQuery.matches ? &quot;dark&quot; : &quot;light&quot;;
+    root.dataset.theme = theme;
+    globalThis.openai = {
+      ...globalThis.openai,
+      ...connectorGlobals,
+      openExternal,
+      sendFollowUpMessage,
+      setWidgetState,
+      theme,
+      visualizationStyleVariables: {},
+      visualizationTheme: theme,
+      widgetState: state,
+      statePersistence,
+      stateModelContext: &quot;none&quot;,
+    };
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: globalThis.openai },
+      }),
+    );
+  };
+  const sendHeight = () =&gt; {
+    postToHost(&quot;height&quot;, {
+      height: Math.ceil(
+        Math.max(
+          document.body.scrollHeight,
+          document.body.getBoundingClientRect().height,
+        ),
+      ),
+    });
+  };
+
+  globalThis.addEventListener(
+    &quot;message&quot;,
+    (event) =&gt; {
+      const data = apply(getMessageData, event, []);
+      const ports = apply(getMessagePorts, event, []);
+      const source = apply(getMessageSource, event, []);
+      if (
+        hostPort != null ||
+        source !== parentWindow ||
+        typeof data !== &quot;object&quot; ||
+        data?.type !== &quot;codex-visualization-initialize&quot; ||
+        !isArray(ports) ||
+        ports.length !== 1
+      ) {
+        return;
+      }
+      apply(stopMessagePropagation, event, []);
+      const nextHostPort = ports[0];
+      try {
+        apply(addHostMessageListener, nextHostPort, [
+          &quot;message&quot;,
+          (event) =&gt; {
+            const data = apply(getMessageData, event, []);
+            if (typeof data === &quot;object&quot; &amp;&amp; data?.type === &quot;measure&quot;) {
+              sendHeight();
+            } else if (
+              typeof data === &quot;object&quot; &amp;&amp;
+              data?.type === &quot;widget-state-result&quot;
+            ) {
+              /** @type {unknown} */
+              const id = data.id;
+              if (typeof id !== &quot;number&quot;) {
+                return;
+              }
+              const pending = pendingStateWrites.get(id);
+              if (pending != null) {
+                pendingStateWrites.delete(id);
+                globalThis.clearTimeout(pending.timeout);
+                if (data.ok === true) {
+                  pending.resolve();
+                } else {
+                  pending.reject(persistenceError());
+                }
+              }
+            }
+          },
+        ]);
+        apply(startHostPort, nextHostPort, []);
+      } catch {
+        return;
+      }
+      hostPort = nextHostPort;
+      for (const [id, { serializedState }] of pendingStateWrites) {
+        postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+      }
+      sendHeight();
+    },
+    { capture: true },
+  );
+  document.currentScript?.remove();
+  mediaQuery.addEventListener(&quot;change&quot;, syncTheme);
+  globalThis.addEventListener(&quot;click&quot;, (event) =&gt; {
+    if (event.defaultPrevented) {
+      return;
+    }
+    let element = null;
+    if (event.target instanceof globalThis.Element) {
+      element = event.target;
+    } else if (event.target instanceof globalThis.Node) {
+      element = event.target.parentElement;
+    }
+    const link = element?.closest(&quot;a[href]&quot;);
+    const href = link?.getAttribute(&quot;href&quot;);
+    if (href == null) {
+      return;
+    }
+    if (href.startsWith(&quot;#&quot;)) {
+      let id;
+      try {
+        id = decodeURIComponent(href.slice(1));
+      } catch {
+        return;
+      }
+      const target = id.length === 0 ? root : document.getElementById(id);
+      if (
+        target == null ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      event.preventDefault();
+      postToHost(&quot;scroll-to&quot;, {
+        top: target.getBoundingClientRect().top + globalThis.scrollY,
+      });
+      return;
+    }
+    event.preventDefault();
+    openExternal({ href });
+  });
+  new ResizeObserver(sendHeight).observe(document.body);
+  syncTheme();
+})();
+&lt;/script&gt;
+&lt;div id=&quot;crm-management-dashboard-cn&quot;&gt;
+  &lt;style&gt;
+    #crm-management-dashboard-cn {
+      color-scheme: light dark;
+      --z-bg: light-dark(#f0f4fa, #0c1118);
+      --z-panel: light-dark(#ffffff, #161d27);
+      --z-soft: light-dark(#f6f8fc, #101720);
+      --z-line: light-dark(#dbe4ef, #293544);
+      --z-line-strong: light-dark(#c4d1e2, #3b4b5f);
+      --z-text: light-dark(#172235, #eef3fa);
+      --z-muted: light-dark(#66768b, #9aa9bd);
+      --z-blue: light-dark(#245ee8, #7ea5ff);
+      --z-blue-soft: light-dark(#edf3ff, #172440);
+      --z-green: light-dark(#117d56, #58d2a5);
+      --z-green-soft: light-dark(#eaf8f1, #10281f);
+      --z-red: light-dark(#ba344b, #ff8f9f);
+      --z-red-soft: light-dark(#fff0f2, #35171d);
+      --z-amber: light-dark(#8e5e00, #f2c765);
+      --z-amber-soft: light-dark(#fff5db, #302410);
+      --z-purple: light-dark(#7048b8, #c3a2ff);
+      --z-purple-soft: light-dark(#f4efff, #271b3d);
+      background: var(--z-bg);
+      color: var(--z-text);
+      border-radius: 16px;
+      font-family: Inter, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, system-ui, sans-serif;
+      overflow: hidden;
+      width: 100%;
+    }
+    #crm-management-dashboard-cn * { box-sizing: border-box; }
+    .zd-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 14px;
+      background: var(--z-panel);
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-brand { display: flex; align-items: center; gap: 9px; }
+    .zd-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: var(--z-blue);
+      color: #fff;
+    }
+    .zd-mark svg { width: 16px; height: 16px; }
+    .zd-title { font-size: 14px; font-weight: 600; }
+    .zd-sub { color: var(--z-muted); font-size: 10px; margin-top: 2px; }
+    .zd-meta { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .zd-chip {
+      border: 1px solid var(--z-line);
+      border-radius: 999px;
+      padding: 4px 7px;
+      color: var(--z-muted);
+      background: var(--z-soft);
+      font-size: 10px;
+    }
+    .zd-body { padding: 10px 12px 12px; display: grid; gap: 8px; }
+    .zd-stage-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .zd-phase {
+      min-width: 0;
+      border: 1px solid var(--z-line);
+      border-radius: 10px;
+      background: var(--z-panel);
+      padding: 7px 8px 8px;
+    }
+    .zd-phase.active {
+      border-color: color-mix(in srgb, var(--z-blue) 50%, var(--z-line));
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--z-blue) 13%, transparent);
+    }
+    .zd-phase-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .zd-phase-head span { color: var(--z-muted); font-weight: 400; }
+    .zd-stages { display: flex; gap: 4px; flex-wrap: wrap; }
+    .zd-stage {
+      min-height: 28px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-soft);
+      color: var(--z-muted);
+      padding: 4px 7px;
+      font-size: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .zd-stage:hover { color: var(--z-text); border-color: var(--z-line-strong); }
+    .zd-stage:focus-visible,
+    .zd-generate:focus-visible,
+    .zd-prompt:focus-visible {
+      outline: 2px solid var(--z-blue);
+      outline-offset: 2px;
+    }
+    .zd-stage[aria-pressed=&quot;true&quot;] {
+      background: var(--z-blue-soft);
+      color: var(--z-blue);
+      border-color: color-mix(in srgb, var(--z-blue) 45%, var(--z-line));
+      font-weight: 500;
+    }
+    .zd-stage svg { width: 11px; height: 11px; }
+    .zd-stage-priority {
+      font-size: 8px;
+      line-height: 1;
+      border-radius: 999px;
+      padding: 2px 4px;
+      white-space: nowrap;
+    }
+    .zd-stage-priority.high { color: var(--z-red); background: var(--z-red-soft); }
+    .zd-stage-priority.medium { color: var(--z-amber); background: var(--z-amber-soft); }
+    .zd-stage-priority.later { color: var(--z-blue); background: var(--z-blue-soft); }
+    .zd-query {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 7px;
+      align-items: stretch;
+      padding: 7px;
+      border-radius: 10px;
+      border: 1px solid var(--z-line);
+      background: var(--z-panel);
+    }
+    .zd-prompt {
+      width: 100%;
+      min-height: 38px;
+      max-height: 54px;
+      resize: vertical;
+      border: 1px solid var(--z-line);
+      border-radius: 7px;
+      background: var(--z-soft);
+      color: var(--z-text);
+      padding: 9px 10px;
+      font: inherit;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .zd-generate {
+      min-width: 98px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--z-blue);
+      color: #fff;
+      cursor: pointer;
+      padding: 0 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .zd-generate svg { width: 14px; height: 14px; }
+    .zd-status {
+      min-height: 15px;
+      color: var(--z-muted);
+      font-size: 9px;
+      padding-left: 2px;
+    }
+    .zd-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.62fr) minmax(330px, .98fr);
+      gap: 8px;
+      min-width: 0;
+    }
+    .zd-panel {
+      background: var(--z-panel);
+      border: 1px solid var(--z-line);
+      border-radius: 10px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .zd-panel-head {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .zd-panel-title svg { width: 13px; height: 13px; color: var(--z-blue); }
+    .zd-source { color: var(--z-muted); font-size: 9px; }
+    .zd-canvas { padding: 8px; display: grid; gap: 7px; }
+    .zd-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .zd-kpi {
+      min-width: 0;
+      padding: 7px 8px;
+      border-radius: 7px;
+      background: var(--z-soft);
+      border: 1px solid var(--z-line);
+    }
+    .zd-kpi-name { color: var(--z-muted); font-size: 9px; line-height: 1.25; }
+    .zd-kpi-value {
+      margin-top: 4px;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+      overflow-wrap: anywhere;
+    }
+    .zd-kpi-note { margin-top: 2px; color: var(--z-muted); font-size: 9px; line-height: 1.3; }
+    .zd-deal-panel {
+      display: grid;
+      gap: 0;
+      border: 1px solid var(--z-line);
+      border-radius: 8px;
+      background: var(--z-soft);
+      overflow: hidden;
+    }
+    .zd-deal-panel[hidden] { display: none; }
+    .zd-intent-scale {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .zd-intent-scale[hidden] { display: none; }
+    .zd-intent-step {
+      min-width: 0;
+      border: 1px solid var(--z-line);
+      border-radius: 7px;
+      background: var(--z-soft);
+      padding: 7px 8px;
+    }
+    .zd-intent-step.level-100 { background: var(--z-green-soft); }
+    .zd-intent-step.level-80 { background: var(--z-amber-soft); }
+    .zd-intent-step.level-50 { background: var(--z-blue-soft); }
+    .zd-intent-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .zd-intent-level { font-size: 15px; font-weight: 600; }
+    .zd-intent-level.level-100 { color: var(--z-green); }
+    .zd-intent-level.level-80 { color: var(--z-amber); }
+    .zd-intent-level.level-50 { color: var(--z-blue); }
+    .zd-intent-count {
+      border-radius: 999px;
+      background: var(--z-panel);
+      padding: 2px 6px;
+      color: var(--z-muted);
+      font-size: 9px;
+      white-space: nowrap;
+    }
+    .zd-intent-label { font-size: 11px; font-weight: 500; }
+    .zd-intent-rule {
+      margin-top: 3px;
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+    .zd-intent-note {
+      grid-column: 1 / -1;
+      padding: 5px 7px;
+      border-radius: 6px;
+      background: var(--z-panel);
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+    .zd-deal-toolbar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 8px;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-deal-controls { display: flex; align-items: flex-end; gap: 7px; flex-wrap: wrap; }
+    .zd-deal-control { display: grid; gap: 3px; }
+    .zd-deal-control label { color: var(--z-muted); font-size: 9px; }
+    .zd-deal-select {
+      height: 28px;
+      min-width: 112px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+      color: var(--z-text);
+      padding: 0 7px;
+      font: inherit;
+      font-size: 11px;
+    }
+    .zd-periods { display: flex; gap: 3px; }
+    .zd-period {
+      height: 28px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+      color: var(--z-muted);
+      padding: 0 9px;
+      font: inherit;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .zd-period[aria-pressed=&quot;true&quot;] {
+      border-color: var(--z-blue);
+      background: var(--z-blue-soft);
+      color: var(--z-blue);
+      font-weight: 500;
+    }
+    .zd-deal-basis {
+      max-width: 330px;
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.4;
+      text-align: right;
+    }
+    .zd-target-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-target-metric {
+      min-width: 0;
+      padding: 7px 8px;
+      border-right: 1px solid var(--z-line);
+    }
+    .zd-target-metric:last-child { border-right: 0; }
+    .zd-target-label { color: var(--z-muted); font-size: 9px; }
+    .zd-target-value { margin-top: 3px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .zd-target-value.gap { color: var(--z-red); }
+    .zd-target-progress {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-target-progress .zd-track { flex: 1; height: 6px; }
+    .zd-target-progress span { color: var(--z-muted); font-size: 9px; white-space: nowrap; }
+    .zd-target-table-wrap { width: 100%; overflow-x: auto; }
+    .zd-target-table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+      font-size: 10px;
+      line-height: 1.35;
+    }
+    .zd-target-table th,
+    .zd-target-table td {
+      padding: 5px 7px;
+      border-bottom: 1px solid var(--z-line);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .zd-target-table th {
+      color: var(--z-muted);
+      background: var(--z-panel);
+      font-weight: 500;
+    }
+    .zd-target-table tr:last-child td { border-bottom: 0; }
+    .zd-target-table td:not(:first-child),
+    .zd-target-table th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+    .zd-target-table .total-row td { font-weight: 600; background: var(--z-blue-soft); }
+    .zd-target-table .over-target { color: var(--z-green); }
+    .zd-target-footer {
+      padding: 5px 8px;
+      border-top: 1px solid var(--z-line);
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.4;
+    }
+    .zd-chart-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.22fr) minmax(165px, .78fr);
+      gap: 7px;
+    }
+    .zd-mini {
+      border: 1px solid var(--z-line);
+      border-radius: 7px;
+      padding: 7px 8px;
+      background: var(--z-soft);
+      min-width: 0;
+    }
+    .zd-mini-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .zd-mini-head span { color: var(--z-muted); font-size: 9px; font-weight: 400; }
+    .zd-bars { display: grid; gap: 5px; }
+    .zd-funnel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+    .zd-funnel-step {
+      min-width: 0;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+      padding: 6px;
+    }
+    .zd-funnel-step span { display: block; color: var(--z-muted); font-size: 9px; line-height: 1.3; }
+    .zd-funnel-step strong { display: block; margin-top: 3px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .zd-funnel-step small { display: block; margin-top: 2px; color: var(--z-muted); font-size: 8px; line-height: 1.3; }
+    .zd-bar-row {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr) 56px;
+      align-items: center;
+      gap: 6px;
+      font-size: 9px;
+    }
+    .zd-bar-label { color: var(--z-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .zd-track { height: 5px; background: color-mix(in srgb, var(--z-muted) 16%, transparent); border-radius: 99px; overflow: hidden; }
+    .zd-fill { height: 100%; background: var(--z-blue); border-radius: 99px; }
+    .zd-bar-value { text-align: right; color: var(--z-text); font-variant-numeric: tabular-nums; }
+    .zd-list { display: grid; gap: 4px; }
+    .zd-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 5px 6px;
+      border-bottom: 1px solid var(--z-line);
+      font-size: 9px;
+      line-height: 1.35;
+    }
+    .zd-list-item:last-child { border-bottom: 0; }
+    .zd-list-item strong { font-weight: 500; }
+    .zd-cc-space {
+      border: 1px solid var(--z-line);
+      border-radius: 7px;
+      background: var(--z-soft);
+      overflow: hidden;
+    }
+    .zd-cc-head {
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid var(--z-line);
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .zd-cc-head span { color: var(--z-muted); font-size: 9px; font-weight: 400; }
+    .zd-functions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 8px;
+      padding: 2px 8px;
+    }
+    .zd-function {
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1fr) auto;
+      gap: 5px;
+      align-items: start;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--z-line);
+      font-size: 9px;
+      line-height: 1.35;
+    }
+    .zd-function:nth-last-child(-n+2) { border-bottom: 0; }
+    .zd-function-symbol { color: var(--z-green); }
+    .zd-function.missing .zd-function-symbol { color: var(--z-red); }
+    .zd-function-name { min-width: 0; }
+    .zd-function-note { display: block; color: var(--z-muted); font-size: 8px; margin-top: 1px; }
+    .zd-function-priority {
+      border-radius: 999px;
+      padding: 1px 4px;
+      font-size: 8px;
+      white-space: nowrap;
+    }
+    .zd-function-priority.phase-one { color: var(--z-blue); background: var(--z-blue-soft); }
+    .zd-function-priority.phase-two { color: var(--z-purple); background: var(--z-purple-soft); }
+    .zd-function-priority.phase-three { color: var(--z-green); background: var(--z-green-soft); }
+    .zd-function-priority.phase-four { color: var(--z-blue); background: var(--z-blue-soft); }
+    .zd-function-priority.phase-five { color: var(--z-purple); background: var(--z-purple-soft); }
+    .zd-function-priority.phase-six { color: var(--z-green); background: var(--z-green-soft); }
+    .zd-empty {
+      min-height: 128px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 14px;
+      border-radius: 7px;
+      background: var(--z-red-soft);
+      color: var(--z-red);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .zd-catalog { padding: 0 9px 7px; display: grid; }
+    .zd-rule {
+      margin: 7px 0 2px;
+      padding: 6px 7px;
+      border-radius: 6px;
+      background: var(--z-blue-soft);
+      color: var(--z-blue);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+    .zd-metric {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.42fr);
+      gap: 7px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-metric:last-child { border-bottom: 0; }
+    .zd-metric-name { font-size: 10px; font-weight: 500; line-height: 1.35; }
+    .zd-definition { color: var(--z-muted); font-size: 9px; margin-top: 3px; line-height: 1.45; }
+    .zd-unit { color: var(--z-muted); font-size: 8px; margin-top: 2px; }
+    .zd-field-groups { display: grid; gap: 4px; }
+    .zd-field-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      font-size: 9px;
+      line-height: 1.35;
+      color: var(--z-muted);
+    }
+    .zd-field-line em {
+      flex: 0 0 auto;
+      color: var(--z-text);
+      font-style: normal;
+      font-weight: 500;
+    }
+    .zd-field-line.design {
+      padding: 4px 5px;
+      border-radius: 5px;
+      background: var(--z-red-soft);
+    }
+    .zd-field-line.design em { color: var(--z-red); }
+    .zd-fields { display: flex; flex-wrap: wrap; gap: 3px; }
+    .zd-field {
+      border-radius: 5px;
+      padding: 2px 4px;
+      background: var(--z-soft);
+      border: 1px solid var(--z-line);
+      white-space: nowrap;
+    }
+    .zd-field.yes { color: var(--z-green); }
+    .zd-field.no { color: var(--z-red); }
+    .zd-foot {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--z-line);
+      border-radius: 9px;
+      background: var(--z-panel);
+      overflow: hidden;
+    }
+    .zd-foot-cell {
+      padding: 7px 8px;
+      border-right: 1px solid var(--z-line);
+      min-width: 0;
+      font-size: 9px;
+      line-height: 1.4;
+    }
+    .zd-foot-cell:last-child { border-right: 0; }
+    .zd-foot-label { color: var(--z-muted); margin-bottom: 2px; }
+    .zd-intelligence {
+      background: var(--z-panel);
+      border: 1px solid var(--z-line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .zd-intelligence-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--z-line);
+    }
+    .zd-intelligence-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .zd-intelligence-title svg { width: 14px; height: 14px; color: var(--z-blue); }
+    .zd-intelligence-note { color: var(--z-muted); font-size: 9px; }
+    .zd-intelligence-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .zd-ai-role {
+      padding: 9px 10px;
+      min-width: 0;
+    }
+    .zd-ai-role + .zd-ai-role { border-left: 1px solid var(--z-line); }
+    .zd-ai-role-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .zd-ai-role-head span { color: var(--z-muted); font-size: 9px; font-weight: 400; }
+    .zd-ai-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px 8px;
+    }
+    .zd-ai-capability {
+      padding: 6px 7px;
+      border-radius: 7px;
+      background: var(--z-soft);
+      border: 1px solid var(--z-line);
+      min-width: 0;
+      font-size: 9px;
+      line-height: 1.35;
+    }
+    .zd-ai-capability strong {
+      display: flex;
+      justify-content: space-between;
+      gap: 5px;
+      font-size: 9px;
+      font-weight: 500;
+    }
+    .zd-ai-capability p { margin: 3px 0 0; color: var(--z-muted); }
+    .zd-ai-flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border-top: 1px solid var(--z-line);
+    }
+    .zd-ai-step {
+      min-width: 0;
+      padding: 6px 8px;
+      border-right: 1px solid var(--z-line);
+      color: var(--z-muted);
+      font-size: 9px;
+      line-height: 1.35;
+    }
+    .zd-ai-step:last-child { border-right: 0; }
+    .zd-ai-step b { display: block; color: var(--z-text); font-weight: 500; margin-bottom: 1px; }
+    @media (max-width: 900px) {
+      .zd-stage-board,
+      .zd-workspace,
+      .zd-chart-row,
+      .zd-foot,
+      .zd-intelligence-grid,
+      .zd-ai-flow { grid-template-columns: 1fr; }
+      .zd-foot-cell { border-right: 0; border-bottom: 1px solid var(--z-line); }
+      .zd-foot-cell:last-child { border-bottom: 0; }
+      .zd-ai-role + .zd-ai-role { border-left: 0; border-top: 1px solid var(--z-line); }
+      .zd-ai-step { border-right: 0; border-bottom: 1px solid var(--z-line); }
+      .zd-ai-step:last-child { border-bottom: 0; }
+      .zd-deal-toolbar { align-items: stretch; flex-direction: column; }
+      .zd-deal-basis { max-width: none; text-align: left; }
+      .zd-target-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .zd-target-metric:nth-child(2) { border-right: 0; }
+      .zd-funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .zd-intent-scale { grid-template-columns: 1fr; }
+      .zd-intent-note { grid-column: auto; }
+    }
+    @media (max-width: 520px) {
+      .zd-head { align-items: flex-start; }
+      .zd-meta { justify-content: flex-start; }
+      .zd-body { padding: 9px; }
+      .zd-query { grid-template-columns: 1fr; }
+      .zd-generate { min-height: 38px; }
+      .zd-kpis { grid-template-columns: 1fr; }
+      .zd-metric { grid-template-columns: 1fr; }
+      .zd-deal-controls { align-items: stretch; flex-direction: column; }
+      .zd-deal-select { width: 100%; }
+      .zd-periods { display: grid; grid-template-columns: repeat(3, 1fr); }
+      .zd-target-summary { grid-template-columns: 1fr; }
+      .zd-target-metric { border-right: 0; border-bottom: 1px solid var(--z-line); }
+      .zd-target-metric:last-child { border-bottom: 0; }
+      .zd-funnel { grid-template-columns: 1fr; }
+    }
+
+    /* Fixed light presentation for readability. */
+    #crm-management-dashboard-cn {
+      color-scheme: light;
+      --z-bg: #eef3f9;
+      --z-panel: #ffffff;
+      --z-soft: #f5f8fc;
+      --z-line: #d6e0eb;
+      --z-line-strong: #b8c7d9;
+      --z-text: #172235;
+      --z-muted: #5c697b;
+      --z-blue: #245ee8;
+      --z-blue-soft: #eaf1ff;
+      --z-green: #087a50;
+      --z-green-soft: #e8f7ef;
+      --z-red: #b4233c;
+      --z-red-soft: #fff0f2;
+      --z-amber: #8b5900;
+      --z-amber-soft: #fff4da;
+      --z-purple: #6941b8;
+      --z-purple-soft: #f3edff;
+    }
+    .zd-title { font-size: 16px; }
+    .zd-sub,
+    .zd-chip,
+    .zd-source,
+    .zd-intelligence-note { font-size: 12px; }
+    .zd-phase-head { font-size: 13px; }
+    .zd-stage { font-size: 12px; min-height: 32px; }
+    .zd-stage-priority { font-size: 10px; padding: 3px 5px; }
+    .zd-panel-title,
+    .zd-intelligence-title { font-size: 13px; }
+    .zd-kpi-name { font-size: 12px; }
+    .zd-kpi-value { font-size: 22px; }
+    .zd-kpi-note { font-size: 12px; }
+    .zd-deal-control label,
+    .zd-deal-basis,
+    .zd-target-label,
+    .zd-target-progress span,
+    .zd-target-footer { font-size: 11px; }
+    .zd-deal-select,
+    .zd-period { font-size: 12px; }
+    .zd-target-value { font-size: 16px; }
+    .zd-target-table { font-size: 11px; }
+    .zd-funnel-step span { font-size: 11px; }
+    .zd-funnel-step strong { font-size: 14px; }
+    .zd-funnel-step small { font-size: 10px; }
+    .zd-intent-label { font-size: 12px; }
+    .zd-intent-count,
+    .zd-intent-rule,
+    .zd-intent-note { font-size: 11px; }
+    .zd-mini-head { font-size: 13px; }
+    .zd-mini-head span { font-size: 11px; }
+    .zd-bar-row,
+    .zd-list-item { font-size: 12px; }
+    .zd-cc-head { font-size: 13px; }
+    .zd-cc-head span { font-size: 11px; }
+    .zd-function { font-size: 12px; }
+    .zd-function-note,
+    .zd-function-priority { font-size: 10px; }
+    .zd-metric-name { font-size: 13px; }
+    .zd-definition,
+    .zd-unit,
+    .zd-field-line,
+    .zd-foot-cell { font-size: 12px; }
+    .zd-rule { font-size: 12px; }
+    .zd-ai-role-head { font-size: 12px; }
+    .zd-ai-role-head span,
+    .zd-ai-capability strong,
+    .zd-ai-capability p,
+    .zd-ai-step { font-size: 12px; }
+    .zd-ai-capability { padding: 8px 9px; }
+    .zd-ai-step { padding: 8px 9px; }
+  &lt;/style&gt;
+
+  &lt;div class=&quot;zd-shell&quot;&gt;
+    &lt;header class=&quot;zd-head&quot;&gt;
+      &lt;div class=&quot;zd-brand&quot;&gt;
+        &lt;span class=&quot;zd-mark&quot;&gt;&lt;i data-lucide=&quot;layout-dashboard&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+        &lt;div&gt;
+          &lt;div class=&quot;zd-title&quot;&gt;管理经营看板&lt;/div&gt;
+          &lt;div class=&quot;zd-sub&quot;&gt;业务阶段 · 指标定义 · 功能覆盖 · 智能能力&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;zd-meta&quot;&gt;
+        &lt;span class=&quot;zd-chip&quot;&gt;11月业务表&lt;/span&gt;
+        &lt;span class=&quot;zd-chip&quot;&gt;11月16日至22日经营看板&lt;/span&gt;
+        &lt;span class=&quot;zd-chip&quot;&gt;客户管理系统快照&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;main class=&quot;zd-body&quot;&gt;
+      &lt;section class=&quot;zd-stage-board&quot; aria-label=&quot;业务阶段&quot;&gt;
+        &lt;div class=&quot;zd-phase&quot; id=&quot;zd-phase-presale&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;zd-phase&quot; id=&quot;zd-phase-sale&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;zd-phase&quot; id=&quot;zd-phase-aftersale&quot;&gt;&lt;/div&gt;
+      &lt;/section&gt;
+
+      &lt;section class=&quot;zd-workspace&quot;&gt;
+        &lt;article class=&quot;zd-panel&quot; aria-labelledby=&quot;zd-dashboard-title&quot;&gt;
+          &lt;div class=&quot;zd-panel-head&quot;&gt;
+            &lt;div class=&quot;zd-panel-title&quot; id=&quot;zd-dashboard-title&quot;&gt;
+              &lt;i data-lucide=&quot;panel-top&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+              &lt;span id=&quot;zd-dashboard-name&quot;&gt;看板预览&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;zd-source&quot; id=&quot;zd-source&quot;&gt;&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;zd-canvas&quot;&gt;
+            &lt;div class=&quot;zd-kpis&quot; id=&quot;zd-kpis&quot;&gt;&lt;/div&gt;
+            &lt;section class=&quot;zd-deal-panel&quot; id=&quot;zd-deal-panel&quot; aria-label=&quot;成交目标与差距&quot; hidden&gt;
+              &lt;div class=&quot;zd-deal-toolbar&quot;&gt;
+                &lt;div class=&quot;zd-deal-controls&quot;&gt;
+                  &lt;div class=&quot;zd-deal-control&quot;&gt;
+                    &lt;label for=&quot;zd-scope-select&quot;&gt;查看范围&lt;/label&gt;
+                    &lt;select class=&quot;zd-deal-select&quot; id=&quot;zd-scope-select&quot;&gt;
+                      &lt;option value=&quot;团队&quot;&gt;团队&lt;/option&gt;
+                      &lt;option value=&quot;销售顾问&quot;&gt;销售顾问&lt;/option&gt;
+                    &lt;/select&gt;
+                  &lt;/div&gt;
+                  &lt;div class=&quot;zd-deal-control&quot;&gt;
+                    &lt;label&gt;目标周期&lt;/label&gt;
+                    &lt;div class=&quot;zd-periods&quot; role=&quot;group&quot; aria-label=&quot;目标周期&quot;&gt;
+                      &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;月&quot; aria-pressed=&quot;true&quot;&gt;月&lt;/button&gt;
+                      &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;周&quot; aria-pressed=&quot;false&quot;&gt;周&lt;/button&gt;
+                      &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;日&quot; aria-pressed=&quot;false&quot;&gt;日&lt;/button&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;zd-deal-basis&quot;&gt;成交为一级经营结果，剩余应付只作为回款漏斗。团队月目标沿用经营目标；周目标按冲刺计划；组与个人拆分目标为试算，待正式目标对象上线后替换。&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-target-summary&quot; id=&quot;zd-target-summary&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+              &lt;div class=&quot;zd-target-progress&quot;&gt;
+                &lt;span&gt;0&lt;/span&gt;
+                &lt;div class=&quot;zd-track&quot; role=&quot;progressbar&quot; aria-label=&quot;目标完成进度&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot; aria-valuenow=&quot;0&quot; id=&quot;zd-target-progress&quot;&gt;&lt;span class=&quot;zd-fill&quot; id=&quot;zd-target-progress-fill&quot; style=&quot;width:0%&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;span id=&quot;zd-target-progress-label&quot;&gt;目标完成率 0%&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-target-table-wrap&quot;&gt;
+                &lt;table class=&quot;zd-target-table&quot;&gt;
+                  &lt;thead&gt;
+                    &lt;tr&gt;&lt;th&gt;对象&lt;/th&gt;&lt;th&gt;目标金额&lt;/th&gt;&lt;th&gt;成交金额&lt;/th&gt;&lt;th&gt;订单&lt;/th&gt;&lt;th&gt;距目标&lt;/th&gt;&lt;th&gt;完成率&lt;/th&gt;&lt;/tr&gt;
+                  &lt;/thead&gt;
+                  &lt;tbody id=&quot;zd-target-rows&quot; aria-live=&quot;polite&quot;&gt;&lt;/tbody&gt;
+                &lt;/table&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-target-footer&quot; id=&quot;zd-target-footer&quot;&gt;&lt;/div&gt;
+            &lt;/section&gt;
+            &lt;section class=&quot;zd-intent-scale&quot; id=&quot;zd-intent-scale&quot; aria-label=&quot;支付意向分级口径&quot; hidden&gt;
+              &lt;div class=&quot;zd-intent-step level-100&quot;&gt;
+                &lt;div class=&quot;zd-intent-head&quot;&gt;&lt;span class=&quot;zd-intent-level level-100&quot;&gt;100%&lt;/span&gt;&lt;span class=&quot;zd-intent-count&quot;&gt;业务表 14 条&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-label&quot;&gt;已决定购买 · 定金级&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-rule&quot;&gt;已明确决定购买，套餐、价格、付款方式和付款日期已确认，关键决策人同意，无未解决实质异议；对应“PL 100% (Deposit)”。&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-intent-step level-80&quot;&gt;
+                &lt;div class=&quot;zd-intent-head&quot;&gt;&lt;span class=&quot;zd-intent-level level-80&quot;&gt;80%&lt;/span&gt;&lt;span class=&quot;zd-intent-count&quot;&gt;业务表 10 条&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-label&quot;&gt;购买方向已定 · 强意向&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-rule&quot;&gt;套餐与价格基本认可，仅剩一个关键条件待确认，如家庭成员同意、具体班次或付款日；已有明确下一步动作和时间。&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-intent-step level-50&quot;&gt;
+                &lt;div class=&quot;zd-intent-head&quot;&gt;&lt;span class=&quot;zd-intent-level level-50&quot;&gt;50%&lt;/span&gt;&lt;span class=&quot;zd-intent-count&quot;&gt;业务表 65 条&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-label&quot;&gt;需求匹配 · 待解决异议&lt;/div&gt;
+                &lt;div class=&quot;zd-intent-rule&quot;&gt;需求与产品匹配且愿意继续沟通，但价格、套餐选择、决策人或付款方式至少一项未解决，尚未形成购买或付款承诺。&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-intent-note&quot;&gt;判定取每条线索最新一条有效意向记录：成交后统一归为“已支付”，拒绝后不再保留原高意向；无明确客户证据时归为“待定”，不能仅凭跟进次数或销售主观判断升级。持续跟进是独立状态，不等同于 50%。&lt;/div&gt;
+            &lt;/section&gt;
+            &lt;div class=&quot;zd-chart-row&quot;&gt;
+              &lt;div class=&quot;zd-mini&quot;&gt;
+                &lt;div class=&quot;zd-mini-head&quot;&gt;&lt;strong id=&quot;zd-chart-title&quot;&gt;&lt;/strong&gt;&lt;span id=&quot;zd-chart-unit&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;zd-bars&quot; id=&quot;zd-bars&quot;&gt;&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-mini&quot;&gt;
+                &lt;div class=&quot;zd-mini-head&quot;&gt;&lt;strong&gt;需要关注&lt;/strong&gt;&lt;span id=&quot;zd-attention-count&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;zd-list&quot; id=&quot;zd-attention&quot;&gt;&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;zd-cc-space&quot;&gt;
+              &lt;div class=&quot;zd-cc-head&quot;&gt;
+                &lt;strong&gt;销售需求 · 可用功能与建设项&lt;/strong&gt;
+                &lt;span id=&quot;zd-function-count&quot;&gt;&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-functions&quot; id=&quot;zd-functions&quot;&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;section class=&quot;zd-intelligence&quot; aria-labelledby=&quot;zd-intelligence-title&quot;&gt;
+              &lt;div class=&quot;zd-intelligence-head&quot;&gt;
+                &lt;div class=&quot;zd-intelligence-title&quot; id=&quot;zd-intelligence-title&quot;&gt;
+                  &lt;i data-lucide=&quot;wand-sparkles&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+                  &lt;span id=&quot;zd-intelligence-name&quot;&gt;本阶段智能能力&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;zd-intelligence-note&quot; id=&quot;zd-intelligence-note&quot;&gt;建设优先级从四期开始&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-intelligence-grid&quot;&gt;
+                &lt;section class=&quot;zd-ai-role&quot;&gt;
+                  &lt;div class=&quot;zd-ai-role-head&quot;&gt;
+                    &lt;strong&gt;面向销售顾问&lt;/strong&gt;
+                    &lt;span&gt;告诉销售：先做谁、怎么做、结果如何回填&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class=&quot;zd-ai-list&quot; id=&quot;zd-ai-sales&quot;&gt;&lt;/div&gt;
+                &lt;/section&gt;
+                &lt;section class=&quot;zd-ai-role&quot;&gt;
+                  &lt;div class=&quot;zd-ai-role-head&quot;&gt;
+                    &lt;strong&gt;面向管理者&lt;/strong&gt;
+                    &lt;span&gt;让管理者直接描述问题，不必为每个报表重复提需求&lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div class=&quot;zd-ai-list&quot; id=&quot;zd-ai-manager&quot;&gt;&lt;/div&gt;
+                &lt;/section&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-ai-flow&quot; aria-label=&quot;管理者自定义报表流程&quot;&gt;
+                &lt;div class=&quot;zd-ai-step&quot;&gt;&lt;b&gt;描述问题&lt;/b&gt;业务语言即可&lt;/div&gt;
+                &lt;div class=&quot;zd-ai-step&quot;&gt;&lt;b&gt;匹配指标&lt;/b&gt;调用统一指标字典&lt;/div&gt;
+                &lt;div class=&quot;zd-ai-step&quot;&gt;&lt;b&gt;检查数据&lt;/b&gt;字段、权限、时效&lt;/div&gt;
+                &lt;div class=&quot;zd-ai-step&quot;&gt;&lt;b&gt;生成视图&lt;/b&gt;卡片、趋势、排行、明细&lt;/div&gt;
+                &lt;div class=&quot;zd-ai-step&quot;&gt;&lt;b&gt;保存与订阅&lt;/b&gt;个人看板、共享、推送&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/section&gt;
+          &lt;/div&gt;
+        &lt;/article&gt;
+
+        &lt;aside class=&quot;zd-panel&quot; aria-labelledby=&quot;zd-catalog-title&quot;&gt;
+          &lt;div class=&quot;zd-panel-head&quot;&gt;
+            &lt;div class=&quot;zd-panel-title&quot; id=&quot;zd-catalog-title&quot;&gt;
+              &lt;i data-lucide=&quot;list-checks&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+              &lt;span&gt;指标定义与字段&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;zd-source&quot;&gt;✅ 已有 · ❌ 缺失&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;zd-catalog&quot;&gt;
+            &lt;div class=&quot;zd-rule&quot;&gt;迁移原则：业务表仅作为现状字段来源；新增字段、派生字段和后续数据维护统一落入客户管理系统，不继续扩展业务表。公共口径按业务线当地自然日统计，线索与订单分别按业务编号去重。&lt;/div&gt;
+            &lt;div id=&quot;zd-metrics&quot;&gt;&lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/aside&gt;
+      &lt;/section&gt;
+
+      &lt;section class=&quot;zd-foot&quot; aria-label=&quot;现状与功能建设&quot;&gt;
+        &lt;div class=&quot;zd-foot-cell&quot;&gt;
+          &lt;div class=&quot;zd-foot-label&quot;&gt;业务表现状&lt;/div&gt;
+          &lt;div id=&quot;zd-business&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;zd-foot-cell&quot;&gt;
+          &lt;div class=&quot;zd-foot-label&quot;&gt;客户管理系统现状&lt;/div&gt;
+          &lt;div id=&quot;zd-crm&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;zd-foot-cell&quot;&gt;
+          &lt;div class=&quot;zd-foot-label&quot;&gt;指标可用性&lt;/div&gt;
+          &lt;div id=&quot;zd-readiness&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;zd-foot-cell&quot;&gt;
+          &lt;div class=&quot;zd-foot-label&quot;&gt;客户管理系统功能建设&lt;/div&gt;
+          &lt;div id=&quot;zd-build&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+
+    &lt;/main&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    (() =&gt; {
+      const phases = [
+        { id: &quot;presale&quot;, name: &quot;售前&quot;, note: &quot;线索 → 预约&quot; },
+        { id: &quot;sale&quot;, name: &quot;售中&quot;, note: &quot;到课 → 成交回款&quot; },
+        { id: &quot;aftersale&quot;, name: &quot;售后&quot;, note: &quot;首课 → 推荐&quot; }
+      ];
+      const stages = [
+        {
+          id: &quot;assign&quot;, phase: &quot;presale&quot;, name: &quot;线索分配&quot;, icon: &quot;users&quot;, priority: &quot;高优先级&quot;,
+          prompt: &quot;看今日新增线索的分配情况、未分配数量和五分钟内首次联系情况，按销售顾问排列&quot;,
+          source: &quot;客户管理系统当前快照&quot;,
+          kpis: [[&quot;当前线索&quot;, &quot;90&quot;, &quot;含已付费&quot;], [&quot;已分配&quot;, &quot;46&quot;, &quot;51.1%&quot;], [&quot;未分配&quot;, &quot;43&quot;, &quot;需优先处理&quot;]],
+          chartTitle: &quot;当前线索状态&quot;, chartUnit: &quot;线索数&quot;,
+          bars: [[&quot;已分配&quot;, 46, &quot;46&quot;], [&quot;未分配&quot;, 43, &quot;43&quot;], [&quot;暂不跟进&quot;, 32, &quot;32&quot;], [&quot;已拒绝&quot;, 3, &quot;3&quot;]],
+          attention: [[&quot;未分配&quot;, &quot;43 条&quot;, &quot;bad&quot;], [&quot;待外呼&quot;, &quot;29 条&quot;, &quot;warn&quot;], [&quot;未接通待跟进&quot;, &quot;16 条&quot;, &quot;warn&quot;]],
+          metrics: [
+            { name: &quot;线索分配率&quot;, definition: &quot;统计期内成功分配给销售顾问的去重线索数 ÷ 同期新增有效线索数。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;线索注册日期 ✅&quot;, &quot;销售顾问 ✅&quot;, &quot;首次分配时间 ❌&quot;], crm: [&quot;首次分配时间 ✅&quot;, &quot;首跟销售顾问编号 ✅&quot;, &quot;分配事件编号 ✅&quot;] },
+            { name: &quot;五分钟首次联系达标率&quot;, definition: &quot;首次分配至首次外呼尝试间隔不超过五分钟的线索数 ÷ 已分配线索数。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;分配时间 ❌&quot;, &quot;首次外呼时间 ❌&quot;], crm: [&quot;首次分配时间 ✅&quot;, &quot;首次外呼时间 ✅&quot;, &quot;达标规则 ❌&quot;], design: [&quot;首次分配时间&quot;, &quot;首次外呼时间&quot;, &quot;首次联系时限&quot;, &quot;达标状态&quot;] },
+            { name: &quot;三次三小时触达达成率&quot;, definition: &quot;三小时内完成至少三次有效外呼尝试的线索数 ÷ 已分配线索数。&quot;, unit: &quot;线索；外呼尝试按通话编号去重&quot;, business: [&quot;通话记录 ❌&quot;, &quot;接通状态 ❌&quot;], crm: [&quot;通话记录 ✅&quot;, &quot;触达计时 ❌&quot;], design: [&quot;触达任务开始时间&quot;, &quot;累计触达次数&quot;, &quot;第三次触达时间&quot;, &quot;达标状态&quot;] },
+            { name: &quot;无效或重复线索率&quot;, definition: &quot;被标记无效、重复或合并的线索数 ÷ 同期新增线索数。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;去重编号 ✅&quot;, &quot;无效原因 ❌&quot;], crm: [&quot;去重能力 ✅&quot;, &quot;无效原因 ❌&quot;], design: [&quot;无效原因&quot;, &quot;重复主线索编号&quot;, &quot;合并时间&quot;] }
+          ],
+          functions: [
+            [&quot;自动分配、公海领取和转派&quot;, true, &quot;首跟销售顾问与当前销售顾问已上线&quot;, &quot;一期&quot;],
+            [&quot;线索来源、国家与用户编号筛选&quot;, true, &quot;销售中心已有&quot;, &quot;一期&quot;],
+            [&quot;五分钟首次联系时限和超时提醒&quot;, false, &quot;需新增时限任务&quot;, &quot;一期&quot;],
+            [&quot;线索容量与值班负载分配&quot;, false, &quot;需新增负载路由&quot;, &quot;二期&quot;]
+          ],
+          smartSales: [
+            [&quot;线索优先级副驾&quot;, &quot;结合来源、意向、进入时段和历史转化，解释今天先联系谁。&quot;, &quot;四期&quot;],
+            [&quot;首次联系建议&quot;, &quot;推荐最优联系时段、触达渠道和第一段开场话术。&quot;, &quot;五期&quot;]
+          ],
+          smartManager: [
+            [&quot;分配策略问答&quot;, &quot;直接询问哪类线索在哪个团队转化最好，并解释分配偏差。&quot;, &quot;四期&quot;],
+            [&quot;自定义线索质量报表&quot;, &quot;按国家、渠道、团队和销售顾问自动组合指标与图表。&quot;, &quot;五期&quot;]
+          ],
+          business: &quot;登记日期、来源、团队和销售顾问可用；分配与时效字段缺失。&quot;,
+          crm: &quot;公海、领取、转派、首跟销售顾问、首次分配可用；缺时效任务。&quot;,
+          build: &quot;首次联系时限、未分配老化、容量分配、超时升级。&quot;
+        },
+        {
+          id: &quot;call&quot;, phase: &quot;presale&quot;, name: &quot;外呼&quot;, icon: &quot;phone&quot;, priority: &quot;高优先级&quot;,
+          prompt: &quot;看本周外呼接通率、通话时长和最佳拨打时段，按销售顾问排行&quot;,
+          source: &quot;越南11月16日至22日经营看板&quot;,
+          kpis: [[&quot;外呼次数&quot;, &quot;11,000&quot;, &quot;环比增加7.45%&quot;], [&quot;接通次数&quot;, &quot;4,215&quot;, &quot;接通率38.32%&quot;], [&quot;总通时&quot;, &quot;99小时25分&quot;, &quot;单次1分25秒&quot;]],
+          chartTitle: &quot;各时段接通率&quot;, chartUnit: &quot;百分比&quot;,
+          bars: [[&quot;13:30至14:30&quot;, 40.40, &quot;40.4%&quot;], [&quot;14:30至15:30&quot;, 35.51, &quot;35.5%&quot;], [&quot;17:00至19:00&quot;, 35.41, &quot;35.4%&quot;], [&quot;12:30至13:30&quot;, 34.90, &quot;34.9%&quot;]],
+          attention: [[&quot;最佳时段&quot;, &quot;1,056 次接通&quot;, &quot;good&quot;], [&quot;最低接通时段&quot;, &quot;32.79%&quot;, &quot;warn&quot;], [&quot;平均通话&quot;, &quot;1分25秒&quot;, &quot;warn&quot;]],
+          metrics: [
+            { name: &quot;外呼覆盖率&quot;, definition: &quot;统计期内至少有一次外呼记录的线索数 ÷ 应跟进线索数。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;通话日期 ✅&quot;, &quot;线索级电话 ❌&quot;], crm: [&quot;首次外呼 ✅&quot;, &quot;外呼次数 ✅&quot;], design: [&quot;线索编号&quot;, &quot;首次外呼时间&quot;] },
+            { name: &quot;外呼接通率&quot;, definition: &quot;接通状态为真的通话次数 ÷ 全部外呼次数。&quot;, unit: &quot;通话；按通话编号去重&quot;, business: [&quot;通话状态 ❌&quot;, &quot;通话编号 ❌&quot;], crm: [&quot;接通次数 ✅&quot;, &quot;外呼次数 ✅&quot;] },
+            { name: &quot;三次三小时触达达成率&quot;, definition: &quot;三小时内完成至少三次外呼尝试的线索数 ÷ 已分配线索数。&quot;, unit: &quot;线索；尝试次数按通话编号去重&quot;, business: [&quot;通话时间序列 ❌&quot;], crm: [&quot;通话记录 ✅&quot;, &quot;触达计时 ❌&quot;], design: [&quot;触达任务编号&quot;, &quot;触达开始时间&quot;, &quot;累计触达次数&quot;, &quot;第三次触达时间&quot;] },
+            { name: &quot;平均通话时长&quot;, definition: &quot;全部接通通话的总时长 ÷ 接通通话次数。&quot;, unit: &quot;秒；按通话编号去重&quot;, business: [&quot;通话时长 ❌&quot;], crm: [&quot;通话时长 ✅&quot;] }
+          ],
+          functions: [
+            [&quot;一键拨号&quot;, true, &quot;销售中心已上线&quot;, &quot;一期&quot;],
+            [&quot;通话录音、文字稿与通话小结&quot;, true, &quot;录音和文字稿可用&quot;, &quot;一期&quot;],
+            [&quot;外呼次数、接通次数和通话时长&quot;, true, &quot;销售中心与团队监控可用&quot;, &quot;一期&quot;],
+            [&quot;三次三小时触达任务&quot;, false, &quot;需新增触达计时&quot;, &quot;一期&quot;],
+            [&quot;时段接通效率看板&quot;, false, &quot;需新增时段聚合&quot;, &quot;二期&quot;]
+          ],
+          smartSales: [
+            [&quot;通话前客户摘要&quot;, &quot;汇总来源、历史联系、意向、顾虑和本次通话目标。&quot;, &quot;四期&quot;],
+            [&quot;智能语音预约确认&quot;, &quot;自动完成预约时间、到场方式和确认结果核验，低置信度转人工。&quot;, &quot;五期&quot;],
+            [&quot;通话后自动小结&quot;, &quot;自动生成通话结论、客户反馈、下一步和回访时间。&quot;, &quot;五期&quot;],
+            [&quot;实时话术提示&quot;, &quot;识别异议和关键节点，提供简明提示，不替代销售判断。&quot;, &quot;六期&quot;]
+          ],
+          smartManager: [
+            [&quot;外呼效率追问&quot;, &quot;追问接通下降的原因，自动拆分时段、线路和销售顾问。&quot;, &quot;四期&quot;],
+            [&quot;自定义通话分析&quot;, &quot;用一句话生成通话量、接通、通时和结果等组合报表。&quot;, &quot;五期&quot;],
+            [&quot;智能线路调控与呼损压降&quot;, &quot;按接通率、线路质量、并发和地域动态分配外呼线路，自动降载并回收失败任务。&quot;, &quot;五期&quot;]
+          ],
+          business: &quot;通话日期可用；通话状态、次数、时长分散在外部数据。&quot;,
+          crm: &quot;拨号、录音、接通次数与通话时长可用；缺多轮触达任务。&quot;,
+          build: &quot;三次三小时任务、未接通回拨、通话结果、时段分析。&quot;
+        },
+        {
+          id: &quot;appointment&quot;, phase: &quot;presale&quot;, name: &quot;预约&quot;, icon: &quot;calendar-check&quot;, priority: &quot;高优先级&quot;,
+          prompt: &quot;看本周线索到预约、接通到预约和预约确认率，按销售顾问排行&quot;,
+          source: &quot;越南11月16日至22日经营看板&quot;,
+          kpis: [[&quot;预约人数&quot;, &quot;673&quot;, &quot;线索到预约20.78%&quot;], [&quot;预约确认&quot;, &quot;419&quot;, &quot;确认率62.26%&quot;], [&quot;接通到预约&quot;, &quot;33.40%&quot;, &quot;目标至少35%&quot;]],
+          chartTitle: &quot;预约漏斗&quot;, chartUnit: &quot;人数&quot;,
+          bars: [[&quot;接通&quot;, 2015, &quot;2,015&quot;], [&quot;预约&quot;, 673, &quot;673&quot;], [&quot;已确认&quot;, 419, &quot;419&quot;], [&quot;到场&quot;, 338, &quot;338&quot;]],
+          attention: [[&quot;未确认预约&quot;, &quot;254 人&quot;, &quot;bad&quot;], [&quot;预约到场&quot;, &quot;50.22%&quot;, &quot;warn&quot;], [&quot;接通到预约&quot;, &quot;33.40%&quot;, &quot;warn&quot;]],
+          metrics: [
+            { name: &quot;线索到预约转化率&quot;, definition: &quot;产生至少一条有效预约的去重线索数 ÷ 同期新增有效线索数。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;线索注册日期 ✅&quot;, &quot;预约日期时间 ✅&quot;], crm: [&quot;线索 ✅&quot;, &quot;预约 ✅&quot;] },
+            { name: &quot;接通到预约转化率&quot;, definition: &quot;产生有效预约的去重线索数 ÷ 已接通去重线索数。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;接通状态 ❌&quot;, &quot;预约 ✅&quot;], crm: [&quot;接通 ✅&quot;, &quot;预约 ✅&quot;] },
+            { name: &quot;预约确认率&quot;, definition: &quot;确认状态为“是”的有效预约数 ÷ 全部有效预约数。&quot;, unit: &quot;预约；按预约编号或线索编号去重&quot;, business: [&quot;预约确认 ✅&quot;], crm: [&quot;预约确认字段 ❌&quot;], design: [&quot;预约确认状态&quot;, &quot;确认时间&quot;, &quot;确认渠道&quot;, &quot;确认人&quot;] },
+            { name: &quot;预约改期率&quot;, definition: &quot;至少发生一次改期的有效预约数 ÷ 全部有效预约数。&quot;, unit: &quot;预约；按预约编号去重&quot;, business: [&quot;改期状态 ✅&quot;], crm: [&quot;改期事件 ❌&quot;], design: [&quot;改期前预约时间&quot;, &quot;改期后预约时间&quot;, &quot;改期原因&quot;, &quot;改期次数&quot;] }
+          ],
+          functions: [
+            [&quot;销售预约与用户预约时间&quot;, true, &quot;销售中心已有&quot;, &quot;一期&quot;],
+            [&quot;已预约、未到课状态&quot;, true, &quot;管理看板与销售中心可用&quot;, &quot;一期&quot;],
+            [&quot;实时可预约时段&quot;, false, &quot;需新增日历与时段库存&quot;, &quot;一期&quot;],
+            [&quot;预约确认、自动提醒&quot;, false, &quot;需新增提醒任务&quot;, &quot;一期&quot;],
+            [&quot;飞书会议与一键改期&quot;, false, &quot;会议回写仍在规划&quot;, &quot;二期&quot;]
+          ],
+          smartSales: [
+            [&quot;预约时段建议&quot;, &quot;结合客户历史联系时段和销售空档推荐预约时间。&quot;, &quot;四期&quot;],
+            [&quot;预约跟进话术&quot;, &quot;根据客户年龄、级别、顾虑和可约时间生成确认话术。&quot;, &quot;五期&quot;]
+          ],
+          smartManager: [
+            [&quot;预约异常解释&quot;, &quot;解释预约确认和到场下降主要发生在哪些人群与时段。&quot;, &quot;四期&quot;],
+            [&quot;自定义预约报表&quot;, &quot;按国家、渠道、团队、时段自由组合预约转化指标。&quot;, &quot;五期&quot;]
+          ],
+          business: &quot;预约时间、确认状态和改期状态可用。&quot;,
+          crm: &quot;预约与未到课状态可用；确认、提醒、改期未闭环。&quot;,
+          build: &quot;可用时段、预约确认、自动提醒、飞书会议、一键改期。&quot;
+        },
+        {
+          id: &quot;attendance&quot;, phase: &quot;sale&quot;, name: &quot;到课&quot;, icon: &quot;presentation&quot;, priority: &quot;高优先级&quot;,
+          prompt: &quot;看到课率、未到课原因和改期回收情况，按销售团队拆分&quot;,
+          source: &quot;第三周指标与11月业务表&quot;,
+          kpis: [[&quot;预约到场&quot;, &quot;338&quot;, &quot;到场率50.22%&quot;], [&quot;体验课完课&quot;, &quot;300&quot;, &quot;完课率88.76%&quot;], [&quot;未到课首因&quot;, &quot;无法联系&quot;, &quot;417 条&quot;]],
+          chartTitle: &quot;到课状态分布&quot;, chartUnit: &quot;记录数&quot;,
+          bars: [[&quot;到场且完课&quot;, 886, &quot;886&quot;], [&quot;取消&quot;, 244, &quot;244&quot;], [&quot;到场未完成&quot;, 123, &quot;123&quot;], [&quot;改期&quot;, 117, &quot;117&quot;]],
+          attention: [[&quot;无法联系&quot;, &quot;417&quot;, &quot;bad&quot;], [&quot;家长忙碌&quot;, &quot;218&quot;, &quot;warn&quot;], [&quot;设备问题&quot;, &quot;40&quot;, &quot;warn&quot;]],
+          metrics: [
+            { name: &quot;预约到场率&quot;, definition: &quot;实际参加体验课的预约人数 ÷ 同期有效预约人数。&quot;, unit: &quot;预约；按预约编号或线索编号去重&quot;, business: [&quot;预约时间 ✅&quot;, &quot;体验课状态 ✅&quot;], crm: [&quot;预约 ✅&quot;, &quot;未到课 ✅&quot;] },
+            { name: &quot;未到课率&quot;, definition: &quot;到期未到课且未取消的预约数 ÷ 同期到期预约数。&quot;, unit: &quot;预约；按预约编号去重&quot;, business: [&quot;体验课状态 ✅&quot;], crm: [&quot;未到课 ✅&quot;] },
+            { name: &quot;未到课原因覆盖率&quot;, definition: &quot;填写了有效未到课原因的预约数 ÷ 全部未到课预约数。&quot;, unit: &quot;预约；按预约编号去重&quot;, business: [&quot;未到课原因 ✅&quot;], crm: [&quot;原因字段 ❌&quot;], design: [&quot;未到课原因&quot;, &quot;原因备注&quot;, &quot;现场记录时间&quot;] },
+            { name: &quot;改期回收率&quot;, definition: &quot;发生改期后最终到课的预约数 ÷ 发生改期的预约数。&quot;, unit: &quot;预约；按预约编号去重&quot;, business: [&quot;改期状态 ✅&quot;, &quot;到场状态 ✅&quot;, &quot;事件串联 ❌&quot;], crm: [&quot;改期事件 ❌&quot;], design: [&quot;改期事件编号&quot;, &quot;改期前预约编号&quot;, &quot;改期后预约编号&quot;, &quot;改期后到场状态&quot;] }
+          ],
+          functions: [
+            [&quot;到课与未到课结果&quot;, true, &quot;销售跟进状态可用&quot;, &quot;一期&quot;],
+            [&quot;咨询完成状态&quot;, true, &quot;销售中心已有&quot;, &quot;一期&quot;],
+            [&quot;课前确认提醒&quot;, false, &quot;需新增自动提醒&quot;, &quot;一期&quot;],
+            [&quot;结构化未到课原因&quot;, false, &quot;需新增原因字段&quot;, &quot;一期&quot;],
+            [&quot;一键改期和召回任务&quot;, false, &quot;需新增改期任务&quot;, &quot;一期&quot;]
+          ],
+          smartSales: [
+            [&quot;到课风险提醒&quot;, &quot;根据确认状态、历史失约和设备信息提示高风险预约。&quot;, &quot;四期&quot;],
+            [&quot;未到课挽回话术&quot;, &quot;按未到课原因生成改期或线上排查沟通草稿。&quot;, &quot;五期&quot;]
+          ],
+          smartManager: [
+            [&quot;失约原因聚类&quot;, &quot;自动归纳主要未到课原因及其影响的团队和时段。&quot;, &quot;四期&quot;],
+            [&quot;自定义到课看板&quot;, &quot;自由组合预约、到场、改期和原因分布。&quot;, &quot;五期&quot;]
+          ],
+          business: &quot;体验课状态、未到课原因和备注完整。&quot;,
+          crm: &quot;未到课与咨询状态可用；原因与改期任务缺失。&quot;,
+          build: &quot;课前确认、未到课原因、自动改期、召回任务。&quot;
+        },
+        {
+          id: &quot;pl&quot;, phase: &quot;sale&quot;, name: &quot;支付意向&quot;, icon: &quot;badge-dollar-sign&quot;, priority: &quot;高优先级&quot;,
+          prompt: &quot;看支付意向分层、高意向停滞和主要拒绝原因，按团队拆分&quot;,
+          source: &quot;越南11月业务表，截至11月24日&quot;,
+          kpis: [[&quot;已填写意向&quot;, &quot;1,000&quot;, &quot;全部2,275条线索&quot;], [&quot;持续跟进&quot;, &quot;455&quot;, &quot;45.5%&quot;], [&quot;高意向&quot;, &quot;24&quot;, &quot;80%与100%&quot;]],
+          chartTitle: &quot;支付意向分层&quot;, chartUnit: &quot;线索数&quot;,
+          bars: [[&quot;持续跟进&quot;, 455, &quot;455&quot;], [&quot;已拒绝&quot;, 272, &quot;272&quot;], [&quot;已支付&quot;, 172, &quot;172&quot;], [&quot;50%意向&quot;, 65, &quot;65&quot;], [&quot;80%或100%&quot;, 24, &quot;24&quot;]],
+          attention: [[&quot;预算过高&quot;, &quot;80&quot;, &quot;warn&quot;], [&quot;无法联系&quot;, &quot;60&quot;, &quot;bad&quot;], [&quot;需家庭决策&quot;, &quot;42&quot;, &quot;warn&quot;]],
+          metrics: [
+            { name: &quot;支付意向层级分布&quot;, definition: &quot;按每条线索最新有效状态统计：100%已决定购买且套餐、价格、付款方式与日期明确；80%购买方向确认但仅剩一项关键条件；50%需求匹配但仍有多项成交异议，尚未形成购买或付款承诺。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;支付意向状态 ✅&quot;], crm: [&quot;结构化支付意向 ❌&quot;], design: [&quot;支付意向等级&quot;, &quot;意向变更时间&quot;, &quot;意向变更人&quot;] },
+            { name: &quot;高意向转支付率&quot;, definition: &quot;意向等级为80%或100%且最终支付的去重线索数 ÷ 同期高意向去重线索数。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;支付意向 ✅&quot;, &quot;订单 ✅&quot;], crm: [&quot;支付意向 ❌&quot;, &quot;订单 ✅&quot;], design: [&quot;支付意向等级&quot;, &quot;意向变更时间&quot;, &quot;支付成功时间&quot;] },
+            { name: &quot;高意向停滞数&quot;, definition: &quot;意向等级为80%或100%、超过承诺付款日期仍未预约、定金或支付的线索数。&quot;, unit: &quot;线索；取最新承诺日期&quot;, business: [&quot;支付意向 ✅&quot;, &quot;承诺日期 ❌&quot;], crm: [&quot;支付意向 ❌&quot;, &quot;下次跟进 ✅&quot;], design: [&quot;支付意向等级&quot;, &quot;承诺付款日期&quot;, &quot;承诺付款方式&quot;, &quot;下一次跟进时间&quot;] },
+            { name: &quot;拒绝原因分布&quot;, definition: &quot;按最新拒绝或犹豫原因对线索分组计数，每条线索只归入一个主原因。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;拒绝原因 ✅&quot;], crm: [&quot;原因枚举 ❌&quot;], design: [&quot;异议原因分类&quot;, &quot;异议记录时间&quot;, &quot;下一次跟进时间&quot;] }
+          ],
+          functions: [
+            [&quot;基础购买意向标记&quot;, true, &quot;销售中心已有购买意向&quot;, &quot;一期&quot;],
+            [&quot;支付意向100%、80%、50%分级&quot;, false, &quot;需新增支付意向历史&quot;, &quot;一期&quot;],
+            [&quot;价格、产品、家庭决策等异议标签&quot;, false, &quot;需新增异议原因枚举&quot;, &quot;一期&quot;],
+            [&quot;承诺付款日期和下一次跟进任务&quot;, false, &quot;需新增承诺与时限&quot;, &quot;一期&quot;],
+            [&quot;高意向停滞队列与主管升级&quot;, false, &quot;需新增停滞规则&quot;, &quot;二期&quot;]
+          ],
+          smartSales: [
+            [&quot;智能语音意向确认&quot;, &quot;按统一问题确认购买意愿、预算、决策人、付款时间与关键异议，结果回写支付意向等级；低置信度转人工复核。&quot;, &quot;五期&quot;],
+            [&quot;意向与异议提取&quot;, &quot;从通话和跟进记录中提取意向等级、顾虑与承诺信息。&quot;, &quot;四期&quot;],
+            [&quot;成交路径建议&quot;, &quot;根据顾虑和套餐适合度推荐下一次沟通重点。&quot;, &quot;五期&quot;],
+            [&quot;关单风险预警&quot;, &quot;识别长期停滞但仍有高意向的客户并提示优先处理。&quot;, &quot;六期&quot;]
+          ],
+          smartManager: [
+            [&quot;停滞客户解释&quot;, &quot;解释高意向客户停滞主要卡在价格、信任还是付款方式。&quot;, &quot;四期&quot;],
+            [&quot;自定义支付意向报表&quot;, &quot;按国家、团队、销售顾问和原因组合意向转化指标。&quot;, &quot;五期&quot;]
+          ],
+          business: &quot;支付意向和拒绝原因字段成熟。&quot;,
+          crm: &quot;尚未结构化沉淀支付意向和异议。&quot;,
+          build: &quot;支付意向历史、异议标签、承诺付款日、停滞队列与升级。&quot;
+        },
+        {
+          id: &quot;deposit&quot;, phase: &quot;sale&quot;, name: &quot;成交与回款&quot;, icon: &quot;badge-check&quot;, priority: &quot;高优先级&quot;,
+          prompt: &quot;看成交金额、订单、目标完成率、差距和回款漏斗，按团队或销售顾问及月周日出数&quot;,
+          source: &quot;越南11月收入表；成交截至11月23日&quot;,
+          kpis: [[&quot;成交金额&quot;, &quot;$33,270&quot;, &quot;181 单成交&quot;], [&quot;成交订单&quot;, &quot;181&quot;, &quot;客单价 $184&quot;], [&quot;目标完成率&quot;, &quot;55.5%&quot;, &quot;月目标差 $26,730&quot;]],
+          chartTitle: &quot;成交与回款漏斗&quot;, chartUnit: &quot;人数、订单与金额分层&quot;,
+          bars: [],
+          attention: [[&quot;剩余应付&quot;, &quot;13,332万 VND&quot;, &quot;bad&quot;], [&quot;高意向未成交&quot;, &quot;24 人&quot;, &quot;warn&quot;], [&quot;已收定金&quot;, &quot;5,233.5万 VND&quot;, &quot;good&quot;]],
+          metrics: [
+            { name: &quot;成交金额与成交订单&quot;, definition: &quot;统计期内收入表有效成交记录的实收金额之和与去重订单数；退款、撤销和重复记录剔除。&quot;, unit: &quot;金额与订单；按订单编号去重&quot;, business: [&quot;支付日期 ✅&quot;, &quot;收入金额 ✅&quot;, &quot;订单编号 ❌&quot;], crm: [&quot;订单编号 ✅&quot;, &quot;订单金额 ✅&quot;, &quot;支付日期 ✅&quot;] },
+            { name: &quot;成交率&quot;, definition: &quot;统计期内形成有效成交订单的去重线索数 ÷ 同期新增有效线索数。&quot;, unit: &quot;线索；按线索编号去重&quot;, business: [&quot;线索注册日期 ✅&quot;, &quot;支付日期 ✅&quot;, &quot;线索与订单关联 ❌&quot;], crm: [&quot;线索编号 ✅&quot;, &quot;订单编号 ✅&quot;, &quot;线索与订单关联 ❌&quot;], design: [&quot;线索编号&quot;, &quot;首购订单编号&quot;, &quot;成交归因时间&quot;] },
+            { name: &quot;客单价&quot;, definition: &quot;统计期内有效成交金额 ÷ 有效成交订单数。&quot;, unit: &quot;金额；按订单编号去重&quot;, business: [&quot;收入金额 ✅&quot;, &quot;订单编号 ❌&quot;], crm: [&quot;订单金额 ✅&quot;, &quot;订单编号 ✅&quot;] },
+            { name: &quot;目标完成率与目标差额&quot;, definition: &quot;成交金额 ÷ 同范围、同周期有效收入目标；目标差额为 max(目标金额减成交金额, 0)，超额时单列显示。&quot;, unit: &quot;金额；按目标版本与周期唯一确定&quot;, business: [&quot;收入金额 ✅&quot;, &quot;收入目标 ❌&quot;, &quot;销售个人目标 ❌&quot;], crm: [&quot;成交金额 ✅&quot;, &quot;目标对象 ❌&quot;, &quot;目标周期 ❌&quot;], design: [&quot;目标对象编号&quot;, &quot;目标范围类型&quot;, &quot;团队编号&quot;, &quot;销售顾问编号&quot;, &quot;目标周期类型&quot;, &quot;周期开始日&quot;, &quot;周期结束日&quot;, &quot;成交金额目标&quot;, &quot;成交订单目标&quot;, &quot;目标币种&quot;, &quot;目标版本与状态&quot;] },
+            { name: &quot;成交与回款漏斗&quot;, definition: &quot;按高意向、有效定金成交、支付入账、剩余应付清收四个阶段观察数量与金额，阶段按订单及时间串联。&quot;, unit: &quot;线索、订单或金额；各阶段按业务编号去重&quot;, business: [&quot;支付意向 ✅&quot;, &quot;已收定金 ✅&quot;, &quot;收入金额 ✅&quot;, &quot;剩余定金 ✅&quot;, &quot;订单串联 ❌&quot;], crm: [&quot;支付意向 ❌&quot;, &quot;定金对象 ❌&quot;, &quot;订单 ✅&quot;, &quot;应付计划 ❌&quot;], design: [&quot;支付意向等级&quot;, &quot;定金单编号&quot;, &quot;订单编号&quot;, &quot;应付计划编号&quot;, &quot;阶段进入时间&quot;, &quot;阶段退出时间&quot;] },
+            { name: &quot;剩余应付与逾期&quot;, definition: &quot;有效成交订单的应付总额减已收金额；逾期金额为应收日期早于当前业务日且余额大于零的部分。&quot;, unit: &quot;金额与订单；按订单编号去重&quot;, business: [&quot;剩余定金 ✅&quot;, &quot;尾款应日 ✅&quot;, &quot;剩余余额 ✅&quot;], crm: [&quot;应付计划 ❌&quot;, &quot;尾款任务 ❌&quot;], design: [&quot;应付总额&quot;, &quot;已收金额&quot;, &quot;剩余应付&quot;, &quot;尾款到期日&quot;, &quot;逾期天数&quot;, &quot;催收状态&quot;] }
+          ],
+          functions: [
+            [&quot;订单、支付日期与成交金额&quot;, true, &quot;订单中心和支付结果可用&quot;, &quot;一期&quot;],
+            [&quot;已付费用户继续跟进&quot;, true, &quot;销售中心已付费列表可用&quot;, &quot;一期&quot;],
+            [&quot;团队及销售月、周、日目标配置&quot;, false, &quot;需新增目标对象与版本&quot;, &quot;一期&quot;],
+            [&quot;目标完成率、差额与超额计算&quot;, false, &quot;依赖目标和订单口径&quot;, &quot;一期&quot;],
+            [&quot;成交、定金、尾款与剩余应付漏斗&quot;, false, &quot;需串联意向、订单与支付计划&quot;, &quot;一期&quot;],
+            [&quot;独立定金单及报价关联&quot;, false, &quot;需在订单管理中扩展&quot;, &quot;一期&quot;],
+            [&quot;剩余应付、到期与逾期队列&quot;, false, &quot;需新增应收和催收任务&quot;, &quot;二期&quot;],
+            [&quot;支付对账、退款与审批审计&quot;, false, &quot;需新增财务闭环&quot;, &quot;二期&quot;]
+          ],
+          smartSales: [
+            [&quot;成交推进建议&quot;, &quot;结合高意向等级、承诺日期和最近沟通，告诉销售今天优先关谁、怎么推进。&quot;, &quot;四期&quot;],
+            [&quot;目标缺口行动清单&quot;, &quot;按销售个人目标和剩余时间拆出今日需完成的成交金额与订单数。&quot;, &quot;五期&quot;],
+            [&quot;回款与逾期沟通草稿&quot;, &quot;按应付余额、到期日和付款方式生成提醒与催收草稿。&quot;, &quot;五期&quot;]
+          ],
+          smartManager: [
+            [&quot;目标缺口追问&quot;, &quot;直接追问哪个团队或销售在月、周、日目标上掉队，并拆出金额与订单缺口。&quot;, &quot;四期&quot;],
+            [&quot;成交与回款归因&quot;, &quot;解释成交下降或剩余应付集中是卡在人群、产品、销售还是付款方式。&quot;, &quot;五期&quot;],
+            [&quot;支付异常识别&quot;, &quot;识别重复支付、退款、金额差异和长期未对账记录。&quot;, &quot;六期&quot;]
+          ],
+          business: &quot;收入金额、支付日期和课包可用，可统计成交；没有团队或销售月周目标，也没有可串联全流程的订单编号。&quot;,
+          crm: &quot;订单金额与支付结果可用；缺正式目标对象、定金单、应付计划与催收闭环。&quot;,
+          build: &quot;目标对象、团队与销售目标、周期版本、成交差距、定金单、支付计划、剩余应付、逾期跟进与对账。&quot;
+        },
+        {
+          id: &quot;first_lesson&quot;, phase: &quot;aftersale&quot;, name: &quot;首课&quot;, icon: &quot;book-open-check&quot;, priority: &quot;中优先级&quot;,
+          prompt: &quot;看新增付费用户首课激活率、未激活人数和课包差异&quot;,
+          source: &quot;越南11月收入表；首课数据缺失&quot;,
+          kpis: [[&quot;已填课包订单&quot;, &quot;181&quot;, &quot;11月收入表&quot;], [&quot;首课激活&quot;, &quot;—&quot;, &quot;❌ 无数据&quot;], [&quot;未激活&quot;, &quot;—&quot;, &quot;❌ 无数据&quot;]],
+          chartTitle: &quot;课包结构&quot;, chartUnit: &quot;订单数&quot;,
+          bars: [[&quot;年包&quot;, 104, &quot;104&quot;], [&quot;半年包&quot;, 75, &quot;75&quot;], [&quot;季度包&quot;, 2, &quot;2&quot;]],
+          attention: [[&quot;首课激活事件&quot;, &quot;缺失&quot;, &quot;bad&quot;], [&quot;课包到首课&quot;, &quot;缺失&quot;, &quot;bad&quot;], [&quot;未激活名单&quot;, &quot;无法生成&quot;, &quot;bad&quot;]],
+          metrics: [
+            { name: &quot;首课激活率&quot;, definition: &quot;完成首课的付费用户数 ÷ 同期新增付费用户数。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;首课事件 ❌&quot;], crm: [&quot;首课事件 ❌&quot;], design: [&quot;新增付费标识&quot;, &quot;首课状态&quot;, &quot;首课开始时间&quot;, &quot;首课完成时间&quot;] },
+            { name: &quot;付费到首课时长&quot;, definition: &quot;首课实际开始时间减首次支付成功时间，按用户取首次值。&quot;, unit: &quot;小时；按用户编号去重&quot;, business: [&quot;支付日期 ✅&quot;, &quot;首课 ❌&quot;], crm: [&quot;支付日期 ✅&quot;, &quot;首课 ❌&quot;], design: [&quot;首次支付成功时间&quot;, &quot;首课实际开始时间&quot;] },
+            { name: &quot;未激活人数&quot;, definition: &quot;已产生有效付费、但在统计截止时仍无首课开始事件的用户数。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;首课 ❌&quot;], crm: [&quot;首课 ❌&quot;], design: [&quot;付费状态&quot;, &quot;首课开始时间&quot;, &quot;未激活原因&quot;] },
+            { name: &quot;首课完成率&quot;, definition: &quot;完成首课的用户数 ÷ 已开始首课的用户数。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;学习事件 ❌&quot;], crm: [&quot;学习事件 ❌&quot;], design: [&quot;首课开始时间&quot;, &quot;首课完成时间&quot;, &quot;上课时长&quot;] }
+          ],
+          functions: [
+            [&quot;用户会员与课包权益&quot;, true, &quot;会员和订单能力可用&quot;, &quot;一期&quot;],
+            [&quot;首课状态与首课课次&quot;, false, &quot;需接入学习事件&quot;, &quot;二期&quot;],
+            [&quot;首课预约和自动提醒&quot;, false, &quot;需新增首课任务&quot;, &quot;二期&quot;],
+            [&quot;未激活名单与责任销售&quot;, false, &quot;需新增激活队列&quot;, &quot;二期&quot;]
+          ],
+          smartSales: [
+            [&quot;语音与短信到课通知&quot;, &quot;自动发送首课提醒、设备检查、上课入口和改期入口，并回收送达与确认状态。&quot;, &quot;四期&quot;],
+            [&quot;首课激活优先级&quot;, &quot;按付费时长、课包和家长可用时间给未激活用户排序。&quot;, &quot;四期&quot;],
+            [&quot;首课沟通建议&quot;, &quot;生成首次使用说明、课程安排和家长提醒话术。&quot;, &quot;五期&quot;]
+          ],
+          smartManager: [
+            [&quot;包型激活差异分析&quot;, &quot;解释不同课包的激活速度与未激活集中原因。&quot;, &quot;四期&quot;],
+            [&quot;自助学习启动报表&quot;, &quot;按国家、课包、团队和销售顾问生成首课报表。&quot;, &quot;五期&quot;]
+          ],
+          business: &quot;仅支付与课包可用，首课不在当前业务表。&quot;,
+          crm: &quot;会员权益可用，首课激活尚未接入。&quot;,
+          build: &quot;首课事件、课包权益、首课预约、未激活队列。&quot;
+        },
+        {
+          id: &quot;follow_lesson&quot;, phase: &quot;aftersale&quot;, name: &quot;跟课&quot;, icon: &quot;monitor-play&quot;, priority: &quot;中优先级&quot;,
+          prompt: &quot;看每周课次完成率、活跃学习和连续未学习用户，按销售顾问拆分&quot;,
+          source: &quot;暂无可生成数据源&quot;,
+          kpis: [[&quot;学习活跃率&quot;, &quot;—&quot;, &quot;❌&quot;], [&quot;周课次完成率&quot;, &quot;—&quot;, &quot;❌&quot;], [&quot;连续缺课&quot;, &quot;—&quot;, &quot;❌&quot;]],
+          chartTitle: &quot;周学习趋势&quot;, chartUnit: &quot;课次&quot;,
+          bars: [],
+          attention: [[&quot;正式课学习计划&quot;, &quot;缺失&quot;, &quot;bad&quot;], [&quot;周课次&quot;, &quot;缺失&quot;, &quot;bad&quot;], [&quot;学习报告&quot;, &quot;缺失&quot;, &quot;bad&quot;]],
+          metrics: [
+            { name: &quot;学习活跃率&quot;, definition: &quot;统计周内至少有一条有效学习记录的用户数 ÷ 有效付费用户数。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;学习记录 ❌&quot;], crm: [&quot;学习记录 ❌&quot;], design: [&quot;学习记录编号&quot;, &quot;学习开始时间&quot;, &quot;有效学习时长&quot;] },
+            { name: &quot;周课次完成率&quot;, definition: &quot;实际完成的主课次数 ÷ 周学习计划安排的主课次数。&quot;, unit: &quot;课次；按课次编号去重&quot;, business: [&quot;课表 ❌&quot;], crm: [&quot;学习计划 ❌&quot;], design: [&quot;学习计划编号&quot;, &quot;周编号&quot;, &quot;计划课次&quot;, &quot;完成课次&quot;] },
+            { name: &quot;最近学习时间&quot;, definition: &quot;用户在统计截止时最近一次有效学习事件的开始时间。&quot;, unit: &quot;用户；取最近事件&quot;, business: [&quot;学习事件 ❌&quot;], crm: [&quot;学习事件 ❌&quot;], design: [&quot;用户编号&quot;, &quot;学习事件编号&quot;, &quot;最近学习时间&quot;] },
+            { name: &quot;连续缺课数&quot;, definition: &quot;从最近一次已安排主课起，连续未完成的主课次数。&quot;, unit: &quot;课次；按课次编号去重&quot;, business: [&quot;周计划 ❌&quot;], crm: [&quot;周计划 ❌&quot;], design: [&quot;计划课次&quot;, &quot;实际完成状态&quot;, &quot;课次日期&quot;] }
+          ],
+          functions: [
+            [&quot;已付费用户与课包信息&quot;, true, &quot;销售中心可查看&quot;, &quot;一期&quot;],
+            [&quot;学习计划与每周课次&quot;, false, &quot;需接入正式课学习计划&quot;, &quot;二期&quot;],
+            [&quot;课程完成与最近学习&quot;, false, &quot;需接入学习事件&quot;, &quot;二期&quot;],
+            [&quot;学习报告与低活跃提醒&quot;, false, &quot;需接入报告和提醒&quot;, &quot;二期&quot;]
+          ],
+          smartSales: [
+            [&quot;学习周报摘要&quot;, &quot;将课程进度、完成率和学习表现压缩成一段家长沟通摘要。&quot;, &quot;四期&quot;],
+            [&quot;个性化跟进建议&quot;, &quot;根据最近学习、完课和兴趣推荐提醒主题与下一次联系时间。&quot;, &quot;五期&quot;]
+          ],
+          smartManager: [
+            [&quot;学习趋势解释&quot;, &quot;追问完课下降来自用户、课程、团队还是产品故障。&quot;, &quot;四期&quot;],
+            [&quot;自定义学习报表&quot;, &quot;按国家、级别、课包、团队和销售顾问生成学习看板。&quot;, &quot;五期&quot;]
+          ],
+          business: &quot;销售业务表不覆盖正式学习进度。&quot;,
+          crm: &quot;学习计划与课程进度仍在规划。&quot;,
+          build: &quot;学习计划、周安排、课次、完课、学习报告、低活跃提醒。&quot;
+        },
+        {
+          id: &quot;risk&quot;, phase: &quot;aftersale&quot;, name: &quot;学习风险&quot;, icon: &quot;triangle-alert&quot;, priority: &quot;中优先级&quot;,
+          prompt: &quot;列出连续七天未学习且完课率下降的风险用户，按风险原因和销售顾问排列&quot;,
+          source: &quot;暂无可生成数据源&quot;,
+          kpis: [[&quot;风险用户&quot;, &quot;—&quot;, &quot;❌&quot;], [&quot;连续未学习&quot;, &quot;—&quot;, &quot;❌&quot;], [&quot;干预触达&quot;, &quot;—&quot;, &quot;❌&quot;]],
+          chartTitle: &quot;风险原因分布&quot;, chartUnit: &quot;用户数&quot;,
+          bars: [],
+          attention: [[&quot;风险规则&quot;, &quot;缺失&quot;, &quot;bad&quot;], [&quot;责任转交&quot;, &quot;缺失&quot;, &quot;bad&quot;], [&quot;干预结果&quot;, &quot;缺失&quot;, &quot;bad&quot;]],
+          metrics: [
+            { name: &quot;风险用户占比&quot;, definition: &quot;命中任一学习风险规则的用户数 ÷ 同期有效付费活跃用户数。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;学习事件 ❌&quot;], crm: [&quot;风险规则 ❌&quot;], design: [&quot;风险规则编号&quot;, &quot;风险等级&quot;, &quot;风险首次命中时间&quot;] },
+            { name: &quot;连续未学习天数&quot;, definition: &quot;当前业务日与最近一次有效学习日期之间的自然日数。&quot;, unit: &quot;天；按用户编号去重&quot;, business: [&quot;学习事件 ❌&quot;], crm: [&quot;学习事件 ❌&quot;], design: [&quot;最近学习时间&quot;, &quot;当前业务日&quot;, &quot;连续未学习天数&quot;] },
+            { name: &quot;风险原因分布&quot;, definition: &quot;按时间、课程、设备、兴趣和教学问题对风险用户进行唯一主原因分类。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;原因字段 ❌&quot;], crm: [&quot;原因字段 ❌&quot;], design: [&quot;风险原因分类&quot;, &quot;原因备注&quot;, &quot;风险责任人&quot;] },
+            { name: &quot;干预触达率&quot;, definition: &quot;至少完成一次有效联系的风险用户数 ÷ 全部风险用户数。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;学习事件 ❌&quot;, &quot;触达 ❌&quot;], crm: [&quot;风险队列 ❌&quot;, &quot;跟进记录 ✅&quot;], design: [&quot;干预负责人&quot;, &quot;干预动作&quot;, &quot;干预时间&quot;, &quot;干预结果&quot;, &quot;风险解除时间&quot;] }
+          ],
+          functions: [
+            [&quot;销售跟进记录&quot;, true, &quot;可用于记录干预&quot;, &quot;一期&quot;],
+            [&quot;学习风险规则与风险队列&quot;, false, &quot;需新增规则引擎&quot;, &quot;二期&quot;],
+            [&quot;跨团队责任转交&quot;, false, &quot;需新增转交和提醒&quot;, &quot;二期&quot;],
+            [&quot;干预结果与风险解除&quot;, false, &quot;需新增结果回写&quot;, &quot;二期&quot;]
+          ],
+          smartSales: [
+            [&quot;风险原因与行动建议&quot;, &quot;根据最近学习、完课和跟进记录建议先查什么、说什么。&quot;, &quot;四期&quot;],
+            [&quot;家长沟通草稿&quot;, &quot;按风险原因生成关怀、沟通或课程调整草稿。&quot;, &quot;五期&quot;]
+          ],
+          smartManager: [
+            [&quot;风险人群归因&quot;, &quot;自动拆解风险集中在哪些国家、课包、团队和课程级别。&quot;, &quot;四期&quot;],
+            [&quot;干预效果追踪&quot;, &quot;比较干预前后活跃和完课变化，识别有效动作。&quot;, &quot;五期&quot;],
+            [&quot;跨团队干预编排&quot;, &quot;把销售、教学、客服和产品问题分派到对应责任人。&quot;, &quot;六期&quot;]
+          ],
+          business: &quot;当前没有学习风险数据。&quot;,
+          crm: &quot;无风险规则、队列和责任闭环。&quot;,
+          build: &quot;风险规则、风险队列、原因标签、跨团队转交、干预结果。&quot;
+        },
+        {
+          id: &quot;renewal&quot;, phase: &quot;aftersale&quot;, name: &quot;续费&quot;, icon: &quot;refresh-cw&quot;, priority: &quot;后续优先级&quot;,
+          prompt: &quot;看未来三十、六十和九十天到期用户、续费率和续费收入，按销售顾问排列&quot;,
+          source: &quot;越南11月收入表；到期日可推导&quot;,
+          kpis: [[&quot;已填课包&quot;, &quot;181&quot;, &quot;可按到期日&quot;], [&quot;61至90天&quot;, &quot;2&quot;, &quot;待续费&quot;], [&quot;90天以上&quot;, &quot;179&quot;, &quot;持续观察&quot;]],
+          chartTitle: &quot;预计到期分布&quot;, chartUnit: &quot;订单数&quot;,
+          bars: [[&quot;0至30天&quot;, 0, &quot;0&quot;], [&quot;31至60天&quot;, 0, &quot;0&quot;], [&quot;61至90天&quot;, 2, &quot;2&quot;], [&quot;90天以上&quot;, 179, &quot;179&quot;]],
+          attention: [[&quot;未填课包&quot;, &quot;22 单&quot;, &quot;warn&quot;], [&quot;续费率&quot;, &quot;❌ 无事件&quot;, &quot;bad&quot;], [&quot;续费收入&quot;, &quot;❌ 无归因&quot;, &quot;bad&quot;]],
+          metrics: [
+            { name: &quot;三十、六十、九十天到期数&quot;, definition: &quot;按支付日期加课包有效期计算预计到期日，并统计未来对应时间桶内的用户数。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;支付日期 ✅&quot;, &quot;付费课包 ✅&quot;], crm: [&quot;支付日期 ✅&quot;, &quot;付费课包 ✅&quot;, &quot;到期日 ❌&quot;], design: [&quot;课包生效时间&quot;, &quot;课包到期时间&quot;, &quot;续费窗口开始日&quot;] },
+            { name: &quot;续费率&quot;, definition: &quot;在到期前形成续费订单的用户数 ÷ 同期到期用户数。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;续费事件 ❌&quot;], crm: [&quot;续费事件 ❌&quot;], design: [&quot;原订单编号&quot;, &quot;续费订单编号&quot;, &quot;续费结果&quot;, &quot;续费支付时间&quot;] },
+            { name: &quot;续费收入&quot;, definition: &quot;标识为续费的订单实付金额之和，退款订单剔除。&quot;, unit: &quot;金额；按订单编号去重&quot;, business: [&quot;订单金额 ✅&quot;, &quot;续费标识 ❌&quot;], crm: [&quot;订单金额 ✅&quot;, &quot;续费标识 ❌&quot;], design: [&quot;续费标识&quot;, &quot;续费金额&quot;, &quot;退款状态&quot;] },
+            { name: &quot;提前续费率&quot;, definition: &quot;在原课包到期日前完成续费的用户数 ÷ 同期到期用户数。&quot;, unit: &quot;用户；按用户编号去重&quot;, business: [&quot;续费事件 ❌&quot;], crm: [&quot;续费事件 ❌&quot;], design: [&quot;原课包到期日&quot;, &quot;续费支付时间&quot;, &quot;续费结果&quot;] }
+          ],
+          functions: [
+            [&quot;已付费用户列表&quot;, true, &quot;销售中心可查看&quot;, &quot;一期&quot;],
+            [&quot;订单金额与支付日期&quot;, true, &quot;订单中心和管理看板可用&quot;, &quot;一期&quot;],
+            [&quot;课包到期日与到期分桶&quot;, false, &quot;需新增到期计算和看板&quot;, &quot;三期&quot;],
+            [&quot;续费任务、报价与流失原因&quot;, false, &quot;需新增续费流程&quot;, &quot;三期&quot;],
+            [&quot;学习表现驱动的续费建议&quot;, false, &quot;依赖学习事件接入&quot;, &quot;三期&quot;]
+          ],
+          smartSales: [
+            [&quot;续费优先名单&quot;, &quot;结合到期时间、完课表现和近期活跃度推荐优先联系顺序。&quot;, &quot;四期&quot;],
+            [&quot;续费方案与话术&quot;, &quot;根据学习成果、课包和家庭情况生成续费方案与沟通草稿。&quot;, &quot;五期&quot;]
+          ],
+          smartManager: [
+            [&quot;到期池预测&quot;, &quot;预测未来各周期的到期规模、续费机会和风险集中点。&quot;, &quot;四期&quot;],
+            [&quot;自定义续费报表&quot;, &quot;自由组合到期、续费、收入、团队和流失原因。&quot;, &quot;五期&quot;],
+            [&quot;流失原因预测&quot;, &quot;识别续费流失前的主要行为信号与高风险人群。&quot;, &quot;六期&quot;]
+          ],
+          business: &quot;支付日期与课包可推导到期，续费事件缺失。&quot;,
+          crm: &quot;订单可查，缺续费任务、学习依据和结果归因。&quot;,
+          build: &quot;到期用户分桶、续费任务、学习表现依据、续费报价、流失原因。&quot;
+        },
+        {
+          id: &quot;referral&quot;, phase: &quot;aftersale&quot;, name: &quot;推荐&quot;, icon: &quot;share-2&quot;, priority: &quot;后续优先级&quot;,
+          prompt: &quot;看推荐关系、有效推荐、付费转化和奖励成本，按销售顾问排行&quot;,
+          source: &quot;越南11月业务表，仅来源标签&quot;,
+          kpis: [[&quot;推荐线索&quot;, &quot;12&quot;, &quot;业务表&quot;], [&quot;推荐收入单&quot;, &quot;2&quot;, &quot;收入表&quot;], [&quot;有效推荐关系&quot;, &quot;—&quot;, &quot;❌&quot;]],
+          chartTitle: &quot;推荐来源规模&quot;, chartUnit: &quot;记录数&quot;,
+          bars: [[&quot;推荐线索&quot;, 12, &quot;12&quot;], [&quot;推荐收入单&quot;, 2, &quot;2&quot;], [&quot;推荐关系&quot;, 0, &quot;❌&quot;], [&quot;奖励事件&quot;, 0, &quot;❌&quot;]],
+          attention: [[&quot;推荐人与被推荐人&quot;, &quot;缺失&quot;, &quot;bad&quot;], [&quot;奖励发放&quot;, &quot;缺失&quot;, &quot;bad&quot;], [&quot;异常审核&quot;, &quot;缺失&quot;, &quot;bad&quot;]],
+          metrics: [
+            { name: &quot;推荐关系数&quot;, definition: &quot;完成绑定且通过唯一性校验的推荐人与被推荐人关系数。&quot;, unit: &quot;关系；按被推荐人用户编号去重&quot;, business: [&quot;推荐来源 ✅&quot;, &quot;关系 ❌&quot;], crm: [&quot;推荐关系 ❌&quot;], design: [&quot;推荐关系编号&quot;, &quot;推荐人用户编号&quot;, &quot;被推荐人用户编号&quot;, &quot;关系绑定时间&quot;, &quot;关系状态&quot;] },
+            { name: &quot;推荐转化率&quot;, definition: &quot;形成有效付费的被推荐用户数 ÷ 已绑定推荐关系数。&quot;, unit: &quot;用户；按被推荐人用户编号去重&quot;, business: [&quot;推荐来源 ✅&quot;, &quot;关系 ❌&quot;], crm: [&quot;推荐关系 ❌&quot;, &quot;订单 ✅&quot;], design: [&quot;推荐关系编号&quot;, &quot;被推荐人用户编号&quot;, &quot;首购订单编号&quot;] },
+            { name: &quot;推荐获客成本&quot;, definition: &quot;已发放推荐奖励成本 ÷ 推荐带来的有效付费用户数。&quot;, unit: &quot;金额；按奖励事件去重&quot;, business: [&quot;奖励记录 ❌&quot;], crm: [&quot;奖励事件 ❌&quot;], design: [&quot;奖励规则编号&quot;, &quot;奖励事件编号&quot;, &quot;奖励成本&quot;, &quot;发放状态&quot;] },
+            { name: &quot;有效推荐占比&quot;, definition: &quot;通过审核且满足活动规则的推荐关系数 ÷ 全部推荐关系数。&quot;, unit: &quot;关系；按被推荐人用户编号去重&quot;, business: [&quot;关系 ❌&quot;], crm: [&quot;审核规则 ❌&quot;], design: [&quot;审核状态&quot;, &quot;审核人&quot;, &quot;审核时间&quot;, &quot;失效原因&quot;] }
+          ],
+          functions: [
+            [&quot;线索来源标记为推荐&quot;, true, &quot;来源字段可用&quot;, &quot;一期&quot;],
+            [&quot;唯一推荐关系与归属&quot;, false, &quot;需新增推荐关系对象&quot;, &quot;三期&quot;],
+            [&quot;首课、首购与社媒推荐奖励&quot;, false, &quot;需新增奖励事件&quot;, &quot;三期&quot;],
+            [&quot;风控审核与权益发放日志&quot;, false, &quot;需新增审核和日志&quot;, &quot;三期&quot;]
+          ],
+          smartSales: [
+            [&quot;推荐候选人识别&quot;, &quot;从高满意度、高完课和高互动用户中推荐可邀请对象。&quot;, &quot;四期&quot;],
+            [&quot;推荐话术生成&quot;, &quot;按用户画像生成活动说明、邀请文案和奖励解释。&quot;, &quot;五期&quot;]
+          ],
+          smartManager: [
+            [&quot;推荐质量分析&quot;, &quot;解释推荐用户与非推荐用户的转化和学习表现差异。&quot;, &quot;四期&quot;],
+            [&quot;自定义增长报表&quot;, &quot;按推荐人、国家、团队和奖励规则组合增长指标。&quot;, &quot;五期&quot;],
+            [&quot;异常与作弊识别&quot;, &quot;提示自荐、重复关系、异常奖励和低质量推荐。&quot;, &quot;六期&quot;]
+          ],
+          business: &quot;只有推荐来源标签，缺推荐关系与奖励。&quot;,
+          crm: &quot;推荐关系、奖励、审核仍处于规划阶段。&quot;,
+          build: &quot;推荐关系、奖励事件、权益发放、社媒审核、推荐归因。&quot;
+        }
+      ];
+
+      const dealTargets = {
+        月: {
+          total: { name: &quot;团队合计&quot;, target: 60000, actual: 33270, orders: 181 },
+          teams: [
+            { name: &quot;麦西团队&quot;, target: 34000, actual: 18935, orders: 102 },
+            { name: &quot;杜伊团队&quot;, target: 22000, actual: 13298, orders: 73 },
+            { name: &quot;专案组&quot;, target: 4000, actual: 1037, orders: 6 }
+          ],
+          sales: [
+            { name: &quot;Vy Nguyễn&quot;, target: 5000, actual: 3910, orders: 19 },
+            { name: &quot;Thùy Dung&quot;, target: 4300, actual: 3174, orders: 16 },
+            { name: &quot;Mia&quot;, target: 3500, actual: 2205, orders: 11 },
+            { name: &quot;Trúc&quot;, target: 3200, actual: 2126, orders: 12 },
+            { name: &quot;Thảo (Lia)&quot;, target: 3000, actual: 2038, orders: 10 }
+          ],
+          scopeNote: &quot;销售表仅列本月成交金额前五名；个人目标为试算口径，不代表已下发目标。&quot;
+        },
+        周: {
+          total: { name: &quot;团队合计&quot;, target: 30000, actual: 10339, orders: 52 },
+          teams: [
+            { name: &quot;麦西团队&quot;, target: 17000, actual: 5579, orders: 27 },
+            { name: &quot;杜伊团队&quot;, target: 11500, actual: 4431, orders: 23 },
+            { name: &quot;专案组&quot;, target: 1500, actual: 329, orders: 2 }
+          ],
+          sales: [
+            { name: &quot;Vy Nguyễn&quot;, target: 2200, actual: 1605, orders: 7 },
+            { name: &quot;Finn&quot;, target: 1300, actual: 895, orders: 4 },
+            { name: &quot;Vy Phạm&quot;, target: 1200, actual: 790, orders: 4 },
+            { name: &quot;Linh&quot;, target: 1100, actual: 727, orders: 4 },
+            { name: &quot;Mia&quot;, target: 1000, actual: 667, orders: 3 }
+          ],
+          scopeNote: &quot;统计区间为11月16日至22日；团队周目标按当前冲刺计划展示，销售个人目标为试算口径。&quot;
+        },
+        日: {
+          total: { name: &quot;团队合计&quot;, target: 3750, actual: 2719, orders: 14 },
+          teams: [
+            { name: &quot;麦西团队&quot;, target: 2100, actual: 1322, orders: 7 },
+            { name: &quot;杜伊团队&quot;, target: 1450, actual: 1036, orders: 5 },
+            { name: &quot;专案组&quot;, target: 200, actual: 361, orders: 2 }
+          ],
+          sales: [
+            { name: &quot;Mia&quot;, target: 800, actual: 677, orders: 3 },
+            { name: &quot;Anna&quot;, target: 350, actual: 238, orders: 1 },
+            { name: &quot;Thùy Dung&quot;, target: 350, actual: 238, orders: 1 },
+            { name: &quot;Lucy&quot;, target: 350, actual: 238, orders: 1 },
+            { name: &quot;Vy Phạm&quot;, target: 350, actual: 215, orders: 1 }
+          ],
+          scopeNote: &quot;统计日为11月23日；团队日目标由当前冲刺计划折算，销售个人目标为试算口径。&quot;
+        }
+      };
+
+      let state = { stage: &quot;assign&quot;, scope: &quot;团队&quot;, period: &quot;月&quot; };
+      try {
+        const saved = window.openai?.widgetState;
+        if (saved &amp;&amp; stages.some(item =&gt; item.id === saved.stage)) {
+          state.stage = saved.stage;
+        }
+        if (saved?.scope === &quot;团队&quot; || saved?.scope === &quot;销售顾问&quot;) state.scope = saved.scope;
+        if (saved?.period &amp;&amp; dealTargets[saved.period]) state.period = saved.period;
+      } catch (_) {}
+
+      const selected = () =&gt; stages.find(item =&gt; item.id === state.stage);
+      const fieldState = text =&gt; text.includes(&quot;❌&quot;) ? &quot;no&quot; : &quot;yes&quot;;
+      const priorityClass = value =&gt; value === &quot;高优先级&quot; ? &quot;high&quot; : value === &quot;中优先级&quot; ? &quot;medium&quot; : &quot;later&quot;;
+      const iterationClass = value =&gt; (
+        value === &quot;一期&quot; ? &quot;phase-one&quot; :
+        value === &quot;二期&quot; ? &quot;phase-two&quot; :
+        value === &quot;三期&quot; ? &quot;phase-three&quot; :
+        value === &quot;四期&quot; ? &quot;phase-four&quot; :
+        value === &quot;五期&quot; ? &quot;phase-five&quot; : &quot;phase-six&quot;
+      );
+
+      function icon(name) {
+        return `&lt;i data-lucide=&quot;${name}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;`;
+      }
+
+      function save() {
+        try {
+          window.openai?.setWidgetState?.({
+            modelContent: { stage: state.stage, scope: state.scope, period: state.period },
+            privateContent: state
+          })?.catch?.(() =&gt; {});
+        } catch (_) {}
+      }
+
+      const numberFormat = new Intl.NumberFormat(&quot;zh-CN&quot;);
+      const money = value =&gt; `$${numberFormat.format(Math.round(value))}`;
+      const percent = value =&gt; `${value.toFixed(1)}%`;
+
+      function renderDealTargets() {
+        const data = dealTargets[state.period];
+        const total = data.total;
+        const gap = total.target - total.actual;
+        const attainment = total.target ? total.actual / total.target * 100 : 0;
+        const detailRows = state.scope === &quot;团队&quot; ? [total, ...data.teams] : data.sales;
+        const periodNames = { 月: &quot;月&quot;, 周: &quot;周&quot;, 日: &quot;日&quot; };
+        document.getElementById(&quot;zd-scope-select&quot;).value = state.scope;
+        document.querySelectorAll(&quot;[data-period]&quot;).forEach(button =&gt; {
+          button.setAttribute(&quot;aria-pressed&quot;, String(button.dataset.period === state.period));
+        });
+        document.getElementById(&quot;zd-target-summary&quot;).innerHTML = `
+          &lt;div class=&quot;zd-target-metric&quot;&gt;&lt;div class=&quot;zd-target-label&quot;&gt;${periodNames[state.period]}目标&lt;/div&gt;&lt;div class=&quot;zd-target-value&quot;&gt;${money(total.target)}&lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&quot;zd-target-metric&quot;&gt;&lt;div class=&quot;zd-target-label&quot;&gt;实际成交&lt;/div&gt;&lt;div class=&quot;zd-target-value&quot;&gt;${money(total.actual)}&lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&quot;zd-target-metric&quot;&gt;&lt;div class=&quot;zd-target-label&quot;&gt;距目标&lt;/div&gt;&lt;div class=&quot;zd-target-value ${gap &gt; 0 ? &quot;gap&quot; : &quot;&quot;}&quot;&gt;${gap &gt; 0 ? `差 ${money(gap)}` : `超 ${money(Math.abs(gap))}`}&lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&quot;zd-target-metric&quot;&gt;&lt;div class=&quot;zd-target-label&quot;&gt;目标完成率&lt;/div&gt;&lt;div class=&quot;zd-target-value&quot;&gt;${percent(attainment)}&lt;/div&gt;&lt;/div&gt;`;
+        const progress = document.getElementById(&quot;zd-target-progress&quot;);
+        progress.setAttribute(&quot;aria-valuenow&quot;, String(Math.min(100, Math.round(attainment))));
+        progress.setAttribute(&quot;aria-valuetext&quot;, `目标完成率 ${percent(attainment)}`);
+        document.getElementById(&quot;zd-target-progress-fill&quot;).style.width = `${Math.min(100, attainment)}%`;
+        document.getElementById(&quot;zd-target-progress-label&quot;).textContent = `目标完成率 ${percent(attainment)}`;
+        document.getElementById(&quot;zd-target-rows&quot;).innerHTML = detailRows.map(row =&gt; {
+          const rowGap = row.target - row.actual;
+          const rowRate = row.target ? row.actual / row.target * 100 : 0;
+          return `
+            &lt;tr class=&quot;${row === total ? &quot;total-row&quot; : &quot;&quot;}&quot;&gt;
+              &lt;td&gt;${row.name}&lt;/td&gt;
+              &lt;td&gt;${money(row.target)}&lt;/td&gt;
+              &lt;td&gt;${money(row.actual)}&lt;/td&gt;
+              &lt;td&gt;${row.orders}&lt;/td&gt;
+              &lt;td class=&quot;${rowGap &lt; 0 ? &quot;over-target&quot; : &quot;&quot;}&quot;&gt;${rowGap &gt;= 0 ? `差 ${money(rowGap)}` : `超 ${money(Math.abs(rowGap))}`}&lt;/td&gt;
+              &lt;td&gt;${percent(rowRate)}&lt;/td&gt;
+            &lt;/tr&gt;`;
+        }).join(&quot;&quot;);
+        document.getElementById(&quot;zd-target-footer&quot;).textContent = `${data.scopeNote} 明细范围：${state.scope}；月目标为团队合计口径，团队日目标按当前冲刺计划折算。`;
+      }
+
+      function renderStages() {
+        phases.forEach(phase =&gt; {
+          const host = document.getElementById(`zd-phase-${phase.id}`);
+          const items = stages.filter(item =&gt; item.phase === phase.id);
+          host.classList.toggle(&quot;active&quot;, items.some(item =&gt; item.id === state.stage));
+          host.innerHTML = `
+            &lt;div class=&quot;zd-phase-head&quot;&gt;&lt;strong&gt;${phase.name}&lt;/strong&gt;&lt;span&gt;${phase.note}&lt;/span&gt;&lt;/div&gt;
+            &lt;div class=&quot;zd-stages&quot;&gt;${items.map(item =&gt; `
+              &lt;button type=&quot;button&quot; class=&quot;zd-stage&quot; data-stage=&quot;${item.id}&quot; aria-pressed=&quot;${item.id === state.stage}&quot;&gt;
+                ${icon(item.icon)}&lt;span&gt;${item.name}&lt;/span&gt;&lt;span class=&quot;zd-stage-priority ${priorityClass(item.priority)}&quot;&gt;${item.priority}&lt;/span&gt;
+              &lt;/button&gt;`).join(&quot;&quot;)}&lt;/div&gt;`;
+          host.querySelectorAll(&quot;[data-stage]&quot;).forEach(button =&gt; {
+            button.addEventListener(&quot;click&quot;, () =&gt; {
+              state.stage = button.dataset.stage;
+              renderAll();
+              save();
+            });
+          });
+        });
+      }
+
+      function renderDashboard() {
+        const item = selected();
+        const isDeal = item.id === &quot;deposit&quot;;
+        const periodData = isDeal ? dealTargets[state.period].total : null;
+        const periodRange = { 月: &quot;11月1日至23日&quot;, 周: &quot;11月16日至22日&quot;, 日: &quot;11月23日&quot; };
+        document.getElementById(&quot;zd-dashboard-name&quot;).textContent = `管理需求 · ${item.name} · ${item.priority}`;
+        document.getElementById(&quot;zd-source&quot;).textContent = item.source;
+        document.getElementById(&quot;zd-deal-panel&quot;).hidden = !isDeal;
+        document.getElementById(&quot;zd-intent-scale&quot;).hidden = item.id !== &quot;pl&quot;;
+        if (isDeal) {
+          const gap = periodData.target - periodData.actual;
+          const attainment = periodData.actual / periodData.target * 100;
+          const averageOrder = periodData.actual / periodData.orders;
+          document.getElementById(&quot;zd-kpis&quot;).innerHTML = [
+            [&quot;成交金额&quot;, money(periodData.actual), `${periodData.orders} 单 · ${periodRange[state.period]}`],
+            [&quot;成交订单&quot;, numberFormat.format(periodData.orders), `客单价 ${money(averageOrder)}`],
+            [&quot;目标完成率&quot;, percent(attainment), `${state.period}目标差 ${money(gap)}`]
+          ].map(([label, value, note]) =&gt; `
+            &lt;div class=&quot;zd-kpi&quot;&gt;
+              &lt;div class=&quot;zd-kpi-name&quot;&gt;${label}&lt;/div&gt;
+              &lt;div class=&quot;zd-kpi-value&quot;&gt;${value}&lt;/div&gt;
+              &lt;div class=&quot;zd-kpi-note&quot;&gt;${note}&lt;/div&gt;
+            &lt;/div&gt;`).join(&quot;&quot;);
+          renderDealTargets();
+        } else {
+          document.getElementById(&quot;zd-kpis&quot;).innerHTML = item.kpis.map(([label, value, note]) =&gt; `
+          &lt;div class=&quot;zd-kpi&quot;&gt;
+            &lt;div class=&quot;zd-kpi-name&quot;&gt;${label}&lt;/div&gt;
+            &lt;div class=&quot;zd-kpi-value&quot;&gt;${value}&lt;/div&gt;
+            &lt;div class=&quot;zd-kpi-note&quot;&gt;${note}&lt;/div&gt;
+          &lt;/div&gt;`).join(&quot;&quot;);
+        }
+        document.getElementById(&quot;zd-chart-title&quot;).textContent = item.chartTitle;
+        document.getElementById(&quot;zd-chart-unit&quot;).textContent = item.chartUnit;
+        if (isDeal) {
+          document.getElementById(&quot;zd-bars&quot;).innerHTML = `
+            &lt;div class=&quot;zd-funnel&quot; aria-label=&quot;成交与回款漏斗&quot;&gt;
+              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;高意向&lt;/span&gt;&lt;strong&gt;24 人&lt;/strong&gt;&lt;small&gt;80% 或 100% 意向&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;定金成交&lt;/span&gt;&lt;strong&gt;41 单&lt;/strong&gt;&lt;small&gt;已收 5,233.5万 VND&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;支付入账&lt;/span&gt;&lt;strong&gt;181 单&lt;/strong&gt;&lt;small&gt;成交 $33,270&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;剩余应付清收&lt;/span&gt;&lt;strong&gt;13,332万 VND&lt;/strong&gt;&lt;small&gt;全部成交待收余额&lt;/small&gt;&lt;/div&gt;
+            &lt;/div&gt;`;
+        } else if (!item.bars.length) {
+          document.getElementById(&quot;zd-bars&quot;).innerHTML = `&lt;div class=&quot;zd-empty&quot;&gt;❌ 当前缺少可生成图表的数据字段&lt;br&gt;接入后可自动生成趋势与分布&lt;/div&gt;`;
+        } else {
+          const max = Math.max(...item.bars.map(row =&gt; row[1]), 1);
+          document.getElementById(&quot;zd-bars&quot;).innerHTML = item.bars.map(([label, value, display]) =&gt; `
+            &lt;div class=&quot;zd-bar-row&quot; aria-label=&quot;${label} ${display}&quot;&gt;
+              &lt;span class=&quot;zd-bar-label&quot;&gt;${label}&lt;/span&gt;
+              &lt;span class=&quot;zd-track&quot;&gt;&lt;span class=&quot;zd-fill&quot; style=&quot;width:${value === 0 ? 0 : Math.max(2, value / max * 100)}%&quot;&gt;&lt;/span&gt;&lt;/span&gt;
+              &lt;span class=&quot;zd-bar-value&quot;&gt;${display}&lt;/span&gt;
+            &lt;/div&gt;`).join(&quot;&quot;);
+        }
+        document.getElementById(&quot;zd-attention-count&quot;).textContent = `${item.attention.length} 项`;
+        document.getElementById(&quot;zd-attention&quot;).innerHTML = item.attention.map(([label, value, tone]) =&gt; `
+          &lt;div class=&quot;zd-list-item&quot;&gt;
+            &lt;strong&gt;${tone === &quot;bad&quot; ? &quot;❌&quot; : tone === &quot;good&quot; ? &quot;✅&quot; : &quot;!&quot;} ${label}&lt;/strong&gt;
+            &lt;span&gt;${value}&lt;/span&gt;
+          &lt;/div&gt;`).join(&quot;&quot;);
+        const available = item.functions.filter(fn =&gt; fn[1]).length;
+        document.getElementById(&quot;zd-function-count&quot;).textContent = `已具备 ${available} 项 / 共 ${item.functions.length} 项`;
+        document.getElementById(&quot;zd-functions&quot;).innerHTML = item.functions.map(([name, implemented, note, priority]) =&gt; `
+          &lt;div class=&quot;zd-function ${implemented ? &quot;has&quot; : &quot;missing&quot;}&quot;&gt;
+            &lt;span class=&quot;zd-function-symbol&quot;&gt;${implemented ? &quot;✅&quot; : &quot;❌&quot;}&lt;/span&gt;
+            &lt;span class=&quot;zd-function-name&quot;&gt;${name}&lt;span class=&quot;zd-function-note&quot;&gt;${note}&lt;/span&gt;&lt;/span&gt;
+            &lt;span class=&quot;zd-function-priority ${iterationClass(priority)}&quot;&gt;${priority}&lt;/span&gt;
+          &lt;/div&gt;`).join(&quot;&quot;);
+        document.getElementById(&quot;zd-intelligence-name&quot;).textContent = `智能能力 · ${item.name}`;
+        document.getElementById(&quot;zd-intelligence-note&quot;).textContent = &quot;建设节奏从四期开始，前三期先完成业务数据与流程闭环&quot;;
+        const renderAi = list =&gt; list.map(([name, note, phase]) =&gt; `
+          &lt;div class=&quot;zd-ai-capability&quot;&gt;
+            &lt;strong&gt;&lt;span&gt;${name}&lt;/span&gt;&lt;span class=&quot;zd-function-priority ${iterationClass(phase)}&quot;&gt;${phase}&lt;/span&gt;&lt;/strong&gt;
+            &lt;p&gt;${note}&lt;/p&gt;
+          &lt;/div&gt;`).join(&quot;&quot;);
+        document.getElementById(&quot;zd-ai-sales&quot;).innerHTML = renderAi(item.smartSales);
+        document.getElementById(&quot;zd-ai-manager&quot;).innerHTML = renderAi(item.smartManager);
+      }
+
+      function renderMetrics() {
+        const item = selected();
+        document.getElementById(&quot;zd-metrics&quot;).innerHTML = item.metrics.map(metric =&gt; {
+          const businessReady = metric.business.every(field =&gt; fieldState(field) === &quot;yes&quot;);
+          const crmReady = metric.crm.every(field =&gt; fieldState(field) === &quot;yes&quot;);
+          return `
+            &lt;div class=&quot;zd-metric&quot;&gt;
+              &lt;div&gt;
+                &lt;div class=&quot;zd-metric-name&quot;&gt;${metric.name}&lt;/div&gt;
+                &lt;div class=&quot;zd-definition&quot;&gt;定义：${metric.definition}&lt;/div&gt;
+                &lt;div class=&quot;zd-unit&quot;&gt;${metric.unit}&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;zd-field-groups&quot;&gt;
+                &lt;div class=&quot;zd-field-line&quot;&gt;&lt;em&gt;业务表&lt;/em&gt;&lt;div class=&quot;zd-fields&quot;&gt;${metric.business.map(field =&gt; `&lt;span class=&quot;zd-field ${fieldState(field)}&quot;&gt;${field}&lt;/span&gt;`).join(&quot;&quot;)}&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;zd-field-line&quot;&gt;&lt;em&gt;客户管理系统&lt;/em&gt;&lt;div class=&quot;zd-fields&quot;&gt;${metric.crm.map(field =&gt; `&lt;span class=&quot;zd-field ${fieldState(field)}&quot;&gt;${field}&lt;/span&gt;`).join(&quot;&quot;)}&lt;/div&gt;&lt;/div&gt;
+                ${metric.design?.length ? `&lt;div class=&quot;zd-field-line design&quot;&gt;&lt;em&gt;补入客户管理系统&lt;/em&gt;&lt;div class=&quot;zd-fields&quot;&gt;${metric.design.map(field =&gt; `&lt;span class=&quot;zd-field no&quot;&gt;${field} ❌&lt;/span&gt;`).join(&quot;&quot;)}&lt;/div&gt;&lt;/div&gt;` : &quot;&quot;}
+                &lt;div class=&quot;zd-unit&quot;&gt;${businessReady || crmReady ? &quot;✅ 可直接生成&quot; : &quot;❌ 字段未补齐&quot;}&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;`;
+        }).join(&quot;&quot;);
+        const ready = item.metrics.filter(metric =&gt; metric.business.every(field =&gt; fieldState(field) === &quot;yes&quot;) || metric.crm.every(field =&gt; fieldState(field) === &quot;yes&quot;)).length;
+        document.getElementById(&quot;zd-readiness&quot;).textContent = `${ready}/${item.metrics.length} 项指标可生成；其余需先补字段。`;
+        document.getElementById(&quot;zd-business&quot;).textContent = item.business;
+        document.getElementById(&quot;zd-crm&quot;).textContent = item.crm;
+        document.getElementById(&quot;zd-build&quot;).textContent = item.build;
+      }
+
+      function renderAll() {
+        renderStages();
+        renderDashboard();
+        renderMetrics();
+        if (globalThis.lucide) lucide.createIcons({ attrs: { width: 13, height: 13 } });
+      }
+
+      document.getElementById(&quot;zd-scope-select&quot;).addEventListener(&quot;change&quot;, event =&gt; {
+        state.scope = event.target.value;
+        renderDashboard();
+        save();
+      });
+      document.querySelectorAll(&quot;[data-period]&quot;).forEach(button =&gt; {
+        button.addEventListener(&quot;click&quot;, () =&gt; {
+          state.period = button.dataset.period;
+          renderDashboard();
+          save();
+        });
+      });
+
+      renderAll();
+    })();
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+(() =&gt; {
+  let positioningReady = window.FloatingUIDOM
+    ? Promise.resolve(window.FloatingUIDOM)
+    : null;
+  const loadScript = (src) =&gt; new Promise((resolve, reject) =&gt; {
+    const script = document.createElement(&quot;script&quot;);
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = () =&gt; {
+      script.remove();
+      reject(new Error(&quot;Could not load tooltip positioning&quot;));
+    };
+    document.head.appendChild(script);
+  });
+  const loadPositioning = async () =&gt; {
+    const domUrl = &quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;;
+    const preload = document.createElement(&quot;link&quot;);
+    preload.rel = &quot;preload&quot;;
+    preload.as = &quot;script&quot;;
+    preload.href = domUrl;
+    document.head.appendChild(preload);
+    try {
+      if (window.FloatingUICore == null) {
+        await loadScript(&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;);
+      }
+      await loadScript(domUrl);
+      return window.FloatingUIDOM;
+    } finally {
+      preload.remove();
+    }
+  };
+  const getPositioning = () =&gt; positioningReady ??= loadPositioning().catch((error) =&gt; {
+    positioningReady = null;
+    throw error;
+  });
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (event) =&gt; {
+    for (const target of event.composedPath()) {
+      if (target?.nodeType === Node.ELEMENT_NODE) {
+        const trigger = target.closest(&quot;[data-tooltip]&quot;);
+        if (trigger) return trigger;
+      }
+    }
+    return null;
+  };
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating, { computePosition, flip, offset, shift, size }) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    const request = positionRequest;
+    void getPositioning().then((positioning) =&gt; {
+      if (request !== positionRequest || !trigger.isConnected) return;
+      autoUpdateCleanup = positioning.autoUpdate(trigger, floating, () =&gt; {
+        updatePosition(trigger, floating, positioning);
+      });
+    }).catch(() =&gt; {
+      if (request === positionRequest) closeTooltip(false);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) =&gt; {
+    lastPointerWasTouch =
+      event.type === &quot;pointerdown&quot; &amp;&amp; event.pointerType === &quot;touch&quot;;
+  };
+  const handleTouchClick = (event) =&gt; {
+    const isTouch = event.pointerType === &quot;touch&quot; || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch &amp;&amp; activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() =&gt; {
+      if (activeTrigger === trigger &amp;&amp; !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) =&gt; {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handlers = {
+    pointerover: handlePointerOpen,
+    pointerdown: handlePointer,
+    pointercancel: handlePointer,
+    click: handleTouchClick,
+    pointerout: handleLeave,
+    focusin: handleFocusIn,
+    focusout: handleLeave,
+    keydown: handleKeyDown,
+    contextmenu: handleContextMenu,
+  };
+  const roots = new Map();
+  const handledEvents = new WeakSet();
+  const handleEvent = (event) =&gt; {
+    if (handledEvents.has(event)) return;
+    handledEvents.add(event);
+    handlers[event.type](event);
+  };
+  const discoverRoots = (node) =&gt; {
+    if (node.shadowRoot) listen(node.shadowRoot);
+    for (const element of node.querySelectorAll(&quot;*&quot;)) {
+      if (element.shadowRoot) listen(element.shadowRoot);
+    }
+  };
+  const listen = (root) =&gt; {
+    if (roots.has(root)) return;
+    for (const type of Object.keys(handlers)) root.addEventListener(type, handleEvent);
+    const observer = new window.MutationObserver((records) =&gt; {
+      for (const { addedNodes } of records) {
+        for (const node of addedNodes) {
+          if (node.nodeType === Node.ELEMENT_NODE) discoverRoots(node);
+        }
+      }
+      for (const [root, cleanup] of roots) {
+        if (root.host &amp;&amp; !root.host.isConnected) {
+          cleanup();
+          roots.delete(root);
+        }
+      }
+      if (activeTrigger &amp;&amp; !activeTrigger.isConnected) closeTooltip(false);
+    });
+    observer.observe(root, { childList: true, subtree: true });
+    roots.set(root, () =&gt; {
+      observer.disconnect();
+      for (const type of Object.keys(handlers)) root.removeEventListener(type, handleEvent);
+    });
+    discoverRoots(root);
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    for (const cleanup of roots.values()) cleanup();
+    roots.clear();
+    tooltip = null;
+  };
+
+  // Events between children of one shadow root never reach the document.
+  listen(document);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-tabs&quot;&gt;
+(() =&gt; {
+  const selector = &#x27;.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]&#x27;;
+  const disabled = &#x27;:disabled,[aria-disabled=&quot;true&quot;]&#x27;;
+  const selectTab = (selected) =&gt; {
+    const panelId = selected.getAttribute(&quot;aria-controls&quot;);
+    for (const tab of selected.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;)) {
+      const active = tab === selected;
+      tab.classList.toggle(&quot;active&quot;, active);
+      tab.setAttribute(&quot;aria-selected&quot;, String(active));
+      const id = tab.getAttribute(&quot;aria-controls&quot;);
+      const panel = id &amp;&amp; document.getElementById(id);
+      if (panel != null) {
+        panel.hidden = id !== panelId;
+        if (!panel.hidden &amp;&amp; selected.id) {
+          panel.setAttribute(&quot;aria-labelledby&quot;, selected.id);
+        }
+      }
+    }
+  };
+  const interact = (event) =&gt; {
+    const tab = event.target?.closest?.(selector);
+    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
+      return;
+    }
+    if (event.type === &quot;click&quot;) {
+      selectTab(tab);
+      return;
+    }
+    const tabs = Array.from(
+      tab.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;),
+    ).filter((candidate) =&gt; !candidate.matches(disabled));
+    const current = tabs.indexOf(tab);
+    let next;
+    if (event.key === &quot;ArrowRight&quot; || event.key === &quot;ArrowDown&quot;) {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === &quot;ArrowLeft&quot; || event.key === &quot;ArrowUp&quot;) {
+      next = (current + tabs.length - 1) % tabs.length;
+    } else if (event.key === &quot;Home&quot;) {
+      next = 0;
+    } else if (event.key === &quot;End&quot;) {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    selectTab(tabs[next]);
+  };
+
+  for (const list of document.querySelectorAll(&#x27;.nav[role=&quot;tablist&quot;]&#x27;)) {
+    const selected =
+      list.querySelector(&#x27;[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;].active&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;]&#x27;);
+    if (selected != null) {
+      selectTab(selected);
+    }
+  }
+  document.addEventListener(&quot;click&quot;, interact);
+  document.addEventListener(&quot;keydown&quot;, interact);
+  window.addEventListener(&quot;pagehide&quot;, () =&gt; {
+    document.removeEventListener(&quot;click&quot;, interact);
+    document.removeEventListener(&quot;keydown&quot;, interact);
+  }, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-carousel&quot;&gt;
+  (() =&gt; {
+    for (const root of document.querySelectorAll(&quot;.viz-carousel&quot;)) {
+      const panels = Array.from(
+        root.querySelectorAll(&quot;:scope &gt; [data-variant]&quot;),
+      );
+      if (panels.length === 0) {
+        continue;
+      }
+      root.setAttribute(&quot;role&quot;, &quot;group&quot;);
+      panels.forEach((panel, index) =&gt; {
+        panel.hidden = index !== 0;
+        panel.setAttribute(&quot;role&quot;, &quot;group&quot;);
+        if (!panel.hasAttribute(&quot;aria-label&quot;)) {
+          panel.setAttribute(&quot;aria-label&quot;, panel.dataset.variant);
+        }
+      });
+      root.dataset.activeVariant = panels[0].dataset.variant;
+      if (panels.length === 1) {
+        continue;
+      }
+
+      const controls = document.createElement(&quot;div&quot;);
+      controls.className = &quot;viz-carousel-controls&quot;;
+      // Portable copy of the settings dropdown&#x27;s legacy glyph; no 14px icon-package preset matches it.
+      // https://github.com/openai/openai/blob/master/codex/codex-apps/webview/src/icons/chevron.svg
+      controls.innerHTML = `
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-previous cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+      &lt;details class=&quot;viz-carousel-picker&quot;&gt;
+        &lt;summary class=&quot;cursor-interaction&quot;&gt;
+          &lt;span class=&quot;viz-carousel-count tabular-nums&quot;&gt;&lt;/span&gt;
+          &lt;span class=&quot;viz-carousel-name&quot;&gt;&lt;/span&gt;
+          &lt;svg class=&quot;viz-carousel-caret&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 21&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;
+            &lt;path d=&quot;M15.2793 7.71101C15.539 7.45131 15.961 7.45131 16.2207 7.71101C16.4804 7.97071 16.4804 8.39272 16.2207 8.65242L10.4707 14.4024C10.211 14.6621 9.78902 14.6621 9.52932 14.4024L3.77932 8.65242L3.69436 8.54792C3.52385 8.28979 3.55205 7.93828 3.77932 7.71101C4.00659 7.48374 4.3581 7.45554 4.61623 7.62605L4.72073 7.71101L10 12.9903L15.2793 7.71101Z&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;0.6&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/summary&gt;
+        &lt;div class=&quot;viz-carousel-options&quot;&gt;&lt;/div&gt;
+      &lt;/details&gt;
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-next cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;`;
+      const previous = controls.querySelector(&quot;.viz-carousel-previous&quot;);
+      const next = controls.querySelector(&quot;.viz-carousel-next&quot;);
+      const picker = controls.querySelector(&quot;.viz-carousel-picker&quot;);
+      const summary = picker.querySelector(&quot;summary&quot;);
+      const count = controls.querySelector(&quot;.viz-carousel-count&quot;);
+      const name = controls.querySelector(&quot;.viz-carousel-name&quot;);
+      const options = controls.querySelector(&quot;.viz-carousel-options&quot;);
+      const status = document.createElement(&quot;span&quot;);
+      status.className = &quot;sr-only&quot;;
+      status.setAttribute(&quot;role&quot;, &quot;status&quot;);
+      status.setAttribute(&quot;aria-live&quot;, &quot;polite&quot;);
+      status.setAttribute(&quot;aria-atomic&quot;, &quot;true&quot;);
+      previous.setAttribute(
+        &quot;aria-label&quot;,
+        root.dataset.previousLabel ?? &quot;Previous variant&quot;,
+      );
+      next.setAttribute(&quot;aria-label&quot;, root.dataset.nextLabel ?? &quot;Next variant&quot;);
+
+      let active = 0;
+      let mousePointerId = null;
+      let summaryPointerHandled = false;
+      summary.addEventListener(&quot;pointerdown&quot;, (event) =&gt; {
+        summaryPointerHandled =
+          event.pointerType === &quot;mouse&quot; &amp;&amp; event.button === 0 &amp;&amp; !event.ctrlKey;
+        if (!summaryPointerHandled) {
+          return;
+        }
+        event.preventDefault();
+        summary.focus({ preventScroll: true });
+        picker.open = !picker.open;
+        mousePointerId = picker.open ? event.pointerId : null;
+      });
+      summary.addEventListener(&quot;click&quot;, (event) =&gt; {
+        if (summaryPointerHandled &amp;&amp; event.detail &gt; 0) {
+          event.preventDefault();
+        }
+      });
+      const choices = panels.map((panel, index) =&gt; {
+        const choice = document.createElement(&quot;button&quot;);
+        choice.type = &quot;button&quot;;
+        choice.className = &quot;cursor-interaction&quot;;
+        choice.textContent = panel.dataset.variant;
+        choice.addEventListener(&quot;click&quot;, () =&gt; {
+          select(index);
+          summary.focus();
+        });
+        choice.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+          if (
+            picker.open &amp;&amp;
+            event.pointerType === &quot;mouse&quot; &amp;&amp;
+            event.button === 0 &amp;&amp;
+            event.pointerId === mousePointerId
+          ) {
+            choice.click();
+          }
+        });
+        options.appendChild(choice);
+        return choice;
+      });
+      const select = (index) =&gt; {
+        const changed = active !== index;
+        active = index;
+        panels.forEach((panel, position) =&gt; {
+          panel.hidden = position !== active;
+          choices[position].setAttribute(
+            &quot;aria-current&quot;,
+            String(position === active),
+          );
+        });
+        root.dataset.activeVariant = panels[active].dataset.variant;
+        count.textContent = `${active + 1} / ${panels.length}`;
+        name.textContent = panels[active].dataset.variant;
+        picker.open = false;
+        mousePointerId = null;
+        if (changed) {
+          status.textContent = `${count.textContent}: ${name.textContent}`;
+        }
+      };
+      previous.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + panels.length - 1) % panels.length),
+      );
+      next.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + 1) % panels.length),
+      );
+      picker.addEventListener(&quot;keydown&quot;, (event) =&gt; {
+        if (event.key === &quot;Escape&quot; &amp;&amp; picker.open) {
+          event.preventDefault();
+          picker.open = false;
+          mousePointerId = null;
+          summary.focus();
+          return;
+        }
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        const index = choices.indexOf(document.activeElement);
+        let nextIndex;
+        if (event.key === &quot;ArrowDown&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + 1) % choices.length;
+        } else if (event.key === &quot;ArrowUp&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + choices.length - 1) % choices.length;
+        } else if (picker.open &amp;&amp; event.key === &quot;Home&quot;) {
+          nextIndex = 0;
+        } else if (picker.open &amp;&amp; event.key === &quot;End&quot;) {
+          nextIndex = choices.length - 1;
+        } else {
+          return;
+        }
+        event.preventDefault();
+        picker.open = true;
+        choices[nextIndex].focus();
+      });
+      picker.addEventListener(&quot;focusout&quot;, (event) =&gt; {
+        if (!picker.contains(event.relatedTarget)) {
+          picker.open = false;
+          mousePointerId = null;
+        }
+      });
+      const dismiss = (event) =&gt; {
+        if (!summary.contains(event.target)) {
+          mousePointerId = null;
+        }
+        if (!picker.contains(event.target)) {
+          picker.open = false;
+        }
+      };
+      const endPointerSelection = () =&gt; {
+        mousePointerId = null;
+      };
+      const sizePicker = () =&gt; {
+        root.style.setProperty(
+          &quot;--viz-carousel-picker-height&quot;,
+          `${picker.open ? options.offsetHeight : 0}px`,
+        );
+      };
+      picker.addEventListener(&quot;toggle&quot;, sizePicker);
+      window.addEventListener(&quot;resize&quot;, sizePicker);
+      document.addEventListener(&quot;pointerdown&quot;, dismiss);
+      document.addEventListener(&quot;pointerup&quot;, endPointerSelection);
+      document.addEventListener(&quot;pointercancel&quot;, endPointerSelection);
+      window.addEventListener(&quot;blur&quot;, endPointerSelection);
+      window.addEventListener(
+        &quot;pagehide&quot;,
+        () =&gt; {
+          document.removeEventListener(&quot;pointerdown&quot;, dismiss);
+          document.removeEventListener(&quot;pointerup&quot;, endPointerSelection);
+          document.removeEventListener(&quot;pointercancel&quot;, endPointerSelection);
+          window.removeEventListener(&quot;blur&quot;, endPointerSelection);
+          window.removeEventListener(&quot;resize&quot;, sizePicker);
+        },
+        { once: true },
+      );
+      root.append(controls, status);
+      select(0);
+    }
+  })();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+
+<script>(() => {
+  const frame = document.getElementById("codex-visualization");
+  if (!(frame instanceof HTMLIFrameElement)) {
+    return;
+  }
+  const isShare = document.documentElement.classList.contains(
+    "visualization-share-root",
+  );
+  let viewportHeight = globalThis.innerHeight;
+  let sizeFingerprint = null;
+  let sizeWriteTimeout;
+  let lastSize = null;
+  let pendingSize = null;
+  const storageKey = `codex:visualization-widget-state-v2:${JSON.stringify([
+    globalThis.location.pathname,
+    globalThis.location.search,
+  ])}`;
+  const sizeStorageKey = `${storageKey}:share-size-v1`;
+  const parseState = (serializedState) => {
+    if (
+      typeof serializedState !== "string" ||
+      new TextEncoder().encode(serializedState).length > 16 * 1024
+    ) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    /** @type {unknown} */
+    const state = JSON.parse(serializedState);
+    if (
+      state == null ||
+      typeof state !== "object" ||
+      Array.isArray(state) ||
+      ("imageIds" in state &&
+        (!Array.isArray(state.imageIds) || state.imageIds.length > 0))
+    ) {
+      throw new TypeError("Widget state must be a JSON object");
+    }
+    const storedState = { modelContent: null, privateContent: null, ...state };
+    const canonicalState = JSON.stringify(
+      storedState,
+      (_key, /** @type {unknown} */ value) => {
+        if (typeof value === "number" && !Number.isFinite(value)) {
+          throw new TypeError("Widget state must contain finite numbers");
+        }
+        return value;
+      },
+    );
+    if (new TextEncoder().encode(canonicalState).length > 16 * 1024) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    return storedState;
+  };
+  let storage = null;
+  let state = null;
+  try {
+    const localStorage = globalThis.localStorage;
+    const probeKey = `${storageKey}:probe`;
+    localStorage.setItem(probeKey, "1");
+    localStorage.removeItem(probeKey);
+    storage = localStorage;
+    const savedState = storage.getItem(storageKey);
+    if (savedState != null) {
+      try {
+        state = parseState(savedState);
+      } catch {
+        // Invalid saved state does not disable future writes.
+      }
+    }
+  } catch {
+    storage = null;
+  }
+  const persistSize = () => {
+    globalThis.clearTimeout(sizeWriteTimeout);
+    if (pendingSize == null) {
+      return;
+    }
+    try {
+      storage?.setItem(sizeStorageKey, pendingSize);
+    } catch {
+      // A denied or full cache must not affect the visualization.
+    }
+    pendingSize = null;
+  };
+  if (isShare) {
+    globalThis.addEventListener("pagehide", persistSize);
+  }
+  const initialGlobals = {
+    widgetState: state,
+    statePersistence: storage == null ? "none" : "local",
+  };
+
+  const channel = new MessageChannel();
+  channel.port1.addEventListener("message", (event) => {
+    const data = event.data;
+    if (typeof data !== "object" || data == null) {
+      return;
+    }
+    if (data.type === "widget-state-write") {
+      if (!Number.isSafeInteger(data.id) || data.id <= 0) {
+        return;
+      }
+      let ok = false;
+      try {
+        if (storage != null) {
+          const state = parseState(data.state);
+          storage.setItem(storageKey, JSON.stringify(state));
+          ok = true;
+        }
+      } catch {
+        // Storage denial, quota limits, and invalid state return a failed receipt.
+      }
+      channel.port1.postMessage({
+        type: "widget-state-result",
+        id: data.id,
+        ok,
+      });
+      return;
+    }
+    if (data.type === "height") {
+      const height = data.height;
+      if (
+        typeof height !== "number" ||
+        !Number.isFinite(height) ||
+        height < 0
+      ) {
+        return;
+      }
+      if (height <= 10_000) {
+        const width = isShare && storage != null ? frame.clientWidth : null;
+        frame.style.height = Math.ceil(height) + "px";
+        if (isShare && storage != null) {
+          const size = JSON.stringify({
+            fingerprint: sizeFingerprint,
+            width,
+            viewportHeight: globalThis.innerHeight,
+            dark: globalThis.matchMedia("(prefers-color-scheme: dark)").matches,
+            scale: globalThis.devicePixelRatio,
+            height: Math.ceil(height),
+          });
+          if (size !== lastSize) {
+            lastSize = size;
+            pendingSize = size;
+            globalThis.clearTimeout(sizeWriteTimeout);
+            sizeWriteTimeout = globalThis.setTimeout(persistSize, 100);
+          }
+        }
+      }
+      if (isShare) {
+        // Keep unusually tall content accessible without accepting an unbounded height.
+        if (height > 10_000 && Number.parseFloat(frame.style.height) === 0) {
+          frame.style.removeProperty("height");
+        }
+        frame.scrolling = height > 10_000 ? "auto" : "no";
+        document.documentElement.classList.add("visualization-share-ready");
+      }
+      return;
+    }
+    if (data.type === "scroll-to") {
+      const top = data.top;
+      if (
+        typeof top === "number" &&
+        Number.isFinite(top) &&
+        top >= 0 &&
+        globalThis.navigator.userActivation?.isActive === true
+      ) {
+        globalThis.scrollTo({
+          top: Math.ceil(
+            globalThis.scrollY + frame.getBoundingClientRect().top + top,
+          ),
+        });
+      }
+      return;
+    }
+    if (data.type === "open-external") {
+      const rawHref = data.href;
+      if (typeof rawHref !== "string") {
+        return;
+      }
+      let href;
+      try {
+        const url = new URL(rawHref, document.baseURI);
+        if (url.protocol !== "https:") {
+          return;
+        }
+        href = url.href;
+      } catch {
+        return;
+      }
+      if (globalThis.navigator.userActivation?.isActive === true) {
+        const anchor = document.createElement("a");
+        anchor.href = href;
+        anchor.rel = "noopener noreferrer";
+        anchor.target = "_blank";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+      }
+      return;
+    }
+    if (data.type === "follow-up") {
+      const prompt = data.prompt;
+      if (
+        typeof prompt !== "string" ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      const title = data.title;
+      globalThis.prompt(typeof title === "string" ? title : prompt, prompt);
+    }
+  });
+  channel.port1.start();
+  const srcdoc = frame.dataset.srcdoc;
+  if (srcdoc == null) {
+    return;
+  }
+  globalThis.addEventListener("resize", () => {
+    const height = Number.parseFloat(frame.style.height);
+    if (!isShare && (!Number.isFinite(height) || height <= viewportHeight)) {
+      frame.style.removeProperty("height");
+    }
+    viewportHeight = globalThis.innerHeight;
+    channel.port1.postMessage({ type: "measure" });
+  });
+  frame.addEventListener(
+    "load",
+    () => {
+      frame.contentWindow?.postMessage(
+        { type: "codex-visualization-initialize" },
+        "*",
+        [channel.port2],
+      );
+    },
+    { once: true },
+  );
+  // Match the trusted bootstrap element, not the same text in an authored title.
+  const frameHtml = srcdoc.replace(
+    '<script type="application/json" id="codex-visualization-widget-state">__CODEX_VISUALIZATION_WIDGET_STATE__<\/script>',
+    () =>
+      '<script type="application/json" id="codex-visualization-widget-state">' +
+      JSON.stringify(initialGlobals).replaceAll("<", "\\u003c") +
+      "<\/script>",
+  );
+  if (isShare && storage != null) {
+    // Fingerprint the rendered document, including restored widget state, without
+    // storing its content. This is a layout cache, not a security identity.
+    let hash = 5381;
+    for (let index = 0; index < frameHtml.length; index += 1) {
+      hash = (hash * 33 + frameHtml.charCodeAt(index)) % 4_294_967_296;
+    }
+    sizeFingerprint = hash.toString(36);
+    try {
+      const size = JSON.parse(storage.getItem(sizeStorageKey) ?? "null");
+      if (
+        size?.fingerprint === sizeFingerprint &&
+        size.width === frame.clientWidth &&
+        size.viewportHeight === globalThis.innerHeight &&
+        size.dark ===
+          globalThis.matchMedia("(prefers-color-scheme: dark)").matches &&
+        size.scale === globalThis.devicePixelRatio &&
+        typeof size.height === "number" &&
+        Number.isFinite(size.height) &&
+        size.height >= 0 &&
+        size.height <= 10_000
+      ) {
+        frame.style.height = size.height + "px";
+      }
+    } catch {
+      // Ignore missing or invalid cache entries and measure the live frame.
+    }
+  }
+  frame.srcdoc = frameHtml;
+  delete frame.dataset.srcdoc;
+})();
+</script>
+</body>
+</html>
