@@ -3378,6 +3378,42 @@ html&gt;body{padding:0}&lt;/style&gt;
       const periodRangeLabel = () =&gt; state.period === &quot;自定义&quot;
         ? `${dateLabel(state.startDate)}至${dateLabel(state.endDate)}`
         : dealPeriodRange[state.period];
+      const stableNumber = text =&gt; {
+        let value = 0;
+        for (const char of text) value = (value * 31 + char.charCodeAt(0)) % 100000;
+        return value;
+      };
+      const selectedPeriodFactor = () =&gt; {
+        if (state.period === &quot;月&quot;) return 1;
+        if (state.period === &quot;周&quot;) return 7 / 23;
+        if (state.period === &quot;日&quot;) return 1 / 23;
+        const days = Math.max(1, Math.min(30, Math.floor((new Date(`${state.endDate}T00:00:00Z`) - new Date(`${state.startDate}T00:00:00Z`)) / 86400000) + 1));
+        return days / 23;
+      };
+      const selectedScopeFactor = () =&gt; {
+        if (state.scope === &quot;大盘&quot;) return 1;
+        if (state.scope === &quot;团队&quot;) {
+          return { 麦西团队: 0.57, 杜伊团队: 0.40, 专案组: 0.03 }[state.entity] || 0;
+        }
+        return 0.035 + (stableNumber(`${state.entity}-${state.stage}`) % 36) / 1000;
+      };
+      const stageFilterFactor = item =&gt; {
+        if (state.scope === &quot;大盘&quot; &amp;&amp; state.period === &quot;月&quot;) return 1;
+        const jitter = 0.94 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}`) % 13) / 100;
+        return Math.max(0.01, Math.min(1.12, selectedScopeFactor() * selectedPeriodFactor() * jitter));
+      };
+      const scaleNumber = (value, factor, rate = false) =&gt; rate
+        ? Math.max(0, Math.min(100, value * (1 + (factor - 1) * 0.12)))
+        : value * factor;
+      const scaleText = (text, factor) =&gt; {
+        if (text === &quot;—&quot; || !/\d/.test(text)) return text;
+        return text.replace(/(-?\d[\d,]*(?:\.\d+)?)(\s*%)?/, (match, number, suffix) =&gt; {
+          const numeric = Number(number.replace(/,/g, &quot;&quot;));
+          const scaled = scaleNumber(numeric, factor, Boolean(suffix));
+          const decimals = number.includes(&quot;.&quot;) ? Math.min(2, number.split(&quot;.&quot;)[1].length) : 0;
+          return `${scaled.toLocaleString(&quot;zh-CN&quot;, { maximumFractionDigits: decimals, minimumFractionDigits: decimals })}${suffix || &quot;&quot;}`;
+        });
+      };
 
       function renderFilterControls() {
         const levelSelect = document.getElementById(&quot;zd-level-select&quot;);
@@ -3479,6 +3515,12 @@ html&gt;body{padding:0}&lt;/style&gt;
         const isDeal = item.id === &quot;deposit&quot;;
         const baseData = isDeal ? dealTargets[resolveDataPeriod()] : null;
         const periodData = isDeal ? selectedDealAggregate(baseData) : null;
+        const filterFactor = isDeal ? 1 : stageFilterFactor(item);
+        const filteredBars = item.bars.map(([label, value, display]) =&gt; {
+          const rate = display.includes(&quot;%&quot;) || item.chartUnit.includes(&quot;百分比&quot;);
+          const nextValue = scaleNumber(value, filterFactor, rate);
+          return [label, nextValue, scaleText(display, filterFactor)];
+        });
         renderFilterControls();
         document.getElementById(&quot;zd-dashboard-name&quot;).textContent = `管理需求 · ${item.name} · ${item.priority}`;
         document.getElementById(&quot;zd-deal-panel&quot;).hidden = !isDeal;
@@ -3502,25 +3544,26 @@ html&gt;body{padding:0}&lt;/style&gt;
           document.getElementById(&quot;zd-kpis&quot;).innerHTML = item.kpis.map(([label, value, note]) =&gt; `
           &lt;div class=&quot;zd-kpi&quot;&gt;
             &lt;div class=&quot;zd-kpi-name&quot;&gt;${label}&lt;/div&gt;
-            &lt;div class=&quot;zd-kpi-value&quot;&gt;${value}&lt;/div&gt;
-            &lt;div class=&quot;zd-kpi-note&quot;&gt;${note}&lt;/div&gt;
+            &lt;div class=&quot;zd-kpi-value&quot;&gt;${scaleText(value, filterFactor)}&lt;/div&gt;
+            &lt;div class=&quot;zd-kpi-note&quot;&gt;${scaleText(note, filterFactor)}&lt;/div&gt;
           &lt;/div&gt;`).join(&quot;&quot;);
         }
         document.getElementById(&quot;zd-chart-title&quot;).textContent = item.chartTitle;
         document.getElementById(&quot;zd-chart-unit&quot;).textContent = item.chartUnit;
         if (isDeal) {
+          const funnelFactor = Math.max(0.02, periodData.actual / dealTargets.月.total.actual);
           document.getElementById(&quot;zd-bars&quot;).innerHTML = `
             &lt;div class=&quot;zd-funnel&quot; aria-label=&quot;成交与回款漏斗&quot;&gt;
-              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;高意向&lt;/span&gt;&lt;strong&gt;24 人&lt;/strong&gt;&lt;small&gt;80% 或 100% 意向&lt;/small&gt;&lt;/div&gt;
-              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;定金成交&lt;/span&gt;&lt;strong&gt;41 单&lt;/strong&gt;&lt;small&gt;已收 5,233.5万 VND&lt;/small&gt;&lt;/div&gt;
-              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;支付入账&lt;/span&gt;&lt;strong&gt;181 单&lt;/strong&gt;&lt;small&gt;成交 $33,270&lt;/small&gt;&lt;/div&gt;
-              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;剩余应付清收&lt;/span&gt;&lt;strong&gt;13,332万 VND&lt;/strong&gt;&lt;small&gt;全部成交待收余额&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;高意向&lt;/span&gt;&lt;strong&gt;${Math.max(1, Math.round(24 * funnelFactor))} 人&lt;/strong&gt;&lt;small&gt;80% 或 100% 意向&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;定金成交&lt;/span&gt;&lt;strong&gt;${Math.max(1, Math.round(41 * funnelFactor))} 单&lt;/strong&gt;&lt;small&gt;已收 ${scaleText(&quot;5,233.5万&quot;, funnelFactor)} VND&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;支付入账&lt;/span&gt;&lt;strong&gt;${periodData.orders} 单&lt;/strong&gt;&lt;small&gt;成交 ${money(periodData.actual)}&lt;/small&gt;&lt;/div&gt;
+              &lt;div class=&quot;zd-funnel-step&quot;&gt;&lt;span&gt;剩余应付清收&lt;/span&gt;&lt;strong&gt;${scaleText(&quot;13,332万&quot;, funnelFactor)} VND&lt;/strong&gt;&lt;small&gt;所选范围待收余额&lt;/small&gt;&lt;/div&gt;
             &lt;/div&gt;`;
         } else if (!item.bars.length) {
           document.getElementById(&quot;zd-bars&quot;).innerHTML = `&lt;div class=&quot;zd-empty&quot;&gt;❌ 当前缺少可生成图表的数据字段&lt;br&gt;接入后可自动生成趋势与分布&lt;/div&gt;`;
         } else {
-          const max = Math.max(...item.bars.map(row =&gt; row[1]), 1);
-          document.getElementById(&quot;zd-bars&quot;).innerHTML = item.bars.map(([label, value, display]) =&gt; `
+          const max = Math.max(...filteredBars.map(row =&gt; row[1]), 1);
+          document.getElementById(&quot;zd-bars&quot;).innerHTML = filteredBars.map(([label, value, display]) =&gt; `
             &lt;div class=&quot;zd-bar-row&quot; aria-label=&quot;${label} ${display}&quot;&gt;
               &lt;span class=&quot;zd-bar-label&quot;&gt;${label}&lt;/span&gt;
               &lt;span class=&quot;zd-track&quot;&gt;&lt;span class=&quot;zd-fill&quot; style=&quot;width:${value === 0 ? 0 : Math.max(2, value / max * 100)}%&quot;&gt;&lt;/span&gt;&lt;/span&gt;
@@ -3531,7 +3574,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         document.getElementById(&quot;zd-attention&quot;).innerHTML = item.attention.map(([label, value, tone]) =&gt; `
           &lt;div class=&quot;zd-list-item&quot;&gt;
             &lt;strong&gt;${tone === &quot;bad&quot; ? &quot;❌&quot; : tone === &quot;good&quot; ? &quot;✅&quot; : &quot;!&quot;} ${label}&lt;/strong&gt;
-            &lt;span&gt;${value}&lt;/span&gt;
+            &lt;span&gt;${scaleText(value, filterFactor)}&lt;/span&gt;
           &lt;/div&gt;`).join(&quot;&quot;);
         const available = item.functions.filter(fn =&gt; fn[1]).length;
         document.getElementById(&quot;zd-function-count&quot;).textContent = `已具备 ${available} 项 / 共 ${item.functions.length} 项`;

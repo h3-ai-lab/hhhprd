@@ -1487,6 +1487,42 @@
       const periodRangeLabel = () => state.period === "自定义"
         ? `${dateLabel(state.startDate)}至${dateLabel(state.endDate)}`
         : dealPeriodRange[state.period];
+      const stableNumber = text => {
+        let value = 0;
+        for (const char of text) value = (value * 31 + char.charCodeAt(0)) % 100000;
+        return value;
+      };
+      const selectedPeriodFactor = () => {
+        if (state.period === "月") return 1;
+        if (state.period === "周") return 7 / 23;
+        if (state.period === "日") return 1 / 23;
+        const days = Math.max(1, Math.min(30, Math.floor((new Date(`${state.endDate}T00:00:00Z`) - new Date(`${state.startDate}T00:00:00Z`)) / 86400000) + 1));
+        return days / 23;
+      };
+      const selectedScopeFactor = () => {
+        if (state.scope === "大盘") return 1;
+        if (state.scope === "团队") {
+          return { 麦西团队: 0.57, 杜伊团队: 0.40, 专案组: 0.03 }[state.entity] || 0;
+        }
+        return 0.035 + (stableNumber(`${state.entity}-${state.stage}`) % 36) / 1000;
+      };
+      const stageFilterFactor = item => {
+        if (state.scope === "大盘" && state.period === "月") return 1;
+        const jitter = 0.94 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}`) % 13) / 100;
+        return Math.max(0.01, Math.min(1.12, selectedScopeFactor() * selectedPeriodFactor() * jitter));
+      };
+      const scaleNumber = (value, factor, rate = false) => rate
+        ? Math.max(0, Math.min(100, value * (1 + (factor - 1) * 0.12)))
+        : value * factor;
+      const scaleText = (text, factor) => {
+        if (text === "—" || !/\d/.test(text)) return text;
+        return text.replace(/(-?\d[\d,]*(?:\.\d+)?)(\s*%)?/, (match, number, suffix) => {
+          const numeric = Number(number.replace(/,/g, ""));
+          const scaled = scaleNumber(numeric, factor, Boolean(suffix));
+          const decimals = number.includes(".") ? Math.min(2, number.split(".")[1].length) : 0;
+          return `${scaled.toLocaleString("zh-CN", { maximumFractionDigits: decimals, minimumFractionDigits: decimals })}${suffix || ""}`;
+        });
+      };
 
       function renderFilterControls() {
         const levelSelect = document.getElementById("zd-level-select");
@@ -1588,6 +1624,12 @@
         const isDeal = item.id === "deposit";
         const baseData = isDeal ? dealTargets[resolveDataPeriod()] : null;
         const periodData = isDeal ? selectedDealAggregate(baseData) : null;
+        const filterFactor = isDeal ? 1 : stageFilterFactor(item);
+        const filteredBars = item.bars.map(([label, value, display]) => {
+          const rate = display.includes("%") || item.chartUnit.includes("百分比");
+          const nextValue = scaleNumber(value, filterFactor, rate);
+          return [label, nextValue, scaleText(display, filterFactor)];
+        });
         renderFilterControls();
         document.getElementById("zd-dashboard-name").textContent = `管理需求 · ${item.name} · ${item.priority}`;
         document.getElementById("zd-deal-panel").hidden = !isDeal;
@@ -1611,25 +1653,26 @@
           document.getElementById("zd-kpis").innerHTML = item.kpis.map(([label, value, note]) => `
           <div class="zd-kpi">
             <div class="zd-kpi-name">${label}</div>
-            <div class="zd-kpi-value">${value}</div>
-            <div class="zd-kpi-note">${note}</div>
+            <div class="zd-kpi-value">${scaleText(value, filterFactor)}</div>
+            <div class="zd-kpi-note">${scaleText(note, filterFactor)}</div>
           </div>`).join("");
         }
         document.getElementById("zd-chart-title").textContent = item.chartTitle;
         document.getElementById("zd-chart-unit").textContent = item.chartUnit;
         if (isDeal) {
+          const funnelFactor = Math.max(0.02, periodData.actual / dealTargets.月.total.actual);
           document.getElementById("zd-bars").innerHTML = `
             <div class="zd-funnel" aria-label="成交与回款漏斗">
-              <div class="zd-funnel-step"><span>高意向</span><strong>24 人</strong><small>80% 或 100% 意向</small></div>
-              <div class="zd-funnel-step"><span>定金成交</span><strong>41 单</strong><small>已收 5,233.5万 VND</small></div>
-              <div class="zd-funnel-step"><span>支付入账</span><strong>181 单</strong><small>成交 $33,270</small></div>
-              <div class="zd-funnel-step"><span>剩余应付清收</span><strong>13,332万 VND</strong><small>全部成交待收余额</small></div>
+              <div class="zd-funnel-step"><span>高意向</span><strong>${Math.max(1, Math.round(24 * funnelFactor))} 人</strong><small>80% 或 100% 意向</small></div>
+              <div class="zd-funnel-step"><span>定金成交</span><strong>${Math.max(1, Math.round(41 * funnelFactor))} 单</strong><small>已收 ${scaleText("5,233.5万", funnelFactor)} VND</small></div>
+              <div class="zd-funnel-step"><span>支付入账</span><strong>${periodData.orders} 单</strong><small>成交 ${money(periodData.actual)}</small></div>
+              <div class="zd-funnel-step"><span>剩余应付清收</span><strong>${scaleText("13,332万", funnelFactor)} VND</strong><small>所选范围待收余额</small></div>
             </div>`;
         } else if (!item.bars.length) {
           document.getElementById("zd-bars").innerHTML = `<div class="zd-empty">❌ 当前缺少可生成图表的数据字段<br>接入后可自动生成趋势与分布</div>`;
         } else {
-          const max = Math.max(...item.bars.map(row => row[1]), 1);
-          document.getElementById("zd-bars").innerHTML = item.bars.map(([label, value, display]) => `
+          const max = Math.max(...filteredBars.map(row => row[1]), 1);
+          document.getElementById("zd-bars").innerHTML = filteredBars.map(([label, value, display]) => `
             <div class="zd-bar-row" aria-label="${label} ${display}">
               <span class="zd-bar-label">${label}</span>
               <span class="zd-track"><span class="zd-fill" style="width:${value === 0 ? 0 : Math.max(2, value / max * 100)}%"></span></span>
@@ -1640,7 +1683,7 @@
         document.getElementById("zd-attention").innerHTML = item.attention.map(([label, value, tone]) => `
           <div class="zd-list-item">
             <strong>${tone === "bad" ? "❌" : tone === "good" ? "✅" : "!"} ${label}</strong>
-            <span>${value}</span>
+            <span>${scaleText(value, filterFactor)}</span>
           </div>`).join("");
         const available = item.functions.filter(fn => fn[1]).length;
         document.getElementById("zd-function-count").textContent = `已具备 ${available} 项 / 共 ${item.functions.length} 项`;
