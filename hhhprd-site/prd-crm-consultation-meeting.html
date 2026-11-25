@@ -22,7 +22,7 @@
   </style>
 </head>
 <body><main>
-  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/crm-consultation-meeting/prd/PRD.md">查看 Markdown 源文件</a></div>
+  <div class="top"><a href="../projects/crm-consultation-meeting/prd/PRD.md">查看 Markdown 源文件</a></div>
   <article><h2>Lark咨询会议与用户详情回写</h2>
 <blockquote>一句话结论：销售为当前跟进阶段为“已预约”的用户创建飞书咨询会议并分享链接，会议结束后根据飞书参会事实自动判断出勤和咨询完成，同时保存飞书生成的智能纪要原文。<br>版本 / 需求 ID：1.0 / REQ-CONSULT-002<br>需求类型：集成与自动化｜补充类型：规则状态与数据、权限与审计<br>更新时间：2026-11-23</blockquote>
 <blockquote>📌<br>- <strong>会议创建</strong>：企业公共账号创建会议，销售本人作为会议 Owner，CRM 自动保存用户、日程和会议链接。<br>- <strong>状态回写</strong>：会议结束事件触发结果判断，客户有效出勤后自动将 <code>已预约</code> 更新为 <code>咨询已完成</code>；客户未出勤时自动将当前跟进阶段更新为 <code>未出勤</code>。<br>- <strong>出勤结果确认</strong>：会议结果确定后向会议 Owner CC 发送 Lark 互动卡片；H5 默认带出系统判定结果，CC 可确认或修改，并填写可选跟进说明；改为未出勤时原因必填。<br>- <strong>纪要存储</strong>：只保存飞书生成的智能纪要原文、逐字稿入口和来源链接，不在 CRM 二次总结或分析。<br>- <strong>上线前置条件</strong>：确认企业会议并发、高清会议用量、智能纪要额度及应用／账号权限。<br>- <strong>不做</strong>：不重新生成会议摘要，不自动提取试课表现、购买意向或下一步建议，不自动向用户发送会议链接。</blockquote>

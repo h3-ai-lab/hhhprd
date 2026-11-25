@@ -210,7 +210,7 @@ def build_project(slug, title):
   </style>
 </head>
 <body><main>
-  <div class="top"><a href="index.html">← 返回项目入口</a><a href="../projects/{slug}/prd/PRD.md">查看 Markdown 源文件</a></div>
+  <div class="top"><a href="../projects/{slug}/prd/PRD.md">查看 Markdown 源文件</a></div>
   <article>{content}</article>
 </main>
 <script type="module">
@@ -268,7 +268,7 @@ def build_architecture():
   </style>
 </head>
 <body><main>
-  <div class="top"><a href="index.html">← 返回项目入口</a>
+  <div class="top">
   <a href="https://github.com/h3-ai-lab/hhhprd/blob/main/shared/architecture/target-system-architecture.md">查看 Markdown 源文件</a></div>
   <article>{content}</article>
 </main></body></html>"""
