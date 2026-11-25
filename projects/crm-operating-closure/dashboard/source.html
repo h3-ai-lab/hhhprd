@@ -472,6 +472,19 @@
     .zd-line-point { fill: var(--z-blue); stroke: var(--z-panel); stroke-width: 2; }
     .zd-line-label { fill: var(--z-muted); font-size: 10px; }
     .zd-line-value { fill: var(--z-text); font-size: 10px; font-weight: 500; }
+    .zd-chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+      margin-bottom: 6px;
+      color: var(--z-muted);
+      font-size: 9px;
+    }
+    .zd-legend-item { display: inline-flex; align-items: center; gap: 4px; }
+    .zd-legend-dot { width: 7px; height: 7px; border-radius: 99px; background: currentColor; }
+    .zd-grouped-chart { display: block; width: 100%; min-height: 180px; overflow: visible; }
+    .zd-group-bar-label { fill: var(--z-muted); font-size: 10px; }
+    .zd-group-bar-value { fill: var(--z-text); font-size: 9px; font-weight: 500; }
     .zd-detail-table {
       width: 100%;
       border-collapse: collapse;
@@ -485,8 +498,8 @@
       text-align: left;
     }
     .zd-detail-table th { color: var(--z-muted); font-weight: 500; }
-    .zd-detail-table td:last-child,
-    .zd-detail-table th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .zd-detail-table td:not(:first-child),
+    .zd-detail-table th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
     .zd-funnel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
     .zd-funnel-step {
       min-width: 0;
@@ -1474,7 +1487,16 @@
         }
       };
 
-      const teamOptions = ["麦西团队", "杜伊团队", "专案组"];
+      const plStatusCompare = {
+        labels: ["已支付", "Pending", "已拒绝", "持续跟进", "100% 定金", "80%", "50%"],
+        teams: [
+          { name: "麦西团队", values: [79, 9, 169, 178, 8, 2, 23] },
+          { name: "杜伊团队", values: [57, 1, 35, 200, 3, 6, 30] },
+          { name: "专案组", values: [36, 2, 68, 77, 3, 2, 12] }
+        ]
+      };
+
+      const teamOptions = ["全部团队", "麦西团队", "杜伊团队", "专案组"];
       const salesOptions = [
         "Vy Nguyễn", "Thùy Dung", "Mia", "Trúc", "Thảo (Lia)",
         "Finn", "Vy Phạm", "Linh", "Anna", "Lucy"
@@ -1488,7 +1510,7 @@
       let state = {
         stage: "assign",
         scope: "大盘",
-        entity: "麦西团队",
+        entity: "全部团队",
         period: "月",
         startDate: "2026-11-16",
         endDate: "2026-11-22",
@@ -1569,6 +1591,7 @@
       const selectedScopeFactor = () => {
         if (state.scope === "大盘") return 1;
         if (state.scope === "团队") {
+          if (state.entity === "全部团队") return 1;
           return { 麦西团队: 0.57, 杜伊团队: 0.40, 专案组: 0.03 }[state.entity] || 0;
         }
         return 0.035 + (stableNumber(`${state.entity}-${state.stage}`) % 36) / 1000;
@@ -1613,7 +1636,7 @@
         if (isDeal) {
           if (rates) return [];
           const total = periodData.actual;
-          const raw = labels.map((_, index) => 0.65 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 71) / 100);
+          const raw = labels.map((_, index) => 0.45 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 101) / 100);
           const sum = raw.reduce((value, current) => value + current, 0);
           return { labels, values: raw.map(value => total * value / sum), rates: false };
         }
@@ -1621,7 +1644,7 @@
         const base = rates
           ? filteredBars.reduce((sum, row) => sum + row[1], 0) / filteredBars.length
           : filteredBars.reduce((sum, row) => sum + row[1], 0);
-        const raw = labels.map((_, index) => 0.72 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 57) / 100);
+        const raw = labels.map((_, index) => 0.50 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 101) / 100);
         const sum = raw.reduce((value, current) => value + current, 0);
         return {
           labels,
@@ -1687,6 +1710,138 @@
         return `<table class="zd-detail-table"><thead><tr><th>对象</th><th>数值</th></tr></thead><tbody>${body.map(row => `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`).join("")}</tbody></table>`;
       }
 
+      const compareTeams = [
+        { name: "麦西团队", color: "var(--z-blue)", weight: 0.468 },
+        { name: "杜伊团队", color: "var(--z-purple)", weight: 0.332 },
+        { name: "专案组", color: "var(--z-green)", weight: 0.200 }
+      ];
+
+      function teamComparisonData(item, filteredBars) {
+        if (item.id === "pl") {
+          const factor = selectedPeriodFactor();
+          return {
+            labels: plStatusCompare.labels,
+            series: plStatusCompare.teams.map((team, teamIndex) => ({
+              name: team.name,
+              color: compareTeams[teamIndex].color,
+              values: team.values.map((value, index) => Math.round(value * factor * (0.96 + (stableNumber(`${team.name}-${index}-${state.period}`) % 9) / 100)))
+            }))
+          };
+        }
+        const labels = filteredBars.map(row => row[0]);
+        const values = filteredBars.map(row => row[1]);
+        return {
+          labels,
+          series: compareTeams.map(team => ({
+            name: team.name,
+            color: team.color,
+            values: values.map((value, index) => value * team.weight * (0.94 + (stableNumber(`${team.name}-${item.id}-${index}-${state.period}`) % 13) / 100))
+          }))
+        };
+      }
+
+      function chartLegend(series) {
+        return `<div class="zd-chart-legend">${series.map(team => `<span class="zd-legend-item"><span class="zd-legend-dot" style="color:${team.color}"></span>${team.name}</span>`).join("")}</div>`;
+      }
+
+      function groupedBarSvg(labels, series) {
+        if (!labels.length || !series.length) return `<div class="zd-empty">当前口径暂无可对比数据</div>`;
+        const width = 620;
+        const height = 220;
+        const left = 35;
+        const right = 12;
+        const top = 18;
+        const bottom = 38;
+        const plotWidth = width - left - right;
+        const plotHeight = height - top - bottom;
+        const max = Math.max(...series.flatMap(team => team.values), 1);
+        const groupWidth = plotWidth / labels.length;
+        const barWidth = Math.min(18, groupWidth * 0.58 / series.length);
+        return `${chartLegend(series)}
+          <svg class="zd-grouped-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${labels.join("、")}的团队对比">
+            <title>团队指标对比</title>
+            ${[0, 0.5, 1].map(ratio => {
+              const y = top + plotHeight * ratio;
+              return `<line class="zd-line-grid" x1="${left}" y1="${y.toFixed(1)}" x2="${width - right}" y2="${y.toFixed(1)}"></line>
+                <text class="zd-line-label" x="${left - 7}" y="${(y + 3).toFixed(1)}" text-anchor="end">${Math.round(max * (1 - ratio))}</text>`;
+            }).join("")}
+            <line class="zd-line-axis" x1="${left}" y1="${top}" x2="${left}" y2="${top + plotHeight}"></line>
+            <line class="zd-line-axis" x1="${left}" y1="${top + plotHeight}" x2="${width - right}" y2="${top + plotHeight}"></line>
+            ${labels.map((label, labelIndex) => {
+              const groupCenter = left + groupWidth * (labelIndex + 0.5);
+              const startX = groupCenter - barWidth * series.length / 2 - 1.5 * (series.length - 1);
+              return `${series.map((team, seriesIndex) => {
+                const value = team.values[labelIndex] || 0;
+                const barHeight = value / max * plotHeight;
+                const x = startX + seriesIndex * (barWidth + 3);
+                return `<rect x="${x.toFixed(1)}" y="${(top + plotHeight - barHeight).toFixed(1)}" width="${barWidth.toFixed(1)}" height="${Math.max(0.5, barHeight).toFixed(1)}" rx="2" fill="${team.color}"></rect>
+                  <text class="zd-group-bar-value" x="${(x + barWidth / 2).toFixed(1)}" y="${(top + plotHeight - barHeight - 4).toFixed(1)}" text-anchor="middle">${Math.round(value)}</text>`;
+              }).join("")}
+              <text class="zd-group-bar-label" x="${groupCenter.toFixed(1)}" y="${height - 10}" text-anchor="middle">${label}</text>`;
+            }).join("")}
+          </svg>`;
+      }
+
+      function multiLineChartSvg(labels, series) {
+        if (!labels.length || !series.length) return `<div class="zd-empty">当前口径暂无可生成趋势的数据</div>`;
+        const width = 620;
+        const height = 190;
+        const left = 36;
+        const right = 12;
+        const top = 20;
+        const bottom = 28;
+        const plotWidth = width - left - right;
+        const plotHeight = height - top - bottom;
+        const max = Math.max(...series.flatMap(team => team.values), 1);
+        const format = value => Math.round(value).toLocaleString("zh-CN");
+        return `${chartLegend(series)}
+          <svg class="zd-line-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="团队趋势对比">
+            <title>团队趋势对比</title>
+            ${[0, 0.5, 1].map(ratio => {
+              const y = top + plotHeight * ratio;
+              return `<line class="zd-line-grid" x1="${left}" y1="${y.toFixed(1)}" x2="${width - right}" y2="${y.toFixed(1)}"></line>
+                <text class="zd-line-label" x="${left - 7}" y="${(y + 3).toFixed(1)}" text-anchor="end">${format(max * (1 - ratio))}</text>`;
+            }).join("")}
+            <line class="zd-line-axis" x1="${left}" y1="${top}" x2="${left}" y2="${top + plotHeight}"></line>
+            <line class="zd-line-axis" x1="${left}" y1="${top + plotHeight}" x2="${width - right}" y2="${top + plotHeight}"></line>
+            ${series.map(team => {
+              const line = team.values.map((value, index) => `${index ? "L" : "M"}${(left + plotWidth * index / (labels.length - 1)).toFixed(1)},${(top + plotHeight - value / max * plotHeight).toFixed(1)}`).join(" ");
+              return `<path class="zd-line-path" d="${line}" style="stroke:${team.color}"></path>
+                ${team.values.map((value, index) => `<circle class="zd-line-point" cx="${(left + plotWidth * index / (labels.length - 1)).toFixed(1)}" cy="${(top + plotHeight - value / max * plotHeight).toFixed(1)}" r="3" style="fill:${team.color}"></circle>`).join("")}`;
+            }).join("")}
+            ${labels.map((label, index) => `<text class="zd-line-label" x="${(left + plotWidth * index / (labels.length - 1)).toFixed(1)}" y="${height - 8}" text-anchor="middle">${label}</text>`).join("")}
+          </svg>`;
+      }
+
+      function comparisonTrendData(item, filteredBars, periodData, isDeal) {
+        const labels = trendLabels();
+        let totals;
+        if (isDeal) {
+          totals = dealTargets[resolveDataPeriod()].teams.map(team => team.actual);
+        } else if (item.id === "pl") {
+          totals = plStatusCompare.teams.map(team => team.values.reduce((sum, value) => sum + value, 0) * selectedPeriodFactor());
+        } else {
+          const total = filteredBars.reduce((sum, row) => sum + row[1], 0);
+          totals = compareTeams.map(team => total * team.weight);
+        }
+        return labels.length && totals.length ? {
+          labels,
+          series: compareTeams.map((team, teamIndex) => {
+            const raw = labels.map((_, index) => 0.35 + (stableNumber(`${item.id}-${team.name}-${state.period}-${index}`) % 141) / 100);
+            const sum = raw.reduce((value, current) => value + current, 0);
+            return {
+              name: team.name,
+              color: team.color,
+              values: raw.map(value => totals[teamIndex] * value / sum)
+            };
+          })
+        } : { labels: [], series: [] };
+      }
+
+      function comparisonTable(labels, series) {
+        return `<table class="zd-detail-table"><thead><tr><th>对象</th>${series.map(team => `<th>${team.name}</th>`).join("")}</tr></thead><tbody>${labels.map((label, index) => `<tr><td>${label}</td>${series.map(team => `<td>${Math.round(team.values[index] || 0).toLocaleString("zh-CN")}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      }
+
       function renderFilterControls() {
         const levelSelect = document.getElementById("zd-level-select");
         const entityControl = document.getElementById("zd-entity-control");
@@ -1715,6 +1870,7 @@
       function selectedDealAggregate(data) {
         if (state.scope === "大盘") return data.total;
         if (state.scope === "团队") {
+          if (state.entity === "全部团队") return data.total;
           return data.teams.find(row => row.name === state.entity) || { name: state.entity, target: 0, actual: 0, orders: 0 };
         }
         return data.sales.find(row => row.name.replace(/\s+/g, "") === state.entity.replace(/\s+/g, "")) || {
@@ -1788,11 +1944,13 @@
         const baseData = isDeal ? dealTargets[resolveDataPeriod()] : null;
         const periodData = isDeal ? selectedDealAggregate(baseData) : null;
         const filterFactor = isDeal ? 1 : stageFilterFactor(item);
+        const isTeamComparison = state.scope === "团队" && state.entity === "全部团队" && !isDeal;
         const filteredBars = item.bars.map(([label, value, display]) => {
           const rate = display.includes("%") || item.chartUnit.includes("百分比");
           const nextValue = scaleNumber(value, filterFactor, rate);
           return [label, nextValue, scaleText(display, filterFactor)];
         });
+        const comparisonData = isTeamComparison ? teamComparisonData(item, filteredBars) : null;
         renderFilterControls();
         document.getElementById("zd-dashboard-name").textContent = `管理需求 · ${item.name} · ${item.priority}`;
         document.getElementById("zd-deal-panel").hidden = !isDeal;
@@ -1824,18 +1982,27 @@
           button.setAttribute("aria-pressed", String(button.dataset.chartView === state.chartView));
         });
         document.getElementById("zd-chart-title").textContent = state.chartView === "趋势"
-          ? `${item.name}趋势`
+          ? `${item.name}${isTeamComparison ? "团队趋势" : "趋势"}`
           : state.chartView === "明细"
-            ? `${item.name}明细`
-            : item.chartTitle;
+            ? `${item.name}${isTeamComparison ? "团队明细" : "明细"}`
+            : isTeamComparison ? `团队对比 · ${item.chartTitle}` : item.chartTitle;
         document.getElementById("zd-chart-unit").textContent = state.chartView === "分布"
-          ? item.chartUnit
+          ? isTeamComparison ? "团队 · 同口径对比" : item.chartUnit
           : state.chartView === "趋势" ? `${periodRangeLabel()} · 趋势` : "按当前筛选口径";
         if (state.chartView === "趋势") {
-          const trend = trendValues(item, filteredBars, periodData, isDeal);
-          document.getElementById("zd-bars").innerHTML = lineChartSvg(item, trend.labels, trend.values, trend.rates);
+          if (isTeamComparison) {
+            const trend = comparisonTrendData(item, filteredBars, periodData, isDeal);
+            document.getElementById("zd-bars").innerHTML = multiLineChartSvg(trend.labels, trend.series);
+          } else {
+            const trend = trendValues(item, filteredBars, periodData, isDeal);
+            document.getElementById("zd-bars").innerHTML = lineChartSvg(item, trend.labels, trend.values, trend.rates);
+          }
         } else if (state.chartView === "明细") {
-          document.getElementById("zd-bars").innerHTML = detailTable(filteredBars, isDeal, periodData);
+          document.getElementById("zd-bars").innerHTML = isTeamComparison
+            ? comparisonTable(comparisonData.labels, comparisonData.series)
+            : detailTable(filteredBars, isDeal, periodData);
+        } else if (isTeamComparison) {
+          document.getElementById("zd-bars").innerHTML = groupedBarSvg(comparisonData.labels, comparisonData.series);
         } else if (isDeal) {
           const funnelFactor = Math.max(0.02, periodData.actual / dealTargets.月.total.actual);
           document.getElementById("zd-bars").innerHTML = `

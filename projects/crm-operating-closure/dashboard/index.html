@@ -2363,6 +2363,19 @@ html&gt;body{padding:0}&lt;/style&gt;
     .zd-line-point { fill: var(--z-blue); stroke: var(--z-panel); stroke-width: 2; }
     .zd-line-label { fill: var(--z-muted); font-size: 10px; }
     .zd-line-value { fill: var(--z-text); font-size: 10px; font-weight: 500; }
+    .zd-chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+      margin-bottom: 6px;
+      color: var(--z-muted);
+      font-size: 9px;
+    }
+    .zd-legend-item { display: inline-flex; align-items: center; gap: 4px; }
+    .zd-legend-dot { width: 7px; height: 7px; border-radius: 99px; background: currentColor; }
+    .zd-grouped-chart { display: block; width: 100%; min-height: 180px; overflow: visible; }
+    .zd-group-bar-label { fill: var(--z-muted); font-size: 10px; }
+    .zd-group-bar-value { fill: var(--z-text); font-size: 9px; font-weight: 500; }
     .zd-detail-table {
       width: 100%;
       border-collapse: collapse;
@@ -2376,8 +2389,8 @@ html&gt;body{padding:0}&lt;/style&gt;
       text-align: left;
     }
     .zd-detail-table th { color: var(--z-muted); font-weight: 500; }
-    .zd-detail-table td:last-child,
-    .zd-detail-table th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .zd-detail-table td:not(:first-child),
+    .zd-detail-table th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
     .zd-funnel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
     .zd-funnel-step {
       min-width: 0;
@@ -3365,7 +3378,16 @@ html&gt;body{padding:0}&lt;/style&gt;
         }
       };
 
-      const teamOptions = [&quot;麦西团队&quot;, &quot;杜伊团队&quot;, &quot;专案组&quot;];
+      const plStatusCompare = {
+        labels: [&quot;已支付&quot;, &quot;Pending&quot;, &quot;已拒绝&quot;, &quot;持续跟进&quot;, &quot;100% 定金&quot;, &quot;80%&quot;, &quot;50%&quot;],
+        teams: [
+          { name: &quot;麦西团队&quot;, values: [79, 9, 169, 178, 8, 2, 23] },
+          { name: &quot;杜伊团队&quot;, values: [57, 1, 35, 200, 3, 6, 30] },
+          { name: &quot;专案组&quot;, values: [36, 2, 68, 77, 3, 2, 12] }
+        ]
+      };
+
+      const teamOptions = [&quot;全部团队&quot;, &quot;麦西团队&quot;, &quot;杜伊团队&quot;, &quot;专案组&quot;];
       const salesOptions = [
         &quot;Vy Nguyễn&quot;, &quot;Thùy Dung&quot;, &quot;Mia&quot;, &quot;Trúc&quot;, &quot;Thảo (Lia)&quot;,
         &quot;Finn&quot;, &quot;Vy Phạm&quot;, &quot;Linh&quot;, &quot;Anna&quot;, &quot;Lucy&quot;
@@ -3379,7 +3401,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       let state = {
         stage: &quot;assign&quot;,
         scope: &quot;大盘&quot;,
-        entity: &quot;麦西团队&quot;,
+        entity: &quot;全部团队&quot;,
         period: &quot;月&quot;,
         startDate: &quot;2026-11-16&quot;,
         endDate: &quot;2026-11-22&quot;,
@@ -3460,6 +3482,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       const selectedScopeFactor = () =&gt; {
         if (state.scope === &quot;大盘&quot;) return 1;
         if (state.scope === &quot;团队&quot;) {
+          if (state.entity === &quot;全部团队&quot;) return 1;
           return { 麦西团队: 0.57, 杜伊团队: 0.40, 专案组: 0.03 }[state.entity] || 0;
         }
         return 0.035 + (stableNumber(`${state.entity}-${state.stage}`) % 36) / 1000;
@@ -3504,7 +3527,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (isDeal) {
           if (rates) return [];
           const total = periodData.actual;
-          const raw = labels.map((_, index) =&gt; 0.65 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 71) / 100);
+          const raw = labels.map((_, index) =&gt; 0.45 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 101) / 100);
           const sum = raw.reduce((value, current) =&gt; value + current, 0);
           return { labels, values: raw.map(value =&gt; total * value / sum), rates: false };
         }
@@ -3512,7 +3535,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         const base = rates
           ? filteredBars.reduce((sum, row) =&gt; sum + row[1], 0) / filteredBars.length
           : filteredBars.reduce((sum, row) =&gt; sum + row[1], 0);
-        const raw = labels.map((_, index) =&gt; 0.72 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 57) / 100);
+        const raw = labels.map((_, index) =&gt; 0.50 + (stableNumber(`${item.id}-${state.scope}-${state.entity}-${state.period}-${index}`) % 101) / 100);
         const sum = raw.reduce((value, current) =&gt; value + current, 0);
         return {
           labels,
@@ -3578,6 +3601,138 @@ html&gt;body{padding:0}&lt;/style&gt;
         return `&lt;table class=&quot;zd-detail-table&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;对象&lt;/th&gt;&lt;th&gt;数值&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${body.map(row =&gt; `&lt;tr&gt;&lt;td&gt;${row[0]}&lt;/td&gt;&lt;td&gt;${row[1]}&lt;/td&gt;&lt;/tr&gt;`).join(&quot;&quot;)}&lt;/tbody&gt;&lt;/table&gt;`;
       }
 
+      const compareTeams = [
+        { name: &quot;麦西团队&quot;, color: &quot;var(--z-blue)&quot;, weight: 0.468 },
+        { name: &quot;杜伊团队&quot;, color: &quot;var(--z-purple)&quot;, weight: 0.332 },
+        { name: &quot;专案组&quot;, color: &quot;var(--z-green)&quot;, weight: 0.200 }
+      ];
+
+      function teamComparisonData(item, filteredBars) {
+        if (item.id === &quot;pl&quot;) {
+          const factor = selectedPeriodFactor();
+          return {
+            labels: plStatusCompare.labels,
+            series: plStatusCompare.teams.map((team, teamIndex) =&gt; ({
+              name: team.name,
+              color: compareTeams[teamIndex].color,
+              values: team.values.map((value, index) =&gt; Math.round(value * factor * (0.96 + (stableNumber(`${team.name}-${index}-${state.period}`) % 9) / 100)))
+            }))
+          };
+        }
+        const labels = filteredBars.map(row =&gt; row[0]);
+        const values = filteredBars.map(row =&gt; row[1]);
+        return {
+          labels,
+          series: compareTeams.map(team =&gt; ({
+            name: team.name,
+            color: team.color,
+            values: values.map((value, index) =&gt; value * team.weight * (0.94 + (stableNumber(`${team.name}-${item.id}-${index}-${state.period}`) % 13) / 100))
+          }))
+        };
+      }
+
+      function chartLegend(series) {
+        return `&lt;div class=&quot;zd-chart-legend&quot;&gt;${series.map(team =&gt; `&lt;span class=&quot;zd-legend-item&quot;&gt;&lt;span class=&quot;zd-legend-dot&quot; style=&quot;color:${team.color}&quot;&gt;&lt;/span&gt;${team.name}&lt;/span&gt;`).join(&quot;&quot;)}&lt;/div&gt;`;
+      }
+
+      function groupedBarSvg(labels, series) {
+        if (!labels.length || !series.length) return `&lt;div class=&quot;zd-empty&quot;&gt;当前口径暂无可对比数据&lt;/div&gt;`;
+        const width = 620;
+        const height = 220;
+        const left = 35;
+        const right = 12;
+        const top = 18;
+        const bottom = 38;
+        const plotWidth = width - left - right;
+        const plotHeight = height - top - bottom;
+        const max = Math.max(...series.flatMap(team =&gt; team.values), 1);
+        const groupWidth = plotWidth / labels.length;
+        const barWidth = Math.min(18, groupWidth * 0.58 / series.length);
+        return `${chartLegend(series)}
+          &lt;svg class=&quot;zd-grouped-chart&quot; viewBox=&quot;0 0 ${width} ${height}&quot; role=&quot;img&quot; aria-label=&quot;${labels.join(&quot;、&quot;)}的团队对比&quot;&gt;
+            &lt;title&gt;团队指标对比&lt;/title&gt;
+            ${[0, 0.5, 1].map(ratio =&gt; {
+              const y = top + plotHeight * ratio;
+              return `&lt;line class=&quot;zd-line-grid&quot; x1=&quot;${left}&quot; y1=&quot;${y.toFixed(1)}&quot; x2=&quot;${width - right}&quot; y2=&quot;${y.toFixed(1)}&quot;&gt;&lt;/line&gt;
+                &lt;text class=&quot;zd-line-label&quot; x=&quot;${left - 7}&quot; y=&quot;${(y + 3).toFixed(1)}&quot; text-anchor=&quot;end&quot;&gt;${Math.round(max * (1 - ratio))}&lt;/text&gt;`;
+            }).join(&quot;&quot;)}
+            &lt;line class=&quot;zd-line-axis&quot; x1=&quot;${left}&quot; y1=&quot;${top}&quot; x2=&quot;${left}&quot; y2=&quot;${top + plotHeight}&quot;&gt;&lt;/line&gt;
+            &lt;line class=&quot;zd-line-axis&quot; x1=&quot;${left}&quot; y1=&quot;${top + plotHeight}&quot; x2=&quot;${width - right}&quot; y2=&quot;${top + plotHeight}&quot;&gt;&lt;/line&gt;
+            ${labels.map((label, labelIndex) =&gt; {
+              const groupCenter = left + groupWidth * (labelIndex + 0.5);
+              const startX = groupCenter - barWidth * series.length / 2 - 1.5 * (series.length - 1);
+              return `${series.map((team, seriesIndex) =&gt; {
+                const value = team.values[labelIndex] || 0;
+                const barHeight = value / max * plotHeight;
+                const x = startX + seriesIndex * (barWidth + 3);
+                return `&lt;rect x=&quot;${x.toFixed(1)}&quot; y=&quot;${(top + plotHeight - barHeight).toFixed(1)}&quot; width=&quot;${barWidth.toFixed(1)}&quot; height=&quot;${Math.max(0.5, barHeight).toFixed(1)}&quot; rx=&quot;2&quot; fill=&quot;${team.color}&quot;&gt;&lt;/rect&gt;
+                  &lt;text class=&quot;zd-group-bar-value&quot; x=&quot;${(x + barWidth / 2).toFixed(1)}&quot; y=&quot;${(top + plotHeight - barHeight - 4).toFixed(1)}&quot; text-anchor=&quot;middle&quot;&gt;${Math.round(value)}&lt;/text&gt;`;
+              }).join(&quot;&quot;)}
+              &lt;text class=&quot;zd-group-bar-label&quot; x=&quot;${groupCenter.toFixed(1)}&quot; y=&quot;${height - 10}&quot; text-anchor=&quot;middle&quot;&gt;${label}&lt;/text&gt;`;
+            }).join(&quot;&quot;)}
+          &lt;/svg&gt;`;
+      }
+
+      function multiLineChartSvg(labels, series) {
+        if (!labels.length || !series.length) return `&lt;div class=&quot;zd-empty&quot;&gt;当前口径暂无可生成趋势的数据&lt;/div&gt;`;
+        const width = 620;
+        const height = 190;
+        const left = 36;
+        const right = 12;
+        const top = 20;
+        const bottom = 28;
+        const plotWidth = width - left - right;
+        const plotHeight = height - top - bottom;
+        const max = Math.max(...series.flatMap(team =&gt; team.values), 1);
+        const format = value =&gt; Math.round(value).toLocaleString(&quot;zh-CN&quot;);
+        return `${chartLegend(series)}
+          &lt;svg class=&quot;zd-line-chart&quot; viewBox=&quot;0 0 ${width} ${height}&quot; role=&quot;img&quot; aria-label=&quot;团队趋势对比&quot;&gt;
+            &lt;title&gt;团队趋势对比&lt;/title&gt;
+            ${[0, 0.5, 1].map(ratio =&gt; {
+              const y = top + plotHeight * ratio;
+              return `&lt;line class=&quot;zd-line-grid&quot; x1=&quot;${left}&quot; y1=&quot;${y.toFixed(1)}&quot; x2=&quot;${width - right}&quot; y2=&quot;${y.toFixed(1)}&quot;&gt;&lt;/line&gt;
+                &lt;text class=&quot;zd-line-label&quot; x=&quot;${left - 7}&quot; y=&quot;${(y + 3).toFixed(1)}&quot; text-anchor=&quot;end&quot;&gt;${format(max * (1 - ratio))}&lt;/text&gt;`;
+            }).join(&quot;&quot;)}
+            &lt;line class=&quot;zd-line-axis&quot; x1=&quot;${left}&quot; y1=&quot;${top}&quot; x2=&quot;${left}&quot; y2=&quot;${top + plotHeight}&quot;&gt;&lt;/line&gt;
+            &lt;line class=&quot;zd-line-axis&quot; x1=&quot;${left}&quot; y1=&quot;${top + plotHeight}&quot; x2=&quot;${width - right}&quot; y2=&quot;${top + plotHeight}&quot;&gt;&lt;/line&gt;
+            ${series.map(team =&gt; {
+              const line = team.values.map((value, index) =&gt; `${index ? &quot;L&quot; : &quot;M&quot;}${(left + plotWidth * index / (labels.length - 1)).toFixed(1)},${(top + plotHeight - value / max * plotHeight).toFixed(1)}`).join(&quot; &quot;);
+              return `&lt;path class=&quot;zd-line-path&quot; d=&quot;${line}&quot; style=&quot;stroke:${team.color}&quot;&gt;&lt;/path&gt;
+                ${team.values.map((value, index) =&gt; `&lt;circle class=&quot;zd-line-point&quot; cx=&quot;${(left + plotWidth * index / (labels.length - 1)).toFixed(1)}&quot; cy=&quot;${(top + plotHeight - value / max * plotHeight).toFixed(1)}&quot; r=&quot;3&quot; style=&quot;fill:${team.color}&quot;&gt;&lt;/circle&gt;`).join(&quot;&quot;)}`;
+            }).join(&quot;&quot;)}
+            ${labels.map((label, index) =&gt; `&lt;text class=&quot;zd-line-label&quot; x=&quot;${(left + plotWidth * index / (labels.length - 1)).toFixed(1)}&quot; y=&quot;${height - 8}&quot; text-anchor=&quot;middle&quot;&gt;${label}&lt;/text&gt;`).join(&quot;&quot;)}
+          &lt;/svg&gt;`;
+      }
+
+      function comparisonTrendData(item, filteredBars, periodData, isDeal) {
+        const labels = trendLabels();
+        let totals;
+        if (isDeal) {
+          totals = dealTargets[resolveDataPeriod()].teams.map(team =&gt; team.actual);
+        } else if (item.id === &quot;pl&quot;) {
+          totals = plStatusCompare.teams.map(team =&gt; team.values.reduce((sum, value) =&gt; sum + value, 0) * selectedPeriodFactor());
+        } else {
+          const total = filteredBars.reduce((sum, row) =&gt; sum + row[1], 0);
+          totals = compareTeams.map(team =&gt; total * team.weight);
+        }
+        return labels.length &amp;&amp; totals.length ? {
+          labels,
+          series: compareTeams.map((team, teamIndex) =&gt; {
+            const raw = labels.map((_, index) =&gt; 0.35 + (stableNumber(`${item.id}-${team.name}-${state.period}-${index}`) % 141) / 100);
+            const sum = raw.reduce((value, current) =&gt; value + current, 0);
+            return {
+              name: team.name,
+              color: team.color,
+              values: raw.map(value =&gt; totals[teamIndex] * value / sum)
+            };
+          })
+        } : { labels: [], series: [] };
+      }
+
+      function comparisonTable(labels, series) {
+        return `&lt;table class=&quot;zd-detail-table&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;对象&lt;/th&gt;${series.map(team =&gt; `&lt;th&gt;${team.name}&lt;/th&gt;`).join(&quot;&quot;)}&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${labels.map((label, index) =&gt; `&lt;tr&gt;&lt;td&gt;${label}&lt;/td&gt;${series.map(team =&gt; `&lt;td&gt;${Math.round(team.values[index] || 0).toLocaleString(&quot;zh-CN&quot;)}&lt;/td&gt;`).join(&quot;&quot;)}&lt;/tr&gt;`).join(&quot;&quot;)}&lt;/tbody&gt;&lt;/table&gt;`;
+      }
+
       function renderFilterControls() {
         const levelSelect = document.getElementById(&quot;zd-level-select&quot;);
         const entityControl = document.getElementById(&quot;zd-entity-control&quot;);
@@ -3606,6 +3761,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       function selectedDealAggregate(data) {
         if (state.scope === &quot;大盘&quot;) return data.total;
         if (state.scope === &quot;团队&quot;) {
+          if (state.entity === &quot;全部团队&quot;) return data.total;
           return data.teams.find(row =&gt; row.name === state.entity) || { name: state.entity, target: 0, actual: 0, orders: 0 };
         }
         return data.sales.find(row =&gt; row.name.replace(/\s+/g, &quot;&quot;) === state.entity.replace(/\s+/g, &quot;&quot;)) || {
@@ -3679,11 +3835,13 @@ html&gt;body{padding:0}&lt;/style&gt;
         const baseData = isDeal ? dealTargets[resolveDataPeriod()] : null;
         const periodData = isDeal ? selectedDealAggregate(baseData) : null;
         const filterFactor = isDeal ? 1 : stageFilterFactor(item);
+        const isTeamComparison = state.scope === &quot;团队&quot; &amp;&amp; state.entity === &quot;全部团队&quot; &amp;&amp; !isDeal;
         const filteredBars = item.bars.map(([label, value, display]) =&gt; {
           const rate = display.includes(&quot;%&quot;) || item.chartUnit.includes(&quot;百分比&quot;);
           const nextValue = scaleNumber(value, filterFactor, rate);
           return [label, nextValue, scaleText(display, filterFactor)];
         });
+        const comparisonData = isTeamComparison ? teamComparisonData(item, filteredBars) : null;
         renderFilterControls();
         document.getElementById(&quot;zd-dashboard-name&quot;).textContent = `管理需求 · ${item.name} · ${item.priority}`;
         document.getElementById(&quot;zd-deal-panel&quot;).hidden = !isDeal;
@@ -3715,18 +3873,27 @@ html&gt;body{padding:0}&lt;/style&gt;
           button.setAttribute(&quot;aria-pressed&quot;, String(button.dataset.chartView === state.chartView));
         });
         document.getElementById(&quot;zd-chart-title&quot;).textContent = state.chartView === &quot;趋势&quot;
-          ? `${item.name}趋势`
+          ? `${item.name}${isTeamComparison ? &quot;团队趋势&quot; : &quot;趋势&quot;}`
           : state.chartView === &quot;明细&quot;
-            ? `${item.name}明细`
-            : item.chartTitle;
+            ? `${item.name}${isTeamComparison ? &quot;团队明细&quot; : &quot;明细&quot;}`
+            : isTeamComparison ? `团队对比 · ${item.chartTitle}` : item.chartTitle;
         document.getElementById(&quot;zd-chart-unit&quot;).textContent = state.chartView === &quot;分布&quot;
-          ? item.chartUnit
+          ? isTeamComparison ? &quot;团队 · 同口径对比&quot; : item.chartUnit
           : state.chartView === &quot;趋势&quot; ? `${periodRangeLabel()} · 趋势` : &quot;按当前筛选口径&quot;;
         if (state.chartView === &quot;趋势&quot;) {
-          const trend = trendValues(item, filteredBars, periodData, isDeal);
-          document.getElementById(&quot;zd-bars&quot;).innerHTML = lineChartSvg(item, trend.labels, trend.values, trend.rates);
+          if (isTeamComparison) {
+            const trend = comparisonTrendData(item, filteredBars, periodData, isDeal);
+            document.getElementById(&quot;zd-bars&quot;).innerHTML = multiLineChartSvg(trend.labels, trend.series);
+          } else {
+            const trend = trendValues(item, filteredBars, periodData, isDeal);
+            document.getElementById(&quot;zd-bars&quot;).innerHTML = lineChartSvg(item, trend.labels, trend.values, trend.rates);
+          }
         } else if (state.chartView === &quot;明细&quot;) {
-          document.getElementById(&quot;zd-bars&quot;).innerHTML = detailTable(filteredBars, isDeal, periodData);
+          document.getElementById(&quot;zd-bars&quot;).innerHTML = isTeamComparison
+            ? comparisonTable(comparisonData.labels, comparisonData.series)
+            : detailTable(filteredBars, isDeal, periodData);
+        } else if (isTeamComparison) {
+          document.getElementById(&quot;zd-bars&quot;).innerHTML = groupedBarSvg(comparisonData.labels, comparisonData.series);
         } else if (isDeal) {
           const funnelFactor = Math.max(0.02, periodData.actual / dealTargets.月.total.actual);
           document.getElementById(&quot;zd-bars&quot;).innerHTML = `
