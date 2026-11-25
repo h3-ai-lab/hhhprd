@@ -212,6 +212,32 @@
       overflow-wrap: anywhere;
     }
     .zd-kpi-note { margin-top: 2px; color: var(--z-muted); font-size: 9px; line-height: 1.3; }
+    .zd-global-filter {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 8px;
+      border: 1px solid var(--z-line);
+      border-radius: 8px;
+      background: var(--z-soft);
+    }
+    .zd-custom-range {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    .zd-custom-range[hidden] { display: none; }
+    .zd-date-input {
+      height: 28px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+      color: var(--z-text);
+      padding: 0 6px;
+      font: inherit;
+      font-size: 10px;
+    }
     .zd-deal-panel {
       display: grid;
       gap: 0;
@@ -659,6 +685,7 @@
       .zd-ai-step:last-child { border-bottom: 0; }
       .zd-deal-toolbar { align-items: stretch; flex-direction: column; }
       .zd-deal-basis { max-width: none; text-align: left; }
+      .zd-global-filter { align-items: stretch; flex-direction: column; }
       .zd-target-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .zd-target-metric:nth-child(2) { border-right: 0; }
       .zd-funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -673,6 +700,8 @@
       .zd-kpis { grid-template-columns: 1fr; }
       .zd-metric { grid-template-columns: 1fr; }
       .zd-deal-controls { align-items: stretch; flex-direction: column; }
+      .zd-custom-range { display: grid; grid-template-columns: 1fr 1fr; }
+      .zd-custom-range[hidden] { display: none; }
       .zd-deal-select { width: 100%; }
       .zd-periods { display: grid; grid-template-columns: repeat(3, 1fr); }
       .zd-target-summary { grid-template-columns: 1fr; }
@@ -719,7 +748,8 @@
     .zd-target-progress span,
     .zd-target-footer { font-size: 11px; }
     .zd-deal-select,
-    .zd-period { font-size: 12px; }
+    .zd-period,
+    .zd-date-input { font-size: 12px; }
     .zd-target-value { font-size: 16px; }
     .zd-target-table { font-size: 11px; }
     .zd-funnel-step span { font-size: 11px; }
@@ -780,28 +810,44 @@
             </div>
           </div>
           <div class="zd-canvas">
-            <div class="zd-kpis" id="zd-kpis"></div>
-            <section class="zd-deal-panel" id="zd-deal-panel" aria-label="成交目标与差距" hidden>
-              <div class="zd-deal-toolbar">
-                <div class="zd-deal-controls">
-                  <div class="zd-deal-control">
-                    <label for="zd-scope-select">查看范围</label>
-                    <select class="zd-deal-select" id="zd-scope-select">
-                      <option value="团队">团队</option>
-                      <option value="销售顾问">销售顾问</option>
-                    </select>
-                  </div>
-                  <div class="zd-deal-control">
-                    <label>目标周期</label>
-                    <div class="zd-periods" role="group" aria-label="目标周期">
-                      <button type="button" class="zd-period" data-period="月" aria-pressed="true">月</button>
-                      <button type="button" class="zd-period" data-period="周" aria-pressed="false">周</button>
-                      <button type="button" class="zd-period" data-period="日" aria-pressed="false">日</button>
-                    </div>
+            <section class="zd-global-filter" aria-label="看板筛选口径">
+              <div class="zd-deal-controls">
+                <div class="zd-deal-control">
+                  <label for="zd-level-select">查看层级</label>
+                  <select class="zd-deal-select" id="zd-level-select">
+                    <option value="大盘">大盘</option>
+                    <option value="团队">团队</option>
+                    <option value="个人">个人</option>
+                  </select>
+                </div>
+                <div class="zd-deal-control" id="zd-entity-control" hidden>
+                  <label for="zd-entity-select" id="zd-entity-label">查看对象</label>
+                  <select class="zd-deal-select" id="zd-entity-select"></select>
+                </div>
+                <div class="zd-deal-control">
+                  <label>时间范围</label>
+                  <div class="zd-periods" role="group" aria-label="时间范围">
+                    <button type="button" class="zd-period" data-period="月" aria-pressed="true">月</button>
+                    <button type="button" class="zd-period" data-period="周" aria-pressed="false">周</button>
+                    <button type="button" class="zd-period" data-period="日" aria-pressed="false">日</button>
+                    <button type="button" class="zd-period" data-period="自定义" aria-pressed="false">自定义</button>
                   </div>
                 </div>
-                <div class="zd-deal-basis">成交为一级经营结果，剩余应付只作为回款漏斗。团队月目标沿用经营目标；周目标按冲刺计划；组与个人拆分目标为试算，待正式目标对象上线后替换。</div>
+                <div class="zd-custom-range" id="zd-custom-range" hidden>
+                  <div class="zd-deal-control">
+                    <label for="zd-start-date">开始日期</label>
+                    <input class="zd-date-input" id="zd-start-date" type="date">
+                  </div>
+                  <div class="zd-deal-control">
+                    <label for="zd-end-date">结束日期</label>
+                    <input class="zd-date-input" id="zd-end-date" type="date">
+                  </div>
+                </div>
               </div>
+              <div class="zd-deal-basis" id="zd-filter-context" aria-live="polite"></div>
+            </section>
+            <div class="zd-kpis" id="zd-kpis"></div>
+            <section class="zd-deal-panel" id="zd-deal-panel" aria-label="成交目标与差距" hidden>
               <div class="zd-target-summary" id="zd-target-summary" aria-live="polite"></div>
               <div class="zd-target-progress">
                 <span>0</span>
@@ -1364,14 +1410,35 @@
         }
       };
 
-      let state = { stage: "assign", scope: "团队", period: "月" };
+      const teamOptions = ["麦西团队", "杜伊团队", "专案组"];
+      const salesOptions = [
+        "Vy Nguyễn", "Thùy Dung", "Mia", "Trúc", "Thảo (Lia)",
+        "Finn", "Vy Phạm", "Linh", "Anna", "Lucy"
+      ];
+      const dealPeriodRange = {
+        月: "11月1日至23日",
+        周: "11月16日至22日",
+        日: "11月23日"
+      };
+
+      let state = {
+        stage: "assign",
+        scope: "大盘",
+        entity: "麦西团队",
+        period: "月",
+        startDate: "2026-11-16",
+        endDate: "2026-11-22"
+      };
       try {
         const saved = window.openai?.widgetState;
         if (saved && stages.some(item => item.id === saved.stage)) {
           state.stage = saved.stage;
         }
-        if (saved?.scope === "团队" || saved?.scope === "销售顾问") state.scope = saved.scope;
-        if (saved?.period && dealTargets[saved.period]) state.period = saved.period;
+        if (["大盘", "团队", "个人"].includes(saved?.scope)) state.scope = saved.scope;
+        if (typeof saved?.entity === "string") state.entity = saved.entity;
+        if (saved?.period === "自定义" || dealTargets[saved?.period]) state.period = saved.period;
+        if (/^\d{4}-\d{2}-\d{2}$/.test(saved?.startDate || "")) state.startDate = saved.startDate;
+        if (/^\d{4}-\d{2}-\d{2}$/.test(saved?.endDate || "")) state.endDate = saved.endDate;
       } catch (_) {}
 
       const selected = () => stages.find(item => item.id === state.stage);
@@ -1392,7 +1459,14 @@
       function save() {
         try {
           window.openai?.setWidgetState?.({
-            modelContent: { stage: state.stage, scope: state.scope, period: state.period },
+            modelContent: {
+              stage: state.stage,
+              scope: state.scope,
+              entity: state.entity,
+              period: state.period,
+              startDate: state.startDate,
+              endDate: state.endDate
+            },
             privateContent: state
           })?.catch?.(() => {});
         } catch (_) {}
@@ -1401,18 +1475,64 @@
       const numberFormat = new Intl.NumberFormat("zh-CN");
       const money = value => `$${numberFormat.format(Math.round(value))}`;
       const percent = value => `${value.toFixed(1)}%`;
+      const dateLabel = value => {
+        const [, month, day] = value.split("-").map(Number);
+        return `${month}月${day}日`;
+      };
+      const resolveDataPeriod = () => {
+        if (state.period !== "自定义") return state.period;
+        const days = Math.floor((new Date(`${state.endDate}T00:00:00Z`) - new Date(`${state.startDate}T00:00:00Z`)) / 86400000) + 1;
+        return days <= 1 ? "日" : days <= 7 ? "周" : "月";
+      };
+      const periodRangeLabel = () => state.period === "自定义"
+        ? `${dateLabel(state.startDate)}至${dateLabel(state.endDate)}`
+        : dealPeriodRange[state.period];
 
-      function renderDealTargets() {
-        const data = dealTargets[state.period];
-        const total = data.total;
-        const gap = total.target - total.actual;
-        const attainment = total.target ? total.actual / total.target * 100 : 0;
-        const detailRows = state.scope === "团队" ? [total, ...data.teams] : data.sales;
-        const periodNames = { 月: "月", 周: "周", 日: "日" };
-        document.getElementById("zd-scope-select").value = state.scope;
+      function renderFilterControls() {
+        const levelSelect = document.getElementById("zd-level-select");
+        const entityControl = document.getElementById("zd-entity-control");
+        const entitySelect = document.getElementById("zd-entity-select");
+        const entityLabel = document.getElementById("zd-entity-label");
+        const customRange = document.getElementById("zd-custom-range");
+        levelSelect.value = state.scope;
+        entityControl.hidden = state.scope === "大盘";
+        entityLabel.textContent = state.scope === "团队" ? "查看团队" : "查看销售";
+        const options = state.scope === "团队"
+          ? teamOptions
+          : dealTargets[resolveDataPeriod()].sales.map(row => row.name);
+        if (!options.includes(state.entity)) state.entity = options[0];
+        entitySelect.innerHTML = options.map(name => `<option value="${name}">${name}</option>`).join("");
+        entitySelect.value = state.entity;
+        customRange.hidden = state.period !== "自定义";
+        document.getElementById("zd-start-date").value = state.startDate;
+        document.getElementById("zd-end-date").value = state.endDate;
         document.querySelectorAll("[data-period]").forEach(button => {
           button.setAttribute("aria-pressed", String(button.dataset.period === state.period));
         });
+        const scopeText = state.scope === "大盘" ? "大盘" : `${state.scope} · ${state.entity}`;
+        document.getElementById("zd-filter-context").textContent = `当前口径：${scopeText} · ${periodRangeLabel()}`;
+      }
+
+      function selectedDealAggregate(data) {
+        if (state.scope === "大盘") return data.total;
+        if (state.scope === "团队") {
+          return data.teams.find(row => row.name === state.entity) || { name: state.entity, target: 0, actual: 0, orders: 0 };
+        }
+        return data.sales.find(row => row.name.replace(/\s+/g, "") === state.entity.replace(/\s+/g, "")) || {
+          name: state.entity,
+          target: 0,
+          actual: 0,
+          orders: 0
+        };
+      }
+
+      function renderDealTargets() {
+        const data = dealTargets[resolveDataPeriod()];
+        const total = selectedDealAggregate(data);
+        const gap = total.target - total.actual;
+        const attainment = total.target ? total.actual / total.target * 100 : 0;
+        const detailRows = state.scope === "个人" ? data.sales : [data.total, ...data.teams];
+        const periodNames = { 月: "月", 周: "周", 日: "日", 自定义: "时段" };
         document.getElementById("zd-target-summary").innerHTML = `
           <div class="zd-target-metric"><div class="zd-target-label">${periodNames[state.period]}目标</div><div class="zd-target-value">${money(total.target)}</div></div>
           <div class="zd-target-metric"><div class="zd-target-label">实际成交</div><div class="zd-target-value">${money(total.actual)}</div></div>
@@ -1436,7 +1556,10 @@
               <td>${percent(rowRate)}</td>
             </tr>`;
         }).join("");
-        document.getElementById("zd-target-footer").textContent = `${data.scopeNote} 明细范围：${state.scope}；月目标为团队合计口径，团队日目标按当前冲刺计划折算。`;
+        const scopeNote = state.scope === "个人"
+          ? "个人视图展示当前周期成交前五名；个人目标为试算口径。"
+          : "团队视图保留团队横向对比；团队及个人目标为试算口径。";
+        document.getElementById("zd-target-footer").textContent = `${scopeNote} 当前口径：${state.scope === "大盘" ? "大盘" : state.entity} · ${periodRangeLabel()}。`;
       }
 
       function renderStages() {
@@ -1463,8 +1586,9 @@
       function renderDashboard() {
         const item = selected();
         const isDeal = item.id === "deposit";
-        const periodData = isDeal ? dealTargets[state.period].total : null;
-        const periodRange = { 月: "11月1日至23日", 周: "11月16日至22日", 日: "11月23日" };
+        const baseData = isDeal ? dealTargets[resolveDataPeriod()] : null;
+        const periodData = isDeal ? selectedDealAggregate(baseData) : null;
+        renderFilterControls();
         document.getElementById("zd-dashboard-name").textContent = `管理需求 · ${item.name} · ${item.priority}`;
         document.getElementById("zd-deal-panel").hidden = !isDeal;
         document.getElementById("zd-intent-scale").hidden = item.id !== "pl";
@@ -1473,7 +1597,7 @@
           const attainment = periodData.actual / periodData.target * 100;
           const averageOrder = periodData.actual / periodData.orders;
           document.getElementById("zd-kpis").innerHTML = [
-            ["成交金额", money(periodData.actual), `${periodData.orders} 单 · ${periodRange[state.period]}`],
+            ["成交金额", money(periodData.actual), `${periodData.orders} 单 · ${periodRangeLabel()}`],
             ["成交订单", numberFormat.format(periodData.orders), `客单价 ${money(averageOrder)}`],
             ["目标完成率", percent(attainment), `${state.period}目标差 ${money(gap)}`]
           ].map(([label, value, note]) => `
@@ -1571,8 +1695,14 @@
         if (globalThis.lucide) lucide.createIcons({ attrs: { width: 13, height: 13 } });
       }
 
-      document.getElementById("zd-scope-select").addEventListener("change", event => {
+      document.getElementById("zd-level-select").addEventListener("change", event => {
         state.scope = event.target.value;
+        state.entity = state.scope === "团队" ? teamOptions[0] : salesOptions[0];
+        renderDashboard();
+        save();
+      });
+      document.getElementById("zd-entity-select").addEventListener("change", event => {
+        state.entity = event.target.value;
         renderDashboard();
         save();
       });
@@ -1582,6 +1712,18 @@
           renderDashboard();
           save();
         });
+      });
+      document.getElementById("zd-start-date").addEventListener("change", event => {
+        state.startDate = event.target.value;
+        if (state.startDate > state.endDate) state.endDate = state.startDate;
+        renderDashboard();
+        save();
+      });
+      document.getElementById("zd-end-date").addEventListener("change", event => {
+        state.endDate = event.target.value;
+        if (state.endDate < state.startDate) state.startDate = state.endDate;
+        renderDashboard();
+        save();
       });
 
       renderAll();

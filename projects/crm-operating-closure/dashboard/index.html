@@ -2103,6 +2103,32 @@ html&gt;body{padding:0}&lt;/style&gt;
       overflow-wrap: anywhere;
     }
     .zd-kpi-note { margin-top: 2px; color: var(--z-muted); font-size: 9px; line-height: 1.3; }
+    .zd-global-filter {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 8px;
+      border: 1px solid var(--z-line);
+      border-radius: 8px;
+      background: var(--z-soft);
+    }
+    .zd-custom-range {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    .zd-custom-range[hidden] { display: none; }
+    .zd-date-input {
+      height: 28px;
+      border: 1px solid var(--z-line);
+      border-radius: 6px;
+      background: var(--z-panel);
+      color: var(--z-text);
+      padding: 0 6px;
+      font: inherit;
+      font-size: 10px;
+    }
     .zd-deal-panel {
       display: grid;
       gap: 0;
@@ -2550,6 +2576,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       .zd-ai-step:last-child { border-bottom: 0; }
       .zd-deal-toolbar { align-items: stretch; flex-direction: column; }
       .zd-deal-basis { max-width: none; text-align: left; }
+      .zd-global-filter { align-items: stretch; flex-direction: column; }
       .zd-target-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .zd-target-metric:nth-child(2) { border-right: 0; }
       .zd-funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -2564,6 +2591,8 @@ html&gt;body{padding:0}&lt;/style&gt;
       .zd-kpis { grid-template-columns: 1fr; }
       .zd-metric { grid-template-columns: 1fr; }
       .zd-deal-controls { align-items: stretch; flex-direction: column; }
+      .zd-custom-range { display: grid; grid-template-columns: 1fr 1fr; }
+      .zd-custom-range[hidden] { display: none; }
       .zd-deal-select { width: 100%; }
       .zd-periods { display: grid; grid-template-columns: repeat(3, 1fr); }
       .zd-target-summary { grid-template-columns: 1fr; }
@@ -2610,7 +2639,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     .zd-target-progress span,
     .zd-target-footer { font-size: 11px; }
     .zd-deal-select,
-    .zd-period { font-size: 12px; }
+    .zd-period,
+    .zd-date-input { font-size: 12px; }
     .zd-target-value { font-size: 16px; }
     .zd-target-table { font-size: 11px; }
     .zd-funnel-step span { font-size: 11px; }
@@ -2671,28 +2701,44 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;/div&gt;
           &lt;/div&gt;
           &lt;div class=&quot;zd-canvas&quot;&gt;
-            &lt;div class=&quot;zd-kpis&quot; id=&quot;zd-kpis&quot;&gt;&lt;/div&gt;
-            &lt;section class=&quot;zd-deal-panel&quot; id=&quot;zd-deal-panel&quot; aria-label=&quot;成交目标与差距&quot; hidden&gt;
-              &lt;div class=&quot;zd-deal-toolbar&quot;&gt;
-                &lt;div class=&quot;zd-deal-controls&quot;&gt;
-                  &lt;div class=&quot;zd-deal-control&quot;&gt;
-                    &lt;label for=&quot;zd-scope-select&quot;&gt;查看范围&lt;/label&gt;
-                    &lt;select class=&quot;zd-deal-select&quot; id=&quot;zd-scope-select&quot;&gt;
-                      &lt;option value=&quot;团队&quot;&gt;团队&lt;/option&gt;
-                      &lt;option value=&quot;销售顾问&quot;&gt;销售顾问&lt;/option&gt;
-                    &lt;/select&gt;
-                  &lt;/div&gt;
-                  &lt;div class=&quot;zd-deal-control&quot;&gt;
-                    &lt;label&gt;目标周期&lt;/label&gt;
-                    &lt;div class=&quot;zd-periods&quot; role=&quot;group&quot; aria-label=&quot;目标周期&quot;&gt;
-                      &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;月&quot; aria-pressed=&quot;true&quot;&gt;月&lt;/button&gt;
-                      &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;周&quot; aria-pressed=&quot;false&quot;&gt;周&lt;/button&gt;
-                      &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;日&quot; aria-pressed=&quot;false&quot;&gt;日&lt;/button&gt;
-                    &lt;/div&gt;
+            &lt;section class=&quot;zd-global-filter&quot; aria-label=&quot;看板筛选口径&quot;&gt;
+              &lt;div class=&quot;zd-deal-controls&quot;&gt;
+                &lt;div class=&quot;zd-deal-control&quot;&gt;
+                  &lt;label for=&quot;zd-level-select&quot;&gt;查看层级&lt;/label&gt;
+                  &lt;select class=&quot;zd-deal-select&quot; id=&quot;zd-level-select&quot;&gt;
+                    &lt;option value=&quot;大盘&quot;&gt;大盘&lt;/option&gt;
+                    &lt;option value=&quot;团队&quot;&gt;团队&lt;/option&gt;
+                    &lt;option value=&quot;个人&quot;&gt;个人&lt;/option&gt;
+                  &lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;zd-deal-control&quot; id=&quot;zd-entity-control&quot; hidden&gt;
+                  &lt;label for=&quot;zd-entity-select&quot; id=&quot;zd-entity-label&quot;&gt;查看对象&lt;/label&gt;
+                  &lt;select class=&quot;zd-deal-select&quot; id=&quot;zd-entity-select&quot;&gt;&lt;/select&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;zd-deal-control&quot;&gt;
+                  &lt;label&gt;时间范围&lt;/label&gt;
+                  &lt;div class=&quot;zd-periods&quot; role=&quot;group&quot; aria-label=&quot;时间范围&quot;&gt;
+                    &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;月&quot; aria-pressed=&quot;true&quot;&gt;月&lt;/button&gt;
+                    &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;周&quot; aria-pressed=&quot;false&quot;&gt;周&lt;/button&gt;
+                    &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;日&quot; aria-pressed=&quot;false&quot;&gt;日&lt;/button&gt;
+                    &lt;button type=&quot;button&quot; class=&quot;zd-period&quot; data-period=&quot;自定义&quot; aria-pressed=&quot;false&quot;&gt;自定义&lt;/button&gt;
                   &lt;/div&gt;
                 &lt;/div&gt;
-                &lt;div class=&quot;zd-deal-basis&quot;&gt;成交为一级经营结果，剩余应付只作为回款漏斗。团队月目标沿用经营目标；周目标按冲刺计划；组与个人拆分目标为试算，待正式目标对象上线后替换。&lt;/div&gt;
+                &lt;div class=&quot;zd-custom-range&quot; id=&quot;zd-custom-range&quot; hidden&gt;
+                  &lt;div class=&quot;zd-deal-control&quot;&gt;
+                    &lt;label for=&quot;zd-start-date&quot;&gt;开始日期&lt;/label&gt;
+                    &lt;input class=&quot;zd-date-input&quot; id=&quot;zd-start-date&quot; type=&quot;date&quot;&gt;
+                  &lt;/div&gt;
+                  &lt;div class=&quot;zd-deal-control&quot;&gt;
+                    &lt;label for=&quot;zd-end-date&quot;&gt;结束日期&lt;/label&gt;
+                    &lt;input class=&quot;zd-date-input&quot; id=&quot;zd-end-date&quot; type=&quot;date&quot;&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
               &lt;/div&gt;
+              &lt;div class=&quot;zd-deal-basis&quot; id=&quot;zd-filter-context&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+            &lt;/section&gt;
+            &lt;div class=&quot;zd-kpis&quot; id=&quot;zd-kpis&quot;&gt;&lt;/div&gt;
+            &lt;section class=&quot;zd-deal-panel&quot; id=&quot;zd-deal-panel&quot; aria-label=&quot;成交目标与差距&quot; hidden&gt;
               &lt;div class=&quot;zd-target-summary&quot; id=&quot;zd-target-summary&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
               &lt;div class=&quot;zd-target-progress&quot;&gt;
                 &lt;span&gt;0&lt;/span&gt;
@@ -3255,14 +3301,35 @@ html&gt;body{padding:0}&lt;/style&gt;
         }
       };
 
-      let state = { stage: &quot;assign&quot;, scope: &quot;团队&quot;, period: &quot;月&quot; };
+      const teamOptions = [&quot;麦西团队&quot;, &quot;杜伊团队&quot;, &quot;专案组&quot;];
+      const salesOptions = [
+        &quot;Vy Nguyễn&quot;, &quot;Thùy Dung&quot;, &quot;Mia&quot;, &quot;Trúc&quot;, &quot;Thảo (Lia)&quot;,
+        &quot;Finn&quot;, &quot;Vy Phạm&quot;, &quot;Linh&quot;, &quot;Anna&quot;, &quot;Lucy&quot;
+      ];
+      const dealPeriodRange = {
+        月: &quot;11月1日至23日&quot;,
+        周: &quot;11月16日至22日&quot;,
+        日: &quot;11月23日&quot;
+      };
+
+      let state = {
+        stage: &quot;assign&quot;,
+        scope: &quot;大盘&quot;,
+        entity: &quot;麦西团队&quot;,
+        period: &quot;月&quot;,
+        startDate: &quot;2026-11-16&quot;,
+        endDate: &quot;2026-11-22&quot;
+      };
       try {
         const saved = window.openai?.widgetState;
         if (saved &amp;&amp; stages.some(item =&gt; item.id === saved.stage)) {
           state.stage = saved.stage;
         }
-        if (saved?.scope === &quot;团队&quot; || saved?.scope === &quot;销售顾问&quot;) state.scope = saved.scope;
-        if (saved?.period &amp;&amp; dealTargets[saved.period]) state.period = saved.period;
+        if ([&quot;大盘&quot;, &quot;团队&quot;, &quot;个人&quot;].includes(saved?.scope)) state.scope = saved.scope;
+        if (typeof saved?.entity === &quot;string&quot;) state.entity = saved.entity;
+        if (saved?.period === &quot;自定义&quot; || dealTargets[saved?.period]) state.period = saved.period;
+        if (/^\d{4}-\d{2}-\d{2}$/.test(saved?.startDate || &quot;&quot;)) state.startDate = saved.startDate;
+        if (/^\d{4}-\d{2}-\d{2}$/.test(saved?.endDate || &quot;&quot;)) state.endDate = saved.endDate;
       } catch (_) {}
 
       const selected = () =&gt; stages.find(item =&gt; item.id === state.stage);
@@ -3283,7 +3350,14 @@ html&gt;body{padding:0}&lt;/style&gt;
       function save() {
         try {
           window.openai?.setWidgetState?.({
-            modelContent: { stage: state.stage, scope: state.scope, period: state.period },
+            modelContent: {
+              stage: state.stage,
+              scope: state.scope,
+              entity: state.entity,
+              period: state.period,
+              startDate: state.startDate,
+              endDate: state.endDate
+            },
             privateContent: state
           })?.catch?.(() =&gt; {});
         } catch (_) {}
@@ -3292,18 +3366,64 @@ html&gt;body{padding:0}&lt;/style&gt;
       const numberFormat = new Intl.NumberFormat(&quot;zh-CN&quot;);
       const money = value =&gt; `$${numberFormat.format(Math.round(value))}`;
       const percent = value =&gt; `${value.toFixed(1)}%`;
+      const dateLabel = value =&gt; {
+        const [, month, day] = value.split(&quot;-&quot;).map(Number);
+        return `${month}月${day}日`;
+      };
+      const resolveDataPeriod = () =&gt; {
+        if (state.period !== &quot;自定义&quot;) return state.period;
+        const days = Math.floor((new Date(`${state.endDate}T00:00:00Z`) - new Date(`${state.startDate}T00:00:00Z`)) / 86400000) + 1;
+        return days &lt;= 1 ? &quot;日&quot; : days &lt;= 7 ? &quot;周&quot; : &quot;月&quot;;
+      };
+      const periodRangeLabel = () =&gt; state.period === &quot;自定义&quot;
+        ? `${dateLabel(state.startDate)}至${dateLabel(state.endDate)}`
+        : dealPeriodRange[state.period];
 
-      function renderDealTargets() {
-        const data = dealTargets[state.period];
-        const total = data.total;
-        const gap = total.target - total.actual;
-        const attainment = total.target ? total.actual / total.target * 100 : 0;
-        const detailRows = state.scope === &quot;团队&quot; ? [total, ...data.teams] : data.sales;
-        const periodNames = { 月: &quot;月&quot;, 周: &quot;周&quot;, 日: &quot;日&quot; };
-        document.getElementById(&quot;zd-scope-select&quot;).value = state.scope;
+      function renderFilterControls() {
+        const levelSelect = document.getElementById(&quot;zd-level-select&quot;);
+        const entityControl = document.getElementById(&quot;zd-entity-control&quot;);
+        const entitySelect = document.getElementById(&quot;zd-entity-select&quot;);
+        const entityLabel = document.getElementById(&quot;zd-entity-label&quot;);
+        const customRange = document.getElementById(&quot;zd-custom-range&quot;);
+        levelSelect.value = state.scope;
+        entityControl.hidden = state.scope === &quot;大盘&quot;;
+        entityLabel.textContent = state.scope === &quot;团队&quot; ? &quot;查看团队&quot; : &quot;查看销售&quot;;
+        const options = state.scope === &quot;团队&quot;
+          ? teamOptions
+          : dealTargets[resolveDataPeriod()].sales.map(row =&gt; row.name);
+        if (!options.includes(state.entity)) state.entity = options[0];
+        entitySelect.innerHTML = options.map(name =&gt; `&lt;option value=&quot;${name}&quot;&gt;${name}&lt;/option&gt;`).join(&quot;&quot;);
+        entitySelect.value = state.entity;
+        customRange.hidden = state.period !== &quot;自定义&quot;;
+        document.getElementById(&quot;zd-start-date&quot;).value = state.startDate;
+        document.getElementById(&quot;zd-end-date&quot;).value = state.endDate;
         document.querySelectorAll(&quot;[data-period]&quot;).forEach(button =&gt; {
           button.setAttribute(&quot;aria-pressed&quot;, String(button.dataset.period === state.period));
         });
+        const scopeText = state.scope === &quot;大盘&quot; ? &quot;大盘&quot; : `${state.scope} · ${state.entity}`;
+        document.getElementById(&quot;zd-filter-context&quot;).textContent = `当前口径：${scopeText} · ${periodRangeLabel()}`;
+      }
+
+      function selectedDealAggregate(data) {
+        if (state.scope === &quot;大盘&quot;) return data.total;
+        if (state.scope === &quot;团队&quot;) {
+          return data.teams.find(row =&gt; row.name === state.entity) || { name: state.entity, target: 0, actual: 0, orders: 0 };
+        }
+        return data.sales.find(row =&gt; row.name.replace(/\s+/g, &quot;&quot;) === state.entity.replace(/\s+/g, &quot;&quot;)) || {
+          name: state.entity,
+          target: 0,
+          actual: 0,
+          orders: 0
+        };
+      }
+
+      function renderDealTargets() {
+        const data = dealTargets[resolveDataPeriod()];
+        const total = selectedDealAggregate(data);
+        const gap = total.target - total.actual;
+        const attainment = total.target ? total.actual / total.target * 100 : 0;
+        const detailRows = state.scope === &quot;个人&quot; ? data.sales : [data.total, ...data.teams];
+        const periodNames = { 月: &quot;月&quot;, 周: &quot;周&quot;, 日: &quot;日&quot;, 自定义: &quot;时段&quot; };
         document.getElementById(&quot;zd-target-summary&quot;).innerHTML = `
           &lt;div class=&quot;zd-target-metric&quot;&gt;&lt;div class=&quot;zd-target-label&quot;&gt;${periodNames[state.period]}目标&lt;/div&gt;&lt;div class=&quot;zd-target-value&quot;&gt;${money(total.target)}&lt;/div&gt;&lt;/div&gt;
           &lt;div class=&quot;zd-target-metric&quot;&gt;&lt;div class=&quot;zd-target-label&quot;&gt;实际成交&lt;/div&gt;&lt;div class=&quot;zd-target-value&quot;&gt;${money(total.actual)}&lt;/div&gt;&lt;/div&gt;
@@ -3327,7 +3447,10 @@ html&gt;body{padding:0}&lt;/style&gt;
               &lt;td&gt;${percent(rowRate)}&lt;/td&gt;
             &lt;/tr&gt;`;
         }).join(&quot;&quot;);
-        document.getElementById(&quot;zd-target-footer&quot;).textContent = `${data.scopeNote} 明细范围：${state.scope}；月目标为团队合计口径，团队日目标按当前冲刺计划折算。`;
+        const scopeNote = state.scope === &quot;个人&quot;
+          ? &quot;个人视图展示当前周期成交前五名；个人目标为试算口径。&quot;
+          : &quot;团队视图保留团队横向对比；团队及个人目标为试算口径。&quot;;
+        document.getElementById(&quot;zd-target-footer&quot;).textContent = `${scopeNote} 当前口径：${state.scope === &quot;大盘&quot; ? &quot;大盘&quot; : state.entity} · ${periodRangeLabel()}。`;
       }
 
       function renderStages() {
@@ -3354,8 +3477,9 @@ html&gt;body{padding:0}&lt;/style&gt;
       function renderDashboard() {
         const item = selected();
         const isDeal = item.id === &quot;deposit&quot;;
-        const periodData = isDeal ? dealTargets[state.period].total : null;
-        const periodRange = { 月: &quot;11月1日至23日&quot;, 周: &quot;11月16日至22日&quot;, 日: &quot;11月23日&quot; };
+        const baseData = isDeal ? dealTargets[resolveDataPeriod()] : null;
+        const periodData = isDeal ? selectedDealAggregate(baseData) : null;
+        renderFilterControls();
         document.getElementById(&quot;zd-dashboard-name&quot;).textContent = `管理需求 · ${item.name} · ${item.priority}`;
         document.getElementById(&quot;zd-deal-panel&quot;).hidden = !isDeal;
         document.getElementById(&quot;zd-intent-scale&quot;).hidden = item.id !== &quot;pl&quot;;
@@ -3364,7 +3488,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           const attainment = periodData.actual / periodData.target * 100;
           const averageOrder = periodData.actual / periodData.orders;
           document.getElementById(&quot;zd-kpis&quot;).innerHTML = [
-            [&quot;成交金额&quot;, money(periodData.actual), `${periodData.orders} 单 · ${periodRange[state.period]}`],
+            [&quot;成交金额&quot;, money(periodData.actual), `${periodData.orders} 单 · ${periodRangeLabel()}`],
             [&quot;成交订单&quot;, numberFormat.format(periodData.orders), `客单价 ${money(averageOrder)}`],
             [&quot;目标完成率&quot;, percent(attainment), `${state.period}目标差 ${money(gap)}`]
           ].map(([label, value, note]) =&gt; `
@@ -3462,8 +3586,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (globalThis.lucide) lucide.createIcons({ attrs: { width: 13, height: 13 } });
       }
 
-      document.getElementById(&quot;zd-scope-select&quot;).addEventListener(&quot;change&quot;, event =&gt; {
+      document.getElementById(&quot;zd-level-select&quot;).addEventListener(&quot;change&quot;, event =&gt; {
         state.scope = event.target.value;
+        state.entity = state.scope === &quot;团队&quot; ? teamOptions[0] : salesOptions[0];
+        renderDashboard();
+        save();
+      });
+      document.getElementById(&quot;zd-entity-select&quot;).addEventListener(&quot;change&quot;, event =&gt; {
+        state.entity = event.target.value;
         renderDashboard();
         save();
       });
@@ -3473,6 +3603,18 @@ html&gt;body{padding:0}&lt;/style&gt;
           renderDashboard();
           save();
         });
+      });
+      document.getElementById(&quot;zd-start-date&quot;).addEventListener(&quot;change&quot;, event =&gt; {
+        state.startDate = event.target.value;
+        if (state.startDate &gt; state.endDate) state.endDate = state.startDate;
+        renderDashboard();
+        save();
+      });
+      document.getElementById(&quot;zd-end-date&quot;).addEventListener(&quot;change&quot;, event =&gt; {
+        state.endDate = event.target.value;
+        if (state.endDate &lt; state.startDate) state.startDate = state.endDate;
+        renderDashboard();
+        save();
       });
 
       renderAll();
