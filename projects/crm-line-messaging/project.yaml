@@ -1,6 +1,6 @@
 id: REQ-LINE-001
 name: CRM 多渠道消息发送（LINE 首发）
-status: 待评审
+status: 评审后修订
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

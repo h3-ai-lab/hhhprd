@@ -1,7 +1,7 @@
 # Dino 产品需求与原型库
 
 > 本地主稿、飞书归档。按“公共能力 + 项目空间”组织需求、原型与知识资料。
-> 更新时间：2026-11-24
+> 更新时间：2026-11-25
 
 ## 先看这里
 
@@ -28,12 +28,12 @@
 | 管理看板新增跟进漏斗 | 评审后修订 | [PRD](projects/follow-up-funnel/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/follow-up-funnel/prototype/) |
 | CRM组织架构&数据权限 | 评审后修订 | [PRD](projects/crm-org-data-permissions/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions/prototype/) |
 | CRM组织数据权限二期 | 待评审 | [PRD](projects/crm-org-data-permissions-phase2/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-org-data-permissions-phase2/prototype/) |
-| CRM 多渠道消息发送（LINE 首发） | 待评审 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
+| CRM 多渠道消息发送（LINE 首发） | 评审后修订 | [PRD](projects/crm-line-messaging/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/) |
 | 用户咨询预约时间 | 评审后修订 | [PRD](projects/user-consultation-lead/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/user-consultation-lead/prototype/) |
 | 外呼能力一期 | 评审后修订 | [PRD](projects/outbound-capability/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/outbound-capability/prototype/) |
 | CRM 线索质量分析 | 评审后修订 | [PRD](projects/crm-lead-quality-analysis/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-lead-quality-analysis/prototype/) |
 | CRM学习计划与课程进度 | 待上传 | [PRD](projects/crm-learning-plan-progress/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-learning-plan-progress/prototype/) |
-| Lark咨询会议与用户详情回写 | 待评审 | [PRD](projects/crm-consultation-meeting/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-consultation-meeting/prototype/) |
+| Lark咨询会议与用户详情回写 | 评审后修订 | [PRD](projects/crm-consultation-meeting/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/crm-consultation-meeting/prototype/) |
 | 暂停跟进后直接产生跟进结果 | 待评审 | [PRD](projects/paused-follow-up-direct-outcome/prd/PRD.md) | [线上原型](https://h3-ai-lab.github.io/hhhprd/projects/paused-follow-up-direct-outcome/prototype/) |
 | 多级业务线调研 | 归档于 REQ-ORG-001 | [调研资料](projects/crm-org-data-permissions/research/README.md) | — |
 

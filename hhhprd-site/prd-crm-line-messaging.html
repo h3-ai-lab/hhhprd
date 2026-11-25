@@ -14,6 +14,8 @@
     p{margin:10px 0}a{color:var(--blue)}table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
     th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f7f9fc}
     blockquote{margin:12px 0;padding:10px 14px;background:#fff8e8;border-left:3px solid #d4941e}
+    ins{color:#d93025;text-decoration:none;font-weight:600}
+    del{color:#6b7280;text-decoration-thickness:1.5px}
     code{background:#f1f4f8;padding:1px 5px;border-radius:4px}pre code{background:transparent;padding:0;border-radius:0;color:inherit}pre{overflow:auto;background:#101828;
     color:#eef2f7;padding:16px;border-radius:8px}.mermaid{background:#fff;border:1px solid var(--line);
     border-radius:8px;padding:16px;overflow:auto}.top{display:flex;gap:14px;margin-bottom:18px}
@@ -24,7 +26,7 @@
 <body><main>
   <div class="top"><a href="../projects/crm-line-messaging/prd/PRD.md">查看 Markdown 源文件</a></div>
   <article><h2>CRM 多渠道消息发送（LINE 首发）</h2>
-<blockquote>在 CRM 内建立通用消息发送能力：从销售中心按业务线筛选并选择 1–100 位客户，通过通道适配器发送；一期仅接入 LINE Multicast。<br>需求编号：REQ-LINE-001｜状态：待评审｜更新时间：2026-11-19<br>需求类型：集成与自动化｜补充类型：规则、状态与数据；权限与审计</blockquote>
+<blockquote>在 CRM 内建立通用消息发送能力：从销售中心按业务线筛选并选择 1–100 位客户，通过通道适配器发送；一期仅接入 LINE Multicast。<br>需求编号：REQ-LINE-001｜状态：评审后修订｜更新时间：2026-11-25<br>需求类型：集成与自动化｜补充类型：规则、状态与数据；权限与审计<br>文档修订：v1.1｜基线：v1.0（2026-11-19）｜本页为本次变更评审版<br>标记说明：[新增/修改后] 红色表示本版现行内容；[删除/修改前] 删除线表示内容已失效。</blockquote>
 <h3>交互原型</h3>
 <p><a href="https://h3-ai-lab.github.io/hhhprd/projects/crm-line-messaging/prototype/" target="_blank" rel="noopener">打开完整交互原型</a></p>
 <h3>目标与范围</h3>
@@ -102,12 +104,12 @@
 <p>不新增独立消息页面。销售中心保持现有整体格式，包括侧边导航、顶部标题、列表页签、筛选区、全宽线索表格和原有视觉层级；不新增概览指标卡、右侧固定详情栏，也不将销售中心替换为独立消息工作台。</p>
 <p>消息能力仅嵌入现有销售列表，通过选择列、批量发送工具栏、发送弹窗和客户详情抽屉呈现。</p>
 <h4>客户列表</h4>
-<p>现有销售列顺序保持不变，在首列增加选择框，并在相关客户信息列之后增加：</p>
-<p><code>LINE 绑定 → LINE 关注 → 营销授权 → LINE 可发送</code></p>
+<p>现有销售列顺序保持不变，在首列增加选择框。<del>[删除] 在相关客户信息列之后增加 <code>LINE 绑定 → LINE 关注 → 营销授权 → LINE 可发送</code>。</del> <ins>[现行] 在相关客户信息列之后只增加 <code>LINE 可发送</code>；绑定状态、关注状态和营销授权不在销售中心列表展示。</ins></p>
 <p>筛选区顺序：</p>
 <p>沿用销售中心原有搜索、业务线、负责人、用户状态、渠道来源和日期筛选。业务线仍放在现有同类业务筛选所在区域，不新增重复业务线筛选；仅在消息发送校验中使用该筛选范围。</p>
+<p><ins>[新增] 在现有筛选区内增加一个 <code>可发送状态</code> 筛选，选项为“全部、可发送、不可发送”；不新增 LINE 绑定、关注状态或营销授权筛选。</ins></p>
 <p>筛选规则：</p>
-<ul><li>搜索支持用户 ID、姓名和手机号；手机号仅在操作人拥有现有用户敏感字段查看权限时可搜索。</li><li>业务线筛选决定当前可勾选客户和发送批次所属业务线；切换业务线时清空勾选和发送输入。</li><li>所有筛选使用操作人现有数据范围，不能通过搜索看到无权的客户。</li><li>客户列表分页，切换分页保留已应用筛选。</li><li>无结果、加载失败、LINE 状态查询失败和权限不足分别展示不同状态，不能都显示为空数据。</li><li>切换分页保留勾选；搜索或任一筛选条件变化时清空勾选和批量发送输入。</li></ul>
+<ul><li>搜索支持用户 ID、姓名和手机号；手机号仅在操作人拥有现有用户敏感字段查看权限时可搜索。</li><li>业务线筛选决定当前可勾选客户和发送批次所属业务线；切换业务线时清空勾选和发送输入。</li><li><ins>[新增] <code>可发送状态</code> 筛选只控制当前列表结果，不改变发送前逐人校验。</ins></li><li>所有筛选使用操作人现有数据范围，不能通过搜索看到无权的客户。</li><li>客户列表分页，切换分页保留已应用筛选。</li><li>无结果、加载失败、LINE 状态查询失败和权限不足分别展示不同状态，不能都显示为空数据。</li><li>切换分页保留勾选；搜索或任一筛选条件变化时清空勾选和批量发送输入。</li></ul>
 <h4>批量发送</h4>
 <ul><li>批量工具栏展示“发送通道：LINE”、当前业务线和“已选人数 / 100”。</li><li>选择人数为 1 时，允许从批量工具栏发送，也允许从客户详情发送；两种入口生成同一类型的 Multicast 批次。</li><li>选择人数为 2–100 时，点击“批量发送”打开同一弹窗，展示客户名单摘要、可发送人数、排除人数和正文输入。</li><li>弹窗正文输入、模板快捷插入、字符数和发送前复核规则与单人发送一致。</li><li>弹窗确认后创建批次并禁用重复提交；完成前关闭弹窗，再次打开仍可查看该批次状态。</li><li>发送结果以“批次已受理 / 发送失败 / 已排除”展示，不展示虚假的单客户送达状态。</li></ul>
 <h4>发送记录</h4>
@@ -141,7 +143,11 @@
 <ul><li>绑定创建、绑定冲突、绑定解除和状态来源变化。</li><li>营销同意、授权撤回及条款版本变化。</li><li>批次创建、客户复核、排除、发送、自动重试、人工重试、成功受理和最终失败。</li><li>关注状态刷新及前后值。</li><li>无权限查看、发送、重试或解绑尝试。</li></ul>
 <p>审计至少包含操作人或系统来源、时间、批次 ID、客户用户 ID 列表、绑定 ID、操作类型、变更前状态、变更后状态、排除原因、失败原因、请求标识和操作人数据范围。绑定、批次和审计记录至少保留 2 年；解除绑定和客户离线不删除历史发送记录。</p>
 <h3>依赖与上线边界</h3>
-<ul><li>客户端必须已能产出本 PRD 定义的绑定事件；本项目不补齐客户端登录与授权实现。</li><li>dinoAI LINE 消息服务必须已配置同一 Provider 下的 LINE Login 与 Messaging API Channel，并能保持关注状态和渠道凭证有效。</li><li>官方账号必须满足 LINE 当前接口、配额和内容政策；CRM 不保证消息已送达、已读或不会因用户拉黑而失败。</li><li>消息发送前必须以最新关注和授权状态为准；任何客户端缓存状态都不能单独作为最终发送依据。</li><li>一期以销售中心内、单一业务线、1–100 位客户的 LINE Multicast 文本消息闭环为目标；独立消息中心、其他通道、超过 100 位、自动拆分、定时自动化及富消息必须另行评审。</li></ul></article>
+<ul><li>客户端必须已能产出本 PRD 定义的绑定事件；本项目不补齐客户端登录与授权实现。</li><li>dinoAI LINE 消息服务必须已配置同一 Provider 下的 LINE Login 与 Messaging API Channel，并能保持关注状态和渠道凭证有效。</li><li>官方账号必须满足 LINE 当前接口、配额和内容政策；CRM 不保证消息已送达、已读或不会因用户拉黑而失败。</li><li>消息发送前必须以最新关注和授权状态为准；任何客户端缓存状态都不能单独作为最终发送依据。</li><li>一期以销售中心内、单一业务线、1–100 位客户的 LINE Multicast 文本消息闭环为目标；独立消息中心、其他通道、超过 100 位、自动拆分、定时自动化及富消息必须另行评审。</li></ul>
+<h3>本次修订记录</h3>
+<h4>v1.1 · 2026-11-25</h4>
+<p>基线版本：v1.0（2026-11-19）</p>
+<table><thead><tr><th>编号</th><th>类型</th><th>位置</th><th>变更前</th><th>变更后</th><th>对开发的影响</th></tr></thead><tbody><tr><td>R-01</td><td>修改</td><td>客户列表</td><td>增加 LINE 绑定、LINE 关注、营销授权和 LINE 可发送四个列表列</td><td>只增加 LINE 可发送列</td><td>移除三个列表列的展示和交互</td></tr><tr><td>R-02</td><td>新增</td><td>筛选区</td><td>无 <code>可发送状态</code> 筛选</td><td>增加“全部、可发送、不可发送”筛选</td><td>列表查询增加可发送状态过滤；不新增绑定、关注或授权筛选</td></tr></tbody></table></article>
 </main>
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";

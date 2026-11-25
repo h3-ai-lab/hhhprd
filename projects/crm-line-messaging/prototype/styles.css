@@ -204,7 +204,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
   background: #fff;
   box-shadow: var(--shadow);
 }
-.filter-grid { display: grid; grid-template-columns: minmax(230px, 1.5fr) repeat(4, minmax(140px, .85fr)); gap: 10px; }
+.filter-grid { display: grid; grid-template-columns: minmax(230px, 1.5fr) repeat(2, minmax(160px, .85fr)); gap: 10px; }
 .filter-grid.second { grid-template-columns: repeat(5, minmax(140px, 1fr)); margin-top: 10px; }
 .field { min-width: 0; }
 .field-label { display: block; margin-bottom: 5px; color: #6c7888; font-size: 10px; }

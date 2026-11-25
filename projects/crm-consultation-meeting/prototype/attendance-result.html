@@ -324,7 +324,7 @@
     state.reasonCode = state.result?.reasonCode || null;
     const copy = {
       zh: {
-        title: "确认咨询会议出勤结果", subtitle: "系统已根据 Lark 参会记录生成默认结果，请确认或修改。",
+        title: "确认咨询会议出勤结果", subtitle: "系统已根据 Lark 参会记录生成默认结果，请在 7 天内确认或修改；逾期将采用系统判定。",
         userId: "用户 ID", meetingId: "会议 ID", system: "系统判定", pending: "待确认",
         attendance: "有效出勤结果", attended: "已出勤", absent: "未出勤", reason: "未出勤原因",
         note: "跟进说明（选填）", placeholder: "补充本次跟进情况", submit: "提交", update: "更新提交",
@@ -334,7 +334,7 @@
         confirmed: "已确认", modified: "已修改"
       },
       en: {
-        title: "Confirm consultation attendance", subtitle: "Lark attendance data has produced a default result. Confirm or change it below.",
+        title: "Confirm consultation attendance", subtitle: "Lark attendance data produced a default result. Confirm or change it within 7 days; after that, the system result becomes final.",
         userId: "User ID", meetingId: "Meeting ID", system: "System result", pending: "Pending confirmation",
         attendance: "Effective attendance", attended: "Attended", absent: "No-show", reason: "No-show reason",
         note: "Follow-up note (optional)", placeholder: "Add a follow-up note", submit: "Submit", update: "Update submission",

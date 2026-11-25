@@ -12,7 +12,7 @@ const STR = {
     roleName: "运营管理员",
     roleSub: "销售运营",
     introTitle: "销售中心",
-    introText: "在当前销售列表中按业务线筛选客户，选择 1–100 位已关注且已授权的客户，通过已上线通道发送相同内容。",
+    introText: "在当前销售列表中筛选可发送客户，选择 1–100 位客户，通过 LINE 官方账号发送相同内容。",
     viewPool: "公海",
     viewFollowing: "我的跟进",
     viewPaid: "已付费",
@@ -56,6 +56,7 @@ const STR = {
     filterBinding: "LINE 绑定",
     filterFriend: "关注状态",
     filterConsent: "营销授权",
+    filterSendable: "可发送状态",
     filterBusiness: "业务线",
     filterBusinessShort: "业务线",
     businessAll: "全部业务线",
@@ -65,13 +66,11 @@ const STR = {
     filterBindingShort: "绑定",
     filterFriendShort: "关注",
     filterConsentShort: "授权",
+    filterSendableShort: "可发送状态",
     filterAll: "全部状态",
     colSelect: "选择",
     colUser: "客户",
     colBusiness: "业务线",
-    colBinding: "LINE 绑定",
-    colFriend: "关注状态",
-    colConsent: "营销授权",
     colSendable: "可发送",
     colUpdated: "最近更新",
     previous: "上一页",
@@ -176,7 +175,7 @@ const STR = {
     roleName: "Operations Admin",
     roleSub: "Sales Operations",
     introTitle: "Sales Center",
-    introText: "Filter the current sales list by Business Line, then send the same message to 1–100 linked, opted-in customers through an available channel.",
+    introText: "Filter message-ready customers in the current sales list, then send the same message to 1–100 customers through the LINE Official Account.",
     viewPool: "Lead Pool",
     viewFollowing: "My Follow-ups",
     viewPaid: "Paid",
@@ -220,6 +219,7 @@ const STR = {
     filterBinding: "LINE Link",
     filterFriend: "Follow Status",
     filterConsent: "Marketing Opt-in",
+    filterSendable: "Message-ready Status",
     filterBusiness: "Business Line",
     filterBusinessShort: "Business Line",
     businessAll: "All Business Lines",
@@ -229,13 +229,11 @@ const STR = {
     filterBindingShort: "Link",
     filterFriendShort: "Following",
     filterConsentShort: "Opt-in",
+    filterSendableShort: "Message-ready",
     filterAll: "All statuses",
     colSelect: "Select",
     colUser: "Customer",
     colBusiness: "Business Line",
-    colBinding: "LINE Link",
-    colFriend: "Following",
-    colConsent: "Opt-in",
     colSendable: "Message-ready",
     colUpdated: "Last Updated",
     previous: "Previous",
@@ -389,9 +387,7 @@ const state = {
   query: "",
   tab: "following",
   businessLine: "all",
-  binding: "all",
-  friend: "all",
-  consent: "all",
+  sendable: "all",
   selectedUsers: new Set(),
   drawerMode: null,
   batchFilters: { query: "", status: "all", businessLine: "all", from: "", to: "" }
@@ -512,9 +508,9 @@ function filteredCustomers() {
     return matchesQuery
       && customer.view === state.tab
       && (state.businessLine === "all" || customer.businessLine === state.businessLine)
-      && (state.binding === "all" || customer.binding === state.binding)
-      && (state.friend === "all" || customer.friend === state.friend)
-      && (state.consent === "all" || customer.consent === state.consent);
+      && (state.sendable === "all"
+        || (state.sendable === "yes" && isSendable(customer))
+        || (state.sendable === "no" && !isSendable(customer)));
   });
 }
 
@@ -569,23 +565,10 @@ function renderAll() {
             <option value="VN">${esc(t("businessVN"))}</option>
             <option value="MY">${esc(t("businessMY"))}</option>
           </select></label>
-          <label class="field"><span class="field-label">${esc(t("filterBinding"))}</span><select id="filter-binding" class="control" aria-label="${esc(t("filterBinding"))}">
-            <option value="all">${esc(t("filterBindingShort"))}: ${esc(t("filterAll"))}</option>
-            <option value="ACTIVE">${esc(t("bindingActive"))}</option>
-            <option value="CONFLICT">${esc(t("bindingConflict"))}</option>
-            <option value="UNBOUND">${esc(t("bindingUnbound"))}</option>
-          </select></label>
-          <label class="field"><span class="field-label">${esc(t("filterFriend"))}</span><select id="filter-friend" class="control" aria-label="${esc(t("filterFriend"))}">
-            <option value="all">${esc(t("filterFriendShort"))}: ${esc(t("filterAll"))}</option>
-            <option value="FOLLOWING">${esc(t("friendFollowing"))}</option>
-            <option value="NOT_FOLLOWING">${esc(t("friendNotFollowing"))}</option>
-            <option value="UNKNOWN">${esc(t("friendUnknown"))}</option>
-          </select></label>
-          <label class="field"><span class="field-label">${esc(t("filterConsent"))}</span><select id="filter-consent" class="control" aria-label="${esc(t("filterConsent"))}">
-            <option value="all">${esc(t("filterConsentShort"))}: ${esc(t("filterAll"))}</option>
-            <option value="CONSENTED">${esc(t("consentConsented"))}</option>
-            <option value="WITHDRAWN">${esc(t("consentWithdrawn"))}</option>
-            <option value="UNKNOWN">${esc(t("consentUnknown"))}</option>
+          <label class="field"><span class="field-label">${esc(t("filterSendable"))}</span><select id="filter-sendable" class="control" aria-label="${esc(t("filterSendable"))}">
+            <option value="all">${esc(t("filterSendableShort"))}: ${esc(t("filterAll"))}</option>
+            <option value="yes">${esc(t("yes"))}</option>
+            <option value="no">${esc(t("no"))}</option>
           </select></label>
         </div>
         <div class="filter-actions">
@@ -613,8 +596,7 @@ function renderAll() {
           <table>
             <thead><tr>
               <th class="select-column"><input type="checkbox" id="select-page" aria-label="${esc(t("selectPage"))}"></th>
-              <th>${esc(t("colUser"))}</th><th>${esc(t("colBusiness"))}</th><th>${esc(t("colBinding"))}</th>
-              <th>${esc(t("colFriend"))}</th><th>${esc(t("colConsent"))}</th><th>${esc(t("colSendable"))}</th><th>${esc(t("colUpdated"))}</th><th>${state.lang === "zh" ? "操作" : "Action"}</th>
+              <th>${esc(t("colUser"))}</th><th>${esc(t("colBusiness"))}</th><th>${esc(t("colSendable"))}</th><th>${state.lang === "zh" ? "操作" : "Action"}</th>
             </tr></thead>
             <tbody id="customer-body"></tbody>
           </table>
@@ -636,9 +618,7 @@ function renderAll() {
 
 function applySelectValues() {
   document.querySelector("#filter-businessLine").value = state.businessLine;
-  document.querySelector("#filter-binding").value = state.binding;
-  document.querySelector("#filter-friend").value = state.friend;
-  document.querySelector("#filter-consent").value = state.consent;
+  document.querySelector("#filter-sendable").value = state.sendable;
 }
 
 function renderCustomerTable() {
@@ -646,7 +626,7 @@ function renderCustomerTable() {
   const body = document.querySelector("#customer-body");
   if (!body) return;
   if (!customers.length) {
-    body.innerHTML = `<tr><td colspan="9"><div class="empty"><strong>${esc(t("noCustomers"))}</strong><span>${esc(t("noCustomersSub"))}</span></div></td></tr>`;
+    body.innerHTML = `<tr><td colspan="5"><div class="empty"><strong>${esc(t("noCustomers"))}</strong><span>${esc(t("noCustomersSub"))}</span></div></td></tr>`;
     return;
   }
   body.innerHTML = customers.map((customer) => `
@@ -654,11 +634,7 @@ function renderCustomerTable() {
       <td class="select-column"><input type="checkbox" data-select-user="${esc(customer.userId)}" aria-label="${esc(customer.name)}" ${state.selectedUsers.has(customer.userId) ? "checked" : ""} ${isSendable(customer) ? "" : "disabled"}></td>
       <td><div class="customer-cell"><strong>${esc(customer.name)}</strong><span class="user-id">${esc(customer.userId)}</span></div></td>
       <td>${esc(businessLineLabel(customer.businessLine))}</td>
-      <td>${statusTag(bindingLabel(customer.binding), bindingKind(customer.binding))}</td>
-      <td>${statusTag(friendLabel(customer.friend), friendKind(customer.friend))}</td>
-      <td>${statusTag(consentLabel(customer.consent), consentKind(customer.consent))}</td>
       <td>${statusTag(t(isSendable(customer) ? "yes" : "no"), isSendable(customer) ? "success" : "neutral")}</td>
-      <td>${formatTime(customer.updatedAt)}</td>
       <td><button class="btn btn-small" data-open-user="${esc(customer.userId)}">${esc(t("viewDetails"))}</button></td>
     </tr>
   `).join("");
@@ -1071,7 +1047,7 @@ function bindPageEvents() {
     state.selectedUsers.clear();
     updateFilteredView();
   });
-  ["businessLine", "binding", "friend", "consent"].forEach((key) => {
+  ["businessLine", "sendable"].forEach((key) => {
     document.querySelector(`#filter-${key}`).addEventListener("change", (event) => {
       state[key] = event.target.value;
       state.selectedUsers.clear();
@@ -1081,9 +1057,7 @@ function bindPageEvents() {
   document.querySelector("#reset-filters").addEventListener("click", () => {
     state.query = "";
     state.businessLine = "all";
-    state.binding = "all";
-    state.friend = "all";
-    state.consent = "all";
+    state.sendable = "all";
     state.selectedUsers.clear();
     closeDrawer();
     renderAll();

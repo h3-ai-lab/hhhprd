@@ -1,6 +1,6 @@
 id: REQ-CONSULT-002
 name: Lark咨询会议与用户详情回写
-status: 待评审
+status: 评审后修订
 workflow:
   base: ../../shared/workflows/prd-2.0.md
   overrides: workflow/overrides.md

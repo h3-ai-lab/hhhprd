@@ -305,6 +305,12 @@
         systemAttendance: "系统判定", effectiveAttendance: "有效出勤结果", attendancePending: "待确认",
         attendanceConfirmed: "已确认", attendanceModified: "已修改",
         confirmAttendance: "确认或修改出勤结果", viewAttendance: "查看出勤结果",
+        followUpRecords: "跟进记录", recordSystemOne: "系统 · 1 条", recordCcOne: "CC · 1 条",
+        recordTwo: "系统 + CC · 2 条", editMeetingTime: "修改会议时间", deleteMeeting: "删除会议",
+        editMeetingTitle: "修改会议时间", updateMeeting: "保存修改", meetingUpdated: "会议时间已更新",
+        deleteMeetingTitle: "删除会议", deleteMeetingBody: "删除后将同步取消 Lark 日程，并从有效会议列表移除。是否继续？",
+        confirmDelete: "确认删除", meetingDeleted: "会议已删除", meetingStatusBlocked: "当前会议状态不允许此操作",
+        newStartTime: "新的开始时间", zeroDuration: "会议时长为 0，未自动变更跟进状态",
         larkNoticeSent: "Lark 结果提醒已发送", noNote: "—"
       },
       en: {
@@ -350,6 +356,12 @@
         systemAttendance: "System result", effectiveAttendance: "Effective attendance", attendancePending: "Pending confirmation",
         attendanceConfirmed: "Confirmed", attendanceModified: "Modified",
         confirmAttendance: "Confirm or edit attendance", viewAttendance: "View attendance result",
+        followUpRecords: "Follow-up Records", recordSystemOne: "System · 1 record", recordCcOne: "CC · 1 record",
+        recordTwo: "System + CC · 2 records", editMeetingTime: "Edit Meeting Time", deleteMeeting: "Delete Meeting",
+        editMeetingTitle: "Edit Meeting Time", updateMeeting: "Save Changes", meetingUpdated: "Meeting time updated",
+        deleteMeetingTitle: "Delete Meeting", deleteMeetingBody: "The Lark calendar event will be cancelled and the meeting removed from the active list. Continue?",
+        confirmDelete: "Delete", meetingDeleted: "Meeting deleted", meetingStatusBlocked: "This action is unavailable in the current meeting status",
+        newStartTime: "New start time", zeroDuration: "Meeting duration is 0; follow-up stage was not changed automatically",
         larkNoticeSent: "Lark result reminder sent", noNote: "—"
       }
     };
@@ -368,6 +380,7 @@
       attended: { zh: "已出勤", en: "Attended", cls: "pill-green" },
       absent: { zh: "未出勤", en: "No-show", cls: "pill-amber" },
       cancelled: { zh: "已取消", en: "Cancelled", cls: "pill-red" },
+      deleted: { zh: "已删除", en: "Deleted", cls: "pill-red" },
       sync_failed: { zh: "同步失败", en: "Sync failed", cls: "pill-red" }
     };
     const NO_SHOW_REASON_META = {
@@ -441,7 +454,7 @@
     const stagePill = (stage) => `<span class="pill ${STAGE_META[stage]?.cls || "pill-blue"}">${esc(stageLabel(stage))}</span>`;
     const meetingPill = (status) => `<span class="pill ${MEETING_META[status]?.cls || "pill-blue"}">${esc(MEETING_META[status]?.[state.lang] || status)}</span>`;
     const userById = (id) => users.find((item) => item.id === id);
-    const meetingsFor = (id) => meetings.filter((item) => item.userId === id).sort((a, b) => b.start.localeCompare(a.start));
+    const meetingsFor = (id) => meetings.filter((item) => item.userId === id && item.status !== "deleted").sort((a, b) => b.start.localeCompare(a.start));
     const pendingMeeting = (id) => meetingsFor(id).find((item) => item.status === "scheduled" || item.status === "in_progress");
     const attendanceResultFor = (meetingId) => {
       try {
@@ -630,7 +643,7 @@
             ${list.length ? `<div class="meeting-table-wrap"><table class="meeting-table"><thead><tr>
               <th>${esc(tr("meetingTopic"))}</th><th>${esc(tr("attendance"))}</th><th>${esc(tr("meetingTime"))}</th>
               <th>${esc(tr("actualTime"))}</th><th>${esc(tr("customerAttendance"))}</th>
-              <th>${esc(tr("noShowReason"))}</th><th>${esc(tr("followUpNote"))}</th><th>${esc(tr("note"))}</th><th>${esc(tr("actions"))}</th>
+              <th>${esc(tr("noShowReason"))}</th><th>${esc(tr("followUpNote"))}</th><th>${esc(tr("followUpRecords"))}</th><th>${esc(tr("note"))}</th><th>${esc(tr("actions"))}</th>
             </tr></thead><tbody>${list.map(renderMeetingRow).join("")}</tbody></table></div>` : `<div class="empty">${esc(tr("noMeeting"))}</div>`}
           </section>
         </div>`;
@@ -652,9 +665,21 @@
       const confirmState = result
         ? tr(result.modified ? "attendanceModified" : "attendanceConfirmed")
         : tr("attendancePending");
+      const followUpRecords = !["attended", "absent"].includes(meeting.status)
+        ? "—"
+        : !result
+          ? tr("recordSystemOne")
+          : result.modified
+            ? tr("recordTwo")
+            : tr("recordCcOne");
       const attendanceAction = ["attended", "absent"].includes(meeting.status)
         ? `<button class="btn btn-small ${result ? "" : "btn-soft"}" data-attendance-result="${meeting.id}">${esc(tr(result ? "viewAttendance" : "confirmAttendance"))}</button>`
         : "";
+      const meetingMaintenanceActions = meeting.status === "scheduled"
+        ? `<button class="btn btn-small" data-edit-meeting="${meeting.id}">${esc(tr("editMeetingTime"))}</button><button class="btn btn-danger btn-small" data-delete-meeting="${meeting.id}">${esc(tr("deleteMeeting"))}</button>`
+        : meeting.status === "cancelled"
+          ? `<button class="btn btn-danger btn-small" data-delete-meeting="${meeting.id}">${esc(tr("deleteMeeting"))}</button>`
+          : "";
       return `<tr>
         <td><span class="subject">${esc(meeting.title)}</span><div class="uid">${esc(meeting.owner)} · ${esc(meeting.meetingNo)}</div></td>
         <td>${meetingPill(effective)}<div class="uid">${esc(tr("systemAttendance"))}: ${esc(MEETING_META[meeting.status]?.[state.lang] || meeting.status)} · ${esc(confirmState)}</div>${["attended", "absent"].includes(meeting.status) ? `<div class="uid">${esc(tr("larkNoticeSent"))}</div>` : ""}</td>
@@ -663,10 +688,12 @@
         <td><span class="attendance-time">${esc(attendanceTime)}</span></td>
         <td>${esc(reasonText)}</td>
         <td>${esc(followUpText)}</td>
+        <td>${esc(followUpRecords)}</td>
         <td>${meeting.noteStatus === "saved" ? `<button class="btn btn-soft btn-small" data-note="${meeting.id}">${esc(tr("viewNote"))}</button>` : `<span class="pill ${noteClass}">${esc(noteLabel)}</span>`}</td>
         <td><div class="meeting-actions">
           <button class="btn btn-small" data-open-meeting="${meeting.id}">${esc(tr("viewMeeting"))}</button>
           <button class="btn btn-small" data-copy-link="${meeting.id}">${esc(tr("copyLink"))}</button>
+          ${meetingMaintenanceActions}
           ${attendanceAction}
           ${meeting.noteStatus === "failed" || meeting.status === "sync_failed" ? `<button class="btn btn-small" data-resync="${meeting.id}">${esc(tr("resync"))}</button>` : ""}
         </div></td>
@@ -685,6 +712,8 @@
       document.querySelectorAll("[data-note]").forEach((btn) => btn.addEventListener("click", () => openNote(btn.dataset.note)));
       document.querySelectorAll("[data-resync]").forEach((btn) => btn.addEventListener("click", () => resyncMeeting(btn.dataset.resync)));
       document.querySelectorAll("[data-attendance-result]").forEach((btn) => btn.addEventListener("click", () => openAttendanceResult(btn.dataset.attendanceResult)));
+      document.querySelectorAll("[data-edit-meeting]").forEach((btn) => btn.addEventListener("click", () => openEditMeeting(btn.dataset.editMeeting)));
+      document.querySelectorAll("[data-delete-meeting]").forEach((btn) => btn.addEventListener("click", () => openDeleteMeeting(btn.dataset.deleteMeeting)));
     }
 
     function openOverlay(html) {
@@ -799,6 +828,7 @@
           <div class="actions section-gap">
             <button class="btn btn-soft" data-copy-link="${meeting.id}">${esc(tr("copyLink"))}</button>
             <button class="btn" id="modal-open-lark">${esc(tr("openLark"))}</button>
+            ${meeting.status === "scheduled" ? `<button class="btn" data-edit-meeting="${meeting.id}">${esc(tr("editMeetingTime"))}</button><button class="btn btn-danger" data-delete-meeting="${meeting.id}">${esc(tr("deleteMeeting"))}</button>` : ""}
             ${["attended", "absent"].includes(meeting.status) ? `<button class="btn btn-soft" data-attendance-result="${meeting.id}">${esc(tr(result ? "viewAttendance" : "confirmAttendance"))}</button>` : ""}
             ${meeting.noteStatus === "saved" ? `<button class="btn" data-note="${meeting.id}">${esc(tr("viewNote"))}</button>` : ""}
           </div>
@@ -807,6 +837,77 @@
       bindOverlayClose();
       bindMeetingActions();
       $("#modal-open-lark").addEventListener("click", () => window.open(meeting.url, "_blank", "noopener"));
+    }
+
+    function meetingDurationMinutes(meeting) {
+      if (!meeting.start || !meeting.end) return 30;
+      const start = new Date(meeting.start.replace(" ", "T"));
+      const end = new Date(meeting.end.replace(" ", "T"));
+      return Math.max(1, Math.round((end - start) / 60000));
+    }
+
+    function openEditMeeting(id) {
+      const meeting = meetings.find((item) => item.id === id);
+      if (!meeting) return;
+      if (meeting.status !== "scheduled") {
+        toast(tr("meetingStatusBlocked"));
+        return;
+      }
+      openOverlay(`
+        <div class="modal-head"><h2 id="modal-title">${esc(tr("editMeetingTitle"))}</h2><button class="icon-btn" data-close>×</button></div>
+        <form id="edit-meeting-form">
+          <div class="modal-body">
+            <div class="form-grid">
+              <label class="field full"><span class="field-label">${esc(tr("customer"))}</span><input class="input" value="${esc(userById(meeting.userId)?.name || "")} · ${esc(meeting.userId)}" disabled></label>
+              <label class="field"><span class="field-label">${esc(tr("newStartTime"))}</span><input class="input" type="datetime-local" id="edit-meeting-start" value="${esc(meeting.start.replace(" ", "T"))}" required><div class="error" id="edit-time-error"></div></label>
+              <label class="field"><span class="field-label">${esc(tr("duration"))}</span><select class="select" id="edit-meeting-duration">${[15,30,45,60].map((value) => `<option value="${value}" ${meetingDurationMinutes(meeting) === value ? "selected" : ""}>${value} ${state.lang === "zh" ? "分钟" : "minutes"}</option>`).join("")}</select></label>
+            </div>
+          </div>
+          <div class="modal-foot"><button type="button" class="btn" data-close>${esc(tr("cancel"))}</button><button type="submit" class="btn btn-primary">${esc(tr("updateMeeting"))}</button></div>
+        </form>`);
+      bindOverlayClose();
+      $("#edit-meeting-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const nextStart = $("#edit-meeting-start").value;
+        if (!nextStart) {
+          $("#edit-time-error").textContent = tr("required");
+          return;
+        }
+        const duration = Number($("#edit-meeting-duration").value);
+        const endDate = new Date(`${nextStart}:00`);
+        endDate.setMinutes(endDate.getMinutes() + duration);
+        const pad = (value) => String(value).padStart(2, "0");
+        meeting.start = nextStart.replace("T", " ");
+        meeting.end = `${endDate.getFullYear()}-${pad(endDate.getMonth() + 1)}-${pad(endDate.getDate())} ${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
+        meeting.lastSync = "2026-11-25 17:40";
+        closeOverlay();
+        render();
+        toast(tr("meetingUpdated"));
+      });
+    }
+
+    function openDeleteMeeting(id) {
+      const meeting = meetings.find((item) => item.id === id);
+      if (!meeting) return;
+      if (!["scheduled", "cancelled"].includes(meeting.status)) {
+        toast(tr("meetingStatusBlocked"));
+        return;
+      }
+      openOverlay(`
+        <div class="modal-head"><h2 id="modal-title">${esc(tr("deleteMeetingTitle"))}</h2><button class="icon-btn" data-close>×</button></div>
+        <div class="modal-body">
+          <div class="notice danger"><span>!</span><div><strong>${esc(meeting.title)}</strong><br>${esc(meeting.start)} – ${esc(meeting.end)}</div></div>
+          <p>${esc(tr("deleteMeetingBody"))}</p>
+        </div>
+        <div class="modal-foot"><button class="btn" data-close>${esc(tr("cancel"))}</button><button class="btn btn-danger" id="confirm-delete-meeting">${esc(tr("confirmDelete"))}</button></div>`);
+      bindOverlayClose();
+      $("#confirm-delete-meeting").addEventListener("click", () => {
+        meeting.status = "deleted";
+        meeting.lastSync = "2026-11-25 17:42";
+        closeOverlay();
+        render();
+        toast(tr("meetingDeleted"));
+      });
     }
 
     function openNote(id) {

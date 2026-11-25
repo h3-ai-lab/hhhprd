@@ -1,5 +1,5 @@
 version: 1
-updated_at: 2026-11-24
+updated_at: 2026-11-25
 source: "更新 REQ-ASSIGN-001 Lark 上传状态"
 projects:
   - id: REQ-LEVEL-001
@@ -25,7 +25,7 @@ projects:
   - id: REQ-CONSULT-002
     slug: crm-consultation-meeting
     name: Lark咨询会议与用户详情回写
-    status: 待评审
+    status: 评审后修订
     lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/OEb9drWKioFcoGxpsJTjEAtqpDg
   - id: REQ-LQA-001
     slug: crm-lead-quality-analysis
@@ -40,7 +40,7 @@ projects:
   - id: REQ-LINE-001
     slug: crm-line-messaging
     name: CRM 多渠道消息发送（LINE 首发）
-    status: 待评审
+    status: 评审后修订
     lark_url: https://qjphu5vphyf4.jp.larksuite.com/docx/Iu4HdEalPoVef0xDdZnjslctpAb
   - id: REQ-ORG-001
     slug: crm-org-data-permissions
