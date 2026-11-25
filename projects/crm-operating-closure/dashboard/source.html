@@ -247,69 +247,6 @@
       overflow: hidden;
     }
     .zd-deal-panel[hidden] { display: none; }
-    .zd-intent-scale {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 6px;
-    }
-    .zd-intent-scale[hidden] { display: none; }
-    .zd-intent-step {
-      min-width: 0;
-      border: 1px solid var(--z-line);
-      border-radius: 7px;
-      background: var(--z-soft);
-      padding: 7px 8px;
-    }
-    .zd-intent-step.level-100 { background: var(--z-green-soft); }
-    .zd-intent-step.level-80 { background: var(--z-amber-soft); }
-    .zd-intent-step.level-50 { background: var(--z-blue-soft); }
-    .zd-intent-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-    .zd-intent-level { font-size: 15px; font-weight: 600; }
-    .zd-intent-level.level-100 { color: var(--z-green); }
-    .zd-intent-level.level-80 { color: var(--z-amber); }
-    .zd-intent-level.level-50 { color: var(--z-blue); }
-    .zd-intent-count {
-      border-radius: 999px;
-      background: var(--z-panel);
-      padding: 2px 6px;
-      color: var(--z-muted);
-      font-size: 9px;
-      white-space: nowrap;
-    }
-    .zd-intent-label { font-size: 11px; font-weight: 500; }
-    .zd-intent-rule {
-      margin-top: 3px;
-      color: var(--z-muted);
-      font-size: 9px;
-      line-height: 1.45;
-    }
-    .zd-intent-evidence {
-      margin-top: 5px;
-      padding-top: 5px;
-      border-top: 1px solid color-mix(in srgb, var(--z-line) 72%, transparent);
-      color: var(--z-muted);
-      font-size: 9px;
-      line-height: 1.45;
-    }
-    .zd-intent-evidence b {
-      color: var(--z-text);
-      font-weight: 500;
-    }
-    .zd-intent-note {
-      grid-column: 1 / -1;
-      padding: 5px 7px;
-      border-radius: 6px;
-      background: var(--z-panel);
-      color: var(--z-muted);
-      font-size: 9px;
-      line-height: 1.45;
-    }
     .zd-deal-toolbar {
       display: flex;
       align-items: flex-end;
@@ -754,8 +691,6 @@
       .zd-target-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .zd-target-metric:nth-child(2) { border-right: 0; }
       .zd-funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .zd-intent-scale { grid-template-columns: 1fr; }
-      .zd-intent-note { grid-column: auto; }
     }
     @media (max-width: 520px) {
       .zd-head { align-items: flex-start; }
@@ -820,11 +755,6 @@
     .zd-funnel-step span { font-size: 11px; }
     .zd-funnel-step strong { font-size: 14px; }
     .zd-funnel-step small { font-size: 10px; }
-    .zd-intent-label { font-size: 12px; }
-    .zd-intent-count,
-    .zd-intent-rule,
-    .zd-intent-evidence,
-    .zd-intent-note { font-size: 11px; }
     .zd-mini-head { font-size: 13px; }
     .zd-mini-head span { font-size: 11px; }
     .zd-chart-tab,
@@ -930,27 +860,6 @@
                 </table>
               </div>
               <div class="zd-target-footer" id="zd-target-footer"></div>
-            </section>
-            <section class="zd-intent-scale" id="zd-intent-scale" aria-label="支付意向分级口径" hidden>
-              <div class="zd-intent-step level-100">
-                <div class="zd-intent-head"><span class="zd-intent-level level-100">100%</span><span class="zd-intent-count">业务表 14 条</span></div>
-                <div class="zd-intent-label">客户已支付定金</div>
-                <div class="zd-intent-rule">客户已经实际支付定金，不是仅口头确认购买；对应业务表“PL 100% (Deposit)”。</div>
-                <div class="zd-intent-evidence"><b>业务表</b> 定金金额 ✅ · 定金日期 ✅　<b>CRM补充</b> 定金支付状态 ❌ · 支付时间 ❌ · 关联定金单 ❌</div>
-              </div>
-              <div class="zd-intent-step level-80">
-                <div class="zd-intent-head"><span class="zd-intent-level level-80">80%</span><span class="zd-intent-count">业务表 10 条</span></div>
-                <div class="zd-intent-label">客户已承诺付款 · 三要素齐全</div>
-                <div class="zd-intent-rule">客户明确承诺付款；销售必须同步记录何时付款、购买哪个套餐、采用什么付款方式（如 Visa），任一项缺失不能评为 80%。</div>
-                <div class="zd-intent-evidence"><b>业务表</b> 付款日期 ✅ · 付款套餐 ✅ · 付款方式 ❌　<b>CRM补充</b> 承诺付款时间 ❌ · 承诺付款套餐 ❌ · 承诺付款方式 ❌</div>
-              </div>
-              <div class="zd-intent-step level-50">
-                <div class="zd-intent-head"><span class="zd-intent-level level-50">50%</span><span class="zd-intent-count">业务表 65 条</span></div>
-                <div class="zd-intent-label">客户仍有顾虑 · 未拒绝 · 继续处理</div>
-                <div class="zd-intent-rule">客户仍有未解决顾虑，但没有明确拒绝，销售仍在继续处理和跟进；需记录主要顾虑及下一次跟进安排。</div>
-                <div class="zd-intent-evidence"><b>业务表</b> 意向状态 ✅ · 拒绝原因 ✅　<b>CRM补充</b> 顾虑分类 ❌ · 顾虑备注 ❌ · 下一次跟进 ❌</div>
-              </div>
-              <div class="zd-intent-note">判定取每条线索最新一条有效意向记录：Pending 表示多次外呼始终无人接听，单独统计且不归入 50%；明确拒绝归为拒绝；完成成交后归为已支付。100% 以实际支付定金为准，80% 未补齐付款时间、套餐和付款方式时不得晋级。</div>
             </section>
             <div class="zd-chart-row">
               <div class="zd-mini">
@@ -1954,7 +1863,6 @@
         renderFilterControls();
         document.getElementById("zd-dashboard-name").textContent = `管理需求 · ${item.name} · ${item.priority}`;
         document.getElementById("zd-deal-panel").hidden = !isDeal;
-        document.getElementById("zd-intent-scale").hidden = item.id !== "pl";
         if (isDeal) {
           const gap = periodData.target - periodData.actual;
           const attainment = periodData.actual / periodData.target * 100;
