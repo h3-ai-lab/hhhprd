@@ -22,13 +22,13 @@ sources:
     priority: authoritative
   - id: lark-meeting-get-api
     url: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/get
-    purpose: 会议结束状态、参与人快照、智能纪要标识
+    purpose: 会议结束状态、参与人快照、妙计标识
     priority: authoritative
   - id: lark-meeting-events
     path: ../../../../.agents/skills/lark-event/references/lark-event-vc.md
-    purpose: 会议开始、结束、纪要和录制事件
+    purpose: 会议开始、结束、妙计和录制事件
     priority: authoritative
   - id: lark-plans
     url: https://www.larksuite.com/plans
-    purpose: 公开套餐中的高清会议用量、单场参会人数和智能纪要额度
+    purpose: 公开套餐中的高清会议用量、单场参会人数和妙计额度
     priority: high
